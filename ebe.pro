@@ -11,5 +11,5 @@ QT += webkit
 
 # Input
 HEADERS += mainwindow.h
-SOURCES += main.cpp mainwindow.cpp
+SOURCES += main.cpp mainwindow.cpp sourcewindow.cpp
 RESOURCES += ebe.qrc

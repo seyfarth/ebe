@@ -7,8 +7,8 @@
 
 MainWindow::MainWindow()
 {
-    textEdit = new QTextEdit;
-    setCentralWidget(textEdit);
+    source = new SourceWindow(this);
+    setCentralWidget(source);
 
     createActions();
     createMenus();

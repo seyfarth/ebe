@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QString>
+#include "sourcewindow.h"
+
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -10,7 +12,7 @@ class QMenu;
 class QTextEdit;
 QT_END_NAMESPACE
 
-//! [0]
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -30,7 +32,7 @@ private:
     void createDockWindows();
     void helpAction ( QMenu *menu, QString s, QString file );
 
-    QTextEdit *textEdit;
+    SourceWindow *source;
 
     QMenu *fileMenu;
     QMenu *templateMenu;

@@ -1,7 +1,7 @@
 #ifndef SOURCEWINDOW_H
 #define SOURCEWINDOW_H
 
-#include <QMainWindow>
+#include <QFrame>
 #include <QString>
 
 QT_BEGIN_NAMESPACE
@@ -10,16 +10,15 @@ class QMenu;
 class QTextEdit;
 class QLineEdit;
 class QPushButton;
-class QFrame;
 QT_END_NAMESPACE
 
 //! [0]
-class SourceWindow : public QMainWindow
+class SourceWindow : public QFrame
 {
     Q_OBJECT
 
 public:
-    MainWindow();
+    SourceWindow(QWidget *parent=0);
 
 private slots:
 
@@ -29,8 +28,6 @@ private:
     void createButtons();
     void createCommandLineEdit();
 
-    QFrame *frame;
-    
     QTextEdit *textEdit;
     QTextEdit *lineNumberEdit;
 
