@@ -1,0 +1,11 @@
+<!DOCTYPE RCC> <RCC version="1.0">
+<qresource>
+     <file>html/start.html</file>
+     <file>html/breakpoints.html</file>
+     <file>html/editing.html</file>
+     <file>html/projects.html</file>
+     <file>html/running.html</file>
+     <file>html/about.html</file>
+     <file>images/ebe64.png</file>
+</qresource>
+</RCC>

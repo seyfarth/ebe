@@ -1,0 +1,91 @@
+<html>
+<head>
+<title> Running </title>
+</head>
+</p>
+
+<p>
+<body>
+
+<h1>
+Running your program in the debugger
+</h1>
+
+<p>
+The first step is to set a breakpoint on the line where you want your
+program to stop.  Right click on the line and you will see the first
+character of the line change to a bright red background.  Right click
+again if this is the wrong line.
+</p>
+
+<p>
+After setting one or more breakpoints, you need to click on the Run
+button.  This button will save your source code file, run the proper
+compiler for your code and then start the gdb debugger on the
+compiled program.  When the program reaches a line with a
+breakpoint, it will stop and ebe will highlight the line (except for
+the first character) using a pastel blue-green background.  The
+highlighted line will be the next line to execute.
+</p>
+
+<h2>
+Next and Step
+</h2>
+
+<p>
+Both the Next and Step buttons will step through your code, line by
+line. The difference is that Next will stay in the current function or
+subroutine, while Step will step into a function if one is called on the
+highlighted line.  You generally only want to use the Step button to
+step into a function in the same source file.
+</p>
+
+<h2>
+Continue
+</h2>
+
+<p>
+The Continue button will resume normal execution of the program
+and it will only stop if it encounters a breakpoint.  You probably
+would use this to rapidly step past some debugged code to reach a
+breakpoint in some code which currently has an error.
+</p>
+
+<h2>
+Defining variables
+</h2>
+
+<p>
+You can define variables using either the name of a variable in the
+editor of using the address of a variable shown either in the data
+window or the register window.  User-defined variables are displayed
+automatically in the data window each time control is returned to
+ebe from debugging.
+</p>
+
+<p>
+To define a variable by name, you can mark the variable first and
+then use a right click to bring up a dialog to define a variable.
+In this dialog you can edit the format and the size of data items as
+needed.  The first and last values are used as array indices for the
+variable being defined.  If this is not an array, leave them both as 0.
+If this is an array, set the indices as you wish.  Remember that the
+first index is 0.
+</p>
+
+<p>
+A quicker way to define a variable by name is to simply use the Control
+key and a right click to have ebe mark the variable automatically and
+initiate the dialog.
+</p>
+
+<p>
+To define a variable by address, you can mark the address in one of the
+value fields in the registers window or the data window and then use
+a right click to bring up a dialog to deinfe a variable with the
+selected address.  The fastest way to define a variable by address is
+to use the Control key along with a right click.
+</p>
+
+</body>
+</html>

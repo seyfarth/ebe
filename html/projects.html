@@ -1,0 +1,63 @@
+<html>
+<head>
+<title> Projects </title>
+</head>
+
+<body>
+
+<h1> Projects </h1>
+
+<p>
+A program in ebe is generally managed using a project file to keep
+track of the source code files in the program.  The name of a project
+is the name of the program with ".ebe" appended to the name.  Thus to
+build a program named "hello", you would use a project file named "hello.ebe".
+</p>
+
+<p>
+It is not necessary to use a project file with programs consisting of a
+single source code file.  Ebe starts execution with no known project
+name (if not given on the command line).  As long as there is no known
+project name, it is assumed that there is only 1 source file.  Creating
+a project or opening a project will change the state so that ebe will be
+aware of having a project file.  After that point ebe will keep track of
+the files using the project file.
+</p>
+
+<h2>
+Creating a new project
+</h2>
+
+<p>
+You can create a new project using the "New project" option under the
+File menu.  This option will allow you to navigate to a new directory
+and to specify the name of the new project file.  After creating the
+project file, any open source files will be closed and the project will
+be empty.  Any changes to the project will be written automatically so
+there is no need to save a project file.
+</p>
+
+<h2>
+Opening a project
+</h2>
+
+<p>
+You can open an existing project using the "Open project" option under
+the File menu.  This option will allow you to navigate to a new directory
+open a file with the ".ebe" extension.  After opening the project file,
+any open source files will be closed and the first file in the project
+will be opened in the editor.
+</p>
+
+<h2>
+Closing a project
+</h2>
+
+<p>
+If you close the active project ebe will return to the default mode of
+not using a project.  It will close all open files.
+</p>
+
+<p>
+</body>
+</html>

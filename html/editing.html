@@ -1,0 +1,150 @@
+<html>
+<head>
+<title> </title>
+</head>
+
+<body>
+
+<h1> Editing in ebe </h1>
+
+
+<p>
+Editing in ebe uses the mouse and keyboard in mostly normal ways for
+editors.  Special keys like Delete and Enter work as expected.  For
+many of these normal keys an additional action is invoked using the
+Control key and the normal key.
+</p>
+
+<h2> Navigation </h2>
+
+<p>
+<b> Scrollbars:</b> There are vertical and horizontal scrollbars which can
+scroll through the file.  Scrolling can also be done using the mouse
+wheel.
+</p>
+
+<p>
+<b> Arrow keys:</b> Moving 1 character at a time is done using the arrow keys
+on the keyboard.
+</p>
+
+<p>
+<b>Control + Arrow keys:</b> Control-Right moves 1 word to the right.
+Control-Left moves 1 word to the left.  Control-Up moves 1 paragraph
+up.  Control-Down moves 1 paragraph down.
+</p>
+
+<p>
+<b>Home/End:</b> Home moves to column 1 on the current line.  End moves
+to the end of the current line.
+</p>
+
+<p>
+<b>Control + Home/End:</b> Control-Home moves to column 1 of line 1.
+Control-End moves to the end of the file.
+</p>
+
+<p>
+<b>PageUp/PageDown:</b> These keys move up/down one screenful at a
+time.
+</p>
+
+<p>
+<b>Control-T/Control-B:</b> Control-T moves to column 1 of the top line
+currently on the screen.  Control-B moves to column 1 of the last
+line currently on the screen.
+</p>
+
+<p>
+<b>Control-M:</b> Control-M scrolls the screen until the current line is at the
+middle of the screen.
+</p>
+
+<p>
+<b>Control-G:</b> Control-G will pop up a dialog where you can enter a line
+number to go to.  The dialog is designed so that you can simple press
+Control-G, type in the line number and press Enter without having to
+use the mouse.
+</p>
+
+<h2> Editing </h2>
+
+<p>
+<b>Left mouse:</b> Dragging with the left mouse button help down can be
+used to mark a section of text.  Double clicking with the left mouse
+button will select a "word" of text.
+</p>
+
+<p>
+<b>Select all:</b> You can select all of the text using Control-A or the Edit
+menu option.
+</p>
+
+<p>
+<b>Select none:</b> You can cancel any select using Control-0 or the Edit
+menu option.
+</p>
+
+<p>
+<b>Cut/Copy/Paste:</b> Selected text can be cut, copied and pasted using
+either options in the Edit menu or Control-X for cut, Control-C for
+copy, or Control-V for paste.
+</p>
+
+<p>
+<b>Undo/Redo:</b> Control-Z will undo an edit operation.  Insertions will be
+undone in chunks of about 10 letters.  Control-R will redo an edit
+operation.  There are 100 levels in the undo/redo stack.
+</p>
+
+<p>
+<b>Find/Replace:</b> Use Control-F to pop up the Find/Replace dialog.
+There is a text entry box there for entering a string to find.  The
+focus is ready for you to type the search string when the dialog starts.
+If you simply want to find, then enter either Enter or Control-F as
+many times as you wish.  If you wish to change the string, then use
+Tab to move to the text entry box for the replacement field and enter
+a string.  To replace the string, use Control-R.  You can end the
+Find/Replace dialog using Control-D.
+</p>
+
+<p>
+<b>Backspace/Delete:</b> Backspace will delete the character to the left of
+the cursor while Delete will delete the character to the right of the
+cursor.  Control-Backspace will delete the "word" to the left of the
+cursor and Control-Delete will delete the "word" to the right of the
+cursor.
+</p>
+
+<p>
+<b>Tab:</b> Entering a tab character will enter enough spaces to move to the
+next tab stop.  Tabs are at columns 5, 9, 13, ... - indenting 4
+characters for each tab.  Control-Tab will delete characters to the
+left of the cursor to position to the previous tab column.
+</p>
+
+<p>
+<b>Auto-indent:</b> The editor will automatically enter spaces so that a new
+line will be indented just the same as the previous line.  Ebe will
+indent the next line after a line ending in "{".  Likewise it will
+de-indent when a line begins with "}".  Adjusting
+indentation for a new line can be done using Tab or Control-Tab.
+</p>
+
+<p>
+<b>Commenting:</b> Control-K will comment out the current line or a range of
+lines if some text is selected.  Control-U will uncomment either the
+current line or a range of lines.
+</p>
+
+<p>
+<b>Word/number completion:</b> Ebe keeps track of words and numbers longer than
+three characters to simplify entering/re-entering longer words.  It starts
+with the a collection of keywords and adds words and numbers as you edit. 
+When you enter some text ebe will present a possible completion highlighted
+to the right of where you are editing.  Simply press "Enter" to accept the
+suggested completion or enter additional characters until you either type
+in the complete word or you see the desired completion.
+</p>
+</body>
+</html>
