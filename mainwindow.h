@@ -18,9 +18,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainWindow(QWidget *parent=0);
 
 private slots:
+    void increaseFont();
+    void decreaseFont();
     void displayHelp();
     void quit();
 
@@ -33,6 +35,8 @@ private:
     void helpAction ( QMenu *menu, QString s, QString file );
 
     SourceWindow *source;
+
+    int fontSize;
 
     QMenu *fileMenu;
     QMenu *templateMenu;

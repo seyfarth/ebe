@@ -10,6 +10,7 @@ class QMenu;
 class QTextEdit;
 class QLineEdit;
 class QPushButton;
+class QKeyEvent;
 QT_END_NAMESPACE
 
 class CommandLine;
