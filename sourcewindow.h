@@ -12,7 +12,8 @@ class QLineEdit;
 class QPushButton;
 QT_END_NAMESPACE
 
-//! [0]
+class CommandLine;
+
 class SourceWindow : public QFrame
 {
     Q_OBJECT
@@ -38,8 +39,7 @@ private:
     QPushButton *continueButton;
     QPushButton *stopButton;
 
-    QLineEdit *commandLineEdit;
+    CommandLine *commandLine;
 };
-//! [0]
 
 #endif

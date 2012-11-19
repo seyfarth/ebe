@@ -101,6 +101,5 @@ private:
     QAction *decreaseAction;
 
 };
-//! [0]
 
 #endif
