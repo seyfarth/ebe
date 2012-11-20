@@ -3,6 +3,7 @@
 #include <QtWebKit>
 #include <QWebView>
 #include <QApplication>
+#include <QKeySequence>
 
 #include "mainwindow.h"
 
@@ -66,13 +67,6 @@ void MainWindow::createActions()
     gotoBottomAction = new QAction(tr("Goto bottom of screen \tCtrl+b"),this);
     centerAction = new QAction(tr("Center line on screen \tCtrl+m"),this);
 
-    dataAction = new QAction(tr("Data"),this);
-    registerAction = new QAction(tr("Register"),this);
-    floatAction = new QAction(tr("Float"),this);
-    consoleAction = new QAction(tr("Console"),this);
-    projectAction = new QAction(tr("Project"),this);
-    tooltipsAction = new QAction(tr("Tooltips"),this);
-
     increaseAction = new QAction(tr("Increase \tCtrl +"),this);
     decreaseAction = new QAction(tr("Decrease \tCtrl -"),this);
 }
@@ -98,7 +92,7 @@ void MainWindow::decreaseFont()
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(newAction);
+    fileMenu->addAction(tr("New"), source, SLOT(newFile), QKeySequence::New );
     templateMenu = fileMenu->addMenu(tr("&Template"));
         templateMenu->addAction(templateCAction);
         templateMenu->addAction(templateCppAction);
@@ -148,12 +142,12 @@ void MainWindow::createMenus()
     moveMenu->addAction(centerAction);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
-    viewMenu->addAction(dataAction);
-    viewMenu->addAction(registerAction);
-    viewMenu->addAction(floatAction);
-    viewMenu->addAction(consoleAction);
-    viewMenu->addAction(projectAction);
-    viewMenu->addAction(tooltipsAction);
+    addToggle ( viewMenu, "Data window", this, SLOT(setDataVisible(bool)) );
+    addToggle ( viewMenu, "Register window", this, SLOT(setRegistersVisible(bool)) );
+    addToggle ( viewMenu, "Float register window", this, SLOT(setFloatsVisible(bool)) );
+    addToggle ( viewMenu, "Console window", this, SLOT(setConsoleVisible(bool)) );
+    addToggle ( viewMenu, "Project window", this, SLOT(setProjectVisible(bool)) );
+    addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)) );
     addToggle ( viewMenu, "Command line", source, SLOT(setCommandLineVisible(bool)) );
 
     fontMenu = menuBar()->addMenu(tr("F&ont"));
