@@ -1,10 +1,15 @@
 #include "sourcewindow.h"
+#include "sourceedit.h"
 #include "commandline.h"
 #include <QPushButton>
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTextCursor>
+#include <QApplication>
+#include <QKeyEvent>
+#include <QFile>
+
 
 SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
@@ -15,7 +20,11 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     createTextEdit();
 
     QVBoxLayout *sourceLayout = new QVBoxLayout;
+    sourceLayout->setSpacing(2);
+    sourceLayout->setContentsMargins(3,3,3,3);
     QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->setSpacing(2);
+    buttonLayout->setContentsMargins(3,3,3,3);
 
     quitButton     = new QPushButton ( "Quit" );
     runButton      = new QPushButton ( "Run" );
@@ -56,7 +65,7 @@ void SourceWindow::createLineNumberEdit()
 
 void SourceWindow::createTextEdit()
 {
-    textEdit = new QTextEdit(this);
+    textEdit = new SourceEdit(this);
     textEdit->append("Text");
 }
 

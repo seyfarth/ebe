@@ -2,10 +2,11 @@
 #include <QPushButton>
 #include <QtWebKit>
 #include <QWebView>
+#include <QApplication>
 
 #include "mainwindow.h"
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     source = new SourceWindow(this);
     setCentralWidget(source);
@@ -19,6 +20,9 @@ MainWindow::MainWindow()
     setWindowTitle(tr("ebe"));
 
     setUnifiedTitleAndToolBarOnMac(true);
+
+    fontSize = 15;
+    increaseFont();
 }
 
 void MainWindow::createActions()
@@ -62,15 +66,33 @@ void MainWindow::createActions()
     gotoBottomAction = new QAction(tr("Goto bottom of screen \tCtrl+b"),this);
     centerAction = new QAction(tr("Center line on screen \tCtrl+m"),this);
 
-    dataAction = new QAction(tr("data"),this);
-    registerAction = new QAction(tr("register"),this);
-    floatAction = new QAction(tr("float"),this);
-    consoleAction = new QAction(tr("console"),this);
-    projectAction = new QAction(tr("project"),this);
-    tooltipsAction = new QAction(tr("tooltips"),this);
+    dataAction = new QAction(tr("Data"),this);
+    registerAction = new QAction(tr("Register"),this);
+    floatAction = new QAction(tr("Float"),this);
+    consoleAction = new QAction(tr("Console"),this);
+    projectAction = new QAction(tr("Project"),this);
+    tooltipsAction = new QAction(tr("Tooltips"),this);
 
-    increaseAction = new QAction(tr("increase"),this);
-    decreaseAction = new QAction(tr("decrease"),this);
+    increaseAction = new QAction(tr("Increase \tCtrl +"),this);
+    decreaseAction = new QAction(tr("Decrease \tCtrl -"),this);
+}
+
+void MainWindow::increaseFont()
+{
+    char style[40];
+
+    fontSize++;
+    sprintf(style,"* {font-size: %dpx}",fontSize);
+    qApp->setStyleSheet(style);
+}
+
+void MainWindow::decreaseFont()
+{
+    char style[40];
+
+    fontSize--;
+    sprintf(style,"* {font-size: %dpx}",fontSize);
+    qApp->setStyleSheet(style);
 }
 
 void MainWindow::createMenus()
@@ -136,6 +158,8 @@ void MainWindow::createMenus()
     fontMenu = menuBar()->addMenu(tr("F&ont"));
     fontMenu->addAction(increaseAction);
     fontMenu->addAction(decreaseAction);
+    connect(increaseAction,SIGNAL(triggered()),this,SLOT(increaseFont()));
+    connect(decreaseAction,SIGNAL(triggered()),this,SLOT(decreaseFont()));
 
     helpMenu = menuBar()->addMenu(tr("&Help "));
     helpAction ( helpMenu, "Getting started", "start.html" );
