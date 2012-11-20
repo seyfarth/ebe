@@ -154,6 +154,7 @@ void MainWindow::createMenus()
     viewMenu->addAction(consoleAction);
     viewMenu->addAction(projectAction);
     viewMenu->addAction(tooltipsAction);
+    addToggle ( viewMenu, "Command line", source, SLOT(setCommandLineVisible(bool)) );
 
     fontMenu = menuBar()->addMenu(tr("F&ont"));
     fontMenu->addAction(increaseAction);
@@ -170,6 +171,16 @@ void MainWindow::createMenus()
     helpAction ( helpMenu, "About", "about.html" );
 
 }
+
+void MainWindow::addToggle ( QMenu *menu, QString text, QObject *object, const char *slot )
+{
+    QAction *action = new QAction ( text, this );
+    action->setCheckable(true);
+    action->setChecked(true);
+    menu->addAction(action);
+    connect ( action, SIGNAL(triggered(bool)), object, slot );
+}
+
 
 void MainWindow::helpAction ( QMenu *menu, QString text, QString file )
 {

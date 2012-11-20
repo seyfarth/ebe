@@ -23,6 +23,7 @@ public:
     SourceWindow(QWidget *parent=0);
 
 private slots:
+    void setCommandLineVisible(bool);
 
 private:
     void createLineNumberEdit();

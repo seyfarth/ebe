@@ -34,6 +34,7 @@ private:
     void createDockWindows();
     void helpAction ( QMenu *menu, QString s, QString file );
     void keyPressEvent ( QKeyEvent *event );
+    void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
 
     SourceWindow *source;
 

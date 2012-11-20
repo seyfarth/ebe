@@ -64,6 +64,11 @@ void SourceWindow::createLineNumberEdit()
     lineNumberEdit->setReadOnly(true);
 }
 
+void SourceWindow::setCommandLineVisible(bool visible)
+{
+    commandLine->setVisible(visible);
+}
+
 void SourceWindow::createTextEdit()
 {
     textEdit = new SourceEdit(this);
