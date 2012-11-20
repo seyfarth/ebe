@@ -33,6 +33,7 @@ private:
     void createStatusBar();
     void createDockWindows();
     void helpAction ( QMenu *menu, QString s, QString file );
+    void keyPressEvent ( QKeyEvent *event );
 
     SourceWindow *source;
 

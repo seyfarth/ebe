@@ -240,7 +240,7 @@ void MainWindow::createDockWindows()
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     dock->setWidget(button);
-    addDockWidget(Qt::BottomDockWidgetArea, dock);
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
 
     dock = new QDockWidget(tr("Console"), this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -248,6 +248,16 @@ void MainWindow::createDockWindows()
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     dock->setWidget(button);
-    addDockWidget(Qt::BottomDockWidgetArea, dock);
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
 
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if ( event->matches(QKeySequence::ZoomIn) ) {
+        increaseFont();
+    } else if ( event->matches(QKeySequence::ZoomOut) ) {
+        decreaseFont();
+    }
+    event->ignore();
 }

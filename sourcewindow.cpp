@@ -61,6 +61,7 @@ void SourceWindow::createLineNumberEdit()
     lineNumberEdit = new QTextEdit(this);
     lineNumberEdit->setFixedWidth(60);
     lineNumberEdit->append(QString("1234"));
+    lineNumberEdit->setReadOnly(true);
 }
 
 void SourceWindow::createTextEdit()
