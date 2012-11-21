@@ -113,11 +113,12 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+M") );
 
     viewMenu = menuBar()->addMenu(tr("&View"));
-    addToggle ( viewMenu, "Data window", this, SLOT(setDataVisible(bool)) );
-    addToggle ( viewMenu, "Register window", this, SLOT(setRegistersVisible(bool)) );
-    addToggle ( viewMenu, "Float register window", this, SLOT(setFloatsVisible(bool)) );
-    addToggle ( viewMenu, "Console window", this, SLOT(setConsoleVisible(bool)) );
-    addToggle ( viewMenu, "Project window", this, SLOT(setProjectVisible(bool)) );
+    addToggle ( viewMenu, "Data window", this, SLOT(setDataDockVisible(bool)) );
+    addToggle ( viewMenu, "Register window", this, SLOT(setRegisterDockVisible(bool)) );
+    addToggle ( viewMenu, "Float register window", this, SLOT(setFloatDockVisible(bool)) );
+    addToggle ( viewMenu, "Console window", this, SLOT(setConsoleDockVisible(bool)) );
+    addToggle ( viewMenu, "Terminal window", this, SLOT(setTerminalDockVisible(bool)) );
+    addToggle ( viewMenu, "Project window", this, SLOT(setProjectDockVisible(bool)) );
     addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)) );
     addToggle ( viewMenu, "Command line", source, SLOT(setCommandLineVisible(bool)) );
 
@@ -135,6 +136,41 @@ void MainWindow::createMenus()
     helpAction ( helpMenu, "Running", "running.html" );
     helpAction ( helpMenu, "About", "about.html" );
 
+}
+
+void MainWindow::setDataDockVisible(bool visible)
+{
+    dataDock->setVisible(visible);
+}
+
+
+void MainWindow::setRegisterDockVisible(bool visible)
+{
+    registerDock->setVisible(visible);
+}
+
+
+void MainWindow::setFloatDockVisible(bool visible)
+{
+    floatDock->setVisible(visible);
+}
+
+
+void MainWindow::setConsoleDockVisible(bool visible)
+{
+    consoleDock->setVisible(visible);
+}
+
+
+void MainWindow::setTerminalDockVisible(bool visible)
+{
+    terminalDock->setVisible(visible);
+}
+
+
+void MainWindow::setProjectDockVisible(bool visible)
+{
+    projectDock->setVisible(visible);
 }
 
 void MainWindow::addToggle ( QMenu *menu, QString text, QObject *object, const char *slot )
@@ -178,53 +214,53 @@ void MainWindow::createStatusBar()
 
 void MainWindow::createDockWindows()
 {
-    QDockWidget *dock = new QDockWidget(tr("Data"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    QPushButton *button = new QPushButton(tr("hello"),dock);
+    dataDock = new QDockWidget(tr("Data"), this);
+    dataDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    QPushButton *button = new QPushButton(tr("hello"),dataDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    dataDock->setWidget(button);
+    addDockWidget(Qt::LeftDockWidgetArea, dataDock);
 
-    dock = new QDockWidget(tr("Registers"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),dock);
+    registerDock = new QDockWidget(tr("Registers"), this);
+    registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    button = new QPushButton(tr("hello"),registerDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    registerDock->setWidget(button);
+    addDockWidget(Qt::LeftDockWidgetArea, registerDock);
 
-    dock = new QDockWidget(tr("Floating Point Registers"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),dock);
+    floatDock = new QDockWidget(tr("Floating Point Registers"), this);
+    floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    button = new QPushButton(tr("hello"),floatDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    floatDock->setWidget(button);
+    addDockWidget(Qt::LeftDockWidgetArea, floatDock);
 
-    dock = new QDockWidget(tr("Project"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),dock);
+    projectDock = new QDockWidget(tr("Project"), this);
+    projectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    button = new QPushButton(tr("hello"),projectDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    projectDock->setWidget(button);
+    addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
-    dock = new QDockWidget(tr("Terminal"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),dock);
+    terminalDock = new QDockWidget(tr("Terminal"), this);
+    terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    button = new QPushButton(tr("hello"),terminalDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    terminalDock->setWidget(button);
+    addDockWidget(Qt::LeftDockWidgetArea, terminalDock);
 
-    dock = new QDockWidget(tr("Console"), this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),dock);
+    consoleDock = new QDockWidget(tr("Console"), this);
+    consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    button = new QPushButton(tr("hello"),consoleDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    consoleDock->setWidget(button);
+    addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
 
 }
 

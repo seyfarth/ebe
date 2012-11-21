@@ -10,6 +10,7 @@ QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QTextEdit;
+class QDockWidget;
 QT_END_NAMESPACE
 
 
@@ -24,6 +25,12 @@ private slots:
     void increaseFont();
     void decreaseFont();
     void displayHelp();
+    void setDataDockVisible(bool);
+    void setRegisterDockVisible(bool);
+    void setFloatDockVisible(bool);
+    void setProjectDockVisible(bool);
+    void setTerminalDockVisible(bool);
+    void setConsoleDockVisible(bool);
     void quit();
 
 
@@ -46,6 +53,13 @@ private:
     QMenu *moveMenu;
     QMenu *fontMenu;
     QMenu *helpMenu;
+
+    QDockWidget *dataDock;
+    QDockWidget *registerDock;
+    QDockWidget *floatDock;
+    QDockWidget *projectDock;
+    QDockWidget *terminalDock;
+    QDockWidget *consoleDock;
 };
 
 #endif
