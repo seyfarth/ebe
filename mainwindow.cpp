@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(true);
 
+    QFont *font = new QFont ( "courier" );
+    qApp->setFont(*font);
     fontSize = 15;
     increaseFont();
 }
@@ -31,8 +33,11 @@ void MainWindow::increaseFont()
 
     fontSize++;
     sprintf(style,"* {font-size: %dpx}",fontSize);
-    printf("Style: %s\n",style);
     qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    source->setLineNumberWidth(fm.width("x")*4+12);
 }
 
 void MainWindow::decreaseFont()
@@ -41,8 +46,11 @@ void MainWindow::decreaseFont()
 
     fontSize--;
     sprintf(style,"* {font-size: %dpx}",fontSize);
-    printf("Style: %s\n",style);
     qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    source->setLineNumberWidth(fm.width("x")*4+12);
 }
 
 void MainWindow::createMenus()

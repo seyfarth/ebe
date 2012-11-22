@@ -7,12 +7,13 @@
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
-class QTextEdit;
+class QPlainTextEdit;
 class QLineEdit;
 class QPushButton;
 class QKeyEvent;
 QT_END_NAMESPACE
 
+class SourceEdit;
 class CommandLine;
 
 class SourceWindow : public QFrame
@@ -21,6 +22,7 @@ class SourceWindow : public QFrame
 
 public:
     SourceWindow(QWidget *parent=0);
+    void setLineNumberWidth(int width);
 
 private slots:
     void setCommandLineVisible(bool);
@@ -31,8 +33,8 @@ private:
     void createButtons();
     void createCommandLineEdit();
 
-    QTextEdit *textEdit;
-    QTextEdit *lineNumberEdit;
+    SourceEdit *textEdit;
+    QPlainTextEdit *lineNumberEdit;
 
     QPushButton *quitButton;
     QPushButton *runButton;
