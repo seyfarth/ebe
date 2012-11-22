@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include "sourcewindow.h"
-
+#include "registerwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -43,6 +43,7 @@ private:
     void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
 
     SourceWindow *source;
+    RegisterWindow *registerWindow;
 
     int fontSize;
 
