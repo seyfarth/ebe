@@ -1,11 +1,14 @@
 /*
-
+    QTableWidget for the general purpose register window
+    Displays general purpose registers, toggles view from
+    integer to hexadecimal format and back, no 
 */
 
 #include "registerwindow.h"
 
 /*
-
+    Constructor sets rows and columns and initializes the cells
+    with register names and initial default values of zero
 */
 RegisterWindow::RegisterWindow(QWidget *parent) : QTableWidget(parent)
 {
@@ -22,7 +25,11 @@ RegisterWindow::RegisterWindow(QWidget *parent) : QTableWidget(parent)
 }
 
 /*
-
+    Initialiser function used in constructor, sets the register
+    names in the widget and default zero values, sets tool tips
+    for register values and connects signals and slots for
+    toggling the display of the register values and checking
+    for accidental/invalid changes to cell values
 */
 void RegisterWindow::initRegisterLabelsAndValues()
 {
@@ -120,8 +127,10 @@ void RegisterWindow::initRegisterLabelsAndValues()
     connect(this, SIGNAL(cellPressed(int, int)),
         this, SLOT(toggleNumericFormat(int, int)));
 
-    // connect(this, SIGNAL(cellClicked(int, int)),
-        // this, SLOT(toggleNumericFormat(int, int)));
+    // If there's a double click, assume user wants to enter
+    // a value in the cell unless it's a register name
+    connect(this, SIGNAL(cellDoubleClicked(int, int)),
+        this, SLOT(clearForDoubleClick(int, int)));
 
     // Prevent user changing cell value that's a register name or changing
     // a register value to something other than a valid numeric value
@@ -130,13 +139,14 @@ void RegisterWindow::initRegisterLabelsAndValues()
 }
 
 /*
-
+    NOT USED
+    May be used when all signals and slots are connected eventually
 */
 bool RegisterWindow::isRegister(QString& item)
 {
     // regs is a QStringList with each register as a QString
     // Get rid of whitespace and convert to lowercase before check
-    if (regs.contains(item.simplified().toLower())
+    if (regs.contains(item.simplified().toLower()))
         return true;
 
     // Whatever we got was not a register name
@@ -144,7 +154,29 @@ bool RegisterWindow::isRegister(QString& item)
 }
 
 /*
+    Clear the cell, provided that it's not a register name
+*/
+void RegisterWindow::clearForDoubleClick(int row, int col)
+{
+    // This cell contains a register name, don't clear it
+    if (col == 0 || col % 2 == 0)
+        return;
 
+    // Get the value in cell
+    QTableWidgetItem *cellItem = item(row, col);
+
+    // Clear string out ready to enter new value in cell
+    QString str = cellItem->text();
+    str.clear();
+
+    // Put empty string back in cell
+    cellItem->setText(str);
+}
+
+/*
+    The slot for the cell changed signal. Check if a register name
+    is being changed and restore it, check for invalid numeric
+    format put in a cell and reset it to zero
 */
 void RegisterWindow::cellChangeCheck(int row, int col)
 {
@@ -183,7 +215,14 @@ void RegisterWindow::cellChangeCheck(int row, int col)
 }
 
 /*
+    This toggles the display of a register value from integer
+    to hexadecimal and back again
 
+    Along the way it checks to make sure the row and column
+    correspond to a register value, performs some checks
+    on the number format to see if it's valid first, then
+    whether it's in integer or hexadecimal format, then
+    does the conversion and sets the new display format
 */
 void RegisterWindow::toggleNumericFormat(int row, int col)
 {
@@ -238,7 +277,11 @@ void RegisterWindow::toggleNumericFormat(int row, int col)
 }
 
 /*
-
+    Is the string passed in a hexadecimal formatted number?
+    The function checks the obvious first, then uses a regular
+    expression to allow optional leading digits, requires at
+    least one hexadecimal character, optionally followed by at
+    least one hexadecimal character or digit
 */
 bool RegisterWindow::isHexadecimal(QString& str)
 {
@@ -273,7 +316,9 @@ bool RegisterWindow::isHexadecimal(QString& str)
 }
 
 /*
-
+    Is the string a number, either signed or unsigned integer
+    or hexadecimal? First check the obvious like a leading "0x"
+    or sign "-" or "+", then check against regular expressions
 */
 bool RegisterWindow::isValidNumericFormat(QString& number)
 {
@@ -303,144 +348,3 @@ bool RegisterWindow::isValidNumericFormat(QString& number)
     return valid;
 }
 
-// All require a QString giving the register, e.g. "rax"
-/*
-qlonglong RegisterWindow::getRegisterValueLongLong(QString& reg)
-{
-    int idx = getRegister(reg);
-
-    if (idx == -1)
-        return 0;
-
-    QTableWidgetItem *regItem = item(idx, 0);
-
-    bool ok;
-    qlonglong val = regItem->text().toLongLong(&ok);
-
-    if (!ok)
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Internal error in getRegisterValueLong()"));
-        return 0;
-    }
-
-    return val;
-}
-*/
-
-// Return string representation, set decimal to false for hexadecimal
-/*
-QString RegisterWindow::getRegisterValueString(QString& reg, bool decimal)
-{
-    int idx = getRegister(reg);
-
-    if (idx == -1)
-        return 0;
-
-    QTableWidgetItem *regItem = item(idx, 0);
-
-    bool ok;
-    qlonglong val = regItem->text().toLongLong(&ok);
-
-    if (!ok)
-    {
-        QMessageBox::critical(this, tr("Error"), tr("Internal error in getRegisterValueString()"));
-        return "";
-    }
-
-    if (decimal)
-        return QString::number(val, 10);
-
-    return QString::number(val, 16);
-}
-*/
-
-// Set a register value using a long long or number as a QString
-/*
-void RegisterWindow::setRegisterValue(QString& reg, qlonglong value)
-{
-    int idx = getRegister(reg);
-
-    if (idx == -1)
-        return;
-
-    QString val = QString::number(value, 10);
-
-    internalSetRegister(idx, val);
-}
-*/
-
-/*
-void RegisterWindow::setRegisterValue(QString& reg, QString value)
-{
-    int idx = getRegister(reg);
-
-    if (idx == -1)
-        return;
-
-    internalSetRegister(idx, value);
-}
-*/
-
-/*
-
-*/
-
-/*
-int RegisterWindow::getRegisterPos(QString& reg)
-{
-    // simplified() removes whitespace both in string and around it
-    // Make sure toLower() is kept so the compare() works below
-    QString r = reg.simplified().toLower();
-    
-    // Return register value position, not register name position
-    if (r.compare("rax") == 0)
-        return 1;
-    else if (r.compare("rbx") == 0)
-        return 2;
-    else if (r.compare("rcx") == 0)
-        return 1;
-    else if (r.compare("rdx") == 0)
-        return 2;
-    else if (r.compare("rsi") == 0)
-        return 1;
-    else if (r.compare("rdi") == 0)
-        return 2;
-    else if (r.compare("rbp") == 0)
-        return 1;
-    else if (r.compare("rsp") == 0)
-        return 2;
-    else if (r.compare("r8") == 0)
-        return 1;
-    else if (r.compare("r9") == 0)
-        return 2;
-    else if (r.compare("r10") == 0)
-        return 1;
-    else if (r.compare("r11") == 0)
-        return 2;
-    else if (r.compare("r12") == 0)
-        return 1;
-    else if (r.compare("r13") == 0)
-        return 2;
-    else if (r.compare("r14") == 0)
-        return 1;
-    else if (r.compare("r15") == 0)
-        return 2;
-    else if (r.compare("rip") == 0)
-        return 1;
-    else if (r.compare("eflags") == 0)
-        return 2;
-    
-    QMessageBox::critical(this, tr("Error"), 
-        tr("Internal error in getRegisterPos(QString): reg = ") + r);
-    
-    return -1;
-}
-*/
-
-/*
-void RegisterWindow::internalSetRegister(int regIndex, QString& value)
-{
-    QTableWidgetItem *regItem = item(regIndex, 0);
-    regItem->setText(value);
-}
-*/

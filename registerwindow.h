@@ -2,7 +2,9 @@
 #define REGISTERWINDOW_H
 
 /*
-
+    RegisterWindow class
+    For display of general purpose registers, no public functions
+    for set and get registers just yet
 */
 
 #include <QTableWidget>
@@ -20,21 +22,6 @@ class RegisterWindow : public QTableWidget
 public:
     RegisterWindow(QWidget *parent = 0);
 
-    // Getters and setters
-
-    // Validate input and output as a valid decimal or hexadecimal
-    // value with QRegExp first?
-
-    // All require a QString giving the register, e.g. "rax"
-    // qlonglong getRegisterValueLongLong(QString& reg);
-
-    // Return string representation, set decimal to false for hexadecimal
-    // QString getRegisterValueString(QString& reg, bool decimal = true);
-
-    // Set a register value using a long long or number as a QString
-    // void setRegisterValue(QString& reg, qlonglong value);
-    // void setRegisterValue(QString& reg, QString value);
-
 private:
 
     // Sets register name and value cells, called from constructor
@@ -45,13 +32,6 @@ private:
     // Determine whether string passed is in integer or hexadecimal format
     // Return true for hexadecimal, false for integer (positive or negative)
     bool isHexadecimal(QString& str);
-
-    // Validates register name and returns index of that register value
-    // in the cell view
-    // int getRegisterPos(QString& reg);
-
-    // Helper
-    // void internalSetRegister(int regIndex, QString& value);
 
     // Helper
     // Is it a valid numeric format? Either in hexadecimal, integer
@@ -72,11 +52,19 @@ private slots:
     // other than a valid int or hex number for a register value cell
     void cellChangeCheck(int row, int col);
 
+    // Stop change of register name on double click, allow
+    // change of register values. First just clear the cell.
+    void clearForDoubleClick(int row, int col);
+
 private:
 
     // Saves having to construct it every time we want it
     // Create in RegisterWindow constructor
     QStringList regs;
+
+    // NOT USED
+    // Register names are used, but internal display states not used yet,
+    // maybe they won't be
 
     // Table of QStrings to restore a register name changed in a cell
     // Also gives the display state of a register value in a cell, int or hex
@@ -86,6 +74,8 @@ private:
         {"rbp", "int", "rsp", "int"}, {"r8", "int", "r9", "int" },
         {"r10", "int", "r11", "int"}, {"r12", "int", "r13", "int"},
         {"r14", "int", "r15", "int"}, {"rip", "int", "eflags", "int"} };
+
+    // NOT USED with any functions yet, but set in the code ready
 
     // Table of qlonglongs, the register values at any point in time
     // Note that register positions are not valid, the register values
