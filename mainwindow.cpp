@@ -224,11 +224,11 @@ void MainWindow::createDockWindows()
 {
     dataDock = new QDockWidget(tr("Data"), this);
     dataDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    QPushButton *button = new QPushButton(tr("hello"),dataDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    data = new DataWindow(dataDock);
+    data->setMinimumHeight(0);
+    data->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     dataDock->resize(100,100);
-    dataDock->setWidget(button);
+    dataDock->setWidget(data);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
 
     registerDock = new QDockWidget(tr("Registers"), this);
@@ -242,7 +242,7 @@ void MainWindow::createDockWindows()
 
     floatDock = new QDockWidget(tr("Floating Point Registers"), this);
     floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),floatDock);
+    QPushButton *button = new QPushButton(tr("hello"),floatDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     floatDock->resize(100,100);

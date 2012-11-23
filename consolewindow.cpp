@@ -6,7 +6,7 @@
 #include <QHBoxLayout>
 #include <QTextCursor>
 #include <QApplication>
-#include <QKeyEvent>
+#include <QLabel>
 #include <QFile>
 
 
@@ -19,9 +19,14 @@ ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
     layout->setSpacing(2);
     layout->setContentsMargins(3,3,3,3);
 
-    textEdit = new QPlainTextEdit(this);
+    QHBoxLayout *commandLayout = new QHBoxLayout;
+    QLabel *label = new QLabel("gdb command");
+    commandLayout->addWidget(label);
     commandLine = new QLineEdit(this);
+    commandLayout->addWidget(commandLine);
+
+    textEdit = new QPlainTextEdit(this);
     layout->addWidget(textEdit);
-    layout->addWidget(commandLine);
+    layout->addLayout(commandLayout);
     setLayout(layout);
 }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include "datawindow.h"
 #include "sourcewindow.h"
 #include "registerwindow.h"
 #include "terminalwindow.h"
@@ -45,6 +46,7 @@ private:
     void keyPressEvent ( QKeyEvent *event );
     void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
 
+    DataWindow *data;
     SourceWindow *source;
     RegisterWindow *registerWindow;
     ProjectWindow *project;
