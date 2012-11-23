@@ -6,6 +6,8 @@
 DataWindow::DataWindow(QWidget *parent)
 : QFrame(parent)
 {
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setLineWidth(4);
     dataLayout = new QVBoxLayout(this);
     dataLayout->setSpacing(2);
     dataLayout->setContentsMargins(3,3,3,3);

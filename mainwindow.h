@@ -6,6 +6,7 @@
 #include "datawindow.h"
 #include "sourcewindow.h"
 #include "registerwindow.h"
+#include "floatwindow.h"
 #include "terminalwindow.h"
 #include "consolewindow.h"
 #include "projectwindow.h"
@@ -49,6 +50,7 @@ private:
     DataWindow *data;
     SourceWindow *source;
     RegisterWindow *registerWindow;
+    FloatWindow *floatWindow;
     ProjectWindow *project;
     TerminalWindow *terminal;
     ConsoleWindow *console;

@@ -242,11 +242,11 @@ void MainWindow::createDockWindows()
 
     floatDock = new QDockWidget(tr("Floating Point Registers"), this);
     floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    QPushButton *button = new QPushButton(tr("hello"),floatDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    floatWindow = new FloatWindow(floatDock);
+    floatWindow->setMinimumHeight(0);
+    floatWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     floatDock->resize(100,100);
-    floatDock->setWidget(button);
+    floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
 
     projectDock = new QDockWidget(tr("Project"), this);
