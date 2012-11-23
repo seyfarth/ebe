@@ -251,10 +251,10 @@ void MainWindow::createDockWindows()
 
     projectDock = new QDockWidget(tr("Project"), this);
     projectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),projectDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    projectDock->setWidget(button);
+    project = new ProjectWindow(projectDock);
+    project->setMinimumHeight(0);
+    project->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    projectDock->setWidget(project);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
     terminalDock = new QDockWidget(tr("Terminal"), this);
