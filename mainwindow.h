@@ -6,6 +6,7 @@
 #include "sourcewindow.h"
 #include "registerwindow.h"
 #include "terminalwindow.h"
+#include "consolewindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -64,6 +65,7 @@ private:
     QDockWidget *consoleDock;
 
     TerminalWindow *terminal;
+    ConsoleWindow *console;
 };
 
 #endif

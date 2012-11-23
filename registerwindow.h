@@ -8,6 +8,7 @@
 */
 
 #include <QTableWidget>
+#include <QFrame>
 #include <QStringList>
 #include <QString>
 #include <QTableWidgetItem>
@@ -15,7 +16,7 @@
 #include <QMessageBox>
 #include <QRegExp>
 
-class RegisterWindow : public QTableWidget
+class RegisterWindow : public QFrame
 {
     Q_OBJECT
 
@@ -57,6 +58,8 @@ private slots:
     void clearForDoubleClick(int row, int col);
 
 private:
+
+    QTableWidget *table;
 
     // Saves having to construct it every time we want it
     // Create in RegisterWindow constructor

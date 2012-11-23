@@ -5,23 +5,30 @@
 */
 
 #include "registerwindow.h"
+#include <QHeaderView>
+#include <QSize>
 
 /*
     Constructor sets rows and columns and initializes the cells
     with register names and initial default values of zero
 */
-RegisterWindow::RegisterWindow(QWidget *parent) : QTableWidget(parent)
+RegisterWindow::RegisterWindow(QWidget *parent) : QFrame(parent)
 {
+    table = new QTableWidget(this);
+    table->setMinimumSize(QSize(600,300));
+
     // 9 rows, 4 columns
     // 18 registers, label and value for 2 registers per row
-    setRowCount(9);
-    setColumnCount(4);
+    table->setRowCount(9);
+    table->setColumnCount(4);
 
     // Set the labels indicating the registers, set all to 0 first
     initRegisterLabelsAndValues();
 
     // Set width and possibly height
     // setColumnWidth(0, parent->width());
+    table->verticalHeader()->hide();
+    table->horizontalHeader()->hide();
 }
 
 /*
@@ -55,8 +62,8 @@ void RegisterWindow::initRegisterLabelsAndValues()
     QStringList vHeaders;
     vHeaders << "" << "" << "" << "" << "" << "" << "" << "" << "";
 
-    setVerticalHeaderLabels(vHeaders);
-    setHorizontalHeaderLabels(hHeaders);
+    //setVerticalHeaderLabels(vHeaders);
+    //setHorizontalHeaderLabels(hHeaders);
 
     QStringList::const_iterator constIterator;
 
@@ -68,6 +75,7 @@ void RegisterWindow::initRegisterLabelsAndValues()
     {
         // Create cell item
         QTableWidgetItem *item = new QTableWidgetItem;
+        item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
         
         // Add register names and default zero values
         item->setText((*constIterator).toLocal8Bit().constData());
@@ -97,7 +105,7 @@ void RegisterWindow::initRegisterLabelsAndValues()
             // the item in all columns inside a row, that is, first
             // iteration row = 0, then iterate through columns 0 to 3,
             // then row 1, columns 0 to 3, and so on to row 8             
-            setItem(row, col, item);
+            table->setItem(row, col, item);
             
             posCounter++;
         }
@@ -124,18 +132,18 @@ void RegisterWindow::initRegisterLabelsAndValues()
         // this, SLOT(toggleNumericFormat()));
 
     // This behaves like cellClicked() signal
-    connect(this, SIGNAL(cellPressed(int, int)),
+    connect(table, SIGNAL(cellPressed(int, int)),
         this, SLOT(toggleNumericFormat(int, int)));
 
     // If there's a double click, assume user wants to enter
     // a value in the cell unless it's a register name
-    connect(this, SIGNAL(cellDoubleClicked(int, int)),
+    connect(table, SIGNAL(cellDoubleClicked(int, int)),
         this, SLOT(clearForDoubleClick(int, int)));
 
     // Prevent user changing cell value that's a register name or changing
     // a register value to something other than a valid numeric value
-    connect(this, SIGNAL(cellChanged(int, int)),
-        this, SLOT(cellChangeCheck(int, int)));
+    connect(table, SIGNAL(cellChanged(int, int)),
+        table, SLOT(cellChangeCheck(int, int)));
 }
 
 /*
@@ -163,7 +171,7 @@ void RegisterWindow::clearForDoubleClick(int row, int col)
         return;
 
     // Get the value in cell
-    QTableWidgetItem *cellItem = item(row, col);
+    QTableWidgetItem *cellItem = table->item(row, col);
 
     // Clear string out ready to enter new value in cell
     QString str = cellItem->text();
@@ -181,7 +189,7 @@ void RegisterWindow::clearForDoubleClick(int row, int col)
 void RegisterWindow::cellChangeCheck(int row, int col)
 {
     // Get the value in cell
-    QTableWidgetItem *cellItem = item(row, col);
+    QTableWidgetItem *cellItem = table->item(row, col);
 
     // Remove all whitespace, convert it to lowercase
     QString str = cellItem->text().simplified().toLower();
@@ -231,7 +239,7 @@ void RegisterWindow::toggleNumericFormat(int row, int col)
         return;
 
     // Get the cell that was clicked containing string
-    QTableWidgetItem *cellItem = item(row, col);
+    QTableWidgetItem *cellItem = table->item(row, col);
 
     // Remove whitespace from string and convert to lowercase    
     QString str = cellItem->text().simplified().toLower();

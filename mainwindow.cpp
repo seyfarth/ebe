@@ -227,12 +227,16 @@ void MainWindow::createDockWindows()
     QPushButton *button = new QPushButton(tr("hello"),dataDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    dataDock->resize(100,100);
     dataDock->setWidget(button);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
 
     registerDock = new QDockWidget(tr("Registers"), this);
     registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
     registerWindow = new RegisterWindow(this);    
+    registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    //registerWindow->resize(100,100);
+    //registerDock->resize(100,100);
     registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
 
@@ -241,6 +245,7 @@ void MainWindow::createDockWindows()
     button = new QPushButton(tr("hello"),floatDock);
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    floatDock->resize(100,100);
     floatDock->setWidget(button);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
 
@@ -264,10 +269,10 @@ void MainWindow::createDockWindows()
 
     consoleDock = new QDockWidget(tr("Console"), this);
     consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),consoleDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    consoleDock->setWidget(button);
+    console = new ConsoleWindow(consoleDock);
+    console->setMinimumHeight(0);
+    console->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    consoleDock->setWidget(console);
     addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
 
 }
