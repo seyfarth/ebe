@@ -10,6 +10,14 @@ CONFIG -= app_bundle
 QT += webkit
 
 # Input
+<<<<<<< HEAD
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceedit.h registerwindow.h
 SOURCES += main.cpp mainwindow.cpp sourcewindow.cpp commandline.cpp sourceedit.cpp registerwindow.cpp
+=======
+HEADERS += mainwindow.h sourcewindow.h commandline.h sourceedit.h \
+           terminalwindow.h
+SOURCES += main.cpp mainwindow.cpp sourcewindow.cpp commandline.cpp \
+           sourceedit.cpp terminalwindow.cpp
+
+>>>>>>> 991a7174a2c7b85a1fc17938cf502217a55c4445
 RESOURCES += ebe.qrc

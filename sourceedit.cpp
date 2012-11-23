@@ -1,13 +1,14 @@
 #include "sourceedit.h"
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QKeyEvent>
 
 
-SourceEdit::SourceEdit(QWidget *parent) : QTextEdit(parent)
+SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
 {
 }
 
 void SourceEdit::keyPressEvent ( QKeyEvent *event )
 {
-    if ( event->matches(QKeySequence::ZoomIn) ) event->ignore();
+    //if ( event->matches(QKeySequence::ZoomIn) ) event->ignore();
+    QPlainTextEdit::keyPressEvent(event);
 }

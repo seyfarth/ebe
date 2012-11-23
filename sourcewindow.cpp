@@ -2,7 +2,7 @@
 #include "sourceedit.h"
 #include "commandline.h"
 #include <QPushButton>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTextCursor>
@@ -58,10 +58,15 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 
 void SourceWindow::createLineNumberEdit()
 {
-    lineNumberEdit = new QTextEdit(this);
+    lineNumberEdit = new QPlainTextEdit(this);
     lineNumberEdit->setFixedWidth(60);
-    lineNumberEdit->append(QString("1234"));
+    lineNumberEdit->appendPlainText(QString("1234"));
     lineNumberEdit->setReadOnly(true);
+}
+
+void SourceWindow::setLineNumberWidth ( int width )
+{
+    lineNumberEdit->setFixedWidth(width);
 }
 
 void SourceWindow::setCommandLineVisible(bool visible)
@@ -72,7 +77,7 @@ void SourceWindow::setCommandLineVisible(bool visible)
 void SourceWindow::createTextEdit()
 {
     textEdit = new SourceEdit(this);
-    textEdit->append("Text");
+    textEdit->appendPlainText("Text");
 }
 
 void SourceWindow::createButtons()

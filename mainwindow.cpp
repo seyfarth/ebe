@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(true);
 
+    QFont *font = new QFont ( "courier" );
+    qApp->setFont(*font);
     fontSize = 15;
     increaseFont();
 }
@@ -31,8 +33,11 @@ void MainWindow::increaseFont()
 
     fontSize++;
     sprintf(style,"* {font-size: %dpx}",fontSize);
-    printf("Style: %s\n",style);
     qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    source->setLineNumberWidth(fm.width("x")*4+12);
 }
 
 void MainWindow::decreaseFont()
@@ -41,8 +46,11 @@ void MainWindow::decreaseFont()
 
     fontSize--;
     sprintf(style,"* {font-size: %dpx}",fontSize);
-    printf("Style: %s\n",style);
     qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    source->setLineNumberWidth(fm.width("x")*4+12);
 }
 
 void MainWindow::createMenus()
@@ -246,11 +254,13 @@ void MainWindow::createDockWindows()
 
     terminalDock = new QDockWidget(tr("Terminal"), this);
     terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),terminalDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    terminalDock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, terminalDock);
+    terminal = new TerminalWindow(terminalDock);
+    terminal->setMinimumHeight(20);
+    terminal->setMinimumWidth(20);
+    terminal->resize(300,100);
+    terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    terminalDock->setWidget(terminal);
+    addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
 
     consoleDock = new QDockWidget(tr("Console"), this);
     consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -258,7 +268,7 @@ void MainWindow::createDockWindows()
     button->setMinimumHeight(0);
     button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     consoleDock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
+    addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
 
 }
 
