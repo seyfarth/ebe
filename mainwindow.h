@@ -4,12 +4,8 @@
 #include <QMainWindow>
 #include <QString>
 #include "sourcewindow.h"
-<<<<<<< HEAD
 #include "registerwindow.h"
-=======
 #include "terminalwindow.h"
-
->>>>>>> 991a7174a2c7b85a1fc17938cf502217a55c4445
 
 QT_BEGIN_NAMESPACE
 class QAction;
