@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     //printf("size: %d\n",pointSize);
     //font.setPixelSize ( 20 );
     //app.setFont(font);
-    //QPalette pal = app.palette();
-    //pal.setColor(QPalette::Window, QColor(238,238,248));
-    //app.setPalette(pal);
+    QPalette pal = app.palette();
+    pal.setColor(QPalette::Window, QColor(238,238,248));
+    app.setPalette(pal);
     MainWindow mainWin;
-    mainWin.resize(800,600);
+    mainWin.resize(1000,800);
     mainWin.show();
     return app.exec();
 }

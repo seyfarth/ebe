@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include "sourcewindow.h"
+#include "terminalwindow.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -60,6 +61,8 @@ private:
     QDockWidget *projectDock;
     QDockWidget *terminalDock;
     QDockWidget *consoleDock;
+
+    TerminalWindow *terminal;
 };
 
 #endif
