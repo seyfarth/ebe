@@ -1,25 +1,40 @@
 #ifndef PROJECTWINDOW_H
 #define PROJECTWINDOW_H
 
-#include <QPlainTextEdit>
+/*
+    ProjectWindow class
+
+    For display of project files initially
+*/
+
+#include <QListWidget>
+#include <QStringList>
 #include <QString>
+#include <QTableWidgetItem>
+#include <QList>
+#include <QMessageBox>
+#include <QRegExp>
 
-QT_BEGIN_NAMESPACE
-class QKeyEvent;
-QT_END_NAMESPACE
-
-class ProjectWindow : public QPlainTextEdit
+class ProjectWindow : public QListWidget
 {
     Q_OBJECT
 
 public:
-    ProjectWindow(QWidget *parent=0);
+    ProjectWindow(QWidget *parent = 0);
+
+private:
+
+    // Initialize, called from constructor
+    void initProjectWindow();
 
 private slots:
 
-private:
-    void keyPressEvent ( QKeyEvent *event );
+    
 
+private:
+
+    
 };
+
 
 #endif
