@@ -12,9 +12,11 @@ QT += webkit
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceedit.h \
            terminalwindow.h registerwindow.h consolewindow.h \
-           projectwindow.h datawindow.h floatwindow.h
+           projectwindow.h datawindow.h floatwindow.h \
+           settings.h
 SOURCES += main.cpp mainwindow.cpp sourcewindow.cpp commandline.cpp \
            sourceedit.cpp terminalwindow.cpp registerwindow.cpp \
-           consolewindow.cpp projectwindow.cpp datawindow.cpp floatwindow.cpp
+           consolewindow.cpp projectwindow.cpp datawindow.cpp floatwindow.cpp \
+           settings.cpp
 
 RESOURCES += ebe.qrc

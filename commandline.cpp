@@ -19,6 +19,8 @@ CommandLine::CommandLine(QWidget *parent)
     setLineWidth(0);
 
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setSpacing(10);
+    layout->setContentsMargins(5,5,5,5);
     QLabel *label = new QLabel(tr("Command line"));
     layout->addWidget(label);
     lineEdit = new QLineEdit();

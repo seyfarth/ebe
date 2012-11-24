@@ -13,18 +13,19 @@
 
 SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Panel | QFrame::Plain );
-    setLineWidth(2);
+    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setLineWidth(3);
+    setMidLineWidth(1);
 
     createLineNumberEdit();
     createTextEdit();
 
     QVBoxLayout *sourceLayout = new QVBoxLayout;
     sourceLayout->setSpacing(2);
-    sourceLayout->setContentsMargins(3,3,3,3);
+    sourceLayout->setContentsMargins(10,10,10,10);
     QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->setSpacing(2);
-    buttonLayout->setContentsMargins(3,3,3,3);
+    buttonLayout->setSpacing(6);
+    buttonLayout->setContentsMargins(2,2,2,2);
 
     quitButton     = new QPushButton ( "Quit" );
     runButton      = new QPushButton ( "Run" );

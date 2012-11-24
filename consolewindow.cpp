@@ -12,12 +12,12 @@
 
 ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Panel | QFrame::Plain );
-    setLineWidth(1);
+    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setLineWidth(3);
 
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->setSpacing(2);
-    layout->setContentsMargins(3,3,3,3);
+    layout->setSpacing(5);
+    layout->setContentsMargins(10,10,10,10);
 
     QHBoxLayout *commandLayout = new QHBoxLayout;
     QLabel *label = new QLabel("gdb command");

@@ -6,11 +6,11 @@
 FloatWindow::FloatWindow(QWidget *parent)
 : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Panel | QFrame::Raised );
-    setLineWidth(6);
+    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setLineWidth(3);
     floatLayout = new QVBoxLayout(this);
-    floatLayout->setSpacing(2);
-    floatLayout->setContentsMargins(3,3,3,3);
+    floatLayout->setSpacing(5);
+    floatLayout->setContentsMargins(10,10,10,10);
     for ( int i = 0; i < 16; i++ ) {
         floatLabels[i] = new QLabel ( "0.0" );
     }
