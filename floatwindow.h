@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QString>
 #include <QListWidget>
+#include <QListWidgetItem>
 
 class FloatWindow : public QFrame
 {
@@ -15,7 +16,8 @@ public:
 private slots:
 
 private:
-    void addRegister ( int n, QString value );
+    void setRegister ( int n, QString value );
+    QListWidgetItem *regs[16];
     QListWidget *names1;
     QListWidget *values1;
     QListWidget *names2;

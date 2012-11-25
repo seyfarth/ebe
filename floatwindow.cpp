@@ -1,5 +1,6 @@
 #include "floatwindow.h"
 #include <QHBoxLayout>
+#include <QListWidgetItem>
 #include <cstdio>
 
 
@@ -48,9 +49,19 @@ FloatWindow::FloatWindow(QWidget *parent)
     layout->addWidget(names2);
     layout->addWidget(values2);
         
+    for ( int i = 0; i < 8; i++ ) {
+        regs[i] = values1->item(i);
+        regs[i+8] = values2->item(i);
+    }
+
     setLayout ( layout );
+
+    setRegister(4,"4.0");
+    setRegister(8,"8.0");
+    setRegister(15,"15.0");
 }
 
-void FloatWindow::addRegister ( int n, QString value )
+void FloatWindow::setRegister ( int n, QString value )
 {
+    if ( n >= 0 && n < 16 ) regs[n]->setText(value);
 }
