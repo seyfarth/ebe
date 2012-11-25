@@ -3,7 +3,7 @@
 
 #include <QScrollArea>
 #include <QString>
-#include <QListWidget>
+#include "listwidget.h"
 #include <QListWidgetItem>
 
 class FloatWindow : public QScrollArea
@@ -18,10 +18,10 @@ private slots:
 private:
     void setRegister ( int n, QString value );
     QListWidgetItem *regs[16];
-    QListWidget *names1;
-    QListWidget *values1;
-    QListWidget *names2;
-    QListWidget *values2;
+    ListWidget *names1;
+    ListWidget *values1;
+    ListWidget *names2;
+    ListWidget *values2;
 };
 
 #endif

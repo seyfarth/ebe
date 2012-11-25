@@ -15,32 +15,24 @@ FloatWindow::FloatWindow(QWidget *parent)
     layout->setSpacing(0);
     layout->setContentsMargins(10,10,10,10);
 
-    names1 = new QListWidget(widget);
-    names1->setStyleSheet("QListWidget{border: 0px}");
+    names1 = new ListWidget(widget);
     QStringList names;
     names << "xmm0" << "xmm1" << "xmm2" << "xmm3"
           << "xmm4" << "xmm5" << "xmm6" << "xmm7";
     names1->insertItems(0,names);
-    names1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     names1->setFixedWidth(55);
-    values1 = new QListWidget(widget);
-    values1->setStyleSheet("QListWidget{border: 0px}");
-    values1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    values1 = new ListWidget(widget);
     names.clear();
     names << "0.0" << "0.0" << "0.0" << "0.0"
           << "0.0" << "0.0" << "0.0" << "0.0";
     values1->insertItems(0,names);
-    names2 = new QListWidget(widget);
-    names2->setStyleSheet("QListWidget{border: 0px}");
-    names2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    names2 = new ListWidget(widget);
     names2->setFixedWidth(70);
     names.clear();
     names << "xmm8" << "xmm9" << "xmm10" << "xmm11"
           << "xmm12" << "xmm13" << "xmm14" << "xmm15";
     names2->insertItems(0,names);
-    values2 = new QListWidget(widget);
-    values2->setStyleSheet("QListWidget{border: 0px}");
-    values2->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    values2 = new ListWidget(widget);
     names.clear();
     names << "0.0" << "0.0" << "0.0" << "0.0"
           << "0.0" << "0.0" << "0.0" << "0.0";
