@@ -1,12 +1,12 @@
 #ifndef FLOATWINDOW_H
 #define FLOATWINDOW_H
 
-#include <QFrame>
+#include <QScrollArea>
 #include <QString>
 #include <QListWidget>
 #include <QListWidgetItem>
 
-class FloatWindow : public QFrame
+class FloatWindow : public QScrollArea
 {
     Q_OBJECT
 
