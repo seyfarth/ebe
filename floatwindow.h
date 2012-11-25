@@ -5,7 +5,6 @@
 #include <QString>
 #include <QListWidget>
 
-
 class FloatWindow : public QFrame
 {
     Q_OBJECT

@@ -119,4 +119,3 @@ void Settings::setDefaults()
 
     ebe["xmm/reverse"] = false;
 }
-
