@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     source = new SourceWindow(this);
     setCentralWidget(source);
 
+    settings = new Settings;
+
     createMenus();
     
     createStatusBar();
@@ -21,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(true);
 
+    QFont *font = new QFont ( "courier" );
+    qApp->setFont(*font);
     fontSize = 15;
     increaseFont();
 }
@@ -31,8 +35,11 @@ void MainWindow::increaseFont()
 
     fontSize++;
     sprintf(style,"* {font-size: %dpx}",fontSize);
-    printf("Style: %s\n",style);
     qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    source->setLineNumberWidth(fm.width("x")*4+12);
 }
 
 void MainWindow::decreaseFont()
@@ -41,8 +48,11 @@ void MainWindow::decreaseFont()
 
     fontSize--;
     sprintf(style,"* {font-size: %dpx}",fontSize);
-    printf("Style: %s\n",style);
     qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    source->setLineNumberWidth(fm.width("x")*4+12);
 }
 
 void MainWindow::createMenus()
@@ -63,8 +73,8 @@ void MainWindow::createMenus()
     fileMenu->addAction(tr("Open project"), source, SLOT(openProject()) );
     fileMenu->addAction(tr("Close project"), source, SLOT(closeProject()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("Save settings"), source, SLOT(saveSettingsAs()) );
-    fileMenu->addAction(tr("Save settings as"), source, SLOT(saveSettingsAs()) );
+    fileMenu->addAction(tr("Save settings"), settings, SLOT(save()) );
+    fileMenu->addAction(tr("Save settings as"), settings, SLOT(saveAs()) );
     fileMenu->addSeparator();
     fileMenu->addAction(tr("Quit"), qApp, SLOT(quit()), QKeySequence::Quit );
 
@@ -216,51 +226,57 @@ void MainWindow::createDockWindows()
 {
     dataDock = new QDockWidget(tr("Data"), this);
     dataDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    QPushButton *button = new QPushButton(tr("hello"),dataDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dataDock->setWidget(button);
+    data = new DataWindow(dataDock);
+    data->setMinimumHeight(0);
+    data->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    dataDock->resize(100,100);
+    dataDock->setWidget(data);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
 
     registerDock = new QDockWidget(tr("Registers"), this);
     registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),registerDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    registerDock->setWidget(button);
+    registerWindow = new RegisterWindow(this);    
+    registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    registerWindow->resize(100,100);
+    //registerDock->resize(100,100);
+    registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
 
     floatDock = new QDockWidget(tr("Floating Point Registers"), this);
     floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),floatDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    floatDock->setWidget(button);
+    floatWindow = new FloatWindow(floatDock);
+    floatWindow->setMinimumHeight(0);
+    floatWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    floatWindow->resize(100,100);
+    floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
 
     projectDock = new QDockWidget(tr("Project"), this);
     projectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),projectDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    projectDock->setWidget(button);
+    project = new ProjectWindow(projectDock);
+    project->setMinimumHeight(0);
+    project->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    project->resize(100,100);
+    projectDock->setWidget(project);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
     terminalDock = new QDockWidget(tr("Terminal"), this);
     terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),terminalDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    terminalDock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, terminalDock);
+    terminal = new TerminalWindow(terminalDock);
+    terminal->setMinimumHeight(20);
+    terminal->setMinimumWidth(20);
+    terminal->resize(300,100);
+    terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    terminalDock->setWidget(terminal);
+    addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
 
     consoleDock = new QDockWidget(tr("Console"), this);
     consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    button = new QPushButton(tr("hello"),consoleDock);
-    button->setMinimumHeight(0);
-    button->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    consoleDock->setWidget(button);
-    addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
+    console = new ConsoleWindow(consoleDock);
+    console->setMinimumHeight(0);
+    console->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
+    consoleDock->setWidget(console);
+    addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
 
 }
 

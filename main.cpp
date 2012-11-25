@@ -12,16 +12,11 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     qapp = &app;
-    //QFont font = app.font();
-    //int pointSize = font.pointSize();
-    //printf("size: %d\n",pointSize);
-    //font.setPixelSize ( 20 );
-    //app.setFont(font);
-    //QPalette pal = app.palette();
-    //pal.setColor(QPalette::Window, QColor(238,238,248));
-    //app.setPalette(pal);
+    QPalette pal = app.palette();
+    pal.setColor(QPalette::Window, QColor(218,218,228));
+    app.setPalette(pal);
     MainWindow mainWin;
-    mainWin.resize(800,600);
+    mainWin.resize(1200,900);
     mainWin.show();
     return app.exec();
 }

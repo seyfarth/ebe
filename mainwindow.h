@@ -3,8 +3,14 @@
 
 #include <QMainWindow>
 #include <QString>
+#include "datawindow.h"
 #include "sourcewindow.h"
-
+#include "registerwindow.h"
+#include "floatwindow.h"
+#include "terminalwindow.h"
+#include "consolewindow.h"
+#include "projectwindow.h"
+#include "settings.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -42,7 +48,14 @@ private:
     void keyPressEvent ( QKeyEvent *event );
     void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
 
+    DataWindow *data;
     SourceWindow *source;
+    RegisterWindow *registerWindow;
+    FloatWindow *floatWindow;
+    ProjectWindow *project;
+    TerminalWindow *terminal;
+    ConsoleWindow *console;
+    Settings *settings;
 
     int fontSize;
 

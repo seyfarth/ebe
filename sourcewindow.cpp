@@ -2,7 +2,7 @@
 #include "sourceedit.h"
 #include "commandline.h"
 #include <QPushButton>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTextCursor>
@@ -13,18 +13,19 @@
 
 SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Panel | QFrame::Plain );
-    setLineWidth(2);
+    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setLineWidth(3);
+    setMidLineWidth(1);
 
     createLineNumberEdit();
     createTextEdit();
 
     QVBoxLayout *sourceLayout = new QVBoxLayout;
     sourceLayout->setSpacing(2);
-    sourceLayout->setContentsMargins(3,3,3,3);
+    sourceLayout->setContentsMargins(10,10,10,10);
     QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->setSpacing(2);
-    buttonLayout->setContentsMargins(3,3,3,3);
+    buttonLayout->setSpacing(6);
+    buttonLayout->setContentsMargins(2,2,2,2);
 
     quitButton     = new QPushButton ( "Quit" );
     runButton      = new QPushButton ( "Run" );
@@ -58,10 +59,15 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 
 void SourceWindow::createLineNumberEdit()
 {
-    lineNumberEdit = new QTextEdit(this);
+    lineNumberEdit = new QPlainTextEdit(this);
     lineNumberEdit->setFixedWidth(60);
-    lineNumberEdit->append(QString("1234"));
+    lineNumberEdit->appendPlainText(QString("1234"));
     lineNumberEdit->setReadOnly(true);
+}
+
+void SourceWindow::setLineNumberWidth ( int width )
+{
+    lineNumberEdit->setFixedWidth(width);
 }
 
 void SourceWindow::setCommandLineVisible(bool visible)
@@ -72,7 +78,7 @@ void SourceWindow::setCommandLineVisible(bool visible)
 void SourceWindow::createTextEdit()
 {
     textEdit = new SourceEdit(this);
-    textEdit->append("Text");
+    textEdit->appendPlainText("Text");
 }
 
 void SourceWindow::createButtons()
