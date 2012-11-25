@@ -4,6 +4,8 @@
 #include <QFrame>
 #include <QString>
 
+#include <QTextDocument>
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
@@ -23,9 +25,15 @@ class SourceWindow : public QFrame
 public:
     SourceWindow(QWidget *parent=0);
     void setLineNumberWidth(int width);
+    void setLineNumbers(int nLines);
+    bool fileChanged();
+    void saveBeforeQuit();
 
 private slots:
     void setCommandLineVisible(bool);
+    void open();
+    void save();
+    void prepareLineNumberEdit();
 
 private:
     void createLineNumberEdit();
@@ -34,7 +42,10 @@ private:
     void createCommandLineEdit();
 
     SourceEdit *textEdit;
+    QTextDocument *textDoc;
     QPlainTextEdit *lineNumberEdit;
+    bool changed = false;
+    QString openedFileName;
 
     QPushButton *quitButton;
     QPushButton *runButton;

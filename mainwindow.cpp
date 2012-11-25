@@ -4,6 +4,7 @@
 #include <QWebView>
 #include <QApplication>
 #include <QKeySequence>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 
@@ -214,7 +215,20 @@ void MainWindow::quit()
     qDebug() << "Calling static QApp quit()";
 
     // FIXME: save project/files etc., before quitting
-    QApplication::quit();
+    if (source->fileChanged())
+    {
+        int buttonPressed = QMessageBox::question(source, tr("Save file?"),
+            tr("Save file before quitting?"), QMessageBox::Yes | QMessageBox::No |
+            QMessageBox::Cancel, QMessageBox::Yes);
+
+        if (buttonPressed == QMessageBox::Cancel)
+            return;
+
+        if (buttonPressed == QMessageBox::Yes)
+            source->saveBeforeQuit();
+    }
+
+    qApp->quit();
 }
 
 void MainWindow::createStatusBar()
