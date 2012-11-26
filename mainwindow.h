@@ -3,13 +3,20 @@
 
 #include <QMainWindow>
 #include <QString>
+#include "datawindow.h"
 #include "sourcewindow.h"
-
+#include "registerwindow.h"
+#include "floatwindow.h"
+#include "terminalwindow.h"
+#include "consolewindow.h"
+#include "projectwindow.h"
+#include "settings.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QTextEdit;
+class QDockWidget;
 QT_END_NAMESPACE
 
 
@@ -24,6 +31,12 @@ private slots:
     void increaseFont();
     void decreaseFont();
     void displayHelp();
+    void setDataDockVisible(bool);
+    void setRegisterDockVisible(bool);
+    void setFloatDockVisible(bool);
+    void setProjectDockVisible(bool);
+    void setTerminalDockVisible(bool);
+    void setConsoleDockVisible(bool);
     void quit();
 
 
@@ -35,8 +48,23 @@ private:
     void keyPressEvent ( QKeyEvent *event );
     void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
 
+    DataWindow *data;
     SourceWindow *source;
+    RegisterWindow *registerWindow;
+    FloatWindow *floatWindow;
+    ProjectWindow *project;
+    TerminalWindow *terminal;
+    ConsoleWindow *console;
+    Settings *settings;
 
+    QDockWidget *dataDock;
+    QDockWidget *registerDock;
+    QDockWidget *floatDock;
+    QDockWidget *projectDock;
+    QDockWidget *terminalDock;
+    QDockWidget *consoleDock;
+
+    void setFontSize();
     int fontSize;
 
     QMenu *fileMenu;
