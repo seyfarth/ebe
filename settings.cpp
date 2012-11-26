@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QFile>
 #include <QStringList>
+#include <QFileDialog>
+#include <QDebug>
 
 Settings::Settings()
 {
@@ -22,32 +24,54 @@ bool Settings::read(QString filename)
     for ( int i = 0; i < n; i++ ) {
         ebe[keys[i]] = settings->value(keys[i]);
     }
+    fileName = filename;
+    delete settings;
+    return true;
 }
 
 void Settings::write(QString filename)
 {
+    settings = new QSettings ( filename, QSettings::IniFormat );
+    QStringList keys = ebe.keys();
+    int n = keys.count();
+    for ( int i = 0; i < n; i++ ) {
+        settings->setValue(keys[i],ebe[keys[i]]);
+    }
+    delete settings;
 }
 
 void Settings::save()
 {
+    if ( fileName == "" ) saveAs();
+    write(fileName);
 }
 
 void Settings::saveAs()
 {
+    QString dirName = QFileDialog::getExistingDirectory(
+                            0, tr("Directory for .ebe.ini") );
+    if ( dirName == "" ) return;
+    fileName = dirName + "/" + ".ebe.ini";
+    write (fileName);
 }
 
 void Settings::setDefaults()
 {
-    ebe["quit_color"] = 0xff0000;
-    ebe["bg_color"] = 0xf0f0d8;
-    ebe["break_bg"] = 0xff0000;
-    ebe["break_fg"] = 0x00ffff;
-    ebe["button_blue"] = 0x000080;
-    ebe["button_green"] = 0x006000;
-    ebe["button_red"] = 0x800000;
-    ebe["comment_fg"] = 0x0000e0;
-    ebe["find_bg"] = 0xf0f0a0;
-    ebe["find_fg"] = 0x000080;
+    ebe["quit_color"] = "#c00000";
+    ebe["run_color"] = "#0000c0";
+    ebe["next_color"] = "#0000c0";
+    ebe["step_color"] = "#0000c0";
+    ebe["continue_color"] = "#00a000";
+    ebe["stop_color"] = "#c00000";
+    ebe["bg_color"] = "#f0f0d8";
+    ebe["break_bg"] = "#ff0000";
+    ebe["break_fg"] = "#00ffff";
+    ebe["button_blue"] = "#000080";
+    ebe["button_green"] = "#006000";
+    ebe["button_red"] = "#800000";
+    ebe["comment_fg"] = "#0000e0";
+    ebe["find_bg"] = "#f0f0a0";
+    ebe["find_fg"] = "#000080";
     ebe["fixed_font"] = "Courier";
     ebe["fixed_size"] = 10;
     ebe["id_fg"] = 0x0000a0;
@@ -117,9 +141,6 @@ void Settings::setDefaults()
     ebe["terminal/left"] = 1200;
     ebe["terminal/rows"] = 25;
     ebe["terminal/top"] = 500;
-    ebe["terminal/ttf"] = false;
-    ebe["terminal/ttfname"] = "Monospace";
-    ebe["terminal/ttfsize"] = 12;
 
     ebe["project/height"] = 300;
     ebe["project/left"] = 1300;
