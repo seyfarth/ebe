@@ -57,6 +57,12 @@ FloatWindow::FloatWindow(QWidget *parent)
     setRegister(15,"15.0");
 }
 
+void FloatWindow::setFontWidth ( int width )
+{
+    names1->setFixedWidth(4*width+10);
+    names2->setFixedWidth(5*width+10);
+}
+
 void FloatWindow::setRegister ( int n, QString value )
 {
     if ( n >= 0 && n < 16 ) regs[n]->setText(value);

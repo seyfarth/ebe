@@ -57,6 +57,7 @@ private:
     ConsoleWindow *console;
     Settings *settings;
 
+    void setFontSize();
     int fontSize;
 
     QMenu *fileMenu;

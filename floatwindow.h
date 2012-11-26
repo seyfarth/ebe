@@ -12,6 +12,7 @@ class FloatWindow : public QScrollArea
 
 public:
     FloatWindow(QWidget *parent=0);
+    void setFontWidth ( int width );
 
 private slots:
 

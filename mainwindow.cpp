@@ -26,34 +26,35 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     QFont *font = new QFont ( "courier" );
     qApp->setFont(*font);
-    fontSize = 15;
-    increaseFont();
+    fontSize = 16;
+    setFontSize();
+}
+
+void MainWindow::setFontSize()
+{
+    char style[40];
+    int width;
+    sprintf(style,"* {font-size: %dpx}",fontSize);
+    qApp->setStyleSheet(style);
+    QFont f("courier");
+    f.setPixelSize(fontSize);
+    QFontMetrics fm(f);
+    width = fm.width("x");
+    source->setLineNumberWidth(width*4+14);
+    floatWindow->setFontWidth(width);
 }
 
 void MainWindow::increaseFont()
 {
-    char style[40];
 
     fontSize++;
-    sprintf(style,"* {font-size: %dpx}",fontSize);
-    qApp->setStyleSheet(style);
-    QFont f("courier");
-    f.setPixelSize(fontSize);
-    QFontMetrics fm(f);
-    source->setLineNumberWidth(fm.width("x")*4+12);
+    setFontSize();
 }
 
 void MainWindow::decreaseFont()
 {
-    char style[40];
-
     fontSize--;
-    sprintf(style,"* {font-size: %dpx}",fontSize);
-    qApp->setStyleSheet(style);
-    QFont f("courier");
-    f.setPixelSize(fontSize);
-    QFontMetrics fm(f);
-    source->setLineNumberWidth(fm.width("x")*4+12);
+    setFontSize();
 }
 
 void MainWindow::createMenus()
