@@ -41,6 +41,7 @@ void MainWindow::setFontSize()
     QFontMetrics fm(f);
     width = fm.width("x");
     source->setLineNumberWidth(width*4+14);
+    data->setFontWidth(width);
     floatWindow->setFontWidth(width);
 }
 

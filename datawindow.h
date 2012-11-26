@@ -1,26 +1,25 @@
 #ifndef DATAWINDOW_H
 #define DATAWINDOW_H
 
-#include <QFrame>
+#include <QScrollArea>
 #include <QString>
-#include <QVBoxLayout>
+#include "listwidget.h"
 
-QT_BEGIN_NAMESPACE
-class QKeyEvent;
-QT_END_NAMESPACE
-
-class DataWindow : public QFrame
+class DataWindow : public QScrollArea
 {
     Q_OBJECT
 
 public:
     DataWindow(QWidget *parent=0);
+    void setFontWidth(int width);
 
 private slots:
 
 private:
     void addVariable ( QString name, QString value );
-    QVBoxLayout *dataLayout;
+    ListWidget *names;
+    ListWidget *values;
+
 };
 
 #endif
