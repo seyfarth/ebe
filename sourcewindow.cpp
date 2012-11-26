@@ -1,6 +1,7 @@
 #include "sourcewindow.h"
 #include "sourceedit.h"
 #include "commandline.h"
+#include "settings.h"
 #include <QPushButton>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
@@ -8,6 +9,7 @@
 #include <QTextCursor>
 #include <QApplication>
 #include <QKeyEvent>
+#include <QPalette>
 
 // For open() and other file menu slots
 #include <QFileDialog>
@@ -29,6 +31,10 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 
     createLineNumberEdit();
     createTextEdit();
+    setStyleSheet("QPushButton { font-family: " +
+                   ebe["variable_font"].toString() + "}" +
+                   "QLabel { font-family:" +
+                   ebe["variable_font"].toString() + "}" );
 
     QVBoxLayout *sourceLayout = new QVBoxLayout;
     sourceLayout->setSpacing(2);
@@ -38,11 +44,17 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     buttonLayout->setContentsMargins(2,2,2,2);
 
     quitButton     = new QPushButton ( "Quit" );
+    quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
     runButton      = new QPushButton ( "Run" );
+    runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
     nextButton     = new QPushButton ( "Next" );
+    nextButton->setStyleSheet ( "color: "+ebe["next_color"].toString() );
     stepButton     = new QPushButton ( "Step" );
+    stepButton->setStyleSheet ( "color: "+ebe["step_color"].toString() );
     continueButton = new QPushButton ( "Continue" );
+    continueButton->setStyleSheet ( "color: "+ebe["continue_color"].toString() );
     stopButton     = new QPushButton ( "Stop" );
+    stopButton->setStyleSheet ( "color: "+ebe["stop_color"].toString() );
     buttonLayout->addWidget ( quitButton );
     buttonLayout->addWidget ( runButton );
     buttonLayout->addWidget ( nextButton );

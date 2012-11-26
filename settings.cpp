@@ -1,14 +1,27 @@
 #define SETTINGS_CPP
 #include "settings.h"
 #include <QDir>
+#include <QFile>
+#include <QStringList>
 
 Settings::Settings()
 {
     setDefaults();
+    if ( ! read ( ".ebe.ini" ) ) {
+        read ( QDir::homePath()+"/.ebe.ini" );
+    }
+
 }
 
-void Settings::read(QString filename)
+bool Settings::read(QString filename)
 {
+    if ( ! QFile::exists(filename) ) return false;
+    settings = new QSettings ( filename, QSettings::IniFormat );
+    QStringList keys = settings->allKeys();
+    int n = keys.count();
+    for ( int i = 0; i < n; i++ ) {
+        ebe[keys[i]] = settings->value(keys[i]);
+    }
 }
 
 void Settings::write(QString filename)
@@ -25,6 +38,12 @@ void Settings::saveAs()
 
 void Settings::setDefaults()
 {
+    ebe["quit_color"] = "#c00000";
+    ebe["run_color"] = "#0000c0";
+    ebe["next_color"] = "#0000c0";
+    ebe["step_color"] = "#0000c0";
+    ebe["continue_color"] = "#00a000";
+    ebe["stop_color"] = "#c00000";
     ebe["bg_color"] = "#f0f0d8";
     ebe["break_bg"] = "#ff0000";
     ebe["break_fg"] = "#00ffff";
@@ -103,9 +122,6 @@ void Settings::setDefaults()
     ebe["terminal/left"] = 1200;
     ebe["terminal/rows"] = 25;
     ebe["terminal/top"] = 500;
-    ebe["terminal/ttf"] = false;
-    ebe["terminal/ttfname"] = "Monospace";
-    ebe["terminal/ttfsize"] = 12;
 
     ebe["project/height"] = 300;
     ebe["project/left"] = 1300;

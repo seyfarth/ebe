@@ -10,10 +10,10 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
+    settings = new Settings;
+
     source = new SourceWindow(this);
     setCentralWidget(source);
-
-    settings = new Settings;
 
     createMenus();
     
@@ -32,9 +32,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 void MainWindow::setFontSize()
 {
-    char style[40];
+    char style[80];
     int width;
-    sprintf(style,"* {font-size: %dpx}",fontSize);
+    sprintf(style,"* {font-size: %dpx} QTabBar { font-family: Arial}",fontSize);
     qApp->setStyleSheet(style);
     QFont f("courier");
     f.setPixelSize(fontSize);
@@ -60,6 +60,7 @@ void MainWindow::decreaseFont()
 
 void MainWindow::createMenus()
 {
+    menuBar()->setStyleSheet("font-family: "+ebe["variable_font"].toString());
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("New"), source, SLOT(newFile()), QKeySequence::New );
     templateMenu = fileMenu->addMenu(tr("&Template"));
@@ -294,6 +295,18 @@ void MainWindow::createDockWindows()
     consoleDock->setWidget(console);
     addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
 
+    dataDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable-font"].toString() + "}" );
+    registerDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable-font"].toString() + "}" );
+    floatDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable-font"].toString() + "}" );
+    projectDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable-font"].toString() + "}" );
+    terminalDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable-font"].toString() + "}" );
+    consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable-font"].toString() + "}" );
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

@@ -13,7 +13,7 @@ class Settings : public QObject
 public:
     Settings();
     void clear();
-    void read(QString filename);
+    bool read(QString filename);
     void write(QString filename);
 
 private slots:
@@ -23,6 +23,7 @@ private slots:
 private:
     void setDefaults();
     QSettings *settings;
+    QString fileName;
 };
 
 #ifdef SETTINGS_CPP
