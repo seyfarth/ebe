@@ -15,6 +15,7 @@ CommandLine::CommandLine(QWidget *parent) : QFrame(parent)
     lineEdit = new QLineEdit();
     layout->addWidget(lineEdit);
     setLayout(layout);
+    setVisible(false);
 }
 
 QString CommandLine::text()

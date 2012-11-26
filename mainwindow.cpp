@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     source = new SourceWindow(this);
     setCentralWidget(source);
 
-    createActions();
     createMenus();
     
     createStatusBar();
@@ -24,51 +23,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     fontSize = 15;
     increaseFont();
-}
-
-void MainWindow::createActions()
-{
-    newAction = new QAction(tr("&New \tCtrl+n"),this);
-    openAction = new QAction(tr("&Open \tCtrl+o"),this);
-    saveAction = new QAction(tr("&Save \tCtrl+s"),this);
-    saveAsAction = new QAction(tr("Save As"),this);
-    closeAction = new QAction(tr("&Close"),this);
-    newProjectAction = new QAction(tr("New project"),this);
-    openProjectAction = new QAction(tr("Open Project"),this);
-    closeProjectAction = new QAction(tr("Close Project"),this);
-    saveSettingsAction = new QAction(tr("Save settings"),this);
-    saveSettingsAsAction = new QAction(tr("Save settings as"),this);
-    quitAction = new QAction(tr("&Quit \tCtrl+q"),this);
-    templateCAction = new QAction(tr("New C Program"),this);
-    templateCppAction = new QAction(tr("New C++ Program"),this);
-    templateAssemblyAction = new QAction(tr("New Assembly Program"),this);
-    templateFortranAction = new QAction(tr("New Fortran Program"),this);
-
-    cutAction = new QAction(tr("Cut \tCtrl+x"),this);
-    copyAction = new QAction(tr("Copy \tCtrl+c"),this);
-    pasteAction = new QAction(tr("Paste \tCtrl+v"),this);
-    undoAction = new QAction(tr("Undo \tCtrl+z"),this);
-    redoAction = new QAction(tr("Redo \tCtrl+r"),this);
-    commentAction = new QAction(tr("Comment \tCtrl+k"),this);
-    uncommentAction = new QAction(tr("Uncomment \tCtrl+u"),this);
-    indentAction = new QAction(tr("Indent \tCtrl+>"),this);
-    unindentAction = new QAction(tr("Unindent \tCtrl+<"),this);
-    findAction = new QAction(tr("Find \tCtrl+f"),this);
-    selectAllAction = new QAction(tr("Select all \tCtrl+a"),this);
-    selectNoneAction = new QAction(tr("Select none \tCtrl+0"),this);
-    prettifyAction = new QAction(tr("Prettify \tCtrl+p"),this);
-
-    pageFwdAction = new QAction(tr("Page forward \tPageDown"),this);
-    pageBackAction = new QAction(tr("Page back \tPageUp"),this);
-    firstLineAction = new QAction(tr("Goto line 1 \tCtrl+Home"),this);
-    lastLineAction = new QAction(tr("Goto last line \tCtrl+End"),this);
-    gotoLineAction = new QAction(tr("Goto line n \tCtrl+g"),this);
-    gotoTopAction = new QAction(tr("Goto top of screen \tCtrl+t"),this);
-    gotoBottomAction = new QAction(tr("Goto bottom of screen \tCtrl+b"),this);
-    centerAction = new QAction(tr("Center line on screen \tCtrl+m"),this);
-
-    increaseAction = new QAction(tr("Increase \tCtrl +"),this);
-    decreaseAction = new QAction(tr("Decrease \tCtrl -"),this);
 }
 
 void MainWindow::increaseFont()
@@ -92,53 +46,62 @@ void MainWindow::decreaseFont()
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(tr("New"), source, SLOT(newFile), QKeySequence::New );
+    fileMenu->addAction(tr("New"), source, SLOT(newFile()), QKeySequence::New );
     templateMenu = fileMenu->addMenu(tr("&Template"));
-        templateMenu->addAction(templateCAction);
-        templateMenu->addAction(templateCppAction);
-        templateMenu->addAction(templateAssemblyAction);
-        templateMenu->addAction(templateFortranAction);
-    fileMenu->addAction(openAction);
-    fileMenu->addAction(saveAction);
-    fileMenu->addAction(saveAsAction);
+        templateMenu->addAction(tr("C Program"), source, SLOT(templateC()));
+        templateMenu->addAction(tr("C++ Program"), source, SLOT(templateCpp()));
+        templateMenu->addAction(tr("Assembly Program"), source,
+                      SLOT(templateAssembly()));
+        templateMenu->addAction(tr("Fortran Program"), source, SLOT(templateFortran()));
+    fileMenu->addAction(tr("Open"), source, SLOT(open()), QKeySequence::Open );
+    fileMenu->addAction(tr("Save"), source, SLOT(save()), QKeySequence::Save );
+    fileMenu->addAction(tr("Save as"), source, SLOT(saveAs()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(newProjectAction);
-    fileMenu->addAction(openProjectAction);
-    fileMenu->addAction(closeProjectAction);
+    fileMenu->addAction(tr("New project"), source, SLOT(newProject()) );
+    fileMenu->addAction(tr("Open project"), source, SLOT(openProject()) );
+    fileMenu->addAction(tr("Close project"), source, SLOT(closeProject()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(saveSettingsAction);
-    fileMenu->addAction(saveSettingsAsAction);
+    fileMenu->addAction(tr("Save settings"), source, SLOT(saveSettingsAs()) );
+    fileMenu->addAction(tr("Save settings as"), source, SLOT(saveSettingsAs()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(quitAction);
+    fileMenu->addAction(tr("Quit"), source, SLOT(quit()), QKeySequence::Quit );
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
-    editMenu->addAction(cutAction);
-    editMenu->addAction(copyAction);
-    editMenu->addAction(pasteAction);
+    editMenu->addAction(tr("Cut"), source, SLOT(cut()), QKeySequence::Cut );
+    editMenu->addAction(tr("Copy"), source, SLOT(copy()), QKeySequence::Copy );
+    editMenu->addAction(tr("Paste"), source, SLOT(paste()), QKeySequence::Paste );
     editMenu->addSeparator();
-    editMenu->addAction(undoAction);
-    editMenu->addAction(redoAction);
+    editMenu->addAction(tr("Undo"), source, SLOT(undo()), QKeySequence::Undo );
+    editMenu->addAction(tr("Redo"), source, SLOT(redo()), QKeySequence::Redo );
     editMenu->addSeparator();
-    editMenu->addAction(commentAction);
-    editMenu->addAction(uncommentAction);
-    editMenu->addAction(indentAction);
-    editMenu->addAction(unindentAction);
+    editMenu->addAction(tr("Comment"), source, SLOT(Comment()), "Ctrl+K" );
+    editMenu->addAction(tr("Uncomment"), source, SLOT(unComment()), "Ctrl+U"  );
+    editMenu->addAction(tr("indent"), source, SLOT(indent()), "Ctrl+>"  );
+    editMenu->addAction(tr("Unindent"), source, SLOT(unIndent()), "Ctrl+<"  );
     editMenu->addSeparator();
-    editMenu->addAction(findAction);
+    editMenu->addAction(tr("Find"), source, SLOT(find()), QKeySequence::Find );
     editMenu->addSeparator();
-    editMenu->addAction(selectAllAction);
-    editMenu->addAction(selectNoneAction);
+    editMenu->addAction(tr("Select all"), source, SLOT(selectAll()),
+                        QKeySequence::SelectAll );
+    editMenu->addAction(tr("Select none"), source, SLOT(selectNone()), "Ctrl+0" );
     editMenu->addSeparator();
-    editMenu->addAction(prettifyAction);
+    editMenu->addAction(tr("Prettify"), source, SLOT(Prettify()) );
 
     moveMenu = menuBar()->addMenu(tr("&Move"));
-    moveMenu->addAction(pageFwdAction);
-    moveMenu->addAction(pageBackAction);
-    moveMenu->addAction(firstLineAction);
-    moveMenu->addAction(lastLineAction);
-    moveMenu->addAction(gotoLineAction);
+    moveMenu->addAction(tr("Page forward"), source, SLOT(pageForward()),
+                        QKeySequence::MoveToNextPage );
+    moveMenu->addAction(tr("Page backward"), source, SLOT(pageBackward()),s
+                        QKeySequence::MoveToPreviousPage );
+    moveMenu->addAction(tr("Go to line 1"), source, SLOT(gotoFirstLine()),
+                        QKeySequence::MoveToStartOfDocument );
+    moveMenu->addAction(tr("Go to last line"), source, SLOT(gotoLastLine()),
+                        QKeySequence::MoveToEndOfDocument );
+    moveMenu->addAction(tr("Go to line n"), source, SLOT(gotoLine()), "Ctrl+L" );
+    moveMenu->addAction(tr("Cut"), source, SLOT(cut()), QKeySequence::Cut );
     moveMenu->addAction(gotoTopAction);
+    moveMenu->addAction(tr("Cut"), source, SLOT(cut()), QKeySequence::Cut );
     moveMenu->addAction(gotoBottomAction);
+    moveMenu->addAction(tr("Cut"), source, SLOT(cut()), QKeySequence::Cut );
     moveMenu->addAction(centerAction);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
