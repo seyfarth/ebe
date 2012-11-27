@@ -129,14 +129,29 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+M") );
 
     viewMenu = menuBar()->addMenu(tr("&View"));
-    addToggle ( viewMenu, "Data window", this, SLOT(setDataDockVisible(bool)) );
-    addToggle ( viewMenu, "Register window", this, SLOT(setRegisterDockVisible(bool)) );
-    addToggle ( viewMenu, "Float register window", this, SLOT(setFloatDockVisible(bool)) );
-    addToggle ( viewMenu, "Console window", this, SLOT(setConsoleDockVisible(bool)) );
-    addToggle ( viewMenu, "Terminal window", this, SLOT(setTerminalDockVisible(bool)) );
-    addToggle ( viewMenu, "Project window", this, SLOT(setProjectDockVisible(bool)) );
-    addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)) );
-    addToggle ( viewMenu, "Command line", source, SLOT(setCommandLineVisible(bool)) );
+    addToggle ( viewMenu, "Data window", this, SLOT(setDataDockVisible(bool)),
+                ebe["data/visible"].toBool());
+    addToggle ( viewMenu, "Register window", this,
+                SLOT(setRegisterDockVisible(bool)),
+                ebe["register/visible"].toBool() );
+    addToggle ( viewMenu, "Float register window", this,
+                SLOT(setFloatDockVisible(bool)),
+                ebe["float/visible"].toBool() );
+    addToggle ( viewMenu, "Console window", this,
+                SLOT(setConsoleDockVisible(bool)),
+                ebe["console/visible"].toBool() );
+    addToggle ( viewMenu, "Terminal window", this,
+                SLOT(setTerminalDockVisible(bool)),
+                ebe["terminal/visible"].toBool() );
+    addToggle ( viewMenu, "Project window", this,
+                SLOT(setProjectDockVisible(bool)),
+                ebe["project/visible"].toBool() );
+    addToggle ( viewMenu, "Tooltips", this,
+                SLOT(setTooltipsVisible(bool)),
+                ebe["tooltips/visible"].toBool() );
+    addToggle ( viewMenu, "Command line", source,
+                SLOT(setCommandLineVisible(bool)),
+                ebe["command/visible"].toBool() );
 
     fontMenu = menuBar()->addMenu(tr("F&ont"));
     fontMenu->addAction(tr("Increase font"), this, SLOT(increaseFont()),
@@ -154,46 +169,59 @@ void MainWindow::createMenus()
 
 }
 
+
+void MainWindow::setTooltipsVisible(bool visible)
+{
+    ebe["tooltips/visible"] = visible;
+}
+
 void MainWindow::setDataDockVisible(bool visible)
 {
+    ebe["data/visible"] = visible;
     dataDock->setVisible(visible);
 }
 
 
 void MainWindow::setRegisterDockVisible(bool visible)
 {
+    ebe["register/visible"] = visible;
     registerDock->setVisible(visible);
 }
 
 
 void MainWindow::setFloatDockVisible(bool visible)
 {
+    ebe["float/visible"] = visible;
     floatDock->setVisible(visible);
 }
 
 
 void MainWindow::setConsoleDockVisible(bool visible)
 {
+    ebe["console/visible"] = visible;
     consoleDock->setVisible(visible);
 }
 
 
 void MainWindow::setTerminalDockVisible(bool visible)
 {
+    ebe["terminal/visible"] = visible;
     terminalDock->setVisible(visible);
 }
 
 
 void MainWindow::setProjectDockVisible(bool visible)
 {
+    ebe["project/visible"] = visible;
     projectDock->setVisible(visible);
 }
 
-void MainWindow::addToggle ( QMenu *menu, QString text, QObject *object, const char *slot )
+void MainWindow::addToggle ( QMenu *menu, QString text, QObject *object,
+                             const char *slot, bool checked )
 {
     QAction *action = new QAction ( text, this );
     action->setCheckable(true);
-    action->setChecked(true);
+    action->setChecked(checked);
     menu->addAction(action);
     connect ( action, SIGNAL(triggered(bool)), object, slot );
 }
@@ -309,6 +337,13 @@ void MainWindow::createDockWindows()
                             ebe["variable-font"].toString() + "}" );
     consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
                             ebe["variable-font"].toString() + "}" );
+
+    dataDock->setVisible(ebe["data/visible"].toBool());
+    registerDock->setVisible(ebe["register/visible"].toBool());
+    floatDock->setVisible(ebe["float/visible"].toBool());
+    projectDock->setVisible(ebe["project/visible"].toBool());
+    terminalDock->setVisible(ebe["terminal/visible"].toBool());
+    consoleDock->setVisible(ebe["console/visible"].toBool());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

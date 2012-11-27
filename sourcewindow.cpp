@@ -99,6 +99,7 @@ void SourceWindow::setLineNumberWidth ( int width )
 
 void SourceWindow::setCommandLineVisible(bool visible)
 {
+    ebe["command/visible"] = visible;
     commandLine->setVisible(visible);
 }
 

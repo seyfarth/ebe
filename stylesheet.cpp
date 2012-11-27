@@ -3,6 +3,7 @@
 #include "stylesheet.h"
 
 #include <QApplication>
+#include <QDebug>
 
 void addStyleSheet(QString key, QString style)
 {
@@ -15,5 +16,6 @@ void addStyleSheet(QString key, QString style)
         sheet += i.value();
         i++;
     }
+    //qDebug() << sheet << endl;
     qApp->setStyleSheet(sheet);
 }

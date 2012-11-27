@@ -148,6 +148,8 @@ void Settings::setDefaults()
     ebe["project/visible"] = true;
     ebe["project/width"] = 500;
 
+    ebe["command/visible"] = true;
+
     ebe["tooltips/visible"] = true;
 
     ebe["complete/minimum"] = 4;

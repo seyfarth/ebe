@@ -37,6 +37,7 @@ private slots:
     void setProjectDockVisible(bool);
     void setTerminalDockVisible(bool);
     void setConsoleDockVisible(bool);
+    void setTooltipsVisible(bool);
     void quit();
 
 
@@ -46,7 +47,8 @@ private:
     void createDockWindows();
     void helpAction ( QMenu *menu, QString s, QString file );
     void keyPressEvent ( QKeyEvent *event );
-    void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
+    void addToggle ( QMenu *menu, QString text, QObject *object,
+                     const char *slot, bool checked );
 
     DataWindow *data;
     SourceWindow *source;

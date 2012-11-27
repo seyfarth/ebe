@@ -1,4 +1,5 @@
 #include "commandline.h"
+#include "settings.h"
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
@@ -26,7 +27,7 @@ CommandLine::CommandLine(QWidget *parent)
     lineEdit = new QLineEdit();
     layout->addWidget(lineEdit);
     setLayout(layout);
-    setVisible(false);
+    setVisible(ebe["command/visible"].toBool());
 }
 
 /**
