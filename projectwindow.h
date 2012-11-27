@@ -10,10 +10,6 @@
 #include <QListWidget>
 #include <QStringList>
 #include <QString>
-#include <QTableWidgetItem>
-#include <QList>
-#include <QMessageBox>
-#include <QRegExp>
 
 class ProjectWindow : public QListWidget
 {
@@ -28,13 +24,15 @@ private:
     void initProjectWindow();
 
 private slots:
-
+    void newProject();
+    void openProject();
+    void closeProject();
     
 
 private:
-
+    QStringList fileNames;
+    QString projectFileName;
     
 };
-
 
 #endif

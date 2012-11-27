@@ -7,6 +7,7 @@
 #include <QMessageBox>
 
 #include "mainwindow.h"
+#include "settings.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -15,10 +16,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     source = new SourceWindow(this);
     setCentralWidget(source);
 
-    createMenus();
     
     createStatusBar();
     createDockWindows();
+    createMenus();
 
     setWindowTitle(tr("ebe"));
 
@@ -26,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     QFont *font = new QFont ( "courier" );
     qApp->setFont(*font);
-    fontSize = 16;
+    fontSize = ebe["font_size"].toInt();
     setFontSize();
 }
 
@@ -34,6 +35,7 @@ void MainWindow::setFontSize()
 {
     char style[80];
     int width;
+    ebe["font_size"] = fontSize;
     sprintf(style,"* {font-size: %dpx} QTabBar { font-family: Arial}",fontSize);
     qApp->setStyleSheet(style);
     QFont f("courier");
@@ -73,9 +75,9 @@ void MainWindow::createMenus()
     fileMenu->addAction(tr("Save"), source, SLOT(save()), QKeySequence::Save );
     fileMenu->addAction(tr("Save as"), source, SLOT(saveAs()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("New project"), source, SLOT(newProject()) );
-    fileMenu->addAction(tr("Open project"), source, SLOT(openProject()) );
-    fileMenu->addAction(tr("Close project"), source, SLOT(closeProject()) );
+    fileMenu->addAction(tr("New project"), project, SLOT(newProject()) );
+    fileMenu->addAction(tr("Open project"), project, SLOT(openProject()) );
+    fileMenu->addAction(tr("Close project"), project, SLOT(closeProject()) );
     fileMenu->addSeparator();
     fileMenu->addAction(tr("Save settings"), settings, SLOT(save()) );
     fileMenu->addAction(tr("Save settings as"), settings, SLOT(saveAs()) );
