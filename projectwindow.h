@@ -10,6 +10,7 @@
 #include <QListWidget>
 #include <QStringList>
 #include <QString>
+#include <QContextMenuEvent>
 
 class ProjectWindow : public QListWidget
 {
@@ -24,6 +25,7 @@ private:
     void initProjectWindow();
 
 private slots:
+    void ignore();
     void newProject();
     void openProject();
     void closeProject();
@@ -32,6 +34,7 @@ private slots:
 private:
     QStringList fileNames;
     QString projectFileName;
+    void contextMenuEvent ( QContextMenuEvent *event );
     
 };
 

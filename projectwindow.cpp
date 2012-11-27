@@ -2,6 +2,9 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QIODevice>
+#include <QCursor>
+#include <QAction>
+#include <QMenu>
 
 ProjectWindow::ProjectWindow(QWidget *parent) : QListWidget(parent)
 {
@@ -16,6 +19,28 @@ ProjectWindow::ProjectWindow(QWidget *parent) : QListWidget(parent)
 
 void ProjectWindow::initProjectWindow()
 {
+}
+
+void ProjectWindow::ignore()
+{
+}
+
+void ProjectWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+    if ( projectFileName == "" ) {
+        QMenu menu("Project menu");
+        menu.addAction(tr("New project"), this, SLOT(newProject()) );
+        menu.addAction(tr("Open project"), this, SLOT(openProject()) );
+        menu.addAction(tr("ignore"), this, SLOT(ignore()) );
+        menu.exec(QCursor::pos());
+    } else {
+        QMenu menu("Project menu");
+        menu.addAction(tr("Add file to project"), this, SLOT(addFile()) );
+        menu.addAction(tr("Drop file from project"), this, SLOT(dropFile()) );
+        menu.addAction(tr("Close project"), this, SLOT(closeProject()) );
+        menu.addAction(tr("ignore"), this, SLOT(ignore()) );
+        menu.exec(QCursor::pos());
+    }
 }
 
 void ProjectWindow::newProject()
