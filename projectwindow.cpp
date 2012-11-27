@@ -11,6 +11,7 @@ ProjectWindow::ProjectWindow(QWidget *parent) : QListWidget(parent)
     // clicking to open, etc.
 
     initProjectWindow();
+    setToolTip(tr("Right click to see project options"));
 }
 
 void ProjectWindow::initProjectWindow()

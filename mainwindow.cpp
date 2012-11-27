@@ -8,6 +8,7 @@
 
 #include "mainwindow.h"
 #include "settings.h"
+#include "stylesheet.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -29,15 +30,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     qApp->setFont(*font);
     fontSize = ebe["font_size"].toInt();
     setFontSize();
+    addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
 }
 
 void MainWindow::setFontSize()
 {
-    char style[80];
     int width;
     ebe["font_size"] = fontSize;
-    sprintf(style,"* {font-size: %dpx} QTabBar { font-family: Arial}",fontSize);
-    qApp->setStyleSheet(style);
+    addStyleSheet("font-size", "* {font-size: " + QString("%1").arg(fontSize) + "px}");
     QFont f("courier");
     f.setPixelSize(fontSize);
     QFontMetrics fm(f);
