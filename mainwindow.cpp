@@ -129,21 +129,22 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+M") );
 
     viewMenu = menuBar()->addMenu(tr("&View"));
-    addToggle ( viewMenu, "Data window", this, SLOT(setDataDockVisible(bool)),
+    dataVisible = addToggle ( viewMenu, "Data window", this,
+                SLOT(setDataDockVisible(bool)),
                 ebe["data/visible"].toBool());
-    addToggle ( viewMenu, "Register window", this,
+    registerVisible = addToggle ( viewMenu, "Register window", this,
                 SLOT(setRegisterDockVisible(bool)),
                 ebe["register/visible"].toBool() );
-    addToggle ( viewMenu, "Float register window", this,
+    floatVisible = addToggle ( viewMenu, "Float register window", this,
                 SLOT(setFloatDockVisible(bool)),
                 ebe["float/visible"].toBool() );
-    addToggle ( viewMenu, "Console window", this,
+    consoleVisible = addToggle ( viewMenu, "Console window", this,
                 SLOT(setConsoleDockVisible(bool)),
                 ebe["console/visible"].toBool() );
-    addToggle ( viewMenu, "Terminal window", this,
+    terminalVisible = addToggle ( viewMenu, "Terminal window", this,
                 SLOT(setTerminalDockVisible(bool)),
                 ebe["terminal/visible"].toBool() );
-    addToggle ( viewMenu, "Project window", this,
+    projectVisible = addToggle ( viewMenu, "Project window", this,
                 SLOT(setProjectDockVisible(bool)),
                 ebe["project/visible"].toBool() );
     addToggle ( viewMenu, "Tooltips", this,
@@ -179,6 +180,7 @@ void MainWindow::setDataDockVisible(bool visible)
 {
     ebe["data/visible"] = visible;
     dataDock->setVisible(visible);
+    dataVisible->setChecked(visible);
 }
 
 
@@ -186,6 +188,7 @@ void MainWindow::setRegisterDockVisible(bool visible)
 {
     ebe["register/visible"] = visible;
     registerDock->setVisible(visible);
+    registerVisible->setChecked(visible);
 }
 
 
@@ -193,6 +196,7 @@ void MainWindow::setFloatDockVisible(bool visible)
 {
     ebe["float/visible"] = visible;
     floatDock->setVisible(visible);
+    floatVisible->setChecked(visible);
 }
 
 
@@ -200,6 +204,7 @@ void MainWindow::setConsoleDockVisible(bool visible)
 {
     ebe["console/visible"] = visible;
     consoleDock->setVisible(visible);
+    consoleVisible->setChecked(visible);
 }
 
 
@@ -207,6 +212,7 @@ void MainWindow::setTerminalDockVisible(bool visible)
 {
     ebe["terminal/visible"] = visible;
     terminalDock->setVisible(visible);
+    terminalVisible->setChecked(visible);
 }
 
 
@@ -214,9 +220,10 @@ void MainWindow::setProjectDockVisible(bool visible)
 {
     ebe["project/visible"] = visible;
     projectDock->setVisible(visible);
+    projectVisible->setChecked(visible);
 }
 
-void MainWindow::addToggle ( QMenu *menu, QString text, QObject *object,
+QAction *MainWindow::addToggle ( QMenu *menu, QString text, QObject *object,
                              const char *slot, bool checked )
 {
     QAction *action = new QAction ( text, this );
@@ -224,6 +231,7 @@ void MainWindow::addToggle ( QMenu *menu, QString text, QObject *object,
     action->setChecked(checked);
     menu->addAction(action);
     connect ( action, SIGNAL(triggered(bool)), object, slot );
+    return action;
 }
 
 
@@ -279,6 +287,7 @@ void MainWindow::createDockWindows()
     dataDock->resize(100,100);
     dataDock->setWidget(data);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
+    connect ( dataDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setDataDockVisible(bool)));
 
     registerDock = new QDockWidget(tr("Registers"), this);
     registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -288,6 +297,7 @@ void MainWindow::createDockWindows()
     //registerDock->resize(100,100);
     registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
+    connect ( registerDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setRegisterDockVisible(bool)));
 
     floatDock = new QDockWidget(tr("Floating Point Registers"), this);
     floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -297,6 +307,7 @@ void MainWindow::createDockWindows()
     floatWindow->resize(100,100);
     floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
+    connect ( floatDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setFloatDockVisible(bool)));
 
     projectDock = new QDockWidget(tr("Project"), this);
     projectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -306,6 +317,7 @@ void MainWindow::createDockWindows()
     project->resize(100,100);
     projectDock->setWidget(project);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
+    connect ( projectDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setProjectDockVisible(bool)));
 
     terminalDock = new QDockWidget(tr("Terminal"), this);
     terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -316,6 +328,7 @@ void MainWindow::createDockWindows()
     terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     terminalDock->setWidget(terminal);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
+    connect ( terminalDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setTerminalDockVisible(bool)));
 
     consoleDock = new QDockWidget(tr("Console"), this);
     consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -324,6 +337,7 @@ void MainWindow::createDockWindows()
     console->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     consoleDock->setWidget(console);
     addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
+    connect ( consoleDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setConsoleDockVisible(bool)));
 
     dataDock->setStyleSheet("QDockWidget::title { font-family: " +
                             ebe["variable-font"].toString() + "}" );

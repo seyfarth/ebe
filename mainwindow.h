@@ -47,7 +47,7 @@ private:
     void createDockWindows();
     void helpAction ( QMenu *menu, QString s, QString file );
     void keyPressEvent ( QKeyEvent *event );
-    void addToggle ( QMenu *menu, QString text, QObject *object,
+    QAction *addToggle ( QMenu *menu, QString text, QObject *object,
                      const char *slot, bool checked );
 
     DataWindow *data;
@@ -65,6 +65,13 @@ private:
     QDockWidget *projectDock;
     QDockWidget *terminalDock;
     QDockWidget *consoleDock;
+
+    QAction *dataVisible;
+    QAction *registerVisible;
+    QAction *floatVisible;
+    QAction *projectVisible;
+    QAction *terminalVisible;
+    QAction *consoleVisible;
 
     void setFontSize();
     int fontSize;
