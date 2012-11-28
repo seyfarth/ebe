@@ -13,6 +13,7 @@
 
 ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 {
+    setObjectName("Console");
     setFrameStyle ( QFrame::Box | QFrame::Raised );
     setLineWidth(3);
 

@@ -31,6 +31,39 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fontSize = ebe["font_size"].toInt();
     setFontSize();
     addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
+
+    dataDock->setFloating(ebe["data/floating"].toBool());
+    registerDock->setFloating(ebe["register/floating"].toBool());
+    floatDock->setFloating(ebe["float/floating"].toBool());
+    projectDock->setFloating(ebe["project/floating"].toBool());
+    terminalDock->setFloating(ebe["terminal/floating"].toBool());
+    consoleDock->setFloating(ebe["console/floating"].toBool());
+    dataDock->restoreGeometry(ebe["data/geometry"].toByteArray());
+    registerDock->restoreGeometry(ebe["register/geometry"].toByteArray());
+    floatDock->restoreGeometry(ebe["float/geometry"].toByteArray());
+    projectDock->restoreGeometry(ebe["project/geometry"].toByteArray());
+    terminalDock->restoreGeometry(ebe["terminal/geometry"].toByteArray());
+    consoleDock->restoreGeometry(ebe["console/geometry"].toByteArray());
+    restoreGeometry(ebe["ebe/geometry"].toByteArray());
+    restoreState(ebe["ebe/state"].toByteArray());
+}
+
+void MainWindow::saveSettings()
+{
+    ebe["ebe/geometry"]      = saveGeometry();
+    ebe["ebe/state"]         = saveState();
+    ebe["data/floating"]     = dataDock->isFloating();
+    ebe["register/floating"] = registerDock->isFloating();
+    ebe["float/floating"]    = floatDock->isFloating();
+    ebe["project/floating"]  = projectDock->isFloating();
+    ebe["terminal/floating"] = terminalDock->isFloating();
+    ebe["console/floating"]  = consoleDock->isFloating();
+    ebe["data/geometry"]     = dataDock->saveGeometry();
+    ebe["register/geometry"] = registerDock->saveGeometry();
+    ebe["float/geometry"]    = floatDock->saveGeometry();
+    ebe["project/geometry"]  = projectDock->saveGeometry();
+    ebe["terminal/geometry"] = terminalDock->saveGeometry();
+    ebe["console/geometry"]  = consoleDock->saveGeometry();
 }
 
 void MainWindow::setFontSize()

@@ -15,6 +15,7 @@
 */
 RegisterWindow::RegisterWindow(QWidget *parent) : QFrame(parent)
 {
+    setObjectName("Register");
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(3);
     setMidLineWidth(1);

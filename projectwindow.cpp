@@ -14,6 +14,7 @@ ProjectWindow::ProjectWindow(QWidget *parent) : QListWidget(parent)
     // clicking to open, etc.
 
     initProjectWindow();
+    setObjectName("Project");
     setToolTip(tr("Right click to see project options"));
 }
 
@@ -36,6 +37,7 @@ void ProjectWindow::contextMenuEvent(QContextMenuEvent *event)
     } else {
         QMenu menu("Project menu");
         menu.addAction(tr("Add file to project"), this, SLOT(addFile()) );
+        menu.addAction(tr("Open file in editor"), this, SLOT(dropFile()) );
         menu.addAction(tr("Drop file from project"), this, SLOT(dropFile()) );
         menu.addAction(tr("Close project"), this, SLOT(closeProject()) );
         menu.addAction(tr("ignore"), this, SLOT(ignore()) );

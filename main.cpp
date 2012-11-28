@@ -6,17 +6,15 @@
 
 #include "mainwindow.h"
 
-QApplication *qapp;
-
+MainWindow *mainWin;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    qapp = &app;
     QPalette pal = app.palette();
     pal.setColor(QPalette::Window, QColor(218,218,228));
     app.setPalette(pal);
-    MainWindow mainWin;
-    mainWin.resize(1200,900);
-    mainWin.show();
+    mainWin = new MainWindow;
+    mainWin->resize(1200,900);
+    mainWin->show();
     return app.exec();
 }

@@ -1,10 +1,13 @@
 #define SETTINGS_CPP
+#include "mainwindow.h"
 #include "settings.h"
 #include <QDir>
 #include <QFile>
 #include <QStringList>
 #include <QFileDialog>
 #include <QDebug>
+
+extern MainWindow *mainWin;
 
 Settings::Settings()
 {
@@ -31,6 +34,7 @@ bool Settings::read(QString filename)
 
 void Settings::write(QString filename)
 {
+    mainWin->saveSettings();
     settings = new QSettings ( filename, QSettings::IniFormat );
     QStringList keys = ebe.keys();
     int n = keys.count();

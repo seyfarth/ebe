@@ -8,6 +8,7 @@
 FloatWindow::FloatWindow(QWidget *parent)
 : QScrollArea(parent)
 {
+    setObjectName("Float");
     setFrameStyle ( QFrame::Box | QFrame::Raised );
     setLineWidth(5);
     QWidget *widget = new QWidget();

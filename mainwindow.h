@@ -26,6 +26,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent=0);
+    void saveSettings();
 
 private slots:
     void increaseFont();

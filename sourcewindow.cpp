@@ -61,6 +61,7 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     buttonLayout->addWidget ( stepButton );
     buttonLayout->addWidget ( continueButton );
     buttonLayout->addWidget ( stopButton );
+    buttonLayout->addStretch();
 
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
 
