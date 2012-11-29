@@ -14,7 +14,6 @@ int main(int argc, char *argv[])
     pal.setColor(QPalette::Window, QColor(218,218,228));
     app.setPalette(pal);
     mainWin = new MainWindow;
-    mainWin->resize(1200,900);
     mainWin->show();
     return app.exec();
 }

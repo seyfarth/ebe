@@ -26,10 +26,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(true);
 
-    QFont *font = new QFont ( "courier" );
-    qApp->setFont(*font);
+    //QFont *font = new QFont ( "courier" );
+    //qApp->setFont(*font);
     fontSize = ebe["font_size"].toInt();
     setFontSize();
+    addStyleSheet("textedit-font", "QTextEdit { font-family: Courier}");
+    addStyleSheet("plaintextedit-font", "QPlainTextEdit { font-family: Courier}");
+    addStyleSheet("lineedit-font", "QLineEdit { font-family: Courier}");
+    addStyleSheet("list-font", "QListWidget { font-family: Courier}");
     addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
 
     dataDock->setFloating(ebe["data/floating"].toBool());
@@ -64,6 +68,12 @@ void MainWindow::saveSettings()
     ebe["project/geometry"]  = projectDock->saveGeometry();
     ebe["terminal/geometry"] = terminalDock->saveGeometry();
     ebe["console/geometry"]  = consoleDock->saveGeometry();
+    ebe["data/visible"]      = dataDock->isVisible();
+    ebe["register/visible"]  = registerDock->isVisible();
+    ebe["float/visible"]     = floatDock->isVisible();
+    ebe["project/visible"]   = projectDock->isVisible();
+    ebe["terminal/visible"]  = terminalDock->isVisible();
+    ebe["console/visible"]   = consoleDock->isVisible();
 }
 
 void MainWindow::setFontSize()
@@ -162,30 +172,12 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+M") );
 
     viewMenu = menuBar()->addMenu(tr("&View"));
-    dataVisible = addToggle ( viewMenu, "Data window", this,
-                SLOT(setDataDockVisible(bool)),
-                ebe["data/visible"].toBool());
-    registerVisible = addToggle ( viewMenu, "Register window", this,
-                SLOT(setRegisterDockVisible(bool)),
-                ebe["register/visible"].toBool() );
-    floatVisible = addToggle ( viewMenu, "Float register window", this,
-                SLOT(setFloatDockVisible(bool)),
-                ebe["float/visible"].toBool() );
-    consoleVisible = addToggle ( viewMenu, "Console window", this,
-                SLOT(setConsoleDockVisible(bool)),
-                ebe["console/visible"].toBool() );
-    terminalVisible = addToggle ( viewMenu, "Terminal window", this,
-                SLOT(setTerminalDockVisible(bool)),
-                ebe["terminal/visible"].toBool() );
-    projectVisible = addToggle ( viewMenu, "Project window", this,
-                SLOT(setProjectDockVisible(bool)),
-                ebe["project/visible"].toBool() );
-    addToggle ( viewMenu, "Tooltips", this,
-                SLOT(setTooltipsVisible(bool)),
-                ebe["tooltips/visible"].toBool() );
-    addToggle ( viewMenu, "Command line", source,
-                SLOT(setCommandLineVisible(bool)),
-                ebe["command/visible"].toBool() );
+    viewMenu->addAction ( dataDock->toggleViewAction() );
+    viewMenu->addAction ( registerDock->toggleViewAction() );
+    viewMenu->addAction ( floatDock->toggleViewAction() );
+    viewMenu->addAction ( consoleDock->toggleViewAction() );
+    viewMenu->addAction ( terminalDock->toggleViewAction() );
+    viewMenu->addAction ( projectDock->toggleViewAction() );
 
     fontMenu = menuBar()->addMenu(tr("F&ont"));
     fontMenu->addAction(tr("Increase font"), this, SLOT(increaseFont()),
@@ -302,6 +294,7 @@ void MainWindow::quit()
             source->saveBeforeQuit();
     }
 
+    if (source->fileChanged()) return;
     qApp->quit();
 }
 
@@ -320,7 +313,7 @@ void MainWindow::createDockWindows()
     dataDock->resize(100,100);
     dataDock->setWidget(data);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
-    connect ( dataDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setDataDockVisible(bool)));
+    //connect ( dataDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setDataDockVisible(bool)));
 
     registerDock = new QDockWidget(tr("Registers"), this);
     registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -330,7 +323,7 @@ void MainWindow::createDockWindows()
     //registerDock->resize(100,100);
     registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
-    connect ( registerDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setRegisterDockVisible(bool)));
+    //connect ( registerDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setRegisterDockVisible(bool)));
 
     floatDock = new QDockWidget(tr("Floating Point Registers"), this);
     floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -340,7 +333,7 @@ void MainWindow::createDockWindows()
     floatWindow->resize(100,100);
     floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
-    connect ( floatDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setFloatDockVisible(bool)));
+    //connect ( floatDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setFloatDockVisible(bool)));
 
     projectDock = new QDockWidget(tr("Project"), this);
     projectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -350,7 +343,7 @@ void MainWindow::createDockWindows()
     project->resize(100,100);
     projectDock->setWidget(project);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
-    connect ( projectDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setProjectDockVisible(bool)));
+    //connect ( projectDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setProjectDockVisible(bool)));
 
     terminalDock = new QDockWidget(tr("Terminal"), this);
     terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -361,7 +354,7 @@ void MainWindow::createDockWindows()
     terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     terminalDock->setWidget(terminal);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
-    connect ( terminalDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setTerminalDockVisible(bool)));
+    //connect ( terminalDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setTerminalDockVisible(bool)));
 
     consoleDock = new QDockWidget(tr("Console"), this);
     consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -370,20 +363,20 @@ void MainWindow::createDockWindows()
     console->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     consoleDock->setWidget(console);
     addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
-    connect ( consoleDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setConsoleDockVisible(bool)));
+    //connect ( consoleDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setConsoleDockVisible(bool)));
 
     dataDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable-font"].toString() + "}" );
+                            ebe["variable_font"].toString() + "}" );
     registerDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable-font"].toString() + "}" );
+                            ebe["variable_font"].toString() + "}" );
     floatDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable-font"].toString() + "}" );
+                            ebe["variable_font"].toString() + "}" );
     projectDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable-font"].toString() + "}" );
+                            ebe["variable_font"].toString() + "}" );
     terminalDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable-font"].toString() + "}" );
+                            ebe["variable_font"].toString() + "}" );
     consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable-font"].toString() + "}" );
+                            ebe["variable_font"].toString() + "}" );
 
     dataDock->setVisible(ebe["data/visible"].toBool());
     registerDock->setVisible(ebe["register/visible"].toBool());
