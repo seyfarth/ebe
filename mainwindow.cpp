@@ -178,6 +178,12 @@ void MainWindow::createMenus()
     viewMenu->addAction ( consoleDock->toggleViewAction() );
     viewMenu->addAction ( terminalDock->toggleViewAction() );
     viewMenu->addAction ( projectDock->toggleViewAction() );
+    addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)),
+                          ebe["tooltips/visible"].toBool() );
+    addToggle ( viewMenu, "Command line", source,
+                          SLOT(setCommandLineVisible(bool)),
+                          ebe["command/visible"].toBool() );
+
 
     fontMenu = menuBar()->addMenu(tr("F&ont"));
     fontMenu->addAction(tr("Increase font"), this, SLOT(increaseFont()),
@@ -199,53 +205,6 @@ void MainWindow::createMenus()
 void MainWindow::setTooltipsVisible(bool visible)
 {
     ebe["tooltips/visible"] = visible;
-}
-
-void MainWindow::setDataDockVisible(bool visible)
-{
-    ebe["data/visible"] = visible;
-    dataDock->setVisible(visible);
-    dataVisible->setChecked(visible);
-}
-
-
-void MainWindow::setRegisterDockVisible(bool visible)
-{
-    ebe["register/visible"] = visible;
-    registerDock->setVisible(visible);
-    registerVisible->setChecked(visible);
-}
-
-
-void MainWindow::setFloatDockVisible(bool visible)
-{
-    ebe["float/visible"] = visible;
-    floatDock->setVisible(visible);
-    floatVisible->setChecked(visible);
-}
-
-
-void MainWindow::setConsoleDockVisible(bool visible)
-{
-    ebe["console/visible"] = visible;
-    consoleDock->setVisible(visible);
-    consoleVisible->setChecked(visible);
-}
-
-
-void MainWindow::setTerminalDockVisible(bool visible)
-{
-    ebe["terminal/visible"] = visible;
-    terminalDock->setVisible(visible);
-    terminalVisible->setChecked(visible);
-}
-
-
-void MainWindow::setProjectDockVisible(bool visible)
-{
-    ebe["project/visible"] = visible;
-    projectDock->setVisible(visible);
-    projectVisible->setChecked(visible);
 }
 
 QAction *MainWindow::addToggle ( QMenu *menu, QString text, QObject *object,

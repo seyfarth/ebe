@@ -32,12 +32,6 @@ private slots:
     void increaseFont();
     void decreaseFont();
     void displayHelp();
-    void setDataDockVisible(bool);
-    void setRegisterDockVisible(bool);
-    void setFloatDockVisible(bool);
-    void setProjectDockVisible(bool);
-    void setTerminalDockVisible(bool);
-    void setConsoleDockVisible(bool);
     void setTooltipsVisible(bool);
     void quit();
 
