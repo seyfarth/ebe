@@ -74,6 +74,7 @@ void MainWindow::saveSettings()
     ebe["project/visible"]   = projectDock->isVisible();
     ebe["terminal/visible"]  = terminalDock->isVisible();
     ebe["console/visible"]   = consoleDock->isVisible();
+    settings->write();
 }
 
 void MainWindow::setFontSize()
@@ -121,9 +122,6 @@ void MainWindow::createMenus()
     fileMenu->addAction(tr("New project"), project, SLOT(newProject()) );
     fileMenu->addAction(tr("Open project"), project, SLOT(openProject()) );
     fileMenu->addAction(tr("Close project"), project, SLOT(closeProject()) );
-    fileMenu->addSeparator();
-    fileMenu->addAction(tr("Save settings"), settings, SLOT(save()) );
-    fileMenu->addAction(tr("Save settings as"), settings, SLOT(saveAs()) );
     fileMenu->addSeparator();
     fileMenu->addAction(tr("Quit"), qApp, SLOT(quit()), QKeySequence::Quit );
 
@@ -254,6 +252,7 @@ void MainWindow::quit()
     }
 
     if (source->fileChanged()) return;
+    saveSettings();
     qApp->quit();
 }
 

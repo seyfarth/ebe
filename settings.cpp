@@ -1,5 +1,4 @@
 #define SETTINGS_CPP
-#include "mainwindow.h"
 #include "settings.h"
 #include <QDir>
 #include <QFile>
@@ -7,56 +6,35 @@
 #include <QFileDialog>
 #include <QDebug>
 
-extern MainWindow *mainWin;
-
 Settings::Settings()
 {
     setDefaults();
-    if ( ! read ( ".ebe.ini" ) ) {
-        read ( QDir::homePath()+"/.ebe.ini" );
-    }
-
+    fileName = ".ebe.ini";
+    read();
 }
 
-bool Settings::read(QString filename)
+bool Settings::read()
 {
-    if ( ! QFile::exists(filename) ) return false;
-    settings = new QSettings ( filename, QSettings::IniFormat );
+    if ( ! QFile::exists(fileName) ) return false;
+    settings = new QSettings ( fileName, QSettings::IniFormat );
     QStringList keys = settings->allKeys();
     int n = keys.count();
     for ( int i = 0; i < n; i++ ) {
         ebe[keys[i]] = settings->value(keys[i]);
     }
-    fileName = filename;
     delete settings;
     return true;
 }
 
-void Settings::write(QString filename)
+void Settings::write()
 {
-    mainWin->saveSettings();
-    settings = new QSettings ( filename, QSettings::IniFormat );
+    settings = new QSettings ( fileName, QSettings::IniFormat );
     QStringList keys = ebe.keys();
     int n = keys.count();
     for ( int i = 0; i < n; i++ ) {
         settings->setValue(keys[i],ebe[keys[i]]);
     }
     delete settings;
-}
-
-void Settings::save()
-{
-    if ( fileName == "" ) saveAs();
-    write(fileName);
-}
-
-void Settings::saveAs()
-{
-    QString dirName = QFileDialog::getExistingDirectory(
-                            0, tr("Directory for .ebe.ini") );
-    if ( dirName == "" ) return;
-    fileName = dirName + "/" + ".ebe.ini";
-    write (fileName);
 }
 
 void Settings::setDefaults()

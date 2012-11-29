@@ -13,12 +13,10 @@ class Settings : public QObject
 public:
     Settings();
     void clear();
-    bool read(QString filename);
-    void write(QString filename);
+    bool read();
+    void write();
 
 private slots:
-    void save();
-    void saveAs();
 
 private:
     void setDefaults();
