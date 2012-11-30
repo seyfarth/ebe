@@ -12,7 +12,7 @@ ProjectWindow::ProjectWindow(QWidget *parent)
 {
     setObjectName("Project");
     setToolTip(tr("Right click to see project options"));
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
     setMidLineWidth(1);
     setContentsMargins(12,12,12,12);

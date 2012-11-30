@@ -24,7 +24,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
 : QFrame(parent)
 {
     setObjectName("Register");
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
     setMidLineWidth(1);
     setContentsMargins(12,12,12,12);

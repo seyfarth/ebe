@@ -1,25 +1,26 @@
 #ifndef DATAWINDOW_H
 #define DATAWINDOW_H
 
-#include <QScrollArea>
+#include <QFrame>
 #include <QString>
-#include "listwidget.h"
+#include <QStringList>
+#include <QTableWidget>
 
-class DataWindow : public QScrollArea
+class DataWindow : public QFrame
 {
     Q_OBJECT
 
 public:
     DataWindow(QWidget *parent=0);
-    void setFontWidth(int width);
+    void setFontHeightAndWidth(int height, int width);
 
 private slots:
 
 private:
     void addVariable ( QString name, QString value );
-    ListWidget *names;
-    ListWidget *values;
-
+    QStringList names;
+    QStringList values;
+    QTableWidget *table;
 };
 
 #endif

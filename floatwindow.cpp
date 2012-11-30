@@ -20,7 +20,7 @@ FloatWindow::FloatWindow(QWidget *parent)
 : QFrame(parent)
 {
     setObjectName("Float");
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
     setMidLineWidth(1);
     setContentsMargins(10,10,10,10);

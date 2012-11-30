@@ -90,7 +90,7 @@ void MainWindow::setFontSize()
     width = fm.width("x");
     height = fm.height();
     source->setLineNumberWidth(width*4+14);
-    data->setFontWidth(width);
+    data->setFontHeightAndWidth(height,width);
     floatWindow->setFontHeightAndWidth(height,width);
     registerWindow->setFontHeightAndWidth(height,width);
 }

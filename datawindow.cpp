@@ -1,48 +1,62 @@
 #include "datawindow.h"
 #include <QHBoxLayout>
-#include <QListWidgetItem>
-#include <QScrollArea>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QHeaderView>
+#include <QFrame>
 #include <cstdio>
 
 
 DataWindow::DataWindow(QWidget *parent)
-: QScrollArea(parent)
+: QFrame(parent)
 {
     setObjectName("Data");
-    //setFrameStyle ( QFrame::Panel | QFrame::Raised );
-    //setLineWidth(4);
-    QWidget *widget = new QWidget();
-    QHBoxLayout *layout = new QHBoxLayout(widget);
-    layout->setSpacing(0);
-    layout->setContentsMargins(10,10,10,10);
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setLineWidth(4);
+    setMidLineWidth(1);
+    setContentsMargins(10,10,10,10);
 
-    names = new ListWidget(widget);
-    names->setFixedWidth(100);
-    values = new ListWidget(widget);
-    layout->addWidget(names);
-    layout->addWidget(values);
+    QHBoxLayout *layout = new QHBoxLayout();
 
-    widget->setLayout ( layout );
-    setWidget(widget);
-    setWidgetResizable(true);
+    table = new QTableWidget(this);
+    table->setColumnCount(2);
+    table->verticalHeader()->hide();
+    table->horizontalHeader()->hide();
+    table->setShowGrid(false);
+
+    layout->addWidget(table);
+
+    setLayout ( layout );
 
     addVariable ( "stack[0-7]", "0x7fffc884888, 0, 0, 12, 0, 1, 2, 15" );
 }
 
-void DataWindow::setFontWidth ( int width )
+void DataWindow::setFontHeightAndWidth ( int height, int width )
 {
-    int i, n, k, max=1;
-
-    n = names->count();
-    for ( i = 0; i < n; i++ ) {
-        k = names->item(i)->text().length();
-        if ( k > max ) max = k;
+    int max, length;
+    int rows = table->rowCount();
+    for ( int r = 0; r < rows; r++ ) {
+        table->setRowHeight(r,height+3);
     }
-    names->setFixedWidth(max*width+8);
+    for ( int c = 0; c < 2; c++ ) {
+        max = 1;
+        for ( int r = 0; r < rows; r++ ) {
+            length = table->item(r,c)->text().length();
+            if ( length > max ) max = length;
+        }
+        table->setColumnWidth(c,(max+1)*width+3);
+    }
 }
 
 void DataWindow::addVariable ( QString name, QString value )
 {
-    names->insertItem ( 0, name+":" );
-    values->insertItem ( 0, value );
+    QTableWidgetItem *item;
+    names.append(name);
+    values.append(value);
+    int rows = table->rowCount();
+    table->setRowCount(rows+1);
+    item = new QTableWidgetItem(name);
+    table->setItem(rows,0,item);
+    item = new QTableWidgetItem(value);
+    table->setItem(rows,1,item);
 }
