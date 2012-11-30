@@ -9,8 +9,8 @@ DataWindow::DataWindow(QWidget *parent)
 : QScrollArea(parent)
 {
     setObjectName("Data");
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
-    setLineWidth(5);
+    //setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    //setLineWidth(4);
     QWidget *widget = new QWidget();
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->setSpacing(0);

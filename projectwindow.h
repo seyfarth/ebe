@@ -9,10 +9,11 @@
 
 #include <QListWidget>
 #include <QStringList>
+#include <QFrame>
 #include <QString>
 #include <QContextMenuEvent>
 
-class ProjectWindow : public QListWidget
+class ProjectWindow : public QFrame
 {
     Q_OBJECT
 
@@ -23,6 +24,7 @@ private:
 
     // Initialize, called from constructor
     void initProjectWindow();
+    void contextMenuEvent ( QContextMenuEvent *event );
 
 private slots:
     void ignore();
@@ -34,7 +36,7 @@ private slots:
 private:
     QStringList fileNames;
     QString projectFileName;
-    void contextMenuEvent ( QContextMenuEvent *event );
+    QListWidget *list;
     
 };
 

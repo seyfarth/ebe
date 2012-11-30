@@ -1,28 +1,25 @@
 #ifndef FLOATWINDOW_H
 #define FLOATWINDOW_H
 
-#include <QScrollArea>
+#include <QFrame>
 #include <QString>
-#include "listwidget.h"
-#include <QListWidgetItem>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
-class FloatWindow : public QScrollArea
+class FloatWindow : public QFrame
 {
     Q_OBJECT
 
 public:
     FloatWindow(QWidget *parent=0);
-    void setFontWidth ( int width );
+    void setFontHeightAndWidth ( int height, int width );
+    void setRegister ( int n, QString value );
 
 private slots:
 
 private:
-    void setRegister ( int n, QString value );
-    QListWidgetItem *regs[16];
-    ListWidget *names1;
-    ListWidget *values1;
-    ListWidget *names2;
-    ListWidget *values2;
+    QTableWidgetItem *regs[16];
+    QTableWidget *table;
 };
 
 #endif

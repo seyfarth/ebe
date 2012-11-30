@@ -1,67 +1,77 @@
 #include "floatwindow.h"
-#include <QHBoxLayout>
-#include <QListWidgetItem>
-#include <QScrollArea>
+#include <QVBoxLayout>
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QTableWidgetItem>
 #include <cstdio>
 
+static char *names[8][2] = {
+    { "xmm0", "xmm8" },
+    { "xmm1", "xmm9" },
+    { "xmm2", "xmm10" },
+    { "xmm3", "xmm11" },
+    { "xmm4", "xmm12" },
+    { "xmm5", "xmm13" },
+    { "xmm6", "xmm14" },
+    { "xmm7", "xmm15" }
+};
 
 FloatWindow::FloatWindow(QWidget *parent)
-: QScrollArea(parent)
+: QFrame(parent)
 {
     setObjectName("Float");
     setFrameStyle ( QFrame::Box | QFrame::Raised );
-    setLineWidth(5);
-    QWidget *widget = new QWidget();
-    QHBoxLayout *layout = new QHBoxLayout(widget);
-    layout->setSpacing(0);
-    layout->setContentsMargins(10,10,10,10);
+    setLineWidth(4);
+    setMidLineWidth(1);
+    setContentsMargins(10,10,10,10);
 
-    names1 = new ListWidget(widget);
-    QStringList names;
-    names << "xmm0" << "xmm1" << "xmm2" << "xmm3"
-          << "xmm4" << "xmm5" << "xmm6" << "xmm7";
-    names1->insertItems(0,names);
-    names1->setFixedWidth(55);
-    values1 = new ListWidget(widget);
-    names.clear();
-    names << "0.0" << "0.0" << "0.0" << "0.0"
-          << "0.0" << "0.0" << "0.0" << "0.0";
-    values1->insertItems(0,names);
-    names2 = new ListWidget(widget);
-    names2->setFixedWidth(70);
-    names.clear();
-    names << "xmm8" << "xmm9" << "xmm10" << "xmm11"
-          << "xmm12" << "xmm13" << "xmm14" << "xmm15";
-    names2->insertItems(0,names);
-    values2 = new ListWidget(widget);
-    names.clear();
-    names << "0.0" << "0.0" << "0.0" << "0.0"
-          << "0.0" << "0.0" << "0.0" << "0.0";
-    values2->insertItems(0,names);
+    QHBoxLayout *layout = new QHBoxLayout;
 
-    layout->addWidget(names1);
-    layout->addWidget(values1);
-    layout->addWidget(names2);
-    layout->addWidget(values2);
-        
-    for ( int i = 0; i < 8; i++ ) {
-        regs[i] = values1->item(i);
-        regs[i+8] = values2->item(i);
+    table = new QTableWidget(this);
+    table->setRowCount(8);
+    table->setColumnCount(4);
+    table->verticalHeader()->hide();
+    table->horizontalHeader()->hide();
+
+    QTableWidgetItem *name;
+    QTableWidgetItem *value;
+    for ( int r = 0; r < 8; r++ ) {
+        for ( int c = 0; c < 2; c++ ) {
+            name = new QTableWidgetItem(names[r][c]+QString(" "));
+            name->setTextAlignment(Qt::AlignRight);
+            value = new QTableWidgetItem("0.0");
+            regs[c*2+r] = value;
+            table->setItem(r,c*2,name);
+            table->setItem(r,c*2+1,value);
+        }
     }
+    layout->addWidget(table);
 
-    widget->setLayout ( layout );
-    setWidget(widget);
-    setWidgetResizable(true);
+    table->setShowGrid(false);
+    table->resizeRowsToContents();
+    table->resizeColumnsToContents();
 
-    setRegister(4,"4.0");
-    setRegister(8,"8.0");
-    setRegister(15,"15.0");
+    //setRegister(4,"4.0");
+    //setRegister(8,"8.0");
+    //setRegister(15,"15.0");
+    setLayout ( layout );
 }
 
-void FloatWindow::setFontWidth ( int width )
+void FloatWindow::setFontHeightAndWidth ( int height, int width )
 {
-    names1->setFixedWidth(4*width+10);
-    names2->setFixedWidth(5*width+10);
+    int max, length;
+    for ( int r = 0; r < 8; r++ ) {
+        table->setRowHeight(r,height+3);
+    }
+    for ( int c = 0; c < 4; c++ ) {
+        max = 1;
+        for ( int r = 0; r < 8; r++ ) {
+            length = table->item(r,c)->text().length();
+            if ( length > max ) max = length;
+        }
+        table->setColumnWidth(c,(max+1)*width+3);
+    }
+
 }
 
 void FloatWindow::setRegister ( int n, QString value )

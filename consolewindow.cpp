@@ -14,8 +14,8 @@
 ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 {
     setObjectName("Console");
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
-    setLineWidth(3);
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setLineWidth(4);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(5);

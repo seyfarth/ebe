@@ -5,21 +5,22 @@
 #include <QCursor>
 #include <QAction>
 #include <QMenu>
+#include <QVBoxLayout>
 
-ProjectWindow::ProjectWindow(QWidget *parent) : QListWidget(parent)
+ProjectWindow::ProjectWindow(QWidget *parent)
+: QFrame(parent)
 {
-    // Just basic initialization for now
-
-    // Add functionality later for listing project files,
-    // clicking to open, etc.
-
-    initProjectWindow();
     setObjectName("Project");
     setToolTip(tr("Right click to see project options"));
-}
+    setFrameStyle ( QFrame::Box | QFrame::Raised );
+    setLineWidth(4);
+    setMidLineWidth(1);
+    setContentsMargins(12,12,12,12);
 
-void ProjectWindow::initProjectWindow()
-{
+    QHBoxLayout *layout = new QHBoxLayout();
+    list = new QListWidget();
+    layout->addWidget(list);
+    setLayout(layout);
 }
 
 void ProjectWindow::ignore()
@@ -71,7 +72,7 @@ void ProjectWindow::openProject()
         name = in.readLine();
         while ( !name.isNull() ) {
             fileNames.append(name);
-            addItem(name);
+            list->addItem(name);
             name = in.readLine();
         }
         projectFileName = filename;
@@ -82,5 +83,5 @@ void ProjectWindow::openProject()
 void ProjectWindow::closeProject()
 {
     projectFileName = "";
-    clear();
+    list->clear();
 }

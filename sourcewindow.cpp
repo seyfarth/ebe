@@ -25,9 +25,8 @@
 
 SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
-    setLineWidth(3);
-    setMidLineWidth(1);
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setLineWidth(4);
 
     createLineNumberEdit();
     createTextEdit();

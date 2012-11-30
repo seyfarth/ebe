@@ -30,10 +30,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //qApp->setFont(*font);
     fontSize = ebe["font_size"].toInt();
     setFontSize();
-    addStyleSheet("textedit-font", "QTextEdit { font-family: Courier}");
-    addStyleSheet("plaintextedit-font", "QPlainTextEdit { font-family: Courier}");
-    addStyleSheet("lineedit-font", "QLineEdit { font-family: Courier}");
-    addStyleSheet("list-font", "QListWidget { font-family: Courier}");
+    addStyleSheet("textedit-font", "QTextEdit { font-weight: bold; font-family: Courier}");
+    addStyleSheet("plaintextedit-font", "QPlainTextEdit { font-weight: bold; font-family: Courier}");
+    addStyleSheet("lineedit-font", "QLineEdit { font-weight: bold; font-family: Courier}");
+    addStyleSheet("table-font", "QTableWidget { font-weight: bold; font-family: Courier}");
+    addStyleSheet("list-font", "QListWidget { font-weight: bold; font-family: Courier}");
     addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
 
     dataDock->setFloating(ebe["data/floating"].toBool());
@@ -80,15 +81,18 @@ void MainWindow::saveSettings()
 void MainWindow::setFontSize()
 {
     int width;
+    int height;
     ebe["font_size"] = fontSize;
     addStyleSheet("font-size", "* {font-size: " + QString("%1").arg(fontSize) + "px}");
     QFont f("courier");
     f.setPixelSize(fontSize);
     QFontMetrics fm(f);
     width = fm.width("x");
+    height = fm.height();
     source->setLineNumberWidth(width*4+14);
     data->setFontWidth(width);
-    floatWindow->setFontWidth(width);
+    floatWindow->setFontHeightAndWidth(height,width);
+    registerWindow->setFontHeightAndWidth(height,width);
 }
 
 void MainWindow::increaseFont()
@@ -268,7 +272,7 @@ void MainWindow::createDockWindows()
     data = new DataWindow(dataDock);
     data->setMinimumHeight(0);
     data->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    dataDock->resize(100,100);
+    //dataDock->resize(100,100);
     dataDock->setWidget(data);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
     //connect ( dataDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setDataDockVisible(bool)));
@@ -276,8 +280,7 @@ void MainWindow::createDockWindows()
     registerDock = new QDockWidget(tr("Registers"), this);
     registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
     registerWindow = new RegisterWindow(this);    
-    registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    registerWindow->resize(100,100);
+    registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     //registerDock->resize(100,100);
     registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
@@ -288,7 +291,7 @@ void MainWindow::createDockWindows()
     floatWindow = new FloatWindow(floatDock);
     floatWindow->setMinimumHeight(0);
     floatWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    floatWindow->resize(100,100);
+    //floatDock->resize(100,100);
     floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
     //connect ( floatDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setFloatDockVisible(bool)));
@@ -298,7 +301,7 @@ void MainWindow::createDockWindows()
     project = new ProjectWindow(projectDock);
     project->setMinimumHeight(0);
     project->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    project->resize(100,100);
+    //projectDock->resize(100,100);
     projectDock->setWidget(project);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
     //connect ( projectDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setProjectDockVisible(bool)));
@@ -308,7 +311,7 @@ void MainWindow::createDockWindows()
     terminal = new TerminalWindow(terminalDock);
     terminal->setMinimumHeight(20);
     terminal->setMinimumWidth(20);
-    terminal->resize(300,100);
+    terminalDock->resize(300,100);
     terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     terminalDock->setWidget(terminal);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
