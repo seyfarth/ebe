@@ -1,4 +1,5 @@
 #include "floatwindow.h"
+#include "settings.h"
 #include <QVBoxLayout>
 #include <QTableWidget>
 #include <QHeaderView>

@@ -44,6 +44,7 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 
     quitButton     = new QPushButton ( "Quit" );
     quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
+    quitButton->setToolTip ( tr("Click this button to exit from ebe") );
     runButton      = new QPushButton ( "Run" );
     runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
     nextButton     = new QPushButton ( "Next" );

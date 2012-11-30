@@ -118,6 +118,7 @@ void Settings::setDefaults()
     ebe["register/visible"] = true;
     ebe["register/width"] = 750;
 
+    ebe["float/visible"] = true;
     ebe["terminal/columns"] = 80;
     ebe["terminal/font"] = "10x20";
     ebe["terminal/left"] = 1200;
@@ -129,6 +130,8 @@ void Settings::setDefaults()
     ebe["project/top"] = 100;
     ebe["project/visible"] = true;
     ebe["project/width"] = 500;
+
+    ebe["terminal/visible"] = true;
 
     ebe["command/visible"] = true;
 

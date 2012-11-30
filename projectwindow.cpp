@@ -1,4 +1,5 @@
 #include "projectwindow.h"
+#include "settings.h"
 #include <QFileDialog>
 #include <QDebug>
 #include <QIODevice>

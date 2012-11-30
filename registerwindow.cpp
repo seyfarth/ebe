@@ -5,6 +5,7 @@
 */
 
 #include "registerwindow.h"
+#include "settings.h"
 #include <QDebug>
 #include <QHeaderView>
 #include <QTableWidget>
@@ -59,7 +60,6 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     layout->addWidget(table);
     setLayout(layout);
 }
-
 
 void RegisterWindow::setFontHeightAndWidth ( int height, int width )
 {

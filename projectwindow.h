@@ -31,7 +31,6 @@ private slots:
     void newProject();
     void openProject();
     void closeProject();
-    
 
 private:
     QStringList fileNames;

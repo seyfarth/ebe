@@ -1,4 +1,5 @@
 #include "datawindow.h"
+#include "settings.h"
 #include <QHBoxLayout>
 #include <QTableWidget>
 #include <QTableWidgetItem>

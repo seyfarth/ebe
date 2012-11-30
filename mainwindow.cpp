@@ -13,10 +13,12 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
+    tooltipsVisible = ebe["tooltips/visible"].toBool();
 
     source = new SourceWindow(this);
     setCentralWidget(source);
 
+    qApp->installEventFilter(this);
     
     createStatusBar();
     createDockWindows();
@@ -43,14 +45,40 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     projectDock->setFloating(ebe["project/floating"].toBool());
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
     consoleDock->setFloating(ebe["console/floating"].toBool());
-    dataDock->restoreGeometry(ebe["data/geometry"].toByteArray());
-    registerDock->restoreGeometry(ebe["register/geometry"].toByteArray());
-    floatDock->restoreGeometry(ebe["float/geometry"].toByteArray());
-    projectDock->restoreGeometry(ebe["project/geometry"].toByteArray());
-    terminalDock->restoreGeometry(ebe["terminal/geometry"].toByteArray());
-    consoleDock->restoreGeometry(ebe["console/geometry"].toByteArray());
-    restoreGeometry(ebe["ebe/geometry"].toByteArray());
-    restoreState(ebe["ebe/state"].toByteArray());
+    if ( ebe["data/geometry"].toString() != "" ) {
+        dataDock->restoreGeometry(ebe["data/geometry"].toByteArray());
+    }
+    if ( ebe["register/geometry"].toString() != "" ) {
+        registerDock->restoreGeometry(ebe["register/geometry"].toByteArray());
+    }
+    if ( ebe["float/geometry"].toString() != "" ) {
+        floatDock->restoreGeometry(ebe["float/geometry"].toByteArray());
+    }
+    if ( ebe["project/geometry"].toString() != "" ) {
+        projectDock->restoreGeometry(ebe["project/geometry"].toByteArray());
+    }
+    if ( ebe["terminal/geometry"].toString() != "" ) {
+        terminalDock->restoreGeometry(ebe["terminal/geometry"].toByteArray());
+    }
+    if ( ebe["console/geometry"].toString() != "" ) {
+        consoleDock->restoreGeometry(ebe["console/geometry"].toByteArray());
+    }
+    if ( ebe["ebe/geometry"].toString() != "" ) {
+        restoreGeometry(ebe["ebe/geometry"].toByteArray());
+    } else {
+        resize(1000,800);
+    }
+    if ( ebe["ebe/state"].toString() != "" ) {
+        restoreState(ebe["ebe/state"].toByteArray());
+    }
+}
+
+bool MainWindow::eventFilter ( QObject *object, QEvent *event )
+{
+    if ( event->type() == QEvent::ToolTip ) {
+        if ( !tooltipsVisible ) return true;
+    }
+    return false;
 }
 
 void MainWindow::saveSettings()
@@ -82,6 +110,8 @@ void MainWindow::setFontSize()
 {
     int width;
     int height;
+    if ( fontSize < 4 ) fontSize = 4;
+    if ( fontSize > 100 ) fontSize = 100;
     ebe["font_size"] = fontSize;
     addStyleSheet("font-size", "* {font-size: " + QString("%1").arg(fontSize) + "px}");
     QFont f("courier");
@@ -207,6 +237,7 @@ void MainWindow::createMenus()
 void MainWindow::setTooltipsVisible(bool visible)
 {
     ebe["tooltips/visible"] = visible;
+    tooltipsVisible = visible;
 }
 
 QAction *MainWindow::addToggle ( QMenu *menu, QString text, QObject *object,
@@ -272,7 +303,7 @@ void MainWindow::createDockWindows()
     data = new DataWindow(dataDock);
     data->setMinimumHeight(0);
     data->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    //dataDock->resize(100,100);
+    //data->resize(300,100);
     dataDock->setWidget(data);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
     //connect ( dataDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setDataDockVisible(bool)));
@@ -281,7 +312,7 @@ void MainWindow::createDockWindows()
     registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
     registerWindow = new RegisterWindow(this);    
     registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    //registerDock->resize(100,100);
+    //registerWindow->resize(300,100);
     registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
     //connect ( registerDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setRegisterDockVisible(bool)));
@@ -291,7 +322,7 @@ void MainWindow::createDockWindows()
     floatWindow = new FloatWindow(floatDock);
     floatWindow->setMinimumHeight(0);
     floatWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    //floatDock->resize(100,100);
+    //floatWindow->resize(300,100);
     floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
     //connect ( floatDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setFloatDockVisible(bool)));
@@ -301,7 +332,7 @@ void MainWindow::createDockWindows()
     project = new ProjectWindow(projectDock);
     project->setMinimumHeight(0);
     project->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
-    //projectDock->resize(100,100);
+    //project->resize(100,100);
     projectDock->setWidget(project);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
     //connect ( projectDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setProjectDockVisible(bool)));
@@ -309,10 +340,10 @@ void MainWindow::createDockWindows()
     terminalDock = new QDockWidget(tr("Terminal"), this);
     terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
     terminal = new TerminalWindow(terminalDock);
-    terminal->setMinimumHeight(20);
-    terminal->setMinimumWidth(20);
-    terminalDock->resize(300,100);
-    terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    //terminal->setMinimumHeight(20);
+    //terminal->setMinimumWidth(20);
+    //terminal->resize(300,100);
+    terminal->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Ignored);
     terminalDock->setWidget(terminal);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
     //connect ( terminalDock, SIGNAL(visibilityChanged(bool)), this, SLOT(setTerminalDockVisible(bool)));

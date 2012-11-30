@@ -1,4 +1,5 @@
 #include "terminalwindow.h"
+#include "settings.h"
 #include <QKeyEvent>
 #include <QHBoxLayout>
 
