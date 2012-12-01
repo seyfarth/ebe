@@ -10,7 +10,6 @@ Settings::Settings()
 {
     setDefaults();
     fileName = ".ebe.ini";
-    read();
 }
 
 bool Settings::read()
@@ -55,7 +54,8 @@ void Settings::setDefaults()
     ebe["find_bg"] = "#f0f0a0";
     ebe["find_fg"] = "#000080";
     ebe["fixed_font"] = "Courier";
-    ebe["fixed_size"] = 10;
+    ebe["fixed_size"] = 12;
+    ebe["font_size"] = 12;
     ebe["id_fg"] = 0x0000a0;
     ebe["illegal_bg"] = 0xff00ff;
     ebe["illegal_fg"] = 0x00ff00;
@@ -77,7 +77,7 @@ void Settings::setDefaults()
     ebe["text_fg"] = 0x000060;
     ebe["tooltip_bg"] = 0xffffd0;
     ebe["variable_font"] = "Arial";
-    ebe["variable_size"] = 10;
+    ebe["variable_size"] = 12;
 
     ebe["os/linux"] = false;
     ebe["os/mac"] = true;
@@ -118,7 +118,7 @@ void Settings::setDefaults()
     ebe["register/visible"] = true;
     ebe["register/width"] = 750;
 
-    ebe["float/visible"] = true;
+    ebe["float/visible"] = false;
     ebe["terminal/columns"] = 80;
     ebe["terminal/font"] = "10x20";
     ebe["terminal/left"] = 1200;

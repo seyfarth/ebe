@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QVBoxLayout>
+#include <cstdio>
 
 ProjectWindow::ProjectWindow(QWidget *parent)
 : QFrame(parent)
@@ -15,13 +16,18 @@ ProjectWindow::ProjectWindow(QWidget *parent)
     setToolTip(tr("Right click to see project options"));
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
-    setMidLineWidth(1);
-    setContentsMargins(12,12,12,12);
 
     QHBoxLayout *layout = new QHBoxLayout();
+    layout->setContentsMargins(10,10,10,10);
     list = new QListWidget();
     layout->addWidget(list);
     setLayout(layout);
+}
+
+QSize ProjectWindow::sizeHint()
+{
+    printf("proj sh\n");
+    return QSize(300,100);
 }
 
 void ProjectWindow::ignore()

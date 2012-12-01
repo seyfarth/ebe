@@ -12,6 +12,7 @@
 #include <QString>
 #include <QVBoxLayout>
 #include <QTableWidgetItem>
+#include <cstdio>
 
 static char *names[5][4] = {
     { "rax", "rsi", "r8",  "r12" },
@@ -27,11 +28,10 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     setObjectName("Register");
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
-    setMidLineWidth(1);
-    setContentsMargins(12,12,12,12);
 
     table = new QTableWidget(this);
     QVBoxLayout *layout = new QVBoxLayout;
+    layout->setContentsMargins(10,10,10,10);
 
     table->setRowCount(5);
     table->setColumnCount(8);
@@ -59,6 +59,12 @@ RegisterWindow::RegisterWindow(QWidget *parent)
 
     layout->addWidget(table);
     setLayout(layout);
+}
+
+QSize RegisterWindow::sizeHint()
+{
+    printf ( "regs sh\n" );
+    return QSize(300,100);
 }
 
 void RegisterWindow::setFontHeightAndWidth ( int height, int width )

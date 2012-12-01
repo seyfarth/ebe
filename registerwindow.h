@@ -12,6 +12,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QString>
+#include <QSize>
 
 class RegisterWindow : public QFrame
 {
@@ -25,6 +26,7 @@ public:
 private:
     QMap<QString,QTableWidgetItem *> registerMap;
     QTableWidget *table;
+    QSize sizeHint();
 
 private slots:
 

@@ -23,10 +23,9 @@ FloatWindow::FloatWindow(QWidget *parent)
     setObjectName("Float");
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
-    setMidLineWidth(1);
-    setContentsMargins(10,10,10,10);
 
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(10,10,10,10);
 
     table = new QTableWidget(this);
     table->setRowCount(8);
@@ -56,6 +55,12 @@ FloatWindow::FloatWindow(QWidget *parent)
     //setRegister(8,"8.0");
     //setRegister(15,"15.0");
     setLayout ( layout );
+}
+
+QSize FloatWindow::sizeHint()
+{
+    printf("fp sh\n");
+    return QSize(300,100);
 }
 
 void FloatWindow::setFontHeightAndWidth ( int height, int width )

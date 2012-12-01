@@ -7,6 +7,7 @@
     For display of project files initially
 */
 
+#include <QSize>
 #include <QListWidget>
 #include <QStringList>
 #include <QFrame>
@@ -36,6 +37,7 @@ private:
     QStringList fileNames;
     QString projectFileName;
     QListWidget *list;
+    QSize sizeHint();
     
 };
 

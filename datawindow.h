@@ -1,6 +1,7 @@
 #ifndef DATAWINDOW_H
 #define DATAWINDOW_H
 
+#include <QSize>
 #include <QFrame>
 #include <QString>
 #include <QStringList>
@@ -21,6 +22,7 @@ private:
     QStringList names;
     QStringList values;
     QTableWidget *table;
+    QSize sizeHint();
 };
 
 #endif

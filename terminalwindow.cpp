@@ -11,10 +11,9 @@ TerminalWindow::TerminalWindow(QWidget *parent)
 
     setFrameStyle( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
-    setMidLineWidth(1);
-    setContentsMargins(10,10,10,10);
 
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(10,10,10,10);
 
     edit = new TerminalEdit(this);
 

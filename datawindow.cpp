@@ -14,10 +14,9 @@ DataWindow::DataWindow(QWidget *parent)
     setObjectName("Data");
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
-    setMidLineWidth(1);
-    setContentsMargins(10,10,10,10);
 
     QHBoxLayout *layout = new QHBoxLayout();
+    layout->setContentsMargins(10,10,10,10);
 
     table = new QTableWidget(this);
     table->setColumnCount(2);
@@ -30,6 +29,12 @@ DataWindow::DataWindow(QWidget *parent)
     setLayout ( layout );
 
     addVariable ( "stack[0-7]", "0x7fffc884888, 0, 0, 12, 0, 1, 2, 15" );
+}
+
+QSize DataWindow::sizeHint()
+{
+    printf ( "data sh\n");
+    return QSize(300,100);
 }
 
 void DataWindow::setFontHeightAndWidth ( int height, int width )

@@ -29,6 +29,9 @@ public:
     MainWindow(QWidget *parent=0);
     void saveSettings();
 
+public slots:
+    void restoreMainWindow();
+
 private slots:
     void increaseFont();
     void decreaseFont();
