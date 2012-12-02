@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     source = new SourceWindow(this);
     setCentralWidget(source);
 
-    qApp->installEventFilter(this);
+    //qApp->installEventFilter(this);
     
     createStatusBar();
     createDockWindows();
@@ -118,7 +118,7 @@ void MainWindow::setFontSize()
     QFontMetrics fm(f);
     width = fm.width("x");
     height = fm.height();
-    source->setLineNumberWidth(width*4+14);
+    source->setFontHeightAndWidth(height,width);
     data->setFontHeightAndWidth(height,width);
     floatWindow->setFontHeightAndWidth(height,width);
     registerWindow->setFontHeightAndWidth(height,width);
@@ -285,7 +285,6 @@ void MainWindow::quit()
             source->saveBeforeQuit();
     }
 
-    if (source->fileChanged()) return;
     saveSettings();
     qApp->quit();
 }

@@ -10,6 +10,7 @@ extern QMap<QString,QString> styles;
 QMap<QString,QString> styles;
 #endif
 
+void initStyleSheet(QString key, QString style);
 void addStyleSheet(QString key, QString style);
 
 #endif

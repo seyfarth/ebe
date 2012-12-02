@@ -1,6 +1,7 @@
 #include "sourcewindow.h"
 #include "sourceedit.h"
 #include "commandline.h"
+#include "stylesheet.h"
 #include "settings.h"
 #include <QPushButton>
 #include <QPlainTextEdit>
@@ -10,6 +11,7 @@
 #include <QApplication>
 #include <QKeyEvent>
 #include <QPalette>
+#include <QScrollBar>
 
 // For open() and other file menu slots
 #include <QFileDialog>
@@ -22,15 +24,16 @@
 
 #include <QMessageBox>
 #include <QtDebug>
+#include <cstdio>
 
 SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
-    createLineNumberEdit();
+    lineNumberEdit = new LineNumberEdit(this);
     createTextEdit();
-    setStyleSheet("QPushButton { font-family: " +
+    initStyleSheet("editor","QPushButton { font-family: " +
                    ebe["variable_font"].toString() + "}" +
                    "QLabel { font-family:" +
                    ebe["variable_font"].toString() + "}" );
@@ -79,23 +82,46 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     sourceLayout->addLayout(editorLayout);
     setLayout(sourceLayout);
 
+    heightInPixels = 0;
+    textHeight = 0;
+    numLines = 0;
+    changed = false;
+    topNumber = 0;
+    bottomNumber = 0;
+
+    scrollBar = textEdit->verticalScrollBar();
+    textDoc = textEdit->document();
+
     // Auto update line number edit control when text changes in main
     // text edit widget
-    connect(textEdit, SIGNAL(textChanged()),
-        this, SLOT(prepareLineNumberEdit()));
+    connect(textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
+    connect ( textEdit, SIGNAL(newHeight(int)), this, SLOT(newHeight(int)));
+    //connect ( scrollBar, SIGNAL(sliderMoved(int)),
+              //this, SLOT(scrollBarChanged(int)));
 }
 
-void SourceWindow::createLineNumberEdit()
+void SourceWindow::setFontHeightAndWidth ( int height, int width )
 {
-    lineNumberEdit = new QPlainTextEdit(this);
-    lineNumberEdit->setFixedWidth(60);
-    // lineNumberEdit->appendPlainText(QString("1234"));
-    lineNumberEdit->setReadOnly(true);
+    fontHeight = height;
+    fontWidth  = width;
+    lineNumberEdit->setFixedWidth(width*4+12);
+    if ( heightInPixels > 0 ) {
+        textHeight = heightInPixels/fontHeight;
+    } else {
+        textHeight = 0;
+    }
 }
 
-void SourceWindow::setLineNumberWidth ( int width )
+void SourceWindow::scrollBarChanged ( int value )
 {
-    lineNumberEdit->setFixedWidth(width);
+   setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::newHeight ( int height )
+{
+    heightInPixels = height;
+    textHeight = heightInPixels / fontHeight;
+    setLineNumbers(textDoc->lineCount());
 }
 
 void SourceWindow::setCommandLineVisible(bool visible)
@@ -114,17 +140,12 @@ void SourceWindow::open()
 {
     // How shall we set status bar text here?
 
-    QString homeDir = QDir::toNativeSeparators(QDir::homePath());
-
-    if (homeDir == "")
-    {
-        qDebug() << "Home directory could not be found.";
-    }
-
     // TODO: Add Fortran file extensions and other assembler extensions
     // Any files?
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-        homeDir, tr("Assembly Files (*.asm);;C/C++ Files (*.c *.cpp *.h *.hpp)"));
+        ".", tr("Assembly files (*.asm *akefile);;") +
+             tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;)") +
+             tr("Fortran files (*.f *.F *.f* *.F* *akefile);;All files (*.* *)"));
 
     if (fileName == "")
     {
@@ -161,20 +182,25 @@ void SourceWindow::open()
         return;
     }
 
-    // int lineCount = 1;
-    QTextStream input(&file);
+    //QTextStream input(&file);
 
     openedFileName = fileName;
 
-    while (not input.atEnd())
-    {
-        textEdit->appendPlainText(input.readLine());
-        // lineCount++;
-    }
+    //textEdit->clear();
+    int lineCount = 0;
+    //while (not file.atEnd())
+    //{
+    QByteArray text = file.readAll();
+    int length = text.count();
+    if ( text[length-1] == '\n' ) text.chop(1);
+    textEdit->setPlainText(text);
+        //lineCount++;
+    //}
 
     file.close();
 
-    // setLineNumbers(lineCount);
+    lineCount=textEdit->document()->lineCount();
+    //setLineNumbers(lineCount);
 }
 
 void SourceWindow::save()
@@ -269,32 +295,57 @@ void SourceWindow::createCommandLineEdit()
 // Connected to signal textChanged
 // Then get number of lines from QTextDocument object and update
 // line number control
-void SourceWindow::prepareLineNumberEdit()
+void SourceWindow::textChanged()
 {
     // textChanged signal has been emitted
     changed = true;
-
-    // Fetch the QTextDocument
     textDoc = textEdit->document();
-
-    // Hopefully this will take care of any newline type
-    // \r\n on Windows, \r but not with an \n following on Mac,
-    // and it seems \n for everything else, all the Unixes anyway
-    // int lineNumbers = text.count(QRegExp("\\r\\n|\\r(?!\\n)|\\n"));
-
-    int numLines = textDoc->lineCount();
-    
-    // Clear then update the line number edit control
-    setLineNumbers(numLines);
+    setLineNumbers(textDoc->lineCount());
 }
 
 // Sets the line numbers in the line number edit control
 void SourceWindow::setLineNumbers(int nLines)
 {
+    int top, bottom, limit;
+    char s[10];
+
+    if ( nLines <= textHeight ) {
+        top = 1;
+        bottom = nLines;
+        limit = bottom;
+    } else {
+        top = scrollBar->value() + 1;
+        bottom = top + textHeight - 1;
+        limit = bottom + 2;
+        if ( limit > nLines ) limit = nLines;
+    }
+
+    if ( top == topNumber && bottom == bottomNumber ) return;
+
     // Clear before updating line numbers again
     lineNumberEdit->clear();
 
-    for (int i = 1; i <= nLines; i++)
-        lineNumberEdit->appendPlainText(QString::number(i, 10));
+    for (int i = top; i <= limit; i++) {
+        sprintf(s,"%4d",i);
+        lineNumberEdit->appendPlainText(s);
+    }
+
+    lineNumberEdit->scrollBar->setValue(0);
+
+    topNumber = top;
+    bottomNumber = bottom;
 }
 
+LineNumberEdit::LineNumberEdit(QWidget *parent)
+: QPlainTextEdit(parent)
+{
+    setFixedWidth(60);
+    setReadOnly(true);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollBar = verticalScrollBar();
+}
+
+void LineNumberEdit::wheelEvent ( QWheelEvent *e )
+{
+}

@@ -5,6 +5,11 @@
 #include <QApplication>
 #include <QDebug>
 
+void initStyleSheet(QString key, QString style)
+{
+    styles[key] = style;
+}
+
 void addStyleSheet(QString key, QString style)
 {
     styles[key] = style;
