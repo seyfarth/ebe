@@ -1,86 +1,86 @@
 #include "sourcewindow.h"
-#include "sourceedit.h"
-#include "commandline.h"
 #include "stylesheet.h"
 #include "settings.h"
-#include <QPushButton>
-#include <QPlainTextEdit>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QTextCursor>
-#include <QApplication>
-#include <QKeyEvent>
-#include <QPalette>
-#include <QScrollBar>
+#include <QtGui>
 
-// For open() and other file menu slots
-#include <QFileDialog>
-#include <QFileInfo>
-#include <QFile>
-#include <QDir>
-#include <QIODevice>
-#include <QTextStream>
-#include <QByteArray>
 
-#include <QMessageBox>
-#include <QtDebug>
-#include <cstdio>
+
+SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
+{
+    setWordWrapMode(QTextOption::NoWrap);
+    //QTimer *timer = new QTimer(this);
+    //connect(timer,SIGNAL(timeout()),this,SLOT(printScroll()));
+    //timer->start(1000);
+    top = -1;
+    scrollBar = verticalScrollBar();
+}
+
+//void SourceEdit::scrollContentsBy ( int dx, int dy )
+//{
+    //QPlainTextEdit::scrollContentsBy(dx,dy);
+    //emit newHeight(heightInPixels);
+//}
+void SourceEdit::wheelEvent ( QWheelEvent *event )
+{
+    QPlainTextEdit::wheelEvent(event);
+    int x = scrollBar->value();
+    if ( x != top ) {
+        emit newHeight(heightInPixels);
+        top = x;
+    }
+}
+
+bool SourceEdit::event ( QEvent *event )
+{
+    bool ret = QPlainTextEdit::event(event);
+    int x = scrollBar->value();
+    if ( x != top ) {
+        emit newHeight(heightInPixels);
+        top = x;
+    }
+    return ret;
+}
+
+void SourceEdit::keyPressEvent ( QKeyEvent *event )
+{
+    //if ( event->matches(QKeySequence::ZoomIn) ) event->ignore();
+    QPlainTextEdit::keyPressEvent(event);
+}
+
+void SourceEdit::printScroll()
+{
+    QScrollBar *sb = verticalScrollBar();
+    qDebug() << "sb" << sb->minimum() << sb->value() << sb->maximum() << endl;
+    qDebug() << viewport()->size();
+    qDebug() << "blocks" << blockCount();
+}
+
+void SourceEdit::resizeEvent(QResizeEvent *e)
+{
+    heightInPixels = e->size().height();
+    //qDebug() << "Size " << e->size();
+    //qDebug() << "ht " << heightInPixels;
+    emit newHeight(heightInPixels);
+}
 
 SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
-    setLineWidth(4);
+    setLineWidth(0);
 
     lineNumberEdit = new LineNumberEdit(this);
     createTextEdit();
-    initStyleSheet("editor","QPushButton { font-family: " +
-                   ebe["variable_font"].toString() + "}" +
-                   "QLabel { font-family:" +
-                   ebe["variable_font"].toString() + "}" );
 
-    QVBoxLayout *sourceLayout = new QVBoxLayout;
-    sourceLayout->setSpacing(2);
-    sourceLayout->setContentsMargins(10,10,10,10);
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->setSpacing(6);
-    buttonLayout->setContentsMargins(2,2,2,2);
+    //connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
 
-    quitButton     = new QPushButton ( "Quit" );
-    quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
-    quitButton->setToolTip ( tr("Click this button to exit from ebe") );
-    runButton      = new QPushButton ( "Run" );
-    runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
-    nextButton     = new QPushButton ( "Next" );
-    nextButton->setStyleSheet ( "color: "+ebe["next_color"].toString() );
-    stepButton     = new QPushButton ( "Step" );
-    stepButton->setStyleSheet ( "color: "+ebe["step_color"].toString() );
-    continueButton = new QPushButton ( "Continue" );
-    continueButton->setStyleSheet ( "color: "+ebe["continue_color"].toString() );
-    stopButton     = new QPushButton ( "Stop" );
-    stopButton->setStyleSheet ( "color: "+ebe["stop_color"].toString() );
-    buttonLayout->addWidget ( quitButton );
-    buttonLayout->addWidget ( runButton );
-    buttonLayout->addWidget ( nextButton );
-    buttonLayout->addWidget ( stepButton );
-    buttonLayout->addWidget ( continueButton );
-    buttonLayout->addWidget ( stopButton );
-    buttonLayout->addStretch();
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setSpacing(2);
+    layout->setContentsMargins(5,5,5,5);
 
-    connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
+    layout->addWidget(lineNumberEdit,0);
+    layout->addWidget(textEdit,1);
 
-    commandLine = new CommandLine();
-
-    QHBoxLayout *editorLayout = new QHBoxLayout;
-    editorLayout->setSpacing(2);
-    editorLayout->setContentsMargins(3,3,3,3);
-
-    editorLayout->addWidget(lineNumberEdit,0);
-    editorLayout->addWidget(textEdit,1);
-
-    sourceLayout->addLayout(buttonLayout);
-    sourceLayout->addWidget(commandLine);
-    sourceLayout->addLayout(editorLayout);
-    setLayout(sourceLayout);
+    setLayout(layout);
 
     heightInPixels = 0;
     textHeight = 0;
@@ -120,14 +120,9 @@ void SourceWindow::scrollBarChanged ( int value )
 void SourceWindow::newHeight ( int height )
 {
     heightInPixels = height;
-    textHeight = heightInPixels / fontHeight;
+    if ( fontHeight > 0 ) textHeight = heightInPixels / fontHeight;
+    else textHeight = 10;
     setLineNumbers(textDoc->lineCount());
-}
-
-void SourceWindow::setCommandLineVisible(bool visible)
-{
-    ebe["command/visible"] = visible;
-    commandLine->setVisible(visible);
 }
 
 void SourceWindow::createTextEdit()

@@ -5,7 +5,7 @@
 #include <QString>
 #include <QEvent>
 #include "datawindow.h"
-#include "sourcewindow.h"
+#include "sourceframe.h"
 #include "registerwindow.h"
 #include "floatwindow.h"
 #include "terminalwindow.h"
@@ -52,7 +52,7 @@ private:
 
     bool tooltipsVisible;
     DataWindow *data;
-    SourceWindow *source;
+    SourceFrame *source;
     RegisterWindow *registerWindow;
     FloatWindow *floatWindow;
     ProjectWindow *project;

@@ -15,10 +15,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
 
-    source = new SourceWindow(this);
+    source = new SourceFrame(this);
     setCentralWidget(source);
 
-    //qApp->installEventFilter(this);
+    qApp->installEventFilter(this);
     
     createStatusBar();
     createDockWindows();
@@ -272,6 +272,7 @@ void MainWindow::quit()
     qDebug() << "Calling static QApp quit()";
 
     // FIXME: save project/files etc., before quitting
+#if o
     if (source->fileChanged())
     {
         int buttonPressed = QMessageBox::question(source, tr("Save file?"),
@@ -284,8 +285,9 @@ void MainWindow::quit()
         if (buttonPressed == QMessageBox::Yes)
             source->saveBeforeQuit();
     }
-
+#endif
     saveSettings();
+
     qApp->quit();
 }
 

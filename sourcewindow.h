@@ -1,23 +1,33 @@
 #ifndef SOURCEWINDOW_H
 #define SOURCEWINDOW_H
 
-#include <QFrame>
-#include <QString>
+#include <QtGui>
 
-#include <QTextDocument>
-#include <QPlainTextEdit>
+class SourceEdit : public QPlainTextEdit
+{
+    Q_OBJECT
 
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QLineEdit;
-class QPushButton;
-class QKeyEvent;
-class QScrollBar;
-QT_END_NAMESPACE
+public:
+    SourceEdit(QWidget *parent=0);
+    int heightInPixels;
 
-class SourceEdit;
-class CommandLine;
+private slots:
+    void printScroll();
+
+signals:
+    void newHeight(int height);
+
+private:
+    void keyPressEvent(QKeyEvent *event);
+    void resizeEvent ( QResizeEvent *e );
+    //void scrollContentsBy(int dx, int dy);
+    bool event ( QEvent *e );
+    void wheelEvent ( QWheelEvent *e );
+    int top;
+    QScrollBar *scrollBar;
+};
+
+
 
 class LineNumberEdit: public QPlainTextEdit
 {
@@ -42,8 +52,7 @@ public:
     bool fileChanged();
     void saveBeforeQuit();
 
-private slots:
-    void setCommandLineVisible(bool);
+public slots:
     void open();
     void save();
     void textChanged();
@@ -70,14 +79,6 @@ private:
     QString openedFileName;
     QScrollBar *scrollBar;
 
-    QPushButton *quitButton;
-    QPushButton *runButton;
-    QPushButton *nextButton;
-    QPushButton *stepButton;
-    QPushButton *continueButton;
-    QPushButton *stopButton;
-
-    CommandLine *commandLine;
 };
 
 #endif
