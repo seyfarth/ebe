@@ -21,7 +21,7 @@ private slots:
 private:
     QTableWidgetItem *regs[16];
     QTableWidget *table;
-    QSize sizeHint();
+    QSize sizeHint() const;
 };
 
 #endif

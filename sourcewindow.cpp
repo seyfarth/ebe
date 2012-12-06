@@ -88,6 +88,8 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     changed = false;
     topNumber = 0;
     bottomNumber = 0;
+    opened = false;
+    saved = false;
 
     scrollBar = textEdit->verticalScrollBar();
     textDoc = textEdit->document();
@@ -135,11 +137,13 @@ void SourceWindow::open()
 {
     // How shall we set status bar text here?
 
+    opened = false;
+
     // TODO: Add Fortran file extensions and other assembler extensions
     // Any files?
     QString name = QFileDialog::getOpenFileName(this, tr("Open File"),
-        ".", tr("Assembly files (*.asm *akefile);;") +
-             tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;)") +
+        ".", tr("Assembly files (*.asm *akefile *);;") +
+             tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;") +
              tr("Fortran files (*.f *.F *.f* *.F* *akefile);;All files (*.* *)"));
 
     if (name == "")
@@ -162,20 +166,20 @@ void SourceWindow::open()
 
     fileName = name;
 
-    int lineCount = 0;
     QByteArray text = file.readAll();
     int length = text.count();
     if ( text[length-1] == '\n' ) text.chop(1);
     textEdit->setPlainText(text);
 
     file.close();
-
-    lineCount=textEdit->document()->lineCount();
+    opened = true;
+    changed = false;
 }
 
 void SourceWindow::saveAs()
 {
     QString name = QFileDialog::getSaveFileName(this, tr("Save file as"), "." );
+    saved = false;
 
     if (name == "")
     {
@@ -199,12 +203,15 @@ void SourceWindow::saveAs()
     file.close();
 
     // File changed variable, reset to false
+    qDebug() << "Saved it as " << fileName;
     changed = false;
+    saved = true;
 }
 
 void SourceWindow::save()
 {
     QFile file(fileName);
+    saved = false;
     if (! file.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(this, tr("Error"), tr("Failed to open file ") +
                 fileName + tr(" for saving."));
@@ -217,6 +224,7 @@ void SourceWindow::save()
 
         // File changed variable, reset to false
         changed = false;
+        saved = true;
     }
 }
 

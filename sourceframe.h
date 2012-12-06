@@ -24,6 +24,7 @@ private slots:
     void open();
     void save();
     void saveAs();
+    void close();
 
 private:
     QTabWidget *tab;

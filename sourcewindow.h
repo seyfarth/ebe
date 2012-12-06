@@ -51,6 +51,10 @@ public:
     void setLineNumbers(int nLines);
     bool fileChanged();
     void saveBeforeQuit();
+    QString fileName;
+    bool changed;
+    bool saved;
+    bool opened;
 
 public slots:
     void open();
@@ -76,8 +80,6 @@ private:
     SourceEdit *textEdit;
     QTextDocument *textDoc;
     LineNumberEdit *lineNumberEdit;
-    bool changed;
-    QString fileName;
     QScrollBar *scrollBar;
 
 };

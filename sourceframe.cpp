@@ -56,7 +56,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setLayout(layout);
 
     source = new SourceWindow;
-    int index = tab->addTab(source,"file 1");
+    int index = tab->addTab(source,"file 0");
     tab->setCurrentIndex(index);
 
 }
@@ -93,11 +93,67 @@ void SourceFrame::open()
     int index = tab->addTab(source,"file "+QString::number(count));
     tab->setCurrentIndex(index);
     source->open();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source && source->opened ) {
+        QString name = source->fileName;
+        name = QDir::current().relativeFilePath(name);
+        qDebug() << "Setting name " << index << name;
+        tab->setTabText(index,name);
+    }
+}
+
+void SourceFrame::close()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        if ( source->changed ) {
+            int ret = QMessageBox::warning(this, tr("Warning"),
+                                tr("This file has changed.\n"
+                                   "Do you want save the file?"),
+                                QMessageBox::Save | QMessageBox::Discard
+                                | QMessageBox::Cancel, QMessageBox::Save);
+            switch ( ret ) {
+            case QMessageBox::Save:
+                save();
+                break;
+            case QMessageBox::Discard:
+                delete source;
+            }
+        } else {
+            delete source;
+        }
+    }
 }
 
 void SourceFrame::save()
 {
-    source->save();
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->save();
+        if ( source->saved ) {
+            QString name = source->fileName;
+            name = QDir::current().relativeFilePath(name);
+            qDebug() << "Setting name " << index << name;
+            tab->setTabText(index,name);
+        }
+    }
+}
+
+void SourceFrame::saveAs()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->saveAs();
+        if ( source->saved ) {
+            QString name = source->fileName;
+            name = QDir::current().relativeFilePath(name);
+            qDebug() << "Setting name " << index << name;
+            tab->setTabText(index,name);
+        }
+    }
 }
 
 void SourceFrame::saveAs()

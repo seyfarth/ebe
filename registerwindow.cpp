@@ -14,7 +14,7 @@
 #include <QTableWidgetItem>
 #include <cstdio>
 
-static char *names[5][4] = {
+static QString names[5][4] = {
     { "rax", "rsi", "r8",  "r12" },
     { "rbx", "rdi", "r9",  "r13" },
     { "rcx", "rbp", "r10", "r14" },
@@ -61,9 +61,8 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     setLayout(layout);
 }
 
-QSize RegisterWindow::sizeHint()
+QSize RegisterWindow::sizeHint() const
 {
-    printf ( "regs sh\n" );
     return QSize(300,100);
 }
 
