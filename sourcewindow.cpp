@@ -137,136 +137,87 @@ void SourceWindow::open()
 
     // TODO: Add Fortran file extensions and other assembler extensions
     // Any files?
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+    QString name = QFileDialog::getOpenFileName(this, tr("Open File"),
         ".", tr("Assembly files (*.asm *akefile);;") +
              tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;)") +
              tr("Fortran files (*.f *.F *.f* *.F* *akefile);;All files (*.* *)"));
 
-    if (fileName == "")
+    if (name == "")
     {
-        qDebug() << "File name is empty";
+        delete this;
         return;
     }
 
-    QFile file(fileName);
-    QFileInfo fileInfo(file);
+    QFile file(name);
 
-    if (not fileInfo.exists())
+    if (! file.open(QIODevice::ReadWrite))
     {
-        qDebug() << "File " << fileName << " does not exist!";
-        QMessageBox::critical(this, tr("Error"), tr("File ") + fileName
-            + tr(" does not exist."));
-        return;
+        if ( ! file.open(QIODevice::ReadOnly) ) {
+            QMessageBox::critical(this, tr("Error"),
+                tr("Failed to open file ") + name );
+            delete this;
+            return;
+        }
     }
 
-    if (not fileInfo.isReadable())
-    {
-        QMessageBox::critical(this, tr("Error"), tr("File ") + fileName
-            + tr(" is not readable."));
-        return;
-    }
+    fileName = name;
 
-    if (not fileInfo.isWritable())
-    {
-        qDebug() << "File opened in read-only mode!";
-    }
-
-    if (not file.open(QIODevice::ReadWrite))
-    {
-        qDebug() << "Could not open file in read/write mode!";
-        return;
-    }
-
-    //QTextStream input(&file);
-
-    openedFileName = fileName;
-
-    //textEdit->clear();
     int lineCount = 0;
-    //while (not file.atEnd())
-    //{
     QByteArray text = file.readAll();
     int length = text.count();
     if ( text[length-1] == '\n' ) text.chop(1);
     textEdit->setPlainText(text);
-        //lineCount++;
-    //}
 
     file.close();
 
     lineCount=textEdit->document()->lineCount();
-    //setLineNumbers(lineCount);
+}
+
+void SourceWindow::saveAs()
+{
+    QString name = QFileDialog::getSaveFileName(this, tr("Save file as"), "." );
+
+    if (name == "")
+    {
+        return;
+    }
+
+    QFile file(name);
+
+    if (! file.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::critical(this, tr("Error"),
+                tr("Failed to open file for writing") + name );
+        return;
+    }
+
+    fileName = name;
+
+    QTextStream stream(&file);
+    stream << textEdit->toPlainText()+"\n";
+    stream.flush();
+    file.close();
+
+    // File changed variable, reset to false
+    changed = false;
 }
 
 void SourceWindow::save()
 {
-    if (openedFileName.isEmpty() or not changed)
-    {
-        qDebug() << "save(): No opened file name or text not changed";
-    }
-
-    QString homeDir = QDir::toNativeSeparators(QDir::homePath());
-
-    if (homeDir == "")
-    {
-        qDebug() << "save(): Home directory could not be found.";
-    }
-
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-        homeDir, tr("Text Files (*.txt);;Assembly Files (*.asm);;"
-        "C++ Files (*.cpp *.h *.hpp);;All files (*.*)"));
-
-    if (fileName != "") {
-
-        // Same as currently opened file name?
-        if (openedFileName.compare(fileName) == 0)
-        {
-            qDebug() << "Saving to same file name that was opened...";
-        }
-        else
-        {
-            qDebug() << "save()";
-            qDebug() << "Not the same file name that was opened...";
-        }
-
-        QFile file(fileName);        
-        QFileInfo fileInfo(file);
-
-        // If file name selected does not exist, opening with mode
-        // QIODevice::Write or QIODevice::ReadWrite will attempt
-        // to create the file
-        if (not file.open(QIODevice::ReadWrite)) {
-            
-            qDebug() << "save(): cannot open file read/write!";
-
-            QMessageBox::critical(this, tr("Error"), tr("Failed to open file ") +
+    QFile file(fileName);
+    if (! file.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Error"), tr("Failed to open file ") +
                 fileName + tr(" for saving."));
+        return;
+    } else {
+        QTextStream stream(&file);
+        stream << textEdit->toPlainText()+"\n";
+        stream.flush();
+        file.close();
 
-            return;
-        }
-        else {
-
-            if (not fileInfo.isWritable())
-            {
-                qDebug() << "save(): File is not writable!";
-
-                QMessageBox::critical(this, tr("Error"), tr("File ") + fileName
-                    + tr(" is not writable. Save file failed."));
-
-                return;
-            }
-
-            QTextStream stream(&file);
-            // Could use QTextDocument but makes sense to save as plain text
-            stream << textEdit->toPlainText();
-            stream.flush();
-            file.close();
-
-            // File changed variable, reset to false
-            changed = false;
-        }
+        // File changed variable, reset to false
+        changed = false;
     }
-
 }
 
 void SourceWindow::createButtons()

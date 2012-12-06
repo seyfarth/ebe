@@ -55,6 +55,7 @@ public:
 public slots:
     void open();
     void save();
+    void saveAs();
     void textChanged();
     void newHeight(int heightInPixels);
     void scrollBarChanged(int value);
@@ -76,7 +77,7 @@ private:
     QTextDocument *textDoc;
     LineNumberEdit *lineNumberEdit;
     bool changed;
-    QString openedFileName;
+    QString fileName;
     QScrollBar *scrollBar;
 
 };

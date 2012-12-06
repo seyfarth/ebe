@@ -11,12 +11,20 @@
 #include "settings.h"
 #include "stylesheet.h"
 
+DataWindow *dataWindow;
+SourceFrame *sourceFrame;
+RegisterWindow *registerWindow;
+FloatWindow *floatWindow;
+ProjectWindow *projectWindow;
+TerminalWindow *terminalWindow;
+ConsoleWindow *consoleWindow;
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
 
-    source = new SourceFrame(this);
-    setCentralWidget(source);
+    sourceFrame = new SourceFrame(this);
+    setCentralWidget(sourceFrame);
 
     qApp->installEventFilter(this);
     
@@ -118,8 +126,8 @@ void MainWindow::setFontSize()
     QFontMetrics fm(f);
     width = fm.width("x");
     height = fm.height();
-    source->setFontHeightAndWidth(height,width);
-    data->setFontHeightAndWidth(height,width);
+    sourceFrame->setFontHeightAndWidth(height,width);
+    dataWindow->setFontHeightAndWidth(height,width);
     floatWindow->setFontHeightAndWidth(height,width);
     registerWindow->setFontHeightAndWidth(height,width);
 }
@@ -141,65 +149,67 @@ void MainWindow::createMenus()
 {
     menuBar()->setStyleSheet("font-family: "+ebe["variable_font"].toString());
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(tr("New"), source, SLOT(newFile()), QKeySequence::New );
+    fileMenu->addAction(tr("New"), sourceFrame,
+                        SLOT(newFile()), QKeySequence::New );
     templateMenu = fileMenu->addMenu(tr("&Template"));
-        templateMenu->addAction(tr("C Program"), source, SLOT(templateC()));
-        templateMenu->addAction(tr("C++ Program"), source, SLOT(templateCpp()));
-        templateMenu->addAction(tr("Assembly Program"), source,
+        templateMenu->addAction(tr("C Program"),
+                       sourceFrame, SLOT(templateC()));
+        templateMenu->addAction(tr("C++ Program"), sourceFrame, SLOT(templateCpp()));
+        templateMenu->addAction(tr("Assembly Program"), sourceFrame,
                       SLOT(templateAssembly()));
-        templateMenu->addAction(tr("Fortran Program"), source, SLOT(templateFortran()));
-    fileMenu->addAction(tr("Open"), source, SLOT(open()), QKeySequence::Open );
-    fileMenu->addAction(tr("Save"), source, SLOT(save()), QKeySequence::Save );
-    fileMenu->addAction(tr("Save as"), source, SLOT(saveAs()) );
+        templateMenu->addAction(tr("Fortran Program"), sourceFrame, SLOT(templateFortran()));
+    fileMenu->addAction(tr("Open"), sourceFrame, SLOT(open()), QKeySequence::Open );
+    fileMenu->addAction(tr("Save"), sourceFrame, SLOT(save()), QKeySequence::Save );
+    fileMenu->addAction(tr("Save as"), sourceFrame, SLOT(saveAs()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("New project"), project, SLOT(newProject()) );
-    fileMenu->addAction(tr("Open project"), project, SLOT(openProject()) );
-    fileMenu->addAction(tr("Close project"), project, SLOT(closeProject()) );
+    fileMenu->addAction(tr("New project"), projectWindow, SLOT(newProject()) );
+    fileMenu->addAction(tr("Open project"), projectWindow, SLOT(openProject()) );
+    fileMenu->addAction(tr("Close project"), projectWindow, SLOT(closeProject()) );
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("Quit"), qApp, SLOT(quit()), QKeySequence::Quit );
+    fileMenu->addAction(tr("Quit"), this, SLOT(quit()), QKeySequence::Quit );
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
-    editMenu->addAction(tr("Cut"), source, SLOT(cut()), QKeySequence::Cut );
-    editMenu->addAction(tr("Copy"), source, SLOT(copy()), QKeySequence::Copy );
-    editMenu->addAction(tr("Paste"), source, SLOT(paste()), QKeySequence::Paste );
+    editMenu->addAction(tr("Cut"), sourceFrame, SLOT(cut()), QKeySequence::Cut );
+    editMenu->addAction(tr("Copy"), sourceFrame, SLOT(copy()), QKeySequence::Copy );
+    editMenu->addAction(tr("Paste"), sourceFrame, SLOT(paste()), QKeySequence::Paste );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Undo"), source, SLOT(undo()), QKeySequence::Undo );
-    editMenu->addAction(tr("Redo"), source, SLOT(redo()), QKeySequence::Redo );
+    editMenu->addAction(tr("Undo"), sourceFrame, SLOT(undo()), QKeySequence::Undo );
+    editMenu->addAction(tr("Redo"), sourceFrame, SLOT(redo()), QKeySequence::Redo );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Comment"), source, SLOT(Comment()),
+    editMenu->addAction(tr("Comment"), sourceFrame, SLOT(Comment()),
                         QKeySequence("Ctrl+K") );
-    editMenu->addAction(tr("Uncomment"), source, SLOT(unComment()),
+    editMenu->addAction(tr("Uncomment"), sourceFrame, SLOT(unComment()),
                         QKeySequence("Ctrl+U")  );
-    editMenu->addAction(tr("indent"), source, SLOT(indent()),
+    editMenu->addAction(tr("indent"), sourceFrame, SLOT(indent()),
                         QKeySequence("Ctrl+>")  );
-    editMenu->addAction(tr("Unindent"), source, SLOT(unIndent()),
+    editMenu->addAction(tr("Unindent"), sourceFrame, SLOT(unIndent()),
                         QKeySequence("Ctrl+<")  );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Find"), source, SLOT(find()), QKeySequence::Find );
+    editMenu->addAction(tr("Find"), sourceFrame, SLOT(find()), QKeySequence::Find );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Select all"), source, SLOT(selectAll()),
+    editMenu->addAction(tr("Select all"), sourceFrame, SLOT(selectAll()),
                         QKeySequence::SelectAll );
-    editMenu->addAction(tr("Select none"), source, SLOT(selectNone()),
+    editMenu->addAction(tr("Select none"), sourceFrame, SLOT(selectNone()),
                         QKeySequence("Ctrl+0") );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Prettify"), source, SLOT(Prettify()) );
+    editMenu->addAction(tr("Prettify"), sourceFrame, SLOT(Prettify()) );
 
     moveMenu = menuBar()->addMenu(tr("&Move"));
-    moveMenu->addAction(tr("Page forward"), source, SLOT(pageForward()),
+    moveMenu->addAction(tr("Page forward"), sourceFrame, SLOT(pageForward()),
                         QKeySequence::MoveToNextPage );
-    moveMenu->addAction(tr("Page backward"), source, SLOT(pageBackward()),
+    moveMenu->addAction(tr("Page backward"), sourceFrame, SLOT(pageBackward()),
                         QKeySequence::MoveToPreviousPage );
-    moveMenu->addAction(tr("Go to line 1"), source, SLOT(gotoFirstLine()),
+    moveMenu->addAction(tr("Go to line 1"), sourceFrame, SLOT(gotoFirstLine()),
                         QKeySequence::MoveToStartOfDocument );
-    moveMenu->addAction(tr("Go to last line"), source, SLOT(gotoLastLine()),
+    moveMenu->addAction(tr("Go to last line"), sourceFrame, SLOT(gotoLastLine()),
                         QKeySequence::MoveToEndOfDocument );
-    moveMenu->addAction(tr("Go to line n"), source, SLOT(gotoLine()),
+    moveMenu->addAction(tr("Go to line n"), sourceFrame, SLOT(gotoLine()),
                         QKeySequence("Ctrl+L") );
-    moveMenu->addAction(tr("Go to top of screen"), source, SLOT(gotoTop()),
+    moveMenu->addAction(tr("Go to top of screen"), sourceFrame, SLOT(gotoTop()),
                         QKeySequence("Ctrl+T") );
-    moveMenu->addAction(tr("Go to bottom"), source, SLOT(gotoBottom()),
+    moveMenu->addAction(tr("Go to bottom"), sourceFrame, SLOT(gotoBottom()),
                         QKeySequence("Ctrl+B") );
-    moveMenu->addAction(tr("Move line to middle"), source, SLOT(cut()),
+    moveMenu->addAction(tr("Move line to middle"), sourceFrame, SLOT(cut()),
                         QKeySequence("Ctrl+M") );
 
     viewMenu = menuBar()->addMenu(tr("&View"));
@@ -211,7 +221,7 @@ void MainWindow::createMenus()
     viewMenu->addAction ( projectDock->toggleViewAction() );
     addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)),
                           ebe["tooltips/visible"].toBool() );
-    addToggle ( viewMenu, "Command line", source,
+    addToggle ( viewMenu, "Command line", sourceFrame,
                           SLOT(setCommandLineVisible(bool)),
                           ebe["command/visible"].toBool() );
 
@@ -272,10 +282,10 @@ void MainWindow::quit()
     qDebug() << "Calling static QApp quit()";
 
     // FIXME: save project/files etc., before quitting
-#if o
-    if (source->fileChanged())
+#if 0
+    if (sourceFrame->fileChanged())
     {
-        int buttonPressed = QMessageBox::question(source, tr("Save file?"),
+        int buttonPressed = QMessageBox::question(sourceFrame, tr("Save file?"),
             tr("Save file before quitting?"), QMessageBox::Yes | QMessageBox::No |
             QMessageBox::Cancel, QMessageBox::Yes);
 
@@ -283,7 +293,7 @@ void MainWindow::quit()
             return;
 
         if (buttonPressed == QMessageBox::Yes)
-            source->saveBeforeQuit();
+            sourceFrame->saveBeforeQuit();
     }
 #endif
     saveSettings();
@@ -300,15 +310,17 @@ void MainWindow::createDockWindows()
 {
     dataDock = new QDockWidget(tr("Data"));
     dataDock->setObjectName("Dock 1");
-    dataDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    data = new DataWindow(dataDock);
-    data->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    dataDock->setWidget(data);
+    dataDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    dataWindow = new DataWindow(dataDock);
+    dataWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    dataDock->setWidget(dataWindow);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
 
     registerDock = new QDockWidget(tr("Registers"));
     registerDock->setObjectName("Dock 2");
-    registerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    registerDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     registerWindow = new RegisterWindow(this);    
     registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     registerDock->setWidget(registerWindow);
@@ -316,7 +328,8 @@ void MainWindow::createDockWindows()
 
     floatDock = new QDockWidget(tr("Floating Point Registers"));
     floatDock->setObjectName("Dock 3");
-    floatDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
+    floatDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     floatWindow = new FloatWindow(floatDock);
     floatWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
@@ -324,24 +337,27 @@ void MainWindow::createDockWindows()
 
     projectDock = new QDockWidget(tr("Project"));
     projectDock->setObjectName("Dock 4");
-    projectDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    project = new ProjectWindow(projectDock);
-    project->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-    projectDock->setWidget(project);
+    projectDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    projectWindow = new ProjectWindow(projectDock);
+    projectWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    projectDock->setWidget(projectWindow);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
     terminalDock = new QDockWidget(tr("Terminal"));
     terminalDock->setObjectName("Dock 5");
-    terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    terminal = new TerminalWindow(terminalDock);
-    terminalDock->setWidget(terminal);
+    terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    terminalWindow = new TerminalWindow(terminalDock);
+    terminalDock->setWidget(terminalWindow);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
 
     consoleDock = new QDockWidget(tr("Console"));
     consoleDock->setObjectName("Dock 6");
-    consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
-    console = new ConsoleWindow(consoleDock);
-    consoleDock->setWidget(console);
+    consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    consoleWindow = new ConsoleWindow(consoleDock);
+    consoleDock->setWidget(consoleWindow);
     addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
 
     dataDock->setVisible(ebe["data/visible"].toBool());
