@@ -1,4 +1,5 @@
 #include "consolewindow.h"
+#include "settings.h"
 #include <QPushButton>
 #include <QPlainTextEdit>
 #include <QLineEdit>
@@ -12,8 +13,9 @@
 
 ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Box | QFrame::Raised );
-    setLineWidth(3);
+    setObjectName("Console");
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setLineWidth(4);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(5);
@@ -21,6 +23,8 @@ ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 
     QHBoxLayout *commandLayout = new QHBoxLayout;
     QLabel *label = new QLabel("gdb command");
+    label->setStyleSheet ( "font-family: " +
+                            ebe["variable_font"].toString() );
     commandLayout->addWidget(label);
     commandLine = new QLineEdit(this);
     commandLayout->addWidget(commandLine);

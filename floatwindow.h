@@ -1,9 +1,11 @@
 #ifndef FLOATWINDOW_H
 #define FLOATWINDOW_H
 
+#include <QSize>
 #include <QFrame>
 #include <QString>
-#include <QListWidget>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 class FloatWindow : public QFrame
 {
@@ -11,15 +13,15 @@ class FloatWindow : public QFrame
 
 public:
     FloatWindow(QWidget *parent=0);
+    void setFontHeightAndWidth ( int height, int width );
+    void setRegister ( int n, QString value );
 
 private slots:
 
 private:
-    void addRegister ( int n, QString value );
-    QListWidget *names1;
-    QListWidget *values1;
-    QListWidget *names2;
-    QListWidget *values2;
+    QTableWidgetItem *regs[16];
+    QTableWidget *table;
+    QSize sizeHint();
 };
 
 #endif

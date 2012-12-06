@@ -1,13 +1,11 @@
 #ifndef DATAWINDOW_H
 #define DATAWINDOW_H
 
+#include <QSize>
 #include <QFrame>
 #include <QString>
-#include <QVBoxLayout>
-
-QT_BEGIN_NAMESPACE
-class QKeyEvent;
-QT_END_NAMESPACE
+#include <QStringList>
+#include <QTableWidget>
 
 class DataWindow : public QFrame
 {
@@ -15,12 +13,16 @@ class DataWindow : public QFrame
 
 public:
     DataWindow(QWidget *parent=0);
+    void setFontHeightAndWidth(int height, int width);
 
 private slots:
 
 private:
     void addVariable ( QString name, QString value );
-    QVBoxLayout *dataLayout;
+    QStringList names;
+    QStringList values;
+    QTableWidget *table;
+    QSize sizeHint();
 };
 
 #endif

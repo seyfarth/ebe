@@ -7,15 +7,9 @@
     For display of project files initially
 */
 
-#include <QListWidget>
-#include <QStringList>
-#include <QString>
-#include <QTableWidgetItem>
-#include <QList>
-#include <QMessageBox>
-#include <QRegExp>
+#include <QtGui>
 
-class ProjectWindow : public QListWidget
+class ProjectWindow : public QFrame
 {
     Q_OBJECT
 
@@ -26,15 +20,20 @@ private:
 
     // Initialize, called from constructor
     void initProjectWindow();
+    void contextMenuEvent ( QContextMenuEvent *event );
 
 private slots:
-
-    
+    void ignore();
+    void newProject();
+    void openProject();
+    void closeProject();
 
 private:
-
+    QStringList fileNames;
+    QString projectFileName;
+    QListWidget *list;
+    QSize sizeHint();
     
 };
-
 
 #endif

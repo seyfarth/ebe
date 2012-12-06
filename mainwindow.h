@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QEvent>
 #include "datawindow.h"
-#include "sourcewindow.h"
+#include "sourceframe.h"
 #include "registerwindow.h"
 #include "floatwindow.h"
 #include "terminalwindow.h"
@@ -26,17 +27,14 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent=0);
+    void saveSettings();
 
-private slots:
+public slots:
+    void restoreMainWindow();
     void increaseFont();
     void decreaseFont();
     void displayHelp();
-    void setDataDockVisible(bool);
-    void setRegisterDockVisible(bool);
-    void setFloatDockVisible(bool);
-    void setProjectDockVisible(bool);
-    void setTerminalDockVisible(bool);
-    void setConsoleDockVisible(bool);
+    void setTooltipsVisible(bool);
     void quit();
 
 
@@ -46,17 +44,28 @@ private:
     void createDockWindows();
     void helpAction ( QMenu *menu, QString s, QString file );
     void keyPressEvent ( QKeyEvent *event );
-    void addToggle ( QMenu *menu, QString text, QObject *object, const char *slot );
+    QAction *addToggle ( QMenu *menu, QString text, QObject *object,
+                     const char *slot, bool checked );
+    bool eventFilter ( QObject *object, QEvent *event );
 
-    DataWindow *data;
-    SourceWindow *source;
-    RegisterWindow *registerWindow;
-    FloatWindow *floatWindow;
-    ProjectWindow *project;
-    TerminalWindow *terminal;
-    ConsoleWindow *console;
+    bool tooltipsVisible;
     Settings *settings;
 
+    QDockWidget *dataDock;
+    QDockWidget *registerDock;
+    QDockWidget *floatDock;
+    QDockWidget *projectDock;
+    QDockWidget *terminalDock;
+    QDockWidget *consoleDock;
+
+    QAction *dataVisible;
+    QAction *registerVisible;
+    QAction *floatVisible;
+    QAction *projectVisible;
+    QAction *terminalVisible;
+    QAction *consoleVisible;
+
+    void setFontSize();
     int fontSize;
 
     QMenu *fileMenu;
@@ -66,13 +75,6 @@ private:
     QMenu *moveMenu;
     QMenu *fontMenu;
     QMenu *helpMenu;
-
-    QDockWidget *dataDock;
-    QDockWidget *registerDock;
-    QDockWidget *floatDock;
-    QDockWidget *projectDock;
-    QDockWidget *terminalDock;
-    QDockWidget *consoleDock;
 };
 
 #endif
