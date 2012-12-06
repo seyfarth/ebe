@@ -20,9 +20,8 @@ ProjectWindow::ProjectWindow(QWidget *parent)
     setLayout(layout);
 }
 
-QSize ProjectWindow::sizeHint()
+QSize ProjectWindow::sizeHint() const
 {
-    printf("proj sh\n");
     return QSize(300,100);
 }
 

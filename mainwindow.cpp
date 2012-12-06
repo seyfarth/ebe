@@ -161,6 +161,7 @@ void MainWindow::createMenus()
     fileMenu->addAction(tr("Open"), sourceFrame, SLOT(open()), QKeySequence::Open );
     fileMenu->addAction(tr("Save"), sourceFrame, SLOT(save()), QKeySequence::Save );
     fileMenu->addAction(tr("Save as"), sourceFrame, SLOT(saveAs()) );
+    fileMenu->addAction(tr("Close"), sourceFrame, SLOT(close()) );
     fileMenu->addSeparator();
     fileMenu->addAction(tr("New project"), projectWindow, SLOT(newProject()) );
     fileMenu->addAction(tr("Open project"), projectWindow, SLOT(openProject()) );

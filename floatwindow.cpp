@@ -6,7 +6,7 @@
 #include <QTableWidgetItem>
 #include <cstdio>
 
-static char *names[8][2] = {
+static QString names[8][2] = {
     { "xmm0", "xmm8" },
     { "xmm1", "xmm9" },
     { "xmm2", "xmm10" },
@@ -57,7 +57,7 @@ FloatWindow::FloatWindow(QWidget *parent)
     setLayout ( layout );
 }
 
-QSize FloatWindow::sizeHint()
+QSize FloatWindow::sizeHint() const
 {
     printf("fp sh\n");
     return QSize(300,100);

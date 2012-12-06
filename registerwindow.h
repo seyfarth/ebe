@@ -26,7 +26,7 @@ public:
 private:
     QMap<QString,QTableWidgetItem *> registerMap;
     QTableWidget *table;
-    QSize sizeHint();
+    QSize sizeHint() const;
 
 private slots:
 
