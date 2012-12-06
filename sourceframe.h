@@ -16,11 +16,14 @@ public:
     void setLineNumbers(int nLines);
     bool fileChanged();
     void saveBeforeQuit();
+    void openInNewTab(QString name);
+    void closeTabs();
 
 private slots:
     void setCommandLineVisible(bool);
     void open();
     void save();
+    void saveAs();
 
 private:
     QTabWidget *tab;

@@ -1,13 +1,9 @@
 #include "projectwindow.h"
+#include "sourceframe.h"
 #include "settings.h"
-#include <QFileDialog>
-#include <QDebug>
-#include <QIODevice>
-#include <QCursor>
-#include <QAction>
-#include <QMenu>
-#include <QVBoxLayout>
 #include <cstdio>
+
+extern SourceFrame *sourceFrame;
 
 ProjectWindow::ProjectWindow(QWidget *parent)
 : QFrame(parent)
@@ -68,6 +64,7 @@ void ProjectWindow::newProject()
 
 void ProjectWindow::openProject()
 {
+    bool autoOpen = ebe["project/auto_open"].toBool();
     if ( projectFileName != "" ) closeProject();
     QString filename = QFileDialog::getOpenFileName(this,
             tr("Select project name"), 0, tr("Projects (*.ebe)") );
@@ -80,6 +77,7 @@ void ProjectWindow::openProject()
         while ( !name.isNull() ) {
             fileNames.append(name);
             list->addItem(name);
+            if (autoOpen ) sourceFrame->openInNewTab(name);
             name = in.readLine();
         }
         projectFileName = filename;
@@ -91,4 +89,5 @@ void ProjectWindow::closeProject()
 {
     projectFileName = "";
     list->clear();
+    sourceFrame->closeTabs();
 }

@@ -7,12 +7,7 @@
     For display of project files initially
 */
 
-#include <QSize>
-#include <QListWidget>
-#include <QStringList>
-#include <QFrame>
-#include <QString>
-#include <QContextMenuEvent>
+#include <QtGui>
 
 class ProjectWindow : public QFrame
 {

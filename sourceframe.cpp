@@ -42,7 +42,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     buttonLayout->addWidget ( stopButton );
     buttonLayout->addStretch();
 
-    //connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
+    connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
 
     commandLine = new CommandLine();
 
@@ -56,17 +56,28 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setLayout(layout);
 
     source = new SourceWindow;
-    int i = tab->addTab(source,"file 1");
-    source = new SourceWindow;
-    i = tab->addTab(source,"file 2");
-    source = new SourceWindow;
-    i = tab->addTab(source,"file 3");
-    tab->setCurrentIndex(i);
+    int index = tab->addTab(source,"file 1");
+    tab->setCurrentIndex(index);
+
 }
 
 void SourceFrame::setFontHeightAndWidth ( int height, int width )
 {
-    source->setFontHeightAndWidth(height,width);
+    int current = tab->currentIndex();
+    int count = tab->count();
+    for ( int i = 0; i < count; i++ ) {
+        source = (SourceWindow *)tab->widget(i);
+        source->setFontHeightAndWidth(height,width);
+    }
+    tab->setCurrentIndex(current);
+}
+
+void SourceFrame::openInNewTab(QString name)
+{
+}
+
+void SourceFrame::closeTabs()
+{
 }
 
 void SourceFrame::setCommandLineVisible(bool visible)
@@ -77,10 +88,19 @@ void SourceFrame::setCommandLineVisible(bool visible)
 
 void SourceFrame::open()
 {
+    source = new SourceWindow;
+    int count = tab->count();
+    int index = tab->addTab(source,"file "+QString::number(count));
+    tab->setCurrentIndex(index);
     source->open();
 }
 
 void SourceFrame::save()
 {
     source->save();
+}
+
+void SourceFrame::saveAs()
+{
+    source->saveAs();
 }

@@ -31,8 +31,6 @@ public:
 
 public slots:
     void restoreMainWindow();
-
-private slots:
     void increaseFont();
     void decreaseFont();
     void displayHelp();
@@ -51,13 +49,6 @@ private:
     bool eventFilter ( QObject *object, QEvent *event );
 
     bool tooltipsVisible;
-    DataWindow *data;
-    SourceFrame *source;
-    RegisterWindow *registerWindow;
-    FloatWindow *floatWindow;
-    ProjectWindow *project;
-    TerminalWindow *terminal;
-    ConsoleWindow *console;
     Settings *settings;
 
     QDockWidget *dataDock;

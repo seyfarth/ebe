@@ -130,6 +130,7 @@ void Settings::setDefaults()
     ebe["project/top"] = 100;
     ebe["project/visible"] = true;
     ebe["project/width"] = 500;
+    ebe["project/auto_open"] = true;
 
     ebe["terminal/visible"] = true;
 
