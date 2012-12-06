@@ -51,15 +51,11 @@ FloatWindow::FloatWindow(QWidget *parent)
     table->resizeRowsToContents();
     table->resizeColumnsToContents();
 
-    //setRegister(4,"4.0");
-    //setRegister(8,"8.0");
-    //setRegister(15,"15.0");
     setLayout ( layout );
 }
 
 QSize FloatWindow::sizeHint() const
 {
-    printf("fp sh\n");
     return QSize(300,100);
 }
 

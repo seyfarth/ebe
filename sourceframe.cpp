@@ -57,7 +57,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setLayout(layout);
 
     source = new SourceWindow;
-    int index = tab->addTab(source,"file 0");
+    int index = tab->addTab(source,"unnamed");
     tab->setCurrentIndex(index);
 
 }
@@ -83,9 +83,12 @@ void SourceFrame::openInNewTab(QString name)
 {
 }
 
-void SourceFrame::open(QString name)
+void SourceFrame::open(QString name,int index)
 {
-    int index = tab->currentIndex();
+    while (index >= tab->count()) {
+        source = new SourceWindow;
+        int index = tab->addTab(source,"");
+    }
     source = (SourceWindow *)tab->widget(index);
     source->open(name);
     if ( source && source->opened ) {
@@ -107,12 +110,14 @@ void SourceFrame::setCommandLineVisible(bool visible)
 
 void SourceFrame::open()
 {
-    source = new SourceWindow;
-    int count = tab->count();
-    int index = tab->addTab(source,"file "+QString::number(count));
-    tab->setCurrentIndex(index);
-    source->open();
+    int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
+    if ( !source || source->textDoc->characterCount() > 1 ) {
+        source = new SourceWindow;
+        index = tab->addTab(source,"");
+        tab->setCurrentIndex(index);
+    }
+    source->open();
     if ( source && source->opened ) {
         QString name = source->fileName;
         name = QDir::current().relativeFilePath(name);

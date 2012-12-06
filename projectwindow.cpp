@@ -69,10 +69,15 @@ void ProjectWindow::open(QString filename)
     QTextStream in(&file);
     QString name;
     name = in.readLine();
+    int i = 0;
     while ( !name.isNull() ) {
         fileNames.append(name);
         list->addItem(name);
-        if (autoOpen ) sourceFrame->openInNewTab(name);
+        if (autoOpen ) {
+            qDebug() << "opening " << name;
+            sourceFrame->open(name,i);
+            i++;
+        }
         name = in.readLine();
     }
     projectFileName = filename;
@@ -93,7 +98,9 @@ void ProjectWindow::openProject()
         while ( !name.isNull() ) {
             fileNames.append(name);
             list->addItem(name);
-            if (autoOpen ) sourceFrame->openInNewTab(name);
+            if (autoOpen ) {
+                sourceFrame->open(name);
+            }
             name = in.readLine();
         }
         projectFileName = filename;

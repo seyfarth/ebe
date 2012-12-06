@@ -56,6 +56,8 @@ public:
     bool saved;
     bool opened;
     void open(QString name);
+    SourceEdit *textEdit;
+    QTextDocument *textDoc;
 
 public slots:
     void open();
@@ -78,8 +80,6 @@ private:
     int fontHeight;
     int topNumber;
     int bottomNumber;
-    SourceEdit *textEdit;
-    QTextDocument *textDoc;
     LineNumberEdit *lineNumberEdit;
     QScrollBar *scrollBar;
 

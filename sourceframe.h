@@ -16,7 +16,7 @@ public:
     void setLineNumbers(int nLines);
     bool fileChanged();
     void saveBeforeQuit();
-    void open(QString name);
+    void open(QString name, int index=0);
     void openInNewTab(QString name);
     void closeTabs();
 
