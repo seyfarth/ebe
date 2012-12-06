@@ -16,11 +16,13 @@ public:
     void setLineNumbers(int nLines);
     bool fileChanged();
     void saveBeforeQuit();
+    void open(QString name);
     void openInNewTab(QString name);
     void closeTabs();
 
 private slots:
     void setCommandLineVisible(bool);
+    void changedTab(int index);
     void open();
     void save();
     void saveAs();

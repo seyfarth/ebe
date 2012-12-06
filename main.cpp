@@ -15,5 +15,6 @@ int main(int argc, char *argv[])
     app.setPalette(pal);
     mainWin = new MainWindow;
     mainWin->show();
+    if ( argc > 1 ) mainWin->open(argv[1]);
     return app.exec();
 }

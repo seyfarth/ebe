@@ -243,6 +243,14 @@ void MainWindow::createMenus()
 
 }
 
+void MainWindow::open(QString name)
+{
+    if ( name.endsWith(".ebe", Qt::CaseInsensitive) ) {
+        projectWindow->open(name);\
+    } else {
+        sourceFrame->open(name);
+    }
+}
 
 void MainWindow::setTooltipsVisible(bool visible)
 {

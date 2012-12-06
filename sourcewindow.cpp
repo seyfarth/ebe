@@ -133,6 +133,32 @@ void SourceWindow::createTextEdit()
     // textEdit->appendPlainText("Text");
 }
 
+void SourceWindow::open(QString name)
+{
+    QFile file(name);
+
+    if (! file.open(QIODevice::ReadWrite))
+    {
+        if ( ! file.open(QIODevice::ReadOnly) ) {
+            QMessageBox::critical(this, tr("Error"),
+                tr("Failed to open file ") + name );
+            delete this;
+            return;
+        }
+    }
+
+    fileName = name;
+
+    QByteArray text = file.readAll();
+    int length = text.count();
+    if ( text[length-1] == '\n' ) text.chop(1);
+    textEdit->setPlainText(text);
+
+    file.close();
+    opened = true;
+    changed = false;
+}
+
 void SourceWindow::open()
 {
     // How shall we set status bar text here?

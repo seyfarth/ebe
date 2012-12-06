@@ -52,6 +52,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     layout->addWidget(commandLine);
     layout->addWidget(tab);
 
+    connect ( tab, SIGNAL(currentChanged(int)), this, SLOT(changedTab(int)) );
 
     setLayout(layout);
 
@@ -72,8 +73,26 @@ void SourceFrame::setFontHeightAndWidth ( int height, int width )
     tab->setCurrentIndex(current);
 }
 
+void SourceFrame::changedTab(int index)
+{
+    qDebug() << "switching to " << index;
+    source = (SourceWindow *)tab->widget(index);
+}
+
 void SourceFrame::openInNewTab(QString name)
 {
+}
+
+void SourceFrame::open(QString name)
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    source->open(name);
+    if ( source && source->opened ) {
+        name = QDir::current().relativeFilePath(name);
+        qDebug() << "Setting name " << index << name;
+        tab->setTabText(index,name);
+    }
 }
 
 void SourceFrame::closeTabs()
@@ -154,9 +173,4 @@ void SourceFrame::saveAs()
             tab->setTabText(index,name);
         }
     }
-}
-
-void SourceFrame::saveAs()
-{
-    source->saveAs();
 }

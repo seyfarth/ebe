@@ -15,6 +15,7 @@ class ProjectWindow : public QFrame
 
 public:
     ProjectWindow(QWidget *parent = 0);
+    void open(QString name);
 
 private:
 

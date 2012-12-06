@@ -55,6 +55,7 @@ public:
     bool changed;
     bool saved;
     bool opened;
+    void open(QString name);
 
 public slots:
     void open();

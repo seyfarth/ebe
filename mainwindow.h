@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent=0);
     void saveSettings();
+    void open(QString name);
 
 public slots:
     void restoreMainWindow();

@@ -61,6 +61,23 @@ void ProjectWindow::newProject()
     }
 }
 
+void ProjectWindow::open(QString filename)
+{
+    bool autoOpen = ebe["project/auto_open"].toBool();
+    QFile file(filename);
+    if ( !file.open(QIODevice::ReadOnly|QIODevice::Text) ) return;
+    QTextStream in(&file);
+    QString name;
+    name = in.readLine();
+    while ( !name.isNull() ) {
+        fileNames.append(name);
+        list->addItem(name);
+        if (autoOpen ) sourceFrame->openInNewTab(name);
+        name = in.readLine();
+    }
+    projectFileName = filename;
+}
+
 void ProjectWindow::openProject()
 {
     bool autoOpen = ebe["project/auto_open"].toBool();
