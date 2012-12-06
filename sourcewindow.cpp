@@ -162,15 +162,12 @@ void SourceWindow::open()
 
     fileName = name;
 
-    int lineCount = 0;
     QByteArray text = file.readAll();
     int length = text.count();
     if ( text[length-1] == '\n' ) text.chop(1);
     textEdit->setPlainText(text);
 
     file.close();
-
-    lineCount=textEdit->document()->lineCount();
 }
 
 void SourceWindow::saveAs()

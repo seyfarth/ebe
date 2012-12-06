@@ -31,9 +31,8 @@ DataWindow::DataWindow(QWidget *parent)
     addVariable ( "stack[0-7]", "0x7fffc884888, 0, 0, 12, 0, 1, 2, 15" );
 }
 
-QSize DataWindow::sizeHint()
+QSize DataWindow::sizeHint() const
 {
-    printf ( "data sh\n");
     return QSize(300,100);
 }
 

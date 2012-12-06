@@ -42,6 +42,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     buttonLayout->addWidget ( stopButton );
     buttonLayout->addStretch();
 
+
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
 
     commandLine = new CommandLine();
@@ -56,7 +57,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setLayout(layout);
 
     source = new SourceWindow;
-    int index = tab->addTab(source,"file 1");
+    int index = tab->addTab(source,"file 0");
     tab->setCurrentIndex(index);
 
 }

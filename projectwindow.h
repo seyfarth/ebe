@@ -32,7 +32,7 @@ private:
     QStringList fileNames;
     QString projectFileName;
     QListWidget *list;
-    QSize sizeHint();
+    QSize sizeHint() const;
     
 };
 

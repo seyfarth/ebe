@@ -136,6 +136,10 @@ void Settings::setDefaults()
 
     ebe["command/visible"] = true;
 
+    ebe["terminal/visible"] = true;
+
+    ebe["command/visible"] = true;
+
     ebe["tooltips/visible"] = true;
 
     ebe["complete/minimum"] = 4;

@@ -22,7 +22,7 @@ private:
     QStringList names;
     QStringList values;
     QTableWidget *table;
-    QSize sizeHint();
+    QSize sizeHint() const;
 };
 
 #endif
