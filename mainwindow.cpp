@@ -22,6 +22,7 @@ ConsoleWindow *consoleWindow;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
+    settings->read();
 
     sourceFrame = new SourceFrame(this);
     setCentralWidget(sourceFrame);

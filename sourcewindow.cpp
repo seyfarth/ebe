@@ -319,6 +319,8 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
     scrollBar = verticalScrollBar();
     setToolTip(tr("Click on a line number to set or reset a breakpoint"));
     breakpoints = &((SourceWindow *)parent)->breakpoints;
+    breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
+    breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
 }
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
@@ -331,11 +333,16 @@ void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
     int block = cursorForPosition(e->pos()).blockNumber();
     qDebug() << "mre" << row;
     qDebug() << "block" << block;
-    QTextBlockFormat format=cursorForPosition(e->pos()).blockFormat();
-    format.setBackground(QBrush(QColor(255,0,0)));
-    format.setForeground(QBrush(QColor(0,255,255)));
-    cursorForPosition(e->pos()).setBlockFormat(format);
-
+    if ( breakpoints->contains(block+1) ) {
+        breakpoints->remove(block+1);
+        cursorForPosition(e->pos()).setBlockFormat(normalFormat);
+    } else {
+        breakpoints->insert(block+1);
+        cursorForPosition(e->pos()).setBlockFormat(breakFormat);
+    }
+    //foreach ( int line, *breakpoints ) {
+        //qDebug() << "bp at" << line;
+    //}
 }
 
 void LineNumberEdit::wheelEvent ( QWheelEvent *e )

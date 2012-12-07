@@ -38,6 +38,8 @@ public:
 
     void wheelEvent ( QWheelEvent *e );
     QScrollBar *scrollBar;
+    QTextBlockFormat normalFormat;
+    QTextBlockFormat breakFormat;
 
 private:
     QSet<int> *breakpoints;
