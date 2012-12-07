@@ -325,9 +325,6 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
 {
-    int l,t,r,b;
-    getContentsMargins(&l,&t,&r,&b);
-    qDebug() << "margins" << l << t << r << b;
     SourceWindow *p = (SourceWindow *)parent();
     int row = (e->pos().y()-2)/p->fontHeight + p->topNumber;
     int block = cursorForPosition(e->pos()).blockNumber();
@@ -343,6 +340,62 @@ void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
     //foreach ( int line, *breakpoints ) {
         //qDebug() << "bp at" << line;
     //}
+}
+
+void LineNumberEdit::contextMenuEvent(QContextMenuEvent *event)
+{
+    eventPosition = event->pos();
+    QMenu menu("Breakpoint menu");
+    menu.addAction(tr("Set breakpoint"),
+                   this, SLOT(setBreakpoint()) );
+    menu.addAction(tr("Drop breakpoint"),
+                   this, SLOT(dropBreakpoint()) );
+    menu.addAction(tr("Drop all breakpoints"),
+                   this, SLOT(dropAllBreakpoints()) );
+    menu.addAction(tr("ignore"), this, SLOT(ignore()) );
+    menu.exec(QCursor::pos());
+}
+
+void LineNumberEdit::ignore()
+{
+}
+
+void LineNumberEdit::dropAllBreakpoints()
+{
+    //SourceWindow *p = (SourceWindow *)parent();
+    //qDebug() << "top" << p->topNumber;
+    foreach ( int line, *breakpoints ) {
+        qDebug() << "bp at" << line;
+        breakpoints->remove(line);
+        //eventPosition.setX(0);
+        //eventPosition.setY((line-p->topNumber)*p->fontHeight+p->fontHeight/2+1);
+        //qDebug() << "Pos" << eventPosition;
+        QTextCursor(document()->findBlockByNumber(line-1)).setBlockFormat(normalFormat);
+    }
+}
+
+void LineNumberEdit::setBreakpoint()
+{
+    qDebug() << "set" << eventPosition;
+    SourceWindow *p = (SourceWindow *)parent();
+    int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
+    int block = cursorForPosition(eventPosition).blockNumber();
+    qDebug() << "set" << row;
+    qDebug() << "block" << block;
+    breakpoints->insert(block+1);
+    cursorForPosition(eventPosition).setBlockFormat(breakFormat);
+}
+
+void LineNumberEdit::dropBreakpoint()
+{
+    qDebug() << "drop" << eventPosition;
+    SourceWindow *p = (SourceWindow *)parent();
+    int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
+    int block = cursorForPosition(eventPosition).blockNumber();
+    qDebug() << "set" << row;
+    qDebug() << "block" << block;
+    breakpoints->remove(block+1);
+    cursorForPosition(eventPosition).setBlockFormat(normalFormat);
 }
 
 void LineNumberEdit::wheelEvent ( QWheelEvent *e )

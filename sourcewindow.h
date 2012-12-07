@@ -44,6 +44,14 @@ public:
 private:
     QSet<int> *breakpoints;
     void mouseReleaseEvent ( QMouseEvent *event );
+    void contextMenuEvent ( QContextMenuEvent *event );
+    QPoint eventPosition;
+
+private slots:
+    void setBreakpoint();
+    void dropBreakpoint();
+    void dropAllBreakpoints();
+    void ignore();
 };
 
 

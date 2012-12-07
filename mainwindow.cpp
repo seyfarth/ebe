@@ -42,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 void MainWindow::restoreMainWindow()
 {
-    settings->read();
     tooltipsVisible = ebe["tooltips/visible"].toBool();
 
     addStyleSheet("textedit-font", "QTextEdit { font-weight: bold; font-family: Courier}");
