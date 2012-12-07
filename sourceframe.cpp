@@ -25,15 +25,27 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
     quitButton->setToolTip ( tr("Click this button to exit from ebe") );
     runButton      = new QPushButton ( "Run" );
+    runButton->setToolTip ( tr("Compile and run your program") );
     runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
     nextButton     = new QPushButton ( "Next" );
+    nextButton->setToolTip (
+        tr("Execute the current statement in the same function") );
     nextButton->setStyleSheet ( "color: "+ebe["next_color"].toString() );
     stepButton     = new QPushButton ( "Step" );
     stepButton->setStyleSheet ( "color: "+ebe["step_color"].toString() );
+    stepButton->setToolTip (
+        tr("Execute the current statement possibly stepping\n"
+           "into a different function") );
     continueButton = new QPushButton ( "Continue" );
     continueButton->setStyleSheet ( "color: "+ebe["continue_color"].toString() );
+    continueButton->setToolTip (
+        tr("Execute statements starting at the current statement\n"
+           "continuing until the program ends or a breakpoint\n"
+           "is reached.") );
     stopButton     = new QPushButton ( "Stop" );
     stopButton->setStyleSheet ( "color: "+ebe["stop_color"].toString() );
+    stopButton->setToolTip (
+        tr("End this debugging session and continue editing") );
     buttonLayout->addWidget ( quitButton );
     buttonLayout->addWidget ( runButton );
     buttonLayout->addWidget ( nextButton );
@@ -45,6 +57,10 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
 
     commandLine = new CommandLine();
+    commandLine->setToolTip (
+        tr("This input field is for executing your program with\n"
+           "command line parameters to be accepted in the argv\n"
+           "array") );
 
     tab = new QTabWidget;
 

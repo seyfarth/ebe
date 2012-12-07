@@ -20,9 +20,9 @@ signals:
 private:
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent ( QResizeEvent *e );
-    //void scrollContentsBy(int dx, int dy);
-    bool event ( QEvent *e );
-    void wheelEvent ( QWheelEvent *e );
+    void scrollContentsBy(int dx, int dy);
+    //bool event ( QEvent *e );
+    //void wheelEvent ( QWheelEvent *e );
     int top;
     QScrollBar *scrollBar;
 };
@@ -38,6 +38,10 @@ public:
 
     void wheelEvent ( QWheelEvent *e );
     QScrollBar *scrollBar;
+
+private:
+    QSet<int> *breakpoints;
+    void mouseReleaseEvent ( QMouseEvent *event );
 };
 
 
@@ -58,21 +62,6 @@ public:
     void open(QString name);
     SourceEdit *textEdit;
     QTextDocument *textDoc;
-
-public slots:
-    void open();
-    void save();
-    void saveAs();
-    void textChanged();
-    void newHeight(int heightInPixels);
-    void scrollBarChanged(int value);
-
-private:
-    void createLineNumberEdit();
-    void createTextEdit();
-    void createButtons();
-    void createCommandLineEdit();
-
     int numLines;
     int textHeight;
     int heightInPixels;
@@ -80,6 +69,23 @@ private:
     int fontHeight;
     int topNumber;
     int bottomNumber;
+    int lastLineNumber;
+    QSet<int> breakpoints;
+
+public slots:
+    void open();
+    void save();
+    void saveAs();
+    void textChanged();
+    void newHeight(int heightInPixels);
+    //void scrollBarChanged(int value);
+
+private:
+    void createLineNumberEdit();
+    void createTextEdit();
+    void createButtons();
+    void createCommandLineEdit();
+
     LineNumberEdit *lineNumberEdit;
     QScrollBar *scrollBar;
 

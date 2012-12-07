@@ -15,31 +15,32 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     scrollBar = verticalScrollBar();
 }
 
-//void SourceEdit::scrollContentsBy ( int dx, int dy )
-//{
-    //QPlainTextEdit::scrollContentsBy(dx,dy);
-    //emit newHeight(heightInPixels);
-//}
-void SourceEdit::wheelEvent ( QWheelEvent *event )
+void SourceEdit::scrollContentsBy ( int dx, int dy )
 {
-    QPlainTextEdit::wheelEvent(event);
-    int x = scrollBar->value();
-    if ( x != top ) {
-        emit newHeight(heightInPixels);
-        top = x;
-    }
+    QPlainTextEdit::scrollContentsBy(dx,dy);
+    emit newHeight(heightInPixels);
 }
 
-bool SourceEdit::event ( QEvent *event )
-{
-    bool ret = QPlainTextEdit::event(event);
-    int x = scrollBar->value();
-    if ( x != top ) {
-        emit newHeight(heightInPixels);
-        top = x;
-    }
-    return ret;
-}
+//void SourceEdit::wheelEvent ( QWheelEvent *event )
+//{
+    //QPlainTextEdit::wheelEvent(event);
+    //int x = scrollBar->value();
+    //if ( x != top ) {
+        //emit newHeight(heightInPixels);
+        //top = x;
+    //}
+//}
+
+//bool SourceEdit::event ( QEvent *event )
+//{
+    //bool ret = QPlainTextEdit::event(event);
+    //int x = scrollBar->value();
+    //if ( x != top ) {
+        //emit newHeight(heightInPixels);
+        //top = x;
+    //}
+    //return ret;
+//}
 
 void SourceEdit::keyPressEvent ( QKeyEvent *event )
 {
@@ -90,6 +91,7 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     bottomNumber = 0;
     opened = false;
     saved = false;
+    lastLineNumber = 0;
 
     scrollBar = textEdit->verticalScrollBar();
     textDoc = textEdit->document();
@@ -114,10 +116,11 @@ void SourceWindow::setFontHeightAndWidth ( int height, int width )
     }
 }
 
-void SourceWindow::scrollBarChanged ( int value )
-{
-   setLineNumbers(textDoc->lineCount());
-}
+//void SourceWindow::scrollBarChanged ( int value )
+//{
+   //setLineNumbers(textDoc->lineCount());
+   //topNumber = scrollBar->value() + 1;
+//}
 
 void SourceWindow::newHeight ( int height )
 {
@@ -286,34 +289,24 @@ void SourceWindow::textChanged()
 // Sets the line numbers in the line number edit control
 void SourceWindow::setLineNumbers(int nLines)
 {
-    int top, bottom, limit;
     char s[10];
 
-    if ( nLines <= textHeight ) {
-        top = 1;
-        bottom = nLines;
-        limit = bottom;
-    } else {
-        top = scrollBar->value() + 1;
-        bottom = top + textHeight - 1;
-        limit = bottom + 2;
-        if ( limit > nLines ) limit = nLines;
-    }
-
-    if ( top == topNumber && bottom == bottomNumber ) return;
-
-    // Clear before updating line numbers again
-    lineNumberEdit->clear();
-
-    for (int i = top; i <= limit; i++) {
+    for (int i = lastLineNumber+1; i <= nLines; i++) {
         sprintf(s,"%4d",i);
         lineNumberEdit->appendPlainText(s);
     }
+    QTextCursor cursor;
+    for (int i = nLines+1; i <= lastLineNumber; i++ ) {
+        sprintf(s,"%4d",i);
+        cursor = lineNumberEdit->document()->find(s);
+        cursor.select(QTextCursor::BlockUnderCursor);
+        cursor.removeSelectedText();
+    }
 
-    lineNumberEdit->scrollBar->setValue(0);
+    lastLineNumber = nLines;
 
-    topNumber = top;
-    bottomNumber = bottom;
+    //qDebug() << "SLN" << nLines << topNumber;
+    lineNumberEdit->scrollBar->setValue(scrollBar->value());
 }
 
 LineNumberEdit::LineNumberEdit(QWidget *parent)
@@ -324,6 +317,25 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollBar = verticalScrollBar();
+    setToolTip(tr("Click on a line number to set or reset a breakpoint"));
+    breakpoints = &((SourceWindow *)parent)->breakpoints;
+}
+
+void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
+{
+    int l,t,r,b;
+    getContentsMargins(&l,&t,&r,&b);
+    qDebug() << "margins" << l << t << r << b;
+    SourceWindow *p = (SourceWindow *)parent();
+    int row = (e->pos().y()-2)/p->fontHeight + p->topNumber;
+    int block = cursorForPosition(e->pos()).blockNumber();
+    qDebug() << "mre" << row;
+    qDebug() << "block" << block;
+    QTextBlockFormat format=cursorForPosition(e->pos()).blockFormat();
+    format.setBackground(QBrush(QColor(255,0,0)));
+    format.setForeground(QBrush(QColor(0,255,255)));
+    cursorForPosition(e->pos()).setBlockFormat(format);
+
 }
 
 void LineNumberEdit::wheelEvent ( QWheelEvent *e )

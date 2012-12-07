@@ -95,11 +95,13 @@ void ProjectWindow::openProject()
         QTextStream in(&file);
         QString name;
         name = in.readLine();
+        int i = 0;
         while ( !name.isNull() ) {
             fileNames.append(name);
             list->addItem(name);
             if (autoOpen ) {
-                sourceFrame->open(name);
+                sourceFrame->open(name,i);
+                i++;
             }
             name = in.readLine();
         }

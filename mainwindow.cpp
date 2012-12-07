@@ -36,9 +36,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(true);
 
-    fontSize = ebe["font_size"].toInt();
-    setFontSize();
-
     QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
 }
 
@@ -84,6 +81,8 @@ void MainWindow::restoreMainWindow()
     consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
                             ebe["variable_font"].toString() + "}" );
 
+    fontSize = ebe["font_size"].toInt();
+    setFontSize();
 }
 
 bool MainWindow::eventFilter ( QObject *object, QEvent *event )
