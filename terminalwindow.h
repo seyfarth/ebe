@@ -6,16 +6,19 @@
 #include <QString>
 #include <QKeyEvent>
 
+class PtyReader;
+
 class TerminalEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    TerminalEdit(QWidget *parent=0);
+    TerminalEdit(int fd, QWidget *parent=0);
 
 private slots:
 
 private:
+    int pty;
     void keyPressEvent ( QKeyEvent *event );
 
 };
@@ -28,9 +31,14 @@ public:
     TerminalWindow(QWidget *parent=0);
     
 private slots:
+    void dataReady(char *data, int n);
 
 private:
     TerminalEdit *edit;
+    int pty;
+    int ptySlave;
+    QString ptyName;
+    PtyReader *ptyReader;
 };
 
 #endif
