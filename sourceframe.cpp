@@ -1,8 +1,11 @@
 #include "sourceframe.h"
 #include "sourcewindow.h"
+#include "projectwindow.h"
 #include "commandline.h"
 #include "stylesheet.h"
 #include "settings.h"
+
+extern ProjectWindow *projectWindow;
 
 SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 {
@@ -55,6 +58,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     buttonLayout->addStretch();
 
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
+    connect ( runButton, SIGNAL(clicked()), this, SLOT(run()) );
 
     commandLine = new CommandLine();
     commandLine->setToolTip (
@@ -76,6 +80,115 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     int index = tab->addTab(source,"unnamed");
     tab->setCurrentIndex(index);
 
+    fortranExts << "f" << "F" << "for" << "FOR" << "f90" << "F90"
+                << "f95" << "F95" << "ftn" << "FTN";
+    cExts << "c" << "C";
+    cppExts << "cpp" << "CPP" << "c++" << "C++" << "cc" << "CC";
+    asmExts << "asm" << "ASM" << "s" << "S";
+}
+
+void SourceFrame::run()
+{
+    int index;
+    int length;
+    QStringList sourceFiles;
+    QString exeName;
+    QString ext;
+    QString name;
+    QString base;
+    QString cmd;
+
+//
+//  Determine all source files
+//
+    if ( projectWindow->projectFileName == "" ) {
+        index = tab->currentIndex();
+        source = (SourceWindow *)tab->widget(index);
+        name = source->fileName;
+        if ( name == "" ) {
+            int ret = QMessageBox::warning(this, tr("Warning"),
+                                tr("This file has not been named.\n"
+                                   "Do you want save the file?"),
+                                QMessageBox::Save 
+                                | QMessageBox::Cancel, QMessageBox::Save);
+            if ( ret == QMessageBox::Save ) save();
+            return;
+        }
+        sourceFiles << name;
+        index = name.lastIndexOf('.');
+        if ( index == -1 ) {
+            int ret = QMessageBox::warning(this, tr("Warning"),
+                                tr("The file name, ") + name +
+                                tr(", lacks an extension."),
+                                QMessageBox::Ok, QMessageBox::Ok); 
+            return;
+        } 
+        exeName = name;
+        exeName.truncate(index);
+    } else {
+        sourceFiles = projectWindow->fileNames;
+        exeName = projectWindow->projectFileName;
+        index = exeName.lastIndexOf('.');
+        if ( index == -1 ) {
+            int ret = QMessageBox::warning(this, tr("Warning"),
+                                tr("The project file name, ") + exeName +
+                                tr(", lacks the .ebe extension."),
+                                QMessageBox::Ok, QMessageBox::Ok); 
+            return;
+        } 
+        exeName.truncate(index);
+    }
+
+//
+//  Compile all source files
+//
+    qDebug() << "Files" << sourceFiles;
+    qDebug() << "exe" << exeName;
+
+    foreach ( name, sourceFiles ) {
+        name = QDir::current().relativeFilePath(name);
+        index = name.lastIndexOf('.');
+        if ( index == -1 ) continue;
+        length = name.length();
+        ext = name.right(length-index-1);
+        base = name.left(index);
+        qDebug() << name << base << ext;
+        if ( cppExts.contains(ext) ) {
+            qDebug() << name << "cpp";
+            cmd = ebe["build/cpp"].toString();
+            cmd.replace("$base",base);
+            cmd.replace("$source",name);
+            qDebug() << cmd;
+        } else if ( cExts.contains(ext) ) {
+            qDebug() << name << "c";
+            cmd = ebe["build/cc"].toString();
+            cmd.replace("$base",base);
+            cmd.replace("$source",name);
+            qDebug() << cmd;
+        } else if ( asmExts.contains(ext) ) {
+            qDebug() << name << "asm";
+            cmd = ebe["build/asm"].toString();
+            cmd.replace("$base",base);
+            cmd.replace("$source",name);
+            qDebug() << cmd;
+        } else if ( fortranExts.contains(ext) ) {
+            qDebug() << name << "fortran";
+            cmd = ebe["build/fortran"].toString();
+            cmd.replace("$base",base);
+            cmd.replace("$source",name);
+            qDebug() << cmd;
+        }
+        QProcess compile(this);
+        compile.start(cmd);
+        compile.waitForFinished();
+    }
+//
+//  Link object files to produce executable file
+//
+
+//
+//  Start debugging
+//
 }
 
 void SourceFrame::setFontHeightAndWidth ( int height, int width )

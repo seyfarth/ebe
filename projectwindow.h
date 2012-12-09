@@ -16,6 +16,8 @@ class ProjectWindow : public QFrame
 public:
     ProjectWindow(QWidget *parent = 0);
     void open(QString name);
+    QStringList fileNames;
+    QString projectFileName;
 
 private:
 
@@ -30,8 +32,6 @@ private slots:
     void closeProject();
 
 private:
-    QStringList fileNames;
-    QString projectFileName;
     QListWidget *list;
     QSize sizeHint() const;
     

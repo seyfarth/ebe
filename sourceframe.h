@@ -19,6 +19,10 @@ public:
     void open(QString name, int index=0);
     void openInNewTab(QString name);
     void closeTabs();
+    QStringList fortranExts;
+    QStringList cExts;
+    QStringList cppExts;
+    QStringList asmExts;
 
 private slots:
     void setCommandLineVisible(bool);
@@ -27,6 +31,7 @@ private slots:
     void save();
     void saveAs();
     void close();
+    void run();
 
 private:
     QTabWidget *tab;

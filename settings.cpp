@@ -93,7 +93,12 @@ void Settings::setDefaults()
     ebe["build/cppld"] = "g++ -g -o $base";
     ebe["build/fortran"] = "gfortran -g -c -Wfatal-errors -Wall -O0 -o $base.o $source";
     ebe["build/fortranld"] = "gfortran -g -o $base";
+
+#ifdef Q_WS_WIN
+    ebe["build/obj"] = "obj";
+#else
     ebe["build/obj"] = "o";
+#endif
 
     ebe["source/height"] = 800;
     ebe["source/left"] = 750;
