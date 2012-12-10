@@ -8,6 +8,7 @@
 #include <QMessageBox>
 
 #include "mainwindow.h"
+#include "errorwindow.h"
 #include "settings.h"
 #include "stylesheet.h"
 
@@ -27,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     sourceFrame = new SourceFrame(this);
     setCentralWidget(sourceFrame);
 
+    errorWindow = new ErrorWindow;
     qApp->installEventFilter(this);
     
     createStatusBar();

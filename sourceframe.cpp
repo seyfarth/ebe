@@ -3,6 +3,7 @@
 #include "projectwindow.h"
 #include "commandline.h"
 #include "stylesheet.h"
+#include "errorwindow.h"
 #include "settings.h"
 
 extern ProjectWindow *projectWindow;
@@ -191,9 +192,10 @@ void SourceFrame::run()
             }
         }
         if ( data.length() > 0 ) {
-            QMessageBox::critical(this, tr("Errors in ") + name,
-                                data,
-                                QMessageBox::Ok, QMessageBox::Ok); 
+            if ( errorWindow.isNull() ) errorWindow = new ErrorWindow;
+            errorWindow->setWindowTitle("Errors in " + name );
+            errorWindow->textEdit->setPlainText(data);
+            errorWindow->show();
         }
     }
 //
