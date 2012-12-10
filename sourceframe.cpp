@@ -181,6 +181,20 @@ void SourceFrame::run()
         QProcess compile(this);
         compile.start(cmd);
         compile.waitForFinished();
+        compile.setReadChannel(QProcess::StandardError);
+        QString data;
+        unsigned char s[1025];
+        int n;
+        while ( (n = compile.readLine((char *)s,1024)) > 0 ) {
+            for ( int i = 0; i < n; i++ ) {
+                if ( s[i] < 128 ) data += s[i];
+            }
+        }
+        if ( data.length() > 0 ) {
+            QMessageBox::critical(this, tr("Errors in ") + name,
+                                data,
+                                QMessageBox::Ok, QMessageBox::Ok); 
+        }
     }
 //
 //  Link object files to produce executable file
