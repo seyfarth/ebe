@@ -80,7 +80,7 @@ public:
     int topNumber;
     int bottomNumber;
     int lastLineNumber;
-    QSet<int> breakpoints;
+    QSet<int> *breakpoints;
 
 public slots:
     void open();

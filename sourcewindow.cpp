@@ -69,6 +69,8 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(0);
 
+    breakpoints = new QSet<int>;
+
     lineNumberEdit = new LineNumberEdit(this);
     createTextEdit();
 
@@ -318,7 +320,7 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollBar = verticalScrollBar();
     setToolTip(tr("Click on a line number to set or reset a breakpoint"));
-    breakpoints = &((SourceWindow *)parent)->breakpoints;
+    breakpoints = ((SourceWindow *)parent)->breakpoints;
     breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
     breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
 }

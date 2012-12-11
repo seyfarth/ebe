@@ -14,12 +14,9 @@ void addStyleSheet(QString key, QString style)
 {
     styles[key] = style;
 
-    QMap<QString,QString>::const_iterator i = styles.begin();
-
     QString sheet;
-    while ( i != styles.end() ) {
-        sheet += i.value();
-        i++;
+    foreach ( QString key, styles.keys() ) {
+        sheet += styles[key];
     }
     //qDebug() << sheet << endl;
     qApp->setStyleSheet(sheet);
