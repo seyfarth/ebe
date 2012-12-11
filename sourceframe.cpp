@@ -8,6 +8,8 @@
 
 extern ProjectWindow *projectWindow;
 
+typedef QPair<QString,QString> StringPair;
+
 SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
@@ -93,6 +95,8 @@ void SourceFrame::run()
     int index;
     int length;
     QStringList sourceFiles;
+    QList<StringPair> objectFiles;
+    QString object;
     QString exeName;
     QString ext;
     QString name;
@@ -179,6 +183,8 @@ void SourceFrame::run()
             cmd.replace("$source",name);
             qDebug() << cmd;
         }
+        object = base + "." + ebe["build/obj"].toString();
+        objectFiles << StringPair(object,ext);
         QProcess compile(this);
         compile.start(cmd);
         compile.waitForFinished();
@@ -196,12 +202,77 @@ void SourceFrame::run()
             errorWindow->setWindowTitle("Errors in " + name );
             errorWindow->textEdit->setPlainText(data);
             errorWindow->show();
+            return;
         }
     }
 //
+//  Examine object files looking for main or _start or start
+//
+    QString ldCmd = "";
+    foreach ( StringPair pair, objectFiles ) {
+        object = pair.first;
+        ext = pair.second;
+        qDebug() << "object" << object << ext;
+        QProcess nm(this);
+        nm.start ( "nm -Cg " + object );
+        nm.waitForFinished();
+        nm.setReadChannel(QProcess::StandardOutput);
+        QString data = nm.readLine();
+        QStringList parts;
+        while ( data != "" ) {
+            parts = data.split(QRegExp("\\s+"));
+            qDebug() << parts;
+            if ( parts.length() >= 3 ) {
+                if ( parts[1] == "T" && parts[2] == "main" ) {
+                    qDebug() << "found main" << object;
+                    if ( cExts.contains(ext) ) {
+                        ldCmd = ebe["build/ccld"].toString();
+                    } else if ( cppExts.contains(ext) ) {
+                        ldCmd = ebe["build/cppld"].toString();
+                    } else if ( asmExts.contains(ext) ) {
+                        ldCmd = ebe["build/asmld"].toString();
+                    } else if ( fortranExts.contains(ext) ) {
+                        ldCmd = ebe["build/fortranld"].toString();
+                    }
+                    break;
+                }
+            }
+            qDebug() << data;
+            data = nm.readLine();
+        }
+    }
+
+    qDebug() << "ld cmd" << ldCmd;
+//
 //  Link object files to produce executable file
 //
+    foreach ( StringPair pair, objectFiles ) {
+        ldCmd += " " + pair.first;
+    }
 
+
+    QProcess ld(this);
+    ldCmd.replace("$base",exeName);
+    qDebug() << "ld cmd" << ldCmd;
+    ld.start ( ldCmd );
+    ld.waitForFinished();
+    ld.setReadChannel(QProcess::StandardError);
+
+    QString data;
+    unsigned char s[1025];
+    int n;
+    while ( (n = ld.readLine((char *)s,1024)) > 0 ) {
+        for ( int i = 0; i < n; i++ ) {
+            if ( s[i] < 128 ) data += s[i];
+        }
+    }
+    if ( data.length() > 0 ) {
+        if ( errorWindow.isNull() ) errorWindow = new ErrorWindow;
+        errorWindow->setWindowTitle("Link errors");
+        errorWindow->textEdit->setPlainText(data);
+        errorWindow->show();
+        return;
+    }
 //
 //  Start debugging
 //
