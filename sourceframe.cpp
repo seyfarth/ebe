@@ -90,6 +90,22 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     asmExts << "asm" << "ASM" << "s" << "S";
 }
 
+void SourceFrame::saveIfChanged(QString file)
+{
+    int index;
+    int count;
+    SourceWindow *source;
+
+    count = tab->count();
+    for ( index = 0; index < count; index++ ) {
+        source = (SourceWindow *)tab->widget(index);
+        if ( source->fileName == file ) {
+            source->save();
+            break;
+        }
+    }
+}
+
 void SourceFrame::run()
 {
     int index;
@@ -152,6 +168,7 @@ void SourceFrame::run()
 
     foreach ( name, sourceFiles ) {
         name = QDir::current().relativeFilePath(name);
+        saveIfChanged(name);
         index = name.lastIndexOf('.');
         if ( index == -1 ) continue;
         length = name.length();

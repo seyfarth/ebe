@@ -23,6 +23,7 @@ public:
     QStringList cExts;
     QStringList cppExts;
     QStringList asmExts;
+    void saveIfChanged(QString file);
 
 private slots:
     void setCommandLineVisible(bool);
