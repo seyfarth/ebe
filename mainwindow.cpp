@@ -19,6 +19,7 @@ FloatWindow *floatWindow;
 ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
 ConsoleWindow *consoleWindow;
+GDB *gdb;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -33,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createStatusBar();
     createDockWindows();
     createMenus();
+
+    gdb = new GDB();
+    gdb->start();
 
     setWindowTitle(tr("ebe"));
 

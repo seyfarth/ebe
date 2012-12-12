@@ -8,7 +8,6 @@ PtyReader::PtyReader(int fd, QString name, QWidget *parent)
 {
     pty = fd;
     ptyName = name;
-
 }
 
 

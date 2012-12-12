@@ -11,6 +11,7 @@
 #include "terminalwindow.h"
 #include "consolewindow.h"
 #include "projectwindow.h"
+#include "gdb.h"
 #include "settings.h"
 
 QT_BEGIN_NAMESPACE
