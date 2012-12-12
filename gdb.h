@@ -6,20 +6,28 @@
 #include <QString>
 #include <QStringList>
 
-class GDB : public QThread
+class GDBThread : public QThread
+{
+public:
+    GDBThread();
+    void run();
+};
+
+class GDB : public QObject
 {
     Q_OBJECT
 
 public:
-    GDB();
-    void run();
+    GDB(QObject *parent);
     void initGdb();
 
 private:
     QProcess *gdb;
+    void send(QString cmd);
+    QStringList sendReceive(QString cmd);
 
 public slots:
-    void doRun();
+    void doRun(QString exe);
     void doNext();
     void doStep();
     void doContinue();

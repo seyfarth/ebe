@@ -34,6 +34,9 @@ private slots:
     void close();
     void run();
 
+signals:
+    void doRun(QString exe);
+
 private:
     QTabWidget *tab;
 

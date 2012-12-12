@@ -4,9 +4,11 @@
 #include "commandline.h"
 #include "stylesheet.h"
 #include "errorwindow.h"
+#include "gdb.h"
 #include "settings.h"
 
 extern ProjectWindow *projectWindow;
+extern GDB *gdb;
 
 typedef QPair<QString,QString> StringPair;
 
@@ -62,6 +64,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
     connect ( runButton, SIGNAL(clicked()), this, SLOT(run()) );
+
+    connect ( this, SIGNAL(doRun(QString)), gdb, SLOT(doRun(QString)) );
 
     commandLine = new CommandLine();
     commandLine->setToolTip (
@@ -259,6 +263,12 @@ void SourceFrame::run()
         }
     }
 
+    if ( ldCmd == "" ) {
+        int ret = QMessageBox::warning(this, tr("Warning"),
+                            tr("None of the source files defines main"),
+                            QMessageBox::Ok, QMessageBox::Ok); 
+        return;
+    } 
     qDebug() << "ld cmd" << ldCmd;
 //
 //  Link object files to produce executable file
@@ -293,6 +303,7 @@ void SourceFrame::run()
 //
 //  Start debugging
 //
+    emit doRun(exeName);
 }
 
 void SourceFrame::setFontHeightAndWidth ( int height, int width )

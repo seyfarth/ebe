@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QKeySequence>
 #include <QMessageBox>
+#include <unistd.h>
 
 #include "mainwindow.h"
 #include "errorwindow.h"
@@ -20,14 +21,12 @@ ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
 ConsoleWindow *consoleWindow;
 GDB *gdb;
+GDBThread *gdbThread;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
     settings->read();
-
-    sourceFrame = new SourceFrame(this);
-    setCentralWidget(sourceFrame);
 
     qApp->installEventFilter(this);
     
@@ -35,8 +34,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createDockWindows();
     createMenus();
 
-    gdb = new GDB();
-    gdb->start();
+    gdbThread = new GDBThread();
+    gdbThread->start();
+    while ( !gdb ) usleep(10);
+    qDebug() << "gdb" << gdb;
+
+    sourceFrame = new SourceFrame(this);
+    setCentralWidget(sourceFrame);
 
     setWindowTitle(tr("ebe"));
 

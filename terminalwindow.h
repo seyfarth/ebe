@@ -29,6 +29,7 @@ class TerminalWindow : public QFrame
 
 public:
     TerminalWindow(QWidget *parent=0);
+    QString ptyName;
     
 private slots:
     void dataReady(char *data, int n);
@@ -37,7 +38,6 @@ private:
     TerminalEdit *edit;
     int pty;
     int ptySlave;
-    QString ptyName;
     PtyReader *ptyReader;
 };
 
