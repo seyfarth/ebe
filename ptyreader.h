@@ -16,7 +16,7 @@ public:
     void run();
 
 signals:
-    void dataReady(char *,int);
+    void dataReady(QString);
 
 };
 

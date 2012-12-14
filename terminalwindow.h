@@ -4,6 +4,7 @@
 #include <QPlainTextEdit>
 #include <QFrame>
 #include <QString>
+#include <QLineEdit>
 #include <QKeyEvent>
 
 class PtyReader;
@@ -19,7 +20,6 @@ private slots:
 
 private:
     int pty;
-    void keyPressEvent ( QKeyEvent *event );
 
 };
 
@@ -32,10 +32,12 @@ public:
     QString ptyName;
     
 private slots:
-    void dataReady(char *data, int n);
+    void dataReady(QString data);
+    void lineEditReady();
 
 private:
     TerminalEdit *edit;
+    QLineEdit *lineEdit;
     int pty;
     int ptySlave;
     PtyReader *ptyReader;

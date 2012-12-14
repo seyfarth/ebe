@@ -3,6 +3,8 @@
 #include "settings.h"
 #include <QKeyEvent>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QLabel>
 #include <QDebug>
 #define _XOPEN_SOURCE
 #include <stdlib.h>
@@ -22,28 +24,53 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     grantpt(pty);
     unlockpt(pty);
     
-    QHBoxLayout *layout = new QHBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(10,10,10,10);
 
     edit = new TerminalEdit(pty,this);
+    edit->setReadOnly(true);
 
     layout->addWidget(edit);
 
+    lineEdit = new QLineEdit;
+    QLabel *label = new QLabel(tr("Input"));
+    QHBoxLayout *lineLayout = new QHBoxLayout;
+    lineLayout->addWidget(label);
+    lineLayout->addWidget(lineEdit);
+
+    layout->addLayout(lineLayout);
     setLayout(layout);
 
     ptyName = ptsname(pty);
     qDebug() << "pty" << ptyName;
     ptyReader = new PtyReader(pty,ptyName,this);
-    connect(ptyReader,SIGNAL(dataReady(char*,int)),
-            this,SLOT(dataReady(char*,int)) );
+    connect(lineEdit,SIGNAL(returnPressed()),this,SLOT(lineEditReady()));
+    connect(ptyReader,SIGNAL(dataReady(QString)),
+            this,SLOT(dataReady(QString)) );
     ptySlave = open(ptsname(pty),O_RDWR);
     ptyReader->start();
 }
 
-void TerminalWindow::dataReady(char *data, int n)
+void TerminalWindow::dataReady(QString data)
 {
-    data[n] = 0;
+    int n = data.length();
+    if (data.at(n-1) == '\n') {
+        data.chop(1);
+        if (data.at(n-2) == '\r') data.chop(1);
+        qDebug() << "chop" << data;
+    }
     edit->appendPlainText(data);
+}
+
+void TerminalWindow::lineEditReady()
+{
+    QString s;
+    QByteArray a;
+    s = lineEdit->text();
+    a = s.toAscii();
+    a.append('\n');
+    write(pty,a.data(),a.length());
+    lineEdit->clear();
 }
 
 TerminalEdit::TerminalEdit(int fd,QWidget *parent)
@@ -52,9 +79,10 @@ TerminalEdit::TerminalEdit(int fd,QWidget *parent)
     pty = fd;
 }
 
-void TerminalEdit::keyPressEvent ( QKeyEvent *event )
-{
-    unsigned char c = event->key();
-    write(pty,&c,1);
-    QPlainTextEdit::keyPressEvent(event);
-}
+//void TerminalEdit::keyPressEvent ( QKeyEvent *event )
+//{
+    //unsigned char c = event->key();
+    //qDebug() << "key" << event->key();
+    //write(pty,&c,1);
+    //QPlainTextEdit::keyPressEvent(event);
+//}
