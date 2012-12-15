@@ -55,6 +55,8 @@ private slots:
 };
 
 
+typedef QSet<int> IntSet;
+
 class SourceWindow : public QFrame
 {
     Q_OBJECT
@@ -80,7 +82,7 @@ public:
     int topNumber;
     int bottomNumber;
     int lastLineNumber;
-    QSet<int> *breakpoints;
+    IntSet *breakpoints;
 
 public slots:
     void open();

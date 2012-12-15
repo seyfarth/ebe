@@ -65,10 +65,20 @@ void GDB::initGdb()
 }
 
 //public slots:
-void GDB::doRun(QString exe)
+void GDB::doRun(QString exe, QStringList files, QList<IntSet> breakpoints)
 {
+    int i;
+    int length = files.length();
+    qDebug() << "length" << length;
     send("kill");
     send("file \""+exe+"\"");
+    send("delete breakpoints");
+    for ( i = 0; i < length; i++ ) {
+        qDebug() << files[i] << breakpoints[i];
+        foreach ( int bp, breakpoints[i] ) {
+            send(QString("break %1:%2").arg(files[i]).arg(bp) );
+        }
+    }
     send("run");
 }
 

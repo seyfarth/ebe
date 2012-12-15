@@ -69,7 +69,7 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(0);
 
-    breakpoints = new QSet<int>;
+    breakpoints = new IntSet;
 
     lineNumberEdit = new LineNumberEdit(this);
     createTextEdit();

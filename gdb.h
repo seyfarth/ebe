@@ -5,6 +5,10 @@
 #include <QProcess>
 #include <QString>
 #include <QStringList>
+#include <QList>
+#include <QSet>
+
+typedef QSet<int> IntSet;
 
 class GDBThread : public QThread
 {
@@ -27,7 +31,7 @@ private:
     QStringList sendReceive(QString cmd);
 
 public slots:
-    void doRun(QString exe);
+    void doRun(QString exe, QStringList files, QList<IntSet> breakpoints);
     void doNext();
     void doStep();
     void doContinue();

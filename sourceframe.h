@@ -2,9 +2,9 @@
 #define SOURCEFRAME_H
 
 #include <QtGui>
+#include "sourcewindow.h"
 
 class CommandLine;
-class SourceWindow;
 
 class SourceFrame : public QFrame
 {
@@ -35,7 +35,7 @@ private slots:
     void run();
 
 signals:
-    void doRun(QString exe);
+    void doRun(QString exe, QStringList files, QList<IntSet> breakpoints);
 
 private:
     QTabWidget *tab;

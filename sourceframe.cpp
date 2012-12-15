@@ -1,5 +1,4 @@
 #include "sourceframe.h"
-#include "sourcewindow.h"
 #include "projectwindow.h"
 #include "commandline.h"
 #include "stylesheet.h"
@@ -16,6 +15,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
+
+    qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
 
     initStyleSheet("sourceframe","QPushButton { font-family: " +
                    ebe["variable_font"].toString() + "}" +
@@ -65,7 +66,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
     connect ( runButton, SIGNAL(clicked()), this, SLOT(run()) );
 
-    connect ( this, SIGNAL(doRun(QString)), gdb, SLOT(doRun(QString)) );
+    connect ( this, SIGNAL(doRun(QString,QStringList,QList<IntSet>)),
+              gdb, SLOT(doRun(QString,QStringList,QList<IntSet>)) );
 
     commandLine = new CommandLine();
     commandLine->setToolTip (
@@ -115,6 +117,7 @@ void SourceFrame::run()
     int index;
     int length;
     QStringList sourceFiles;
+    QList<IntSet> breakpoints;
     QList<StringPair> objectFiles;
     QString object;
     QString exeName;
@@ -140,6 +143,7 @@ void SourceFrame::run()
             return;
         }
         sourceFiles << name;
+        qDebug() << "bpts" << *(source->breakpoints);
         index = name.lastIndexOf('.');
         if ( index == -1 ) {
             int ret = QMessageBox::warning(this, tr("Warning"),
@@ -303,7 +307,15 @@ void SourceFrame::run()
 //
 //  Start debugging
 //
-    emit doRun(exeName);
+    sourceFiles.clear();
+    for ( index = 0; index < tab->count(); index++ ) {
+        source = (SourceWindow *)tab->widget(index);
+        sourceFiles.append ( source->fileName );
+        breakpoints.append ( *(source->breakpoints) );
+    }
+    qDebug() << sourceFiles;
+    qDebug() << breakpoints;
+    emit doRun(exeName,sourceFiles,breakpoints);
 }
 
 void SourceFrame::setFontHeightAndWidth ( int height, int width )
