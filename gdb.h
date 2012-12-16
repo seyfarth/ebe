@@ -29,6 +29,7 @@ private:
     QProcess *gdb;
     void send(QString cmd);
     QStringList sendReceive(QString cmd);
+    QSet<QString> runCommands;
 
 public slots:
     void doRun(QString exe, QStringList files, QList<IntSet> breakpoints);

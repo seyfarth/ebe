@@ -83,6 +83,10 @@ public:
     int bottomNumber;
     int lastLineNumber;
     IntSet *breakpoints;
+    void setNextLine(int line);
+    void clearNextLine(int line);
+    QTextBlockFormat normalFormat;
+    QTextBlockFormat breakFormat;
 
 public slots:
     void open();

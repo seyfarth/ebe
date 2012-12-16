@@ -25,16 +25,19 @@ GDB::GDB(QObject *parent)
     gdb = new QProcess(this);
     gdb->start("gdb");
     qDebug() << "gdb state" << gdb->state();
+    runCommands << "run" << "step" << "next" << "stepi" << "nexti"
+                << "continue";
     initGdb();
 }
 
 void GDB::send(QString cmd)
 {
+    QRegExp rx1("at ([^:]*):([0-9]*)$");
+    QRegExp rx2("^([0-9]+).*$");
     cmd += '\n';
-    qDebug() << "gdb state" << gdb->state();
     qDebug() << cmd.toAscii();
     gdb->write(cmd.toAscii());
-    qDebug() << "gdb state" << gdb->state();
+    cmd.chop(1);
     QString result;
     result = gdb->readLine();
     result.chop(1);
@@ -47,6 +50,16 @@ void GDB::send(QString cmd)
         if ( result.length() > 0 ) {
             result.chop(1);
             qDebug() << "result:" << result;
+        }
+        if ( runCommands.contains(cmd) ) {
+            if ( rx1.indexIn(result) >= 0 ) {
+                qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
+                emit nextInstruction(rx1.cap(1),rx1.cap(2).toInt());
+            }
+            if ( rx2.indexIn(result) >= 0 ) {
+                qDebug() << rx2.cap(0) << rx2.cap(1);
+                emit nextInstruction("",rx2.cap(1).toInt());
+            }
         }
     }
     qDebug() << "count" << count;
@@ -84,18 +97,23 @@ void GDB::doRun(QString exe, QStringList files, QList<IntSet> breakpoints)
 
 void GDB::doNext()
 {
+    qDebug() << "gdb next";
+    send("next");
 }
 
 void GDB::doStep()
 {
+    send("step");
 }
 
 void GDB::doContinue()
 {
+    send("continue");
 }
 
 void GDB::doStop()
 {
+    send("kill");
 }
 
 void GDB::getRegs()

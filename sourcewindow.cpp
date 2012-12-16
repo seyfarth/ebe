@@ -94,6 +94,8 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     opened = false;
     saved = false;
     lastLineNumber = 0;
+    breakFormat.setBackground(QBrush(QColor(ebe["next_bg"].toString())));
+    breakFormat.setForeground(QBrush(QColor(ebe["next_fg"].toString())));
 
     scrollBar = textEdit->verticalScrollBar();
     textDoc = textEdit->document();
@@ -309,6 +311,16 @@ void SourceWindow::setLineNumbers(int nLines)
 
     //qDebug() << "SLN" << nLines << topNumber;
     lineNumberEdit->scrollBar->setValue(scrollBar->value());
+}
+
+void SourceWindow::setNextLine(int line)
+{
+    QTextCursor(textEdit->document()->findBlockByNumber(line-1)).setBlockFormat(breakFormat);
+}
+
+void SourceWindow::clearNextLine(int line)
+{
+    QTextCursor(textEdit->document()->findBlockByNumber(line-1)).setBlockFormat(normalFormat);
 }
 
 LineNumberEdit::LineNumberEdit(QWidget *parent)

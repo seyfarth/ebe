@@ -65,9 +65,19 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 
     connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
     connect ( runButton, SIGNAL(clicked()), this, SLOT(run()) );
+    connect ( nextButton, SIGNAL(clicked()), this, SLOT(next()) );
+    connect ( stepButton, SIGNAL(clicked()), this, SLOT(step()) );
+    connect ( continueButton, SIGNAL(clicked()), this, SLOT(Continue()) );
+    connect ( stopButton, SIGNAL(clicked()), this, SLOT(stop()) );
 
     connect ( this, SIGNAL(doRun(QString,QStringList,QList<IntSet>)),
               gdb, SLOT(doRun(QString,QStringList,QList<IntSet>)) );
+    connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
+    connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
+    connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
+    connect ( this, SIGNAL(doStop()), gdb, SLOT(doStop()) );
+    connect ( gdb, SIGNAL(nextInstruction(QString,int)),
+              this, SLOT(nextInstruction(QString,int)) );
 
     commandLine = new CommandLine();
     commandLine->setToolTip (
@@ -125,6 +135,9 @@ void SourceFrame::run()
     QString name;
     QString base;
     QString cmd;
+
+    breakLine = 0;
+    breakFile = "";
 
 //
 //  Determine all source files
@@ -316,6 +329,61 @@ void SourceFrame::run()
     qDebug() << sourceFiles;
     qDebug() << breakpoints;
     emit doRun(exeName,sourceFiles,breakpoints);
+}
+
+void SourceFrame::next()
+{
+    emit doNext();
+}
+
+void SourceFrame::step()
+{
+    emit doStep();
+}
+
+void SourceFrame::Continue()
+{
+    emit doContinue();
+}
+
+void SourceFrame::stop()
+{
+    clearNextLine(breakFile,breakLine);
+    emit doStop();
+}
+
+void SourceFrame::clearNextLine ( QString file, int line )
+{
+    for ( int index=0; index < tab->count(); index++ ) {
+        source = (SourceWindow *)tab->widget(index);
+        if ( source->fileName == file ) {
+            source->clearNextLine(line);
+            return;
+        }
+    }
+}
+
+void SourceFrame::setNextLine ( QString file, int line )
+{
+    for ( int index=0; index < tab->count(); index++ ) {
+        source = (SourceWindow *)tab->widget(index);
+        if ( source->fileName == file ) {
+            tab->setCurrentIndex(index);
+            source->setNextLine(line);
+            return;
+        }
+    }
+}
+
+void SourceFrame::nextInstruction ( QString file, int line )
+{
+    qDebug() << "break" << file << line;
+    if ( breakFile != "" ) {
+        clearNextLine(breakFile,breakLine);
+    }
+    if ( file != "" ) breakFile = file;
+    breakLine = line;
+    setNextLine(breakFile,breakLine);
 }
 
 void SourceFrame::setFontHeightAndWidth ( int height, int width )

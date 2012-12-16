@@ -24,8 +24,11 @@ public:
     QStringList cppExts;
     QStringList asmExts;
     void saveIfChanged(QString file);
+    void setNextLine(QString file,int line);
+    void clearNextLine(QString file,int line);
 
 private slots:
+    void nextInstruction(QString file,int line);
     void setCommandLineVisible(bool);
     void changedTab(int index);
     void open();
@@ -33,9 +36,17 @@ private slots:
     void saveAs();
     void close();
     void run();
+    void next();
+    void step();
+    void Continue();
+    void stop();
 
 signals:
     void doRun(QString exe, QStringList files, QList<IntSet> breakpoints);
+    void doNext();
+    void doStep();
+    void doContinue();
+    void doStop();
 
 private:
     QTabWidget *tab;
@@ -50,6 +61,9 @@ private:
     QPushButton *stopButton;
 
     CommandLine *commandLine;
+
+    QString breakFile;
+    int breakLine;
 };
 
 #endif
