@@ -70,8 +70,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     connect ( continueButton, SIGNAL(clicked()), this, SLOT(Continue()) );
     connect ( stopButton, SIGNAL(clicked()), this, SLOT(stop()) );
 
-    connect ( this, SIGNAL(doRun(QString,QStringList,QList<IntSet>)),
-              gdb, SLOT(doRun(QString,QStringList,QList<IntSet>)) );
+    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<IntSet>)),
+              gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>)) );
     connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
     connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
     connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
@@ -328,7 +328,7 @@ void SourceFrame::run()
     }
     qDebug() << sourceFiles;
     qDebug() << breakpoints;
-    emit doRun(exeName,sourceFiles,breakpoints);
+    emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints);
 }
 
 void SourceFrame::next()

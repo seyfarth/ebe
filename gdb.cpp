@@ -30,7 +30,7 @@ GDB::GDB(QObject *parent)
     initGdb();
 }
 
-void GDB::send(QString cmd)
+void GDB::send(QString cmd, QString options)
 {
     QRegExp rx1("at ([^:]*):([0-9]*)$");
     QRegExp rx2("^([0-9]+).*$");
@@ -65,7 +65,7 @@ void GDB::send(QString cmd)
     qDebug() << "count" << count;
 }
 
-QStringList GDB::sendReceive(QString cmd)
+QStringList GDB::sendReceive(QString cmd, QString options)
 {
 }
 
@@ -78,7 +78,8 @@ void GDB::initGdb()
 }
 
 //public slots:
-void GDB::doRun(QString exe, QStringList files, QList<IntSet> breakpoints)
+void GDB::doRun(QString exe, QString options, QStringList files,
+          QList<IntSet> breakpoints)
 {
     int i;
     int length = files.length();
@@ -86,6 +87,7 @@ void GDB::doRun(QString exe, QStringList files, QList<IntSet> breakpoints)
     send("kill");
     send("file \""+exe+"\"");
     send("delete breakpoints");
+    send("set args "+options);
     for ( i = 0; i < length; i++ ) {
         qDebug() << files[i] << breakpoints[i];
         foreach ( int bp, breakpoints[i] ) {

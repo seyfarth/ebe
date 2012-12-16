@@ -42,7 +42,8 @@ private slots:
     void stop();
 
 signals:
-    void doRun(QString exe, QStringList files, QList<IntSet> breakpoints);
+    void doRun(QString exe, QString options, QStringList files,
+               QList<IntSet> breakpoints);
     void doNext();
     void doStep();
     void doContinue();

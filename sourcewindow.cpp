@@ -316,6 +316,7 @@ void SourceWindow::setLineNumbers(int nLines)
 void SourceWindow::setNextLine(int line)
 {
     QTextCursor(textEdit->document()->findBlockByNumber(line-1)).setBlockFormat(breakFormat);
+    scrollBar->setValue(line-1-textHeight/2);
 }
 
 void SourceWindow::clearNextLine(int line)
