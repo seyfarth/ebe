@@ -47,9 +47,14 @@ private:
     QStringList namesList;
     int fontWidth;
     int fontHeight;
+    void contextMenuEvent(QContextMenuEvent *event);
 
 public slots:
     void receiveRegs(QMap<QString,QString>);
+    void setDecimal();
+    void setHex();
+    void setDecimalAll();
+    void setHexAll();
 
 };
 

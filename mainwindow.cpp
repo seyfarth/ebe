@@ -133,7 +133,7 @@ void MainWindow::setFontSize()
     if ( fontSize > 100 ) fontSize = 100;
     ebe["font_size"] = fontSize;
     addStyleSheet("font-size", "* {font-size: " + QString("%1").arg(fontSize) + "px}");
-    addStyleSheet("table-font-size", "QTableView {font-size: " + QString("%1").arg(fontSize) + "px}");
+    //addStyleSheet("table-font-size", "QTableView {font-size: " + QString("%1").arg(fontSize) + "px}");
     QFont f("courier");
     f.setPixelSize(fontSize);
     QFontMetrics fm(f);

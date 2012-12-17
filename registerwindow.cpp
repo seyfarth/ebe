@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QHeaderView>
 #include <QTableWidget>
+#include <QMenu>
 #include <QString>
 #include <QVBoxLayout>
 #include <QTableWidgetItem>
@@ -37,8 +38,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     table->setColumnCount(8);
     QTableWidgetItem *name;
     QTableWidgetItem *val;
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
+    table->verticalHeader()->hide(); table->horizontalHeader()->hide();
     for ( int r = 0; r < 5; r++ ) {
         for ( int c = 0; c < 4; c++ ) {
             name = new QTableWidgetItem(names[r][c]+QString(" "));
@@ -107,9 +107,68 @@ void RegisterWindow::receiveRegs ( QMap<QString,QString> map )
 {
 
     foreach ( QString key, map.keys() ) {
-        setRegister(key,map[key]);
+        regs[key]->setValue(map[key]);
+        setRegister(key,regs[key]->value());
     }
     setFontHeightAndWidth(fontHeight,fontWidth);
+}
+
+void RegisterWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+    int column = table->currentColumn();
+    QMenu menu("Register menu");
+    if ( column % 2 == 0 ) {
+        menu.addAction(tr("Decimal format"), this, SLOT(setDecimal()) );
+        menu.addAction(tr("Hexadecimal format"), this, SLOT(setHex()) );
+        menu.addSeparator();
+        menu.addAction(tr("Decimal format - all"),
+                       this, SLOT(setDecimalAll()) );
+        menu.addAction(tr("Hexadecimal format - all"),
+                       this, SLOT(setHexAll()) );
+    } else {
+        menu.addAction(tr("Define a variable with this address"),
+                       this, SLOT(defineVariableByAddress()) );
+    }
+    menu.exec(QCursor::pos());
+}
+
+void RegisterWindow::setDecimal()
+{
+    QString reg = table->currentItem()->text();
+    qDebug() << "reg" << reg;
+    if ( reg.at(reg.length()-1) == ' ' ) reg.chop(1);
+    if ( regs.contains(reg) ) {
+        regs[reg]->setFormat("decimal");
+        setRegister(reg,regs[reg]->value());
+    }
+}
+
+void RegisterWindow::setHex()
+{
+    qDebug() << table->currentItem();
+    QString reg = table->currentItem()->text();
+    qDebug() << reg;
+    if ( reg.at(reg.length()-1) == ' ' ) reg.chop(1);
+    if ( regs.contains(reg) ) {
+        regs[reg]->setFormat("hexadecimal");
+        setRegister(reg,regs[reg]->value());
+    }
+}
+
+void RegisterWindow::setDecimalAll()
+{
+    foreach ( QString reg, namesList ) {
+        regs[reg]->setFormat("decimal");
+        setRegister(reg,regs[reg]->value());
+    }
+}
+
+void RegisterWindow::setHexAll()
+{
+    foreach ( QString reg, namesList ) {
+        regs[reg]->setFormat("hexadecimal");
+        setRegister(reg,regs[reg]->value());
+    }
 }
 
 Register::Register(QString n)
@@ -133,6 +192,7 @@ QString Register::value()
 {
     long dec;
     bool ok;
+    qDebug() << name << format << contents;
     if ( name == "rip" || name == "eflags" ) {
         return contents;
     } else if ( format == "decimal" ) {
