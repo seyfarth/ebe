@@ -11,8 +11,24 @@
 #include <QFrame>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QStringList>
 #include <QString>
+#include <QMap>
 #include <QSize>
+
+class Register
+{
+    public:
+    Register(QString name);
+    QString value();
+    void setValue(QString x);
+    void setFormat(QString f);
+
+    private:
+    QString contents;
+    QString format;
+    QString name;
+};
 
 class RegisterWindow : public QFrame
 {
@@ -24,11 +40,16 @@ public:
     void setRegister ( QString name, QString value );
 
 private:
+    QMap<QString,Register *> regs;
     QMap<QString,QTableWidgetItem *> registerMap;
     QTableWidget *table;
     QSize sizeHint() const;
+    QStringList namesList;
+    int fontWidth;
+    int fontHeight;
 
-private slots:
+public slots:
+    void receiveRegs(QMap<QString,QString>);
 
 };
 

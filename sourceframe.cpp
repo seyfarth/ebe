@@ -18,7 +18,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 
     qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
 
-    initStyleSheet("sourceframe","QPushButton { font-family: " +
+    setStyleSheet("QPushButton { font-family: " +
                    ebe["variable_font"].toString() + "}" +
                    "QLabel { font-family:" +
                    ebe["variable_font"].toString() + "}" );

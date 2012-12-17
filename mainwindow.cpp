@@ -47,6 +47,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setUnifiedTitleAndToolBarOnMac(true);
 
     QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
+
+    qRegisterMetaType<QMap<QString,QString> >("QMap<QString,QString>");
+    connect ( gdb, SIGNAL(sendRegs(QMap<QString,QString>)),
+              registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
 }
 
 void MainWindow::restoreMainWindow()
@@ -56,7 +60,7 @@ void MainWindow::restoreMainWindow()
     addStyleSheet("textedit-font", "QTextEdit { font-weight: bold; font-family: Courier}");
     addStyleSheet("plaintextedit-font", "QPlainTextEdit { font-weight: bold; font-family: Courier}");
     addStyleSheet("lineedit-font", "QLineEdit { font-weight: bold; font-family: Courier}");
-    addStyleSheet("table-font", "QTableWidget { font-weight: bold; font-family: Courier}");
+    addStyleSheet("table-font", "QTableView { font-weight: bold; font-family: Courier}");
     addStyleSheet("list-font", "QListWidget { font-weight: bold; font-family: Courier}");
     addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
 
@@ -129,6 +133,7 @@ void MainWindow::setFontSize()
     if ( fontSize > 100 ) fontSize = 100;
     ebe["font_size"] = fontSize;
     addStyleSheet("font-size", "* {font-size: " + QString("%1").arg(fontSize) + "px}");
+    addStyleSheet("table-font-size", "QTableView {font-size: " + QString("%1").arg(fontSize) + "px}");
     QFont f("courier");
     f.setPixelSize(fontSize);
     QFontMetrics fm(f);

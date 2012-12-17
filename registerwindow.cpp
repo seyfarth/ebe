@@ -36,7 +36,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     table->setRowCount(5);
     table->setColumnCount(8);
     QTableWidgetItem *name;
-    QTableWidgetItem *value;
+    QTableWidgetItem *val;
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
     for ( int r = 0; r < 5; r++ ) {
@@ -44,13 +44,13 @@ RegisterWindow::RegisterWindow(QWidget *parent)
             name = new QTableWidgetItem(names[r][c]+QString(" "));
             name->setTextAlignment(Qt::AlignRight);
             if ( r == 4 && c > 1 ) {
-                value = new QTableWidgetItem("");
+                val = new QTableWidgetItem("");
             } else {
-                value = new QTableWidgetItem("0");
+                val = new QTableWidgetItem("0");
             }
-            registerMap[names[r][c]] = value;
+            registerMap[names[r][c]] = val;
             table->setItem(r,c*2,name);
-            table->setItem(r,c*2+1,value);
+            table->setItem(r,c*2+1,val);
         }
     }
     table->resizeRowsToContents();
@@ -59,6 +59,16 @@ RegisterWindow::RegisterWindow(QWidget *parent)
 
     layout->addWidget(table);
     setLayout(layout);
+
+    namesList << "rax" << "rbx" << "rcx" << "rdx"
+         << "rdi" << "rsi" << "rbp" << "rsp"
+         << "r8"  << "r9"  << "r10" << "r11"
+         << "r12" << "r13" << "r14" << "r15"
+         << "rip" << "eflags";
+
+    foreach ( QString name, namesList ) {
+        regs[name] = new Register(name);
+    }
 }
 
 QSize RegisterWindow::sizeHint() const
@@ -69,6 +79,8 @@ QSize RegisterWindow::sizeHint() const
 void RegisterWindow::setFontHeightAndWidth ( int height, int width )
 {
     int max, length;
+    fontHeight = height;
+    fontWidth = width;
     for ( int r = 0; r < 5; r++ ) {
         table->setRowHeight(r,height+3);
     }
@@ -82,11 +94,51 @@ void RegisterWindow::setFontHeightAndWidth ( int height, int width )
     }
 }
 
-void RegisterWindow::setRegister ( QString name, QString value )
+void RegisterWindow::setRegister ( QString name, QString val )
 {
     if ( registerMap.contains(name) ) {
-        registerMap[name]->setText(value);
+        registerMap[name]->setText(val);
     } else {
         qDebug() << "tried to set register " << name << endl;
+    }
+}
+
+void RegisterWindow::receiveRegs ( QMap<QString,QString> map )
+{
+
+    foreach ( QString key, map.keys() ) {
+        setRegister(key,map[key]);
+    }
+    setFontHeightAndWidth(fontHeight,fontWidth);
+}
+
+Register::Register(QString n)
+{
+    name = n;
+    format = "decimal";
+    contents = "";
+}
+
+void Register::setValue(QString v)
+{
+    contents = v;
+}
+
+void Register::setFormat(QString f)
+{
+    format = f;
+}
+
+QString Register::value()
+{
+    long dec;
+    bool ok;
+    if ( name == "rip" || name == "eflags" ) {
+        return contents;
+    } else if ( format == "decimal" ) {
+        dec = contents.toLong(&ok,16);
+        return QString("%1").arg(dec);
+    } else {
+        return contents;
     }
 }

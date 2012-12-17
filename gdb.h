@@ -6,6 +6,7 @@
 #include <QString>
 #include <QStringList>
 #include <QList>
+#include <QMap>
 #include <QSet>
 
 typedef QSet<int> IntSet;
@@ -30,6 +31,9 @@ private:
     void send(QString cmd, QString options="");
     QStringList sendReceive(QString cmd, QString options="");
     QSet<QString> runCommands;
+    QSet<QString> regs;
+    void getRegs();
+    void getFpRegs();
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
@@ -38,15 +42,13 @@ public slots:
     void doStep();
     void doContinue();
     void doStop();
-    void getRegs();
-    void getFpRegs(QStringList names);
     void getData(QString request);
 
 signals:
-    void nextInstruction(QString file, int line);
-    void sendRegs(QStringList data);
-    void sendFpRegs(QStringList data);
-    void sendData(QString request, QString data); 
+    void nextInstruction(QString,int);
+    void sendRegs(QMap<QString,QString>);
+    void sendFpRegs(QMap<QString,QString>);
+    void sendData(QString,QString); 
 };
 
 #endif

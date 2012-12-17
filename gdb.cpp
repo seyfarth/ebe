@@ -27,6 +27,11 @@ GDB::GDB(QObject *parent)
     qDebug() << "gdb state" << gdb->state();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
                 << "continue";
+    regs << "rax" << "rbx" << "rcx" << "rdx"
+         << "rdi" << "rsi" << "rbp" << "rsp"
+         << "r8"  << "r9"  << "r10" << "r11"
+         << "r12" << "r13" << "r14" << "r15"
+         << "rip" << "eflags";
     initGdb();
 }
 
@@ -67,6 +72,28 @@ void GDB::send(QString cmd, QString options)
 
 QStringList GDB::sendReceive(QString cmd, QString options)
 {
+    QStringList list;
+    cmd += '\n';
+    qDebug() << cmd.toAscii();
+    gdb->write(cmd.toAscii());
+    QString result;
+    result = gdb->readLine();
+    result.chop(1);
+    qDebug() << "result:" << result;
+    int count = 1;
+    while ( result.left(5) != "(gdb)" ) {
+        list.append(result);
+        gdb->waitForReadyRead(10);
+        result = gdb->readLine();
+        count++;
+        if ( result.length() > 0 ) {
+            result.chop(1);
+            qDebug() << "result:" << result;
+        }
+    }
+    qDebug() << "count" << count;
+    qDebug() << list;
+    return list;
 }
 
 void GDB::initGdb()
@@ -95,22 +122,26 @@ void GDB::doRun(QString exe, QString options, QStringList files,
         }
     }
     send("run");
+    getRegs();
 }
 
 void GDB::doNext()
 {
     qDebug() << "gdb next";
     send("next");
+    getRegs();
 }
 
 void GDB::doStep()
 {
     send("step");
+    getRegs();
 }
 
 void GDB::doContinue()
 {
     send("continue");
+    getRegs();
 }
 
 void GDB::doStop()
@@ -120,9 +151,29 @@ void GDB::doStop()
 
 void GDB::getRegs()
 {
+    QStringList results;
+    QStringList parts;
+    QMap<QString,QString> map;
+    int index1, index2;
+    results = sendReceive("info registers");
+
+    foreach ( QString result, results ) {
+        parts = result.split(QRegExp("\\s+"));
+        if ( regs.contains(parts[0]) ) {
+            if ( parts[0] == "eflags" ) {
+                index1 = result.indexOf('[');
+                index2 = result.indexOf(']');
+                map[parts[0]] = result.mid(index1+2,index2-index1-3);
+            } else {
+                map[parts[0]] = parts[1];
+            }
+        }
+    }
+    qDebug() << map;
+    emit sendRegs(map);
 }
 
-void GDB::getFpRegs(QStringList names)
+void GDB::getFpRegs()
 {
 }
 

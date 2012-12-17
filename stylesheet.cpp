@@ -18,6 +18,6 @@ void addStyleSheet(QString key, QString style)
     foreach ( QString key, styles.keys() ) {
         sheet += styles[key];
     }
-    //qDebug() << sheet << endl;
+    qDebug() << sheet << endl;
     qApp->setStyleSheet(sheet);
 }
