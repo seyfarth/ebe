@@ -18,13 +18,13 @@
 
 class Register
 {
-    public:
+public:
     Register(QString name);
     QString value();
     void setValue(QString x);
     void setFormat(QString f);
 
-    private:
+private:
     QString contents;
     QString format;
     QString name;

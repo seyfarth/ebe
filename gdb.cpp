@@ -6,6 +6,20 @@
 extern TerminalWindow *terminalWindow;
 
 extern GDB *gdb;
+QProcess *gdbProcess;
+
+QString readLine()
+{
+    QString result="";
+    int n;
+    do {
+        gdbProcess->waitForReadyRead(10);
+        result += gdbProcess->readLine();
+        n = result.length();
+    } while ( n == 0 || result.at(n-1) != '\n' );
+    result.chop(1);
+    return result;
+}
 
 GDBThread::GDBThread()
 : QThread()
@@ -22,9 +36,9 @@ void GDBThread::run()
 GDB::GDB(QObject *parent)
 : QObject(parent)
 {
-    gdb = new QProcess(this);
-    gdb->start("gdb");
-    qDebug() << "gdb state" << gdb->state();
+    gdbProcess = new QProcess(this);
+    gdbProcess->start("gdb");
+    qDebug() << "gdb state" << gdbProcess->state();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
                 << "continue";
     regs << "rax" << "rbx" << "rcx" << "rdx"
@@ -41,21 +55,13 @@ void GDB::send(QString cmd, QString options)
     QRegExp rx2("^([0-9]+).*$");
     cmd += '\n';
     qDebug() << cmd.toAscii();
-    gdb->write(cmd.toAscii());
+    gdbProcess->write(cmd.toAscii());
     cmd.chop(1);
     QString result;
-    result = gdb->readLine();
-    result.chop(1);
-    qDebug() << "result:" << result;
+    result = readLine();
+    //qDebug() << "result:" << result;
     int count = 1;
     while ( result.left(5) != "(gdb)" ) {
-        gdb->waitForReadyRead(10);
-        result = gdb->readLine();
-        count++;
-        if ( result.length() > 0 ) {
-            result.chop(1);
-            qDebug() << "result:" << result;
-        }
         if ( runCommands.contains(cmd) ) {
             if ( rx1.indexIn(result) >= 0 ) {
                 qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
@@ -66,8 +72,10 @@ void GDB::send(QString cmd, QString options)
                 emit nextInstruction("",rx2.cap(1).toInt());
             }
         }
+        result = readLine();
+        count++;
+        //qDebug() << "result:" << result;
     }
-    qDebug() << "count" << count;
 }
 
 QStringList GDB::sendReceive(QString cmd, QString options)
@@ -75,31 +83,25 @@ QStringList GDB::sendReceive(QString cmd, QString options)
     QStringList list;
     cmd += '\n';
     qDebug() << cmd.toAscii();
-    gdb->write(cmd.toAscii());
+    gdbProcess->write(cmd.toAscii());
     QString result;
-    result = gdb->readLine();
-    result.chop(1);
-    qDebug() << "result:" << result;
+    result = readLine();
+    //qDebug() << "result:" << result;
     int count = 1;
     while ( result.left(5) != "(gdb)" ) {
         list.append(result);
-        gdb->waitForReadyRead(10);
-        result = gdb->readLine();
+        result = readLine();
         count++;
-        if ( result.length() > 0 ) {
-            result.chop(1);
-            qDebug() << "result:" << result;
-        }
+        //qDebug() << "result:" << result;
     }
-    qDebug() << "count" << count;
-    qDebug() << list;
+    //qDebug() << list;
     return list;
 }
 
 void GDB::initGdb()
 {
-    gdb->setTextModeEnabled(true);
-    gdb->setReadChannel(QProcess::StandardOutput);
+    gdbProcess->setTextModeEnabled(true);
+    gdbProcess->setReadChannel(QProcess::StandardOutput);
     send("set prompt (gdb)\\n");
     send("tty " + terminalWindow->ptyName);
 }
@@ -122,7 +124,9 @@ void GDB::doRun(QString exe, QString options, QStringList files,
         }
     }
     send("run");
+    hasAVX = testAVX();
     getRegs();
+    getFpRegs();
 }
 
 void GDB::doNext()
@@ -130,18 +134,21 @@ void GDB::doNext()
     qDebug() << "gdb next";
     send("next");
     getRegs();
+    getFpRegs();
 }
 
 void GDB::doStep()
 {
     send("step");
     getRegs();
+    getFpRegs();
 }
 
 void GDB::doContinue()
 {
     send("continue");
     getRegs();
+    getFpRegs();
 }
 
 void GDB::doStop()
@@ -175,7 +182,45 @@ void GDB::getRegs()
 
 void GDB::getFpRegs()
 {
+    QStringList results;
+    QStringList parts;
+    QStringList data;
+    QString result;
+    QRegExp rx("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+).*"
+               "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
+    int index1, index2;
+    for ( int i = 0; i < 16; i++ ) {
+        if ( hasAVX ) {
+            results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
+            result = "";
+            foreach ( QString res, results ) {
+                //qDebug() << res;
+                //qDebug() << "index" << rx.indexIn(res);
+                if ( rx.indexIn(res) >= 0 ) {
+                    //qDebug() << "res" << rx.cap(1);
+                    data.append(rx.cap(1)+" "+rx.cap(2)+" "
+                               +rx.cap(3)+" "+rx.cap(4));
+                }
+            }
+        }
+    }
+    //qDebug() << data;
+    emit sendFpRegs(data);
 }
+
+bool GDB::testAVX()
+{
+    QStringList results;
+    QStringList parts;
+    results = sendReceive("print $ymm0.v4_int64[0]");
+    foreach ( QString result, results ) {
+        parts = result.split(QRegExp("\\s+"));
+        if ( parts.length() == 3 && parts[1] == "=" ) return true;
+    }
+    return false;
+}
+
+
 
 void GDB::getData(QString request)
 {

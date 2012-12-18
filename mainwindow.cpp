@@ -51,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     qRegisterMetaType<QMap<QString,QString> >("QMap<QString,QString>");
     connect ( gdb, SIGNAL(sendRegs(QMap<QString,QString>)),
               registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
+    connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
+              floatWindow, SLOT(receiveFpRegs(QStringList)) );
 }
 
 void MainWindow::restoreMainWindow()

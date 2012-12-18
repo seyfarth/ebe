@@ -27,13 +27,14 @@ public:
     void initGdb();
 
 private:
-    QProcess *gdb;
     void send(QString cmd, QString options="");
     QStringList sendReceive(QString cmd, QString options="");
     QSet<QString> runCommands;
     QSet<QString> regs;
     void getRegs();
     void getFpRegs();
+    bool hasAVX;
+    bool testAVX();
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
@@ -47,7 +48,7 @@ public slots:
 signals:
     void nextInstruction(QString,int);
     void sendRegs(QMap<QString,QString>);
-    void sendFpRegs(QMap<QString,QString>);
+    void sendFpRegs(QStringList);
     void sendData(QString,QString); 
 };
 
