@@ -326,8 +326,7 @@ void SourceFrame::run()
         sourceFiles.append ( source->fileName );
         breakpoints.append ( *(source->breakpoints) );
     }
-    qDebug() << sourceFiles;
-    qDebug() << breakpoints;
+    qDebug() << "doRun" << sourceFiles << breakpoints;
     emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints);
 }
 
@@ -432,9 +431,10 @@ void SourceFrame::setCommandLineVisible(bool visible)
     commandLine->setVisible(visible);
 }
 
-void SourceFrame::open()
+void SourceFrame::open(bool checked)
 {
     int index = tab->currentIndex();
+    qDebug() << "open";
     source = (SourceWindow *)tab->widget(index);
     if ( !source || source->textDoc->characterCount() > 1 ) {
         source = new SourceWindow;

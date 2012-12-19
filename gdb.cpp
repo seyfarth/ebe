@@ -16,6 +16,7 @@ QString readLine()
         gdbProcess->waitForReadyRead(10);
         result += gdbProcess->readLine();
         n = result.length();
+        qDebug() << result;
     } while ( n == 0 || result.at(n-1) != '\n' );
     result.chop(1);
     return result;
@@ -53,13 +54,13 @@ void GDB::send(QString cmd, QString options)
 {
     QRegExp rx1("at ([^:]*):([0-9]*)$");
     QRegExp rx2("^([0-9]+).*$");
-    cmd += '\n';
     qDebug() << cmd.toAscii();
+    cmd += '\n';
     gdbProcess->write(cmd.toAscii());
     cmd.chop(1);
     QString result;
     result = readLine();
-    //qDebug() << "result:" << result;
+    qDebug() << "result:" << result;
     int count = 1;
     while ( result.left(5) != "(gdb)" ) {
         if ( runCommands.contains(cmd) ) {
@@ -74,7 +75,7 @@ void GDB::send(QString cmd, QString options)
         }
         result = readLine();
         count++;
-        //qDebug() << "result:" << result;
+        qDebug() << "result:" << result;
     }
 }
 
@@ -118,8 +119,9 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("delete breakpoints");
     send("set args "+options);
     for ( i = 0; i < length; i++ ) {
-        qDebug() << files[i] << breakpoints[i];
         foreach ( int bp, breakpoints[i] ) {
+            qDebug() << files[i] << bp;
+            qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
             send(QString("break %1:%2").arg(files[i]).arg(bp) );
         }
     }
@@ -186,8 +188,9 @@ void GDB::getFpRegs()
     QStringList parts;
     QStringList data;
     QString result;
-    QRegExp rx("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+).*"
-               "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
+    QRegExp rx1("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+).*"
+                "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
+    QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     int index1, index2;
     for ( int i = 0; i < 16; i++ ) {
         if ( hasAVX ) {
@@ -196,10 +199,21 @@ void GDB::getFpRegs()
             foreach ( QString res, results ) {
                 //qDebug() << res;
                 //qDebug() << "index" << rx.indexIn(res);
-                if ( rx.indexIn(res) >= 0 ) {
+                if ( rx1.indexIn(res) >= 0 ) {
                     //qDebug() << "res" << rx.cap(1);
-                    data.append(rx.cap(1)+" "+rx.cap(2)+" "
-                               +rx.cap(3)+" "+rx.cap(4));
+                    data.append(rx1.cap(1)+" "+rx1.cap(2)+" "
+                               +rx1.cap(3)+" "+rx1.cap(4));
+                }
+            }
+        } else {
+            results = sendReceive(QString("print/x $xmm%1.v2_int64").arg(i));
+            result = "";
+            foreach ( QString res, results ) {
+                //qDebug() << res;
+                //qDebug() << "index" << rx.indexIn(res);
+                if ( rx2.indexIn(res) >= 0 ) {
+                    //qDebug() << "res" << rx.cap(1);
+                    data.append(rx2.cap(1)+" "+rx2.cap(2)+" 0x0 0x0");
                 }
             }
         }
@@ -219,8 +233,6 @@ bool GDB::testAVX()
     }
     return false;
 }
-
-
 
 void GDB::getData(QString request)
 {

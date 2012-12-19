@@ -170,6 +170,7 @@ void SourceWindow::open()
 {
     // How shall we set status bar text here?
 
+    qDebug() << "sw open";
     opened = false;
 
     // TODO: Add Fortran file extensions and other assembler extensions

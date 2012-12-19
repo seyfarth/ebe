@@ -31,7 +31,7 @@ private slots:
     void nextInstruction(QString file,int line);
     void setCommandLineVisible(bool);
     void changedTab(int index);
-    void open();
+    void open(bool);
     void save();
     void saveAs();
     void close();

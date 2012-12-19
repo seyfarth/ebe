@@ -1,11 +1,7 @@
 #ifndef FLOATWINDOW_H
 #define FLOATWINDOW_H
 
-#include <QSize>
-#include <QFrame>
-#include <QString>
-#include <QTableWidget>
-#include <QTableWidgetItem>
+#include <QtGui>
 
 class FpRegister
 {
@@ -42,6 +38,8 @@ public:
 
 public slots:
     void receiveFpRegs(QStringList);
+    void formatRegister(QAction *action);
+    void formatAllRegisters(QAction *action);
 
 private:
     QTableWidgetItem *regs[16];
@@ -50,6 +48,9 @@ private:
     FpRegister regValues[16];
     int fontHeight;
     int fontWidth;
+    int currentColumn;
+    int currentRow;
+    void contextMenuEvent ( QContextMenuEvent *event );
 };
 
 #endif

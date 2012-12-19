@@ -32,17 +32,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     
     createStatusBar();
     createDockWindows();
-    createMenus();
 
     gdbThread = new GDBThread();
     gdbThread->start();
     while ( !gdb ) usleep(10);
     qDebug() << "gdb" << gdb;
 
+    setWindowTitle(tr("ebe"));
     sourceFrame = new SourceFrame(this);
     setCentralWidget(sourceFrame);
 
-    setWindowTitle(tr("ebe"));
+    createMenus();
+
 
     setUnifiedTitleAndToolBarOnMac(true);
 
@@ -173,7 +174,7 @@ void MainWindow::createMenus()
         templateMenu->addAction(tr("Assembly Program"), sourceFrame,
                       SLOT(templateAssembly()));
         templateMenu->addAction(tr("Fortran Program"), sourceFrame, SLOT(templateFortran()));
-    fileMenu->addAction(tr("Open"), sourceFrame, SLOT(open()), QKeySequence::Open );
+    fileMenu->addAction(tr("Open"), sourceFrame, SLOT(open(bool)), QKeySequence::Open );
     fileMenu->addAction(tr("Save"), sourceFrame, SLOT(save()), QKeySequence::Save );
     fileMenu->addAction(tr("Save as"), sourceFrame, SLOT(saveAs()) );
     fileMenu->addAction(tr("Close"), sourceFrame, SLOT(close()) );
