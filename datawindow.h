@@ -1,11 +1,52 @@
 #ifndef DATAWINDOW_H
 #define DATAWINDOW_H
 
-#include <QSize>
-#include <QFrame>
-#include <QString>
-#include <QStringList>
-#include <QTableWidget>
+#include <QtGui>
+
+class DataItem : public QTreeWidgetItem
+{
+public:
+    DataItem();
+    QString value() {
+        return myValue;
+    }
+    QString name() {
+        return myName;
+    }
+    QString type() {
+        return myType;
+    }
+    void setName(QString n);
+    void setValue(QString v);
+    void setType(QString t);
+    void setRange(int f, int l);
+    QString valueFromGdb();
+
+private:
+    QString myName;
+    QString myValue;
+    QString myType;
+    int first;
+    int last;
+
+public slots:
+
+};
+
+class DataTree : public QTreeWidget
+{
+    Q_OBJECT
+
+public:
+    DataTree(QWidget *parent = 0);
+    DataItem *addDataItem(QString n, QString t, QString v);
+
+private:
+
+public slots:
+    void expandDataItem(QTreeWidgetItem*);
+
+};
 
 class DataWindow : public QFrame
 {
@@ -18,10 +59,8 @@ public:
 private slots:
 
 private:
-    void addVariable ( QString name, QString value );
-    QStringList names;
-    QStringList values;
-    QTableWidget *table;
+    DataTree *localTree;
+    DataTree *dataTree;
     QSize sizeHint() const;
 };
 
