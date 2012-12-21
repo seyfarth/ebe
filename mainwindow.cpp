@@ -30,13 +30,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     qApp->installEventFilter(this);
     
-    createStatusBar();
-    createDockWindows();
-
     gdbThread = new GDBThread();
     gdbThread->start();
     while ( !gdb ) usleep(10);
     qDebug() << "gdb" << gdb;
+
+    createStatusBar();
+    createDockWindows();
 
     setWindowTitle(tr("ebe"));
     sourceFrame = new SourceFrame(this);

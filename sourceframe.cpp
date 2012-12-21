@@ -70,8 +70,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     connect ( continueButton, SIGNAL(clicked()), this, SLOT(Continue()) );
     connect ( stopButton, SIGNAL(clicked()), this, SLOT(stop()) );
 
-    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<IntSet>)),
-              gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>)) );
+    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)),
+              gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)) );
     connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
     connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
     connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
@@ -317,6 +317,40 @@ void SourceFrame::run()
         errorWindow->show();
         return;
     }
+
+//
+//  Inspect exe file with nm to determine globals in .data and .bss
+//  "B" "D" and "G" for small objects
+//
+    QString nmCmd = QString("nm -C --defined %1").arg(exeName);
+    QProcess nm(this);
+    qDebug() << "nm cmd" << nmCmd;
+    nm.start ( nmCmd );
+    nm.waitForFinished();
+    ld.setReadChannel(QProcess::StandardOutput);
+
+    QStringList globals;
+    QStringList parts;
+    QRegExp rx("^[A-Za-z][A-Za-z0-9_]*$");
+    while ( (n = nm.readLine((char *)s,1024)) > 0 ) {
+        data = "";
+        for ( int i = 0; i < n; i++ ) {
+            if ( s[i] < 128 ) data += s[i];
+        }
+        parts = data.split(QRegExp("\\s+"));
+        qDebug() << "parts" << parts;
+        if ( parts.length() >= 3 ) {
+            if ( parts[1] == "B" || parts[1] == "b" ||
+                 parts[1] == "D" || parts[1] == "d" ||
+                 parts[1] == "G" || parts[1] == "g" ) {
+                if ( rx.indexIn(parts[2]) >= 0 ) {
+                    globals.append(parts[2]);
+                }
+            }
+        }
+    }
+    globals.sort();
+    qDebug() << "globals" << globals;
 //
 //  Start debugging
 //
@@ -327,7 +361,7 @@ void SourceFrame::run()
         breakpoints.append ( *(source->breakpoints) );
     }
     qDebug() << "doRun" << sourceFiles << breakpoints;
-    emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints);
+    emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints,globals);
 }
 
 void SourceFrame::next()

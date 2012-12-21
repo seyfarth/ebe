@@ -43,7 +43,7 @@ private slots:
 
 signals:
     void doRun(QString exe, QString options, QStringList files,
-               QList<IntSet> breakpoints);
+               QList<IntSet> breakpoints, QStringList globals);
     void doNext();
     void doStep();
     void doContinue();

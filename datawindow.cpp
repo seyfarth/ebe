@@ -1,7 +1,17 @@
 #include "datawindow.h"
 #include "settings.h"
+#include "gdb.h"
 #include <cstdio>
 
+extern GDB *gdb;
+
+DataTree *dataTree;
+DataItem *globals;
+DataItem *locals;
+DataItem *parameters;
+DataItem *userDefined;
+
+static QSet<QString> simpleTypes;
 
 DataWindow::DataWindow(QWidget *parent)
 : QFrame(parent)
@@ -16,12 +26,28 @@ DataWindow::DataWindow(QWidget *parent)
     dataTree = new DataTree(this);
     layout->addWidget(dataTree);
 
-    dataTree->addDataItem("n","int","141");
-    dataTree->addDataItem("t","double","14.1");
+    globals = dataTree->addDataItem("globals","","");
+    locals = dataTree->addDataItem("locals","","");
+    parameters = dataTree->addDataItem("parameters","","");
+    userDefined = dataTree->addDataItem("user-defined","","");
     
-    DataItem *d = dataTree->addDataItem("bigStuff", "machine", "" );
+    simpleTypes << "char" << "signed char" << "unsigned char"
+                << "short" << "signed short" << "unsigned short"
+                << "int" << "signed int" << "unsigned int"
+                << "long" << "signed long" << "unsigned long"
+                << "long int" << "signed long int" << "unsigned long int"
+                << "long long" << "signed long long" << "unsigned long long"
+                << "bool" << "float" << "double" << "long double"
+                << "string";
 
     setLayout ( layout );
+
+    connect ( gdb, SIGNAL(sendGlobals(QStringList,QStringList,QStringList)),
+          dataTree, SLOT(receiveGlobals(QStringList,QStringList,QStringList)));
+    connect ( gdb, SIGNAL(sendLocals(QStringList,QStringList,QStringList)),
+          dataTree, SLOT(receiveLocals(QStringList,QStringList,QStringList)));
+    connect ( gdb, SIGNAL(sendParameters(QStringList,QStringList,QStringList)),
+          dataTree, SLOT(receiveParameters(QStringList,QStringList,QStringList)));
 }
 
 QSize DataWindow::sizeHint() const
@@ -63,12 +89,7 @@ void DataItem::setType(QString t)
 {
     myType = t;
     setText(1,myType);
-    if ( t == "string" ||
-         t == "char" || t == "signed char" || t == "unsigned char" ||
-         t == "short" || t == "signed short" || t == "unsigned short" ||
-         t == "int" || t == "signed int" || t == "unsigned int" ||
-         t == "long" || t == "signed long" || t == "unsigned long" ||
-         t == "float" || t == "double" || t == "bool" ) {
+    if ( simpleTypes.contains(t) ) {
         setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     } else {
         setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
@@ -125,3 +146,61 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
     it->addChild(d);
 }
 
+void DataTree::receiveGlobals(QStringList names, QStringList types,
+               QStringList values)
+{
+    int n = names.length();
+    DataItem *item;
+    
+    qDebug() << "rg" << names << types << values;
+    globals->takeChildren();
+    for ( int i = 0; i < n; i++ ) {
+        item = new DataItem();
+        item->setName(names[i]);
+        item->setType(types[i]);
+        item->setValue(values[i]);
+        globals->addChild(item);
+    }
+}
+
+void DataTree::receiveLocals(QStringList names, QStringList types,
+               QStringList values)
+{
+    int n = names.length();
+    DataItem *item;
+    QList<QTreeWidgetItem*> oldLocals;
+    
+    oldLocals = locals->takeChildren();
+    qDebug() << "rl" << names << types << values;
+    for ( int i = 0; i < n; i++ ) {
+        qDebug() << i << names[i] << types[i] << values[i];
+        item = new DataItem();
+        item->setName(names[i]);
+        item->setType(types[i]);
+        item->setValue(values[i]);
+        locals->addChild(item);
+    }
+    foreach ( QTreeWidgetItem *it, oldLocals ) delete it;
+    qDebug() << "done rl";
+}
+
+void DataTree::receiveParameters(QStringList names, QStringList types,
+               QStringList values)
+{
+    int n = names.length();
+    DataItem *item;
+    QList<QTreeWidgetItem*> oldParameters;
+    
+    oldParameters = parameters->takeChildren();
+    qDebug() << "rl" << names << types << values;
+    for ( int i = 0; i < n; i++ ) {
+        qDebug() << i << names[i] << types[i] << values[i];
+        item = new DataItem();
+        item->setName(names[i]);
+        item->setType(types[i]);
+        item->setValue(values[i]);
+        parameters->addChild(item);
+    }
+    foreach ( QTreeWidgetItem *it, oldParameters ) delete it;
+    qDebug() << "done rl";
+}

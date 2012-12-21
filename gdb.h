@@ -29,16 +29,21 @@ public:
 private:
     void send(QString cmd, QString options="");
     QStringList sendReceive(QString cmd, QString options="");
+    QStringList globals;
     QSet<QString> runCommands;
     QSet<QString> regs;
+    QSet<QString> simpleTypes;
     void getRegs();
     void getFpRegs();
+    void getGlobals();
+    void getLocals();
+    void getArgs();
     bool hasAVX;
     bool testAVX();
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
-               QList<IntSet> breakpoints);
+               QList<IntSet> breakpoints, QStringList globals);
     void doNext();
     void doStep();
     void doContinue();
@@ -50,6 +55,9 @@ signals:
     void sendRegs(QMap<QString,QString>);
     void sendFpRegs(QStringList);
     void sendData(QString,QString); 
+    void sendGlobals(QStringList,QStringList,QStringList); 
+    void sendLocals(QStringList,QStringList,QStringList); 
+    void sendParameters(QStringList,QStringList,QStringList); 
 };
 
 #endif

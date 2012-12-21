@@ -45,6 +45,9 @@ private:
 
 public slots:
     void expandDataItem(QTreeWidgetItem*);
+    void receiveGlobals(QStringList,QStringList,QStringList);
+    void receiveLocals(QStringList,QStringList,QStringList);
+    void receiveParameters(QStringList,QStringList,QStringList);
 
 };
 
@@ -59,8 +62,6 @@ public:
 private slots:
 
 private:
-    DataTree *localTree;
-    DataTree *dataTree;
     QSize sizeHint() const;
 };
 
