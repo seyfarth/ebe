@@ -42,8 +42,8 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     setLayout(layout);
 
     ptyName = ptsname(pty);
-    qDebug() << "pty" << ptyName;
-    ptyReader = new PtyReader(pty,ptyName,this);
+    //qDebug() << "pty" << ptyName;
+    ptyReader = new PtyReader(pty,ptyName);
     connect(lineEdit,SIGNAL(returnPressed()),this,SLOT(lineEditReady()));
     connect(ptyReader,SIGNAL(dataReady(QString)),
             this,SLOT(dataReady(QString)) );
@@ -57,7 +57,7 @@ void TerminalWindow::dataReady(QString data)
     if (data.at(n-1) == '\n') {
         data.chop(1);
         if (data.at(n-2) == '\r') data.chop(1);
-        qDebug() << "chop" << data;
+        //qDebug() << "chop" << data;
     }
     edit->appendPlainText(data);
 }
@@ -69,7 +69,9 @@ void TerminalWindow::lineEditReady()
     s = lineEdit->text();
     a = s.toAscii();
     a.append('\n');
-    write(pty,a.data(),a.length());
+    if ( write(pty,a.data(),a.length()) < 1 ) {
+        qDebug() << "error writing to pty on lineEditReady";
+    }
     lineEdit->clear();
 }
 

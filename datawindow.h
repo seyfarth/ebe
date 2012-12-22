@@ -63,6 +63,8 @@ private slots:
 
 private:
     QSize sizeHint() const;
+    int fontHeight;
+    int fontWidth;
 };
 
 #endif

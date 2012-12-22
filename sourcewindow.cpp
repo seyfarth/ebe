@@ -50,10 +50,10 @@ void SourceEdit::keyPressEvent ( QKeyEvent *event )
 
 void SourceEdit::printScroll()
 {
-    QScrollBar *sb = verticalScrollBar();
-    qDebug() << "sb" << sb->minimum() << sb->value() << sb->maximum() << endl;
-    qDebug() << viewport()->size();
-    qDebug() << "blocks" << blockCount();
+    //QScrollBar *sb = verticalScrollBar();
+    //qDebug() << "sb" << sb->minimum() << sb->value() << sb->maximum() << endl;
+    //qDebug() << viewport()->size();
+    //qDebug() << "blocks" << blockCount();
 }
 
 void SourceEdit::resizeEvent(QResizeEvent *e)
@@ -170,7 +170,7 @@ void SourceWindow::open()
 {
     // How shall we set status bar text here?
 
-    qDebug() << "sw open";
+    //qDebug() << "sw open";
     opened = false;
 
     // TODO: Add Fortran file extensions and other assembler extensions
@@ -237,7 +237,7 @@ void SourceWindow::saveAs()
     file.close();
 
     // File changed variable, reset to false
-    qDebug() << "Saved it as " << fileName;
+    //qDebug() << "Saved it as " << fileName;
     changed = false;
     saved = true;
 }
@@ -341,11 +341,11 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
 {
-    SourceWindow *p = (SourceWindow *)parent();
-    int row = (e->pos().y()-2)/p->fontHeight + p->topNumber;
+    //SourceWindow *p = (SourceWindow *)parent();
+    //int row = (e->pos().y()-2)/p->fontHeight + p->topNumber;
     int block = cursorForPosition(e->pos()).blockNumber();
-    qDebug() << "mre" << row;
-    qDebug() << "block" << block;
+    //qDebug() << "mre" << row;
+    //qDebug() << "block" << block;
     if ( breakpoints->contains(block+1) ) {
         breakpoints->remove(block+1);
         cursorForPosition(e->pos()).setBlockFormat(normalFormat);
@@ -381,7 +381,7 @@ void LineNumberEdit::dropAllBreakpoints()
     //SourceWindow *p = (SourceWindow *)parent();
     //qDebug() << "top" << p->topNumber;
     foreach ( int line, *breakpoints ) {
-        qDebug() << "bp at" << line;
+        //qDebug() << "bp at" << line;
         breakpoints->remove(line);
         //eventPosition.setX(0);
         //eventPosition.setY((line-p->topNumber)*p->fontHeight+p->fontHeight/2+1);
@@ -393,27 +393,27 @@ void LineNumberEdit::dropAllBreakpoints()
 void LineNumberEdit::setBreakpoint()
 {
     qDebug() << "set" << eventPosition;
-    SourceWindow *p = (SourceWindow *)parent();
-    int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
+    //SourceWindow *p = (SourceWindow *)parent();
+    //int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
     int block = cursorForPosition(eventPosition).blockNumber();
-    qDebug() << "set" << row;
-    qDebug() << "block" << block;
+    //qDebug() << "set" << row;
+    //qDebug() << "block" << block;
     breakpoints->insert(block+1);
     cursorForPosition(eventPosition).setBlockFormat(breakFormat);
 }
 
 void LineNumberEdit::dropBreakpoint()
 {
-    qDebug() << "drop" << eventPosition;
-    SourceWindow *p = (SourceWindow *)parent();
-    int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
+    //qDebug() << "drop" << eventPosition;
+    //SourceWindow *p = (SourceWindow *)parent();
+    //int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
     int block = cursorForPosition(eventPosition).blockNumber();
-    qDebug() << "set" << row;
-    qDebug() << "block" << block;
+    //qDebug() << "set" << row;
+    //qDebug() << "block" << block;
     breakpoints->remove(block+1);
     cursorForPosition(eventPosition).setBlockFormat(normalFormat);
 }
 
-void LineNumberEdit::wheelEvent ( QWheelEvent *e )
+void LineNumberEdit::wheelEvent ( QWheelEvent * /* e */ )
 {
 }

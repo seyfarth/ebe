@@ -23,7 +23,7 @@ class GDB : public QObject
     Q_OBJECT
 
 public:
-    GDB(QObject *parent);
+    GDB();
     void initGdb();
 
 private:

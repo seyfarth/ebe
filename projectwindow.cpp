@@ -74,7 +74,7 @@ void ProjectWindow::open(QString filename)
         fileNames.append(name);
         list->addItem(name);
         if (autoOpen ) {
-            qDebug() << "opening " << name;
+            //qDebug() << "opening " << name;
             sourceFrame->open(name,i);
             i++;
         }

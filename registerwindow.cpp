@@ -113,7 +113,7 @@ void RegisterWindow::receiveRegs ( QMap<QString,QString> map )
     setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
-void RegisterWindow::contextMenuEvent(QContextMenuEvent *event)
+void RegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     int column = table->currentColumn();
     QMenu menu("Register menu");
@@ -135,7 +135,7 @@ void RegisterWindow::contextMenuEvent(QContextMenuEvent *event)
 void RegisterWindow::setDecimal()
 {
     QString reg = table->currentItem()->text();
-    qDebug() << "reg" << reg;
+    //qDebug() << "reg" << reg;
     if ( reg.at(reg.length()-1) == ' ' ) reg.chop(1);
     if ( regs.contains(reg) ) {
         regs[reg]->setFormat("decimal");
@@ -145,9 +145,9 @@ void RegisterWindow::setDecimal()
 
 void RegisterWindow::setHex()
 {
-    qDebug() << table->currentItem();
+    //qDebug() << table->currentItem();
     QString reg = table->currentItem()->text();
-    qDebug() << reg;
+    //qDebug() << reg;
     if ( reg.at(reg.length()-1) == ' ' ) reg.chop(1);
     if ( regs.contains(reg) ) {
         regs[reg]->setFormat("hexadecimal");
@@ -192,7 +192,7 @@ QString Register::value()
 {
     long dec;
     bool ok;
-    qDebug() << name << format << contents;
+    //qDebug() << name << format << contents;
     if ( name == "rip" || name == "eflags" ) {
         return contents;
     } else if ( format == "decimal" ) {

@@ -16,7 +16,7 @@ QString readLine()
         gdbProcess->waitForReadyRead(10);
         result += gdbProcess->readLine();
         n = result.length();
-        qDebug() << result;
+        //qDebug() << result;
     } while ( n == 0 || result.at(n-1) != '\n' );
     result.chop(1);
     return result;
@@ -29,17 +29,17 @@ GDBThread::GDBThread()
 
 void GDBThread::run()
 {
-    qDebug() << "thread" << currentThreadId();
-    gdb = new GDB(this);
+    //qDebug() << "thread" << currentThreadId();
+    gdb = new GDB;
     exec();
 }
 
-GDB::GDB(QObject *parent)
-: QObject(parent)
+GDB::GDB()
+: QObject()
 {
     gdbProcess = new QProcess(this);
     gdbProcess->start("gdb");
-    qDebug() << "gdb state" << gdbProcess->state();
+    //qDebug() << "gdb state" << gdbProcess->state();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
                 << "continue";
     simpleTypes << "char" << "signed char" << "unsigned char"
@@ -58,40 +58,40 @@ GDB::GDB(QObject *parent)
     initGdb();
 }
 
-void GDB::send(QString cmd, QString options)
+void GDB::send(QString cmd, QString /*options*/)
 {
     QRegExp rx1("at ([^:]*):([0-9]*)$");
     QRegExp rx2("^([0-9]+).*$");
-    qDebug() << cmd.toAscii();
+    //qDebug() << cmd.toAscii();
     cmd += '\n';
     gdbProcess->write(cmd.toAscii());
     cmd.chop(1);
     QString result;
     result = readLine();
-    qDebug() << "result:" << result;
+    //qDebug() << "result:" << result;
     int count = 1;
     while ( result.left(5) != "(gdb)" ) {
         if ( runCommands.contains(cmd) ) {
             if ( rx1.indexIn(result) >= 0 ) {
-                qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
+                //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
                 emit nextInstruction(rx1.cap(1),rx1.cap(2).toInt());
             }
             if ( rx2.indexIn(result) >= 0 ) {
-                qDebug() << rx2.cap(0) << rx2.cap(1);
+                //qDebug() << rx2.cap(0) << rx2.cap(1);
                 emit nextInstruction("",rx2.cap(1).toInt());
             }
         }
         result = readLine();
         count++;
-        qDebug() << "result:" << result;
+        //qDebug() << "result:" << result;
     }
 }
 
-QStringList GDB::sendReceive(QString cmd, QString options)
+QStringList GDB::sendReceive(QString cmd, QString /*options*/)
 {
     QStringList list;
     cmd += '\n';
-    qDebug() << cmd.toAscii();
+    //qDebug() << cmd.toAscii();
     gdbProcess->write(cmd.toAscii());
     QString result;
     result = readLine();
@@ -121,7 +121,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     int i;
     int length = files.length();
     globals = g;
-    qDebug() << "length" << length;
+    //qDebug() << "length" << length;
     send("kill");
     send("file \""+exe+"\"");
     send("tty " + terminalWindow->ptyName);
@@ -129,8 +129,8 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("set args "+options);
     for ( i = 0; i < length; i++ ) {
         foreach ( int bp, breakpoints[i] ) {
-            qDebug() << files[i] << bp;
-            qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
+            //qDebug() << files[i] << bp;
+            //qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
             send(QString("break %1:%2").arg(files[i]).arg(bp) );
         }
     }
@@ -145,7 +145,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
 
 void GDB::doNext()
 {
-    qDebug() << "gdb next";
+    //qDebug() << "gdb next";
     send("next");
     getRegs();
     getFpRegs();
@@ -199,7 +199,7 @@ void GDB::getRegs()
             }
         }
     }
-    qDebug() << map;
+    //qDebug() << map;
     emit sendRegs(map);
 }
 
@@ -212,7 +212,6 @@ void GDB::getFpRegs()
     QRegExp rx1("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+).*"
                 "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
-    int index1, index2;
     for ( int i = 0; i < 16; i++ ) {
         if ( hasAVX ) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
@@ -258,11 +257,11 @@ void GDB::getGlobals()
         value = "";
         results = sendReceive(QString("whatis %1").arg(name));
         foreach ( QString r, results ) {
-            qDebug() << "r" << r;
+            //qDebug() << "r" << r;
             int i = r.indexOf("=");
             if ( i > 0 ) {
                 type = r.mid(i+2);
-                qDebug() << name << type;
+                //qDebug() << name << type;
                 break;
             }
         }
@@ -270,7 +269,7 @@ void GDB::getGlobals()
             if ( simpleTypes.contains(type) ) {
                 results = sendReceive(QString("print %1").arg(name));
                 foreach ( QString r, results ) {
-                    qDebug() << r;
+                    //qDebug() << r;
                     int i = r.indexOf("=");
                     if ( i > 0 ) {
                         value = r.mid(i+2);
@@ -287,7 +286,7 @@ void GDB::getGlobals()
             }
         }
     }
-    qDebug() << names << types << values;
+    //qDebug() << names << types << values;
     emit sendGlobals(names,types,values);
 }
 
@@ -304,24 +303,24 @@ void GDB::getLocals()
 
     results = sendReceive(QString("info locals"));
     foreach ( QString r, results ) {
-        qDebug() << "r" << r;
+        //qDebug() << "r" << r;
         int n = r.indexOf(" =");
         if ( n > 0 && r.at(0) != ' ' && r.at(0) != '_' ) {
             locals.append(r.left(n));
         }
     }
     locals.sort();
-    qDebug() << "names" << locals;
+    //qDebug() << "names" << locals;
     foreach ( name, locals ) {
         type = "";
         value = "";
         results = sendReceive(QString("whatis %1").arg(name));
         foreach ( QString r, results ) {
-            qDebug() << "r" << r;
+            //qDebug() << "r" << r;
             int i = r.indexOf("=");
             if ( i > 0 ) {
                 type = r.mid(i+2);
-                qDebug() << name << type;
+                //qDebug() << name << type;
                 break;
             }
         }
@@ -329,7 +328,7 @@ void GDB::getLocals()
             if ( simpleTypes.contains(type) ) {
                 results = sendReceive(QString("print %1").arg(name));
                 foreach ( QString r, results ) {
-                    qDebug() << r;
+                    //qDebug() << r;
                     int i = r.indexOf("=");
                     if ( i > 0 ) {
                         value = r.mid(i+2);
@@ -346,7 +345,7 @@ void GDB::getLocals()
             }
         }
     }
-    qDebug() << names << types << values;
+    //qDebug() << names << types << values;
     emit sendLocals(names,types,values);
 }
 
@@ -363,24 +362,24 @@ void GDB::getArgs()
 
     results = sendReceive(QString("info args"));
     foreach ( QString r, results ) {
-        qDebug() << "r" << r;
+        //qDebug() << "r" << r;
         int n = r.indexOf(" =");
         if ( n > 0 && r.at(0) != ' ' && r.at(0) != '_' ) {
             args.append(r.left(n));
         }
     }
     args.sort();
-    qDebug() << "args" << args;
+    //qDebug() << "args" << args;
     foreach ( name, args ) {
         type = "";
         value = "";
         results = sendReceive(QString("whatis %1").arg(name));
         foreach ( QString r, results ) {
-            qDebug() << "r" << r;
+            //qDebug() << "r" << r;
             int i = r.indexOf("=");
             if ( i > 0 ) {
                 type = r.mid(i+2);
-                qDebug() << name << type;
+                //qDebug() << name << type;
                 break;
             }
         }
@@ -388,7 +387,7 @@ void GDB::getArgs()
             if ( simpleTypes.contains(type) ) {
                 results = sendReceive(QString("print %1").arg(name));
                 foreach ( QString r, results ) {
-                    qDebug() << r;
+                    //qDebug() << r;
                     int i = r.indexOf("=");
                     if ( i > 0 ) {
                         value = r.mid(i+2);
@@ -405,7 +404,7 @@ void GDB::getArgs()
             }
         }
     }
-    qDebug() << "parameters" << names << types << values;
+    //qDebug() << "parameters" << names << types << values;
     emit sendParameters(names,types,values);
 }
 

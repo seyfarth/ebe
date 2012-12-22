@@ -57,6 +57,8 @@ QSize DataWindow::sizeHint() const
 
 void DataWindow::setFontHeightAndWidth ( int height, int width )
 {
+    fontHeight = height;
+    fontWidth  = width;
 }
 
 DataItem::DataItem()
@@ -137,7 +139,7 @@ DataItem *DataTree::addDataItem ( QString n, QString t, QString v )
 void DataTree::expandDataItem(QTreeWidgetItem *item)
 {
     DataItem *it = (DataItem *)item;
-    qDebug() << "need to expand" << it->name();
+    //qDebug() << "need to expand" << it->name();
     DataItem *d = new DataItem();
     d->setName("a");
     d->setType("int");
@@ -152,7 +154,7 @@ void DataTree::receiveGlobals(QStringList names, QStringList types,
     int n = names.length();
     DataItem *item;
     
-    qDebug() << "rg" << names << types << values;
+    //qDebug() << "rg" << names << types << values;
     globals->takeChildren();
     for ( int i = 0; i < n; i++ ) {
         item = new DataItem();
@@ -171,9 +173,9 @@ void DataTree::receiveLocals(QStringList names, QStringList types,
     QList<QTreeWidgetItem*> oldLocals;
     
     oldLocals = locals->takeChildren();
-    qDebug() << "rl" << names << types << values;
+    //qDebug() << "rl" << names << types << values;
     for ( int i = 0; i < n; i++ ) {
-        qDebug() << i << names[i] << types[i] << values[i];
+        //qDebug() << i << names[i] << types[i] << values[i];
         item = new DataItem();
         item->setName(names[i]);
         item->setType(types[i]);
@@ -181,7 +183,7 @@ void DataTree::receiveLocals(QStringList names, QStringList types,
         locals->addChild(item);
     }
     foreach ( QTreeWidgetItem *it, oldLocals ) delete it;
-    qDebug() << "done rl";
+    //qDebug() << "done rl";
 }
 
 void DataTree::receiveParameters(QStringList names, QStringList types,
@@ -192,9 +194,9 @@ void DataTree::receiveParameters(QStringList names, QStringList types,
     QList<QTreeWidgetItem*> oldParameters;
     
     oldParameters = parameters->takeChildren();
-    qDebug() << "rl" << names << types << values;
+    //qDebug() << "rl" << names << types << values;
     for ( int i = 0; i < n; i++ ) {
-        qDebug() << i << names[i] << types[i] << values[i];
+        //qDebug() << i << names[i] << types[i] << values[i];
         item = new DataItem();
         item->setName(names[i]);
         item->setType(types[i]);
@@ -202,5 +204,5 @@ void DataTree::receiveParameters(QStringList names, QStringList types,
         parameters->addChild(item);
     }
     foreach ( QTreeWidgetItem *it, oldParameters ) delete it;
-    qDebug() << "done rl";
+    //qDebug() << "done rl";
 }

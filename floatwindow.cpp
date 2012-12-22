@@ -84,14 +84,14 @@ void FloatWindow::receiveFpRegs ( QStringList data )
     QStringList parts;
     bool ok;
     unsigned long x[4]={0,0,0,0};
-    qDebug() << "receive" << data;
+    //qDebug() << "receive" << data;
     for (int i = 0; i < 16; i++ ) {
         parts = data[i].split(QRegExp("\\s+"));
-        qDebug() << parts;
+        //qDebug() << parts;
         for ( int j = 0; j < parts.length(); j++ ) {
             x[j] = parts[j].mid(2).toLong(&ok,16);
         }
-        qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
+        //qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
         regValues[i].setValue(x);
         setRegister(i,regValues[i].value());
     }
@@ -149,7 +149,7 @@ void FloatWindow::formatRegister(QAction *action)
     int n;
 
     n = (table->currentColumn()/2) * 8 + table->currentRow();
-    qDebug() << n << action->text();
+    //qDebug() << n << action->text();
     regValues[n].setFormat(action->text());
     setRegister(n,regValues[n].value());
     setFontHeightAndWidth(fontHeight,fontWidth);
@@ -158,7 +158,7 @@ void FloatWindow::formatRegister(QAction *action)
 void FloatWindow::formatAllRegisters(QAction *action)
 {
     for ( int n = 0; n < 16; n++ ) {
-        qDebug() << n << action->text();
+        //qDebug() << n << action->text();
         regValues[n].setFormat(action->text());
         setRegister(n,regValues[n].value());
     }

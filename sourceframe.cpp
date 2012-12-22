@@ -156,10 +156,10 @@ void SourceFrame::run()
             return;
         }
         sourceFiles << name;
-        qDebug() << "bpts" << *(source->breakpoints);
+        //qDebug() << "bpts" << *(source->breakpoints);
         index = name.lastIndexOf('.');
         if ( index == -1 ) {
-            int ret = QMessageBox::warning(this, tr("Warning"),
+            QMessageBox::warning(this, tr("Warning"),
                                 tr("The file name, ") + name +
                                 tr(", lacks an extension."),
                                 QMessageBox::Ok, QMessageBox::Ok); 
@@ -172,7 +172,7 @@ void SourceFrame::run()
         exeName = projectWindow->projectFileName;
         index = exeName.lastIndexOf('.');
         if ( index == -1 ) {
-            int ret = QMessageBox::warning(this, tr("Warning"),
+            QMessageBox::warning(this, tr("Warning"),
                                 tr("The project file name, ") + exeName +
                                 tr(", lacks the .ebe extension."),
                                 QMessageBox::Ok, QMessageBox::Ok); 
@@ -184,8 +184,8 @@ void SourceFrame::run()
 //
 //  Compile all source files
 //
-    qDebug() << "Files" << sourceFiles;
-    qDebug() << "exe" << exeName;
+    //qDebug() << "Files" << sourceFiles;
+    //qDebug() << "exe" << exeName;
 
     foreach ( name, sourceFiles ) {
         name = QDir::current().relativeFilePath(name);
@@ -195,31 +195,31 @@ void SourceFrame::run()
         length = name.length();
         ext = name.right(length-index-1);
         base = name.left(index);
-        qDebug() << name << base << ext;
+        //qDebug() << name << base << ext;
         if ( cppExts.contains(ext) ) {
-            qDebug() << name << "cpp";
+            //qDebug() << name << "cpp";
             cmd = ebe["build/cpp"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
-            qDebug() << cmd;
+            //qDebug() << cmd;
         } else if ( cExts.contains(ext) ) {
-            qDebug() << name << "c";
+            //qDebug() << name << "c";
             cmd = ebe["build/cc"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
-            qDebug() << cmd;
+            //qDebug() << cmd;
         } else if ( asmExts.contains(ext) ) {
-            qDebug() << name << "asm";
+            //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
-            qDebug() << cmd;
+            //qDebug() << cmd;
         } else if ( fortranExts.contains(ext) ) {
-            qDebug() << name << "fortran";
+            //qDebug() << name << "fortran";
             cmd = ebe["build/fortran"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
-            qDebug() << cmd;
+            //qDebug() << cmd;
         }
         object = base + "." + ebe["build/obj"].toString();
         objectFiles << StringPair(object,ext);
@@ -250,7 +250,7 @@ void SourceFrame::run()
     foreach ( StringPair pair, objectFiles ) {
         object = pair.first;
         ext = pair.second;
-        qDebug() << "object" << object << ext;
+        //qDebug() << "object" << object << ext;
         QProcess nm(this);
         nm.start ( "nm -Cg " + object );
         nm.waitForFinished();
@@ -259,10 +259,10 @@ void SourceFrame::run()
         QStringList parts;
         while ( data != "" ) {
             parts = data.split(QRegExp("\\s+"));
-            qDebug() << parts;
+            //qDebug() << parts;
             if ( parts.length() >= 3 ) {
                 if ( parts[1] == "T" && parts[2] == "main" ) {
-                    qDebug() << "found main" << object;
+                    //qDebug() << "found main" << object;
                     if ( cExts.contains(ext) ) {
                         ldCmd = ebe["build/ccld"].toString();
                     } else if ( cppExts.contains(ext) ) {
@@ -275,18 +275,18 @@ void SourceFrame::run()
                     break;
                 }
             }
-            qDebug() << data;
+            //qDebug() << data;
             data = nm.readLine();
         }
     }
 
     if ( ldCmd == "" ) {
-        int ret = QMessageBox::warning(this, tr("Warning"),
+        QMessageBox::warning(this, tr("Warning"),
                             tr("None of the source files defines main"),
                             QMessageBox::Ok, QMessageBox::Ok); 
         return;
     } 
-    qDebug() << "ld cmd" << ldCmd;
+    //qDebug() << "ld cmd" << ldCmd;
 //
 //  Link object files to produce executable file
 //
@@ -297,7 +297,7 @@ void SourceFrame::run()
 
     QProcess ld(this);
     ldCmd.replace("$base",exeName);
-    qDebug() << "ld cmd" << ldCmd;
+    //qDebug() << "ld cmd" << ldCmd;
     ld.start ( ldCmd );
     ld.waitForFinished();
     ld.setReadChannel(QProcess::StandardError);
@@ -324,7 +324,7 @@ void SourceFrame::run()
 //
     QString nmCmd = QString("nm -C --defined %1").arg(exeName);
     QProcess nm(this);
-    qDebug() << "nm cmd" << nmCmd;
+    //qDebug() << "nm cmd" << nmCmd;
     nm.start ( nmCmd );
     nm.waitForFinished();
     ld.setReadChannel(QProcess::StandardOutput);
@@ -338,7 +338,7 @@ void SourceFrame::run()
             if ( s[i] < 128 ) data += s[i];
         }
         parts = data.split(QRegExp("\\s+"));
-        qDebug() << "parts" << parts;
+        //qDebug() << "parts" << parts;
         if ( parts.length() >= 3 ) {
             if ( parts[1] == "B" || parts[1] == "b" ||
                  parts[1] == "D" || parts[1] == "d" ||
@@ -350,7 +350,7 @@ void SourceFrame::run()
         }
     }
     globals.sort();
-    qDebug() << "globals" << globals;
+    //qDebug() << "globals" << globals;
 //
 //  Start debugging
 //
@@ -360,7 +360,7 @@ void SourceFrame::run()
         sourceFiles.append ( source->fileName );
         breakpoints.append ( *(source->breakpoints) );
     }
-    qDebug() << "doRun" << sourceFiles << breakpoints;
+    //qDebug() << "doRun" << sourceFiles << breakpoints;
     emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints,globals);
 }
 
@@ -410,7 +410,7 @@ void SourceFrame::setNextLine ( QString file, int line )
 
 void SourceFrame::nextInstruction ( QString file, int line )
 {
-    qDebug() << "break" << file << line;
+    //qDebug() << "break" << file << line;
     if ( breakFile != "" ) {
         clearNextLine(breakFile,breakLine);
     }
@@ -432,11 +432,11 @@ void SourceFrame::setFontHeightAndWidth ( int height, int width )
 
 void SourceFrame::changedTab(int index)
 {
-    qDebug() << "switching to " << index;
+    //qDebug() << "switching to " << index;
     source = (SourceWindow *)tab->widget(index);
 }
 
-void SourceFrame::openInNewTab(QString name)
+void SourceFrame::openInNewTab(QString /*name*/)
 {
 }
 
@@ -444,13 +444,13 @@ void SourceFrame::open(QString name,int index)
 {
     while (index >= tab->count()) {
         source = new SourceWindow;
-        int index = tab->addTab(source,"");
+        index = tab->addTab(source,"");
     }
     source = (SourceWindow *)tab->widget(index);
     source->open(name);
     if ( source && source->opened ) {
         name = QDir::current().relativeFilePath(name);
-        qDebug() << "Setting name " << index << name;
+        //qDebug() << "Setting name " << index << name;
         tab->setTabText(index,name);
     }
 }
@@ -465,10 +465,10 @@ void SourceFrame::setCommandLineVisible(bool visible)
     commandLine->setVisible(visible);
 }
 
-void SourceFrame::open(bool checked)
+void SourceFrame::open(bool /* checked */)
 {
     int index = tab->currentIndex();
-    qDebug() << "open";
+    //qDebug() << "open";
     source = (SourceWindow *)tab->widget(index);
     if ( !source || source->textDoc->characterCount() > 1 ) {
         source = new SourceWindow;
@@ -479,7 +479,7 @@ void SourceFrame::open(bool checked)
     if ( source && source->opened ) {
         QString name = source->fileName;
         name = QDir::current().relativeFilePath(name);
-        qDebug() << "Setting name " << index << name;
+        //qDebug() << "Setting name " << index << name;
         tab->setTabText(index,name);
     }
 }
@@ -517,7 +517,7 @@ void SourceFrame::save()
         if ( source->saved ) {
             QString name = source->fileName;
             name = QDir::current().relativeFilePath(name);
-            qDebug() << "Setting name " << index << name;
+            //qDebug() << "Setting name " << index << name;
             tab->setTabText(index,name);
         }
     }
@@ -532,7 +532,7 @@ void SourceFrame::saveAs()
         if ( source->saved ) {
             QString name = source->fileName;
             name = QDir::current().relativeFilePath(name);
-            qDebug() << "Setting name " << index << name;
+            //qDebug() << "Setting name " << index << name;
             tab->setTabText(index,name);
         }
     }

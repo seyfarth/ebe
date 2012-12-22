@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     gdbThread = new GDBThread();
     gdbThread->start();
     while ( !gdb ) usleep(10);
-    qDebug() << "gdb" << gdb;
+    //qDebug() << "gdb" << gdb;
 
     createStatusBar();
     createDockWindows();
@@ -101,7 +101,7 @@ void MainWindow::restoreMainWindow()
     setFontSize();
 }
 
-bool MainWindow::eventFilter ( QObject *object, QEvent *event )
+bool MainWindow::eventFilter ( QObject * /* object */, QEvent *event )
 {
     if ( event->type() == QEvent::ToolTip ) {
         if ( !tooltipsVisible ) return true;
@@ -304,7 +304,7 @@ void MainWindow::displayHelp()
 
 void MainWindow::quit()
 {
-    qDebug() << "Calling static QApp quit()";
+    //qDebug() << "Calling static QApp quit()";
 
     // FIXME: save project/files etc., before quitting
 #if 0
@@ -395,7 +395,7 @@ void MainWindow::createDockWindows()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    printf("key %x\n",event->key());
+    //printf("key %x\n",event->key());
     if ( event->matches(QKeySequence::ZoomIn) ) {
         increaseFont();
     } else if ( event->matches(QKeySequence::ZoomOut) ) {

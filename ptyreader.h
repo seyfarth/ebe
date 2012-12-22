@@ -10,7 +10,7 @@ class PtyReader : public QThread
     Q_OBJECT
 
 public:
-    PtyReader(int fd, QString name, QWidget *parent=0);
+    PtyReader(int fd, QString name);
     int pty;
     QString ptyName;
     void run();
