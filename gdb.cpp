@@ -440,6 +440,7 @@ void GDB::getData(QStringList request)
     QStringList parts;
     QString result;
     QString cmd;
+    QString address2;
 
     if ( size < 0 || size > 8 ) return;
     char sizeLetter = letterForSize[size];
@@ -452,7 +453,28 @@ void GDB::getData(QStringList request)
 
     if ( first < 0 || last < 0 ) return;
 
-    if ( first == 0 && last == 0 ) {
+    if ( format == "String array" ) {
+        result = "";
+        int i = 0;
+        while ( 1 ) {
+            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*8);
+            qDebug() << cmd;
+            results = sendReceive(cmd);
+            qDebug() << results;
+            if ( results.length() == 0 ) break;
+            parts = results[0].split(QRegExp(":\\s+"));
+            if ( parts.length() < 2 ) break;
+            address2 = parts[1];
+            if ( address2 == "0" ) break;
+            cmd = QString("x/sb %1").arg(address2);
+            results = sendReceive(cmd);
+            if ( results.length() == 0 ) break;
+            parts = results[0].split(QRegExp(":\\s+"));
+            if ( parts.length() < 2 ) break;
+            result += parts[1] + " ";
+            i++;
+        }
+    } else if ( first == 0 && last == 0 ) {
         cmd = QString("x/%1%2 %3").arg(formatLetter).arg(sizeLetter).arg(address);
         qDebug() << cmd;
         results = sendReceive(cmd);
@@ -467,8 +489,6 @@ void GDB::getData(QStringList request)
                 result = parts[1];
             }
         }
-        request.append(result);
-        emit dataReady(request);
     } else {
         result = "";
         for ( int i = first; i <= last; i++ ) {
@@ -483,7 +503,7 @@ void GDB::getData(QStringList request)
                 }
             }
         }
-        request.append(result);
-        emit dataReady(request);
     }
+    request.append(result);
+    emit dataReady(request);
 }
