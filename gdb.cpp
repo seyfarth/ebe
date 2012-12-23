@@ -141,6 +141,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     getGlobals();
     getLocals();
     getArgs();
+    emit resetData();
 }
 
 void GDB::doNext()
@@ -152,6 +153,7 @@ void GDB::doNext()
     getGlobals();
     getLocals();
     getArgs();
+    emit resetData();
 }
 
 void GDB::doStep()
@@ -162,6 +164,7 @@ void GDB::doStep()
     getGlobals();
     getLocals();
     getArgs();
+    emit resetData();
 }
 
 void GDB::doContinue()
@@ -172,6 +175,7 @@ void GDB::doContinue()
     getGlobals();
     getLocals();
     getArgs();
+    emit resetData();
 }
 
 void GDB::doStop()
@@ -421,6 +425,65 @@ bool GDB::testAVX()
     return false;
 }
 
-void GDB::getData(QString request)
+static char letterForSize[] = "bbhhwwwwg"; 
+
+void GDB::getData(QStringList request)
 {
+    qDebug() << "gdb" << request;
+    QString name = request[0];
+    QString address = request[1];
+    QString format = request[2];
+    int size = request[3].toInt();
+    int first = request[4].toInt();
+    int last  = request[5].toInt();
+    QStringList results;
+    QStringList parts;
+    QString result;
+    QString cmd;
+
+    if ( size < 0 || size > 8 ) return;
+    char sizeLetter = letterForSize[size];
+
+    char formatLetter = 'd';
+    if ( format == "Hexadecimal" ) formatLetter = 'x';
+    else if ( format == "Floating point" ) formatLetter = 'f';
+    else if ( format == "Character" ) formatLetter = 'c';
+    else if ( format == "String" ) formatLetter = 's';
+
+    if ( first < 0 || last < 0 ) return;
+
+    if ( first == 0 && last == 0 ) {
+        cmd = QString("x/%1%2 %3").arg(formatLetter).arg(sizeLetter).arg(address);
+        qDebug() << cmd;
+        results = sendReceive(cmd);
+        qDebug() << results;
+        if ( results.length() == 0 ) {
+            result = "";
+        } else {
+            parts = results[0].split(QRegExp(":\\s+"));
+            if ( parts.length() < 2 ) {
+                result = "";
+            } else {
+                result = parts[1];
+            }
+        }
+        request.append(result);
+        emit dataReady(request);
+    } else {
+        result = "";
+        for ( int i = first; i <= last; i++ ) {
+            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(formatLetter).arg(sizeLetter).arg(address).arg(i*size);
+            qDebug() << cmd;
+            results = sendReceive(cmd);
+            qDebug() << results;
+            if ( results.length() > 0 ) {
+                parts = results[0].split(QRegExp(":\\s+"));
+                if ( parts.length() >= 2 ) {
+                    result += parts[1] + " ";
+                }
+            }
+        }
+        request.append(result);
+        emit dataReady(request);
+    }
 }

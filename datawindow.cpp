@@ -74,6 +74,8 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
             item->setFormat(strings[2]);
             item->setSize(strings[3].toInt());
             item->setRange(strings[4].toInt(),strings[5].toInt());
+            emit requestData(strings);
+            return;
         }
     }
     item = new DataItem;
@@ -84,6 +86,47 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
     item->setRange(strings[4].toInt(),strings[5].toInt());
     userDefined->addChild ( item );
     userDefined->sortChildren ( 0, Qt::AscendingOrder );
+    emit requestData(strings);
+}
+
+void DataWindow::setData(QStringList strings)
+{
+    DataItem *item;
+    int n = userDefined->childCount();
+    qDebug() << "data rec var" << strings;
+    QString name = strings[0];
+    for ( int i = 0; i < n; i++ ) {
+        item = (DataItem *)userDefined->child(i);
+        if ( item->name() == name ) {
+            item->setAddress(strings[1]);
+            item->setFormat(strings[2]);
+            item->setSize(strings[3].toInt());
+            item->setRange(strings[4].toInt(),strings[5].toInt());
+            item->setValue(strings[6]);
+            break;
+        }
+    }
+}
+
+void DataWindow::resetData()
+{
+    QStringList request;
+    DataItem *item;
+    QString s;
+    int n = userDefined->childCount();
+    qDebug() << "reset" << n;
+    for ( int i = 0; i < n; i++ ) {
+        item = (DataItem *)userDefined->child(i);
+        request.clear();
+        request.append(item->myName);
+        request.append(item->myAddress);
+        request.append(item->myFormat);
+        request.append(s.setNum(item->mySize));
+        request.append(s.setNum(item->myFirst));
+        request.append(s.setNum(item->myLast));
+        qDebug() << "reset req" << i << request;
+        emit requestData(request);
+    }
 }
 
 DataItem::DataItem()

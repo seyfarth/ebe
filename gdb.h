@@ -48,7 +48,7 @@ public slots:
     void doStep();
     void doContinue();
     void doStop();
-    void getData(QString request);
+    void getData(QStringList request);
 
 signals:
     void nextInstruction(QString,int);
@@ -58,6 +58,8 @@ signals:
     void sendGlobals(QStringList,QStringList,QStringList); 
     void sendLocals(QStringList,QStringList,QStringList); 
     void sendParameters(QStringList,QStringList,QStringList); 
+    void dataReady(QStringList);
+    void resetData();
 };
 
 #endif

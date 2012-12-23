@@ -40,7 +40,6 @@ public:
     void setRange(int f, int l);
     QString valueFromGdb();
 
-private:
     QString myName;
     QString myValue;
     QString myType;
@@ -82,11 +81,16 @@ public:
 
 private slots:
     void receiveVariableDefinition(QStringList);
+    void setData(QStringList);
+    void resetData();
 
 private:
     QSize sizeHint() const;
     int fontHeight;
     int fontWidth;
+
+signals:
+    void requestData(QStringList);
 };
 
 #endif

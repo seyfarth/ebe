@@ -54,6 +54,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
               registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
     connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
               floatWindow, SLOT(receiveFpRegs(QStringList)) );
+    connect ( dataWindow, SIGNAL(requestData(QStringList)),
+              gdb, SLOT(getData(QStringList)) );
+    connect ( gdb, SIGNAL(dataReady(QStringList)),
+              dataWindow, SLOT(setData(QStringList)) );
+    connect ( gdb, SIGNAL(resetData()),
+              dataWindow, SLOT(resetData()) );
 }
 
 void MainWindow::restoreMainWindow()
