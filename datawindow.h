@@ -16,9 +16,27 @@ public:
     QString type() {
         return myType;
     }
+    QString address() {
+        return myAddress;
+    }
+    QString format() {
+        return myFormat;
+    }
+    int size() {
+        return mySize;
+    }
+    int first() {
+        return myFirst;
+    }
+    int last() {
+        return myLast;
+    }
     void setName(QString n);
     void setValue(QString v);
     void setType(QString t);
+    void setAddress(QString a);
+    void setFormat(QString f);
+    void setSize(int s);
     void setRange(int f, int l);
     QString valueFromGdb();
 
@@ -26,8 +44,11 @@ private:
     QString myName;
     QString myValue;
     QString myType;
-    int first;
-    int last;
+    QString myAddress;
+    QString myFormat;
+    int myFirst;
+    int myLast;
+    int mySize;
 
 public slots:
 
@@ -60,6 +81,7 @@ public:
     void setFontHeightAndWidth(int height, int width);
 
 private slots:
+    void receiveVariableDefinition(QStringList);
 
 private:
     QSize sizeHint() const;

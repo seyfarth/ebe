@@ -14,11 +14,11 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            terminalwindow.h registerwindow.h consolewindow.h \
            projectwindow.h datawindow.h floatwindow.h \
            settings.h listwidget.h stylesheet.h ptyreader.h \
-           errorwindow.h gdb.h
+           errorwindow.h gdb.h variable.h
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
            consolewindow.cpp projectwindow.cpp datawindow.cpp floatwindow.cpp \
            settings.cpp listwidget.cpp stylesheet.cpp ptyreader.cpp \
-           errorwindow.cpp gdb.cpp
+           errorwindow.cpp gdb.cpp variable.cpp
 
 RESOURCES += ebe.qrc

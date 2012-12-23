@@ -2,6 +2,7 @@
 #define SOURCEWINDOW_H
 
 #include <QtGui>
+#include "variable.h"
 
 class SourceEdit : public QPlainTextEdit
 {
@@ -13,9 +14,12 @@ public:
 
 private slots:
     void printScroll();
+    void defineVariable();
+    void receiveVariableDefinition(bool,QStringList);
 
 signals:
     void newHeight(int height);
+    void sendVariableDefinition(QStringList);
 
 private:
     void keyPressEvent(QKeyEvent *event);
@@ -23,6 +27,8 @@ private:
     void scrollContentsBy(int dx, int dy);
     //bool event ( QEvent *e );
     //void wheelEvent ( QWheelEvent *e );
+    void contextMenuEvent ( QContextMenuEvent *event );
+    VariableFrame *variableFrame;
     int top;
     QScrollBar *scrollBar;
 };
@@ -105,6 +111,7 @@ private:
     LineNumberEdit *lineNumberEdit;
     QScrollBar *scrollBar;
 
+signals:
 };
 
 #endif

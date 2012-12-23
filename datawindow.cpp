@@ -61,14 +61,39 @@ void DataWindow::setFontHeightAndWidth ( int height, int width )
     fontWidth  = width;
 }
 
+void DataWindow::receiveVariableDefinition(QStringList strings)
+{
+    DataItem *item;
+    int n = userDefined->childCount();
+    qDebug() << "data rec var" << strings;
+    QString name = strings[0];
+    for ( int i = 0; i < n; i++ ) {
+        item = (DataItem *)userDefined->child(i);
+        if ( item->name() == name ) {
+            item->setAddress(strings[1]);
+            item->setFormat(strings[2]);
+            item->setSize(strings[3].toInt());
+            item->setRange(strings[4].toInt(),strings[5].toInt());
+        }
+    }
+    item = new DataItem;
+    item->setName(name);
+    item->setAddress(strings[1]);
+    item->setFormat(strings[2]);
+    item->setSize(strings[3].toInt());
+    item->setRange(strings[4].toInt(),strings[5].toInt());
+    userDefined->addChild ( item );
+    userDefined->sortChildren ( 0, Qt::AscendingOrder );
+}
+
 DataItem::DataItem()
 : QTreeWidgetItem()
 {
     myName  = "";
     myType  = "";
     myValue = "";
-    first   = 0;
-    last    = 0;
+    myFirst   = 0;
+    myLast    = 0;
     setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 }
 
@@ -80,10 +105,10 @@ QString DataItem::valueFromGdb()
 void DataItem::setName(QString n)
 {
     myName = n;
-    if ( first == 0 && last == 0 ) {
+    if ( myFirst == 0 && myLast == 0 ) {
         setText(0,myName);
     } else {
-        setText(0,QString("%1[%2:%3]").arg(myName).arg(first).arg(last));
+        setText(0,QString("%1[%2:%3]").arg(myName).arg(myFirst).arg(myLast));
     }
 }
 
@@ -106,9 +131,34 @@ void DataItem::setValue(QString v)
 
 void DataItem::setRange(int f, int l)
 {
-    first = f;
-    last = l;
+    myFirst = f;
+    myLast = l;
     setName(myName);
+}
+
+DataItem *DataTree::addDataItem ( QString n, QString t, QString v )
+{
+    DataItem *d = new DataItem();
+    d->setName(n);
+    d->setType(t);
+    d->setValue(v);
+    addTopLevelItem(d);
+    return d;
+}
+
+void DataItem::setAddress ( QString a )
+{
+    myAddress = a;
+}
+
+void DataItem::setFormat ( QString f )
+{
+    myFormat = f;
+}
+
+void DataItem::setSize ( int s )
+{
+    mySize = s;
 }
 
 DataTree::DataTree(QWidget *parent)
@@ -126,26 +176,8 @@ DataTree::DataTree(QWidget *parent)
               this, SLOT(expandDataItem(QTreeWidgetItem*)) );
 }
 
-DataItem *DataTree::addDataItem ( QString n, QString t, QString v )
-{
-    DataItem *d = new DataItem();
-    d->setName(n);
-    d->setType(t);
-    d->setValue(v);
-    addTopLevelItem(d);
-    return d;
-}
-
 void DataTree::expandDataItem(QTreeWidgetItem *item)
 {
-    DataItem *it = (DataItem *)item;
-    //qDebug() << "need to expand" << it->name();
-    DataItem *d = new DataItem();
-    d->setName("a");
-    d->setType("int");
-    d->setValue("7 8 9 10");
-    d->setRange(0,3);
-    it->addChild(d);
 }
 
 void DataTree::receiveGlobals(QStringList names, QStringList types,

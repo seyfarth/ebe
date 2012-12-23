@@ -1,9 +1,10 @@
 #include "sourcewindow.h"
+#include "datawindow.h"
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
 
-
+extern DataWindow *dataWindow;
 
 SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
 {
@@ -56,6 +57,40 @@ void SourceEdit::printScroll()
     //qDebug() << "blocks" << blockCount();
 }
 
+void SourceEdit::contextMenuEvent ( QContextMenuEvent * /* event */ )
+{
+    QMenu menu("Edit menu");
+    menu.addAction(tr("Undo"), this, SLOT(undo()) );
+    menu.addAction(tr("Redo"), this, SLOT(redo()) );
+    menu.addSeparator();
+    menu.addAction(tr("Cut"), this, SLOT(cut()) );
+    menu.addAction(tr("Copy"), this, SLOT(copy()) );
+    menu.addAction(tr("Paste"), this, SLOT(paste()) );
+    menu.addSeparator();
+    menu.addAction(tr("Define variable"), this, SLOT(defineVariable()) );
+    menu.exec(QCursor::pos());
+}
+
+void SourceEdit::defineVariable()
+{
+    qDebug() << "define var";
+    QString text = textCursor().selectedText();
+    if ( text.length() == 0 ) return;
+    variableFrame = new VariableFrame;
+    variableFrame->nameEdit->setText(text);
+    variableFrame->addressEdit->setText("&"+text);
+    connect ( variableFrame, SIGNAL(sendVariableDefinition(bool,QStringList)),
+              this, SLOT(receiveVariableDefinition(bool,QStringList)) );
+    variableFrame->show();
+}
+
+void SourceEdit::receiveVariableDefinition(bool OK, QStringList strings)
+{
+    delete variableFrame;
+    qDebug() << "receive var" << OK;
+    if ( OK ) emit sendVariableDefinition(strings);
+}
+    
 void SourceEdit::resizeEvent(QResizeEvent *e)
 {
     heightInPixels = e->size().height();
@@ -104,6 +139,9 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     // text edit widget
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
     connect ( textEdit, SIGNAL(newHeight(int)), this, SLOT(newHeight(int)));
+    qDebug() << "dat" << dataWindow;
+    connect ( textEdit, SIGNAL(sendVariableDefinition(QStringList)),
+              dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
     //connect ( scrollBar, SIGNAL(sliderMoved(int)),
               //this, SLOT(scrollBarChanged(int)));
 }
@@ -112,7 +150,7 @@ void SourceWindow::setFontHeightAndWidth ( int height, int width )
 {
     fontHeight = height;
     fontWidth  = width;
-    lineNumberEdit->setFixedWidth(width*4+12);
+    lineNumberEdit->setFixedWidth(width*4+14);
     if ( heightInPixels > 0 ) {
         textHeight = heightInPixels/fontHeight;
     } else {

@@ -304,8 +304,6 @@ void MainWindow::displayHelp()
 
 void MainWindow::quit()
 {
-    //qDebug() << "Calling static QApp quit()";
-
     // FIXME: save project/files etc., before quitting
 #if 0
     if (sourceFrame->fileChanged())
