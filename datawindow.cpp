@@ -14,6 +14,8 @@ DataItem *userDefined;
 
 static QSet<QString> simpleTypes;
 
+QMap<QString,ClassDefinition> classes;
+
 DataWindow::DataWindow(QWidget *parent)
 : QFrame(parent)
 {
@@ -70,7 +72,7 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
 {
     DataItem *item;
     int n = userDefined->childCount();
-    qDebug() << "data rec var" << strings;
+    //qDebug() << "data rec var" << strings;
     QString name = strings[0];
     for ( int i = 0; i < n; i++ ) {
         item = (DataItem *)userDefined->child(i);
@@ -99,7 +101,7 @@ void DataWindow::setData(QStringList strings)
 {
     DataItem *item;
     int n = userDefined->childCount();
-    qDebug() << "data rec var" << strings;
+    //qDebug() << "data rec var" << strings;
     QString name = strings[0];
     for ( int i = 0; i < n; i++ ) {
         item = (DataItem *)userDefined->child(i);
@@ -120,7 +122,7 @@ void DataWindow::resetData()
     DataItem *item;
     QString s;
     int n = userDefined->childCount();
-    qDebug() << "reset" << n;
+    //qDebug() << "reset" << n;
     for ( int i = 0; i < n; i++ ) {
         item = (DataItem *)userDefined->child(i);
         request.clear();
@@ -130,9 +132,15 @@ void DataWindow::resetData()
         request.append(s.setNum(item->mySize));
         request.append(s.setNum(item->myFirst));
         request.append(s.setNum(item->myLast));
-        qDebug() << "reset req" << i << request;
+        //qDebug() << "reset req" << i << request;
         emit requestData(request);
     }
+}
+
+void DataWindow::receiveClasses(QMap<QString,ClassDefinition> c)
+{
+    //qDebug() << "receive classes" << c.keys();
+    classes = c;
 }
 
 DataItem::DataItem()
@@ -251,7 +259,7 @@ void DataItem::setValue(QString v)
             u8 = v.toLong(&ok,16);
             break;
         }
-        qDebug() << myName << mySize << v << u8 << value();
+        //qDebug() << myName << mySize << v << u8 << value();
     } else {
         stringValue = v;
     }
@@ -280,7 +288,7 @@ void DataTree::contextMenuEvent ( QContextMenuEvent *event )
 {
     DataItem *item = (DataItem *)currentItem();
     QString type = item->type();
-    qDebug() << item->name() << type << item->value();
+    //qDebug() << item->name() << type << item->value();
     if ( item->userDefined() ) {
         QMenu menu("Variable menu");
         menu.addAction(tr("Edit variable"),this,SLOT(editUserVariable()));

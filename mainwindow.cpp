@@ -10,6 +10,7 @@
 
 #include "mainwindow.h"
 #include "errorwindow.h"
+#include "sourcewindow.h"
 #include "settings.h"
 #include "stylesheet.h"
 
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     settings = new Settings;
     settings->read();
 
+    qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
+    qRegisterMetaType<QMap<QString,QString> >("QMap<QString,QString>");
+    qRegisterMetaType<QMap<QString,ClassDefinition> >("QMap<QString,ClassDefinition>");
     qApp->installEventFilter(this);
     
     gdbThread = new GDBThread();
@@ -49,7 +53,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
 
-    qRegisterMetaType<QMap<QString,QString> >("QMap<QString,QString>");
     connect ( gdb, SIGNAL(sendRegs(QMap<QString,QString>)),
               registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
     connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
@@ -60,6 +63,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
               dataWindow, SLOT(setData(QStringList)) );
     connect ( gdb, SIGNAL(resetData()),
               dataWindow, SLOT(resetData()) );
+    connect ( gdb, SIGNAL(sendClasses(QMap<QString,ClassDefinition>)),
+              dataWindow, SLOT(receiveClasses(QMap<QString,ClassDefinition>)) );
 }
 
 void MainWindow::restoreMainWindow()

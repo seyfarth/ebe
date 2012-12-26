@@ -63,7 +63,7 @@ signals:
     void sendGlobals(QStringList,QStringList,QStringList); 
     void sendLocals(QStringList,QStringList,QStringList); 
     void sendParameters(QStringList,QStringList,QStringList); 
-    void sendClasses(QVector<ClassDefinition> classes);
+    void sendClasses(QMap<QString,ClassDefinition> classes);
     void dataReady(QStringList);
     void resetData();
 };

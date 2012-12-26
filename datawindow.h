@@ -2,6 +2,7 @@
 #define DATAWINDOW_H
 
 #include <QtGui>
+#include <variable.h>
 
 class DataItem : public QTreeWidgetItem
 {
@@ -91,6 +92,7 @@ private slots:
     void receiveVariableDefinition(QStringList);
     void setData(QStringList);
     void resetData();
+    void receiveClasses(QMap<QString,ClassDefinition> c);
 
 private:
     QSize sizeHint() const;

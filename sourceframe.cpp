@@ -16,8 +16,6 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
-    qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
-
     setStyleSheet("QPushButton { font-family: " +
                    ebe["variable_font"].toString() + "}" +
                    "QLabel { font-family:" +
