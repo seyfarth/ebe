@@ -8,6 +8,7 @@
 #include <QList>
 #include <QMap>
 #include <QSet>
+#include "variable.h"
 
 typedef QSet<int> IntSet;
 
@@ -37,9 +38,13 @@ private:
     void getFpRegs();
     void getGlobals();
     void getLocals();
+    void getClasses();
+    void getVars(QStringList &vars, QStringList &names, QStringList &types,
+                 QStringList &values, QList<QList<int> > &dims );
     void getArgs();
     bool hasAVX;
     bool testAVX();
+    QStringList classResults;
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
@@ -58,6 +63,7 @@ signals:
     void sendGlobals(QStringList,QStringList,QStringList); 
     void sendLocals(QStringList,QStringList,QStringList); 
     void sendParameters(QStringList,QStringList,QStringList); 
+    void sendClasses(QVector<ClassDefinition> classes);
     void dataReady(QStringList);
     void resetData();
 };

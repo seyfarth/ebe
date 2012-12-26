@@ -71,6 +71,7 @@ void MainWindow::restoreMainWindow()
     addStyleSheet("lineedit-font", "QLineEdit { font-weight: bold; font-family: Courier}");
     addStyleSheet("table-font", "QTableView { font-weight: bold; font-family: Courier}");
     addStyleSheet("list-font", "QListWidget { font-weight: bold; font-family: Courier}");
+    addStyleSheet("tree-font", "QTreeWidget { font-weight: bold; font-family: Courier}");
     addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
 
     dataDock->setFloating(ebe["data/floating"].toBool());

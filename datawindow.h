@@ -7,48 +7,53 @@ class DataItem : public QTreeWidgetItem
 {
 public:
     DataItem();
-    QString value() {
-        return myValue;
-    }
-    QString name() {
-        return myName;
-    }
-    QString type() {
-        return myType;
-    }
-    QString address() {
-        return myAddress;
-    }
-    QString format() {
-        return myFormat;
-    }
-    int size() {
-        return mySize;
-    }
-    int first() {
-        return myFirst;
-    }
-    int last() {
-        return myLast;
-    }
+    QString value();
+    QString name() { return myName; }
+    QString type() { return myType; }
+    QString address() { return myAddress; }
+    QString format() { return myFormat; }
+    bool isSimple() { return myIsSimple; }
+    int size() { return mySize; }
+    int first() { return myFirst; }
+    int last() { return myLast; }
+    bool userDefined() { return myUserDefined; }
     void setName(QString n);
     void setValue(QString v);
     void setType(QString t);
-    void setAddress(QString a);
-    void setFormat(QString f);
-    void setSize(int s);
+    void setAddress(QString a) { myAddress = a; }
+    void setFormat(QString f) { myFormat = f; }
+    void setSize(int s) { mySize = s; }
+    void setFirst(int f) { myFirst = f; }
+    void setLast(int l) { myLast = l; }
     void setRange(int f, int l);
+    void setUserDefined(bool u) { myUserDefined = u; }
+    void setIsSimple ( bool i ) { myIsSimple = i; }
     QString valueFromGdb();
 
     QString myName;
-    QString myValue;
     QString myType;
     QString myAddress;
     QString myFormat;
     int myFirst;
     int myLast;
     int mySize;
-
+    bool myUserDefined;
+    bool myIsSimple;
+    union {
+        double f8;
+        float f4;
+        unsigned long u8;
+        unsigned int u4;
+        unsigned short u2;
+        unsigned char u1;
+        long i8;
+        int i4;
+        short i2;
+        signed char i1;
+        char c1;
+        bool b1;
+    };
+    QString stringValue;
 public slots:
 
 };
@@ -60,6 +65,7 @@ class DataTree : public QTreeWidget
 public:
     DataTree(QWidget *parent = 0);
     DataItem *addDataItem(QString n, QString t, QString v);
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private:
 
@@ -68,6 +74,8 @@ public slots:
     void receiveGlobals(QStringList,QStringList,QStringList);
     void receiveLocals(QStringList,QStringList,QStringList);
     void receiveParameters(QStringList,QStringList,QStringList);
+    void editUserVariable();
+    void deleteUserVariable();
 
 };
 

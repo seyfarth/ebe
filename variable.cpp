@@ -1,12 +1,14 @@
 #include "variable.h"
 
-VariableFrame::VariableFrame()
-: QFrame()
+DefineVariableDialog::DefineVariableDialog()
+: QDialog()
 {
-    setObjectName("Variable Edit");
-    setWindowTitle("Variable Edit");
-    setFrameStyle ( QFrame::Panel | QFrame::Raised );
-    setLineWidth(4);
+    setObjectName("Define Variable");
+    setWindowTitle("Define Variable");
+    //setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    //setLineWidth(4);
+    setModal(true);
+    setWindowFlags(Qt::Dialog|Qt::WindowStaysOnTopHint);
 
     move(QCursor::pos());
     QVBoxLayout *layout = new QVBoxLayout;
@@ -61,7 +63,7 @@ VariableFrame::VariableFrame()
     okButton = new QPushButton("OK");
     cancelButton = new QPushButton("Cancel");
     connect(okButton, SIGNAL(clicked()), this, SLOT(defineVariable()));
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
 
@@ -75,22 +77,15 @@ VariableFrame::VariableFrame()
     setLayout(layout);
 }
 
-QSize VariableFrame::sizeHint() const
+QSize DefineVariableDialog::sizeHint() const
 {
     return QSize(200,200);
 }
 
-void VariableFrame::cancel()
+void DefineVariableDialog::defineVariable()
 {
-    QStringList strings;
-    emit sendVariableDefinition(false,strings);
-}
-
-void VariableFrame::defineVariable()
-{
-    QStringList strings;
-    strings << nameEdit->text() << addressEdit->text()
+    result << nameEdit->text() << addressEdit->text()
            << formatCombo->currentText() << sizeCombo->currentText()
            << firstEdit->text() << lastEdit->text();
-    emit sendVariableDefinition(true,strings);
+    accept();
 }

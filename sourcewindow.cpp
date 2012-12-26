@@ -76,19 +76,11 @@ void SourceEdit::defineVariable()
     qDebug() << "define var";
     QString text = textCursor().selectedText();
     if ( text.length() == 0 ) return;
-    variableFrame = new VariableFrame;
-    variableFrame->nameEdit->setText(text);
-    variableFrame->addressEdit->setText("&"+text);
-    connect ( variableFrame, SIGNAL(sendVariableDefinition(bool,QStringList)),
-              this, SLOT(receiveVariableDefinition(bool,QStringList)) );
-    variableFrame->show();
-}
-
-void SourceEdit::receiveVariableDefinition(bool OK, QStringList strings)
-{
-    delete variableFrame;
-    qDebug() << "receive var" << OK;
-    if ( OK ) emit sendVariableDefinition(strings);
+    DefineVariableDialog *dialog = new DefineVariableDialog;
+    dialog->nameEdit->setText(text);
+    dialog->addressEdit->setText("&"+text);
+    if ( dialog->exec() ) emit sendVariableDefinition(dialog->result);
+    delete dialog;
 }
     
 void SourceEdit::resizeEvent(QResizeEvent *e)
@@ -142,27 +134,44 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     qDebug() << "dat" << dataWindow;
     connect ( textEdit, SIGNAL(sendVariableDefinition(QStringList)),
               dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
-    //connect ( scrollBar, SIGNAL(sliderMoved(int)),
-              //this, SLOT(scrollBarChanged(int)));
+    connect ( scrollBar, SIGNAL(sliderMoved(int)),
+              this, SLOT(scrollBarChanged(int)));
+    connect ( scrollBar, SIGNAL(valueChanged(int)),
+              this, SLOT(scrollBarChanged(int)));
+    connect ( scrollBar, SIGNAL(rangeChanged(int,int)),
+              this, SLOT(scrollBarRangeChanged(int,int)));
 }
 
 void SourceWindow::setFontHeightAndWidth ( int height, int width )
 {
     fontHeight = height;
     fontWidth  = width;
-    lineNumberEdit->setFixedWidth(width*4+14);
+    lineNumberEdit->setFixedWidth(width*4+15);
     if ( heightInPixels > 0 ) {
         textHeight = heightInPixels/fontHeight;
     } else {
         textHeight = 0;
     }
+    setLineNumbers(textDoc->lineCount());
 }
 
-//void SourceWindow::scrollBarChanged ( int value )
-//{
-   //setLineNumbers(textDoc->lineCount());
-   //topNumber = scrollBar->value() + 1;
-//}
+void SourceWindow::scrollBarRangeChanged ( int min, int max )
+{
+    lineNumberEdit->scrollBar->setRange(min,max);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::scrollBarChanged ( int value )
+{
+    topNumber = scrollBar->value() + 1;
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::sliderChanged ( int value )
+{
+    topNumber = scrollBar->value() + 1;
+    setLineNumbers(textDoc->lineCount());
+}
 
 void SourceWindow::newHeight ( int height )
 {

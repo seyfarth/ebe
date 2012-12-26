@@ -4,6 +4,7 @@
 #include <cstdio>
 
 extern GDB *gdb;
+extern QMap<QString,int> sizeForType;
 
 DataTree *dataTree;
 DataItem *globals;
@@ -27,9 +28,13 @@ DataWindow::DataWindow(QWidget *parent)
     layout->addWidget(dataTree);
 
     globals = dataTree->addDataItem("globals","","");
+    globals->setExpanded(true);
     locals = dataTree->addDataItem("locals","","");
+    locals->setExpanded(true);
     parameters = dataTree->addDataItem("parameters","","");
+    parameters->setExpanded(true);
     userDefined = dataTree->addDataItem("user-defined","","");
+    userDefined->setExpanded(true);
     
     simpleTypes << "char" << "signed char" << "unsigned char"
                 << "short" << "signed short" << "unsigned short"
@@ -79,6 +84,7 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
         }
     }
     item = new DataItem;
+    item->setUserDefined(true);
     item->setName(name);
     item->setAddress(strings[1]);
     item->setFormat(strings[2]);
@@ -134,15 +140,53 @@ DataItem::DataItem()
 {
     myName  = "";
     myType  = "";
-    myValue = "";
+    u8 = 0;
     myFirst   = 0;
     myLast    = 0;
+    setUserDefined(false);
     setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 }
 
+QString DataItem::value()
+{
+    QString val;
+    if ( isSimple() ) {
+        switch ( mySize ) {
+        case 1:
+            if ( myFormat == "Character" ) val.sprintf("%c",c1);
+            else if ( myFormat == "Decimal" ) val.sprintf("%d",i1);
+            else if ( myFormat == "Hexadecimal" ) val.sprintf("%x",u1);
+            else if ( myFormat == "Boolean" ) val = b1 ? "true" : "false";
+            else val = "";
+            break;
+        case 2:
+            if ( myFormat == "Decimal" ) val.sprintf("%d",i2);
+            else if ( myFormat == "Hexadecimal" ) val.sprintf("%x",u2);
+            else val = "";
+            break;
+        case 4:
+            if ( myFormat == "Decimal" ) val.sprintf("%d",i4);
+            else if ( myFormat == "Hexadecimal" ) val.sprintf("%x",u4);
+            else if ( myFormat == "Floating point" ) val.sprintf("%g",f4);
+            else val = "";
+            break;
+        case 8:
+            if ( myFormat == "Decimal" ) val.sprintf("%ld",i8);
+            else if ( myFormat == "Hexadecimal" ) val.sprintf("%lx",u8);
+            else if ( myFormat == "Floating point" ) val.sprintf("%g",f8);
+            else val = "";
+            break;
+        default:
+            val = "";
+        }
+    } else {
+        val = stringValue;
+    }
+    return val;
+}
 QString DataItem::valueFromGdb()
 {
-    return myValue;
+    return "";
 }
 
 void DataItem::setName(QString n)
@@ -158,8 +202,30 @@ void DataItem::setName(QString n)
 void DataItem::setType(QString t)
 {
     myType = t;
-    setText(1,myType);
+
+    if ( sizeForType.contains(t) ) mySize = sizeForType[t];
+    else mySize = 8;
+
     if ( simpleTypes.contains(t) ) {
+        myIsSimple = true;
+        if ( t.indexOf("char") >= 0 ) {
+            myFormat = "Character";
+        } else if ( t.indexOf("short") >= 0 || t.indexOf("int") >= 0 ||
+                  t.indexOf("long") >= 0 ) {
+            myFormat = "Decimal";
+        } else if ( t.indexOf("float") >= 0 || t.indexOf("double") >= 0 ) {
+            myFormat = "Floating point";
+        } else if ( t.indexOf("bool") >= 0 ) {
+            myFormat = "Boolean";
+        } else {
+            myFormat = "Hexadecimal";
+        }
+    } else {
+        myIsSimple = false;
+    }
+
+    setText(1,myType);
+    if ( isSimple() ) {
         setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     } else {
         setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
@@ -168,8 +234,28 @@ void DataItem::setType(QString t)
 
 void DataItem::setValue(QString v)
 {
-    myValue = v;
-    setText(2,myValue);
+    bool ok;
+    if ( isSimple() ) {
+        u8 = 0;
+        switch ( mySize ) {
+        case 1:
+            u1 = v.toInt(&ok,16);
+            break;
+        case 2:
+            u2 = v.toInt(&ok,16);
+            break;
+        case 4:
+            u4 = v.toInt(&ok,16);
+            break;
+        case 8:
+            u8 = v.toLong(&ok,16);
+            break;
+        }
+        qDebug() << myName << mySize << v << u8 << value();
+    } else {
+        stringValue = v;
+    }
+    setText(2,value());
 }
 
 void DataItem::setRange(int f, int l)
@@ -177,6 +263,45 @@ void DataItem::setRange(int f, int l)
     myFirst = f;
     myLast = l;
     setName(myName);
+}
+
+void DataTree::editUserVariable()
+{
+}
+
+void DataTree::deleteUserVariable()
+{
+    QTreeWidgetItem *item = currentItem();
+    item->parent()->removeChild(item);
+    delete item;
+}
+
+void DataTree::contextMenuEvent ( QContextMenuEvent *event )
+{
+    DataItem *item = (DataItem *)currentItem();
+    QString type = item->type();
+    qDebug() << item->name() << type << item->value();
+    if ( item->userDefined() ) {
+        QMenu menu("Variable menu");
+        menu.addAction(tr("Edit variable"),this,SLOT(editUserVariable()));
+        menu.addAction(tr("Delete variable"),this,SLOT(deleteUserVariable()));
+        menu.exec(QCursor::pos());
+    } else if ( item->isSimple() ) {
+        if ( type.indexOf("char") >= 0 ) {
+            QMenu menu("char menu");
+            menu.addAction(tr("Decimal"),this,SLOT(editUserVariable()));
+            menu.addAction(tr("Hexadecimal"),this,SLOT(editUserVariable()));
+            menu.addAction(tr("Character"),this,SLOT(editUserVariable()));
+            menu.exec(QCursor::pos());
+        } else if ( type.indexOf("short") >= 0 || type.indexOf("int") >= 0 ||
+                    type.indexOf("long") >= 0 ) {
+            QMenu menu("Integer menu");
+            menu.addAction(tr("Signed decimal"),this,SLOT(editUserVariable()));
+            menu.addAction(tr("Unsigned decimal"),this,SLOT(editUserVariable()));
+            menu.addAction(tr("Hexadecimal"),this,SLOT(editUserVariable()));
+            menu.exec(QCursor::pos());
+        }
+    }
 }
 
 DataItem *DataTree::addDataItem ( QString n, QString t, QString v )
@@ -187,21 +312,6 @@ DataItem *DataTree::addDataItem ( QString n, QString t, QString v )
     d->setValue(v);
     addTopLevelItem(d);
     return d;
-}
-
-void DataItem::setAddress ( QString a )
-{
-    myAddress = a;
-}
-
-void DataItem::setFormat ( QString f )
-{
-    myFormat = f;
-}
-
-void DataItem::setSize ( int s )
-{
-    mySize = s;
 }
 
 DataTree::DataTree(QWidget *parent)
@@ -221,6 +331,7 @@ DataTree::DataTree(QWidget *parent)
 
 void DataTree::expandDataItem(QTreeWidgetItem *item)
 {
+
 }
 
 void DataTree::receiveGlobals(QStringList names, QStringList types,

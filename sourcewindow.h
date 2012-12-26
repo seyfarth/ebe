@@ -15,7 +15,7 @@ public:
 private slots:
     void printScroll();
     void defineVariable();
-    void receiveVariableDefinition(bool,QStringList);
+    //void receiveVariableDefinition(bool,QStringList);
 
 signals:
     void newHeight(int height);
@@ -28,7 +28,6 @@ private:
     //bool event ( QEvent *e );
     //void wheelEvent ( QWheelEvent *e );
     void contextMenuEvent ( QContextMenuEvent *event );
-    VariableFrame *variableFrame;
     int top;
     QScrollBar *scrollBar;
 };
@@ -100,7 +99,9 @@ public slots:
     void saveAs();
     void textChanged();
     void newHeight(int heightInPixels);
-    //void scrollBarChanged(int value);
+    void scrollBarChanged(int value);
+    void scrollBarRangeChanged(int min, int max);
+    void sliderChanged(int value);
 
 private:
     void createLineNumberEdit();
