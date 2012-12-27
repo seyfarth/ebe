@@ -5,12 +5,14 @@
 
 extern GDB *gdb;
 extern QMap<QString,int> sizeForType;
+extern DataWindow *dataWindow;
 
 DataTree *dataTree;
 DataItem *globals;
 DataItem *locals;
 DataItem *parameters;
 DataItem *userDefined;
+QMap<QString,DataItem*> dataMap;
 
 static QSet<QString> simpleTypes;
 
@@ -55,6 +57,8 @@ DataWindow::DataWindow(QWidget *parent)
           dataTree, SLOT(receiveLocals(QStringList,QStringList,QStringList)));
     connect ( gdb, SIGNAL(sendParameters(QStringList,QStringList,QStringList)),
           dataTree, SLOT(receiveParameters(QStringList,QStringList,QStringList)));
+    connect ( dataTree, SIGNAL(requestData(QStringList)),
+              gdb, SLOT(getData(QStringList)) );
 }
 
 QSize DataWindow::sizeHint() const
@@ -100,18 +104,26 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
 void DataWindow::setData(QStringList strings)
 {
     DataItem *item;
-    int n = userDefined->childCount();
-    //qDebug() << "data rec var" << strings;
+    qDebug() << "data rec var" << strings;
     QString name = strings[0];
-    for ( int i = 0; i < n; i++ ) {
-        item = (DataItem *)userDefined->child(i);
-        if ( item->name() == name ) {
-            item->setAddress(strings[1]);
-            item->setFormat(strings[2]);
-            item->setSize(strings[3].toInt());
-            item->setRange(strings[4].toInt(),strings[5].toInt());
-            item->setValue(strings[6]);
-            break;
+    item = dataMap[name];
+    if ( item->name() == name ) {
+        item->setAddress(strings[1]);
+        item->setFormat(strings[2]);
+        item->setSize(strings[3].toInt());
+        item->setRange(strings[4].toInt(),strings[5].toInt());
+        item->setValue(strings[6]);
+        int n2 = item->childCount();
+        for ( int j = 0; j < n2; j++ ) {
+            DataItem *it = (DataItem *)item->child(j);
+            strings.clear();
+            strings.append(it->name());
+            strings.append(it->address());
+            strings.append(it->format());
+            strings.append(QString("%1").arg(it->size()));
+            strings.append(QString("%1").arg(it->first()));
+            strings.append(QString("%1").arg(it->last()));
+            emit requestData(strings);
         }
     }
 }
@@ -200,10 +212,14 @@ QString DataItem::valueFromGdb()
 void DataItem::setName(QString n)
 {
     myName = n;
+    QString shortName;
+    int k = n.lastIndexOf('.');
+    if ( n >= 0 ) shortName = n.mid(k+1);
+    else shortName = n;
     if ( myFirst == 0 && myLast == 0 ) {
-        setText(0,myName);
+        setText(0,shortName);
     } else {
-        setText(0,QString("%1[%2:%3]").arg(myName).arg(myFirst).arg(myLast));
+        setText(0,QString("%1[%2:%3]").arg(shortName).arg(myFirst).arg(myLast));
     }
 }
 
@@ -230,6 +246,7 @@ void DataItem::setType(QString t)
         }
     } else {
         myIsSimple = false;
+        myFormat = "";
     }
 
     setText(1,myType);
@@ -261,7 +278,8 @@ void DataItem::setValue(QString v)
         }
         //qDebug() << myName << mySize << v << u8 << value();
     } else {
-        stringValue = v;
+        if ( dataMap.contains(name()) ) stringValue = "";
+        else stringValue = v;
     }
     setText(2,value());
 }
@@ -339,7 +357,31 @@ DataTree::DataTree(QWidget *parent)
 
 void DataTree::expandDataItem(QTreeWidgetItem *item)
 {
-
+    DataItem *it = (DataItem *)item;
+    DataItem *d;
+    QStringList request;
+    QString fullName;
+    ClassDefinition c;
+    c = classes[it->type()];
+    if ( c.name != "" ) {
+        foreach ( VariableDefinition v, c.members ) {
+            request.clear();
+            d = new DataItem;
+            fullName = it->name() + "." + v.name;
+            d->setName(fullName);
+            d->setAddress("&("+fullName+")");
+            d->setType(v.type);
+            it->addChild(d);
+            dataMap[fullName] = d;
+            request.append(fullName);
+            request.append(d->address());
+            request.append(d->format());
+            request.append(QString("%1").arg(d->size()));
+            request.append(QString("%1").arg(d->first()));
+            request.append(QString("%1").arg(d->last()));
+            emit requestData(request);
+        }
+    }
 }
 
 void DataTree::receiveGlobals(QStringList names, QStringList types,
@@ -347,16 +389,36 @@ void DataTree::receiveGlobals(QStringList names, QStringList types,
 {
     int n = names.length();
     DataItem *item;
+    QStringList request;
     
     //qDebug() << "rg" << names << types << values;
-    globals->takeChildren();
+    //globals->takeChildren();
     for ( int i = 0; i < n; i++ ) {
-        item = new DataItem();
-        item->setName(names[i]);
-        item->setType(types[i]);
-        item->setValue(values[i]);
-        globals->addChild(item);
+        item = dataMap[names[i]];
+        if ( item == 0 ) {
+            item = new DataItem();
+            item->setName(names[i]);
+            item->setType(types[i]);
+            item->setValue(values[i]);
+            globals->addChild(item);
+            dataMap[names[i]] = item;
+        } else {
+            item->setValue(values[i]);
+            int n2 = item->childCount();
+            for ( int j = 0; j < n2; j++ ) {
+                DataItem *it = (DataItem *)item->child(j);
+                request.clear();
+                request.append(it->name());
+                request.append(it->address());
+                request.append(it->format());
+                request.append(QString("%1").arg(it->size()));
+                request.append(QString("%1").arg(it->first()));
+                request.append(QString("%1").arg(it->last()));
+                emit requestData(request);
+            }
+        }
     }
+    globals->sortChildren(0,Qt::AscendingOrder);
 }
 
 void DataTree::receiveLocals(QStringList names, QStringList types,
@@ -364,20 +426,38 @@ void DataTree::receiveLocals(QStringList names, QStringList types,
 {
     int n = names.length();
     DataItem *item;
-    QList<QTreeWidgetItem*> oldLocals;
+    QStringList request;
+    //QList<QTreeWidgetItem*> oldLocals;
     
-    oldLocals = locals->takeChildren();
+    //oldLocals = locals->takeChildren();
     //qDebug() << "rl" << names << types << values;
     for ( int i = 0; i < n; i++ ) {
         //qDebug() << i << names[i] << types[i] << values[i];
-        item = new DataItem();
-        item->setName(names[i]);
-        item->setType(types[i]);
-        item->setValue(values[i]);
-        locals->addChild(item);
+        item = dataMap[names[i]];
+        if ( item == 0 ) {
+            item = new DataItem();
+            item->setName(names[i]);
+            item->setType(types[i]);
+            item->setValue(values[i]);
+            locals->addChild(item);
+            dataMap[names[i]] = item;
+        } else {
+            item->setValue(values[i]);
+            int n2 = item->childCount();
+            for ( int j = 0; j < n2; j++ ) {
+                DataItem *it = (DataItem *)item->child(j);
+                request.clear();
+                request.append(it->name());
+                request.append(it->address());
+                request.append(it->format());
+                request.append(QString("%1").arg(it->size()));
+                request.append(QString("%1").arg(it->first()));
+                request.append(QString("%1").arg(it->last()));
+                emit requestData(request);
+            }
+        }
     }
-    foreach ( QTreeWidgetItem *it, oldLocals ) delete it;
-    //qDebug() << "done rl";
+    globals->sortChildren(0,Qt::AscendingOrder);
 }
 
 void DataTree::receiveParameters(QStringList names, QStringList types,
@@ -385,18 +465,35 @@ void DataTree::receiveParameters(QStringList names, QStringList types,
 {
     int n = names.length();
     DataItem *item;
-    QList<QTreeWidgetItem*> oldParameters;
+    QStringList request;
     
-    oldParameters = parameters->takeChildren();
     //qDebug() << "rl" << names << types << values;
     for ( int i = 0; i < n; i++ ) {
         //qDebug() << i << names[i] << types[i] << values[i];
-        item = new DataItem();
-        item->setName(names[i]);
-        item->setType(types[i]);
-        item->setValue(values[i]);
-        parameters->addChild(item);
+        item = dataMap[names[i]];
+        if ( item == 0 ) {
+            item = new DataItem();
+            item->setName(names[i]);
+            item->setType(types[i]);
+            item->setValue(values[i]);
+            parameters->addChild(item);
+            dataMap[names[i]] = item;
+        } else {
+            item->setValue(values[i]);
+            int n2 = item->childCount();
+            for ( int j = 0; j < n2; j++ ) {
+                DataItem *it = (DataItem *)item->child(j);
+                request.clear();
+                request.append(it->name());
+                request.append(it->address());
+                request.append(it->format());
+                request.append(QString("%1").arg(it->size()));
+                request.append(QString("%1").arg(it->first()));
+                request.append(QString("%1").arg(it->last()));
+                emit requestData(request);
+            }
+        }
     }
-    foreach ( QTreeWidgetItem *it, oldParameters ) delete it;
+    parameters->sortChildren(0,Qt::AscendingOrder);
     //qDebug() << "done rl";
 }

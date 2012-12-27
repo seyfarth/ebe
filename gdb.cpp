@@ -16,7 +16,7 @@ QString readLine()
     QString result="";
     int n;
     do {
-        gdbProcess->waitForReadyRead(10);
+        gdbProcess->waitForReadyRead(0);
         result += gdbProcess->readLine();
         n = result.length();
         //qDebug() << result;
@@ -499,7 +499,7 @@ bool GDB::testAVX()
 
 void GDB::getData(QStringList request)
 {
-    //qDebug() << "gdb" << request;
+    qDebug() << "gdb" << request;
     QString name = request[0];
     QString address = request[1];
     QString format = request[2];
@@ -545,7 +545,7 @@ void GDB::getData(QStringList request)
             i++;
         }
     } else if ( first == 0 && last == 0 ) {
-        cmd = QString("x/%1%2 %3").arg(formatLetter).arg(sizeLetter).arg(address);
+        cmd = QString("x/x%1 %2").arg(sizeLetter).arg(address);
         //qDebug() << cmd;
         results = sendReceive(cmd);
         //qDebug() << results;

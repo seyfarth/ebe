@@ -68,7 +68,6 @@ public:
     DataItem *addDataItem(QString n, QString t, QString v);
     void contextMenuEvent(QContextMenuEvent *event);
 
-private:
 
 public slots:
     void expandDataItem(QTreeWidgetItem*);
@@ -78,6 +77,10 @@ public slots:
     void editUserVariable();
     void deleteUserVariable();
 
+private:
+
+signals:
+    void requestData(QStringList);
 };
 
 class DataWindow : public QFrame
