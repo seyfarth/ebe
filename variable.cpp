@@ -89,3 +89,75 @@ void DefineVariableDialog::defineVariable()
            << firstEdit->text() << lastEdit->text();
     accept();
 }
+
+ArrayBoundsDialog::ArrayBoundsDialog()
+: QDialog()
+{
+    setObjectName("Set Array Bounds");
+    setWindowTitle("Set Array Bounds");
+    //setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    //setLineWidth(4);
+    setModal(true);
+    setWindowFlags(Qt::Dialog|Qt::WindowStaysOnTopHint);
+
+    move(QCursor::pos());
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setSpacing(5);
+    layout->setContentsMargins(10,10,10,10);
+
+    QHBoxLayout *firstLayout = new QHBoxLayout;
+    firstLayout->addWidget ( new QLabel(tr("First index")) );
+    firstSpin = new QSpinBox;
+    firstLayout->addWidget ( firstSpin );
+    layout->addLayout(firstLayout);
+
+    QHBoxLayout *lastLayout = new QHBoxLayout;
+    lastLayout->addWidget ( new QLabel(tr("Last index")) );
+    lastSpin = new QSpinBox;
+    lastLayout->addWidget ( lastSpin );
+    layout->addLayout(lastLayout);
+
+    okButton = new QPushButton("OK");
+    cancelButton = new QPushButton("Cancel");
+    connect(okButton, SIGNAL(clicked()), this, SLOT(setArrayBounds()));
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+    buttonLayout->addStretch();
+
+    layout->addLayout(buttonLayout);
+
+    setMax(3);
+    setToolTip(tr("A pointer can point to an object or an array.\n") +
+               tr("To point to an object set first and last to 0.") );
+    setLayout(layout);
+}
+
+void ArrayBoundsDialog::setMax(int max)
+{
+    firstSpin->setMaximum(max);
+    lastSpin->setMaximum(max);
+}
+
+void ArrayBoundsDialog::setArrayBounds()
+{
+    min = firstSpin->value();
+    max = lastSpin->value();
+    if ( min > max ) {
+        QMessageBox::warning(this,tr("Error"),
+                     tr("The first index can't be\n greater than the last."),
+                     QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+    accept();
+}
+
+QSize ArrayBoundsDialog::sizeHint() const
+{
+    return QSize(200,200);
+}
+

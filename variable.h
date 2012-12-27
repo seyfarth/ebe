@@ -26,7 +26,29 @@ private:
     QPushButton *cancelButton;
 
 signals:
-    void sendVariableDefinition(bool OK,QStringList);
+};
+
+class ArrayBoundsDialog: public QDialog
+{
+    Q_OBJECT
+
+public:
+    ArrayBoundsDialog();
+    QSpinBox *firstSpin;
+    QSpinBox *lastSpin;
+    QSize sizeHint() const;
+    void setMax(int max);
+    int min;
+    int max;
+
+private:
+    QPushButton *okButton;
+    QPushButton *cancelButton;
+
+public slots:
+    void setArrayBounds();
+
+signals:
 };
 
 struct VariableDefinition
