@@ -364,6 +364,7 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
     ClassDefinition c;
     int n;
     c = classes[it->type()];
+    it->takeChildren();
     if ( c.name != "" ) {
         foreach ( VariableDefinition v, c.members ) {
             request.clear();
@@ -413,6 +414,43 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             }
         }
         delete dialog;
+    } else if ( (n = it->type().indexOf('[')) >= 0 ) {
+        QString type = it->type();
+        int n2 = type.indexOf(']');
+        if ( n2 < 0 ) return;
+        QString dimString = type.mid(n+1,n2-n-1);
+        type.remove(n,n2-n+1);
+        n = type.length();
+        if ( type[n-1] == ' ' ) type.chop(1);
+        ArrayBoundsDialog *dialog = new ArrayBoundsDialog();
+        int dim;
+        if ( dimString.length() > 0 ) {
+            dim = dimString.toInt();
+            dialog->setMax(dim-1);
+        }
+        if ( dialog->exec() ) {
+            qDebug() << "min max" << dialog->min << dialog->max;
+            int min = dialog->min;
+            int max = dialog->max;
+            qDebug() << "type" << type;
+            for ( int i = min; i <= max; i++ ) {
+                request.clear();
+                d = new DataItem;
+                fullName = it->name()+QString("[%1]").arg(i);
+                d->setName(fullName);
+                d->setAddress("&("+fullName+")");
+                d->setType(type);
+                it->addChild(d);
+                dataMap[fullName] = d;
+                request.append(fullName);
+                request.append(d->address());
+                request.append(d->format());
+                request.append(QString("%1").arg(d->size()));
+                request.append(QString("%1").arg(d->first()));
+                request.append(QString("%1").arg(d->last()));
+                emit requestData(request);
+            }
+        }
     }
 }
 
