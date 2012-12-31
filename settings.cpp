@@ -142,6 +142,8 @@ void Settings::setDefaults()
 
     ebe["command/visible"] = true;
 
+    ebe["backtrace/visible"] = true;
+
     ebe["tooltips/visible"] = true;
 
     ebe["complete/minimum"] = 4;

@@ -1,9 +1,11 @@
 #include "datawindow.h"
 #include "settings.h"
+#include "backtracewindow.h"
 #include "gdb.h"
 #include <cstdio>
 
 extern GDB *gdb;
+extern BackTraceWindow *backTraceWindow;
 extern QMap<QString,int> sizeForType;
 extern DataWindow *dataWindow;
 
@@ -12,7 +14,12 @@ DataItem *globals;
 DataItem *locals;
 DataItem *parameters;
 DataItem *userDefined;
-QMap<QString,DataItem*> dataMap;
+DataMap *localMap;
+DataMap *parameterMap;
+DataMap *globalMap;
+DataMap *userDefinedMap;
+
+QStack<DataTree*> stack;
 
 static QSet<QString> simpleTypes;
 
@@ -25,21 +32,14 @@ DataWindow::DataWindow(QWidget *parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
-    QVBoxLayout *layout = new QVBoxLayout();
+    layout = new QVBoxLayout();
     layout->setContentsMargins(10,10,10,10);
 
     dataTree = new DataTree(this);
     layout->addWidget(dataTree);
 
-    globals = dataTree->addDataItem("globals","","");
-    globals->setExpanded(true);
-    locals = dataTree->addDataItem("locals","","");
-    locals->setExpanded(true);
-    parameters = dataTree->addDataItem("parameters","","");
-    parameters->setExpanded(true);
-    userDefined = dataTree->addDataItem("user-defined","","");
-    userDefined->setExpanded(true);
-    
+    level = 1;
+
     simpleTypes << "char" << "signed char" << "unsigned char"
                 << "short" << "signed short" << "unsigned short"
                 << "int" << "signed int" << "unsigned int"
@@ -51,14 +51,27 @@ DataWindow::DataWindow(QWidget *parent)
 
     setLayout ( layout );
 
+    qRegisterMetaType<DataMap*>("DataMap*");
+
     connect ( gdb, SIGNAL(sendGlobals(QStringList,QStringList,QStringList)),
-          dataTree, SLOT(receiveGlobals(QStringList,QStringList,QStringList)));
+          this, SLOT(receiveGlobals(QStringList,QStringList,QStringList)));
     connect ( gdb, SIGNAL(sendLocals(QStringList,QStringList,QStringList)),
-          dataTree, SLOT(receiveLocals(QStringList,QStringList,QStringList)));
+          this, SLOT(receiveLocals(QStringList,QStringList,QStringList)));
     connect ( gdb, SIGNAL(sendParameters(QStringList,QStringList,QStringList)),
-          dataTree, SLOT(receiveParameters(QStringList,QStringList,QStringList)));
-    connect ( dataTree, SIGNAL(requestData(QStringList)),
-              gdb, SLOT(getData(QStringList)) );
+         this, SLOT(receiveParameters(QStringList,QStringList,QStringList)));
+    connect (
+       this, SIGNAL(requestVar(DataMap*,QString,QString,QString,
+                        QString,int,int,int)),
+       gdb, SLOT(requestVar(DataMap*,QString,QString,QString,
+                 QString,int,int,int)) );
+    connect ( gdb, SIGNAL(sendVar(DataMap*,QString,QString)),
+              this, SLOT(receiveVar(DataMap*,QString,QString)) );
+    //connect ( gdb, SIGNAL(dataReady(QStringList)),
+              //this, SLOT(setData(QStringList)) );
+    connect ( gdb, SIGNAL(resetData()),
+              this, SLOT(resetData()) );
+    connect ( gdb, SIGNAL(sendClasses(QMap<QString,ClassDefinition>)),
+              this, SLOT(receiveClasses(QMap<QString,ClassDefinition>)) );
 }
 
 QSize DataWindow::sizeHint() const
@@ -75,77 +88,27 @@ void DataWindow::setFontHeightAndWidth ( int height, int width )
 void DataWindow::receiveVariableDefinition(QStringList strings)
 {
     DataItem *item;
-    int n = userDefined->childCount();
     //qDebug() << "data rec var" << strings;
     QString name = strings[0];
-    for ( int i = 0; i < n; i++ ) {
-        item = (DataItem *)userDefined->child(i);
-        if ( item->name() == name ) {
-            item->setAddress(strings[1]);
-            item->setFormat(strings[2]);
-            item->setSize(strings[3].toInt());
-            item->setRange(strings[4].toInt(),strings[5].toInt());
-            emit requestData(strings);
-            return;
-        }
-    }
-    item = new DataItem;
-    item->setUserDefined(true);
-    item->setName(name);
-    item->setAddress(strings[1]);
-    item->setFormat(strings[2]);
-    item->setSize(strings[3].toInt());
-    item->setRange(strings[4].toInt(),strings[5].toInt());
-    userDefined->addChild ( item );
-    userDefined->sortChildren ( 0, Qt::AscendingOrder );
-    emit requestData(strings);
-}
-
-void DataWindow::setData(QStringList strings)
-{
-    DataItem *item;
-    qDebug() << "data rec var" << strings;
-    QString name = strings[0];
-    item = dataMap[name];
-    if ( item->name() == name ) {
-        item->setAddress(strings[1]);
-        item->setFormat(strings[2]);
-        item->setSize(strings[3].toInt());
+    item = userDefinedMap->value(name);
+    if ( item == 0 ) {
+        item = dataTree->addDataItem(userDefinedMap,name,strings[1],"");
+        item->format=strings[2];
+        item->size=strings[3].toInt();
         item->setRange(strings[4].toInt(),strings[5].toInt());
-        item->setValue(strings[6]);
-        int n2 = item->childCount();
-        for ( int j = 0; j < n2; j++ ) {
-            DataItem *it = (DataItem *)item->child(j);
-            strings.clear();
-            strings.append(it->name());
-            strings.append(it->address());
-            strings.append(it->format());
-            strings.append(QString("%1").arg(it->size()));
-            strings.append(QString("%1").arg(it->first()));
-            strings.append(QString("%1").arg(it->last()));
-            emit requestData(strings);
-        }
+        userDefined->addChild ( item );
+        userDefined->sortChildren ( 0, Qt::AscendingOrder );
     }
+    request(item);
 }
 
 void DataWindow::resetData()
 {
-    QStringList request;
-    DataItem *item;
     QString s;
     int n = userDefined->childCount();
     //qDebug() << "reset" << n;
     for ( int i = 0; i < n; i++ ) {
-        item = (DataItem *)userDefined->child(i);
-        request.clear();
-        request.append(item->myName);
-        request.append(item->myAddress);
-        request.append(item->myFormat);
-        request.append(s.setNum(item->mySize));
-        request.append(s.setNum(item->myFirst));
-        request.append(s.setNum(item->myLast));
-        //qDebug() << "reset req" << i << request;
-        emit requestData(request);
+        request((DataItem *)userDefined->child(i));
     }
 }
 
@@ -158,42 +121,42 @@ void DataWindow::receiveClasses(QMap<QString,ClassDefinition> c)
 DataItem::DataItem()
 : QTreeWidgetItem()
 {
-    myName  = "";
-    myType  = "";
-    u8 = 0;
-    myFirst   = 0;
-    myLast    = 0;
-    setUserDefined(false);
+    name  = "";
+    type  = "";
+    u8    = 0;
+    first = 0;
+    last  = 0;
+    userDefined = false;
     setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 }
 
 QString DataItem::value()
 {
     QString val;
-    if ( isSimple() ) {
-        switch ( mySize ) {
+    if ( isSimple ) {
+        switch ( size ) {
         case 1:
-            if ( myFormat == "Character" ) val.sprintf("%c",c1);
-            else if ( myFormat == "Decimal" ) val.sprintf("%d",i1);
-            else if ( myFormat == "Hexadecimal" ) val.sprintf("%x",u1);
-            else if ( myFormat == "Boolean" ) val = b1 ? "true" : "false";
+            if ( format == "Character" ) val.sprintf("%c",c1);
+            else if ( format == "Decimal" ) val.sprintf("%d",i1);
+            else if ( format == "Hexadecimal" ) val.sprintf("%x",u1);
+            else if ( format == "Boolean" ) val = b1 ? "true" : "false";
             else val = "";
             break;
         case 2:
-            if ( myFormat == "Decimal" ) val.sprintf("%d",i2);
-            else if ( myFormat == "Hexadecimal" ) val.sprintf("%x",u2);
+            if ( format == "Decimal" ) val.sprintf("%d",i2);
+            else if ( format == "Hexadecimal" ) val.sprintf("%x",u2);
             else val = "";
             break;
         case 4:
-            if ( myFormat == "Decimal" ) val.sprintf("%d",i4);
-            else if ( myFormat == "Hexadecimal" ) val.sprintf("%x",u4);
-            else if ( myFormat == "Floating point" ) val.sprintf("%g",f4);
+            if ( format == "Decimal" ) val.sprintf("%d",i4);
+            else if ( format == "Hexadecimal" ) val.sprintf("%x",u4);
+            else if ( format == "Floating point" ) val.sprintf("%g",f4);
             else val = "";
             break;
         case 8:
-            if ( myFormat == "Decimal" ) val.sprintf("%ld",i8);
-            else if ( myFormat == "Hexadecimal" ) val.sprintf("%lx",u8);
-            else if ( myFormat == "Floating point" ) val.sprintf("%g",f8);
+            if ( format == "Decimal" ) val.sprintf("%ld",i8);
+            else if ( format == "Hexadecimal" ) val.sprintf("%lx",u8);
+            else if ( format == "Floating point" ) val.sprintf("%g",f8);
             else val = "";
             break;
         default:
@@ -211,46 +174,47 @@ QString DataItem::valueFromGdb()
 
 void DataItem::setName(QString n)
 {
-    myName = n;
+    name = n;
     QString shortName;
     int k = n.lastIndexOf('.');
     if ( n >= 0 ) shortName = n.mid(k+1);
     else shortName = n;
-    if ( myFirst == 0 && myLast == 0 ) {
+    if ( first == 0 && last == 0 ) {
         setText(0,shortName);
     } else {
-        setText(0,QString("%1[%2:%3]").arg(shortName).arg(myFirst).arg(myLast));
+        setText(0,QString("%1[%2:%3]").arg(shortName).arg(first).arg(last));
     }
 }
 
 void DataItem::setType(QString t)
 {
-    myType = t;
+    type = t;
 
-    if ( sizeForType.contains(t) ) mySize = sizeForType[t];
-    else mySize = 8;
+    if ( sizeForType.contains(t) ) size = sizeForType[t];
+    else size = 8;
 
     if ( simpleTypes.contains(t) ) {
-        myIsSimple = true;
+        isSimple = true;
         if ( t.indexOf("char") >= 0 ) {
-            myFormat = "Character";
+            format = "Character";
         } else if ( t.indexOf("short") >= 0 || t.indexOf("int") >= 0 ||
                   t.indexOf("long") >= 0 ) {
-            myFormat = "Decimal";
+            format = "Decimal";
         } else if ( t.indexOf("float") >= 0 || t.indexOf("double") >= 0 ) {
-            myFormat = "Floating point";
+            format = "Floating point";
         } else if ( t.indexOf("bool") >= 0 ) {
-            myFormat = "Boolean";
+            format = "Boolean";
         } else {
-            myFormat = "Hexadecimal";
+            format = "Hexadecimal";
         }
     } else {
-        myIsSimple = false;
-        myFormat = "";
+        isSimple = false;
+        if ( t.indexOf(" *") >= 0 ) format = "Pointer";
+        else format = "";
     }
 
-    setText(1,myType);
-    if ( isSimple() ) {
+    setText(1,type);
+    if ( isSimple ) {
         setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     } else {
         setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
@@ -260,9 +224,9 @@ void DataItem::setType(QString t)
 void DataItem::setValue(QString v)
 {
     bool ok;
-    if ( isSimple() ) {
+    if ( isSimple ) {
         u8 = 0;
-        switch ( mySize ) {
+        switch ( size ) {
         case 1:
             u1 = v.toInt(&ok,16);
             break;
@@ -276,19 +240,21 @@ void DataItem::setValue(QString v)
             u8 = v.toLong(&ok,16);
             break;
         }
-        //qDebug() << myName << mySize << v << u8 << value();
+        //qDebug() << name << size << v << u8 << value();
     } else {
-        if ( dataMap.contains(name()) ) stringValue = "";
-        else stringValue = v;
+        //if ( dataMap.contains(name) ) stringValue = "";
+        stringValue = v;
     }
+    qDebug() << "setText 2";
     setText(2,value());
+    qDebug() << "setText 2 done";
 }
 
 void DataItem::setRange(int f, int l)
 {
-    myFirst = f;
-    myLast = l;
-    setName(myName);
+    first = f;
+    last = l;
+    setName(name);
 }
 
 void DataTree::editUserVariable()
@@ -302,17 +268,17 @@ void DataTree::deleteUserVariable()
     delete item;
 }
 
-void DataTree::contextMenuEvent ( QContextMenuEvent *event )
+void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
 {
     DataItem *item = (DataItem *)currentItem();
-    QString type = item->type();
-    //qDebug() << item->name() << type << item->value();
-    if ( item->userDefined() ) {
+    QString type = item->type;
+    //qDebug() << item->name << type << item->value();
+    if ( item->userDefined ) {
         QMenu menu("Variable menu");
         menu.addAction(tr("Edit variable"),this,SLOT(editUserVariable()));
         menu.addAction(tr("Delete variable"),this,SLOT(deleteUserVariable()));
         menu.exec(QCursor::pos());
-    } else if ( item->isSimple() ) {
+    } else if ( item->isSimple ) {
         if ( type.indexOf("char") >= 0 ) {
             QMenu menu("char menu");
             menu.addAction(tr("Decimal"),this,SLOT(editUserVariable()));
@@ -330,16 +296,6 @@ void DataTree::contextMenuEvent ( QContextMenuEvent *event )
     }
 }
 
-DataItem *DataTree::addDataItem ( QString n, QString t, QString v )
-{
-    DataItem *d = new DataItem();
-    d->setName(n);
-    d->setType(t);
-    d->setValue(v);
-    addTopLevelItem(d);
-    return d;
-}
-
 DataTree::DataTree(QWidget *parent)
 : QTreeWidget(parent)
 {
@@ -351,71 +307,92 @@ DataTree::DataTree(QWidget *parent)
     header->setText(2,tr("Value"));
     setHeaderItem(header);
 
+    ::globalMap = globalMap = new DataMap;
+    ::localMap = localMap  = new DataMap;
+    ::parameterMap = parameterMap = new DataMap;
+    ::userDefinedMap = userDefinedMap = new DataMap;
+
+    ::globals = globals = addDataItem(globalMap,"globals","","");
+    ::locals = locals = addDataItem(localMap,"locals","","");
+    ::parameters = parameters = addDataItem(parameterMap,"parameters","","");
+    ::userDefined = userDefined = addDataItem(userDefinedMap,"user-defined","","");
+
+    addTopLevelItem(globals);
+    globals->setExpanded(true);
+    addTopLevelItem(locals);
+    locals->setExpanded(true);
+    addTopLevelItem(parameters);
+    parameters->setExpanded(true);
+    addTopLevelItem(userDefined);
+    userDefined->setExpanded(true);
+    
     connect ( this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
               this, SLOT(expandDataItem(QTreeWidgetItem*)) );
 }
 
+DataTree::~DataTree()
+{
+    globals->removeSubTree();
+    delete globals;
+    locals->removeSubTree();
+    delete locals;
+    parameters->removeSubTree();
+    delete parameters;
+    userDefined->removeSubTree();
+    delete userDefined;
+    delete globalMap;
+    delete localMap;
+    delete parameterMap;
+    delete userDefinedMap;
+}
 void DataTree::expandDataItem(QTreeWidgetItem *item)
 {
     DataItem *it = (DataItem *)item;
     DataItem *d;
-    QStringList request;
     QString fullName;
     ClassDefinition c;
     int n;
-    c = classes[it->type()];
-    it->takeChildren();
+    c = classes[it->type];
+    QList<QTreeWidgetItem*> kids = it->takeChildren();
+    foreach ( QTreeWidgetItem *t, kids ) {
+        ((DataItem *)t)->removeSubTree();
+        delete t;
+    }
     if ( c.name != "" ) {
         foreach ( VariableDefinition v, c.members ) {
-            request.clear();
-            d = new DataItem;
-            fullName = it->name() + "." + v.name;
-            d->setName(fullName);
-            d->setAddress("&("+fullName+")");
-            d->setType(v.type);
+            fullName = it->name + "." + v.name;
+            d = addDataItem(it->map,fullName,v.type,"");
+            if ( it->map == globalMap ) {
+                d->address="&(::"+fullName+")";
+            } else {
+                d->address="&("+fullName+")";
+            }
             it->addChild(d);
-            dataMap[fullName] = d;
-            request.append(fullName);
-            request.append(d->address());
-            request.append(d->format());
-            request.append(QString("%1").arg(d->size()));
-            request.append(QString("%1").arg(d->first()));
-            request.append(QString("%1").arg(d->last()));
-            emit requestData(request);
+            dataWindow->request(d);
         }
-    } else if ( (n = it->myType.indexOf(" *")) > 0 ) {
-        qDebug() << it->myName << "pointer" << it->myType;
+    } else if ( (n = it->type.indexOf(" *")) > 0 ) {
+        qDebug() << it->name << "pointer" << it->type;
         ArrayBoundsDialog *dialog = new ArrayBoundsDialog();
         if ( dialog->exec() ) {
             qDebug() << "min max" << dialog->min << dialog->max;
             int min = dialog->min;
             int max = dialog->max;
-            QString type = it->type();
+            QString type = it->type;
             type.remove(n+1,1);
             n = type.length();
             if ( type[n-1] == ' ' ) type.chop(1);
             qDebug() << "type" << type;
             for ( int i = min; i <= max; i++ ) {
-                request.clear();
-                d = new DataItem;
-                fullName = it->name()+QString("[%1]").arg(i);
-                d->setName(fullName);
-                d->setAddress("&("+fullName+")");
-                d->setType(type);
+                fullName = it->name+QString("[%1]").arg(i);
+                d = addDataItem(it->map,fullName,type,"");
+                d->address="&("+fullName+")";
                 it->addChild(d);
-                dataMap[fullName] = d;
-                request.append(fullName);
-                request.append(d->address());
-                request.append(d->format());
-                request.append(QString("%1").arg(d->size()));
-                request.append(QString("%1").arg(d->first()));
-                request.append(QString("%1").arg(d->last()));
-                emit requestData(request);
+                dataWindow->request(d);
             }
         }
         delete dialog;
-    } else if ( (n = it->type().indexOf('[')) >= 0 ) {
-        QString type = it->type();
+    } else if ( (n = it->type.indexOf('[')) >= 0 ) {
+        QString type = it->type;
         int n2 = type.indexOf(']');
         if ( n2 < 0 ) return;
         QString dimString = type.mid(n+1,n2-n-1);
@@ -434,136 +411,176 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             int max = dialog->max;
             qDebug() << "type" << type;
             for ( int i = min; i <= max; i++ ) {
-                request.clear();
-                d = new DataItem;
-                fullName = it->name()+QString("[%1]").arg(i);
-                d->setName(fullName);
-                d->setAddress("&("+fullName+")");
-                d->setType(type);
+                fullName = it->name+QString("[%1]").arg(i);
+                d = addDataItem(it->map,fullName,type,"");
+                d->address="&("+fullName+")";
                 it->addChild(d);
-                dataMap[fullName] = d;
-                request.append(fullName);
-                request.append(d->address());
-                request.append(d->format());
-                request.append(QString("%1").arg(d->size()));
-                request.append(QString("%1").arg(d->first()));
-                request.append(QString("%1").arg(d->last()));
-                emit requestData(request);
+                dataWindow->request(d);
             }
         }
     }
 }
 
-void DataTree::receiveGlobals(QStringList names, QStringList types,
+void DataWindow::request(DataItem *d)
+{
+    qDebug() << "dt req" << d->name << d->type;
+    emit requestVar(d->map,d->name,d->address,d->type,
+                    d->format,d->size,d->first,d->last);
+}
+
+void DataWindow::receiveVar(DataMap *map, QString name, QString value)
+{
+    DataItem *item;
+    qDebug() << "data rec var" << name << value;
+    item = map->value(name);
+    if ( item == 0 ) {
+        qDebug() << "item is 0";
+        return;
+    }
+    item->setValue(value);
+    int n2 = item->childCount();
+    for ( int j = 0; j < n2; j++ ) {
+        request((DataItem *)item->child(j));
+    }
+}
+
+void DataWindow::receiveGlobals(QStringList names, QStringList types,
                QStringList values)
 {
     int n = names.length();
     DataItem *item;
-    QStringList request;
     
-    //qDebug() << "rg" << names << types << values;
+    qDebug() << "rg" << names << types << values;
     //globals->takeChildren();
     for ( int i = 0; i < n; i++ ) {
-        item = dataMap[names[i]];
+        item = globalMap->value(names[i]);
+        qDebug() << i << item << names[i];
         if ( item == 0 ) {
-            item = new DataItem();
-            item->setName(names[i]);
-            item->setType(types[i]);
-            item->setValue(values[i]);
+            item = dataTree->addDataItem(globalMap,names[i],types[i],values[i]);
+            item->address = QString("&(::%1").arg(names[i]);
             globals->addChild(item);
-            dataMap[names[i]] = item;
         } else {
             item->setValue(values[i]);
+            qDebug() << "set v" << values[i];
             int n2 = item->childCount();
             for ( int j = 0; j < n2; j++ ) {
-                DataItem *it = (DataItem *)item->child(j);
-                request.clear();
-                request.append(it->name());
-                request.append(it->address());
-                request.append(it->format());
-                request.append(QString("%1").arg(it->size()));
-                request.append(QString("%1").arg(it->first()));
-                request.append(QString("%1").arg(it->last()));
-                emit requestData(request);
+                request((DataItem *)item->child(j));
             }
         }
     }
     globals->sortChildren(0,Qt::AscendingOrder);
 }
 
-void DataTree::receiveLocals(QStringList names, QStringList types,
-               QStringList values)
+void DataItem::removeSubTree()
+{
+    int i;
+    int n = childCount();
+    DataItem *item;
+    QList<QTreeWidgetItem*> kids;
+
+    for ( i = 0; i < n; i++ ) {
+        item = (DataItem *)child(i);
+        item->removeSubTree();
+    }
+    kids = takeChildren();
+    for ( i = 0; i < n; i++ ) {
+        item = (DataItem *)kids[i];
+        item->map->remove(item->name);
+        delete item;
+    }
+}
+
+void DataWindow::receiveLocals(QStringList names, QStringList types, QStringList values)
 {
     int n = names.length();
     DataItem *item;
-    QStringList request;
     //QList<QTreeWidgetItem*> oldLocals;
     
     //oldLocals = locals->takeChildren();
-    //qDebug() << "rl" << names << types << values;
+    qDebug() << "rl" << names << types << values;
+    qDebug() << "levels" << level << backTraceWindow->level;
+    while ( level < backTraceWindow->level ) {
+        qDebug() << "push";
+        dataTree->hide();
+        stack.push(dataTree);
+        dataTree = new DataTree;
+        layout->addWidget(dataTree);
+        level++;
+    }
+    while ( level > backTraceWindow->level ) {
+        qDebug() << "pop";
+        dataTree->hide();
+        layout->removeWidget(dataTree);
+        delete dataTree;
+        dataTree = stack.pop();
+        dataTree->show();
+        globals = dataTree->globals;
+        locals = dataTree->locals;
+        parameters = dataTree->parameters;
+        userDefined = dataTree->userDefined;
+        globalMap = dataTree->globalMap;
+        localMap = dataTree->localMap;
+        parameterMap = dataTree->parameterMap;
+        userDefinedMap = dataTree->userDefinedMap;
+        level--;
+    }
     for ( int i = 0; i < n; i++ ) {
-        //qDebug() << i << names[i] << types[i] << values[i];
-        item = dataMap[names[i]];
+        qDebug() << i << names[i] << types[i] << values[i];
+        item = localMap->value(names[i]);
+        qDebug() << item;
         if ( item == 0 ) {
-            item = new DataItem();
-            item->setName(names[i]);
-            item->setType(types[i]);
-            item->setValue(values[i]);
+            item = dataTree->addDataItem(localMap,names[i],types[i],values[i]);
+            item->address = QString("&(%1)").arg(names[i]);
             locals->addChild(item);
-            dataMap[names[i]] = item;
         } else {
+            qDebug() << item->name;
+            qDebug() << item->isSimple;
+            qDebug() << item->value();
+            qDebug() << item->type;
             item->setValue(values[i]);
+            qDebug() << "set value";
             int n2 = item->childCount();
             for ( int j = 0; j < n2; j++ ) {
-                DataItem *it = (DataItem *)item->child(j);
-                request.clear();
-                request.append(it->name());
-                request.append(it->address());
-                request.append(it->format());
-                request.append(QString("%1").arg(it->size()));
-                request.append(QString("%1").arg(it->first()));
-                request.append(QString("%1").arg(it->last()));
-                emit requestData(request);
+                request((DataItem *)item->child(j));
             }
         }
     }
-    globals->sortChildren(0,Qt::AscendingOrder);
+    locals->sortChildren(0,Qt::AscendingOrder);
 }
 
-void DataTree::receiveParameters(QStringList names, QStringList types,
-               QStringList values)
+void DataWindow::receiveParameters(QStringList names, QStringList types,
+                                 QStringList values)
 {
     int n = names.length();
     DataItem *item;
-    QStringList request;
     
-    //qDebug() << "rl" << names << types << values;
     for ( int i = 0; i < n; i++ ) {
         //qDebug() << i << names[i] << types[i] << values[i];
-        item = dataMap[names[i]];
+        item = parameterMap->value(names[i]);
         if ( item == 0 ) {
-            item = new DataItem();
-            item->setName(names[i]);
-            item->setType(types[i]);
-            item->setValue(values[i]);
+            item = dataTree->addDataItem(parameterMap,names[i],types[i],values[i]);
+            item->address = QString("&(%1)").arg(names[i]);
             parameters->addChild(item);
-            dataMap[names[i]] = item;
         } else {
             item->setValue(values[i]);
             int n2 = item->childCount();
             for ( int j = 0; j < n2; j++ ) {
-                DataItem *it = (DataItem *)item->child(j);
-                request.clear();
-                request.append(it->name());
-                request.append(it->address());
-                request.append(it->format());
-                request.append(QString("%1").arg(it->size()));
-                request.append(QString("%1").arg(it->first()));
-                request.append(QString("%1").arg(it->last()));
-                emit requestData(request);
+                request((DataItem *)item->child(j));
             }
         }
     }
     parameters->sortChildren(0,Qt::AscendingOrder);
     //qDebug() << "done rl";
+}
+
+DataItem *DataTree::addDataItem ( DataMap *map, QString n,
+                                  QString t, QString v )
+{
+    DataItem *d = new DataItem;
+    d->setName(n);
+    d->setType(t);
+    d->setValue(v);
+    d->map = map;
+    map->insert(n,d);
+    return d;
 }

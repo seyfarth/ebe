@@ -9,6 +9,7 @@
 #include <QMap>
 #include <QSet>
 #include "variable.h"
+#include "datawindow.h"
 
 typedef QSet<int> IntSet;
 
@@ -26,6 +27,7 @@ class GDB : public QObject
 public:
     GDB();
     void initGdb();
+    bool running;
 
 private:
     void send(QString cmd, QString options="");
@@ -34,6 +36,7 @@ private:
     QSet<QString> runCommands;
     QSet<QString> regs;
     QSet<QString> simpleTypes;
+    void getBackTrace();
     void getRegs();
     void getFpRegs();
     void getGlobals();
@@ -54,6 +57,8 @@ public slots:
     void doContinue();
     void doStop();
     void getData(QStringList request);
+    void requestVar(DataMap *map, QString name, QString address, QString type,
+                    QString format, int size, int first, int last);
 
 signals:
     void nextInstruction(QString,int);
@@ -64,7 +69,9 @@ signals:
     void sendLocals(QStringList,QStringList,QStringList); 
     void sendParameters(QStringList,QStringList,QStringList); 
     void sendClasses(QMap<QString,ClassDefinition> classes);
+    void sendVar(DataMap *map, QString name, QString value);
     void dataReady(QStringList);
+    void sendBackTrace(QStringList);
     void resetData();
 };
 

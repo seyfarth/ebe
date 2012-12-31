@@ -21,6 +21,7 @@ FloatWindow *floatWindow;
 ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
 ConsoleWindow *consoleWindow;
+BackTraceWindow *backTraceWindow;
 GDB *gdb;
 GDBThread *gdbThread;
 
@@ -57,14 +58,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
               registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
     connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
               floatWindow, SLOT(receiveFpRegs(QStringList)) );
-    connect ( dataWindow, SIGNAL(requestData(QStringList)),
-              gdb, SLOT(getData(QStringList)) );
-    connect ( gdb, SIGNAL(dataReady(QStringList)),
-              dataWindow, SLOT(setData(QStringList)) );
-    connect ( gdb, SIGNAL(resetData()),
-              dataWindow, SLOT(resetData()) );
-    connect ( gdb, SIGNAL(sendClasses(QMap<QString,ClassDefinition>)),
-              dataWindow, SLOT(receiveClasses(QMap<QString,ClassDefinition>)) );
 }
 
 void MainWindow::restoreMainWindow()
@@ -245,6 +238,7 @@ void MainWindow::createMenus()
     viewMenu->addAction ( dataDock->toggleViewAction() );
     viewMenu->addAction ( registerDock->toggleViewAction() );
     viewMenu->addAction ( floatDock->toggleViewAction() );
+    viewMenu->addAction ( backTraceDock->toggleViewAction() );
     viewMenu->addAction ( consoleDock->toggleViewAction() );
     viewMenu->addAction ( terminalDock->toggleViewAction() );
     viewMenu->addAction ( projectDock->toggleViewAction() );
@@ -379,8 +373,17 @@ void MainWindow::createDockWindows()
     projectDock->setWidget(projectWindow);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
+    backTraceDock = new QDockWidget(tr("Back Trace"));
+    backTraceDock->setObjectName("Dock 6");
+    backTraceDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    backTraceWindow = new BackTraceWindow(backTraceDock);
+    backTraceWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    backTraceDock->setWidget(backTraceWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, backTraceDock);
+
     terminalDock = new QDockWidget(tr("Terminal"));
-    terminalDock->setObjectName("Dock 5");
+    terminalDock->setObjectName("Dock 6");
     terminalDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                               Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     terminalWindow = new TerminalWindow(terminalDock);
@@ -388,7 +391,7 @@ void MainWindow::createDockWindows()
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
 
     consoleDock = new QDockWidget(tr("Console"));
-    consoleDock->setObjectName("Dock 6");
+    consoleDock->setObjectName("Dock 7");
     consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                               Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     consoleWindow = new ConsoleWindow(consoleDock);
@@ -399,6 +402,7 @@ void MainWindow::createDockWindows()
     registerDock->setVisible(ebe["register/visible"].toBool());
     floatDock->setVisible(ebe["float/visible"].toBool());
     projectDock->setVisible(ebe["project/visible"].toBool());
+    backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
     terminalDock->setVisible(ebe["terminal/visible"].toBool());
     consoleDock->setVisible(ebe["console/visible"].toBool());
 }

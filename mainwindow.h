@@ -11,6 +11,7 @@
 #include "terminalwindow.h"
 #include "consolewindow.h"
 #include "projectwindow.h"
+#include "backtracewindow.h"
 #include "gdb.h"
 #include "settings.h"
 
@@ -59,6 +60,7 @@ private:
     QDockWidget *projectDock;
     QDockWidget *terminalDock;
     QDockWidget *consoleDock;
+    QDockWidget *backTraceDock;
 
     QAction *dataVisible;
     QAction *registerVisible;
