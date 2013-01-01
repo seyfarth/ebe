@@ -535,6 +535,13 @@ void SourceWindow::unIndent()
 
 }
 
+void SourceWindow::find()
+{
+    FindReplaceDialog *dialog = new FindReplaceDialog;
+    dialog->textEdit = textEdit;
+    dialog->exec();
+}
+
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
 {
     //SourceWindow *p = (SourceWindow *)parent();
@@ -611,4 +618,75 @@ void LineNumberEdit::dropBreakpoint()
 
 void LineNumberEdit::wheelEvent ( QWheelEvent * /* e */ )
 {
+}
+
+FindReplaceDialog::FindReplaceDialog()
+: QDialog()
+{
+    setObjectName("Find/Replace");
+    setWindowTitle("Find/Replace");
+    setModal(false);
+    setWindowFlags(Qt::Dialog|Qt::WindowStaysOnTopHint);
+
+    move(QCursor::pos());
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setSpacing(5);
+    layout->setContentsMargins(10,10,10,10);
+
+    QHBoxLayout *findLayout = new QHBoxLayout;
+    findLayout->addWidget ( new QLabel(tr("Find")) );
+    findEdit = new QLineEdit;
+    findLayout->addWidget ( findEdit );
+    layout->addLayout(findLayout);
+
+    QHBoxLayout *replaceLayout = new QHBoxLayout;
+    replaceLayout->addWidget ( new QLabel(tr("Replace")) );
+    replaceEdit = new QLineEdit;
+    replaceLayout->addWidget ( replaceEdit );
+    layout->addLayout(replaceLayout);
+
+    findButton = new QPushButton("Find");
+    replaceButton = new QPushButton("Replace");
+    cancelButton = new QPushButton("Cancel");
+    connect(findButton, SIGNAL(clicked()), this, SLOT(find()));
+    connect(replaceButton, SIGNAL(clicked()), this, SLOT(replace()));
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(findButton);
+    buttonLayout->addWidget(replaceButton);
+    buttonLayout->addWidget(cancelButton);
+    buttonLayout->addStretch();
+
+    layout->addLayout(buttonLayout);
+
+    setLayout(layout);
+}
+
+void FindReplaceDialog::find()
+{
+    if ( !textEdit->find(findEdit->text()) ) {
+        textEdit->moveCursor(QTextCursor::Start);
+        textEdit->find(findEdit->text());
+    }
+}
+
+void FindReplaceDialog::replace()
+{
+    textEdit->insertPlainText(replaceEdit->text());
+}
+
+void FindReplaceDialog::keyPressEvent(QKeyEvent *event)
+{
+    int key = event->key();
+    //qDebug() << "key" << key << event->modifiers();
+    if ( key == 'F' && event->modifiers() & Qt::ControlModifier ) {
+        find();
+    } else if ( key == 'R' && event->modifiers() & Qt::ControlModifier ) {
+        replace();
+    } else {
+        QDialog::keyPressEvent(event);
+    }
 }

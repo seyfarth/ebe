@@ -47,6 +47,7 @@ private slots:
     void unComment();
     void indent();
     void unIndent();
+    void find();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

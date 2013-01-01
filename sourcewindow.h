@@ -4,6 +4,29 @@
 #include <QtGui>
 #include "variable.h"
 
+class SourceEdit;
+
+class FindReplaceDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    FindReplaceDialog();
+    QLineEdit *findEdit;
+    QLineEdit *replaceEdit;
+    QPushButton *findButton;
+    QPushButton *replaceButton;
+    QPushButton *cancelButton;
+    SourceEdit *textEdit;
+
+public slots:
+    void find();
+    void replace();
+
+private:
+    void keyPressEvent(QKeyEvent *event);
+};
+
 class SourceEdit : public QPlainTextEdit
 {
     Q_OBJECT
@@ -98,6 +121,7 @@ public:
     void unComment();
     void indent();
     void unIndent();
+    void find();
 
 public slots:
     void open();

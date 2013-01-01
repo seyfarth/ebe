@@ -640,3 +640,12 @@ void SourceFrame::unIndent()
     }
 }
 
+void SourceFrame::find()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->find();
+    }
+}
+
