@@ -6,6 +6,11 @@
 
 extern DataWindow *dataWindow;
 
+extern QList<QString> cppExts;
+extern QList<QString> cExts;
+extern QList<QString> fortranExts;
+extern QList<QString> asmExts;
+
 SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
 {
     setWordWrapMode(QTextOption::NoWrap);
@@ -382,6 +387,77 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
     breakpoints = ((SourceWindow *)parent)->breakpoints;
     breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
     breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
+}
+
+void SourceWindow::comment()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextDocument *doc = textEdit->document();
+    if ( !cursor.hasSelection() ) return;
+    int start = cursor.selectionStart();
+    int end = cursor.selectionEnd();
+    qDebug() << "comment" << start << end;
+    QTextBlock block;
+    block = doc->findBlock(start);
+    int startBlock = block.blockNumber();
+    block = doc->findBlock(end);
+    int endBlock = block.blockNumber();
+    qDebug() << fileName << "comment blocks" << startBlock << endBlock;
+    int n = fileName.lastIndexOf('.');
+    if ( n < 0 ) {
+        qDebug() << "File does not have an extension.";
+        return;
+    }
+    QString ext = fileName.mid(n+1);
+    qDebug() << "ext" << ext;
+    int pos;
+    if ( cppExts.contains(ext) ) {
+        for ( int i = startBlock; i <= endBlock; i++ ) {
+            block = doc->findBlockByNumber(i);
+            pos = block.position();
+            cursor.setPosition(pos);
+            cursor.insertText("//");
+        }
+    }
+
+}
+
+void SourceWindow::unComment()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextDocument *doc = textEdit->document();
+    if ( !cursor.hasSelection() ) return;
+    int start = cursor.selectionStart();
+    int end = cursor.selectionEnd();
+    qDebug() << "comment" << start << end;
+    QTextBlock block;
+    block = doc->findBlock(start);
+    int startBlock = block.blockNumber();
+    block = doc->findBlock(end);
+    int endBlock = block.blockNumber();
+    qDebug() << fileName << "comment blocks" << startBlock << endBlock;
+    int n = fileName.lastIndexOf('.');
+    if ( n < 0 ) {
+        qDebug() << "File does not have an extension.";
+        return;
+    }
+    QString ext = fileName.mid(n+1);
+    qDebug() << "ext" << ext;
+    int pos;
+    QString t;
+    if ( cppExts.contains(ext) ) {
+        for ( int i = startBlock; i <= endBlock; i++ ) {
+            block = doc->findBlockByNumber(i);
+            pos = block.position();
+            cursor.setPosition(pos);
+            cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,2);
+            t = cursor.selectedText();
+            if ( t == "//" ) cursor.deleteChar();
+        }
+        cursor.setPosition(start);
+        cursor.setPosition(end,QTextCursor::KeepAnchor);
+    }
+
 }
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )

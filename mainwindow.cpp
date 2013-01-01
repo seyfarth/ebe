@@ -224,7 +224,7 @@ void MainWindow::createMenus()
     editMenu->addAction(tr("Undo"), sourceFrame, SLOT(undo()), QKeySequence::Undo );
     editMenu->addAction(tr("Redo"), sourceFrame, SLOT(redo()), QKeySequence::Redo );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Comment"), sourceFrame, SLOT(Comment()),
+    editMenu->addAction(tr("Comment"), sourceFrame, SLOT(comment()),
                         QKeySequence("Ctrl+K") );
     editMenu->addAction(tr("Uncomment"), sourceFrame, SLOT(unComment()),
                         QKeySequence("Ctrl+U")  );

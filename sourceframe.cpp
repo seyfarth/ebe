@@ -6,6 +6,11 @@
 #include "gdb.h"
 #include "settings.h"
 
+QStringList fortranExts;
+QStringList cExts;
+QStringList cppExts;
+QStringList asmExts;
+
 extern ProjectWindow *projectWindow;
 extern GDB *gdb;
 
@@ -535,3 +540,88 @@ void SourceFrame::saveAs()
         }
     }
 }
+
+void SourceFrame::cut()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->cut();
+    }
+}
+
+void SourceFrame::copy()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->copy();
+    }
+}
+
+void SourceFrame::paste()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->paste();
+    }
+}
+
+void SourceFrame::undo()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->undo();
+    }
+}
+
+void SourceFrame::redo()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->redo();
+    }
+}
+
+void SourceFrame::selectAll()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->selectAll();
+    }
+}
+
+void SourceFrame::selectNone()
+{
+    qDebug() << "select none";
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->textEdit->moveCursor(QTextCursor::Start,QTextCursor::MoveAnchor);
+    }
+}
+
+void SourceFrame::comment()
+{
+    qDebug() << "select none";
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->comment();
+    }
+}
+
+void SourceFrame::unComment()
+{
+    qDebug() << "select none";
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->unComment();
+    }
+}
+

@@ -92,6 +92,8 @@ public:
     void clearNextLine(int line);
     QTextBlockFormat normalFormat;
     QTextBlockFormat breakFormat;
+    void comment();
+    void unComment();
 
 public slots:
     void open();

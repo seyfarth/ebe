@@ -19,10 +19,6 @@ public:
     void open(QString name, int index=0);
     void openInNewTab(QString name);
     void closeTabs();
-    QStringList fortranExts;
-    QStringList cExts;
-    QStringList cppExts;
-    QStringList asmExts;
     void saveIfChanged(QString file);
     void setNextLine(QString file,int line);
     void clearNextLine(QString file,int line);
@@ -40,6 +36,15 @@ private slots:
     void step();
     void Continue();
     void stop();
+    void cut();
+    void copy();
+    void paste();
+    void undo();
+    void redo();
+    void selectAll();
+    void selectNone();
+    void comment();
+    void unComment();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,
