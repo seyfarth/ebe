@@ -138,30 +138,36 @@ QString DataItem::value()
         case 1:
             if ( format == "Character" ) val.sprintf("%c",c1);
             else if ( format == "Decimal" ) val.sprintf("%d",i1);
-            else if ( format == "Hexadecimal" ) val.sprintf("%x",u1);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%d",u1);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",u1);
             else if ( format == "Boolean" ) val = b1 ? "true" : "false";
             else val = "";
             break;
         case 2:
             if ( format == "Decimal" ) val.sprintf("%d",i2);
-            else if ( format == "Hexadecimal" ) val.sprintf("%x",u2);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%d",u2);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",u2);
             else val = "";
             break;
         case 4:
             if ( format == "Decimal" ) val.sprintf("%d",i4);
-            else if ( format == "Hexadecimal" ) val.sprintf("%x",u4);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%d",u4);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",u4);
             else if ( format == "Floating point" ) val.sprintf("%g",f4);
             else val = "";
             break;
         case 8:
             if ( format == "Decimal" ) val.sprintf("%ld",i8);
-            else if ( format == "Hexadecimal" ) val.sprintf("%lx",u8);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%ld",u8);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%lx",u8);
             else if ( format == "Floating point" ) val.sprintf("%g",f8);
             else val = "";
             break;
         default:
             val = "";
         }
+    } else if ( classes.contains(type) ) {
+        val = "";
     } else {
         val = stringValue;
     }
@@ -224,6 +230,8 @@ void DataItem::setType(QString t)
 void DataItem::setValue(QString v)
 {
     bool ok;
+
+    stringValue = v;
     if ( isSimple ) {
         u8 = 0;
         switch ( size ) {
@@ -241,9 +249,6 @@ void DataItem::setValue(QString v)
             break;
         }
         //qDebug() << name << size << v << u8 << value();
-    } else {
-        //if ( dataMap.contains(name) ) stringValue = "";
-        stringValue = v;
     }
     qDebug() << "setText 2";
     setText(2,value());
@@ -257,14 +262,63 @@ void DataItem::setRange(int f, int l)
     setName(name);
 }
 
+void DataTree::setDecimal()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Decimal";
+    d->setText(2,d->value());
+}
+
+void DataTree::setUnsignedDecimal()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Unsigned decimal";
+    d->setText(2,d->value());
+}
+
+void DataTree::setHexadecimal()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Hexadecimal";
+    d->setText(2,d->value());
+}
+
+void DataTree::setCharacter()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Character";
+    d->setText(2,d->value());
+}
+
 void DataTree::editUserVariable()
 {
+    DataItem *d = (DataItem *)currentItem();
+    DefineVariableDialog *dialog = new DefineVariableDialog;
+    dialog->nameEdit->setText(d->name);
+    dialog->addressEdit->setText(d->address);
+    dialog->formatCombo->setCurrentIndex(dialog->formatCombo->findText(d->format));
+    dialog->sizeCombo->setCurrentIndex(dialog->sizeCombo->findText(QString("%1").arg(d->size)));
+    dialog->firstEdit->setText(QString("%1").arg(d->first));
+    dialog->lastEdit->setText(QString("%1").arg(d->last));
+    if ( dialog->exec() ) {
+        userDefinedMap->remove(d->name);
+        d->setName(dialog->nameEdit->text());
+        d->address = dialog->addressEdit->text();
+        d->format = dialog->formatCombo->currentText();
+        d->size = dialog->sizeCombo->currentText().toInt();
+        d->first = dialog->firstEdit->text().toInt();
+        d->last = dialog->lastEdit->text().toInt();
+        userDefinedMap->insert(d->name,d);
+        d->setText(2,d->value());
+    }
+    delete dialog;
 }
 
 void DataTree::deleteUserVariable()
 {
-    QTreeWidgetItem *item = currentItem();
+    DataItem *item = (DataItem *)currentItem();
     item->parent()->removeChild(item);
+    userDefinedMap->remove(item->name);
     delete item;
 }
 
@@ -281,16 +335,17 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
     } else if ( item->isSimple ) {
         if ( type.indexOf("char") >= 0 ) {
             QMenu menu("char menu");
-            menu.addAction(tr("Decimal"),this,SLOT(editUserVariable()));
-            menu.addAction(tr("Hexadecimal"),this,SLOT(editUserVariable()));
-            menu.addAction(tr("Character"),this,SLOT(editUserVariable()));
+            menu.addAction(tr("Decimal"),this,SLOT(setDecimal()));
+            menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
+            menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
+            menu.addAction(tr("Character"),this,SLOT(setCharacter()));
             menu.exec(QCursor::pos());
         } else if ( type.indexOf("short") >= 0 || type.indexOf("int") >= 0 ||
                     type.indexOf("long") >= 0 ) {
             QMenu menu("Integer menu");
-            menu.addAction(tr("Signed decimal"),this,SLOT(editUserVariable()));
-            menu.addAction(tr("Unsigned decimal"),this,SLOT(editUserVariable()));
-            menu.addAction(tr("Hexadecimal"),this,SLOT(editUserVariable()));
+            menu.addAction(tr("Signed decimal"),this,SLOT(setDecimal()));
+            menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
+            menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
             menu.exec(QCursor::pos());
         }
     }
@@ -410,10 +465,44 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             int min = dialog->min;
             int max = dialog->max;
             qDebug() << "type" << type;
+            int n3 = type.indexOf('[');
+            int n4 = type.indexOf(']');
+            int dim2;
+            if ( n3 > 0 && n4 > 0 ) {
+                dimString = type.mid(n3+1,n4-n3-1);
+                dim2 = dimString.toInt() - 1;
+                if ( dim2 > 9 ) dim2 = 9;
+            } else {
+                dim2 = 0;
+            }
+            qDebug() << n3 << n4 << dimString << dim2;
+            int isize = 8;
+            QString format;
+            if ( type.indexOf('[',n4) >= 0 ) {
+                dim2 = 0;
+            } else {
+                QString newType = type.left(n3-1);
+                if ( simpleTypes.contains(newType) ) {
+                    isize = sizeForType[newType];
+                    qDebug() << isize << newType;
+                    if ( newType == "char" ) {
+                        format = "Character";
+                    } else if ( newType == "float" || newType == "double" ) {
+                        format = "Floating point";
+                    } else if ( newType == "bool" ) {
+                        format = "Boolean";
+                    } else {
+                        format = "Decimal";
+                    }
+                }
+            }
+            qDebug() << type.indexOf('[',n4) << dim2;
             for ( int i = min; i <= max; i++ ) {
                 fullName = it->name+QString("[%1]").arg(i);
                 d = addDataItem(it->map,fullName,type,"");
-                d->address="&("+fullName+")";
+                d->size = isize;
+                d->last = dim2;
+                d->format = format;
                 it->addChild(d);
                 dataWindow->request(d);
             }
@@ -423,7 +512,7 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
 
 void DataWindow::request(DataItem *d)
 {
-    qDebug() << "dt req" << d->name << d->type;
+    qDebug() << "dt req" << d->name << d->type << d->first << d->last;
     emit requestVar(d->map,d->name,d->address,d->type,
                     d->format,d->size,d->first,d->last);
 }
@@ -580,6 +669,7 @@ DataItem *DataTree::addDataItem ( DataMap *map, QString n,
     d->setName(n);
     d->setType(t);
     d->setValue(v);
+    d->userDefined = (map == userDefinedMap);
     d->map = map;
     map->insert(n,d);
     return d;

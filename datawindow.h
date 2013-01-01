@@ -43,7 +43,6 @@ public:
         char c1;
         bool b1;
     };
-public slots:
 
 };
 
@@ -73,6 +72,10 @@ public slots:
     void expandDataItem(QTreeWidgetItem*);
     void editUserVariable();
     void deleteUserVariable();
+    void setDecimal();
+    void setCharacter();
+    void setUnsignedDecimal();
+    void setHexadecimal();
 
 private:
 

@@ -28,7 +28,7 @@ DefineVariableDialog::DefineVariableDialog()
     layout->addLayout(addressLayout);
 
     QStringList formats;
-    formats << "Hexadecimal" << "Decimal" << "Floating point"
+    formats << "Hexadecimal" << "Decimal" << "Unsigned decimal" << "Floating point"
             << "Character" << "String" << "String array";
     QHBoxLayout *formatLayout = new QHBoxLayout;
     formatLayout->addWidget ( new QLabel(tr("Format")) );

@@ -565,6 +565,11 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
 
     if ( size < 0 || size > 8 ) return;
     char sizeLetter = letterForSize[size];
+ 
+    char formatLetter = 'd';
+    if ( format == "Hexadecimal" ) formatLetter = 'x';
+    else if ( format == "Floating point" ) formatLetter = 'f';
+    else if ( format == "Character" ) formatLetter = 'c';
 
     if ( first < 0 || last < 0 ) return;
 
@@ -618,10 +623,10 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
     } else {
         result = "";
         for ( int i = first; i <= last; i++ ) {
-            cmd = QString("x/x%1 ((unsigned char *)%2)+%3").arg(sizeLetter).arg(address).arg(i*size);
-            //qDebug() << cmd;
+            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(sizeLetter).arg(formatLetter).arg(name).arg(i*size);
+            qDebug() << cmd;
             results = sendReceive(cmd);
-            //qDebug() << results;
+            qDebug() << results;
             if ( results.length() > 0 ) {
                 parts = results[0].split(QRegExp(":\\s+"));
                 if ( parts.length() >= 2 ) {
