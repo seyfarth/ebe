@@ -48,6 +48,9 @@ private slots:
     void indent();
     void unIndent();
     void find();
+    void pageForward();
+    void pageBackward();
+    void center();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

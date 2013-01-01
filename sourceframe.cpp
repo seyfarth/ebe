@@ -640,6 +640,33 @@ void SourceFrame::unIndent()
     }
 }
 
+void SourceFrame::pageForward()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->pageForward();
+    }
+}
+
+void SourceFrame::pageBackward()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->pageBackward();
+    }
+}
+
+void SourceFrame::center()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->center();
+    }
+}
+
 void SourceFrame::find()
 {
     int index = tab->currentIndex();

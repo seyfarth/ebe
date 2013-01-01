@@ -221,6 +221,24 @@ void SourceWindow::open(QString name)
     QByteArray text = file.readAll();
     int length = text.count();
     if ( text[length-1] == '\n' ) text.chop(1);
+    int i = 0;
+    int column = 0;
+    int next;
+    int n;
+    int j;
+    while ( i < text.count() ) {
+        if ( text[i] == '\t' ) {
+            next = (column + tab_width)/tab_width*tab_width;
+            n = next - column;
+            text[i] = ' ';
+            for ( j = 1; j < n; j++ ) text.insert(i," ");
+        } else if ( text[i] == '\n' ) {
+            column = 0;
+        } else {
+            column++;
+        }
+        i++;
+    }
     textEdit->setPlainText(text);
 
     file.close();
@@ -540,6 +558,69 @@ void SourceWindow::find()
     FindReplaceDialog *dialog = new FindReplaceDialog;
     dialog->textEdit = textEdit;
     dialog->exec();
+}
+
+void SourceWindow::pageForward()
+{
+    QTextDocument *doc = textEdit->document();
+    QTextCursor cursor = textEdit->textCursor();
+    int pos = cursor.position();
+    QTextBlock block;
+    block = doc->findBlock(pos);
+    int blockNumber = block.blockNumber();
+    qDebug() << "pos" << pos << "block" << blockNumber;
+    if ( blockNumber + textHeight >= doc->lineCount() ) {
+        blockNumber = doc->lineCount() - 1;
+    } else {
+        blockNumber += textHeight;
+    }
+    block = doc->findBlockByNumber(blockNumber);
+    pos = block.position();
+    qDebug() << "pos" << pos << "block" << blockNumber;
+    cursor.setPosition(pos);
+    textEdit->setTextCursor(cursor);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::pageBackward()
+{
+    QTextDocument *doc = textEdit->document();
+    QTextCursor cursor = textEdit->textCursor();
+    int pos = cursor.position();
+    QTextBlock block;
+    block = doc->findBlock(pos);
+    int blockNumber = block.blockNumber();
+    qDebug() << "pos" << pos << "block" << blockNumber;
+    if ( blockNumber - textHeight < 0 ) {
+        blockNumber = 0;
+    } else {
+        blockNumber -= textHeight;
+    }
+    block = doc->findBlockByNumber(blockNumber);
+    pos = block.position();
+    qDebug() << "pos" << pos << "block" << blockNumber;
+    cursor.setPosition(pos);
+    textEdit->setTextCursor(cursor);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::center()
+{
+    QTextDocument *doc = textEdit->document();
+    QTextCursor cursor = textEdit->textCursor();
+    int pos = cursor.position();
+    QTextBlock block;
+    block = doc->findBlock(pos);
+    int blockNumber = block.blockNumber();
+    qDebug() << "pos" << pos << "block" << blockNumber;
+    int top;
+    if ( blockNumber > textHeight/2 ) {
+        top = blockNumber - textHeight/2;
+    } else {
+        top = 0;
+    }
+    scrollBar->setValue(top);
+    setLineNumbers(textDoc->lineCount());
 }
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )

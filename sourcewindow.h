@@ -122,6 +122,9 @@ public:
     void indent();
     void unIndent();
     void find();
+    void pageForward();
+    void pageBackward();
+    void center();
 
 public slots:
     void open();

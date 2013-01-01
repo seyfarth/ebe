@@ -257,7 +257,7 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+T") );
     moveMenu->addAction(tr("Go to bottom"), sourceFrame, SLOT(gotoBottom()),
                         QKeySequence("Ctrl+B") );
-    moveMenu->addAction(tr("Move line to middle"), sourceFrame, SLOT(cut()),
+    moveMenu->addAction(tr("Move line to middle"), sourceFrame, SLOT(center()),
                         QKeySequence("Ctrl+M") );
 
     viewMenu = menuBar()->addMenu(tr("&View"));
