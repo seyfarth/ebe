@@ -64,13 +64,39 @@ void MainWindow::restoreMainWindow()
 {
     tooltipsVisible = ebe["tooltips/visible"].toBool();
 
-    addStyleSheet("textedit-font", "QTextEdit { font-weight: bold; font-family: Courier}");
-    addStyleSheet("plaintextedit-font", "QPlainTextEdit { font-weight: bold; font-family: Courier}");
-    addStyleSheet("lineedit-font", "QLineEdit { font-weight: bold; font-family: Courier}");
-    addStyleSheet("table-font", "QTableView { font-weight: bold; font-family: Courier}");
-    addStyleSheet("list-font", "QListWidget { font-weight: bold; font-family: Courier}");
-    addStyleSheet("tree-font", "QTreeWidget { font-weight: bold; font-family: Courier}");
-    addStyleSheet("tab-font", "QTabBar { font-family: Arial}");
+    addStyleSheet("textedit-font",
+            QString("QTextEdit { font-weight: bold; font-family: %1}").
+            arg(ebe["fixed_font"].toString()));
+    addStyleSheet("plaintextedit-font",
+            QString("QPlainTextEdit { font-weight: bold; font-family: %1}").
+            arg(ebe["fixed_font"].toString()));
+    addStyleSheet("plaintextedit-bg",
+            QString("QPlainTextEdit { background: %1}").
+            arg(ebe["bg_color"].toString()));
+    addStyleSheet("table-bg",
+            QString("QTableWidget { background: %1}").
+            arg(ebe["table_bg"].toString()));
+    addStyleSheet("list-bg",
+            QString("QListWidget { background: %1}").
+            arg(ebe["list_bg"].toString()));
+    addStyleSheet("tree-bg",
+            QString("QTreeWidget { background: %1}").
+            arg(ebe["tree_bg"].toString()));
+    addStyleSheet("lineedit-font",
+            QString("QLineEdit { font-weight: bold; font-family: %1}").
+            arg(ebe["fixed_font"].toString()));
+    addStyleSheet("table-font",
+            QString("QTableView { font-weight: bold; font-family: %1}").
+            arg(ebe["fixed_font"].toString()));
+    addStyleSheet("list-font",
+            QString("QListWidget { font-weight: bold; font-family: %1}").
+            arg(ebe["fixed_font"].toString()));
+    addStyleSheet("tree-font",
+            QString("QTreeWidget { font-weight: bold; font-family: %1}").
+            arg(ebe["fixed_font"].toString()));
+    addStyleSheet("tab-font",
+            QString("QTabBar { font-family: %1}").
+            arg(ebe["variable_font"].toString()));
 
     dataDock->setFloating(ebe["data/floating"].toBool());
     registerDock->setFloating(ebe["register/floating"].toBool());

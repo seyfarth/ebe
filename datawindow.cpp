@@ -250,9 +250,7 @@ void DataItem::setValue(QString v)
         }
         //qDebug() << name << size << v << u8 << value();
     }
-    qDebug() << "setText 2";
     setText(2,value());
-    qDebug() << "setText 2 done";
 }
 
 void DataItem::setRange(int f, int l)
@@ -426,17 +424,14 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             dataWindow->request(d);
         }
     } else if ( (n = it->type.indexOf(" *")) > 0 ) {
-        qDebug() << it->name << "pointer" << it->type;
         ArrayBoundsDialog *dialog = new ArrayBoundsDialog();
         if ( dialog->exec() ) {
-            qDebug() << "min max" << dialog->min << dialog->max;
             int min = dialog->min;
             int max = dialog->max;
             QString type = it->type;
             type.remove(n+1,1);
             n = type.length();
             if ( type[n-1] == ' ' ) type.chop(1);
-            qDebug() << "type" << type;
             for ( int i = min; i <= max; i++ ) {
                 fullName = it->name+QString("[%1]").arg(i);
                 d = addDataItem(it->map,fullName,type,"");
@@ -461,10 +456,8 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             dialog->setMax(dim-1);
         }
         if ( dialog->exec() ) {
-            qDebug() << "min max" << dialog->min << dialog->max;
             int min = dialog->min;
             int max = dialog->max;
-            qDebug() << "type" << type;
             int n3 = type.indexOf('[');
             int n4 = type.indexOf(']');
             int dim2;
@@ -475,7 +468,6 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             } else {
                 dim2 = 0;
             }
-            qDebug() << n3 << n4 << dimString << dim2;
             int isize = 8;
             QString format;
             if ( type.indexOf('[',n4) >= 0 ) {
@@ -484,7 +476,6 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
                 QString newType = type.left(n3-1);
                 if ( simpleTypes.contains(newType) ) {
                     isize = sizeForType[newType];
-                    qDebug() << isize << newType;
                     if ( newType == "char" ) {
                         format = "Character";
                     } else if ( newType == "float" || newType == "double" ) {
@@ -496,7 +487,6 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
                     }
                 }
             }
-            qDebug() << type.indexOf('[',n4) << dim2;
             for ( int i = min; i <= max; i++ ) {
                 fullName = it->name+QString("[%1]").arg(i);
                 d = addDataItem(it->map,fullName,type,"");
@@ -512,7 +502,6 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
 
 void DataWindow::request(DataItem *d)
 {
-    qDebug() << "dt req" << d->name << d->type << d->first << d->last;
     emit requestVar(d->map,d->name,d->address,d->type,
                     d->format,d->size,d->first,d->last);
 }
@@ -520,10 +509,8 @@ void DataWindow::request(DataItem *d)
 void DataWindow::receiveVar(DataMap *map, QString name, QString value)
 {
     DataItem *item;
-    qDebug() << "data rec var" << name << value;
     item = map->value(name);
     if ( item == 0 ) {
-        qDebug() << "item is 0";
         return;
     }
     item->setValue(value);
@@ -539,18 +526,14 @@ void DataWindow::receiveGlobals(QStringList names, QStringList types,
     int n = names.length();
     DataItem *item;
     
-    qDebug() << "rg" << names << types << values;
-    //globals->takeChildren();
     for ( int i = 0; i < n; i++ ) {
         item = globalMap->value(names[i]);
-        qDebug() << i << item << names[i];
         if ( item == 0 ) {
             item = dataTree->addDataItem(globalMap,names[i],types[i],values[i]);
             item->address = QString("&(::%1").arg(names[i]);
             globals->addChild(item);
         } else {
             item->setValue(values[i]);
-            qDebug() << "set v" << values[i];
             int n2 = item->childCount();
             for ( int j = 0; j < n2; j++ ) {
                 request((DataItem *)item->child(j));
@@ -583,13 +566,8 @@ void DataWindow::receiveLocals(QStringList names, QStringList types, QStringList
 {
     int n = names.length();
     DataItem *item;
-    //QList<QTreeWidgetItem*> oldLocals;
     
-    //oldLocals = locals->takeChildren();
-    qDebug() << "rl" << names << types << values;
-    qDebug() << "levels" << level << backTraceWindow->level;
     while ( level < backTraceWindow->level ) {
-        qDebug() << "push";
         dataTree->hide();
         stack.push(dataTree);
         dataTree = new DataTree;
@@ -597,7 +575,6 @@ void DataWindow::receiveLocals(QStringList names, QStringList types, QStringList
         level++;
     }
     while ( level > backTraceWindow->level ) {
-        qDebug() << "pop";
         dataTree->hide();
         layout->removeWidget(dataTree);
         delete dataTree;
@@ -614,20 +591,13 @@ void DataWindow::receiveLocals(QStringList names, QStringList types, QStringList
         level--;
     }
     for ( int i = 0; i < n; i++ ) {
-        qDebug() << i << names[i] << types[i] << values[i];
         item = localMap->value(names[i]);
-        qDebug() << item;
         if ( item == 0 ) {
             item = dataTree->addDataItem(localMap,names[i],types[i],values[i]);
             item->address = QString("&(%1)").arg(names[i]);
             locals->addChild(item);
         } else {
-            qDebug() << item->name;
-            qDebug() << item->isSimple;
-            qDebug() << item->value();
-            qDebug() << item->type;
             item->setValue(values[i]);
-            qDebug() << "set value";
             int n2 = item->childCount();
             for ( int j = 0; j < n2; j++ ) {
                 request((DataItem *)item->child(j));
@@ -670,6 +640,11 @@ DataItem *DataTree::addDataItem ( DataMap *map, QString n,
     d->setType(t);
     d->setValue(v);
     d->userDefined = (map == userDefinedMap);
+    if ( map == globalMap ) {
+        d->address = QString("&(::%1)").arg(n);
+    } else {
+        d->address = QString("&(%1)").arg(n);
+    }
     d->map = map;
     map->insert(n,d);
     return d;

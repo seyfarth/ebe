@@ -45,7 +45,7 @@ void Settings::setDefaults()
     ebe["step_color"] = "#0000c0";
     ebe["continue_color"] = "#00a000";
     ebe["stop_color"] = "#c00000";
-    ebe["bg_color"] = "#f0f0d8";
+    ebe["bg_color"] = "#ffffd8";
     ebe["break_bg"] = "#ff0000";
     ebe["break_fg"] = "#00ffff";
     ebe["button_blue"] = "#000080";
@@ -55,7 +55,6 @@ void Settings::setDefaults()
     ebe["find_bg"] = "#f0f0a0";
     ebe["find_fg"] = "#000080";
     ebe["fixed_font"] = "Courier";
-    ebe["fixed_size"] = 12;
     ebe["font_size"] = 12;
     ebe["id_fg"] = "#0000a0";
     ebe["illegal_bg"] = "#ff00ff";
@@ -78,7 +77,9 @@ void Settings::setDefaults()
     ebe["text_fg"] = "#000060";
     ebe["tooltip_bg"] = "#ffffd0";
     ebe["variable_font"] = "Arial";
-    ebe["variable_size"] = 12;
+    ebe["table_bg"] = "#faffff";
+    ebe["list_bg"] = "#fafaff";
+    ebe["tree_bg"] = "#fffafa";
 
     ebe["os/linux"] = false;
     ebe["os/mac"] = true;

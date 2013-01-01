@@ -73,7 +73,6 @@ void SourceEdit::contextMenuEvent ( QContextMenuEvent * /* event */ )
 
 void SourceEdit::defineVariable()
 {
-    qDebug() << "define var";
     QString text = textCursor().selectedText();
     if ( text.length() == 0 ) return;
     DefineVariableDialog *dialog = new DefineVariableDialog;
@@ -131,7 +130,6 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     // text edit widget
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
     connect ( textEdit, SIGNAL(newHeight(int)), this, SLOT(newHeight(int)));
-    qDebug() << "dat" << dataWindow;
     connect ( textEdit, SIGNAL(sendVariableDefinition(QStringList)),
               dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
     connect ( scrollBar, SIGNAL(sliderMoved(int)),
@@ -439,7 +437,6 @@ void LineNumberEdit::dropAllBreakpoints()
 
 void LineNumberEdit::setBreakpoint()
 {
-    qDebug() << "set" << eventPosition;
     //SourceWindow *p = (SourceWindow *)parent();
     //int row = (eventPosition.y()-2)/p->fontHeight + p->topNumber;
     int block = cursorForPosition(eventPosition).blockNumber();

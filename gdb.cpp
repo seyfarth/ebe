@@ -218,24 +218,18 @@ void GDB::doRun(QString exe, QString options, QStringList files,
             send(QString("break %1:%2").arg(files[i]).arg(bp) );
         }
     }
-    qDebug() << "doRun 1";
     send("run");
     running = true;
     hasAVX = testAVX();
-    qDebug() << "doRun 2";
     getBackTrace();
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    qDebug() << "doRun 3";
     getGlobals();
     getLocals();
     getArgs();
-    qDebug() << "doRun 4";
     emit resetData();
-    qDebug() << "doRun 5";
     getClasses();
-    qDebug() << "doRun 6";
 }
 
 void GDB::doNext()
@@ -293,7 +287,6 @@ void GDB::getBackTrace()
     results = sendReceive("backtrace");
     if ( results.length() == 0 || results[0].length() == 0 ||
          results[0][0] != '#' ) {
-        qDebug() << "Not running";
         running = false;
         results.clear();
         results.append("Program not running");
@@ -321,7 +314,7 @@ void GDB::getRegs()
             }
         }
     }
-    qDebug() << map;
+    //qDebug() << map;
     emit sendRegs(map);
 }
 
@@ -360,7 +353,7 @@ void GDB::getFpRegs()
             }
         }
     }
-    qDebug() << data;
+    //qDebug() << data;
     emit sendFpRegs(data);
 }
 
@@ -373,7 +366,6 @@ void GDB::getGlobals()
     QList<QList<int> > dimensions;
 
     getVars ( globals, names, types, values, dimensions );
-    qDebug() << "gdb send globals";
     emit sendGlobals(names,types,values);
 }
 
@@ -494,9 +486,7 @@ void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
                 }
             } else if ( type.indexOf(" *") >= 0 ) {
                 QString cmd = QString("printf \"0x%x\\n\",%1").arg(name);
-                qDebug() << cmd;
                 results = sendReceive(cmd);
-                qDebug() << results;
                 if ( results.length() == 0 ) {
                     value = "";
                 } else {
@@ -596,9 +586,7 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
         }
     } else if ( format == "Pointer" ) {
         cmd = QString("printf \"0x%x\\n\",%1").arg(name);
-        qDebug() << cmd;
         results = sendReceive(cmd);
-        qDebug() << results;
         if ( results.length() == 0 ) {
             result = "";
         } else {
@@ -607,9 +595,7 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
         }
     } else if ( first == 0 && last == 0 ) {
         cmd = QString("x/x%1 %2").arg(sizeLetter).arg(address);
-        qDebug() << cmd;
         results = sendReceive(cmd);
-        qDebug() << results;
         if ( results.length() == 0 ) {
             result = "";
         } else {
@@ -624,9 +610,7 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
         result = "";
         for ( int i = first; i <= last; i++ ) {
             cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(sizeLetter).arg(formatLetter).arg(name).arg(i*size);
-            qDebug() << cmd;
             results = sendReceive(cmd);
-            qDebug() << results;
             if ( results.length() > 0 ) {
                 parts = results[0].split(QRegExp(":\\s+"));
                 if ( parts.length() >= 2 ) {
@@ -635,7 +619,6 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
             }
         }
     }
-    qDebug() << result;
     emit sendVar ( map, name, result );
 }
 
@@ -653,7 +636,6 @@ void GDB::getData(QStringList request)
     QString cmd;
     QString address2;
 
-    qDebug() << "gdb" << request;
 
     if ( size < 0 || size > 8 ) return;
     char sizeLetter = letterForSize[size];
@@ -689,9 +671,7 @@ void GDB::getData(QStringList request)
         }
     } else if ( format == "Pointer" ) {
         cmd = QString("printf \"0x%x\\n\",%1").arg(name);
-        qDebug() << cmd;
         results = sendReceive(cmd);
-        qDebug() << results;
         if ( results.length() == 0 ) {
             result = "";
         } else {
@@ -700,9 +680,7 @@ void GDB::getData(QStringList request)
         }
     } else if ( first == 0 && last == 0 ) {
         cmd = QString("x/x%1 %2").arg(sizeLetter).arg(address);
-        qDebug() << cmd;
         results = sendReceive(cmd);
-        qDebug() << results;
         if ( results.length() == 0 ) {
             result = "";
         } else {
@@ -728,7 +706,6 @@ void GDB::getData(QStringList request)
             }
         }
     }
-    qDebug() << result;
     request.append(result);
     emit dataReady(request);
 }
