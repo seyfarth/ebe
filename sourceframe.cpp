@@ -597,7 +597,6 @@ void SourceFrame::selectAll()
 
 void SourceFrame::selectNone()
 {
-    qDebug() << "select none";
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
     if ( source ) {
@@ -607,7 +606,6 @@ void SourceFrame::selectNone()
 
 void SourceFrame::comment()
 {
-    qDebug() << "select none";
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
     if ( source ) {
@@ -617,11 +615,28 @@ void SourceFrame::comment()
 
 void SourceFrame::unComment()
 {
-    qDebug() << "select none";
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
     if ( source ) {
         source->unComment();
+    }
+}
+
+void SourceFrame::indent()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->indent();
+    }
+}
+
+void SourceFrame::unIndent()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->unIndent();
     }
 }
 

@@ -11,6 +11,7 @@ class SourceEdit : public QPlainTextEdit
 public:
     SourceEdit(QWidget *parent=0);
     int heightInPixels;
+    int tab_width;
 
 private slots:
     void printScroll();
@@ -87,6 +88,7 @@ public:
     int topNumber;
     int bottomNumber;
     int lastLineNumber;
+    int tab_width;
     IntSet *breakpoints;
     void setNextLine(int line);
     void clearNextLine(int line);
@@ -94,6 +96,8 @@ public:
     QTextBlockFormat breakFormat;
     void comment();
     void unComment();
+    void indent();
+    void unIndent();
 
 public slots:
     void open();

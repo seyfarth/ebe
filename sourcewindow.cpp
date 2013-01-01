@@ -19,6 +19,22 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     //timer->start(1000);
     top = -1;
     scrollBar = verticalScrollBar();
+    tab_width = ebe["tab_width"].toInt();
+}
+
+void SourceEdit::keyPressEvent(QKeyEvent *event)
+{
+    int key = event->key();
+    //qDebug() << "key" << key << event->modifiers();
+    if ( key == 46 && event->modifiers() & Qt::ControlModifier ) {
+        SourceWindow *p = (SourceWindow *)parent();
+        p->indent();
+    } else if ( key == 44 && event->modifiers() & Qt::ControlModifier ) {
+        SourceWindow *p = (SourceWindow *)parent();
+        p->unIndent();
+    } else {
+        QPlainTextEdit::keyPressEvent(event);
+    }
 }
 
 void SourceEdit::scrollContentsBy ( int dx, int dy )
@@ -47,12 +63,6 @@ void SourceEdit::scrollContentsBy ( int dx, int dy )
     //}
     //return ret;
 //}
-
-void SourceEdit::keyPressEvent ( QKeyEvent *event )
-{
-    //if ( event->matches(QKeySequence::ZoomIn) ) event->ignore();
-    QPlainTextEdit::keyPressEvent(event);
-}
 
 void SourceEdit::printScroll()
 {
@@ -99,6 +109,8 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(0);
+
+    tab_width = ebe["tab_width"].toInt();
 
     breakpoints = new IntSet;
 
@@ -396,20 +408,17 @@ void SourceWindow::comment()
     if ( !cursor.hasSelection() ) return;
     int start = cursor.selectionStart();
     int end = cursor.selectionEnd();
-    qDebug() << "comment" << start << end;
     QTextBlock block;
     block = doc->findBlock(start);
     int startBlock = block.blockNumber();
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
-    qDebug() << fileName << "comment blocks" << startBlock << endBlock;
     int n = fileName.lastIndexOf('.');
     if ( n < 0 ) {
         qDebug() << "File does not have an extension.";
         return;
     }
     QString ext = fileName.mid(n+1);
-    qDebug() << "ext" << ext;
     int pos;
     if ( cppExts.contains(ext) ) {
         for ( int i = startBlock; i <= endBlock; i++ ) {
@@ -429,20 +438,17 @@ void SourceWindow::unComment()
     if ( !cursor.hasSelection() ) return;
     int start = cursor.selectionStart();
     int end = cursor.selectionEnd();
-    qDebug() << "comment" << start << end;
     QTextBlock block;
     block = doc->findBlock(start);
     int startBlock = block.blockNumber();
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
-    qDebug() << fileName << "comment blocks" << startBlock << endBlock;
     int n = fileName.lastIndexOf('.');
     if ( n < 0 ) {
         qDebug() << "File does not have an extension.";
         return;
     }
     QString ext = fileName.mid(n+1);
-    qDebug() << "ext" << ext;
     int pos;
     QString t;
     if ( cppExts.contains(ext) ) {
@@ -453,6 +459,75 @@ void SourceWindow::unComment()
             cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,2);
             t = cursor.selectedText();
             if ( t == "//" ) cursor.deleteChar();
+        }
+        cursor.setPosition(start);
+        cursor.setPosition(end,QTextCursor::KeepAnchor);
+    }
+
+}
+
+void SourceWindow::indent()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextDocument *doc = textEdit->document();
+    if ( !cursor.hasSelection() ) return;
+    int start = cursor.selectionStart();
+    int end = cursor.selectionEnd();
+    QTextBlock block;
+    block = doc->findBlock(start);
+    int startBlock = block.blockNumber();
+    block = doc->findBlock(end);
+    int endBlock = block.blockNumber();
+    int n = fileName.lastIndexOf('.');
+    if ( n < 0 ) {
+        qDebug() << "File does not have an extension.";
+        return;
+    }
+    QString ext = fileName.mid(n+1);
+    int pos;
+    QString prefix;
+    for ( int i=0; i < tab_width; i++ ) prefix += " ";
+    if ( cppExts.contains(ext) ) {
+        for ( int i = startBlock; i <= endBlock; i++ ) {
+            block = doc->findBlockByNumber(i);
+            pos = block.position();
+            cursor.setPosition(pos);
+            cursor.insertText(prefix);
+        }
+    }
+
+}
+
+void SourceWindow::unIndent()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    QTextDocument *doc = textEdit->document();
+    if ( !cursor.hasSelection() ) return;
+    int start = cursor.selectionStart();
+    int end = cursor.selectionEnd();
+    QTextBlock block;
+    block = doc->findBlock(start);
+    int startBlock = block.blockNumber();
+    block = doc->findBlock(end);
+    int endBlock = block.blockNumber();
+    int n = fileName.lastIndexOf('.');
+    if ( n < 0 ) {
+        qDebug() << "File does not have an extension.";
+        return;
+    }
+    QString ext = fileName.mid(n+1);
+    int pos;
+    QString t;
+    QString prefix;
+    for ( int i=0; i < tab_width; i++ ) prefix += " ";
+    if ( cppExts.contains(ext) ) {
+        for ( int i = startBlock; i <= endBlock; i++ ) {
+            block = doc->findBlockByNumber(i);
+            pos = block.position();
+            cursor.setPosition(pos);
+            cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,tab_width);
+            t = cursor.selectedText();
+            if ( t == prefix ) cursor.deleteChar();
         }
         cursor.setPosition(start);
         cursor.setPosition(end,QTextCursor::KeepAnchor);

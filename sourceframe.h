@@ -45,6 +45,8 @@ private slots:
     void selectNone();
     void comment();
     void unComment();
+    void indent();
+    void unIndent();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,
