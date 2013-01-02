@@ -32,6 +32,12 @@ void SourceEdit::keyPressEvent(QKeyEvent *event)
     } else if ( key == 44 && event->modifiers() & Qt::ControlModifier ) {
         SourceWindow *p = (SourceWindow *)parent();
         p->unIndent();
+    } else if ( key == Qt::Key_Home && event->modifiers() & Qt::ControlModifier ) {
+        SourceWindow *p = (SourceWindow *)parent();
+        p->gotoFirstLine();
+    } else if ( key == Qt::Key_End && event->modifiers() & Qt::ControlModifier ) {
+        SourceWindow *p = (SourceWindow *)parent();
+        p->gotoLastLine();
     } else {
         QPlainTextEdit::keyPressEvent(event);
     }
@@ -568,7 +574,6 @@ void SourceWindow::pageForward()
     QTextBlock block;
     block = doc->findBlock(pos);
     int blockNumber = block.blockNumber();
-    qDebug() << "pos" << pos << "block" << blockNumber;
     if ( blockNumber + textHeight >= doc->lineCount() ) {
         blockNumber = doc->lineCount() - 1;
     } else {
@@ -576,7 +581,6 @@ void SourceWindow::pageForward()
     }
     block = doc->findBlockByNumber(blockNumber);
     pos = block.position();
-    qDebug() << "pos" << pos << "block" << blockNumber;
     cursor.setPosition(pos);
     textEdit->setTextCursor(cursor);
     setLineNumbers(textDoc->lineCount());
@@ -590,7 +594,6 @@ void SourceWindow::pageBackward()
     QTextBlock block;
     block = doc->findBlock(pos);
     int blockNumber = block.blockNumber();
-    qDebug() << "pos" << pos << "block" << blockNumber;
     if ( blockNumber - textHeight < 0 ) {
         blockNumber = 0;
     } else {
@@ -598,7 +601,6 @@ void SourceWindow::pageBackward()
     }
     block = doc->findBlockByNumber(blockNumber);
     pos = block.position();
-    qDebug() << "pos" << pos << "block" << blockNumber;
     cursor.setPosition(pos);
     textEdit->setTextCursor(cursor);
     setLineNumbers(textDoc->lineCount());
@@ -612,7 +614,6 @@ void SourceWindow::center()
     QTextBlock block;
     block = doc->findBlock(pos);
     int blockNumber = block.blockNumber();
-    qDebug() << "pos" << pos << "block" << blockNumber;
     int top;
     if ( blockNumber > textHeight/2 ) {
         top = blockNumber - textHeight/2;
@@ -621,6 +622,75 @@ void SourceWindow::center()
     }
     scrollBar->setValue(top);
     setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::gotoFirstLine()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    cursor.setPosition(0);
+    textEdit->setTextCursor(cursor);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::gotoLastLine()
+{
+    QTextDocument *doc = textEdit->document();
+    QTextCursor cursor = textEdit->textCursor();
+    int blockNumber = doc->lineCount()-1;
+    QTextBlock block = doc->findBlockByNumber(blockNumber);
+    int pos = block.position();
+    cursor.setPosition(pos);
+    textEdit->setTextCursor(cursor);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::gotoTop()
+{
+    QTextDocument *doc = textEdit->document();
+    QTextCursor cursor = textEdit->textCursor();
+    int blockNumber = scrollBar->value();
+    QTextBlock block;
+    block = doc->findBlockByNumber(blockNumber);
+    int pos = block.position();
+    cursor.setPosition(pos);
+    textEdit->setTextCursor(cursor);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::gotoBottom()
+{
+    QTextDocument *doc = textEdit->document();
+    QTextCursor cursor = textEdit->textCursor();
+    int blockNumber = scrollBar->value()+textHeight-2;
+    QTextBlock block;
+    block = doc->findBlockByNumber(blockNumber);
+    int pos = block.position();
+    cursor.setPosition(pos);
+    textEdit->setTextCursor(cursor);
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::gotoLine()
+{
+    qDebug() << "gotoLine";
+    QTextDocument *doc = textEdit->document();
+    LineNumberDialog *dialog = new LineNumberDialog;
+    QTextCursor cursor = textEdit->textCursor();
+    int pos = cursor.position();
+    QTextBlock block;
+    block = doc->findBlock(pos);
+    dialog->line = block.blockNumber()+1;
+    dialog->setMax(doc->lineCount());
+    if ( dialog->exec() ) {
+        int blockNumber = dialog->line - 1;
+        block = doc->findBlockByNumber(blockNumber);
+        int pos = block.position();
+        cursor.setPosition(pos);
+        textEdit->setTextCursor(cursor);
+        setLineNumbers(textDoc->lineCount());
+    }
+    delete dialog;
+    center();
 }
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
@@ -701,6 +771,54 @@ void LineNumberEdit::wheelEvent ( QWheelEvent * /* e */ )
 {
 }
 
+LineNumberDialog::LineNumberDialog()
+: QDialog()
+{
+    setObjectName("Go to line");
+    setWindowTitle("Go to line");
+    setModal(true);
+    setWindowFlags(Qt::Dialog|Qt::WindowStaysOnTopHint);
+
+    move(QCursor::pos());
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setSpacing(5);
+    layout->setContentsMargins(10,10,10,10);
+
+    QHBoxLayout *lineLayout = new QHBoxLayout;
+    lineLayout->addWidget ( new QLabel(tr("Line number")) );
+    lineSpin = new QSpinBox;
+    lineSpin->setMinimum(1);
+    lineLayout->addWidget ( lineSpin );
+    layout->addLayout(lineLayout);
+
+    okButton = new QPushButton("Go");
+    cancelButton = new QPushButton("Cancel");
+    connect(okButton, SIGNAL(clicked()), this, SLOT(setLine()));
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(okButton);
+    buttonLayout->addWidget(cancelButton);
+    buttonLayout->addStretch();
+
+    layout->addLayout(buttonLayout);
+
+    setLayout(layout);
+}
+
+void LineNumberDialog::setLine()
+{
+    line = lineSpin->value();
+    accept();
+}
+
+void LineNumberDialog::setMax(int max)
+{
+    lineSpin->setMaximum(max);
+}
+
 FindReplaceDialog::FindReplaceDialog()
 : QDialog()
 {
@@ -771,3 +889,4 @@ void FindReplaceDialog::keyPressEvent(QKeyEvent *event)
         QDialog::keyPressEvent(event);
     }
 }
+

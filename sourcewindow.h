@@ -27,6 +27,22 @@ private:
     void keyPressEvent(QKeyEvent *event);
 };
 
+class LineNumberDialog: public QDialog
+{
+    Q_OBJECT
+
+public:
+    LineNumberDialog();
+    QSpinBox *lineSpin;
+    void setMax(int max);
+    int line;
+    QPushButton *okButton;
+    QPushButton *cancelButton;
+
+public slots:
+    void setLine();
+};
+    
 class SourceEdit : public QPlainTextEdit
 {
     Q_OBJECT
@@ -125,6 +141,11 @@ public:
     void pageForward();
     void pageBackward();
     void center();
+    void gotoFirstLine();
+    void gotoLastLine();
+    void gotoTop();
+    void gotoBottom();
+    void gotoLine();
 
 public slots:
     void open();

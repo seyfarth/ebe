@@ -51,6 +51,11 @@ private slots:
     void pageForward();
     void pageBackward();
     void center();
+    void gotoFirstLine();
+    void gotoLastLine();
+    void gotoTop();
+    void gotoBottom();
+    void gotoLine();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

@@ -667,6 +667,51 @@ void SourceFrame::center()
     }
 }
 
+void SourceFrame::gotoFirstLine()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->gotoFirstLine();
+    }
+}
+
+void SourceFrame::gotoLastLine()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->gotoLastLine();
+    }
+}
+
+void SourceFrame::gotoTop()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->gotoTop();
+    }
+}
+
+void SourceFrame::gotoBottom()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->gotoBottom();
+    }
+}
+
+void SourceFrame::gotoLine()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->gotoLine();
+    }
+}
+
 void SourceFrame::find()
 {
     int index = tab->currentIndex();
