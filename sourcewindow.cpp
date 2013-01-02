@@ -261,6 +261,8 @@ void SourceWindow::open(QString name)
             n = next - column;
             text[i] = ' ';
             for ( j = 1; j < n; j++ ) text.insert(i," ");
+            column = next;
+            i = next-1;
         } else if ( text[i] == '\n' ) {
             column = 0;
         } else {
@@ -323,6 +325,8 @@ void SourceWindow::open()
             n = next - column;
             text[i] = ' ';
             for ( j = 1; j < n; j++ ) text.insert(i," ");
+            column = next;
+            i = next-1;
         } else if ( text[i] == '\n' ) {
             column = 0;
         } else {
