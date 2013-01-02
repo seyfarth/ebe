@@ -38,6 +38,29 @@ void SourceEdit::keyPressEvent(QKeyEvent *event)
     } else if ( key == Qt::Key_End && event->modifiers() & Qt::ControlModifier ) {
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoLastLine();
+    } else if ( key == Qt::Key_Tab && event->modifiers() == 0 ) {
+        QTextCursor cursor = textCursor();
+        int pos = cursor.position();
+        int col = cursor.positionInBlock();
+        int next = (col+4)/tab_width*tab_width;
+        int n = next - col;
+        for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
+    } else if ( key == Qt::Key_Tab && event->modifiers() & Qt::ControlModifier ) {
+        QTextCursor cursor = textCursor();
+        int pos = cursor.position();
+        int col = cursor.positionInBlock();
+        QTextBlock block = cursor.block();
+        QString t = block.text();
+        int prev = (col-1)/tab_width*tab_width;
+        //qDebug() << "prev" << prev << col;
+        for ( int i = col-1; i >= prev; i-- ) {
+            //qDebug() << "i" << i << t[i];
+            if ( t[i] == ' ' ) {
+                cursor.deletePreviousChar();
+            } else {
+                break;
+            }
+        }
     } else {
         QPlainTextEdit::keyPressEvent(event);
     }
