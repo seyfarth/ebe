@@ -284,7 +284,7 @@ void SourceWindow::open()
         }
     }
 
-    fileName = name;
+    fileName = QDir::current().relativeFilePath(name);
 
     QByteArray text = file.readAll();
     int length = text.count();
@@ -333,7 +333,7 @@ void SourceWindow::saveAs()
         return;
     }
 
-    fileName = name;
+    fileName = QDir::current().relativeFilePath(name);
 
     QTextStream stream(&file);
     stream << textEdit->toPlainText()+"\n";
