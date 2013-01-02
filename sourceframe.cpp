@@ -431,6 +431,8 @@ void SourceFrame::setFontHeightAndWidth ( int height, int width )
         source->setFontHeightAndWidth(height,width);
     }
     tab->setCurrentIndex(current);
+    fontHeight = height;
+    fontWidth = width;
 }
 
 void SourceFrame::changedTab(int index)
@@ -710,6 +712,121 @@ void SourceFrame::gotoLine()
     if ( source ) {
         source->gotoLine();
     }
+}
+
+void SourceFrame::prettify()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->prettify();
+    }
+}
+
+void SourceFrame::newFile()
+{
+    source = new SourceWindow;
+    int index = tab->addTab(source,"unnamed");
+    tab->setCurrentIndex(index);
+}
+
+void SourceFrame::templateC()
+{
+    if ( !source || source->textEdit->document()->characterCount() > 1 ) {
+        source = new SourceWindow;
+        int index = tab->addTab(source,"hello.c");
+        tab->setCurrentIndex(index);
+    }
+    int index = tab->currentIndex();
+    source->textEdit->setPlainText(
+        "#include <stdio.h>\n"
+        "\n"
+        "int main ( int argc, char **argv )\n"
+        "    printf ( \"Hello World!\\n\" );\n"
+        "    return 0;\n"
+        "}"
+    );
+    source->fileName = "hello.c";
+    tab->setTabText(index,"hello.c");
+    source->save();
+    source->setFontHeightAndWidth(fontHeight,fontWidth);
+}
+
+void SourceFrame::templateCpp()
+{
+    if ( !source || source->textEdit->document()->characterCount() > 1 ) {
+        source = new SourceWindow;
+        int index = tab->addTab(source,"hello.cpp");
+        tab->setCurrentIndex(index);
+    }
+    int index = tab->currentIndex();
+    source->textEdit->setPlainText(
+        "#include <iostream>\n"
+        "\n"
+        "using namespace std;\n"
+        "\n"
+        "int main ( int argc, char **argv )\n"
+        "{\n"
+        "    cout << \"Hello World!\\n\" << endl;\n"
+        "    return 0;\n"
+        "}"
+    );
+    source->fileName = "hello.cpp";
+    tab->setTabText(index,"hello.cpp");
+    source->save();
+    source->setFontHeightAndWidth(fontHeight,fontWidth);
+}
+
+void SourceFrame::templateAssembly()
+{
+    if ( !source || source->textEdit->document()->characterCount() > 1 ) {
+        source = new SourceWindow;
+        int index = tab->addTab(source,"hello.asm");
+        tab->setCurrentIndex(index);
+    }
+    int index = tab->currentIndex();
+    source->textEdit->setPlainText(
+        "msg:   db      'Hello World!',0x0a     ; String to print\n"
+        "len:   equ     $-msg                   ; String length\n"
+        "\n"
+        "       segment .text\n"
+        "       global  _main                   ; Tell linker about main\n"
+        "       extern  _write, _exit\n"
+        "_main:\n"
+        "       push    rbp\n"
+        "       mov     rbp. rsp\n"
+        "       mov     edx, len                ; Parameter 3 for write\n"
+        "       lea     rsi, [msg]              ; Parameter 2 for write\n"
+        "       mov     edi, 1                  ; Parameter 1 (fd)\n"
+        "       call    _write\n"
+        "\n"
+        "       xor     edi, edi                ; 0 return = success\n"
+        "       call    _exit"
+    );
+    source->fileName = "hello.asm";
+    tab->setTabText(index,"hello.asm");
+    source->save();
+    source->setFontHeightAndWidth(fontHeight,fontWidth);
+}
+
+void SourceFrame::templateFortran()
+{
+    if ( !source || source->textEdit->document()->characterCount() > 1 ) {
+        source = new SourceWindow;
+        int index = tab->addTab(source,"hello.f");
+        tab->setCurrentIndex(index);
+    }
+    int index = tab->currentIndex();
+    source->textEdit->setPlainText(
+        "       program hello\n"
+        "       print *, 'Hello World!'\n"
+        "       stop\n"
+        "       end"
+    );
+    source->fileName = "hello.f";
+    tab->setTabText(index,"hello.f");
+    source->save();
+    source->setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
 void SourceFrame::find()

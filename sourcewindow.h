@@ -146,6 +146,7 @@ public:
     void gotoTop();
     void gotoBottom();
     void gotoLine();
+    void prettify();
 
 public slots:
     void open();

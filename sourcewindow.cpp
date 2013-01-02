@@ -289,6 +289,24 @@ void SourceWindow::open()
     QByteArray text = file.readAll();
     int length = text.count();
     if ( text[length-1] == '\n' ) text.chop(1);
+    int i = 0;
+    int column = 0;
+    int next;
+    int n;
+    int j;
+    while ( i < text.count() ) {
+        if ( text[i] == '\t' ) {
+            next = (column + tab_width)/tab_width*tab_width;
+            n = next - column;
+            text[i] = ' ';
+            for ( j = 1; j < n; j++ ) text.insert(i," ");
+        } else if ( text[i] == '\n' ) {
+            column = 0;
+        } else {
+            column++;
+        }
+        i++;
+    }
     textEdit->setPlainText(text);
 
     file.close();
@@ -691,6 +709,17 @@ void SourceWindow::gotoLine()
     }
     delete dialog;
     center();
+}
+
+void SourceWindow::prettify()
+{
+    save();
+    QProcess indent(this);
+    QString cmd = ebe["prettify"].toString();
+    cmd.replace("$source",fileName);
+    indent.start(cmd);
+    indent.waitForFinished();
+    open(fileName);
 }
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )

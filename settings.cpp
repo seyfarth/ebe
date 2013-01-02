@@ -87,6 +87,7 @@ void Settings::setDefaults()
     ebe["os/os"] = "mac";
     ebe["os/windows"] = false;
 
+    ebe["prettify"] = "astyle -A3 $source";
     ebe["build/asm"] = "yasm -f macho64 -l $base.lst $source";
     ebe["build/asmld"] = "ld -g -o $base";
     ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 -o $base.o $source";

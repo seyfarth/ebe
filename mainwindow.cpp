@@ -240,7 +240,7 @@ void MainWindow::createMenus()
     editMenu->addAction(tr("Select none"), sourceFrame, SLOT(selectNone()),
                         QKeySequence("Ctrl+0") );
     editMenu->addSeparator();
-    editMenu->addAction(tr("Prettify"), sourceFrame, SLOT(Prettify()) );
+    editMenu->addAction(tr("Prettify"), sourceFrame, SLOT(prettify()) );
 
     moveMenu = menuBar()->addMenu(tr("&Move"));
     moveMenu->addAction(tr("Page forward"), sourceFrame, SLOT(pageForward()),

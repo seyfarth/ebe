@@ -22,6 +22,8 @@ public:
     void saveIfChanged(QString file);
     void setNextLine(QString file,int line);
     void clearNextLine(QString file,int line);
+    int  fontHeight;
+    int  fontWidth;
 
 private slots:
     void nextInstruction(QString file,int line);
@@ -56,6 +58,12 @@ private slots:
     void gotoTop();
     void gotoBottom();
     void gotoLine();
+    void prettify();
+    void newFile();
+    void templateC();
+    void templateCpp();
+    void templateAssembly();
+    void templateFortran();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,
