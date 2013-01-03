@@ -336,24 +336,10 @@ void MainWindow::displayHelp()
 
 void MainWindow::quit()
 {
-    // FIXME: save project/files etc., before quitting
-#if 0
-    if (sourceFrame->fileChanged())
-    {
-        int buttonPressed = QMessageBox::question(sourceFrame, tr("Save file?"),
-            tr("Save file before quitting?"), QMessageBox::Yes | QMessageBox::No |
-            QMessageBox::Cancel, QMessageBox::Yes);
-
-        if (buttonPressed == QMessageBox::Cancel)
-            return;
-
-        if (buttonPressed == QMessageBox::Yes)
-            sourceFrame->saveBeforeQuit();
+    if ( sourceFrame->filesSaved() ) {
+        saveSettings();
+        qApp->quit();
     }
-#endif
-    saveSettings();
-
-    qApp->quit();
 }
 
 void MainWindow::createStatusBar()

@@ -543,6 +543,39 @@ void SourceFrame::saveAs()
     }
 }
 
+bool SourceFrame::filesSaved()
+{
+    QStringList filesToSave;
+    QList<SourceWindow*> windows;
+    SourceWindow *window;
+
+    for ( int i = 0; i < tab->count(); i++ ) {
+        window = (SourceWindow *)tab->widget(i);
+        if ( window->changed ) {
+            filesToSave.append(window->fileName);
+            windows.append(window);
+        }
+    }
+
+    if ( filesToSave.length() > 0 ) {
+        QString msg;
+        msg = "The following files have not been saved:\n";
+        foreach ( QString name, filesToSave ) {
+            msg += "        " + name + "\n";
+        }
+        msg += "Do you wish to save them all?";
+        int ret = QMessageBox::warning(this, tr("Warning"), msg,
+                            QMessageBox::Save | QMessageBox::Cancel,
+                            QMessageBox::Save);
+        if ( ret != QMessageBox::Save ) return false;
+        foreach ( window, windows ) {
+            window->save();
+            if ( window->changed ) return false;
+        }
+    }
+    return true;
+}
+
 void SourceFrame::cut()
 {
     int index = tab->currentIndex();

@@ -24,6 +24,7 @@ public:
     void clearNextLine(QString file,int line);
     int  fontHeight;
     int  fontWidth;
+    bool filesSaved();
 
 private slots:
     void nextInstruction(QString file,int line);
