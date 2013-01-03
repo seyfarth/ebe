@@ -565,9 +565,11 @@ bool SourceFrame::filesSaved()
         }
         msg += "Do you wish to save them all?";
         int ret = QMessageBox::warning(this, tr("Warning"), msg,
-                            QMessageBox::Save | QMessageBox::Cancel,
+                            QMessageBox::Save | QMessageBox::Discard |
+                            QMessageBox::Cancel,
                             QMessageBox::Save);
-        if ( ret != QMessageBox::Save ) return false;
+        if ( ret == QMessageBox::Discard ) return true;
+        if ( ret == QMessageBox::Cancel ) return false;
         foreach ( window, windows ) {
             window->save();
             if ( window->changed ) return false;

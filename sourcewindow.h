@@ -51,10 +51,16 @@ public:
     SourceEdit(QWidget *parent=0);
     int heightInPixels;
     int tab_width;
+    void setCompleter(QCompleter *c);
+    QCompleter *completer() const;
+    QStringListModel model;
+    void addWords(QString t);
+    QSet<QString> wordsInList;
 
 private slots:
     void printScroll();
     void defineVariable();
+    void insertCompletion(const QString &completion);
     //void receiveVariableDefinition(bool,QStringList);
 
 signals:
@@ -62,14 +68,19 @@ signals:
     void sendVariableDefinition(QStringList);
 
 private:
-    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *e);
+    void focusInEvent(QFocusEvent *e); 
     void resizeEvent ( QResizeEvent *e );
     void scrollContentsBy(int dx, int dy);
     //bool event ( QEvent *e );
     //void wheelEvent ( QWheelEvent *e );
     void contextMenuEvent ( QContextMenuEvent *event );
+    QString textUnderCursor() const;
+
+private:
     int top;
     QScrollBar *scrollBar;
+    QCompleter *c;
 };
 
 

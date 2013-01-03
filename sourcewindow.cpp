@@ -20,32 +20,163 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     top = -1;
     scrollBar = verticalScrollBar();
     tab_width = ebe["tab_width"].toInt();
+    c = 0;
+    QCompleter *completer = new QCompleter(this);
+    setCompleter(completer);
+    c->setModel ( &model );
+    QStringList list;
+    list << "include" << "using" << "namespace" << "class"
+         << "struct" << "union" << "double" << "extern" 
+         << "static" << "volatile" << "parameter" << "variable"
+         << "allocate" << "assert" << "asynchronous" << "average"
+         << "binary" << "break" << "catch" << "const"
+         << "close" << "const_cast" << "critical" << "continue"
+         << "cout" << "bool" << "dynamic_cast" << "decimal"
+         << "define" << "dimension" << "delete" << "default"
+         << "error" << "extern" << "external" << "fclose"
+         << "first" << "float" << "flush" << "fflush"
+         << "fopen" << "format" << "fprintf" << "fscanf"
+         << "fstream" << "false" << "generic" << "goto"
+         << "height" << "hello world!" << "Hello world!" << "hexadecimal"
+         << "ifdef" << "ifndef" << "implicit" << "import"
+         << "index" << "inline" << "INT_MIN" << "INT_MAX"
+         << "integer" << "intrinsic" << "iostream" << "iomanip"
+         << "iterator" << "last" << "length" << "lock" 
+         << "long" << "lowercase" << "macro" << "MAX_RAND"
+         << "memory" << "middle" << "module" << "main" 
+         << "negative" << "npos" << "NULL" << "only" 
+         << "open" << "operator" << "optional" << "people"
+         << "person" << "pointer" << "polynomial" << "positive"
+         << "precision" << "prefix" << "print" << "printf"
+         << "private" << "protected" << "public" << "pure"
+         << "push_back" << "queue" << "random" << "read"
+         << "recursive" << "register" << "reinterpret_cast" << "result"
+         << "reverse" << "rewind" << "return" << "real" 
+         << "save" << "scanf" << "section" << "segment"
+         << "select" << "sequence" << "short" << "signed"
+         << "square" << "static_cast" << "string" << "strlen"
+         << "student" << "substr" << "suffix" << "switch"
+         << "sync" << "static" << "sizeof" << "typeid"
+         << "target" << "text" << "this" << "throw"
+         << "total" << "true" << "typedef" << "undef" 
+         << "unlock" << "unsigned" << "uppercase" << "value"
+         << "virtual" << "vector" << "void" << "wait"
+         << "wchar_t" << "weight" << "write" << "while";
+    list.sort();
+
+    model.setStringList(list);
+    c->setModelSorting(QCompleter::CaseSensitivelySortedModel);
+    c->setCaseSensitivity(Qt::CaseSensitive);
+    c->setWrapAround(false);
 }
 
-void SourceEdit::keyPressEvent(QKeyEvent *event)
+void SourceEdit::setCompleter(QCompleter *completer)
 {
-    int key = event->key();
+    if ( c ) disconnect ( c, 0, this, 0 );
+
+    c = completer;
+
+    if ( !c ) return;
+
+    c->setWidget(this);
+    c->setCompletionMode(QCompleter::PopupCompletion);
+    c->setCaseSensitivity(Qt::CaseSensitive);
+    QObject::connect(c, SIGNAL(activated(QString)),
+            this, SLOT(insertCompletion(QString)));
+}
+
+QCompleter *SourceEdit::completer() const
+{
+    return c;
+}
+
+void SourceEdit::insertCompletion(const QString& completion)
+{
+    if (c->widget() != this)
+        return;
+    QTextCursor tc = textCursor();
+    int extra = completion.length() - c->completionPrefix().length();
+    tc.movePosition(QTextCursor::Left);
+    tc.movePosition(QTextCursor::EndOfWord);
+    tc.insertText(completion.right(extra));
+    setTextCursor(tc);
+}
+
+QString SourceEdit::textUnderCursor() const
+{
+    QTextCursor tc = textCursor();
+    tc.select(QTextCursor::WordUnderCursor);
+    return tc.selectedText();
+}
+
+void SourceEdit::focusInEvent(QFocusEvent *e)
+{
+    if (c) c->setWidget(this);
+    QPlainTextEdit::focusInEvent(e);
+}
+
+void SourceEdit::addWords(QString t)
+{
+    QRegExp rx("([a-zA-Z][a-zA-Z0-9_]{3,})");
+    QString word;
+
+    int i=0;
+    while ( true ) {
+        i = rx.indexIn(t,i);
+        if ( i < 0 ) break;
+        word = rx.cap(1);
+        if ( ! wordsInList.contains(word) ) {
+            model.insertRow(0);
+            model.setData(model.index(0),word);
+            wordsInList.insert(word);
+        }
+        i += word.length();
+    }
+    model.sort(0);
+}
+
+QString lastPrefix="";
+
+void SourceEdit::keyPressEvent(QKeyEvent *e)
+{
+    static QString eow(" ~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+
+    int key = e->key();
     //qDebug() << "key" << key << event->modifiers();
-    if ( key == 46 && event->modifiers() & Qt::ControlModifier ) {
+    if ( c && c->popup()->isVisible() ) {
+        switch ( key ) {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+            case Qt::Key_Escape:
+            case Qt::Key_Tab:
+            case Qt::Key_Backtab:
+                e->ignore();
+                return; // let the completer do default behavior
+            default:
+                break;
+        }
+    }
+
+    if ( key == 46 && e->modifiers() & Qt::ControlModifier ) {
         SourceWindow *p = (SourceWindow *)parent();
         p->indent();
-    } else if ( key == 44 && event->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == 44 && e->modifiers() & Qt::ControlModifier ) {
         SourceWindow *p = (SourceWindow *)parent();
         p->unIndent();
-    } else if ( key == Qt::Key_Home && event->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_Home && e->modifiers() & Qt::ControlModifier ) {
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoFirstLine();
-    } else if ( key == Qt::Key_End && event->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_End && e->modifiers() & Qt::ControlModifier ) {
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoLastLine();
-    } else if ( key == Qt::Key_Tab && event->modifiers() == 0 ) {
+    } else if ( key == Qt::Key_Tab && e->modifiers() == 0 ) {
         QTextCursor cursor = textCursor();
         int pos = cursor.position();
         int col = cursor.positionInBlock();
         int next = (col+4)/tab_width*tab_width;
         int n = next - col;
         for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
-    } else if ( key == Qt::Key_Tab && event->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_Tab && e->modifiers() & Qt::ControlModifier ) {
         QTextCursor cursor = textCursor();
         int pos = cursor.position();
         int col = cursor.positionInBlock();
@@ -62,7 +193,37 @@ void SourceEdit::keyPressEvent(QKeyEvent *event)
             }
         }
     } else {
-        QPlainTextEdit::keyPressEvent(event);
+        QPlainTextEdit::keyPressEvent(e);
+        const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+        if (!c || (ctrlOrShift && e->text().isEmpty()))
+            return;
+
+        bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+        QString completionPrefix = textUnderCursor();
+
+        if (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 1
+                || eow.contains(e->text().right(1))) {
+            c->popup()->hide();
+            if ( lastPrefix.length() > 3 &&
+                 ! wordsInList.contains(lastPrefix) ) {
+                model.insertRow(0);
+                model.setData(model.index(0),lastPrefix);
+                wordsInList.insert(lastPrefix);
+                model.sort(0);
+            }
+            return;
+        }
+
+        lastPrefix = completionPrefix;
+
+        if (completionPrefix != c->completionPrefix()) {
+            c->setCompletionPrefix(completionPrefix);
+            c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
+        }
+        QRect cr = cursorRect();
+        cr.setWidth(c->popup()->sizeHintForColumn(0)
+                + c->popup()->verticalScrollBar()->sizeHint().width());
+        c->complete(cr); // popup it up!
     }
 }
 
@@ -74,23 +235,23 @@ void SourceEdit::scrollContentsBy ( int dx, int dy )
 
 //void SourceEdit::wheelEvent ( QWheelEvent *event )
 //{
-    //QPlainTextEdit::wheelEvent(event);
-    //int x = scrollBar->value();
-    //if ( x != top ) {
-        //emit newHeight(heightInPixels);
-        //top = x;
-    //}
+//QPlainTextEdit::wheelEvent(event);
+//int x = scrollBar->value();
+//if ( x != top ) {
+//emit newHeight(heightInPixels);
+//top = x;
+//}
 //}
 
 //bool SourceEdit::event ( QEvent *event )
 //{
-    //bool ret = QPlainTextEdit::event(event);
-    //int x = scrollBar->value();
-    //if ( x != top ) {
-        //emit newHeight(heightInPixels);
-        //top = x;
-    //}
-    //return ret;
+//bool ret = QPlainTextEdit::event(event);
+//int x = scrollBar->value();
+//if ( x != top ) {
+//emit newHeight(heightInPixels);
+//top = x;
+//}
+//return ret;
 //}
 
 void SourceEdit::printScroll()
@@ -125,7 +286,7 @@ void SourceEdit::defineVariable()
     if ( dialog->exec() ) emit sendVariableDefinition(dialog->result);
     delete dialog;
 }
-    
+
 void SourceEdit::resizeEvent(QResizeEvent *e)
 {
     heightInPixels = e->size().height();
@@ -177,13 +338,13 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
     connect ( textEdit, SIGNAL(newHeight(int)), this, SLOT(newHeight(int)));
     connect ( textEdit, SIGNAL(sendVariableDefinition(QStringList)),
-              dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
+            dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
     connect ( scrollBar, SIGNAL(sliderMoved(int)),
-              this, SLOT(scrollBarChanged(int)));
+            this, SLOT(scrollBarChanged(int)));
     connect ( scrollBar, SIGNAL(valueChanged(int)),
-              this, SLOT(scrollBarChanged(int)));
+            this, SLOT(scrollBarChanged(int)));
     connect ( scrollBar, SIGNAL(rangeChanged(int,int)),
-              this, SLOT(scrollBarRangeChanged(int,int)));
+            this, SLOT(scrollBarRangeChanged(int,int)));
 }
 
 void SourceWindow::setFontHeightAndWidth ( int height, int width )
@@ -239,7 +400,7 @@ void SourceWindow::open(QString name)
     {
         if ( ! file.open(QIODevice::ReadOnly) ) {
             QMessageBox::critical(this, tr("Error"),
-                tr("Failed to open file ") + name );
+                    tr("Failed to open file ") + name );
             delete this;
             return;
         }
@@ -270,6 +431,7 @@ void SourceWindow::open(QString name)
         }
         i++;
     }
+    textEdit->addWords(QString(text));
     textEdit->setPlainText(text);
 
     file.close();
@@ -287,9 +449,9 @@ void SourceWindow::open()
     // TODO: Add Fortran file extensions and other assembler extensions
     // Any files?
     QString name = QFileDialog::getOpenFileName(this, tr("Open File"),
-        ".", tr("Assembly files (*.asm *akefile *);;") +
-             tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;") +
-             tr("Fortran files (*.f *.F *.f* *.F* *akefile);;All files (*.* *)"));
+            ".", tr("Assembly files (*.asm *akefile *);;") +
+            tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;") +
+            tr("Fortran files (*.f *.F *.f* *.F* *akefile);;All files (*.* *)"));
 
     if (name == "")
     {
@@ -303,7 +465,7 @@ void SourceWindow::open()
     {
         if ( ! file.open(QIODevice::ReadOnly) ) {
             QMessageBox::critical(this, tr("Error"),
-                tr("Failed to open file ") + name );
+                    tr("Failed to open file ") + name );
             delete this;
             return;
         }
@@ -334,6 +496,7 @@ void SourceWindow::open()
         }
         i++;
     }
+    textEdit->addWords(QString(text));
     textEdit->setPlainText(text);
 
     file.close();
@@ -456,7 +619,7 @@ void SourceWindow::clearNextLine(int line)
     QTextCursor(textEdit->document()->findBlockByNumber(line-1)).setBlockFormat(normalFormat);
 }
 
-LineNumberEdit::LineNumberEdit(QWidget *parent)
+    LineNumberEdit::LineNumberEdit(QWidget *parent)
 : QPlainTextEdit(parent)
 {
     setFixedWidth(60);
@@ -764,7 +927,7 @@ void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
         cursorForPosition(e->pos()).setBlockFormat(breakFormat);
     }
     //foreach ( int line, *breakpoints ) {
-        //qDebug() << "bp at" << line;
+    //qDebug() << "bp at" << line;
     //}
 }
 
@@ -773,11 +936,11 @@ void LineNumberEdit::contextMenuEvent(QContextMenuEvent *event)
     eventPosition = event->pos();
     QMenu menu("Breakpoint menu");
     menu.addAction(tr("Set breakpoint"),
-                   this, SLOT(setBreakpoint()) );
+            this, SLOT(setBreakpoint()) );
     menu.addAction(tr("Drop breakpoint"),
-                   this, SLOT(dropBreakpoint()) );
+            this, SLOT(dropBreakpoint()) );
     menu.addAction(tr("Drop all breakpoints"),
-                   this, SLOT(dropAllBreakpoints()) );
+            this, SLOT(dropAllBreakpoints()) );
     menu.addAction(tr("ignore"), this, SLOT(ignore()) );
     menu.exec(QCursor::pos());
 }
@@ -827,7 +990,7 @@ void LineNumberEdit::wheelEvent ( QWheelEvent * /* e */ )
 {
 }
 
-LineNumberDialog::LineNumberDialog()
+    LineNumberDialog::LineNumberDialog()
 : QDialog()
 {
     setObjectName("Go to line");
@@ -875,7 +1038,7 @@ void LineNumberDialog::setMax(int max)
     lineSpin->setMaximum(max);
 }
 
-FindReplaceDialog::FindReplaceDialog()
+    FindReplaceDialog::FindReplaceDialog()
 : QDialog()
 {
     setObjectName("Find/Replace");
