@@ -20,7 +20,7 @@ RegisterWindow *registerWindow;
 FloatWindow *floatWindow;
 ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
-ConsoleWindow *consoleWindow;
+//ConsoleWindow *consoleWindow;
 BackTraceWindow *backTraceWindow;
 GDB *gdb;
 GDBThread *gdbThread;
@@ -105,7 +105,7 @@ void MainWindow::restoreMainWindow()
     floatDock->setFloating(ebe["float/floating"].toBool());
     projectDock->setFloating(ebe["project/floating"].toBool());
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
-    consoleDock->setFloating(ebe["console/floating"].toBool());
+    //consoleDock->setFloating(ebe["console/floating"].toBool());
 
     if ( ebe.contains("ebe/geometry") ) {
         restoreGeometry(ebe["ebe/geometry"].toByteArray());
@@ -127,8 +127,8 @@ void MainWindow::restoreMainWindow()
                             ebe["variable_font"].toString() + "}" );
     terminalDock->setStyleSheet("QDockWidget::title { font-family: " +
                             ebe["variable_font"].toString() + "}" );
-    consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            ebe["variable_font"].toString() + "}" );
+    //consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            //ebe["variable_font"].toString() + "}" );
 
     fontSize = ebe["font_size"].toInt();
     setFontSize();
@@ -151,13 +151,13 @@ void MainWindow::saveSettings()
     ebe["float/floating"]    = floatDock->isFloating();
     ebe["project/floating"]  = projectDock->isFloating();
     ebe["terminal/floating"] = terminalDock->isFloating();
-    ebe["console/floating"]  = consoleDock->isFloating();
+    //ebe["console/floating"]  = consoleDock->isFloating();
     ebe["data/visible"]      = dataDock->isVisible();
     ebe["register/visible"]  = registerDock->isVisible();
     ebe["float/visible"]     = floatDock->isVisible();
     ebe["project/visible"]   = projectDock->isVisible();
     ebe["terminal/visible"]  = terminalDock->isVisible();
-    ebe["console/visible"]   = consoleDock->isVisible();
+    //ebe["console/visible"]   = consoleDock->isVisible();
     settings->write();
 }
 
@@ -267,7 +267,7 @@ void MainWindow::createMenus()
     viewMenu->addAction ( registerDock->toggleViewAction() );
     viewMenu->addAction ( floatDock->toggleViewAction() );
     viewMenu->addAction ( backTraceDock->toggleViewAction() );
-    viewMenu->addAction ( consoleDock->toggleViewAction() );
+    //viewMenu->addAction ( consoleDock->toggleViewAction() );
     viewMenu->addAction ( terminalDock->toggleViewAction() );
     viewMenu->addAction ( projectDock->toggleViewAction() );
     addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)),
@@ -296,7 +296,7 @@ void MainWindow::createMenus()
 void MainWindow::open(QString name)
 {
     if ( name.endsWith(".ebe", Qt::CaseInsensitive) ) {
-        projectWindow->open(name);\
+        projectWindow->open(name);
     } else {
         sourceFrame->open(name);
     }
@@ -405,13 +405,13 @@ void MainWindow::createDockWindows()
     terminalDock->setWidget(terminalWindow);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
 
-    consoleDock = new QDockWidget(tr("Console"));
-    consoleDock->setObjectName("Dock 7");
-    consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
-                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
-    consoleWindow = new ConsoleWindow(consoleDock);
-    consoleDock->setWidget(consoleWindow);
-    addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
+    //consoleDock = new QDockWidget(tr("Console"));
+    //consoleDock->setObjectName("Dock 7");
+    //consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              //Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    //consoleWindow = new ConsoleWindow(consoleDock);
+    //consoleDock->setWidget(consoleWindow);
+    //addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
 
     dataDock->setVisible(ebe["data/visible"].toBool());
     registerDock->setVisible(ebe["register/visible"].toBool());
@@ -419,7 +419,7 @@ void MainWindow::createDockWindows()
     projectDock->setVisible(ebe["project/visible"].toBool());
     backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
     terminalDock->setVisible(ebe["terminal/visible"].toBool());
-    consoleDock->setVisible(ebe["console/visible"].toBool());
+    //consoleDock->setVisible(ebe["console/visible"].toBool());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

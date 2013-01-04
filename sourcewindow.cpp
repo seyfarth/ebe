@@ -508,6 +508,7 @@ void SourceWindow::open()
     }
     textEdit->addWords(QString(text));
     textEdit->setPlainText(text);
+    setFontHeightAndWidth(sourceFrame->fontHeight,sourceFrame->fontWidth);
 
     file.close();
     opened = true;
