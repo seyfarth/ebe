@@ -25,6 +25,7 @@ public:
     int  fontHeight;
     int  fontWidth;
     bool filesSaved();
+    QLabel *cursorPosition;
 
 private slots:
     void nextInstruction(QString file,int line);
@@ -65,6 +66,7 @@ private slots:
     void templateCpp();
     void templateAssembly();
     void templateFortran();
+    void updateCursorPosition();
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

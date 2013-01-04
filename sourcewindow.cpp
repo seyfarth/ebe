@@ -1,15 +1,19 @@
 #include "sourcewindow.h"
+#include "sourceframe.h"
 #include "datawindow.h"
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
 
 extern DataWindow *dataWindow;
+extern SourceFrame *sourceFrame;
 
 extern QList<QString> cppExts;
 extern QList<QString> cExts;
 extern QList<QString> fortranExts;
 extern QList<QString> asmExts;
+
+extern QStatusBar *statusBar;
 
 SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
 {
@@ -73,6 +77,9 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     c->setWrapAround(false);
 
     highlighter = new Highlighter(document());
+
+    connect ( this, SIGNAL(cursorPositionChanged()), 
+              sourceFrame, SLOT(updateCursorPosition()) );
 }
 
 void SourceEdit::setCompleter(QCompleter *completer)
@@ -176,14 +183,12 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         p->gotoLastLine();
     } else if ( key == Qt::Key_Tab && e->modifiers() == 0 ) {
         QTextCursor cursor = textCursor();
-        int pos = cursor.position();
         int col = cursor.positionInBlock();
         int next = (col+4)/tab_width*tab_width;
         int n = next - col;
         for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
     } else if ( key == Qt::Key_Tab && e->modifiers() & Qt::ControlModifier ) {
         QTextCursor cursor = textCursor();
-        int pos = cursor.position();
         int col = cursor.positionInBlock();
         QTextBlock block = cursor.block();
         QString t = block.text();
@@ -371,13 +376,13 @@ void SourceWindow::scrollBarRangeChanged ( int min, int max )
     setLineNumbers(textDoc->lineCount());
 }
 
-void SourceWindow::scrollBarChanged ( int value )
+void SourceWindow::scrollBarChanged ( int /* value */ )
 {
     topNumber = scrollBar->value() + 1;
     setLineNumbers(textDoc->lineCount());
 }
 
-void SourceWindow::sliderChanged ( int value )
+void SourceWindow::sliderChanged ( int /* value */ )
 {
     topNumber = scrollBar->value() + 1;
     setLineNumbers(textDoc->lineCount());
@@ -411,7 +416,7 @@ void SourceWindow::open(QString name)
         }
     }
 
-    fileName = name;
+    fileName = QDir::current().relativeFilePath(name);
 
     QByteArray text = file.readAll();
     int length = text.count();

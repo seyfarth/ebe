@@ -13,11 +13,14 @@ QStringList asmExts;
 
 extern ProjectWindow *projectWindow;
 extern GDB *gdb;
+extern QStatusBar *statusBar;
+extern SourceFrame *sourceFrame;
 
 typedef QPair<QString,QString> StringPair;
 
 SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 {
+    sourceFrame = this;
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
@@ -95,6 +98,9 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     layout->addWidget(tab);
 
     connect ( tab, SIGNAL(currentChanged(int)), this, SLOT(changedTab(int)) );
+
+    cursorPosition = new QLabel(this);
+    statusBar->addPermanentWidget(cursorPosition);
 
     setLayout(layout);
 
@@ -435,10 +441,22 @@ void SourceFrame::setFontHeightAndWidth ( int height, int width )
     fontWidth = width;
 }
 
+void SourceFrame::updateCursorPosition()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    QTextCursor cursor = source->textEdit->textCursor();
+    QTextBlock block = cursor.block();
+    int row = block.blockNumber()+1;
+    int column = cursor.positionInBlock()+1;
+    cursorPosition->setText(QString("line %1, column %2").arg(row).arg(column));
+}
+
 void SourceFrame::changedTab(int index)
 {
     //qDebug() << "switching to " << index;
     source = (SourceWindow *)tab->widget(index);
+    updateCursorPosition();
 }
 
 void SourceFrame::openInNewTab(QString /*name*/)

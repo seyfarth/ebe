@@ -25,6 +25,8 @@ BackTraceWindow *backTraceWindow;
 GDB *gdb;
 GDBThread *gdbThread;
 
+QStatusBar *statusBar;
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
@@ -344,6 +346,7 @@ void MainWindow::quit()
 
 void MainWindow::createStatusBar()
 {
+    ::statusBar = statusBar();
     statusBar()->showMessage(tr("Ready"));
 }
 

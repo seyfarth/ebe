@@ -77,9 +77,9 @@ void Settings::setDefaults()
     ebe["text_fg"] = "#000060";
     ebe["tooltip_bg"] = "#ffffd0";
     ebe["variable_font"] = "Arial";
-    ebe["table_bg"] = "#faffff";
-    ebe["list_bg"] = "#fafaff";
-    ebe["tree_bg"] = "#fffafa";
+    ebe["table_bg"] = "#f0ffff";
+    ebe["list_bg"] = "#e0f0ff";
+    ebe["tree_bg"] = "#e0fafa";
     ebe["tab_width"] = 4;
 
     ebe["os/linux"] = false;
