@@ -103,42 +103,21 @@ void Settings::setDefaults()
     ebe["build/obj"] = "o";
 #endif
 
-    ebe["source/height"] = 800;
-    ebe["source/left"] = 750;
-    ebe["source/top"] = 0;
-    ebe["source/width"] = 700;
+    ebe["buttons/icons"] = true;
+    ebe["buttons/icon_size"] = 32;
 
-    ebe["console/height"] = 800;
-    ebe["console/left"] = 0;
-    ebe["console/top"] = 0;
+    ebe["toolbars/icon_size"] = 32;
+
     ebe["console/visible"] = false;
-    ebe["console/width"] = 700;
 
-    ebe["data/height"] = 400;
-    ebe["data/left"] = 0;
-    ebe["data/top"] = 0;
     ebe["data/visible"] = true;
-    ebe["data/width"] = 750;
 
     ebe["register/fg"] = "#c09000";
-    ebe["register/height"] = 400;
-    ebe["register/left"] = 0;
-    ebe["register/top"] = 400;
     ebe["register/visible"] = true;
-    ebe["register/width"] = 750;
 
     ebe["float/visible"] = false;
-    ebe["terminal/columns"] = 80;
-    ebe["terminal/font"] = "10x20";
-    ebe["terminal/left"] = 1200;
-    ebe["terminal/rows"] = 25;
-    ebe["terminal/top"] = 500;
 
-    ebe["project/height"] = 300;
-    ebe["project/left"] = 1300;
-    ebe["project/top"] = 100;
     ebe["project/visible"] = true;
-    ebe["project/width"] = 500;
     ebe["project/auto_open"] = true;
 
     ebe["terminal/visible"] = true;

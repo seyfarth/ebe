@@ -24,6 +24,9 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
+    bool icons = ebe["buttons/icons"].toBool();
+    int icon_size = ebe["buttons/icon_size"].toInt();
+
     setStyleSheet("QPushButton { font-family: " +
                    ebe["variable_font"].toString() + "}" +
                    "QLabel { font-family:" +
@@ -36,31 +39,72 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     buttonLayout->setSpacing(6);
     buttonLayout->setContentsMargins(2,2,2,2);
 
-    quitButton     = new QPushButton ( "Quit" );
+    quitButton     = new QPushButton;
+    if ( icons ) {
+        quitButton->setIcon(QIcon(QString(":/icons/%1/quit.png")
+                .arg(icon_size)));
+        quitButton->setIconSize(QSize(icon_size,icon_size));
+    } else {
+        quitButton->setText("Quit");
+    }
     quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
     quitButton->setToolTip ( tr("Click this button to exit from ebe") );
-    runButton      = new QPushButton ( "Run" );
+    runButton      = new QPushButton;
     runButton->setToolTip ( tr("Compile and run your program") );
     runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
-    nextButton     = new QPushButton ( "Next" );
+    if ( icons ) {
+        runButton->setIcon(QIcon(QString(":/icons/%1/run.png")
+                           .arg(icon_size)));
+        runButton->setIconSize(QSize(icon_size,icon_size));
+    } else {
+        runButton->setText("Run");
+    }
+    nextButton     = new QPushButton;
     nextButton->setToolTip (
         tr("Execute the current statement in the same function") );
     nextButton->setStyleSheet ( "color: "+ebe["next_color"].toString() );
-    stepButton     = new QPushButton ( "Step" );
+    if ( icons ) {
+        nextButton->setIcon(QIcon(QString(":/icons/%1/next.png")
+                           .arg(icon_size)));
+        nextButton->setIconSize(QSize(icon_size,icon_size));
+    } else {
+        nextButton->setText("Next");
+    }
+    stepButton     = new QPushButton;
     stepButton->setStyleSheet ( "color: "+ebe["step_color"].toString() );
     stepButton->setToolTip (
         tr("Execute the current statement possibly stepping\n"
            "into a different function") );
-    continueButton = new QPushButton ( "Continue" );
+    if ( icons ) {
+        stepButton->setIcon(QIcon(QString(":/icons/%1/step.png")
+                           .arg(icon_size)));
+        stepButton->setIconSize(QSize(icon_size,icon_size));
+    } else {
+        stepButton->setText("Step");
+    }
+    continueButton = new QPushButton;
     continueButton->setStyleSheet ( "color: "+ebe["continue_color"].toString() );
     continueButton->setToolTip (
         tr("Execute statements starting at the current statement\n"
            "continuing until the program ends or a breakpoint\n"
            "is reached.") );
-    stopButton     = new QPushButton ( "Stop" );
+    if ( icons ) {
+        continueButton->setIcon(QIcon(QString(":/icons/%1/continue.png")
+                                .arg(icon_size)));
+        continueButton->setIconSize(QSize(icon_size,icon_size));
+    } else {
+        continueButton->setText("Continue");
+    }
+    stopButton     = new QPushButton;
     stopButton->setStyleSheet ( "color: "+ebe["stop_color"].toString() );
     stopButton->setToolTip (
         tr("End this debugging session and continue editing") );
+    if ( icons ) {
+        stopButton->setIcon(QIcon(":/icons/32/process-stop.png"));
+        stopButton->setIconSize(QSize(icon_size,icon_size));
+    } else {
+        stopButton->setText("Stop");
+    }
     buttonLayout->addWidget ( quitButton );
     buttonLayout->addWidget ( runButton );
     buttonLayout->addWidget ( nextButton );
@@ -445,6 +489,7 @@ void SourceFrame::updateCursorPosition()
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
+    if ( source == 0 ) return;
     QTextCursor cursor = source->textEdit->textCursor();
     QTextBlock block = cursor.block();
     int row = block.blockNumber()+1;
@@ -523,9 +568,11 @@ void SourceFrame::close()
                 save();
                 break;
             case QMessageBox::Discard:
+                tab->removeTab(index);
                 delete source;
             }
         } else {
+            tab->removeTab(index);
             delete source;
         }
     }
@@ -569,7 +616,8 @@ bool SourceFrame::filesSaved()
 
     for ( int i = 0; i < tab->count(); i++ ) {
         window = (SourceWindow *)tab->widget(i);
-        if ( window->changed ) {
+        if ( window->changed &&
+             window->textEdit->document()->characterCount() > 1 ) {
             filesToSave.append(window->fileName);
             windows.append(window);
         }

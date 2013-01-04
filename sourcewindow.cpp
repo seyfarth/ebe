@@ -411,7 +411,6 @@ void SourceWindow::open(QString name)
         if ( ! file.open(QIODevice::ReadOnly) ) {
             QMessageBox::critical(this, tr("Error"),
                     tr("Failed to open file ") + name );
-            delete this;
             return;
         }
     }
@@ -465,7 +464,6 @@ void SourceWindow::open()
 
     if (name == "")
     {
-        delete this;
         return;
     }
 
@@ -476,7 +474,6 @@ void SourceWindow::open()
         if ( ! file.open(QIODevice::ReadOnly) ) {
             QMessageBox::critical(this, tr("Error"),
                     tr("Failed to open file ") + name );
-            delete this;
             return;
         }
     }

@@ -45,7 +45,7 @@ void Highlighter::highlightBlock(const QString &text)
     int end;
     QChar startChar;
     QString name;
-    QString t = text + "@@";
+    QString t = text + "@@'\"";
 
     if ( n == 0 ) {
         setCurrentBlockState(previousBlockState());

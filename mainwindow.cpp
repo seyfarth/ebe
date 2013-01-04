@@ -27,6 +27,9 @@ GDBThread *gdbThread;
 
 QStatusBar *statusBar;
 
+QToolBar *fileToolBar;
+QToolBar *editToolBar;
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
@@ -196,6 +199,16 @@ void MainWindow::decreaseFont()
 
 void MainWindow::createMenus()
 {
+    int icon_size = ebe["toolbars/icon_size"].toInt();
+
+    fileToolBar = new QToolBar("File toolbar",this);
+    fileToolBar->setObjectName("File toolbar");
+    fileToolBar->setIconSize(QSize(icon_size,icon_size));
+
+    editToolBar = new QToolBar("Edit toolbar",this);
+    editToolBar->setObjectName("Edit toolbar");
+    editToolBar->setIconSize(QSize(icon_size,icon_size));
+
     menuBar()->setStyleSheet("font-family: "+ebe["variable_font"].toString());
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("New"), sourceFrame,
@@ -217,6 +230,30 @@ void MainWindow::createMenus()
     fileMenu->addAction(tr("Close project"), projectWindow, SLOT(closeProject()) );
     fileMenu->addSeparator();
     fileMenu->addAction(tr("Quit"), this, SLOT(quit()), QKeySequence::Quit );
+
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/new.png").arg(icon_size)),
+        tr("New"), sourceFrame, SLOT(newFile()) );
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/open.png").arg(icon_size)),
+        tr("Open"), sourceFrame, SLOT(open(bool)) );
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/save.png").arg(icon_size)),
+        tr("Save"), sourceFrame, SLOT(save()) );
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/save-as.png").arg(icon_size)),
+        tr("Save as"), sourceFrame, SLOT(saveAs()) );
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/close.png").arg(icon_size)),
+        tr("Close"), sourceFrame, SLOT(close()) );
+
+    fileToolBar->addSeparator();
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/project-new.png").
+        arg(icon_size)),
+        tr("New project"), projectWindow, SLOT(newProject()) );
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/project-open.png").
+        arg(icon_size)),
+        tr("Open project"), projectWindow, SLOT(openProject()) );
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/project-close.png").
+        arg(icon_size)),
+        tr("Close project"), projectWindow, SLOT(closeProject()) );
+
+    addToolBar(Qt::TopToolBarArea,fileToolBar);
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
     editMenu->addAction(tr("Cut"), sourceFrame, SLOT(cut()), QKeySequence::Cut );
@@ -261,6 +298,37 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+B") );
     moveMenu->addAction(tr("Move line to middle"), sourceFrame, SLOT(center()),
                         QKeySequence("Ctrl+M") );
+
+    editToolBar->addAction(QIcon(QString(":/icons/%1/cut.png").arg(icon_size)),
+        tr("Cut"), sourceFrame, SLOT(cut()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/copy.png").arg(icon_size)),
+        tr("Copy"), sourceFrame, SLOT(copy()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/paste.png")
+        .arg(icon_size)), tr("Paste"), sourceFrame, SLOT(paste()) );
+    editToolBar->addSeparator();
+    editToolBar->addAction(QIcon(QString(":/icons/%1/undo.png")
+        .arg(icon_size)), tr("Undo"), sourceFrame, SLOT(undo()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/redo.png")
+        .arg(icon_size)), tr("Redo"), sourceFrame, SLOT(redo()) );
+    editToolBar->addSeparator();
+    editToolBar->addAction(QIcon(QString(":/icons/%1/indent-more.png")
+        .arg(icon_size)), tr("Indent"), sourceFrame, SLOT(indent()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/indent-less.png")
+        .arg(icon_size)), tr("Unindent"), sourceFrame, SLOT(unIndent()) );
+    editToolBar->addSeparator();
+    editToolBar->addAction(QIcon(QString(":/icons/%1/find.png")
+        .arg(icon_size)), tr("Find"), sourceFrame, SLOT(find()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/select-all.png")
+        .arg(icon_size)), tr("Select all"), sourceFrame, SLOT(selectAll()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/prettify.png")
+        .arg(icon_size)), tr("Prettify"), sourceFrame, SLOT(prettify()) );
+    editToolBar->addSeparator();
+    editToolBar->addAction(QIcon(QString(":/icons/%1/font-decrease.png")
+        .arg(icon_size)), tr("Decrease font"), this, SLOT(decreaseFont()) );
+    editToolBar->addAction(QIcon(QString(":/icons/%1/font-increase.png")
+        .arg(icon_size)), tr("Increase font"), this, SLOT(increaseFont()) );
+
+    addToolBar(Qt::TopToolBarArea,editToolBar);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewMenu->addAction ( dataDock->toggleViewAction() );
