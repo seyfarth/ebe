@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "variable.h"
+#include "highlighter.h"
 
 class SourceEdit;
 
@@ -56,6 +57,8 @@ public:
     QStringListModel model;
     void addWords(QString t);
     QSet<QString> wordsInList;
+    int complete_minimum;
+    Highlighter *highlighter;
 
 private slots:
     void printScroll();

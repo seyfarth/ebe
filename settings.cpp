@@ -65,12 +65,12 @@ void Settings::setDefaults()
     ebe["next_fg"] = "#ff0000";
     ebe["numbers_bg"] = "#f8f8dc";
     ebe["numbers_fg"] = "#000078";
-    ebe["numeric_fg"] = "#00c000";
-    ebe["operator_fg"] = "#009070";
+    ebe["numeric_fg"] = "#80o080";
+    ebe["operator_fg"] = "#008860";
     ebe["preprocessor_fg"] = "#c00090";
     ebe["reg_fg"] = "#000080";
     ebe["reg_title_fg"] = "#800000";
-    ebe["reserved_fg"] = "#c00000";
+    ebe["reserved_fg"] = "#b00000";
     ebe["space_fg"] = "#000000";
     ebe["string_fg"] = "#ffb000";
     ebe["text_bg"] = "#ffffe3";

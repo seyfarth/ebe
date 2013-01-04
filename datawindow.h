@@ -2,7 +2,7 @@
 #define DATAWINDOW_H
 
 #include <QtGui>
-#include <variable.h>
+#include "variable.h"
 
 class DataGroup;
 

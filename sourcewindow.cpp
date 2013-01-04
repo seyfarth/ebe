@@ -25,6 +25,7 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     setCompleter(completer);
     c->setModel ( &model );
     QStringList list;
+    complete_minimum = ebe["complete/minimum"].toInt();
     list << "include" << "using" << "namespace" << "class"
          << "struct" << "union" << "double" << "extern" 
          << "static" << "volatile" << "parameter" << "variable"
@@ -61,13 +62,17 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
          << "total" << "true" << "typedef" << "undef" 
          << "unlock" << "unsigned" << "uppercase" << "value"
          << "virtual" << "vector" << "void" << "wait"
-         << "wchar_t" << "weight" << "write" << "while";
+         << "wchar_t" << "weight" << "write" << "while"
+         << "stdio.h" << "stdlib.h" << "cstdio" << "math.h";
     list.sort();
 
+    list = list.filter(QRegExp(QString(".{%1,}").arg(complete_minimum)));
     model.setStringList(list);
     c->setModelSorting(QCompleter::CaseSensitivelySortedModel);
     c->setCaseSensitivity(Qt::CaseSensitive);
     c->setWrapAround(false);
+
+    highlighter = new Highlighter(document());
 }
 
 void SourceEdit::setCompleter(QCompleter *completer)
@@ -117,7 +122,7 @@ void SourceEdit::focusInEvent(QFocusEvent *e)
 
 void SourceEdit::addWords(QString t)
 {
-    QRegExp rx("([a-zA-Z][a-zA-Z0-9_]{3,})");
+    QRegExp rx(QString("([a-zA-Z][a-zA-Z0-9_]{%1,})").arg(complete_minimum));
     QString word;
 
     int i=0;
@@ -204,7 +209,7 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         if (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 1
                 || eow.contains(e->text().right(1))) {
             c->popup()->hide();
-            if ( lastPrefix.length() > 3 &&
+            if ( lastPrefix.length() >= complete_minimum &&
                  ! wordsInList.contains(lastPrefix) ) {
                 model.insertRow(0);
                 model.setData(model.index(0),lastPrefix);
