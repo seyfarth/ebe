@@ -103,6 +103,7 @@ void Settings::setDefaults()
     ebe["build/obj"] = "o";
 #endif
 
+    ebe["buttons/visible"] = true;
     ebe["buttons/icons"] = true;
     ebe["buttons/icon_size"] = 32;
 

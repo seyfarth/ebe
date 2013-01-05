@@ -29,6 +29,7 @@ QStatusBar *statusBar;
 
 QToolBar *fileToolBar;
 QToolBar *editToolBar;
+QToolBar *debugToolBar;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -209,6 +210,10 @@ void MainWindow::createMenus()
     editToolBar->setObjectName("Edit toolbar");
     editToolBar->setIconSize(QSize(icon_size,icon_size));
 
+    debugToolBar = new QToolBar("Debug toolbar",this);
+    debugToolBar->setObjectName("Debug toolbar");
+    debugToolBar->setIconSize(QSize(icon_size,icon_size));
+
     menuBar()->setStyleSheet("font-family: "+ebe["variable_font"].toString());
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("New"), sourceFrame,
@@ -231,6 +236,9 @@ void MainWindow::createMenus()
     fileMenu->addSeparator();
     fileMenu->addAction(tr("Quit"), this, SLOT(quit()), QKeySequence::Quit );
 
+    fileToolBar->addAction(QIcon(QString(":/icons/%1/quit.png").arg(icon_size)),
+        tr("Quit"), this, SLOT(quit()) );
+    fileToolBar->addSeparator();
     fileToolBar->addAction(QIcon(QString(":/icons/%1/new.png").arg(icon_size)),
         tr("New"), sourceFrame, SLOT(newFile()) );
     fileToolBar->addAction(QIcon(QString(":/icons/%1/open.png").arg(icon_size)),
@@ -329,6 +337,19 @@ void MainWindow::createMenus()
         .arg(icon_size)), tr("Increase font"), this, SLOT(increaseFont()) );
 
     addToolBar(Qt::TopToolBarArea,editToolBar);
+
+    debugToolBar->addAction(QIcon(QString(":/icons/%1/run.png")
+        .arg(icon_size)), tr("Run"), sourceFrame, SLOT(run()) );
+    debugToolBar->addAction(QIcon(QString(":/icons/%1/next.png")
+        .arg(icon_size)), tr("Next"), sourceFrame, SLOT(next()) );
+    debugToolBar->addAction(QIcon(QString(":/icons/%1/step.png")
+        .arg(icon_size)), tr("Step"), sourceFrame, SLOT(step()) );
+    debugToolBar->addAction(QIcon(QString(":/icons/%1/continue.png")
+        .arg(icon_size)), tr("Continue"), sourceFrame, SLOT(Continue()) );
+    debugToolBar->addAction(QIcon(QString(":/icons/%1/process-stop.png")
+        .arg(icon_size)), tr("stop"), sourceFrame, SLOT(stop()) );
+
+    addToolBar(Qt::TopToolBarArea,debugToolBar);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewMenu->addAction ( dataDock->toggleViewAction() );

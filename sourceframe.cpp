@@ -28,116 +28,120 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     int icon_size = ebe["buttons/icon_size"].toInt();
 
     setStyleSheet("QPushButton { font-family: " +
-                   ebe["variable_font"].toString() + "}" +
-                   "QLabel { font-family:" +
-                   ebe["variable_font"].toString() + "}" );
+            ebe["variable_font"].toString() + "}" +
+            "QLabel { font-family:" +
+            ebe["variable_font"].toString() + "}" );
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(2);
     layout->setContentsMargins(10,10,10,10);
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->setSpacing(6);
-    buttonLayout->setContentsMargins(2,2,2,2);
 
-    quitButton     = new QPushButton;
-    if ( icons ) {
-        quitButton->setIcon(QIcon(QString(":/icons/%1/quit.png")
-                .arg(icon_size)));
-        quitButton->setIconSize(QSize(icon_size,icon_size));
-    } else {
-        quitButton->setText("Quit");
-    }
-    quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
-    quitButton->setToolTip ( tr("Click this button to exit from ebe") );
-    runButton      = new QPushButton;
-    runButton->setToolTip ( tr("Compile and run your program") );
-    runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
-    if ( icons ) {
-        runButton->setIcon(QIcon(QString(":/icons/%1/run.png")
-                           .arg(icon_size)));
-        runButton->setIconSize(QSize(icon_size,icon_size));
-    } else {
-        runButton->setText("Run");
-    }
-    nextButton     = new QPushButton;
-    nextButton->setToolTip (
-        tr("Execute the current statement in the same function") );
-    nextButton->setStyleSheet ( "color: "+ebe["next_color"].toString() );
-    if ( icons ) {
-        nextButton->setIcon(QIcon(QString(":/icons/%1/next.png")
-                           .arg(icon_size)));
-        nextButton->setIconSize(QSize(icon_size,icon_size));
-    } else {
-        nextButton->setText("Next");
-    }
-    stepButton     = new QPushButton;
-    stepButton->setStyleSheet ( "color: "+ebe["step_color"].toString() );
-    stepButton->setToolTip (
-        tr("Execute the current statement possibly stepping\n"
-           "into a different function") );
-    if ( icons ) {
-        stepButton->setIcon(QIcon(QString(":/icons/%1/step.png")
-                           .arg(icon_size)));
-        stepButton->setIconSize(QSize(icon_size,icon_size));
-    } else {
-        stepButton->setText("Step");
-    }
-    continueButton = new QPushButton;
-    continueButton->setStyleSheet ( "color: "+ebe["continue_color"].toString() );
-    continueButton->setToolTip (
-        tr("Execute statements starting at the current statement\n"
-           "continuing until the program ends or a breakpoint\n"
-           "is reached.") );
-    if ( icons ) {
-        continueButton->setIcon(QIcon(QString(":/icons/%1/continue.png")
-                                .arg(icon_size)));
-        continueButton->setIconSize(QSize(icon_size,icon_size));
-    } else {
-        continueButton->setText("Continue");
-    }
-    stopButton     = new QPushButton;
-    stopButton->setStyleSheet ( "color: "+ebe["stop_color"].toString() );
-    stopButton->setToolTip (
-        tr("End this debugging session and continue editing") );
-    if ( icons ) {
-        stopButton->setIcon(QIcon(":/icons/32/process-stop.png"));
-        stopButton->setIconSize(QSize(icon_size,icon_size));
-    } else {
-        stopButton->setText("Stop");
-    }
-    buttonLayout->addWidget ( quitButton );
-    buttonLayout->addWidget ( runButton );
-    buttonLayout->addWidget ( nextButton );
-    buttonLayout->addWidget ( stepButton );
-    buttonLayout->addWidget ( continueButton );
-    buttonLayout->addWidget ( stopButton );
-    buttonLayout->addStretch();
+    if ( ebe["buttons/visible"].toBool() ) {
+        QHBoxLayout *buttonLayout = new QHBoxLayout;
+        buttonLayout->setSpacing(6);
+        buttonLayout->setContentsMargins(2,2,2,2);
 
-    connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
-    connect ( runButton, SIGNAL(clicked()), this, SLOT(run()) );
-    connect ( nextButton, SIGNAL(clicked()), this, SLOT(next()) );
-    connect ( stepButton, SIGNAL(clicked()), this, SLOT(step()) );
-    connect ( continueButton, SIGNAL(clicked()), this, SLOT(Continue()) );
-    connect ( stopButton, SIGNAL(clicked()), this, SLOT(stop()) );
+        quitButton     = new QPushButton;
+        if ( icons ) {
+            quitButton->setIcon(QIcon(QString(":/icons/%1/quit.png")
+                        .arg(icon_size)));
+            quitButton->setIconSize(QSize(icon_size,icon_size));
+        } else {
+            quitButton->setText("Quit");
+        }
+        quitButton->setStyleSheet ( "color: "+ebe["quit_color"].toString() );
+        quitButton->setToolTip ( tr("Click this button to exit from ebe") );
+        runButton      = new QPushButton;
+        runButton->setToolTip ( tr("Compile and run your program") );
+        runButton->setStyleSheet ( "color: "+ebe["run_color"].toString() );
+        if ( icons ) {
+            runButton->setIcon(QIcon(QString(":/icons/%1/run.png")
+                        .arg(icon_size)));
+            runButton->setIconSize(QSize(icon_size,icon_size));
+        } else {
+            runButton->setText("Run");
+        }
+        nextButton     = new QPushButton;
+        nextButton->setToolTip (
+                tr("Execute the current statement in the same function") );
+        nextButton->setStyleSheet ( "color: "+ebe["next_color"].toString() );
+        if ( icons ) {
+            nextButton->setIcon(QIcon(QString(":/icons/%1/next.png")
+                        .arg(icon_size)));
+            nextButton->setIconSize(QSize(icon_size,icon_size));
+        } else {
+            nextButton->setText("Next");
+        }
+        stepButton     = new QPushButton;
+        stepButton->setStyleSheet ( "color: "+ebe["step_color"].toString() );
+        stepButton->setToolTip (
+                tr("Execute the current statement possibly stepping\n"
+                    "into a different function") );
+        if ( icons ) {
+            stepButton->setIcon(QIcon(QString(":/icons/%1/step.png")
+                        .arg(icon_size)));
+            stepButton->setIconSize(QSize(icon_size,icon_size));
+        } else {
+            stepButton->setText("Step");
+        }
+        continueButton = new QPushButton;
+        continueButton->setStyleSheet ( "color: "+ebe["continue_color"].toString() );
+        continueButton->setToolTip (
+                tr("Execute statements starting at the current statement\n"
+                    "continuing until the program ends or a breakpoint\n"
+                    "is reached.") );
+        if ( icons ) {
+            continueButton->setIcon(QIcon(QString(":/icons/%1/continue.png")
+                        .arg(icon_size)));
+            continueButton->setIconSize(QSize(icon_size,icon_size));
+        } else {
+            continueButton->setText("Continue");
+        }
+        stopButton     = new QPushButton;
+        stopButton->setStyleSheet ( "color: "+ebe["stop_color"].toString() );
+        stopButton->setToolTip (
+                tr("End this debugging session and continue editing") );
+        if ( icons ) {
+            stopButton->setIcon(QIcon(":/icons/32/process-stop.png"));
+            stopButton->setIconSize(QSize(icon_size,icon_size));
+        } else {
+            stopButton->setText("Stop");
+        }
+        buttonLayout->addWidget ( quitButton );
+        buttonLayout->addWidget ( runButton );
+        buttonLayout->addWidget ( nextButton );
+        buttonLayout->addWidget ( stepButton );
+        buttonLayout->addWidget ( continueButton );
+        buttonLayout->addWidget ( stopButton );
+        buttonLayout->addStretch();
+
+        connect ( quitButton, SIGNAL(clicked()), parent, SLOT(quit()) );
+        connect ( runButton, SIGNAL(clicked()), this, SLOT(run()) );
+        connect ( nextButton, SIGNAL(clicked()), this, SLOT(next()) );
+        connect ( stepButton, SIGNAL(clicked()), this, SLOT(step()) );
+        connect ( continueButton, SIGNAL(clicked()), this, SLOT(Continue()) );
+        connect ( stopButton, SIGNAL(clicked()), this, SLOT(stop()) );
+
+        layout->addLayout(buttonLayout);
+    }
 
     connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)),
-              gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)) );
+            gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)) );
     connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
     connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
     connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
     connect ( this, SIGNAL(doStop()), gdb, SLOT(doStop()) );
     connect ( gdb, SIGNAL(nextInstruction(QString,int)),
-              this, SLOT(nextInstruction(QString,int)) );
+            this, SLOT(nextInstruction(QString,int)) );
 
     commandLine = new CommandLine();
     commandLine->setToolTip (
-        tr("This input field is for executing your program with\n"
-           "command line parameters to be accepted in the argv\n"
-           "array") );
+            tr("This input field is for executing your program with\n"
+                "command line parameters to be accepted in the argv\n"
+                "array") );
 
     tab = new QTabWidget;
 
-    layout->addLayout(buttonLayout);
     layout->addWidget(commandLine);
     layout->addWidget(tab);
 
@@ -153,7 +157,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     tab->setCurrentIndex(index);
 
     fortranExts << "f" << "F" << "for" << "FOR" << "f90" << "F90"
-                << "f95" << "F95" << "ftn" << "FTN";
+        << "f95" << "F95" << "ftn" << "FTN";
     cExts << "c" << "C";
     cppExts << "cpp" << "CPP" << "c++" << "C++" << "cc" << "CC";
     asmExts << "asm" << "ASM" << "s" << "S";
@@ -192,19 +196,19 @@ void SourceFrame::run()
     breakLine = 0;
     breakFile = "";
 
-//
-//  Determine all source files
-//
+    //
+    //  Determine all source files
+    //
     if ( projectWindow->projectFileName == "" ) {
         index = tab->currentIndex();
         source = (SourceWindow *)tab->widget(index);
         name = source->fileName;
         if ( name == "" ) {
             int ret = QMessageBox::warning(this, tr("Warning"),
-                                tr("This file has not been named.\n"
-                                   "Do you want save the file?"),
-                                QMessageBox::Save 
-                                | QMessageBox::Cancel, QMessageBox::Save);
+                    tr("This file has not been named.\n"
+                        "Do you want save the file?"),
+                    QMessageBox::Save 
+                    | QMessageBox::Cancel, QMessageBox::Save);
             if ( ret == QMessageBox::Save ) save();
             return;
         }
@@ -213,9 +217,9 @@ void SourceFrame::run()
         index = name.lastIndexOf('.');
         if ( index == -1 ) {
             QMessageBox::warning(this, tr("Warning"),
-                                tr("The file name, ") + name +
-                                tr(", lacks an extension."),
-                                QMessageBox::Ok, QMessageBox::Ok); 
+                    tr("The file name, ") + name +
+                    tr(", lacks an extension."),
+                    QMessageBox::Ok, QMessageBox::Ok); 
             return;
         } 
         exeName = name;
@@ -226,17 +230,17 @@ void SourceFrame::run()
         index = exeName.lastIndexOf('.');
         if ( index == -1 ) {
             QMessageBox::warning(this, tr("Warning"),
-                                tr("The project file name, ") + exeName +
-                                tr(", lacks the .ebe extension."),
-                                QMessageBox::Ok, QMessageBox::Ok); 
+                    tr("The project file name, ") + exeName +
+                    tr(", lacks the .ebe extension."),
+                    QMessageBox::Ok, QMessageBox::Ok); 
             return;
         } 
         exeName.truncate(index);
     }
 
-//
-//  Compile all source files
-//
+    //
+    //  Compile all source files
+    //
     //qDebug() << "Files" << sourceFiles;
     //qDebug() << "exe" << exeName;
 
@@ -296,9 +300,9 @@ void SourceFrame::run()
             return;
         }
     }
-//
-//  Examine object files looking for main or _start or start
-//
+    //
+    //  Examine object files looking for main or _start or start
+    //
     QString ldCmd = "";
     foreach ( StringPair pair, objectFiles ) {
         object = pair.first;
@@ -335,14 +339,14 @@ void SourceFrame::run()
 
     if ( ldCmd == "" ) {
         QMessageBox::warning(this, tr("Warning"),
-                            tr("None of the source files defines main"),
-                            QMessageBox::Ok, QMessageBox::Ok); 
+                tr("None of the source files defines main"),
+                QMessageBox::Ok, QMessageBox::Ok); 
         return;
     } 
     //qDebug() << "ld cmd" << ldCmd;
-//
-//  Link object files to produce executable file
-//
+    //
+    //  Link object files to produce executable file
+    //
     foreach ( StringPair pair, objectFiles ) {
         ldCmd += " " + pair.first;
     }
@@ -371,10 +375,10 @@ void SourceFrame::run()
         return;
     }
 
-//
-//  Inspect exe file with nm to determine globals in .data and .bss
-//  "B" "D" and "G" for small objects
-//
+    //
+    //  Inspect exe file with nm to determine globals in .data and .bss
+    //  "B" "D" and "G" for small objects
+    //
     QString nmCmd = QString("nm -C --defined %1").arg(exeName);
     QProcess nm(this);
     //qDebug() << "nm cmd" << nmCmd;
@@ -394,8 +398,8 @@ void SourceFrame::run()
         //qDebug() << "parts" << parts;
         if ( parts.length() >= 3 ) {
             if ( parts[1] == "B" || parts[1] == "b" ||
-                 parts[1] == "D" || parts[1] == "d" ||
-                 parts[1] == "G" || parts[1] == "g" ) {
+                    parts[1] == "D" || parts[1] == "d" ||
+                    parts[1] == "G" || parts[1] == "g" ) {
                 if ( rx.indexIn(parts[2]) >= 0 ) {
                     globals.append(parts[2]);
                 }
@@ -404,9 +408,9 @@ void SourceFrame::run()
     }
     globals.sort();
     //qDebug() << "globals" << globals;
-//
-//  Start debugging
-//
+    //
+    //  Start debugging
+    //
     sourceFiles.clear();
     for ( index = 0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
@@ -559,17 +563,17 @@ void SourceFrame::close()
     if ( source ) {
         if ( source->changed ) {
             int ret = QMessageBox::warning(this, tr("Warning"),
-                                tr("This file has changed.\n"
-                                   "Do you want save the file?"),
-                                QMessageBox::Save | QMessageBox::Discard
-                                | QMessageBox::Cancel, QMessageBox::Save);
+                    tr("This file has changed.\n"
+                        "Do you want save the file?"),
+                    QMessageBox::Save | QMessageBox::Discard
+                    | QMessageBox::Cancel, QMessageBox::Save);
             switch ( ret ) {
-            case QMessageBox::Save:
-                save();
-                break;
-            case QMessageBox::Discard:
-                tab->removeTab(index);
-                delete source;
+                case QMessageBox::Save:
+                    save();
+                    break;
+                case QMessageBox::Discard:
+                    tab->removeTab(index);
+                    delete source;
             }
         } else {
             tab->removeTab(index);
@@ -617,7 +621,7 @@ bool SourceFrame::filesSaved()
     for ( int i = 0; i < tab->count(); i++ ) {
         window = (SourceWindow *)tab->widget(i);
         if ( window->changed &&
-             window->textEdit->document()->characterCount() > 1 ) {
+                window->textEdit->document()->characterCount() > 1 ) {
             filesToSave.append(window->fileName);
             windows.append(window);
         }
@@ -631,9 +635,9 @@ bool SourceFrame::filesSaved()
         }
         msg += "Do you wish to save them all?";
         int ret = QMessageBox::warning(this, tr("Warning"), msg,
-                            QMessageBox::Save | QMessageBox::Discard |
-                            QMessageBox::Cancel,
-                            QMessageBox::Save);
+                QMessageBox::Save | QMessageBox::Discard |
+                QMessageBox::Cancel,
+                QMessageBox::Save);
         if ( ret == QMessageBox::Discard ) return true;
         if ( ret == QMessageBox::Cancel ) return false;
         foreach ( window, windows ) {
@@ -840,13 +844,13 @@ void SourceFrame::templateC()
     }
     int index = tab->currentIndex();
     source->textEdit->setPlainText(
-        "#include <stdio.h>\n"
-        "\n"
-        "int main ( int argc, char **argv )\n"
-        "    printf ( \"Hello World!\\n\" );\n"
-        "    return 0;\n"
-        "}"
-    );
+            "#include <stdio.h>\n"
+            "\n"
+            "int main ( int argc, char **argv )\n"
+            "    printf ( \"Hello World!\\n\" );\n"
+            "    return 0;\n"
+            "}"
+            );
     source->fileName = "hello.c";
     tab->setTabText(index,"hello.c");
     source->save();
@@ -862,16 +866,16 @@ void SourceFrame::templateCpp()
     }
     int index = tab->currentIndex();
     source->textEdit->setPlainText(
-        "#include <iostream>\n"
-        "\n"
-        "using namespace std;\n"
-        "\n"
-        "int main ( int argc, char **argv )\n"
-        "{\n"
-        "    cout << \"Hello World!\\n\" << endl;\n"
-        "    return 0;\n"
-        "}"
-    );
+            "#include <iostream>\n"
+            "\n"
+            "using namespace std;\n"
+            "\n"
+            "int main ( int argc, char **argv )\n"
+            "{\n"
+            "    cout << \"Hello World!\\n\" << endl;\n"
+            "    return 0;\n"
+            "}"
+            );
     source->fileName = "hello.cpp";
     tab->setTabText(index,"hello.cpp");
     source->save();
@@ -887,23 +891,23 @@ void SourceFrame::templateAssembly()
     }
     int index = tab->currentIndex();
     source->textEdit->setPlainText(
-        "msg:   db      'Hello World!',0x0a     ; String to print\n"
-        "len:   equ     $-msg                   ; String length\n"
-        "\n"
-        "       segment .text\n"
-        "       global  _main                   ; Tell linker about main\n"
-        "       extern  _write, _exit\n"
-        "_main:\n"
-        "       push    rbp\n"
-        "       mov     rbp. rsp\n"
-        "       mov     edx, len                ; Parameter 3 for write\n"
-        "       lea     rsi, [msg]              ; Parameter 2 for write\n"
-        "       mov     edi, 1                  ; Parameter 1 (fd)\n"
-        "       call    _write\n"
-        "\n"
-        "       xor     edi, edi                ; 0 return = success\n"
-        "       call    _exit"
-    );
+            "msg:   db      'Hello World!',0x0a     ; String to print\n"
+            "len:   equ     $-msg                   ; String length\n"
+            "\n"
+            "       segment .text\n"
+            "       global  _main                   ; Tell linker about main\n"
+            "       extern  _write, _exit\n"
+            "_main:\n"
+            "       push    rbp\n"
+            "       mov     rbp. rsp\n"
+            "       mov     edx, len                ; Parameter 3 for write\n"
+            "       lea     rsi, [msg]              ; Parameter 2 for write\n"
+            "       mov     edi, 1                  ; Parameter 1 (fd)\n"
+            "       call    _write\n"
+            "\n"
+            "       xor     edi, edi                ; 0 return = success\n"
+            "       call    _exit"
+            );
     source->fileName = "hello.asm";
     tab->setTabText(index,"hello.asm");
     source->save();
@@ -919,11 +923,11 @@ void SourceFrame::templateFortran()
     }
     int index = tab->currentIndex();
     source->textEdit->setPlainText(
-        "       program hello\n"
-        "       print *, 'Hello World!'\n"
-        "       stop\n"
-        "       end"
-    );
+            "       program hello\n"
+            "       print *, 'Hello World!'\n"
+            "       stop\n"
+            "       end"
+            );
     source->fileName = "hello.f";
     tab->setTabText(index,"hello.f");
     source->save();
