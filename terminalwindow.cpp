@@ -37,6 +37,8 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     QHBoxLayout *lineLayout = new QHBoxLayout;
     lineLayout->addWidget(label);
     lineLayout->addWidget(lineEdit);
+    lineEdit->setToolTip(
+        tr("Terminal input will only work from this input box."));
 
     layout->addLayout(lineLayout);
     setLayout(layout);

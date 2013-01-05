@@ -37,6 +37,9 @@ DataWindow::DataWindow(QWidget *parent)
 
     dataTree = new DataTree(this);
     layout->addWidget(dataTree);
+    dataTree->setToolTip(
+        tr("Left click on a > symbol to expand an item.\n"
+           "Right click to change formats."));
 
     level = 1;
 

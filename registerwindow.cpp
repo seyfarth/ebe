@@ -56,6 +56,10 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     table->resizeRowsToContents();
     table->resizeColumnsToContents();
     table->setShowGrid(false);
+    table->setToolTip(
+        tr("Left click on register names to change formats.\n"
+           "Right clock on a register's value to define a variable\n"
+           "with the address contained in the register."));
 
     layout->addWidget(table);
     setLayout(layout);

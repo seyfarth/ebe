@@ -28,6 +28,7 @@ FloatWindow::FloatWindow(QWidget *parent)
     table->setColumnCount(4);
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
+    table->setToolTip(tr("Right click to change register formats."));
 
     QTableWidgetItem *name;
     QTableWidgetItem *value;
