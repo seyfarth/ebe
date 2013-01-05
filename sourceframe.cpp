@@ -309,7 +309,7 @@ void SourceFrame::run()
         ext = pair.second;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
-        nm.start ( "nm -Cg " + object );
+        nm.start ( "nm -g " + object );
         nm.waitForFinished();
         nm.setReadChannel(QProcess::StandardOutput);
         QString data = nm.readLine();
@@ -318,7 +318,7 @@ void SourceFrame::run()
             parts = data.split(QRegExp("\\s+"));
             //qDebug() << parts;
             if ( parts.length() >= 3 ) {
-                if ( parts[1] == "T" && parts[2] == "main" ) {
+                if ( parts[1] == "T" && (parts[2] == "main" || parts[2] == "_main") ) {
                     //qDebug() << "found main" << object;
                     if ( cExts.contains(ext) ) {
                         ldCmd = ebe["build/ccld"].toString();
