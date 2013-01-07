@@ -6,6 +6,9 @@
 #include <QString>
 #include <QLineEdit>
 #include <QKeyEvent>
+#ifdef Q_WS_WIN
+#include <windows.h>
+#endif
 
 class PtyReader;
 
@@ -35,9 +38,17 @@ private slots:
     void dataReady(QString data);
     void lineEditReady();
 
-private:
+public:
     TerminalEdit *edit;
     QLineEdit *lineEdit;
+#ifdef Q_WS_WIN
+    HANDLE toChild;
+    HANDLE fromChild;
+    HANDLE childStdin;
+    HANDLE childStdout;
+#else
+
+#endif
     int pty;
     int ptySlave;
     PtyReader *ptyReader;

@@ -8,10 +8,10 @@
 extern DataWindow *dataWindow;
 extern SourceFrame *sourceFrame;
 
-extern QList<QString> cppExts;
-extern QList<QString> cExts;
-extern QList<QString> fortranExts;
-extern QList<QString> asmExts;
+extern QStringList cppExts;
+extern QStringList cExts;
+extern QStringList fortranExts;
+extern QStringList asmExts;
 
 extern QStatusBar *statusBar;
 
@@ -892,7 +892,7 @@ void SourceWindow::gotoBottom()
 
 void SourceWindow::gotoLine()
 {
-    qDebug() << "gotoLine";
+    //qDebug() << "gotoLine";
     QTextDocument *doc = textEdit->document();
     LineNumberDialog *dialog = new LineNumberDialog;
     QTextCursor cursor = textEdit->textCursor();

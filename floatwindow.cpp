@@ -84,13 +84,21 @@ void FloatWindow::receiveFpRegs ( QStringList data )
 {
     QStringList parts;
     bool ok;
+#ifdef Q_WS_WIN
+    unsigned long long x[4]={0,0,0,0};
+#else
     unsigned long x[4]={0,0,0,0};
+#endif
     //qDebug() << "fp receive" << data;
     for (int i = 0; i < 16; i++ ) {
         parts = data[i].split(QRegExp("\\s+"));
         //qDebug() << parts;
         for ( int j = 0; j < parts.length(); j++ ) {
+#ifdef Q_WS_WIN
+            x[j] = parts[j].mid(2).toLongLong(&ok,16);
+#else
             x[j] = parts[j].mid(2).toLong(&ok,16);
+#endif
         }
         //qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
         regValues[i].setValue(x);
@@ -172,7 +180,11 @@ FpRegister::FpRegister()
     for ( int i = 0; i < 4; i++ ) i8[i] = 0;
 }
 
+#ifdef Q_WS_WIN
+void FpRegister::setValue(unsigned long long *x)
+#else
 void FpRegister::setValue(unsigned long *x)
+#endif
 {
     for ( int i = 0; i < 4; i++ ) u8[i] = x[i];
 }

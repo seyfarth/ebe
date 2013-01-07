@@ -1,7 +1,11 @@
 #include <QDebug>
 #include <QTimer>
+#include <cstdio>
 #include "gdb.h"
 #include "terminalwindow.h"
+#ifdef Q_WS_WIN
+#include <windows.h>
+#endif
 
 extern TerminalWindow *terminalWindow;
 
@@ -10,6 +14,12 @@ QProcess *gdbProcess;
 
 QMap<QString,int> sizeForType;
 char letterForSize[] = "bbhhwwwwg"; 
+
+#ifdef Q_WS_WIN
+bool needToKill;
+HANDLE hProcess;
+HANDLE hThread;
+#endif
 
 QString readLine()
 {
@@ -40,8 +50,11 @@ void GDBThread::run()
 GDB::GDB()
 : QObject()
 {
+#ifdef Q_WS_WIN
+    needToKill = false;
+#endif
     gdbProcess = new QProcess(this);
-    gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
+    //gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
     gdbProcess->start("gdb");
 
     //qDebug() << "gdb state" << gdbProcess->state();
@@ -96,7 +109,10 @@ void GDB::send(QString cmd, QString /*options*/)
     QString result;
     result = readLine();
     //qDebug() << "result:" << result;
-    int count = 1;
+    //if ( result == "Continuing." ) return;
+#ifdef Q_WS_WIN
+    if ( cmd == "continue") ResumeThread(hThread);
+#endif
     while ( result.left(5) != "(gdb)" ) {
         if ( runCommands.contains(cmd) ) {
             if ( rx1.indexIn(result) >= 0 ) {
@@ -109,7 +125,6 @@ void GDB::send(QString cmd, QString /*options*/)
             }
         }
         result = readLine();
-        count++;
         //qDebug() << "result:" << result;
     }
 }
@@ -123,11 +138,9 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
     QString result;
     result = readLine();
     //qDebug() << "result:" << result;
-    int count = 1;
     while ( result.left(5) != "(gdb)" ) {
         list.append(result);
         result = readLine();
-        count++;
         //qDebug() << "result:" << result;
     }
     //qDebug() << list;
@@ -208,9 +221,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("nosharedlibrary");
     send("file \""+exe+"\"");
     classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
-    send("tty " + terminalWindow->ptyName);
     send("delete breakpoints");
-    send("set args "+options);
     for ( i = 0; i < length; i++ ) {
         foreach ( int bp, breakpoints[i] ) {
             //qDebug() << files[i] << bp;
@@ -218,7 +229,73 @@ void GDB::doRun(QString exe, QString options, QStringList files,
             send(QString("break %1:%2").arg(files[i]).arg(bp) );
         }
     }
+#ifdef Q_WS_WIN
+    char dir[1025];
+    DWORD len = 1024;
+    len = GetCurrentDirectory(len,(LPTSTR)dir);
+    //printf("len %d, dir = %s\n",len,dir);
+    PROCESS_INFORMATION pi;
+    STARTUPINFO si;
+    DWORD flags;
+    ZeroMemory(&si,sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi,sizeof(pi));
+    si.hStdInput = terminalWindow->childStdin;
+    si.hStdOutput = terminalWindow->childStdout;
+    si.hStdError = terminalWindow->childStdout;
+    flags = CREATE_SUSPENDED;
+    si.dwFlags = STARTF_USESTDHANDLES;
+    QString cmd = exe + " " + options;
+    QByteArray ba = cmd.toLocal8Bit();
+    //qDebug() << "cmd" << cmd;
+    const char *s = ba.data();
+    size_t sz = ba.length()+1;
+    wchar_t * ws = new wchar_t[sz];
+    size_t conv=0;
+    mbstowcs_s(&conv,ws,sz,s,_TRUNCATE);
+    //printf("cmd = %s\n",s);
+    if ( needToKill ) {
+        TerminateProcess(hProcess,0);
+        needToKill = false;
+    }
+    if (! CreateProcess (
+                NULL,           // Application name
+                ws,      // Command line
+                NULL,           // Process attributes
+                NULL,           // Thread attributes
+                TRUE,           // Inherit handles
+                flags,          // Creation flags
+                NULL,           // Environment
+                NULL,           // Current directory
+                &si,            // Startup info
+                &pi)            // Process information
+        ) {
+        qDebug() << "Could not create process" << exe;
+        DWORD error = GetLastError();
+        qDebug() << "error" << error;
+        return;
+    }
+    //qDebug() << "pid" << pi.dwProcessId;
+    hProcess = pi.hProcess;
+    hThread = pi.hThread;
+    needToKill = true;
+
+    send("attach "+QString("%1").arg(pi.dwProcessId));
+    //send("delete breakpoints");
+    //for ( i = 0; i < length; i++ ) {
+        //foreach ( int bp, breakpoints[i] ) {
+            ////qDebug() << files[i] << bp;
+            ////qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
+            //send(QString("break %1:%2").arg(files[i]).arg(bp) );
+        //}
+    //}
+    send("continue");
+    //send("set prompt (gdb)\\n");
+#else
+    send("tty " + terminalWindow->ptyName);
+    send("set args "+options);
     send("run");
+#endif
     running = true;
     hasAVX = testAVX();
     getBackTrace();
@@ -537,6 +614,7 @@ bool GDB::testAVX()
     QStringList results;
     QStringList parts;
     results = sendReceive("print $ymm0.v4_int64[0]");
+    //qDebug() << "tavx" << results;
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
         if ( parts.length() == 3 && parts[1] == "=" ) return true;

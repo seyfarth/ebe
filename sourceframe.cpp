@@ -5,6 +5,17 @@
 #include "errorwindow.h"
 #include "gdb.h"
 #include "settings.h"
+#ifdef Q_WS_WIN
+#include <windows.h>
+#endif
+
+#include <iostream>
+using namespace std;
+
+#ifdef Q_WS_WIN
+extern HANDLE hProcess;
+extern bool needToKill;
+#endif
 
 QStringList fortranExts;
 QStringList cExts;
@@ -196,6 +207,13 @@ void SourceFrame::run()
     breakLine = 0;
     breakFile = "";
 
+#ifdef Q_WS_WIN
+    if ( needToKill ) {
+        //printf("Killing handle %d\n",hProcess);
+        TerminateProcess(hProcess,0);
+        needToKill = false;
+    }
+#endif
     //
     //  Determine all source files
     //
@@ -314,6 +332,7 @@ void SourceFrame::run()
         nm.setReadChannel(QProcess::StandardOutput);
         QString data = nm.readLine();
         QStringList parts;
+	    //cout << object.toStdString() << " " << data.toStdString() << endl;
         while ( data != "" ) {
             parts = data.split(QRegExp("\\s+"));
             //qDebug() << parts;

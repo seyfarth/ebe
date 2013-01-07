@@ -6,7 +6,11 @@
 #include <QApplication>
 #include <QKeySequence>
 #include <QMessageBox>
+#ifdef Q_WS_WIN
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
 
 #include "mainwindow.h"
 #include "errorwindow.h"
@@ -31,6 +35,11 @@ QToolBar *fileToolBar;
 QToolBar *editToolBar;
 QToolBar *debugToolBar;
 
+#ifdef Q_WS_WIN
+extern HANDLE hProcess;
+extern bool needToKill;
+#endif
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
@@ -43,7 +52,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     
     gdbThread = new GDBThread();
     gdbThread->start();
+#ifdef Q_WS_WIN
+    while ( !gdb ) Sleep(1);
+#else
     while ( !gdb ) usleep(10);
+#endif
     //qDebug() << "gdb" << gdb;
 
     createStatusBar();
@@ -338,7 +351,7 @@ void MainWindow::createMenus()
 
     addToolBar(Qt::TopToolBarArea,editToolBar);
 
-    debugToolBar->addAction(QIcon(QString(":/icons/%1/run.png")
+    debugToolBar->addAction(QIcon(QString(":/icons/%1/ebe.png")
         .arg(icon_size)), tr("Run"), sourceFrame, SLOT(run()) );
     debugToolBar->addAction(QIcon(QString(":/icons/%1/next.png")
         .arg(icon_size)), tr("Next"), sourceFrame, SLOT(next()) );
@@ -427,6 +440,9 @@ void MainWindow::displayHelp()
 
 void MainWindow::quit()
 {
+#ifdef Q_WS_WIN
+    if ( needToKill ) TerminateProcess(hProcess,0);
+#endif
     if ( sourceFrame->filesSaved() ) {
         saveSettings();
         qApp->quit();

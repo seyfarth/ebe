@@ -239,16 +239,20 @@ void DataItem::setValue(QString v)
         u8 = 0;
         switch ( size ) {
         case 1:
-            u1 = v.toInt(&ok,16);
+            u1 = v.toUInt(&ok,16);
             break;
         case 2:
-            u2 = v.toInt(&ok,16);
+            u2 = v.toUInt(&ok,16);
             break;
         case 4:
-            u4 = v.toInt(&ok,16);
+            u4 = v.toUInt(&ok,16);
             break;
         case 8:
-            u8 = v.toLong(&ok,16);
+#ifdef Q_WS_WIN
+            u8 = v.toULongLong(&ok,16);
+#else
+            u8 = v.toULong(&ok,16);
+#endif
             break;
         }
         //qDebug() << name << size << v << u8 << value();
@@ -512,6 +516,7 @@ void DataWindow::request(DataItem *d)
 void DataWindow::receiveVar(DataMap *map, QString name, QString value)
 {
     DataItem *item;
+    //qDebug() << "rv" << name << value;
     item = map->value(name);
     if ( item == 0 ) {
         return;

@@ -32,11 +32,19 @@ public:
     union {
         double f8;
         float f4;
+#ifdef Q_WS_WIN
+        unsigned long long u8;
+#else
         unsigned long u8;
+#endif
         unsigned int u4;
         unsigned short u2;
         unsigned char u1;
+#ifdef Q_WS_WIN
+        long long i8;
+#else
         long i8;
+#endif
         int i4;
         short i2;
         signed char i1;

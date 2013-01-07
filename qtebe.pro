@@ -8,7 +8,15 @@ DEPENDPATH += .
 INCLUDEPATH += .
 CONFIG -= app_bundle
 QT += webkit
-CONFIG += debug
+CONFIG += console
+
+win32 {
+    CONFIG += console
+}
+
+win64 {
+    CONFIG += console
+}
 
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \

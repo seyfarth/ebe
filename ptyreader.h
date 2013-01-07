@@ -4,15 +4,22 @@
 #include <QThread>
 #include <QString>
 #include <QKeyEvent>
+#ifdef Q_WS_WIN
+#include <windows.h>
+#endif
 
 class PtyReader : public QThread
 {
     Q_OBJECT
 
 public:
-    PtyReader(int fd, QString name);
+#ifdef Q_WS_WIN
+    PtyReader(HANDLE h);
+    HANDLE pty;
+#else
+    PtyReader(int fd);
     int pty;
-    QString ptyName;
+#endif
     void run();
 
 signals:

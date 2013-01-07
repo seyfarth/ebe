@@ -1,25 +1,41 @@
 #include "ptyreader.h"
+#ifndef Q_WS_WIN
 #include <unistd.h>
+#endif
 #include <stdio.h>
 #include <QDebug>
 
-
-PtyReader::PtyReader(int fd, QString name)
+#ifdef Q_WS_WIN
+PtyReader::PtyReader(HANDLE h)
+: QThread()
+{
+    pty = h;
+}
+#else
+PtyReader::PtyReader(int fd)
 : QThread()
 {
     pty = fd;
-    ptyName = name;
 }
+#endif
 
 
 void PtyReader::run()
 {
     char data[257];
+#ifdef Q_WS_WIN
+    DWORD n;
+#else
     int n;
+#endif
 
     //printf("ready\n");
     while ( 1 ) {
+#ifdef Q_WS_WIN
+        ReadFile ( pty, data, 256, &n, NULL );
+#else
         n=read(pty,data,256);
+#endif
         data[n] = 0;
         QString s(data);
         //qDebug() << s;

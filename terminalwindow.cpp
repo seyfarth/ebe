@@ -9,7 +9,9 @@
 #define _XOPEN_SOURCE
 #include <stdlib.h>
 #include <fcntl.h>
+#ifndef Q_WS_WIN
 #include <unistd.h>
+#endif
 
 
 TerminalWindow::TerminalWindow(QWidget *parent)
@@ -20,9 +22,24 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     setFrameStyle( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
+#ifdef Q_WS_WIN
+    SECURITY_ATTRIBUTES attr;
+    attr.nLength = sizeof(SECURITY_ATTRIBUTES);
+    attr.lpSecurityDescriptor = 0;
+    attr.bInheritHandle = TRUE;
+    if ( !CreatePipe(&childStdin,&toChild,&attr,4096) ) {
+       qDebug() << "Could not create pipe to child";
+       return;
+    }
+    if ( !CreatePipe(&fromChild,&childStdout,&attr,4096) ) {
+       qDebug() << "Could not create pipe from child";
+       return;
+    }
+#else
     pty = posix_openpt(O_RDWR);
     grantpt(pty);
     unlockpt(pty);
+#endif
     
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(10,10,10,10);
@@ -43,13 +60,17 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     layout->addLayout(lineLayout);
     setLayout(layout);
 
+#ifdef Q_WS_WIN
+    ptyReader = new PtyReader(fromChild);
+#else
     ptyName = ptsname(pty);
     //qDebug() << "pty" << ptyName;
-    ptyReader = new PtyReader(pty,ptyName);
+    ptyReader = new PtyReader(pty);
+    ptySlave = open(ptsname(pty),O_RDWR);
+#endif
     connect(lineEdit,SIGNAL(returnPressed()),this,SLOT(lineEditReady()));
     connect(ptyReader,SIGNAL(dataReady(QString)),
             this,SLOT(dataReady(QString)) );
-    ptySlave = open(ptsname(pty),O_RDWR);
     ptyReader->start();
 }
 
@@ -71,9 +92,17 @@ void TerminalWindow::lineEditReady()
     s = lineEdit->text();
     a = s.toAscii();
     a.append('\n');
+#ifdef Q_WS_WIN
+    DWORD n=a.length();
+    DWORD res;
+    if ( ! WriteFile(toChild,a.data(),n,&res,NULL) ) {
+        qDebug() << "error writing to child on lineEditReady";
+    }
+#else
     if ( write(pty,a.data(),a.length()) < 1 ) {
         qDebug() << "error writing to pty on lineEditReady";
     }
+#endif
     lineEdit->clear();
 }
 
