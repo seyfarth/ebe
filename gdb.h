@@ -13,6 +13,18 @@
 
 typedef QSet<int> IntSet;
 
+
+class FileLine
+{
+public:
+    QString file;
+    int line;
+    FileLine(QString f, int l);
+    bool operator==(FileLine &x) const;
+};
+
+uint qHash(const FileLine &f);
+
 class GDBThread : public QThread
 {
 public:
@@ -28,6 +40,7 @@ public:
     GDB();
     void initGdb();
     bool running;
+    QHash<FileLine,int> bpHash;
 
 private:
     void send(QString cmd, QString options="");
@@ -59,6 +72,8 @@ public slots:
     void getData(QStringList request);
     void requestVar(DataMap *map, QString name, QString address, QString type,
                     QString format, int size, int first, int last);
+    void setBreakpoint(QString,int);
+    void deleteBreakpoint(QString,int);
 
 signals:
     void nextInstruction(QString,int);

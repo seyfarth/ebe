@@ -1,12 +1,14 @@
 #include "sourcewindow.h"
 #include "sourceframe.h"
 #include "datawindow.h"
+#include "gdb.h"
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
 
 extern DataWindow *dataWindow;
 extern SourceFrame *sourceFrame;
+extern GDB *gdb;
 
 extern QStringList cppExts;
 extern QStringList cExts;
@@ -622,18 +624,25 @@ void SourceWindow::setLineNumbers(int nLines)
 
 void SourceWindow::setNextLine(int line)
 {
-    QTextCursor(textEdit->document()->findBlockByNumber(line-1)).setBlockFormat(breakFormat);
+    QTextDocument *doc = textEdit->document();
+    bool saveChanged = changed;
+    QTextCursor(doc->findBlockByNumber(line-1)).setBlockFormat(breakFormat);
     scrollBar->setValue(line-1-textHeight/2);
+    changed = saveChanged;
 }
 
 void SourceWindow::clearNextLine(int line)
 {
-    QTextCursor(textEdit->document()->findBlockByNumber(line-1)).setBlockFormat(normalFormat);
+    bool saveChanged = changed;
+    QTextDocument *doc = textEdit->document();
+    QTextCursor(doc->findBlockByNumber(line-1)).setBlockFormat(normalFormat);
+    changed = saveChanged;
 }
 
-    LineNumberEdit::LineNumberEdit(QWidget *parent)
+LineNumberEdit::LineNumberEdit(QWidget *parent)
 : QPlainTextEdit(parent)
 {
+    myParent = (SourceWindow *)parent;
     setFixedWidth(60);
     setReadOnly(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -643,6 +652,10 @@ void SourceWindow::clearNextLine(int line)
     breakpoints = ((SourceWindow *)parent)->breakpoints;
     breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
     breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
+    connect(this, SIGNAL(sendBreakpoint(QString,int)),
+            gdb, SLOT(setBreakpoint(QString,int)));
+    connect(this, SIGNAL(deleteBreakpoint(QString,int)),
+            gdb, SLOT(deleteBreakpoint(QString,int)));
 }
 
 void SourceWindow::comment()
@@ -934,9 +947,11 @@ void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
     if ( breakpoints->contains(block+1) ) {
         breakpoints->remove(block+1);
         cursorForPosition(e->pos()).setBlockFormat(normalFormat);
+        emit deleteBreakpoint(myParent->fileName,block+1);
     } else {
         breakpoints->insert(block+1);
         cursorForPosition(e->pos()).setBlockFormat(breakFormat);
+        emit sendBreakpoint(myParent->fileName,block+1);
     }
     //foreach ( int line, *breakpoints ) {
     //qDebug() << "bp at" << line;
@@ -968,6 +983,7 @@ void LineNumberEdit::dropAllBreakpoints()
     foreach ( int line, *breakpoints ) {
         //qDebug() << "bp at" << line;
         breakpoints->remove(line);
+        emit deleteBreakpoint(myParent->fileName,line);
         //eventPosition.setX(0);
         //eventPosition.setY((line-p->topNumber)*p->fontHeight+p->fontHeight/2+1);
         //qDebug() << "Pos" << eventPosition;
@@ -983,6 +999,7 @@ void LineNumberEdit::setBreakpoint()
     //qDebug() << "set" << row;
     //qDebug() << "block" << block;
     breakpoints->insert(block+1);
+    emit sendBreakpoint(myParent->fileName,block+1);
     cursorForPosition(eventPosition).setBlockFormat(breakFormat);
 }
 
@@ -995,6 +1012,7 @@ void LineNumberEdit::dropBreakpoint()
     //qDebug() << "set" << row;
     //qDebug() << "block" << block;
     breakpoints->remove(block+1);
+    emit deleteBreakpoint(myParent->fileName,block+1);
     cursorForPosition(eventPosition).setBlockFormat(normalFormat);
 }
 

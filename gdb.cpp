@@ -17,6 +17,7 @@ char letterForSize[] = "bbhhwwwwg";
 
 #ifdef Q_WS_WIN
 bool needToKill;
+bool needToWake;
 HANDLE hProcess;
 HANDLE hThread;
 #endif
@@ -109,9 +110,11 @@ void GDB::send(QString cmd, QString /*options*/)
     QString result;
     result = readLine();
     //qDebug() << "result:" << result;
-    //if ( result == "Continuing." ) return;
 #ifdef Q_WS_WIN
-    if ( cmd == "continue") ResumeThread(hThread);
+    if ( needToWake ) {
+        ResumeThread(hThread);
+        needToWake = false;
+    }
 #endif
     while ( result.left(5) != "(gdb)" ) {
         if ( runCommands.contains(cmd) ) {
@@ -217,6 +220,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     globals = g;
     //qDebug() << "length" << length;
     running = false;
+    bpHash.clear();
     send("kill");
     send("nosharedlibrary");
     send("file \""+exe+"\"");
@@ -225,11 +229,11 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     for ( i = 0; i < length; i++ ) {
         foreach ( int bp, breakpoints[i] ) {
             //qDebug() << files[i] << bp;
-            //qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
-            send(QString("break %1:%2").arg(files[i]).arg(bp) );
+            setBreakpoint(files[i],bp);
         }
     }
 #ifdef Q_WS_WIN
+    needToWake = true;
     char dir[1025];
     DWORD len = 1024;
     len = GetCurrentDirectory(len,(LPTSTR)dir);
@@ -356,6 +360,49 @@ void GDB::doStop()
 {
     send("kill");
     running = false;
+}
+
+void GDB::setBreakpoint(QString file, int bp)
+{
+    QStringList results;
+    QStringList parts;
+    FileLine f(file,bp);
+    if ( bpHash.contains(f) ) return;
+    results = sendReceive(QString("break %1:%2").arg(file).arg(bp) );
+    foreach ( QString result, results ) {
+        parts = result.split(QRegExp("\\s+"));
+        if ( parts[0] == "Breakpoint" ) {
+            //qDebug() << "sbp" << result << file << bp << parts[1].toInt();
+            bpHash[f] = parts[1].toInt();
+            break;
+        }
+    }
+}
+
+void GDB::deleteBreakpoint(QString file, int line)
+{
+    FileLine f(file,line);
+    int bp = bpHash[f];
+    //qDebug() << "dbp" << file << line << bp;
+    if ( bp > 0 ) {
+        send(QString("delete %1").arg(bp));
+        bpHash.remove(f);
+    }
+}
+
+FileLine::FileLine(QString f, int l)
+: file(f), line(l)
+{
+}
+
+bool FileLine::operator==(FileLine &f) const
+{
+    return file == f.file && line == f.line;
+}
+
+uint qHash(const FileLine &f)
+{
+    return qHash(f.file) ^ qHash(f.line);
 }
 
 void GDB::getBackTrace()

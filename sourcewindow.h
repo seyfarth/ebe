@@ -6,6 +6,7 @@
 #include "highlighter.h"
 
 class SourceEdit;
+class SourceWindow;
 
 class FindReplaceDialog : public QDialog
 {
@@ -105,12 +106,17 @@ private:
     void mouseReleaseEvent ( QMouseEvent *event );
     void contextMenuEvent ( QContextMenuEvent *event );
     QPoint eventPosition;
+    SourceWindow *myParent;
 
 private slots:
     void setBreakpoint();
     void dropBreakpoint();
     void dropAllBreakpoints();
     void ignore();
+
+signals:
+    void sendBreakpoint(QString,int);
+    void deleteBreakpoint(QString,int);
 };
 
 
