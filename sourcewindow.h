@@ -60,6 +60,9 @@ public:
     QSet<QString> wordsInList;
     int complete_minimum;
     Highlighter *highlighter;
+    bool autoIndent;
+    void newLine();
+    void indentNewLine(int k=0);
 
 private slots:
     void printScroll();

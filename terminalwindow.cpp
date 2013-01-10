@@ -95,6 +95,7 @@ void TerminalWindow::lineEditReady()
     if ( ! WriteFile(toChild,a.data(),n,&res,NULL) ) {
         qDebug() << "error writing to child on lineEditReady";
     }
+    dataReady(s+"\n");
 #else
     if ( write(pty,a.data(),a.length()) < 1 ) {
         qDebug() << "error writing to pty on lineEditReady";

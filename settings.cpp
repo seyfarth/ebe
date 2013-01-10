@@ -80,7 +80,9 @@ void Settings::setDefaults()
     ebe["table_bg"] = "#f0ffff";
     ebe["list_bg"] = "#e0f0ff";
     ebe["tree_bg"] = "#e0fafa";
-    ebe["tab_width"] = 4;
+
+    ebe["edit/tab_width"] = 4;
+    ebe["edit/auto_indent"] = true;
 
     ebe["os/linux"] = false;
     ebe["os/mac"] = true;

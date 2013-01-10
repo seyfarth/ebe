@@ -44,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
     settings->read();
+    QTimer *timer = new QTimer();
+    timer->setInterval(1);
+    timer->start();
 
     qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
     qRegisterMetaType<QMap<QString,QString> >("QMap<QString,QString>");

@@ -27,7 +27,10 @@ QString readLine()
     QString result="";
     int n;
     do {
-        gdbProcess->waitForReadyRead(0);
+        while ( gdbProcess->bytesAvailable() == 0 ) {
+            gdbProcess->waitForReadyRead(0);
+            //qDebug() << "waiting" << gdbProcess->bytesAvailable();
+        }
         result += gdbProcess->readLine();
         n = result.length();
         //qDebug() << result;
@@ -411,6 +414,7 @@ void GDB::getBackTrace()
 {
     QStringList results;
     results = sendReceive("backtrace");
+    //qDebug() << "getBackTrace" << results;
     if ( results.length() == 0 || results[0].length() == 0 ||
          results[0][0] != '#' ) {
         running = false;
@@ -427,6 +431,7 @@ void GDB::getRegs()
     QMap<QString,QString> map;
     int index1, index2;
     results = sendReceive("info registers");
+    //qDebug() << "getRegs" << results;
 
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
@@ -453,6 +458,7 @@ void GDB::getFpRegs()
     QRegExp rx1("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+).*"
                 "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
+    //qDebug() << "getFpRegs";
     for ( int i = 0; i < 16; i++ ) {
         if ( hasAVX ) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
@@ -491,6 +497,7 @@ void GDB::getGlobals()
     QStringList values;
     QList<QList<int> > dimensions;
 
+    //qDebug() << "getGlobals";
     getVars ( globals, names, types, values, dimensions );
     emit sendGlobals(names,types,values);
 }
@@ -506,6 +513,7 @@ void GDB::getLocals()
     QList<QList<int> > dimensions;
 
     results = sendReceive(QString("info locals"));
+    //qDebug() << "getLocals" << results;
     foreach ( QString r, results ) {
         //qDebug() << "r" << r;
         int n = r.indexOf(" =");
@@ -644,6 +652,7 @@ void GDB::getArgs()
     QString value;
 
     results = sendReceive(QString("info args"));
+    //qDebug() << "getArgs" << results;
     foreach ( QString r, results ) {
         //qDebug() << "r" << r;
         int n = r.indexOf(" =");
@@ -663,7 +672,7 @@ bool GDB::testAVX()
     QStringList results;
     QStringList parts;
     results = sendReceive("print $ymm0.v4_int64[0]");
-    //qDebug() << "tavx" << results;
+    //qDebug() << "testAVX" << results;
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
         if ( parts.length() == 3 && parts[1] == "=" ) return true;

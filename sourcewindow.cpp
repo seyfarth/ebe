@@ -29,7 +29,8 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
                   "useful for assembly language."));
     top = -1;
     scrollBar = verticalScrollBar();
-    tab_width = ebe["tab_width"].toInt();
+    tab_width = ebe["edit/tab_width"].toInt();
+    autoIndent = ebe["edit/auto_indent"].toBool();
     c = 0;
     QCompleter *completer = new QCompleter(this);
     setCompleter(completer);
@@ -159,8 +160,8 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
 {
     static QString eow(" ~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
 
+    static int lastKey=0;
     int key = e->key();
-    //qDebug() << "key" << key << event->modifiers();
     if ( c && c->popup()->isVisible() ) {
         switch ( key ) {
             case Qt::Key_Enter:
@@ -175,25 +176,64 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         }
     }
 
-    if ( key == 46 && e->modifiers() & Qt::ControlModifier ) {
+    int mod = e->modifiers();
+    //qDebug() << "key" << key << mod;
+    if ( key == Qt::Key_BraceLeft && mod == Qt::ShiftModifier ) {
+        //qDebug() << "BraceLeft";
+        lastKey = key;
+        QTextCursor cursor = textCursor();
+        cursor.insertText("{");
+    } else if ( key == Qt::Key_BraceRight && mod == Qt::ShiftModifier ) {
+        //qDebug() << "BraceRight";
+        lastKey = key;
+        QTextCursor cursor = textCursor();
+        if ( autoIndent ) {
+            int col = cursor.positionInBlock();
+            QTextBlock block = cursor.block();
+            QString t = block.text();
+            int prev = (col-1)/tab_width*tab_width;
+            //qDebug() << "prev" << prev << col;
+            for ( int i = col-1; i >= prev; i-- ) {
+                //qDebug() << "i" << i << t[i];
+                if ( t[i] == ' ' ) {
+                    cursor.deletePreviousChar();
+                } else {
+                    break;
+                }
+            }
+        }
+        cursor.insertText("}");
+    } else if ( key == Qt::Key_Return ) {
+        int k = 0;
+        if ( lastKey == Qt::Key_BraceLeft ) k = 1;
+        if ( autoIndent && mod == 0 ) indentNewLine(k);
+        else newLine();
+        lastKey = 0;
+    } else if ( key == 46 && mod & Qt::ControlModifier ) {
+        lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->indent();
-    } else if ( key == 44 && e->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == 44 && mod & Qt::ControlModifier ) {
+        lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->unIndent();
-    } else if ( key == Qt::Key_Home && e->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_Home && mod & Qt::ControlModifier ) {
+        lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoFirstLine();
-    } else if ( key == Qt::Key_End && e->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_End && mod & Qt::ControlModifier ) {
+        lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoLastLine();
-    } else if ( key == Qt::Key_Tab && e->modifiers() == 0 ) {
+    } else if ( key == Qt::Key_Tab && mod == 0 ) {
+        lastKey = 0;
         QTextCursor cursor = textCursor();
         int col = cursor.positionInBlock();
         int next = (col+4)/tab_width*tab_width;
         int n = next - col;
         for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
-    } else if ( key == Qt::Key_Tab && e->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_Tab && mod & Qt::ControlModifier ) {
+        lastKey = 0;
         QTextCursor cursor = textCursor();
         int col = cursor.positionInBlock();
         QTextBlock block = cursor.block();
@@ -210,11 +250,11 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         }
     } else {
         QPlainTextEdit::keyPressEvent(e);
-        const bool ctrlOrShift = e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+        const bool ctrlOrShift = mod & (Qt::ControlModifier | Qt::ShiftModifier);
         if (!c || (ctrlOrShift && e->text().isEmpty()))
             return;
 
-        bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+        bool hasModifier = (mod != Qt::NoModifier) && !ctrlOrShift;
         QString completionPrefix = textUnderCursor();
 
         if (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 1
@@ -241,6 +281,32 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
                 + c->popup()->verticalScrollBar()->sizeHint().width());
         c->complete(cr); // popup it up!
     }
+}
+
+void SourceEdit::indentNewLine(int x)
+{
+    //qDebug() << "inl";
+    QTextCursor cursor = textCursor();
+    int col = cursor.positionInBlock();
+    QTextBlock block = cursor.block();
+    QString t = block.text();
+    int n = t.length();
+    int k = 0;
+    cursor.insertText("\n");
+    cursor = textCursor();
+    while ( k < n && t[k] == ' ' ) {
+        k++;
+    }
+    k += x * tab_width;
+    for ( int i = 0; i < k; i++ ) {
+        cursor.insertText(" ");
+    }
+}
+
+void SourceEdit::newLine()
+{
+    //qDebug() << "nl";
+    textCursor().insertText("\n");
 }
 
 void SourceEdit::scrollContentsBy ( int dx, int dy )
@@ -1131,10 +1197,11 @@ void FindReplaceDialog::replace()
 void FindReplaceDialog::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
-    //qDebug() << "key" << key << event->modifiers();
-    if ( key == 'F' && event->modifiers() & Qt::ControlModifier ) {
+    int mod = event->modifiers();
+    //qDebug() << "key" << key << mod;
+    if ( key == 'F' && mod & Qt::ControlModifier ) {
         find();
-    } else if ( key == 'R' && event->modifiers() & Qt::ControlModifier ) {
+    } else if ( key == 'R' && mod & Qt::ControlModifier ) {
         replace();
     } else {
         QDialog::keyPressEvent(event);

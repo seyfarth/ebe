@@ -197,6 +197,7 @@ void SourceFrame::run()
 {
     int index;
     int length;
+    QStringList globals;
     QStringList sourceFiles;
     QList<IntSet> breakpoints;
     QList<StringPair> objectFiles;
@@ -265,6 +266,10 @@ void SourceFrame::run()
         exeName.truncate(index);
     }
 
+#ifdef Q_WS_WIN
+    exeName += ".exe";
+#endif
+
     //
     //  Compile all source files
     //
@@ -279,9 +284,9 @@ void SourceFrame::run()
         length = name.length();
         ext = name.right(length-index-1);
         base = name.left(index);
-        qDebug() << name << base << ext;
+        //qDebug() << name << base << ext;
         if ( cppExts.contains(ext) ) {
-            qDebug() << name << "cpp";
+            //qDebug() << name << "cpp";
             cmd = ebe["build/cpp"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
@@ -307,33 +312,28 @@ void SourceFrame::run()
         }
         object = base + "." + ebe["build/obj"].toString();
         objectFiles << StringPair(object,ext);
-        qDebug() << "cccmd" << cmd;
+        //qDebug() << "cccmd" << cmd;
         QProcess compile(this);
         compile.start(cmd);
         compile.waitForFinished();
-        compile.setReadChannel(QProcess::StandardError);
-        QString data;
-        unsigned char s[1025];
-        int n;
-        while ( (n = compile.readLine((char *)s,1024)) > 0 ) {
-            for ( int i = 0; i < n; i++ ) {
-                if ( s[i] < 128 ) data += s[i];
-            }
-        }
+        QByteArray data = compile.readAllStandardError();
         if ( data.length() > 0 ) {
             if ( errorWindow.isNull() ) errorWindow = new ErrorWindow;
             errorWindow->setWindowTitle("Errors in " + name );
-            errorWindow->textEdit->setPlainText(data);
+            errorWindow->textEdit->setPlainText(QString(data));
             errorWindow->show();
             return;
         }
     }
     //
     //  Examine object files looking for main or _start or start
+    //  and building list of globals
     //
+    //qDebug() << "building globals";
     QString ldCmd = "";
     foreach ( StringPair pair, objectFiles ) {
         object = pair.first;
+        if ( object == "ebe_unbuffer.o" ) continue;
         ext = pair.second;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
@@ -358,13 +358,25 @@ void SourceFrame::run()
                     } else if ( fortranExts.contains(ext) ) {
                         ldCmd = ebe["build/fortranld"].toString();
                     }
-                    break;
+                } else if ( parts[1] == "B" || parts[1] == "D" ||
+                            parts[1] == "G" ) {
+#ifdef Q_OS_MAC
+                    if ( parts[2].at(0) == '_' ) {
+                        globals.append(parts[2].mid(1));
+                    } else {
+                        globals.append(parts[2]);
+                    }
+#else
+                    globals.append(parts[2]);
+#endif
                 }
             }
             //qDebug() << data;
             data = nm.readLine();
         }
     }
+    globals.sort();
+    //qDebug() << "globals" << globals;
 
     if ( ldCmd == "" ) {
         QMessageBox::warning(this, tr("Warning"),
@@ -383,60 +395,21 @@ void SourceFrame::run()
 
     QProcess ld(this);
     ldCmd.replace("$base",exeName);
-    qDebug() << "ld cmd" << ldCmd;
+    //qDebug() << "ld cmd" << ldCmd;
     ld.start ( ldCmd );
     ld.waitForFinished();
     ld.setReadChannel(QProcess::StandardError);
 
-    QString data;
-    unsigned char s[1025];
-    int n;
-    while ( (n = ld.readLine((char *)s,1024)) > 0 ) {
-        for ( int i = 0; i < n; i++ ) {
-            if ( s[i] < 128 ) data += s[i];
-        }
-    }
+    QByteArray data = ld.readAllStandardError();
     if ( data.length() > 0 ) {
         if ( errorWindow.isNull() ) errorWindow = new ErrorWindow;
         errorWindow->setWindowTitle("Link errors");
-        errorWindow->textEdit->setPlainText(data);
+        errorWindow->textEdit->setPlainText(QString(data));
         errorWindow->show();
         return;
     }
 
-    //
-    //  Inspect exe file with nm to determine globals in .data and .bss
-    //  "B" "D" and "G" for small objects
-    //
-    QString nmCmd = QString("nm -C --defined %1").arg(exeName);
-    QProcess nm(this);
-    //qDebug() << "nm cmd" << nmCmd;
-    nm.start ( nmCmd );
-    nm.waitForFinished();
-    ld.setReadChannel(QProcess::StandardOutput);
 
-    QStringList globals;
-    QStringList parts;
-    QRegExp rx("^[A-Za-z][A-Za-z0-9_]*$");
-    while ( (n = nm.readLine((char *)s,1024)) > 0 ) {
-        data = "";
-        for ( int i = 0; i < n; i++ ) {
-            if ( s[i] < 128 ) data += s[i];
-        }
-        parts = data.split(QRegExp("\\s+"));
-        //qDebug() << "parts" << parts;
-        if ( parts.length() >= 3 ) {
-            if ( parts[1] == "B" || parts[1] == "b" ||
-                    parts[1] == "D" || parts[1] == "d" ||
-                    parts[1] == "G" || parts[1] == "g" ) {
-                if ( rx.indexIn(parts[2]) >= 0 ) {
-                    globals.append(parts[2]);
-                }
-            }
-        }
-    }
-    globals.sort();
-    //qDebug() << "globals" << globals;
     //
     //  Start debugging
     //
@@ -989,7 +962,7 @@ void SourceFrame::copyUnbufferCode()
     "{\n"
     "public:\n"
     "__UnBuffer();\n"
-    "int x;\n"
+    //"int x;\n"
     "};\n"
     "__UnBuffer::__UnBuffer()\n"
     "{\n"
