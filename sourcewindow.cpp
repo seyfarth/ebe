@@ -463,10 +463,12 @@ void SourceWindow::open()
 
     // TODO: Add Fortran file extensions and other assembler extensions
     // Any files?
-    QString name = QFileDialog::getOpenFileName(this, tr("Open File"),
-            ".", tr("Assembly files (*.asm *akefile *);;") +
-            tr("C/C++ files (*.c *.cpp *.h *.hpp *akefile);;") +
-            tr("Fortran files (*.f *.F *.f* *.F* *akefile);;All files (*.* *)"));
+    QString name = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
+            tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
+            tr("Fortran files (*.f* *.F* *akefile);;")+
+            tr("Assembly files (*.asm *.s *akefile);;") +
+            tr("All files (*)")
+    );
 
     if (name == "")
     {

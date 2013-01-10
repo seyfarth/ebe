@@ -104,19 +104,21 @@ void GDB::send(QString cmd, QString /*options*/)
     QRegExp rx1("at ([^:]*):([0-9]*)$");
     QRegExp rx2("^([0-9]+).*$");
     //qDebug() << cmd.toAscii();
+#ifdef Q_WS_WIN
+    if ( needToWake && cmd == "continue" ) {
+        //qDebug() << "ResumeThread" << hThread;
+        ResumeThread(hThread);
+        needToWake = false;
+    }
+#endif
     cmd += '\n';
     gdbProcess->write(cmd.toAscii());
     cmd.chop(1);
     QString result;
     result = readLine();
     //qDebug() << "result:" << result;
-#ifdef Q_WS_WIN
-    if ( needToWake ) {
-        ResumeThread(hThread);
-        needToWake = false;
-    }
-#endif
     while ( result.left(5) != "(gdb)" ) {
+        //qDebug() << "result" << result;
         if ( runCommands.contains(cmd) ) {
             if ( rx1.indexIn(result) >= 0 ) {
                 //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);

@@ -35,6 +35,9 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
+    breakFile = "";
+    breakLine = 0;
+
     bool icons = ebe["buttons/icons"].toBool();
     int icon_size = ebe["buttons/icon_size"].toInt();
 
@@ -204,8 +207,11 @@ void SourceFrame::run()
     QString base;
     QString cmd;
 
+    stop();
     breakLine = 0;
     breakFile = "";
+
+    copyUnbufferCode();
 
 #ifdef Q_WS_WIN
     if ( needToKill ) {
@@ -217,6 +223,8 @@ void SourceFrame::run()
     //
     //  Determine all source files
     //
+    sourceFiles << "ebe_unbuffer.cpp";
+
     if ( projectWindow->projectFileName == "" ) {
         index = tab->currentIndex();
         source = (SourceWindow *)tab->widget(index);
@@ -244,6 +252,7 @@ void SourceFrame::run()
         exeName.truncate(index);
     } else {
         sourceFiles = projectWindow->fileNames;
+        sourceFiles << "ebe_unbuffer.cpp";
         exeName = projectWindow->projectFileName;
         index = exeName.lastIndexOf('.');
         if ( index == -1 ) {
@@ -270,9 +279,9 @@ void SourceFrame::run()
         length = name.length();
         ext = name.right(length-index-1);
         base = name.left(index);
-        //qDebug() << name << base << ext;
+        qDebug() << name << base << ext;
         if ( cppExts.contains(ext) ) {
-            //qDebug() << name << "cpp";
+            qDebug() << name << "cpp";
             cmd = ebe["build/cpp"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
@@ -298,6 +307,7 @@ void SourceFrame::run()
         }
         object = base + "." + ebe["build/obj"].toString();
         objectFiles << StringPair(object,ext);
+        qDebug() << "cccmd" << cmd;
         QProcess compile(this);
         compile.start(cmd);
         compile.waitForFinished();
@@ -373,7 +383,7 @@ void SourceFrame::run()
 
     QProcess ld(this);
     ldCmd.replace("$base",exeName);
-    //qDebug() << "ld cmd" << ldCmd;
+    qDebug() << "ld cmd" << ldCmd;
     ld.start ( ldCmd );
     ld.waitForFinished();
     ld.setReadChannel(QProcess::StandardError);
@@ -442,16 +452,19 @@ void SourceFrame::run()
 
 void SourceFrame::next()
 {
+    clearNextLine(breakFile,breakLine);
     emit doNext();
 }
 
 void SourceFrame::step()
 {
+    clearNextLine(breakFile,breakLine);
     emit doStep();
 }
 
 void SourceFrame::Continue()
 {
+    clearNextLine(breakFile,breakLine);
     emit doContinue();
 }
 
@@ -463,6 +476,8 @@ void SourceFrame::stop()
 
 void SourceFrame::clearNextLine ( QString file, int line )
 {
+    //qDebug() << "cnl" << file << line;
+    if ( file == "" || line < 1 ) return;
     for ( int index=0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
         if ( source->fileName == file ) {
@@ -470,10 +485,14 @@ void SourceFrame::clearNextLine ( QString file, int line )
             return;
         }
     }
+    breakFile = "";
+    breakLine = 0;
 }
 
 void SourceFrame::setNextLine ( QString file, int line )
 {
+    //qDebug() << "snl" << file << line;
+    if ( file == "" || line < 1 ) return;
     for ( int index=0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
         if ( source->fileName == file ) {
@@ -486,7 +505,7 @@ void SourceFrame::setNextLine ( QString file, int line )
 
 void SourceFrame::nextInstruction ( QString file, int line )
 {
-    //qDebug() << "break" << file << line;
+    //qDebug() << "nextI" << file << line;
     if ( breakFile != "" ) {
         clearNextLine(breakFile,breakLine);
     }
@@ -962,3 +981,27 @@ void SourceFrame::find()
     }
 }
 
+void SourceFrame::copyUnbufferCode()
+{
+    QString text =
+    "#include <cstdio>\n"
+    "class __UnBuffer\n"
+    "{\n"
+    "public:\n"
+    "__UnBuffer();\n"
+    "int x;\n"
+    "};\n"
+    "__UnBuffer::__UnBuffer()\n"
+    "{\n"
+    "setbuf(stdout,NULL);\n"
+    "}\n"
+    "__UnBuffer _unBuffer;\n";
+
+    QFile out("ebe_unbuffer.cpp");
+    if ( ! out.open(QIODevice::WriteOnly|QIODevice::Text) ) {
+        qDebug() << "unable to open ebe_unbuffer.cpp for writing";
+        return;
+    }
+    out.write(text.toAscii());
+    out.close();
+}

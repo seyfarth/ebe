@@ -8,15 +8,7 @@ DEPENDPATH += .
 INCLUDEPATH += .
 CONFIG -= app_bundle
 QT += webkit
-CONFIG += console
-
-win32 {
-    CONFIG += console
-}
-
-win64 {
-    CONFIG += console
-}
+CONFIG += console static embed_manifest_exe
 
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \

@@ -27,14 +27,16 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     attr.nLength = sizeof(SECURITY_ATTRIBUTES);
     attr.lpSecurityDescriptor = 0;
     attr.bInheritHandle = TRUE;
-    if ( !CreatePipe(&childStdin,&toChild,&attr,4096) ) {
+    if ( !CreatePipe(&childStdin,&toChild,&attr,1) ) {
        qDebug() << "Could not create pipe to child";
        return;
     }
-    if ( !CreatePipe(&fromChild,&childStdout,&attr,4096) ) {
+    SetHandleInformation(toChild,HANDLE_FLAG_INHERIT,0);
+    if ( !CreatePipe(&fromChild,&childStdout,&attr,1) ) {
        qDebug() << "Could not create pipe from child";
        return;
     }
+    SetHandleInformation(fromChild,HANDLE_FLAG_INHERIT,0);
 #else
     pty = posix_openpt(O_RDWR);
     grantpt(pty);
@@ -76,13 +78,8 @@ TerminalWindow::TerminalWindow(QWidget *parent)
 
 void TerminalWindow::dataReady(QString data)
 {
-    int n = data.length();
-    if (data.at(n-1) == '\n') {
-        data.chop(1);
-        if (data.at(n-2) == '\r') data.chop(1);
-        //qDebug() << "chop" << data;
-    }
-    edit->appendPlainText(data);
+    edit->textCursor().insertText(data);
+    edit->ensureCursorVisible();
 }
 
 void TerminalWindow::lineEditReady()

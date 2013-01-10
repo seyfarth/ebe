@@ -98,12 +98,12 @@ void Settings::setDefaults()
     ebe["build/fortranld"] = "gfortran -g -o $base";
 
 #ifdef Q_WS_WIN
-    ebe["build/obj"] = "obj";
+    ebe["build/obj"] = "o";
 #else
     ebe["build/obj"] = "o";
 #endif
 
-    ebe["buttons/visible"] = true;
+    ebe["buttons/visible"] = false;
     ebe["buttons/icons"] = true;
     ebe["buttons/icon_size"] = 32;
 
