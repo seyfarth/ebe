@@ -582,6 +582,16 @@ void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
                         break;
                     }
                 }
+            } else if ( type == "std::string" ) {
+                value = "";
+                cmd = QString("p %1._M_dataplus._M_p").arg(name);
+                //qDebug() << cmd;
+                results = sendReceive(cmd);
+                //qDebug() << results;
+                if ( results.length() == 0 ) continue;
+                parts = results[0].split(QRegExp("\\s+"));
+                if ( parts.length() < 4 ) continue;
+                value = parts[3];
             } else if ( dim.length() == 1 ) {
                 int n = dim[0];
                 if ( n > 10 ) n = 10;

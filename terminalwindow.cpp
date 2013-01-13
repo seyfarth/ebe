@@ -27,11 +27,11 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     attr.nLength = sizeof(SECURITY_ATTRIBUTES);
     attr.lpSecurityDescriptor = 0;
     attr.bInheritHandle = TRUE;
-    if ( !CreatePipe(&childStdin,&toChild,&attr,1) ) {
+    if ( !CreatePipe(&childStdin,&toChild,&attr,4096) ) {
        qDebug() << "Could not create pipe to child";
        return;
     }
-    SetHandleInformation(toChild,HANDLE_FLAG_INHERIT,0);
+    SetHandleInformation(toChild,HANDLE_FLAG_INHERIT,4096);
     if ( !CreatePipe(&fromChild,&childStdout,&attr,1) ) {
        qDebug() << "Could not create pipe from child";
        return;
