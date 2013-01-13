@@ -79,7 +79,7 @@ DataWindow::DataWindow(QWidget *parent)
 
 QSize DataWindow::sizeHint() const
 {
-    return QSize(300,100);
+    return QSize(300,50);
 }
 
 void DataWindow::setFontHeightAndWidth ( int height, int width )

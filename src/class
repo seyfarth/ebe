@@ -1,0 +1,26 @@
+class MyClass
+{
+public:
+    MyClass();
+
+    int work(int x);
+    
+private:
+    int a;
+};
+
+//
+//  Constructor for MyClass
+//
+MyClass::MyClass()
+{
+    a = 0;
+}
+
+//
+//  Public member function for MyClass
+//
+int MyClass::work(int x)
+{
+    a += x;
+}

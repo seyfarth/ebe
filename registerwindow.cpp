@@ -77,7 +77,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
 
 QSize RegisterWindow::sizeHint() const
 {
-    return QSize(300,100);
+    return QSize(300,50);
 }
 
 void RegisterWindow::setFontHeightAndWidth ( int height, int width )

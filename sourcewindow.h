@@ -170,6 +170,7 @@ public:
     void gotoBottom();
     void gotoLine();
     void prettify();
+    void doTemplate(QAction *a);
 
 public slots:
     void open();

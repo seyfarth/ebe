@@ -22,7 +22,6 @@ public:
     void saveIfChanged(QString file);
     void setNextLine(QString file,int line);
     void clearNextLine(QString file,int line);
-    void copyUnbufferCode();
     int  fontHeight;
     int  fontWidth;
     bool filesSaved();
@@ -68,6 +67,7 @@ private slots:
     void templateAssembly();
     void templateFortran();
     void updateCursorPosition();
+    void doTemplate(QAction*);
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

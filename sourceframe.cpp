@@ -212,7 +212,9 @@ void SourceFrame::run()
     breakLine = 0;
     breakFile = "";
 
-    copyUnbufferCode();
+    QFile::copy(":/src/ebe_unbuffer.cpp","ebe_unbuffer.cpp");
+    QFile::setPermissions("ebe_unbuffer.cpp",
+           QFile::ReadOwner | QFile::WriteOwner);
 
 #ifdef Q_WS_WIN
     if ( needToKill ) {
@@ -854,17 +856,20 @@ void SourceFrame::templateC()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    source->textEdit->setPlainText(
-            "#include <stdio.h>\n"
-            "\n"
-            "int main ( int argc, char **argv )\n"
-            "    printf ( \"Hello World!\\n\" );\n"
-            "    return 0;\n"
-            "}"
-            );
+    //source->textEdit->setPlainText(
+            //"#include <stdio.h>\n"
+            //"\n"
+            //"int main ( int argc, char **argv )\n"
+            //"    printf ( \"Hello World!\\n\" );\n"
+            //"    return 0;\n"
+            //"}"
+            //);
     source->fileName = "hello.c";
     tab->setTabText(index,"hello.c");
-    source->save();
+    //source->save();
+    QFile::copy(":/src/hello.c","hello.c");
+    QFile::setPermissions("hello.c", QFile::ReadOwner | QFile::WriteOwner);
+    source->open("hello.c");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
@@ -876,20 +881,23 @@ void SourceFrame::templateCpp()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    source->textEdit->setPlainText(
-            "#include <iostream>\n"
-            "\n"
-            "using namespace std;\n"
-            "\n"
-            "int main ( int argc, char **argv )\n"
-            "{\n"
-            "    cout << \"Hello World!\\n\" << endl;\n"
-            "    return 0;\n"
-            "}"
-            );
+    //source->textEdit->setPlainText(
+            //"#include <iostream>\n"
+            //"\n"
+            //"using namespace std;\n"
+            //"\n"
+            //"int main ( int argc, char **argv )\n"
+            //"{\n"
+            //"    cout << \"Hello World!\\n\" << endl;\n"
+            //"    return 0;\n"
+            //"}"
+            //);
     source->fileName = "hello.cpp";
     tab->setTabText(index,"hello.cpp");
-    source->save();
+    //source->save();
+    QFile::copy(":/src/hello.cpp","hello.cpp");
+    QFile::setPermissions("hello.cpp", QFile::ReadOwner | QFile::WriteOwner);
+    source->open("hello.cpp");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
@@ -901,27 +909,30 @@ void SourceFrame::templateAssembly()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    source->textEdit->setPlainText(
-            "msg:   db      'Hello World!',0x0a     ; String to print\n"
-            "len:   equ     $-msg                   ; String length\n"
-            "\n"
-            "       segment .text\n"
-            "       global  _main                   ; Tell linker about main\n"
-            "       extern  _write, _exit\n"
-            "_main:\n"
-            "       push    rbp\n"
-            "       mov     rbp. rsp\n"
-            "       mov     edx, len                ; Parameter 3 for write\n"
-            "       lea     rsi, [msg]              ; Parameter 2 for write\n"
-            "       mov     edi, 1                  ; Parameter 1 (fd)\n"
-            "       call    _write\n"
-            "\n"
-            "       xor     edi, edi                ; 0 return = success\n"
-            "       call    _exit"
-            );
+    //source->textEdit->setPlainText(
+            //"msg:   db      'Hello World!',0x0a     ; String to print\n"
+            //"len:   equ     $-msg                   ; String length\n"
+            //"\n"
+            //"       segment .text\n"
+            //"       global  _main                   ; Tell linker about main\n"
+            //"       extern  _write, _exit\n"
+            //"_main:\n"
+            //"       push    rbp\n"
+            //"       mov     rbp. rsp\n"
+            //"       mov     edx, len                ; Parameter 3 for write\n"
+            //"       lea     rsi, [msg]              ; Parameter 2 for write\n"
+            //"       mov     edi, 1                  ; Parameter 1 (fd)\n"
+            //"       call    _write\n"
+            //"\n"
+            //"       xor     edi, edi                ; 0 return = success\n"
+            //"       call    _exit"
+            //);
     source->fileName = "hello.asm";
     tab->setTabText(index,"hello.asm");
-    source->save();
+    //source->save();
+    QFile::copy(":/src/hello.asm","hello.asm");
+    QFile::setPermissions("hello.asm", QFile::ReadOwner | QFile::WriteOwner);
+    source->open("hello.asm");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
@@ -933,15 +944,18 @@ void SourceFrame::templateFortran()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    source->textEdit->setPlainText(
-            "       program hello\n"
-            "       print *, 'Hello World!'\n"
-            "       stop\n"
-            "       end"
-            );
+    //source->textEdit->setPlainText(
+            //"       program hello\n"
+            //"       print *, 'Hello World!'\n"
+            //"       stop\n"
+            //"       end"
+            //);
     source->fileName = "hello.f";
     tab->setTabText(index,"hello.f");
-    source->save();
+    //source->save();
+    QFile::copy(":/src/hello.f","hello.f");
+    QFile::setPermissions("hello.f", QFile::ReadOwner | QFile::WriteOwner);
+    source->open("hello.f");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
@@ -954,27 +968,11 @@ void SourceFrame::find()
     }
 }
 
-void SourceFrame::copyUnbufferCode()
+void SourceFrame::doTemplate(QAction *a)
 {
-    QString text =
-    "#include <cstdio>\n"
-    "class __UnBuffer\n"
-    "{\n"
-    "public:\n"
-    "__UnBuffer();\n"
-    //"int x;\n"
-    "};\n"
-    "__UnBuffer::__UnBuffer()\n"
-    "{\n"
-    "setbuf(stdout,NULL);\n"
-    "}\n"
-    "__UnBuffer _unBuffer;\n";
-
-    QFile out("ebe_unbuffer.cpp");
-    if ( ! out.open(QIODevice::WriteOnly|QIODevice::Text) ) {
-        qDebug() << "unable to open ebe_unbuffer.cpp for writing";
-        return;
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->doTemplate(a);
     }
-    out.write(text.toAscii());
-    out.close();
 }

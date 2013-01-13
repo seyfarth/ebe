@@ -1,0 +1,10 @@
+    switch ( _ ) {
+    case _:
+        _;
+        break;
+    case _:
+        _;
+        break;
+    default:
+        _;
+    }

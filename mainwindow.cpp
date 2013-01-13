@@ -34,6 +34,7 @@ QStatusBar *statusBar;
 QToolBar *fileToolBar;
 QToolBar *editToolBar;
 QToolBar *debugToolBar;
+QToolBar *templateToolBar;
 
 #ifdef Q_WS_WIN
 extern HANDLE hProcess;
@@ -230,6 +231,10 @@ void MainWindow::createMenus()
     debugToolBar->setObjectName("Debug toolbar");
     debugToolBar->setIconSize(QSize(icon_size,icon_size));
 
+    templateToolBar = new QToolBar("Code template toolbar",this);
+    templateToolBar->setObjectName("Template toolbar");
+    templateToolBar->setIconSize(QSize(icon_size,icon_size));
+
     menuBar()->setStyleSheet("font-family: "+ebe["variable_font"].toString());
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(tr("New"), sourceFrame,
@@ -396,6 +401,44 @@ void MainWindow::createMenus()
     helpAction ( helpMenu, "Running", "running.html" );
     helpAction ( helpMenu, "About", "about.html" );
 
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/cin.png")
+        .arg(icon_size)), "cin: input" );
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/cout.png")
+        .arg(icon_size)), "cout: output");
+    templateToolBar->addSeparator();
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/if.png")
+        .arg(icon_size)), "if");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/if-else.png")
+        .arg(icon_size)), "if-else");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/switch.png")
+        .arg(icon_size)), "switch: multi-way branch");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/for.png")
+        .arg(icon_size)), "for: counting loop");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/while.png")
+        .arg(icon_size)), "while: general loop with test at the top");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/do-while.png")
+        .arg(icon_size)), "do-while: general loop with test at the bottom");
+    templateToolBar->addSeparator();
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/double.png")
+        .arg(icon_size)), "double: floating point number");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/int.png")
+        .arg(icon_size)), "int: an integer");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/string.png")
+        .arg(icon_size)), "string");
+    templateToolBar->addSeparator();
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/main.png")
+        .arg(icon_size)), "main");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/function.png")
+        .arg(icon_size)), "function");
+    templateToolBar->addSeparator();
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/class.png")
+        .arg(icon_size)), "class");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/struct.png")
+        .arg(icon_size)), "struct");
+
+    connect ( templateToolBar, SIGNAL(actionTriggered(QAction*)),
+        sourceFrame, SLOT(doTemplate(QAction*)) );
+    addToolBar(Qt::RightToolBarArea,templateToolBar);
 }
 
 void MainWindow::open(QString name)

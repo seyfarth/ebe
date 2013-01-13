@@ -22,7 +22,7 @@ ProjectWindow::ProjectWindow(QWidget *parent)
 
 QSize ProjectWindow::sizeHint() const
 {
-    return QSize(300,100);
+    return QSize(300,50);
 }
 
 void ProjectWindow::ignore()
