@@ -481,6 +481,7 @@ void MainWindow::displayHelp()
     QAction *action = (QAction *)sender();
     QWebView *view = new QWebView();
     view->load(QUrl("qrc:/html/"+action->data().toString()));
+    view->setZoomFactor((double)fontSize/14);
     view->show();
 }
 

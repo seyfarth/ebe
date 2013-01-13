@@ -720,7 +720,10 @@ void SourceFrame::selectNone()
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
     if ( source ) {
-        source->textEdit->moveCursor(QTextCursor::Start,QTextCursor::MoveAnchor);
+        QTextCursor tc = source->textEdit->textCursor();
+        tc.clearSelection();
+        source->textEdit->setTextCursor(tc);
+        gotoFirstLine();
     }
 }
 

@@ -13,18 +13,28 @@ Running your program in the debugger
 
 <p>
 The first step is to set a breakpoint on the line where you want your
-program to stop.  Right click on the line and you will see the first
-character of the line change to a bright red background.  Right click
+program to stop.  Left click on the line number to the left of the 
+line and you will see the first
+character of the line change to a bright red background.  Left click
 again if this is the wrong line.
 </p>
 
 <p>
+You can also right click in the line number column and popup a menu which 
+you can use to set or drop breakpoints.
+This can be quite handy if you have set a lot of breakpoints and you want
+to drop them all.
+</p>
+
+<p>
 After setting one or more breakpoints, you need to click on the Run
-button.  This button will save your source code file, run the proper
+icon in the run toolbar.
+The run icon is the green alien icon <img src='images/ebe.png'>.
+This will save your source code file, run the proper
 compiler for your code and then start the gdb debugger on the
 compiled program.  When the program reaches a line with a
-breakpoint, it will stop and ebe will highlight the line (except for
-the first character) using a pastel blue-green background.  The
+breakpoint, it will stop and ebe will highlight the line 
+using a pastel blue-green background.  The
 highlighted line will be the next line to execute.
 </p>
 
@@ -33,7 +43,8 @@ Next and Step
 </h2>
 
 <p>
-Both the Next and Step buttons will step through your code, line by
+Both the Next <img src='images/next.png'>
+and Step<img src='images/step.png'> icons will step through your code, line by
 line. The difference is that Next will stay in the current function or
 subroutine, while Step will step into a function if one is called on the
 highlighted line.  You generally only want to use the Step button to
@@ -45,10 +56,18 @@ Continue
 </h2>
 
 <p>
-The Continue button will resume normal execution of the program
+The Continue icon <img src='images/continue.png'> will resume normal execution of the program
 and it will only stop if it encounters a breakpoint.  You probably
 would use this to rapidly step past some debugged code to reach a
 breakpoint in some code which currently has an error.
+</p>
+
+<h2>
+Stop
+</h2>
+
+<p>
+The Stop icon <img src='images/stop.png'> will end your debugging session.
 </p>
 
 <h2>

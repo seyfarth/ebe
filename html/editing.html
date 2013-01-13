@@ -61,9 +61,9 @@ middle of the screen.
 </p>
 
 <p>
-<b>Control-G:</b> Control-G will pop up a dialog where you can enter a line
+<b>Control-L:</b> Control-L will pop up a dialog where you can enter a line
 number to go to.  The dialog is designed so that you can simple press
-Control-G, type in the line number and press Enter without having to
+Control-L, type in the line number and press Enter without having to
 use the mouse.
 </p>
 
@@ -81,8 +81,10 @@ menu option.
 </p>
 
 <p>
-<b>Select none:</b> You can cancel any select using Control-0 or the Edit
-menu option.
+<b>Select none:</b> The best way to select none is to click with the mouse in
+the edit window which cancels the selection.  You can also cancel any select
+using Control-0 or the Edit menu option, but this option moves you back
+to line 1.
 </p>
 
 <p>
@@ -93,8 +95,8 @@ copy, or Control-V for paste.
 
 <p>
 <b>Undo/Redo:</b> Control-Z will undo an edit operation.  Insertions will be
-undone in chunks of about 10 letters.  Control-R will redo an edit
-operation.  There are 100 levels in the undo/redo stack.
+undone line at a time.  Control-Y will redo an edit operation.  The editor
+maintains a stack of edit operations which is probably plenty.
 </p>
 
 <p>
@@ -118,9 +120,10 @@ cursor.
 
 <p>
 <b>Tab:</b> Entering a tab character will enter enough spaces to move to the
-next tab stop.  Tabs are at columns 5, 9, 13, ... - indenting 4
+next tab stop.  By default tabs are at columns 5, 9, 13, ... - indenting 4
 characters for each tab.  Control-Tab will delete characters to the
-left of the cursor to position to the previous tab column.
+left of the cursor to position to the previous tab column.  The tab width can
+be changed by changing the "tab_width" parameter is the file ".ebe.ini".
 </p>
 
 <p>
@@ -129,6 +132,7 @@ line will be indented just the same as the previous line.  Ebe will
 indent the next line after a line ending in "{".  Likewise it will
 de-indent when a line begins with "}".  Adjusting
 indentation for a new line can be done using Tab or Control-Tab.
+Auto-indent can be turned off by setting "auto_indent" to false in ".ebe.ini".
 </p>
 
 <p>
@@ -141,10 +145,11 @@ current line or a range of lines.
 <b>Word/number completion:</b> Ebe keeps track of words and numbers longer than
 three characters to simplify entering/re-entering longer words.  It starts
 with the a collection of keywords and adds words and numbers as you edit. 
-When you enter some text ebe will present a possible completion highlighted
-to the right of where you are editing.  Simply press "Enter" to accept the
-suggested completion or enter additional characters until you either type
-in the complete word or you see the desired completion.
+When you enter some text ebe will present a list of possible completions to
+select from.  Press enter after moving up or down in the list to enter the
+selection completion.  You can also type more text or press Escape to cancel
+the completion. You can change the minimum by changing the "minimum" value of
+the "complete" section of ".ebe.ini".
 </p>
 </body>
 </html>

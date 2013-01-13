@@ -158,7 +158,7 @@ QString lastPrefix="";
 
 void SourceEdit::keyPressEvent(QKeyEvent *e)
 {
-    static QString eow(" ~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+    static QString eow("\r ~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
 
     static int lastKey=0;
     int key = e->key();
@@ -204,6 +204,13 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         }
         cursor.insertText("}");
     } else if ( key == Qt::Key_Return ) {
+        if ( lastPrefix.length() >= complete_minimum &&
+             ! wordsInList.contains(lastPrefix) ) {
+            model.insertRow(0);
+            model.setData(model.index(0),lastPrefix);
+            wordsInList.insert(lastPrefix);
+            model.sort(0);
+        }
         int k = 0;
         if ( lastKey == Qt::Key_BraceLeft ) k = 1;
         if ( autoIndent && mod == 0 ) indentNewLine(k);
@@ -213,7 +220,7 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->indent();
-    } else if ( key == Qt::Key_Period && mod & Qt::ControlModifier ) {
+    } else if ( key == Qt::Key_Comma && mod & Qt::ControlModifier ) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->unIndent();
@@ -1103,7 +1110,7 @@ void LineNumberEdit::wheelEvent ( QWheelEvent * /* e */ )
 {
 }
 
-    LineNumberDialog::LineNumberDialog()
+LineNumberDialog::LineNumberDialog()
 : QDialog()
 {
     setObjectName("Go to line");
@@ -1151,7 +1158,7 @@ void LineNumberDialog::setMax(int max)
     lineSpin->setMaximum(max);
 }
 
-    FindReplaceDialog::FindReplaceDialog()
+FindReplaceDialog::FindReplaceDialog()
 : QDialog()
 {
     setObjectName("Find/Replace");
@@ -1177,8 +1184,11 @@ void LineNumberDialog::setMax(int max)
     layout->addLayout(replaceLayout);
 
     findButton = new QPushButton("Find");
+    findButton->setShortcut(QKeySequence(tr("Ctrl+F")));
     replaceButton = new QPushButton("Replace");
+    replaceButton->setShortcut(QKeySequence(tr("Ctrl+R")));
     cancelButton = new QPushButton("Cancel");
+    cancelButton->setShortcut(QKeySequence(tr("Ctrl+C")));
     connect(findButton, SIGNAL(clicked()), this, SLOT(find()));
     connect(replaceButton, SIGNAL(clicked()), this, SLOT(replace()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
@@ -1208,18 +1218,3 @@ void FindReplaceDialog::replace()
 {
     textEdit->insertPlainText(replaceEdit->text());
 }
-
-void FindReplaceDialog::keyPressEvent(QKeyEvent *event)
-{
-    int key = event->key();
-    int mod = event->modifiers();
-    //qDebug() << "key" << key << mod;
-    if ( key == 'F' && mod & Qt::ControlModifier ) {
-        find();
-    } else if ( key == 'R' && mod & Qt::ControlModifier ) {
-        replace();
-    } else {
-        QDialog::keyPressEvent(event);
-    }
-}
-

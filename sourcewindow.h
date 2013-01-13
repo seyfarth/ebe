@@ -26,7 +26,6 @@ public slots:
     void replace();
 
 private:
-    void keyPressEvent(QKeyEvent *event);
 };
 
 class LineNumberDialog: public QDialog
