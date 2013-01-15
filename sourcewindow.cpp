@@ -177,7 +177,7 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
     }
 
     int mod = e->modifiers();
-    qDebug() << "key" << key << mod << e->text() << int(e->text()[0].toAscii());
+    //qDebug() << "key" << key << mod << e->text() << int(e->text()[0].toAscii());
     if ( key == Qt::Key_BraceLeft && mod == Qt::ShiftModifier ) {
         //qDebug() << "BraceLeft";
         lastKey = key;
@@ -216,11 +216,13 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         if ( autoIndent && mod == 0 ) indentNewLine(k);
         else newLine();
         lastKey = 0;
-    } else if ( key == Qt::Key_Period && mod & Qt::ControlModifier ) {
+    } else if ( (key == Qt::Key_Period || key == Qt::Key_Less)
+                && mod & Qt::ControlModifier ) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->indent();
-    } else if ( key == Qt::Key_Comma && mod & Qt::ControlModifier ) {
+    } else if ( (key == Qt::Key_Comma || key == Qt::Key_Greater)
+                && mod & Qt::ControlModifier ) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->unIndent();
@@ -477,11 +479,11 @@ void SourceWindow::newHeight ( int height )
 
 void SourceWindow::doTemplate(QAction *a)
 {
-    qDebug() << "iconText" << a->iconText();
+    //qDebug() << "iconText" << a->iconText();
     QString name = a->iconText();
     int n = name.indexOf(':');
     if ( n > 0 ) name = name.left(n);
-    qDebug() << name;
+    //qDebug() << name;
 
     QFile in(QString(":/src/%1").arg(name));
     if ( in.open(QFile::ReadOnly) ) {

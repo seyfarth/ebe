@@ -309,6 +309,8 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+0") );
     editMenu->addSeparator();
     editMenu->addAction(tr("Prettify"), sourceFrame, SLOT(prettify()) );
+    editMenu->addSeparator();
+    editMenu->addAction(tr("Edit settings"), this, SLOT(editSettings()) );
 
     moveMenu = menuBar()->addMenu(tr("&Move"));
     moveMenu->addAction(tr("Page forward"), sourceFrame, SLOT(pageForward()),
@@ -360,15 +362,20 @@ void MainWindow::createMenus()
     addToolBar(Qt::TopToolBarArea,editToolBar);
 
     debugToolBar->addAction(QIcon(QString(":/icons/%1/ebe.png")
-        .arg(icon_size)), tr("Run"), sourceFrame, SLOT(run()) );
+        .arg(icon_size)), tr("Run (F5)"), sourceFrame, SLOT(run()) );
+    debugToolBar->actions()[0]->setShortcut(QKeySequence("F5"));
     debugToolBar->addAction(QIcon(QString(":/icons/%1/next.png")
-        .arg(icon_size)), tr("Next"), sourceFrame, SLOT(next()) );
+        .arg(icon_size)), tr("Next (F6)"), sourceFrame, SLOT(next()) );
+    debugToolBar->actions()[1]->setShortcut(QKeySequence("F6"));
     debugToolBar->addAction(QIcon(QString(":/icons/%1/step.png")
-        .arg(icon_size)), tr("Step"), sourceFrame, SLOT(step()) );
+        .arg(icon_size)), tr("Step (F7)"), sourceFrame, SLOT(step()) );
+    debugToolBar->actions()[2]->setShortcut(QKeySequence("F7"));
     debugToolBar->addAction(QIcon(QString(":/icons/%1/continue.png")
-        .arg(icon_size)), tr("Continue"), sourceFrame, SLOT(Continue()) );
+        .arg(icon_size)), tr("Continue (F8)"), sourceFrame, SLOT(Continue()) );
+    debugToolBar->actions()[3]->setShortcut(QKeySequence("F8"));
     debugToolBar->addAction(QIcon(QString(":/icons/%1/process-stop.png")
-        .arg(icon_size)), tr("stop"), sourceFrame, SLOT(stop()) );
+        .arg(icon_size)), tr("stop (F9)"), sourceFrame, SLOT(stop()) );
+    debugToolBar->actions()[4]->setShortcut(QKeySequence("F9"));
 
     addToolBar(Qt::TopToolBarArea,debugToolBar);
 
@@ -572,6 +579,12 @@ void MainWindow::createDockWindows()
     backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
     terminalDock->setVisible(ebe["terminal/visible"].toBool());
     //consoleDock->setVisible(ebe["console/visible"].toBool());
+}
+
+void MainWindow::editSettings()
+{
+    SettingsDialog *dialog = new SettingsDialog();
+    dialog->exec();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

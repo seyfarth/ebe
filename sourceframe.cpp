@@ -507,6 +507,7 @@ void SourceFrame::updateCursorPosition()
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
     if ( source == 0 ) return;
+    source->setLineNumbers(source->textEdit->document()->lineCount());
     QTextCursor cursor = source->textEdit->textCursor();
     QTextBlock block = cursor.block();
     int row = block.blockNumber()+1;

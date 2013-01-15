@@ -25,7 +25,7 @@ Highlighter::Highlighter(QTextDocument *parent)
              << "union" << "unsigned" << "using" << "virtual" << "void"
              << "volatile" << "wchar_t" << "while" << "xor" << "xor_eq";
 
-    operators = QString("!$%^&*()-+=|{}[]\"':;?/<,>.");
+    operators = QString("~!$%^&*()-+=|{}[]\"':;?/<,>.");
     keywordFormat.setForeground(QColor(ebe["reserved_fg"].toString()));
     idFormat.setForeground(QColor(ebe["id_fg"].toString()));
     numberFormat.setForeground(QColor(ebe["numeric_fg"].toString()));

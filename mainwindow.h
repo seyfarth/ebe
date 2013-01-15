@@ -39,6 +39,7 @@ public slots:
     void displayHelp();
     void setTooltipsVisible(bool);
     void quit();
+    void editSettings();
 
 
 private:

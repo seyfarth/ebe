@@ -52,13 +52,13 @@ void Settings::setDefaults()
     ebe["button_green"] = "#006000";
     ebe["button_red"] = "#800000";
     ebe["comment_fg"] = "#0000e0";
-    ebe["find_bg"] = "#f0f0a0";
-    ebe["find_fg"] = "#000080";
+    ebe["find_bg"] = "#a0a0f0";
+    ebe["find_fg"] = "#a00000";
     ebe["fixed_font"] = "Courier";
     ebe["font_size"] = 12;
     ebe["id_fg"] = "#0000a0";
-    ebe["illegal_bg"] = "#ff00ff";
-    ebe["illegal_fg"] = "#00ff00";
+    ebe["illegal_bg"] = "#ffc0ff";
+    ebe["illegal_fg"] = "#000000";
     ebe["instruction_fg"] = "#007090";
     ebe["macro_fg"] = "#d00080";
     ebe["next_bg"] = "#b0ffff";
@@ -135,3 +135,304 @@ void Settings::setDefaults()
 
     ebe["xmm/reverse"] = false;
 }
+
+QMap<QString,QVariant> newSettings;
+
+SettingsDialog::SettingsDialog()
+: QDialog()
+{
+    setObjectName("Settings dialog");
+    setWindowTitle("Edit Settings");
+    setModal(true);
+
+    newSettings = ebe;
+
+    QPoint pos = QCursor::pos();
+    int y = pos.y()-300;
+    if ( y < 100 ) y = 100;
+    pos.setY(y);
+    move ( pos );
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->setSpacing(1);
+    mainLayout->setContentsMargins(3,3,3,3);
+
+    QVBoxLayout *columnLayout;
+    SettingsFrame *frame;
+    
+    columnLayout = new QVBoxLayout;
+    frame = new SettingsFrame("Debug colors");
+
+    frame->addColorSetter("Background", "bg_color");
+    frame->addColorSetter("Breakpoint fg", "break_fg");
+    frame->addColorSetter("Breakpoint bg", "break_bg");
+    frame->addColorSetter("Find fg", "find_fg");
+    frame->addColorSetter("Find bg", "find_bg");
+    frame->addColorSetter("Line number fg", "numbers_fg");
+    frame->addColorSetter("Line number bg", "numbers_bg");
+    frame->addColorSetter("Next line fg", "next_fg");
+    frame->addColorSetter("Next line bg", "next_bg");
+    frame->addStretch();
+    columnLayout->addWidget(frame);
+    //mainLayout->addLayout(columnLayout);
+
+    //columnLayout = new QVBoxLayout;
+    frame = new SettingsFrame("Other colors");
+
+    frame->addColorSetter("Register","reg_fg");
+    frame->addColorSetter("Register title","reg_title_fg");
+
+    frame->addColorSetter("Tooltip","tooltip_bg");
+    frame->addColorSetter("Table","table_bg");
+    frame->addColorSetter("List","list_bg");
+    frame->addColorSetter("Tree","tree_bg");
+    frame->addStretch();
+    columnLayout->addWidget(frame);
+    mainLayout->addLayout(columnLayout);
+
+    columnLayout = new QVBoxLayout;
+    frame = new SettingsFrame("Highlight colors");
+
+    frame->addColorSetter("Comment", "comment_fg");
+    frame->addColorSetter("Identifier", "id_fg");
+    frame->addColorSetter("Reserved", "reserved_fg");
+    frame->addColorSetter("String", "string_fg");
+    frame->addColorSetter("Number", "numeric");
+    frame->addColorSetter("Operator", "operator_fg");
+    frame->addColorSetter("Instruction", "instruction_fg");
+    frame->addColorSetter("Macro", "macro_fg");
+    frame->addColorSetter("Preprocessor","preprocessor_fg");
+    frame->addColorSetter("Illegal fg", "illegal_fg");
+    frame->addColorSetter("Illegal bg", "illegal_bg");
+    frame->addStretch();
+    columnLayout->addWidget(frame);
+
+    QFrame *f = new QFrame;
+    f->setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    f->setLineWidth(3);
+    QVBoxLayout *vbox = new QVBoxLayout;
+    QPushButton *save = new QPushButton(tr("Save"));
+    QPushButton *cancel = new QPushButton(tr("Cancel"));
+    vbox->addStretch();
+    vbox->addWidget(save);
+    vbox->addStretch();
+    vbox->addWidget(cancel);
+    vbox->addStretch();
+    f->setLayout(vbox);
+    columnLayout->addWidget(f);
+    mainLayout->addLayout(columnLayout);
+    connect ( cancel, SIGNAL(clicked()), this, SLOT(reject()) );
+    connect ( save, SIGNAL(clicked()), this, SLOT(save()) );
+
+    columnLayout = new QVBoxLayout;
+    Spinner *spin;
+    ComboBox *box;
+    QStringList strings;
+    frame = new SettingsFrame("Options");
+    spin = frame->addSpinner("Tab spacing","edit/tab_width");
+    spin->setRange(2,16);
+    spin = frame->addSpinner("Completion minimum","complete/minimum");
+    spin->setRange(4,32);
+    box = frame->addComboBox("Toolbar icon size","toolbars/icon_size");
+    strings << "16" << "24" << "32" << "48";
+    box->setChoices(strings);
+    box = frame->addComboBox("Debug button icon size","buttons/icon_size");
+    box->setChoices(strings);
+    frame->addCheckBox("Auto-indent","edit/auto_indent");
+    frame->addCheckBox("Display debug buttons","buttons/visible");
+    frame->addCheckBox("Icons on debug buttons","buttons/icons");
+    frame->addCheckBox("XMM Reverse","xmm/reverse");
+    frame->addStretch();
+    columnLayout->addWidget(frame);
+    //mainLayout->addLayout(columnLayout);
+
+    //columnLayout = new QVBoxLayout;
+    frame = new SettingsFrame("External commands");
+    frame->addLineEdit("Prettify","prettify");
+    frame->addLineEdit("Assemble","build/asm");
+    frame->addLineEdit("Link asm","build/asmld");
+    frame->addLineEdit("C Compile","build/cc");
+    frame->addLineEdit("Link C","build/ccld");
+    frame->addLineEdit("Compile C++","build/cpp");
+    frame->addLineEdit("Link C","build/cppld");
+    frame->addLineEdit("Compile Fortran","build/fortran");
+    frame->addLineEdit("Link Fortran","build/fortranld");
+    frame->addStretch();
+    columnLayout->addWidget(frame);
+    mainLayout->addLayout(columnLayout);
+
+    setLayout(mainLayout);
+
+}
+
+void SettingsDialog::save()
+{
+    //qDebug() << "Saving";
+    ebe = newSettings;
+    accept();
+}
+
+void SettingsFrame::addColorSetter ( QString label, QString var)
+{
+    int row = grid->rowCount();
+    grid->addWidget ( new QLabel(label), row, 0 );
+    ColorButton *button = new ColorButton(var);
+    connect(button,SIGNAL(clicked()), button, SLOT(setColor()));
+    grid->addWidget(button, row, 1);
+}
+
+void SettingsFrame::addStretch()
+{
+    layout->addStretch();
+}
+
+SettingsFrame::SettingsFrame(QString title)
+: QFrame()
+{
+    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setLineWidth(3);
+
+    layout = new QVBoxLayout;
+    grid = new QGridLayout;
+    layout->setSpacing(3);
+    layout->setContentsMargins(10,10,10,10);
+    QLabel *p = new QLabel(title);
+    layout->addWidget(p);
+    layout->setAlignment(p,Qt::AlignCenter);
+    p = new QLabel;
+    QPixmap *pm = new QPixmap(3*title.length()*ebe["font_size"].toInt()/8,2);
+    pm->fill("black");
+    p->setPixmap(*pm);
+    layout->addWidget(p);
+    layout->setAlignment(p,Qt::AlignCenter);
+    layout->addLayout(grid);
+    setLayout(layout);
+}
+
+ColorButton::ColorButton(QString v)
+: QPushButton()
+{
+    var = v;
+    int chipSize = 1.2 * ebe["font_size"].toInt();
+    setFlat(true);
+    pm = new QPixmap(chipSize,chipSize);
+    pm->fill(QColor(ebe[var].toString()));
+    setIconSize(QSize(chipSize,chipSize));
+    setIcon(*pm);
+    setFixedSize(chipSize,chipSize);
+}
+
+void ColorButton::setColor()
+{
+    QColorDialog *dialog = new QColorDialog;
+    dialog->setCurrentColor(QColor(ebe[var].toString()));
+    dialog->setModal(true);
+    if ( dialog->exec() ) {
+        QColor color = dialog->currentColor();
+        QString c;
+        pm->fill(color);
+        setIcon(*pm);
+        c.sprintf("#%02x%02x%02x",color.red(),color.green(),color.blue());
+        newSettings[var] =  c;
+    }
+}
+
+Spinner::Spinner(QString v)
+: QSpinBox()
+{
+    var = v;
+    setValue(ebe[var].toInt());
+}
+
+Spinner * SettingsFrame::addSpinner(QString label, QString var )
+{
+    int row = grid->rowCount();
+    grid->addWidget ( new QLabel(label), row, 0 );
+    Spinner *spinner = new Spinner(var);
+    connect(spinner,SIGNAL(valueChanged(int)),
+            spinner, SLOT(saveValue(int)));
+    grid->addWidget(spinner, row, 1);
+    return spinner;
+}
+
+void Spinner::saveValue ( int v )
+{
+    newSettings[var] = v;
+}
+
+LineEdit::LineEdit(QString v)
+: QLineEdit()
+{
+    var = v;
+    setText(ebe[var].toString());
+    setFixedWidth(ebe["font_size"].toInt()*38);
+}
+
+void SettingsFrame::addLineEdit(QString label, QString var )
+{
+    int row = grid->rowCount();
+    grid->addWidget ( new QLabel(label), row, 0 );
+    LineEdit *edit = new LineEdit(var);
+    connect(edit,SIGNAL(textChanged(QString)),
+            edit, SLOT(saveValue(QString)));
+    grid->addWidget(edit, row, 1);
+}
+
+void LineEdit::saveValue ( QString v )
+{
+    newSettings[var] = v;
+}
+
+CheckBox::CheckBox(QString v)
+: QCheckBox()
+{
+    var = v;
+    setChecked(ebe[var].toBool());
+}
+
+void SettingsFrame::addCheckBox(QString label, QString var )
+{
+    int row = grid->rowCount();
+    grid->addWidget ( new QLabel(label), row, 0 );
+    CheckBox *box = new CheckBox(var);
+    connect(box,SIGNAL(stateChanged(int)),
+            box, SLOT(saveValue(int)));
+    grid->addWidget(box, row, 1);
+}
+
+void CheckBox::saveValue ( int v )
+{
+    newSettings[var] = isChecked();
+}
+
+
+ComboBox::ComboBox(QString v)
+: QComboBox()
+{
+    var = v;
+}
+
+void ComboBox::setChoices(QStringList items)
+{
+    addItems(items);
+    int i = items.indexOf(ebe[var].toString());
+    if ( i < 0 ) i = 0;
+    setCurrentIndex(i);
+}
+
+ComboBox * SettingsFrame::addComboBox(QString label, QString var )
+{
+    int row = grid->rowCount();
+    grid->addWidget ( new QLabel(label), row, 0 );
+    ComboBox *box = new ComboBox(var);
+    connect(box,SIGNAL(activated(QString)),
+            box, SLOT(saveValue(QString)));
+    grid->addWidget(box, row, 1);
+    return box;
+}
+
+void ComboBox::saveValue ( QString v )
+{
+    newSettings[var] = v;
+}
+
