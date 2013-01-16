@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
               registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
     connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
               floatWindow, SLOT(receiveFpRegs(QStringList)) );
+    connect ( this, SIGNAL(sendWorkingDir(QString)),
+              gdb, SLOT(receiveWorkingDir(QString)) );
 }
 
 void MainWindow::restoreMainWindow()
@@ -250,6 +252,7 @@ void MainWindow::createMenus()
     fileMenu->addAction(tr("Save"), sourceFrame, SLOT(save()), QKeySequence::Save );
     fileMenu->addAction(tr("Save as"), sourceFrame, SLOT(saveAs()) );
     fileMenu->addAction(tr("Close"), sourceFrame, SLOT(close()) );
+    fileMenu->addAction(tr("Change directory"), this, SLOT(changeDirectory()));
     fileMenu->addSeparator();
     fileMenu->addAction(tr("New project"), projectWindow, SLOT(newProject()) );
     fileMenu->addAction(tr("Open project"), projectWindow, SLOT(openProject()) );
@@ -500,6 +503,19 @@ void MainWindow::quit()
     if ( sourceFrame->filesSaved() ) {
         saveSettings();
         qApp->quit();
+    }
+}
+
+void MainWindow::changeDirectory()
+{
+    QString dir;
+
+    dir = QFileDialog::getExistingDirectory(this,tr("Select working directory"),
+                QDir::currentPath(), QFileDialog::ShowDirsOnly );
+    if ( dir != "" ) {
+        qDebug() << "cd" << dir;
+        QDir::current().cd(dir);
+        emit sendWorkingDir(dir);
     }
 }
 

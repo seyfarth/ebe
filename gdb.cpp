@@ -228,6 +228,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     bpHash.clear();
     send("kill");
     send("nosharedlibrary");
+    send(QString("cd ")+QDir::currentPath());
     send("file \""+exe+"\"");
     classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
     send("delete breakpoints");
@@ -854,4 +855,9 @@ void GDB::getData(QStringList request)
     }
     request.append(result);
     emit dataReady(request);
+}
+
+void GDB::receiveWorkingDir(QString dir)
+{
+    QDir::current().cd(dir);
 }

@@ -40,7 +40,10 @@ public slots:
     void setTooltipsVisible(bool);
     void quit();
     void editSettings();
+    void changeDirectory();
 
+signals:
+    void sendWorkingDir(QString);
 
 private:
     void createMenus();

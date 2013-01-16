@@ -74,6 +74,7 @@ public slots:
                     QString format, int size, int first, int last);
     void setBreakpoint(QString,int);
     void deleteBreakpoint(QString,int);
+    void receiveWorkingDir(QString);
 
 signals:
     void nextInstruction(QString,int);
