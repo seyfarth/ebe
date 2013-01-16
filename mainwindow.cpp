@@ -514,7 +514,8 @@ void MainWindow::changeDirectory()
                 QDir::currentPath(), QFileDialog::ShowDirsOnly );
     if ( dir != "" ) {
         qDebug() << "cd" << dir;
-        QDir::current().cd(dir);
+        QDir::setCurrent(dir);
+        qDebug() << "current" << QDir::current();
         emit sendWorkingDir(dir);
     }
 }

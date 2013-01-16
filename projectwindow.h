@@ -3,8 +3,6 @@
 
 /*
     ProjectWindow class
-
-    For display of project files initially
 */
 
 #include <QtGui>
@@ -18,6 +16,8 @@ public:
     void open(QString name);
     QStringList fileNames;
     QString projectFileName;
+    void addFile(QString);
+    void save();
 
 private:
 
@@ -30,6 +30,9 @@ private slots:
     void newProject();
     void openProject();
     void closeProject();
+    void dropFile();
+    void editFile();
+    void addFile();
 
 private:
     QListWidget *list;

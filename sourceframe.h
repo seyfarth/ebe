@@ -16,7 +16,7 @@ public:
     void setLineNumbers(int nLines);
     bool fileChanged();
     void saveBeforeQuit();
-    void open(QString name, int index=0);
+    void open(QString name, int index=-1);
     void openInNewTab(QString name);
     void closeTabs();
     void saveIfChanged(QString file);
@@ -26,8 +26,9 @@ public:
     int  fontWidth;
     bool filesSaved();
     QLabel *cursorPosition;
+    void close(QString);
 
-private slots:
+public slots:
     void nextInstruction(QString file,int line);
     void setCommandLineVisible(bool);
     void changedTab(int index);

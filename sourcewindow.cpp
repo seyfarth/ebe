@@ -1,12 +1,14 @@
 #include "sourcewindow.h"
 #include "sourceframe.h"
 #include "datawindow.h"
+#include "projectwindow.h"
 #include "gdb.h"
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
 
 extern DataWindow *dataWindow;
+extern ProjectWindow *projectWindow;
 extern SourceFrame *sourceFrame;
 extern GDB *gdb;
 
@@ -511,7 +513,7 @@ void SourceWindow::open(QString name)
         }
     }
 
-    fileName = QDir::current().relativeFilePath(name);
+    fileName = QDir::current().absoluteFilePath(name);
 
     QByteArray text = file.readAll();
     int length = text.count();
@@ -540,6 +542,7 @@ void SourceWindow::open(QString name)
     textEdit->setPlainText(text);
 
     file.close();
+
     opened = true;
     changed = false;
 }
@@ -576,7 +579,7 @@ void SourceWindow::open()
         }
     }
 
-    fileName = QDir::current().relativeFilePath(name);
+    fileName = QDir::current().absoluteFilePath(name);
 
     QByteArray text = file.readAll();
     int length = text.count();
@@ -606,6 +609,7 @@ void SourceWindow::open()
     setFontHeightAndWidth(sourceFrame->fontHeight,sourceFrame->fontWidth);
 
     file.close();
+    projectWindow->addFile(fileName);
     opened = true;
     changed = false;
 }
@@ -629,7 +633,7 @@ void SourceWindow::saveAs()
         return;
     }
 
-    fileName = QDir::current().relativeFilePath(name);
+    fileName = QDir::current().absoluteFilePath(name);
 
     QTextStream stream(&file);
     stream << textEdit->toPlainText()+"\n";

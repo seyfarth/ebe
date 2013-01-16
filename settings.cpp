@@ -239,6 +239,7 @@ SettingsDialog::SettingsDialog()
     box = frame->addComboBox("Debug button icon size","buttons/icon_size");
     box->setChoices(strings);
     frame->addCheckBox("Auto-indent","edit/auto_indent");
+    frame->addCheckBox("Auto-open project files","edit/auto_indent");
     frame->addCheckBox("Display debug buttons","buttons/visible");
     frame->addCheckBox("Icons on debug buttons","buttons/icons");
     frame->addCheckBox("XMM Reverse","xmm/reverse");

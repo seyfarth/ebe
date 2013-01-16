@@ -279,7 +279,7 @@ void SourceFrame::run()
     //qDebug() << "exe" << exeName;
 
     foreach ( name, sourceFiles ) {
-        name = QDir::current().relativeFilePath(name);
+        //name = QDir::current().relativeFilePath(name);
         saveIfChanged(name);
         index = name.lastIndexOf('.');
         if ( index == -1 ) continue;
@@ -528,6 +528,7 @@ void SourceFrame::openInNewTab(QString /*name*/)
 
 void SourceFrame::open(QString name,int index)
 {
+    if ( index == -1 ) index = tab->count();
     while (index >= tab->count()) {
         source = new SourceWindow;
         index = tab->addTab(source,"");
@@ -554,8 +555,8 @@ void SourceFrame::setCommandLineVisible(bool visible)
 void SourceFrame::open(bool /* checked */)
 {
     int index = tab->currentIndex();
-    //qDebug() << "open";
     source = (SourceWindow *)tab->widget(index);
+    qDebug() << "open" << index << source << source->textDoc->characterCount();
     if ( !source || source->textDoc->characterCount() > 1 ) {
         source = new SourceWindow;
         index = tab->addTab(source,"");
@@ -584,14 +585,36 @@ void SourceFrame::close()
             switch ( ret ) {
                 case QMessageBox::Save:
                     save();
+                    source->close();
+                    delete source;
                     break;
                 case QMessageBox::Discard:
-                    tab->removeTab(index);
+                    //tab->removeTab(index);
+                    source->close();
                     delete source;
             }
         } else {
-            tab->removeTab(index);
+            //tab->removeTab(index);
+            source->close();
             delete source;
+        }
+    }
+}
+
+void SourceFrame::close(QString name)
+{
+    //qDebug() << "sf close" << name;
+    for ( int index = 0; index < tab->count(); index++ ) {
+        source = (SourceWindow *)tab->widget(index);
+        //qDebug() << index << source->fileName;
+        if ( source && source->fileName == name ) {
+            //qDebug() << "closing" << index << source->fileName;
+            if ( source->fileChanged() ) {
+                source->save();
+            }
+            source->close();
+            delete source;
+            return;
         }
     }
 }

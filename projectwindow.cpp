@@ -40,7 +40,7 @@ void ProjectWindow::contextMenuEvent(QContextMenuEvent *event)
     } else {
         QMenu menu("Project menu");
         menu.addAction(tr("Add file to project"), this, SLOT(addFile()) );
-        menu.addAction(tr("Open file in editor"), this, SLOT(dropFile()) );
+        menu.addAction(tr("Open file in editor"), this, SLOT(editFile()) );
         menu.addAction(tr("Drop file from project"), this, SLOT(dropFile()) );
         menu.addAction(tr("Close project"), this, SLOT(closeProject()) );
         menu.addAction(tr("ignore"), this, SLOT(ignore()) );
@@ -54,11 +54,22 @@ void ProjectWindow::newProject()
     QString filename = QFileDialog::getSaveFileName(this,
             tr("Select project name"), 0, tr("Projects (*.ebe)") );
     if ( filename != "" ) {
+        if ( filename.right(4) != ".ebe" ) {
+            qDebug() << "append .ebe";
+            filename += ".ebe";
+        }
         QFile file(filename);
         if ( !file.open(QIODevice::WriteOnly|QIODevice::Text) ) return;
         file.resize(0);
         projectFileName = filename;
     }
+}
+
+void ProjectWindow::addFile(QString name)
+{
+    fileNames.append(name);
+    list->addItem(QDir::current().relativeFilePath(name));
+    save();
 }
 
 void ProjectWindow::open(QString filename)
@@ -71,8 +82,8 @@ void ProjectWindow::open(QString filename)
     name = in.readLine();
     int i = 0;
     while ( !name.isNull() ) {
-        fileNames.append(name);
-        list->addItem(name);
+        fileNames.append(QDir::current().absoluteFilePath(name));
+        list->addItem(QDir::current().relativeFilePath(name));
         if (autoOpen ) {
             //qDebug() << "opening " << name;
             sourceFrame->open(name,i);
@@ -82,6 +93,41 @@ void ProjectWindow::open(QString filename)
     }
     projectFileName = filename;
 }
+
+void ProjectWindow::save()
+{
+    QFile file(projectFileName);
+    if ( !file.open(QFile::WriteOnly|QFile::Text) ) {
+        QMessageBox::critical(this, tr("Error"),
+                tr("Failed to open ") + projectFileName + tr(" for writing"));
+        return;
+    }
+    QTextStream out(&file);
+    foreach ( QString name, fileNames ) {
+        out << name << endl;
+    }
+    file.close();
+}
+
+void ProjectWindow::dropFile()
+{
+    QString file = QDir::current().absoluteFilePath(list->currentItem()->text());
+    sourceFrame->close(file);
+    list->takeItem(list->currentRow());
+    fileNames.removeOne(file);
+    save();
+}
+
+void ProjectWindow::editFile()
+{
+    QString file = QDir::current().absoluteFilePath(list->currentItem()->text());
+    sourceFrame->open(file);
+}
+void ProjectWindow::addFile()
+{
+    sourceFrame->open(true);
+}
+
 
 void ProjectWindow::openProject()
 {
@@ -97,8 +143,8 @@ void ProjectWindow::openProject()
         name = in.readLine();
         int i = 0;
         while ( !name.isNull() ) {
-            fileNames.append(name);
-            list->addItem(name);
+            fileNames.append(QDir::current().absoluteFilePath(name));
+            list->addItem(QDir::current().relativeFilePath(name));
             if (autoOpen ) {
                 sourceFrame->open(name,i);
                 i++;
