@@ -401,7 +401,7 @@ void SettingsFrame::addCheckBox(QString label, QString var )
     grid->addWidget(box, row, 1);
 }
 
-void CheckBox::saveValue ( int v )
+void CheckBox::saveValue ( int /* v */)
 {
     newSettings[var] = isChecked();
 }

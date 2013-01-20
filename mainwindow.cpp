@@ -456,7 +456,7 @@ void MainWindow::open(QString name)
     if ( name.endsWith(".ebe", Qt::CaseInsensitive) ) {
         projectWindow->open(name);
     } else {
-        sourceFrame->open(name);
+        sourceFrame->open(name,0);
     }
 }
 
@@ -513,9 +513,11 @@ void MainWindow::changeDirectory()
     dir = QFileDialog::getExistingDirectory(this,tr("Select working directory"),
                 QDir::currentPath(), QFileDialog::ShowDirsOnly );
     if ( dir != "" ) {
-        qDebug() << "cd" << dir;
+        //qDebug() << "cd" << dir;
         QDir::setCurrent(dir);
-        qDebug() << "current" << QDir::current();
+        //qDebug() << "current" << QDir::current();
+        settings->read();
+        restoreMainWindow();
         emit sendWorkingDir(dir);
     }
 }
@@ -601,7 +603,7 @@ void MainWindow::createDockWindows()
 void MainWindow::editSettings()
 {
     SettingsDialog *dialog = new SettingsDialog();
-    dialog->exec();
+    if ( dialog->exec() ) restoreMainWindow();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

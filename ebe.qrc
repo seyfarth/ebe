@@ -1,5 +1,9 @@
 <!DOCTYPE RCC> <RCC version="1.0">
 <qresource>
+     <file>src/cpp/hello.cpp</file>
+     <file>src/c/hello.c</file>
+     <file>src/fortran/hello.f</file>
+     <file>src/assembly/hello.asm</file>
      <file>src/ebe_unbuffer.cpp</file>
      <file>src/cin</file>
      <file>src/class</file>
@@ -22,6 +26,11 @@
      <file>html/projects.html</file>
      <file>html/running.html</file>
      <file>html/about.html</file>
+     <file>html/images/ebe.png</file>
+     <file>html/images/next.png</file>
+     <file>html/images/step.png</file>
+     <file>html/images/continue.png</file>
+     <file>html/images/stop.png</file>
      <file>images/ebe64.png</file>
      <file>icons/16/close.png</file>
      <file>icons/16/continue.png</file>
@@ -129,7 +138,6 @@
      <file>icons/32/struct.png</file>
      <file>icons/32/switch.png</file>
      <file>icons/32/while.png</file>
-
      <file>icons/48/close.png</file>
      <file>icons/48/continue.png</file>
      <file>icons/48/copy.png</file>

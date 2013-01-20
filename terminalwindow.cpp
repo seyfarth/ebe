@@ -92,7 +92,11 @@ void TerminalWindow::lineEditReady()
 #ifdef Q_WS_WIN
     DWORD n=a.length();
     DWORD res;
-    if ( ! WriteFile(toChild,a.data(),n,&res,NULL) ) {
+    if ( s == "EOF" ) {
+        a[0] = 3;
+        a[1] = '\n';
+        WriteFile(toChild,a.data(),2,&res,NULL);
+    } else if ( ! WriteFile(toChild,a.data(),n,&res,NULL) ) {
         qDebug() << "error writing to child on lineEditReady";
     }
     dataReady(s+"\n");

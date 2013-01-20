@@ -1,0 +1,79 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: fig2dev Version 3.2 Patchlevel 5d -->
+<!-- CreationDate: Thu Jan 17 13:58:28 2013 -->
+<!-- Magnification: 1.050 -->
+<svg	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="32" height="32"
+	viewBox="1168 696 7348 8812">
+<g style="stroke-width:.025in; fill:none">
+<!-- Line: box -->
+<rect x="3779" y="2125" width="4724" height="472" rx="0" 
+style="stroke:#d10000;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#d10000;
+"/>
+<!-- Line: box -->
+<rect x="3779" y="2125" width="472" height="4724" rx="0" 
+style="stroke:#d10000;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#d10000;
+"/>
+<!-- Line: box -->
+<rect x="3779" y="6377" width="4724" height="472" rx="0" 
+style="stroke:#d10000;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#d10000;
+"/>
+<!-- Line: box -->
+<rect x="8031" y="2125" width="472" height="4724" rx="0" 
+style="stroke:#d10000;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#d10000;
+"/>
+<!-- Line: box -->
+<rect x="2598" y="1181" width="3779" height="472" rx="0" 
+style="stroke:#008f00;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#008f00;
+"/>
+<!-- Line: box -->
+<rect x="5905" y="1653" width="472" height="472" rx="0" 
+style="stroke:#008f00;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#008f00;
+"/>
+<!-- Line: box -->
+<rect x="5905" y="6850" width="472" height="944" rx="0" 
+style="stroke:#008f00;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#008f00;
+"/>
+<!-- Line: box -->
+<rect x="2598" y="7322" width="3307" height="472" rx="0" 
+style="stroke:#008f00;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#008f00;
+"/>
+<!-- Line -->
+<polygon points="1181,8267
+3307,8267
+2267,9496
+1653,8740
+1181,8267
+" style="stroke:#0000d1;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#0000d1;
+"/>
+<!-- Line: box -->
+<rect x="1889" y="708" width="708" height="7559" rx="0" 
+style="stroke:#0000d1;stroke-width:8;
+stroke-linejoin:miter; stroke-linecap:butt;
+fill:#0000d1;
+"/>
+<!-- Text -->
+<text xml:space="preserve" x="5905" y="9448" fill="#000000"  font-family="Courier" font-style="normal" font-weight="bold" font-size="1512" text-anchor="start">if</text>
+</g>
+</svg>

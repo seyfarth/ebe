@@ -57,7 +57,7 @@ void Highlighter::highlightBlock(const QString &text)
     More:
         if ( i >= n ) return;
         setCurrentBlockState(0);
-        if ( t[i].isLetter() ) goto Identifier;
+        if ( t[i].isLetter() || t[i] == QChar('_') ) goto Identifier;
         if ( t[i].isDigit() ) goto Number;
         if ( t[i] == QChar('#') ) goto Preprocessor;
         if ( t[i] == QChar('/') &&

@@ -48,6 +48,7 @@ DataWindow::DataWindow(QWidget *parent)
                 << "int" << "signed int" << "unsigned int"
                 << "long" << "signed long" << "unsigned long"
                 << "long int" << "signed long int" << "unsigned long int"
+                << "long signed int" << "long unsigned int"
                 << "long long" << "signed long long" << "unsigned long long"
                 << "bool" << "float" << "double" << "long double"
                 << "string";

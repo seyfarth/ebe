@@ -66,34 +66,48 @@ GDB::GDB()
                 << "continue";
     simpleTypes << "char" << "signed char" << "unsigned char"
                 << "short" << "signed short" << "unsigned short"
-                << "int" << "signed int" << "unsigned int" << "unsigned"
+                << "short int" << "signed short int" << "unsigned short int"
+                << "short signed int" << "short unsigned int"
+                << "int" << "signed int" << "unsigned int"
+                << "signed" << "unsigned"
                 << "long" << "signed long" << "unsigned long"
+                << "long unsigned" << "long signed"
+                << "long unsigned int" << "long signed int"
                 << "long int" << "signed long int" << "unsigned long int"
+                << "long signed int" << "long unsigned int"
                 << "long long" << "signed long long" << "unsigned long long"
                 << "bool" << "float" << "double" << "long double";
-    sizeForType["bool"] = 1;
-    sizeForType["char"] = 1;
-    sizeForType["signed char"] = 1;
-    sizeForType["unsigned char"] = 1;
-    sizeForType["short"] = 2;
-    sizeForType["signed short"] = 2;
-    sizeForType["unsigned short"] = 2;
-    sizeForType["int"] = 4;
-    sizeForType["signed int"] = 4;
-    sizeForType["unsigned int"] = 4;
-    sizeForType["unsigned"] = 4;
-    sizeForType["long"] = 8;
-    sizeForType["signed long"] = 8;
-    sizeForType["unsigned long"] = 8;
-    sizeForType["long int"] = 8;
-    sizeForType["signed long int"] = 8;
-    sizeForType["unsigned long int"] = 8;
-    sizeForType["long long"] = 8;
-    sizeForType["signed long long"] = 8;
-    sizeForType["unsigned long long"] = 8;
-    sizeForType["float"] = 4;
-    sizeForType["double"] = 8;
-    sizeForType["long double"] = 8;
+    sizeForType["bool"] = sizeof(bool);
+    sizeForType["char"] = sizeof(char);
+    sizeForType["signed char"] = sizeof(signed char);
+    sizeForType["unsigned char"] = sizeof(unsigned char);
+    sizeForType["short"] = sizeof(short);
+    sizeForType["signed short"] = sizeof(signed short);
+    sizeForType["unsigned short"] = sizeof(unsigned short);
+    sizeForType["short int"] = sizeof(short);
+    sizeForType["signed short int"] = sizeof(signed short int);
+    sizeForType["unsigned short int"] = sizeof(unsigned short int);
+    sizeForType["short signed int"] = sizeof(short signed int);
+    sizeForType["short unsigned int"] = sizeof(short unsigned int);
+    sizeForType["int"] = sizeof(int);
+    sizeForType["signed int"] = sizeof(signed int);
+    sizeForType["unsigned int"] = sizeof(unsigned int);
+    sizeForType["signed"] = sizeof(signed);
+    sizeForType["unsigned"] = sizeof(unsigned);
+    sizeForType["long"] = sizeof(long);
+    sizeForType["signed long"] = sizeof(signed long);
+    sizeForType["unsigned long"] = sizeof(unsigned long);
+    sizeForType["long int"] = sizeof(long int);
+    sizeForType["signed long int"] = sizeof(signed long int);
+    sizeForType["unsigned long int"] = sizeof(unsigned long int);
+    sizeForType["long signed int"] = sizeof(long signed int);
+    sizeForType["long unsigned int"] = sizeof(long unsigned int);
+    sizeForType["long long"] = sizeof(long long);
+    sizeForType["signed long long"] = sizeof(signed long long);
+    sizeForType["unsigned long long"] = sizeof(unsigned long long);
+    sizeForType["float"] = sizeof(float);
+    sizeForType["double"] = sizeof(double);
+    sizeForType["long double"] = sizeof(long double);
     regs << "rax" << "rbx" << "rcx" << "rdx"
          << "rdi" << "rsi" << "rbp" << "rsp"
          << "r8"  << "r9"  << "r10" << "r11"
@@ -122,16 +136,16 @@ void GDB::send(QString cmd, QString /*options*/)
     //qDebug() << "result:" << result;
     while ( result.left(5) != "(gdb)" ) {
         //qDebug() << "result" << result;
-        if ( runCommands.contains(cmd) ) {
-            if ( rx1.indexIn(result) >= 0 ) {
+        //if ( runCommands.contains(cmd) ) {
+            //if ( rx1.indexIn(result) >= 0 ) {
                 //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
-                emit nextInstruction(rx1.cap(1),rx1.cap(2).toInt());
-            }
-            if ( rx2.indexIn(result) >= 0 ) {
+                //emit nextInstruction(rx1.cap(1),rx1.cap(2).toInt());
+            //}
+            //if ( rx2.indexIn(result) >= 0 ) {
                 //qDebug() << rx2.cap(0) << rx2.cap(1);
-                emit nextInstruction("",rx2.cap(1).toInt());
-            }
-        }
+                //emit nextInstruction("",rx2.cap(1).toInt());
+            //}
+        //}
         result = readLine();
         //qDebug() << "result:" << result;
     }
@@ -229,6 +243,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("kill");
     send("nosharedlibrary");
     send(QString("cd ")+QDir::currentPath());
+    //qDebug() << "file" << exe;
     send("file \""+exe+"\"");
     classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
     send("delete breakpoints");
@@ -240,9 +255,9 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     }
 #ifdef Q_WS_WIN
     needToWake = true;
-    char dir[1025];
-    DWORD len = 1024;
-    len = GetCurrentDirectory(len,(LPTSTR)dir);
+    //char dir[1025];
+    //DWORD len = 1024;
+    //len = GetCurrentDirectory(len,(LPTSTR)dir);
     //printf("len %d, dir = %s\n",len,dir);
     PROCESS_INFORMATION pi;
     STARTUPINFO si;
@@ -421,6 +436,22 @@ void GDB::getBackTrace()
         running = false;
         results.clear();
         results.append("Program not running");
+    }
+    int n;
+    int line;
+    QString file;
+    foreach ( QString s, results ) {
+        n = s.indexOf(" at ");
+        if ( n > 0 ) {
+            file = s.mid(n+4);
+            n = file.lastIndexOf(":");
+            if ( n < 0 ) continue;
+            line = file.mid(n+1).toInt();
+            file = file.left(n);
+            //qDebug() << "match at" << file << line;
+            emit nextInstruction(file,line);
+            break;
+        }
     }
     emit sendBackTrace(results);
 }

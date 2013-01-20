@@ -29,7 +29,7 @@ void ProjectWindow::ignore()
 {
 }
 
-void ProjectWindow::contextMenuEvent(QContextMenuEvent *event)
+void ProjectWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     if ( projectFileName == "" ) {
         QMenu menu("Project menu");
@@ -55,7 +55,7 @@ void ProjectWindow::newProject()
             tr("Select project name"), 0, tr("Projects (*.ebe)") );
     if ( filename != "" ) {
         if ( filename.right(4) != ".ebe" ) {
-            qDebug() << "append .ebe";
+            //qDebug() << "append .ebe";
             filename += ".ebe";
         }
         QFile file(filename);
@@ -67,7 +67,8 @@ void ProjectWindow::newProject()
 
 void ProjectWindow::addFile(QString name)
 {
-    fileNames.append(name);
+    if ( projectFileName == "" ) return;
+    fileNames.append(QDir::current().absoluteFilePath(name));
     list->addItem(QDir::current().relativeFilePath(name));
     save();
 }

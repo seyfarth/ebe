@@ -107,7 +107,7 @@ void FloatWindow::receiveFpRegs ( QStringList data )
     setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
-void FloatWindow::contextMenuEvent ( QContextMenuEvent *event )
+void FloatWindow::contextMenuEvent ( QContextMenuEvent * /* event */ )
 {
     QMenu *menu;
     QMenu *single;

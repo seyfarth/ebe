@@ -298,7 +298,7 @@ void SourceEdit::indentNewLine(int x)
 {
     //qDebug() << "inl";
     QTextCursor cursor = textCursor();
-    int col = cursor.positionInBlock();
+    //int col = cursor.positionInBlock();
     QTextBlock block = cursor.block();
     QString t = block.text();
     int n = t.length();
@@ -487,9 +487,11 @@ void SourceWindow::doTemplate(QAction *a)
     if ( n > 0 ) name = name.left(n);
     //qDebug() << name;
 
+    //qDebug() << QString(":/src/%1").arg(name);
     QFile in(QString(":/src/%1").arg(name));
     if ( in.open(QFile::ReadOnly) ) {
         QString data = QString(in.readAll());
+        //qDebug() << data;
         textEdit->textCursor().insertText(data);
     }
 }
@@ -554,8 +556,6 @@ void SourceWindow::open()
     //qDebug() << "sw open";
     opened = false;
 
-    // TODO: Add Fortran file extensions and other assembler extensions
-    // Any files?
     QString name = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
             tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
             tr("Fortran files (*.f* *.F* *akefile);;")+
@@ -698,16 +698,19 @@ void SourceWindow::textChanged()
 // Sets the line numbers in the line number edit control
 void SourceWindow::setLineNumbers(int nLines)
 {
-    char s[10];
+    //char s[10];
+    QString s;
+    QTextDocument *doc = lineNumberEdit->document();
 
     for (int i = lastLineNumber+1; i <= nLines; i++) {
-        sprintf(s,"%4d",i);
+        s.sprintf("%4d",i);
         lineNumberEdit->appendPlainText(s);
+        QTextCursor(doc->findBlockByNumber(i-1)).setBlockFormat(normalFormat);
     }
     QTextCursor cursor;
     for (int i = nLines+1; i <= lastLineNumber; i++ ) {
-        sprintf(s,"%4d",i);
-        cursor = lineNumberEdit->document()->find(s);
+        s.sprintf("%4d",i);
+        cursor = doc->find(s);
         cursor.select(QTextCursor::BlockUnderCursor);
         cursor.removeSelectedText();
     }
@@ -720,6 +723,7 @@ void SourceWindow::setLineNumbers(int nLines)
 
 void SourceWindow::setNextLine(int line)
 {
+    //qDebug() << "snl" << line;
     QTextDocument *doc = textEdit->document();
     bool saveChanged = changed;
     QTextCursor(doc->findBlockByNumber(line-1)).setBlockFormat(breakFormat);

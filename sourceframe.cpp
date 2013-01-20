@@ -361,7 +361,7 @@ void SourceFrame::run()
                         ldCmd = ebe["build/fortranld"].toString();
                     }
                 } else if ( parts[1] == "B" || parts[1] == "D" ||
-                            parts[1] == "G" ) {
+                            parts[1] == "G" || parts[1] == "C" ) {
 #ifdef Q_OS_MAC
                     if ( parts[2].at(0) == '_' ) {
                         globals.append(parts[2].mid(1));
@@ -455,7 +455,7 @@ void SourceFrame::clearNextLine ( QString file, int line )
     if ( file == "" || line < 1 ) return;
     for ( int index=0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
-        if ( source->fileName == file ) {
+        if ( source->fileName == QDir::current().absoluteFilePath(file) ) {
             source->clearNextLine(line);
             return;
         }
@@ -470,7 +470,7 @@ void SourceFrame::setNextLine ( QString file, int line )
     if ( file == "" || line < 1 ) return;
     for ( int index=0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
-        if ( source->fileName == file ) {
+        if ( source->fileName == QDir::current().absoluteFilePath(file) ) {
             tab->setCurrentIndex(index);
             source->setNextLine(line);
             return;
@@ -556,7 +556,7 @@ void SourceFrame::open(bool /* checked */)
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
-    qDebug() << "open" << index << source << source->textDoc->characterCount();
+    //qDebug() << "open" << index << source << source->textDoc->characterCount();
     if ( !source || source->textDoc->characterCount() > 1 ) {
         source = new SourceWindow;
         index = tab->addTab(source,"");
@@ -564,7 +564,7 @@ void SourceFrame::open(bool /* checked */)
     }
     source->open();
     if ( source && source->opened ) {
-        QString name = source->fileName;
+        QString name = QDir::current().absoluteFilePath(source->fileName);
         name = QDir::current().relativeFilePath(name);
         //qDebug() << "Setting name " << index << name;
         tab->setTabText(index,name);
@@ -877,24 +877,16 @@ void SourceFrame::newFile()
 
 void SourceFrame::templateC()
 {
+    int index;
     if ( !source || source->textEdit->document()->characterCount() > 1 ) {
         source = new SourceWindow;
-        int index = tab->addTab(source,"hello.c");
+        index = tab->addTab(source,"hello.c");
         tab->setCurrentIndex(index);
     }
-    int index = tab->currentIndex();
-    //source->textEdit->setPlainText(
-            //"#include <stdio.h>\n"
-            //"\n"
-            //"int main ( int argc, char **argv )\n"
-            //"    printf ( \"Hello World!\\n\" );\n"
-            //"    return 0;\n"
-            //"}"
-            //);
-    source->fileName = "hello.c";
+    index = tab->currentIndex();
     tab->setTabText(index,"hello.c");
-    //source->save();
-    QFile::copy(":/src/hello.c","hello.c");
+    QFile::remove("hello.c");
+    QFile::copy(":/src/c/hello.c","hello.c");
     QFile::setPermissions("hello.c", QFile::ReadOwner | QFile::WriteOwner);
     source->open("hello.c");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
@@ -908,21 +900,9 @@ void SourceFrame::templateCpp()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    //source->textEdit->setPlainText(
-            //"#include <iostream>\n"
-            //"\n"
-            //"using namespace std;\n"
-            //"\n"
-            //"int main ( int argc, char **argv )\n"
-            //"{\n"
-            //"    cout << \"Hello World!\\n\" << endl;\n"
-            //"    return 0;\n"
-            //"}"
-            //);
-    source->fileName = "hello.cpp";
     tab->setTabText(index,"hello.cpp");
-    //source->save();
-    QFile::copy(":/src/hello.cpp","hello.cpp");
+    QFile::remove("hello.cpp");
+    QFile::copy(":/src/cpp/hello.cpp","hello.cpp");
     QFile::setPermissions("hello.cpp", QFile::ReadOwner | QFile::WriteOwner);
     source->open("hello.cpp");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
@@ -936,28 +916,9 @@ void SourceFrame::templateAssembly()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    //source->textEdit->setPlainText(
-            //"msg:   db      'Hello World!',0x0a     ; String to print\n"
-            //"len:   equ     $-msg                   ; String length\n"
-            //"\n"
-            //"       segment .text\n"
-            //"       global  _main                   ; Tell linker about main\n"
-            //"       extern  _write, _exit\n"
-            //"_main:\n"
-            //"       push    rbp\n"
-            //"       mov     rbp. rsp\n"
-            //"       mov     edx, len                ; Parameter 3 for write\n"
-            //"       lea     rsi, [msg]              ; Parameter 2 for write\n"
-            //"       mov     edi, 1                  ; Parameter 1 (fd)\n"
-            //"       call    _write\n"
-            //"\n"
-            //"       xor     edi, edi                ; 0 return = success\n"
-            //"       call    _exit"
-            //);
-    source->fileName = "hello.asm";
     tab->setTabText(index,"hello.asm");
-    //source->save();
-    QFile::copy(":/src/hello.asm","hello.asm");
+    QFile::remove("hello.asm");
+    QFile::copy(":/src/assembly/hello.asm","hello.asm");
     QFile::setPermissions("hello.asm", QFile::ReadOwner | QFile::WriteOwner);
     source->open("hello.asm");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
@@ -971,16 +932,9 @@ void SourceFrame::templateFortran()
         tab->setCurrentIndex(index);
     }
     int index = tab->currentIndex();
-    //source->textEdit->setPlainText(
-            //"       program hello\n"
-            //"       print *, 'Hello World!'\n"
-            //"       stop\n"
-            //"       end"
-            //);
-    source->fileName = "hello.f";
     tab->setTabText(index,"hello.f");
-    //source->save();
-    QFile::copy(":/src/hello.f","hello.f");
+    QFile::remove("hello.f");
+    QFile::copy(":/src/fortran/hello.f","hello.f");
     QFile::setPermissions("hello.f", QFile::ReadOwner | QFile::WriteOwner);
     source->open("hello.f");
     source->setFontHeightAndWidth(fontHeight,fontWidth);

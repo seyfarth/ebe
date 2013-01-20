@@ -1,3 +1,4 @@
+#include <QtGui>
 #include <QApplication>
 #include <QPalette>
 #include <QColor>
@@ -9,6 +10,7 @@
 MainWindow *mainWin;
 int main(int argc, char *argv[])
 {
+    Q_INIT_RESOURCE(ebe);
     QApplication app(argc, argv);
     QPalette pal = app.palette();
     pal.setColor(QPalette::Window, QColor(218,218,228));
