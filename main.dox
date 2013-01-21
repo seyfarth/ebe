@@ -1,0 +1,55 @@
+/**
+ * \mainpage EBE - Easy Beginner Environment
+ *
+ * \author Ray Seyfarth
+ * \copyright GNU Public License
+ *
+ * \section Purpose
+ *
+ * The initial motivation behind ebe was to make it easier to learn
+ * assembly language.  There are numerous capable IDEs for a variety
+ * of high-level languages.  However it is common for IDEs to require
+ * some form of project and indeed this concept has at least 2 levels
+ * of organization in some IDEs.
+ *
+ * What was needed for assembly language was a method for using either
+ * a label or the contents of a register or memory location as the
+ * address of some data defined by the user.  Ultimately ebe was
+ * developed with the goals of supporting beginning programmers in
+ * assembly and C/C++.  There needed to be some form of multiple file
+ * project in order to write C programs which call assembly functions,
+ * but for beginning C/C++ programmers writing a single source file it
+ * is ideal to not confuse people with projects.
+ *
+ * When using ebe with a single source file for a program, there is
+ * no need to define a project. Also there is no explicit compile
+ * operation in ebe.  You can open the source file and click
+ * on the Run icon (the green alien) to compile and run the program.
+ * Compilation of beginner programs is quick enough to not worry about
+ * possibly wasting some CPU cycles compiling every time you test a
+ * program.
+ *
+ * \section History
+ *
+ * The ebe project began in December 2011 as a Python project.  For a
+ * short period of time it was named "dbe" when it was planned only to
+ * be a debugger.  The Python widget used to display source code was
+ * in fact an editor, so it was moderately close to being an IDE from
+ * the start.  So the program became and IDE and needed a new name.
+ * Ebe was chosen due to the similarity to dbe and the obvious
+ * connection to "extraterrestrial biological entity".  So the acronym
+ * was chosen before the words.
+ *
+ * Ebe developed into a moderately capable IDE with the main problem
+ * being the inability to display the components of classes and structs.
+ * There were several issues with the available Python GUI tools and
+ * the Qt toolkit seemed like a more attractive alternative.
+ *
+ * Around November 20, 2012 work started on a Qt version of ebe and the
+ * actual directory name was qtebe which meant a convenient program name
+ * of qtebe.  Perhaps the original name will be used instead of qtebe as
+ * the program proves itself capable of doing everything the original
+ * ebe did along with a few new tricks.
+ */
+
+
