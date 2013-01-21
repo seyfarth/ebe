@@ -1,9 +1,3 @@
-/*
-    RegisterWindow class
-    For display of general purpose registers, no public functions
-    for set and get registers just yet
-*/
-
 #include "registerwindow.h"
 #include "settings.h"
 #include <QDebug>
@@ -15,6 +9,9 @@
 #include <QTableWidgetItem>
 #include <cstdio>
 
+/**
+ * Static matrix of register names matching the pattern in the table
+ */
 static QString names[5][4] = {
     { "rax", "rsi", "r8",  "r12" },
     { "rbx", "rdi", "r9",  "r13" },
@@ -23,19 +20,54 @@ static QString names[5][4] = {
     { "rip", "eflags", "", "" }
 };
 
+/*
+ *  Constructor
+ */
 RegisterWindow::RegisterWindow(QWidget *parent)
 : QFrame(parent)
 {
+/*
+ *  For the mainwindow's saveState/restoreState and
+ *  saveGeometry/restoreGeometry to work properly each dock widget and toolbar
+ *  needs a unique object name set.
+ */
     setObjectName("Register");
+
+/*
+ *  Set the frame to be raised with a width 4 bevel.
+ */
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
+/*
+ *  Create a table to display the registers
+ */
     table = new QTableWidget(this);
+
+/*
+ *  We need a layout for the table widget
+ */
     QVBoxLayout *layout = new QVBoxLayout;
+
+/*
+ *  Leave 10 pixels all around the table
+ */
     layout->setContentsMargins(10,10,10,10);
 
+/*
+ *  There are 16 general purpose registers in 4 rows.  Each register
+ *  has a name and a value making 8 columns.
+ *
+ *  The fifth row is for rip and eflags
+ */
     table->setRowCount(5);
     table->setColumnCount(8);
+
+/*
+ *  Fill the table with register names and initial values ("0").
+ *  Save the QTableWidgetItem pointers for the register values
+ *  in registerMap.
+ */
     QTableWidgetItem *name;
     QTableWidgetItem *val;
     table->verticalHeader()->hide(); table->horizontalHeader()->hide();
@@ -53,33 +85,64 @@ RegisterWindow::RegisterWindow(QWidget *parent)
             table->setItem(r,c*2+1,val);
         }
     }
+
+/*
+ *  Resizing based on size hints which is not too accurate
+ */
     table->resizeRowsToContents();
     table->resizeColumnsToContents();
+
+/*
+ *  Don't show a grid
+ */
     table->setShowGrid(false);
+
+/*
+ *  Set a tooltip to display when the cursor is over the table
+ */
     table->setToolTip(
-        tr("Left click on register names to change formats.\n"
+        tr("Right click on register names to change formats.\n"
            "Right clock on a register's value to define a variable\n"
            "with the address contained in the register."));
 
+/*
+ *  Add the table to the layout and set the layout for the frame.
+ */
     layout->addWidget(table);
     setLayout(layout);
 
+/*
+ *  Initialize namesList with all register names
+ */
     namesList << "rax" << "rbx" << "rcx" << "rdx"
          << "rdi" << "rsi" << "rbp" << "rsp"
          << "r8"  << "r9"  << "r10" << "r11"
          << "r12" << "r13" << "r14" << "r15"
          << "rip" << "eflags";
 
+/*
+ *  For each register name, create a Register object and save the
+ *  pointer in the regs map.
+ */
     foreach ( QString name, namesList ) {
         regs[name] = new Register(name);
     }
 }
 
+/*
+ *  Crude size hint.  50 rows is not enough to display much, but it allows
+ *  the user to shrink the register window.  300 columns is probably not
+ *  enough.
+ */
 QSize RegisterWindow::sizeHint() const
 {
     return QSize(300,50);
 }
 
+/*
+ *  This function sets the row heights and column widths based on
+ *  the contents of the table and the current font size.
+ */
 void RegisterWindow::setFontHeightAndWidth ( int height, int width )
 {
     int max, length;
@@ -98,6 +161,9 @@ void RegisterWindow::setFontHeightAndWidth ( int height, int width )
     }
 }
 
+/*
+ *  Set the content of a Register based on its name
+ */
 void RegisterWindow::setRegister ( QString name, QString val )
 {
     if ( registerMap.contains(name) ) {
@@ -107,6 +173,10 @@ void RegisterWindow::setRegister ( QString name, QString val )
     }
 }
 
+/*
+ *  Slot triggered by the gdb class sending a map of register
+ *  values.
+ */
 void RegisterWindow::receiveRegs ( QMap<QString,QString> map )
 {
 
@@ -117,11 +187,19 @@ void RegisterWindow::receiveRegs ( QMap<QString,QString> map )
     setFontHeightAndWidth(fontHeight,fontWidth);
 }
 
+/*
+ *  Virtual function from the QFrame class over-ridden to provide
+ *  popup menus for the register window.
+ */
 void RegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     int column = table->currentColumn();
     QMenu menu("Register menu");
     if ( column % 2 == 0 ) {
+/*
+ *      If the column is an even number, this is a register name
+ *      and the menu needs to allow changing formats.
+ */
         menu.addAction(tr("Decimal format"), this, SLOT(setDecimal()) );
         menu.addAction(tr("Hexadecimal format"), this, SLOT(setHex()) );
         menu.addSeparator();
@@ -130,12 +208,20 @@ void RegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
         menu.addAction(tr("Hexadecimal format - all"),
                        this, SLOT(setHexAll()) );
     } else {
+/*
+ *      If the column is odd, then this is a register value which
+ *      can be used to create a variable with the address specified
+ *      by the register.  This is only important for assembly.
+ */
         menu.addAction(tr("Define a variable with this address"),
                        this, SLOT(defineVariableByAddress()) );
     }
     menu.exec(QCursor::pos());
 }
 
+/*
+ *  Change the current table item's format to decimal.
+ */
 void RegisterWindow::setDecimal()
 {
     QString reg = table->currentItem()->text();
@@ -147,6 +233,9 @@ void RegisterWindow::setDecimal()
     }
 }
 
+/*
+ *  Change the current table item's format to hexadecimal.
+ */
 void RegisterWindow::setHex()
 {
     //qDebug() << table->currentItem();
@@ -159,6 +248,9 @@ void RegisterWindow::setHex()
     }
 }
 
+/*
+ *  Change all the register's formats to decimal.
+ */
 void RegisterWindow::setDecimalAll()
 {
     foreach ( QString reg, namesList ) {
@@ -167,6 +259,9 @@ void RegisterWindow::setDecimalAll()
     }
 }
 
+/*
+ *  Change all the register's formats to hexadecimal.
+ */
 void RegisterWindow::setHexAll()
 {
     foreach ( QString reg, namesList ) {
@@ -175,6 +270,11 @@ void RegisterWindow::setHexAll()
     }
 }
 
+/*
+ *  Constructor
+ *  
+ *  The parameter is the register's name.
+ */
 Register::Register(QString n)
 {
     name = n;
@@ -182,22 +282,34 @@ Register::Register(QString n)
     contents = "";
 }
 
+/*
+ *  Set the value of this Register
+ */
 void Register::setValue(QString v)
 {
     contents = v;
 }
 
+/*
+ *  Set the format of this Register
+ */
 void Register::setFormat(QString f)
 {
     format = f;
 }
 
+/*
+ *  Get the value of this Register as it should look in the table
+ */
 QString Register::value()
 {
     long dec;
     bool ok;
     //qDebug() << name << format << contents;
     if ( name == "rip" || name == "eflags" ) {
+/*
+ *      rip and eflags should be just like gdb prints them
+ */
         return contents;
     } else if ( format == "decimal" ) {
         dec = contents.toLong(&ok,16);
