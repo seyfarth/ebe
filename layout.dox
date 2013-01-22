@@ -1,0 +1,230 @@
+/**
+ * \page layout Ebe Layout
+ *
+ * This description here is designed to give a programmatic overview of the
+ * layout of ebe which will explain which classes are involved in structuring
+ * the program.
+ *
+ * \section mainwindow MainWindow
+ *
+ * Ebe's main GUI class is \c MainWindow which is a derived class of \c
+ * QMainWindow.  \c QMainWindow is a main window class which supports a
+ * central widget with optional dock widgets and toolbars.  The central
+ * widget is a subwindow which should always remain on screen while the
+ * dockwidgets and toolbars can be moved around and hidden if not needed.
+ *
+ * The central widget is a \c SourceFrame which manages editing and
+ * debugging of programs.
+ *
+ * The \c MainWindow uses a derivative of the QThread class to start
+ * \c gdb and manage communication with \c gdb.  Using a thread allows the
+ * thread to be stuck waiting for responses from \c gdb without cripping the
+ * main GUI thread.  This makes it possible to possibly recover from problems
+ * or at least save files and exit smoothly.
+ *
+ * The \c MainWindow creates the program's menubar, the dock widgets and
+ * toolbars and connects the signals from the menu and toolbar actions to
+ * slots in the appropriate dock widgets.
+ *
+ * \section gdbsection GDBThread and GDB
+ *
+ * The \c GDBThread class is a derived class of \c QThread and executes somewhat
+ * independently of the GUI thread.  Interaction between the 2 threads is
+ * based on emitting signals which transfer information between threads and
+ * call slots (functions in the other thread).  In the case of the \c GDBThread
+ * it emits signals to initiate action in the GUI thread and the various parts
+ * of the GUI thread emit signals to initiate actions in the \c GDBThread.
+ *
+ * The \c GDBThread \c run function is called when the thread is started.
+ * The main effect of \run is to create a new \c GDB object which includes
+ * using \c QProcess to start \c gdb in a new process.  From that point
+ * forward the \c GDBThread handles all interactions with \c gdb.
+ *
+ * \section sourceframe SourceFrame
+ *
+ * The central widget for \c MainWindow is an object of class \c SourceFrame
+ * which is derived from the \c QFrame class.  The purposes of the \c
+ * SourceFrame is to manage all source editing and debugging in ebe.
+ *
+ * Since the \c SourceFrame manages all the files actively being edited it
+ * acts as an go-between between signals emitted by the menus and toolbars and
+ * the various tabbed \c SourceWindows.  Therefore there are many repeated
+ * function names in the 2 classes.
+ * \subsection tabs Tabbed SourceWindows
+ * The \c SourceFrame has a pointer to a \c QTabWidget named \c tab
+ * which it uses to manage its collection of tabs.  Each tab manages
+ * a single \c SourceWindow object which represents one file opened
+ * for editing.
+ *
+ * A \c SourceWindow contains 2 \c QPlaintTextEdits.  The first of these
+ * contains the text of the file being edited and the second contains
+ * line numbers for the file.  There did not seem to be a simple modification
+ * for editing while displaying line numbers.
+ *
+ * The \c QPlainTextEdit treats data as "blocks" which are lines of text for
+ * our purposes.  We number lines starting with 1 to match user expectations
+ * while Qt numbers blocks from 0.
+ *
+ * \subsection commandline Command line parameters
+ *
+ * To allow writing programs which process command line parameters the
+ * \c SourceFrame include a \c QLineEdit which allows the user to enter
+ * parameters which would go on a command line after the program name.
+ * Some programs don't interact with the command line so it is possible
+ * hide the command line widget.
+ *
+ * \subsection debugbuttons Optional debug buttons
+ *
+ * Early on ebe operated with \c QPushButtons in the \c SourceFrame
+ * labelled with "Run", "Next", "Step", "Continue" and "Stop".  With
+ * the introduction of a debug toolbar, it is no longer necessary to
+ * use these buttons.  Still some may prefer the buttons which are located
+ * right above the \c SourceWindow tabs.  Users can turn on the debug
+ * buttons by setting parameters.  Additionally the user can choose to use
+ * text or icons for the buttons.
+ *
+ * \section dockwidgets Dock widgets
+ *
+ * In general dock widgets of a \c QMainWindow can be placed to the left,
+ * right, above or below the central widget.  They are initially placed
+ * where the programmer selects, but the user can move them as permitted
+ * in the code.  In ebe all the dock widgets can be moved to the left,
+ * right or bottom.  You can move a dock widget by clicking in the title
+ * bar of the widget and dragging it.  It is possible to drop a dock widget
+ * on top of others resulting tabbed dock widgets.  It is also possible
+ * to drag a dock widget out of the application window to become a stand-alone
+ * window.
+ *
+ * \subsection terminal Terminal dock widget
+ *
+ * The \c TerminalWindow class is derived from the \c QFrame class and
+ * also presents a beveled appearance.  The GUI parts of the \c TerminalWindow
+ * are a \c TerminalEdit object derived from \c QPlainTextEdit but set to
+ * be uneditable and a QLineEdit which accepts input destined to the 
+ * debugged program.
+ *
+ * Communication between \c ebe and the debugged program is through a pair of
+ * pipes under Windows and a pseudoterminal device under Linux and OS X.
+ * Reading data from the debugged program is handled by a thread class
+ * named \c PtyReader which prevents the GUI thread from blocking 
+ * reading from the debuggee.  The \c PtyReader emits a signal to trigger
+ * the transfer of text from the debuggee into the \c TerminalWindow.
+ *
+ * The pseudoterminal device under Linux uses line buffering which works
+ * pretty well for a terminal interface.  Unfortunately using pipes under
+ * Windows results in the C standard library discovering a non-interactive
+ * device which results in using a fairly large buffer and output doesn't
+ * show up unless the user's program uses a flush function.
+ *
+ * To overcome the buffering problem ebe has a file, \c ebe_unbuffer.cpp.
+ * defines a class and a single static object of the class.  This means that
+ * the constructor for the object is called before \c main is called.
+ * A call to \c setbuf in the constructor results in \c stdout and \c cout
+ * being unbuffered, solving the problem.
+ *
+ * \subsection data Data dock widget
+ *
+ * The \c DataWindow class is also derived from \c QFrame and has a beveled
+ * appearance to match to other dock widgets.  Inside the frame is a
+ * \c QTreeWidget which is used to store data obtained from \c gdb.
+ *
+ * The top-level items of the tree are four categories of data: global
+ * variables, local variables, function parameters and user-defined data.
+ * The list of global variables is obtained by inspecting the output of
+ * the \c nm program on each object file for the program.  The local variables
+ * and parameters are fetched by \c gdb.
+ *
+ * The \c DataWindow receives a variety of data from signals emitted from the
+ * \c gdb thread.  It also emits a signal named \c requestVar to fetch
+ * either user-defined variables or to expand arrays or class/struct objects.
+ * This request process can result in effectively recursive expansion of
+ * the data in the \c QTeeWidget.
+ *
+ * \subsection register Register dock widget
+ *
+ * The register dock widget is an object of the \c RegisterWindow class,
+ * which is another class derived from \c QFrame.  The only content of the
+ * \c RegisterWindow is a \c QTableWidget containing the names and values of
+ * the 16 general purpose registers and \c rip and \c eflags.
+ *
+ * The \c RegistesWindow class implements a \contextMenuEvent function
+ * to generate popup menus when the user right-clicks in the widget.
+ * This menu allows changing the format of registers and also will allow
+ * the user to define a variable with an address taken from the value of
+ * a register.
+ *
+ * \subsection float Floating point register dock widget
+ * 
+ * The \c FloatWindow class is much like the \c RegistesWindow class.
+ * It also has a \c QTableWidget to store floating point register
+ * names and values.  The floating point registers used are the \c XMM
+ * or \c YMM registers which can hold multiple data items, so the context
+ * menu allows a large number of format choices.
+ *
+ * 
+ * \subsection project Project dock widget
+ *
+ * An \ebe project is simply a text file with the extension ".ebe" 
+ * containing the names of several files required for a program.
+ * When the run button is clicked with a project
+ * active all the compilable files are compiled and the program is built.
+ * This means that a project can include data files in addition to source
+ * files.
+ *
+ * The \c ProjectWindow class is once again derived from the \c QFrame
+ * class.  Internally it displays the file names in a \c QListWidget.
+ * There is a context menu which allows adding and dropping files from
+ * projects and opening a project file in an edit tab.  If auto-open is
+ * enabled for projects, all the files for the project are opened when
+ * the project file is opened.
+ *
+ * \subsection backtrace Backtrace dock widget
+ *
+ * The \c BackTraceWindow class is, as expected, derived from \c QFrame.
+ * At this point its only purpose is to display the results of the \gdb
+ * \c backtrace command.  This is a list of functions and line numbers
+ * defining the sequence of function calls involved in reaching the current
+ * state of the program being debugged.  This data is presented using a
+ * \c QListWidget.
+ *
+ * \section toolbars Toolbars
+ * 
+ * Toolbars are implemented using the \c QToolBar class which works with
+ * the \c QMainWindow class.  Toolbars can be moved around like dock widgets,
+ * though toolbars are always placed on an edge of the window or as separate
+ * windows if moved out of the ebe window.  You can move a toolbar by dragging
+ * it by its left edge (or top edge if vertical).
+ *
+ * The \c ebe toolbars are created in the \c MainWindow class and each
+ * consists of a collection of icons which represent fairly common actions
+ * in \c ebe.
+ *
+ * \subsection filetoolbar File toolbar
+ *
+ * The file toolbar includes open, save, save all, new and close icons.
+ *
+ * \subsection projecttoolbar Project toolbar
+ *
+ * The project toolbar include icons for creating a new project, opening
+ * a project and closing a project.
+ *
+ * \subsection edittoolbar Edit toolbar
+ *
+ * The edit toolbar allows easy access to cut, copy, paste, undo, redo,
+ * indent/unindent, find/replace, select all, prettify, font increase and
+ * font decrease.
+ *
+ * \subsection debugtoolbar Debug toolbar
+ *
+ * The debug toolbar contains icons for run, next, step, continue and stop.
+ *
+ * \subsection cpptoolbar Template code toolbar
+ *
+ * The C++ template toolbar is fairly unique and allows the user to insert
+ * snippets of C++ code including cin, cout, if, if/else, switch, for loop,
+ * while loop, do-while loop, simple variable declarations, a main function,
+ * a general purpose function, class and struct code.  This does not seem
+ * important for experienced programmers, but may help in the first few months
+ * of C++ or C programming.  Hopefully other toolbars will be added for other
+ * languages later.
+ */
