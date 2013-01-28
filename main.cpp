@@ -8,7 +8,10 @@ MainWindow *mainWin;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QResource::registerResource("ebe.rcc");
+    QString home;
+    home = getenv("EBE_HOME");
+    if ( home == "" ) home = ".";
+    QResource::registerResource(home+"/ebe.rcc");
     mainWin = new MainWindow;
     mainWin->show();
     if ( argc > 1 ) mainWin->open(argv[1]);
