@@ -240,7 +240,7 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         lastKey = 0;
         QTextCursor cursor = textCursor();
         int col = cursor.positionInBlock();
-        int next = (col+4)/tab_width*tab_width;
+        int next = (col+tab_width)/tab_width*tab_width;
         int n = next - col;
         for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
     } else if ( key == Qt::Key_Tab && mod & Qt::ControlModifier ) {
@@ -297,6 +297,7 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
 void SourceEdit::indentNewLine(int x)
 {
     //qDebug() << "inl";
+    tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textCursor();
     //int col = cursor.positionInBlock();
     QTextBlock block = cursor.block();
@@ -393,7 +394,7 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(0);
 
-    tab_width = ebe["tab_width"].toInt();
+    tab_width = ebe["edit/tab_width"].toInt();
 
     breakpoints = new IntSet;
 
@@ -504,6 +505,7 @@ void SourceWindow::createTextEdit()
 
 void SourceWindow::open(QString name)
 {
+    tab_width = ebe["edit/tab_width"].toInt();
     QFile file(name);
 
     if (! file.open(QIODevice::ReadWrite))
@@ -825,6 +827,7 @@ void SourceWindow::unComment()
 
 void SourceWindow::indent()
 {
+    tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
     if ( !cursor.hasSelection() ) return;
@@ -857,6 +860,7 @@ void SourceWindow::indent()
 
 void SourceWindow::unIndent()
 {
+    tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
     if ( !cursor.hasSelection() ) return;
@@ -1032,6 +1036,7 @@ void SourceWindow::prettify()
     QProcess indent(this);
     QString cmd = ebe["prettify"].toString();
     cmd.replace("$source",fileName);
+    cmd.replace("$tab_width",ebe["edit/tab_width"].toString());
     indent.start(cmd);
     indent.waitForFinished();
     open(fileName);

@@ -1,18 +1,13 @@
 #ifndef GDB_H
 #define GDB_H
 
+#include "types.h"
 #include <QThread>
 #include <QProcess>
-#include <QString>
 #include <QStringList>
 #include <QList>
-#include <QMap>
-#include <QSet>
 #include "variable.h"
 #include "datawindow.h"
-
-typedef QSet<int> IntSet;
-
 
 class FileLine
 {
@@ -41,6 +36,8 @@ public:
     void initGdb();
     bool running;
     QHash<FileLine,int> bpHash;
+    int numFloats;
+    bool NullEOF;
 
 private:
     void send(QString cmd, QString options="");
@@ -61,6 +58,7 @@ private:
     bool hasAVX;
     bool testAVX();
     QStringList classResults;
+    void setNormal();
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
@@ -75,20 +73,22 @@ public slots:
     void setBreakpoint(QString,int);
     void deleteBreakpoint(QString,int);
     void receiveWorkingDir(QString);
+    void setEOF();
 
 signals:
     void nextInstruction(QString,int);
-    void sendRegs(QMap<QString,QString>);
+    void sendRegs(StringHash);
     void sendFpRegs(QStringList);
     void sendData(QString,QString); 
     void sendGlobals(QStringList,QStringList,QStringList); 
     void sendLocals(QStringList,QStringList,QStringList); 
     void sendParameters(QStringList,QStringList,QStringList); 
-    void sendClasses(QMap<QString,ClassDefinition> classes);
+    void sendClasses(QHash<QString,ClassDefinition> classes);
     void sendVar(DataMap *map, QString name, QString value);
     void dataReady(QStringList);
     void sendBackTrace(QStringList);
     void resetData();
+    void endFlash();
 };
 
 #endif

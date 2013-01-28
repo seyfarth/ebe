@@ -6,10 +6,10 @@
 #include <QHBoxLayout>
 
 /**
- *  \brief Constructor for the CommandLine class
+ *  \brief Constructor for the \c CommandLine class
  *
- *  The constructor uses a QHBoxLayout to place a QLabel and a QLineEdit
- *  in the QFrame which is the container for the widgets.  The label is
+ *  The constructor uses a \c QHBoxLayout to place a QLabel and a \c QLineEdit
+ *  in the \c QFrame which is the container for the widgets.  The label is
  *  placed to the left of the line edit widget. The line edit input field
  *  starts empty.
  */
@@ -32,6 +32,8 @@ CommandLine::CommandLine(QWidget *parent)
 
 /**
  *  \brief This is a function to get the text in the line edit
+ *
+ *  \return QString holding the text from the \c QLineEdit
  */
 QString CommandLine::text()
 {

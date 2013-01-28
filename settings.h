@@ -119,9 +119,11 @@ private slots:
 };
 
 #ifdef SETTINGS_CPP
-QMap<QString,QVariant> ebe;
+QVariantHash ebe;
+int wordSize;
 #else
-extern QMap<QString,QVariant> ebe;
+extern QVariantHash ebe;
+extern int wordSize;
 #endif
 
 #endif

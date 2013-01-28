@@ -1,3 +1,4 @@
+       segment .data
 msg:   db      'Hello World!',0x0a     ; String to print
 len:   equ     $-msg                   ; String length
 
@@ -6,7 +7,7 @@ len:   equ     $-msg                   ; String length
        extern  _write, _exit
 _main:
        push    rbp
-       mov     rbp. rsp
+       mov     rbp, rsp
        mov     edx, len                ; Parameter 3 for write
        lea     rsi, [msg]              ; Parameter 2 for write
        mov     edi, 1                  ; Parameter 1 (fd)

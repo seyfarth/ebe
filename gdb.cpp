@@ -8,11 +8,12 @@
 #endif
 
 extern TerminalWindow *terminalWindow;
+extern int wordSize;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
 
-QMap<QString,int> sizeForType;
+IntHash sizeForType;
 char letterForSize[] = "bbhhwwwwg"; 
 
 #ifdef Q_WS_WIN
@@ -108,19 +109,28 @@ GDB::GDB()
     sizeForType["float"] = sizeof(float);
     sizeForType["double"] = sizeof(double);
     sizeForType["long double"] = sizeof(long double);
-    regs << "rax" << "rbx" << "rcx" << "rdx"
-         << "rdi" << "rsi" << "rbp" << "rsp"
-         << "r8"  << "r9"  << "r10" << "r11"
-         << "r12" << "r13" << "r14" << "r15"
-         << "rip" << "eflags";
+    if ( wordSize == 64 ) {
+        numFloats = 16;
+        regs << "rax" << "rbx" << "rcx" << "rdx"
+             << "rdi" << "rsi" << "rbp" << "rsp"
+             << "r8"  << "r9"  << "r10" << "r11"
+             << "r12" << "r13" << "r14" << "r15"
+             << "rip" << "eflags";
+    } else {
+        numFloats = 8;
+        regs << "eax" << "ebx" << "ecx" << "edx"
+             << "edi" << "esi" << "ebp" << "esp"
+             << "eip" << "eflags";
+    }
     initGdb();
+    NullEOF = false;
 }
 
 void GDB::send(QString cmd, QString /*options*/)
 {
     QRegExp rx1("at ([^:]*):([0-9]*)$");
     QRegExp rx2("^([0-9]+).*$");
-    //qDebug() << cmd.toAscii();
+    //qDebug() << cmd;
 #ifdef Q_WS_WIN
     if ( needToWake && cmd == "continue" ) {
         //qDebug() << "ResumeThread" << hThread;
@@ -154,8 +164,8 @@ void GDB::send(QString cmd, QString /*options*/)
 QStringList GDB::sendReceive(QString cmd, QString /*options*/)
 {
     QStringList list;
+    //qDebug() << cmd;
     cmd += '\n';
-    //qDebug() << cmd.toAscii();
     gdbProcess->write(cmd.toAscii());
     QString result;
     result = readLine();
@@ -171,7 +181,7 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
 
 void GDB::getClasses()
 {
-    QMap<QString,ClassDefinition> classes;
+    QHash<QString,ClassDefinition> classes;
     ClassDefinition c;
     VariableDefinition v;
     QString result;
@@ -270,7 +280,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     si.hStdError = terminalWindow->childStdout;
     flags = CREATE_SUSPENDED;
     si.dwFlags = STARTF_USESTDHANDLES;
-    QString cmd = exe + " " + options;
+    QString cmd = "\"" + exe + "\" " + options;
     QByteArray ba = cmd.toLocal8Bit();
     //qDebug() << "cmd" << cmd;
     const char *s = ba.data();
@@ -323,6 +333,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
 #endif
     running = true;
     hasAVX = testAVX();
+    setNormal();
     getBackTrace();
     if ( !running ) return;
     getRegs();
@@ -339,6 +350,7 @@ void GDB::doNext()
     //qDebug() << "gdb next";
     if ( !running ) return;
     send("next");
+    setNormal();
     getBackTrace();
     if ( !running ) return;
     getRegs();
@@ -353,6 +365,7 @@ void GDB::doStep()
 {
     if ( !running ) return;
     send("step");
+    setNormal();
     getBackTrace();
     if ( !running ) return;
     getRegs();
@@ -367,6 +380,7 @@ void GDB::doContinue()
 {
     if ( !running ) return;
     send("continue");
+    setNormal();
     getBackTrace();
     if ( !running ) return;
     getRegs();
@@ -389,7 +403,7 @@ void GDB::setBreakpoint(QString file, int bp)
     QStringList parts;
     FileLine f(file,bp);
     if ( bpHash.contains(f) ) return;
-    results = sendReceive(QString("break %1:%2").arg(file).arg(bp) );
+    results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
         if ( parts[0] == "Breakpoint" ) {
@@ -460,7 +474,7 @@ void GDB::getRegs()
 {
     QStringList results;
     QStringList parts;
-    QMap<QString,QString> map;
+    StringHash map;
     int index1, index2;
     results = sendReceive("info registers");
     //qDebug() << "getRegs" << results;
@@ -491,7 +505,7 @@ void GDB::getFpRegs()
                 "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     //qDebug() << "getFpRegs";
-    for ( int i = 0; i < 16; i++ ) {
+    for ( int i = 0; i < numFloats; i++ ) {
         if ( hasAVX ) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
             result = "";
@@ -886,6 +900,21 @@ void GDB::getData(QStringList request)
     }
     request.append(result);
     emit dataReady(request);
+}
+
+void GDB::setNormal()
+{
+    if ( NullEOF ) {
+        send("call __ebeSetNormal()");
+        NullEOF = false;
+    }
+    emit endFlash();
+}
+
+void GDB::setEOF()
+{
+    send("call __ebeSetNULL()");
+    NullEOF = true;
 }
 
 void GDB::receiveWorkingDir(QString dir)

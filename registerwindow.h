@@ -7,13 +7,11 @@
     for set and get registers just yet
 */
 
-#include <QMap>
+#include "types.h"
 #include <QFrame>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QStringList>
-#include <QString>
-#include <QMap>
 #include <QSize>
 
 /**
@@ -89,15 +87,15 @@ private:
  *  user to select the format for either a single register or all the
  *  registers using a popup menu.
  *
- *  Internally registers are stored using a QMap which uses the register
+ *  Internally registers are stored using a QHash which uses the register
  *  name as the key and a pointer to a Register object as the value for a key.
  *  To facilitate setting the proper item in the table, there is a second
- *  QMap which holds a pointer to a QTableWidgetItem.  This allows rapid
+ *  QHash which holds a pointer to a QTableWidgetItem.  This allows rapid
  *  access to the register's value and the place to store the value in
  *  the table.
  *
  *  The registers are received by the RegisterWindow class using the
- *  receiveRegs slot.  This function has a single parameter, a QMap
+ *  receiveRegs slot.  This function has a single parameter, a QHash
  *  containing register values indexed by their names.
  *
  *  If the user uses a right click in the register window the
@@ -163,17 +161,17 @@ public:
 
 private:
 /**
- *  QMap which provides a register pointer based on a register
+ *  QHash which provides a register pointer based on a register
  *  name as key.
  */
-    QMap<QString,Register *> regs;  
+    QHash<QString,Register *> regs;  
 
 /**
- *  QMap which provides a pointer to a QTableWidgetItem based
+ *  QHash which provides a pointer to a QTableWidgetItem based
  *  on a register name as key.  The QTableWidgetItem is where
  *  the value for a particular register is stored in the table.
  */
-    QMap<QString,QTableWidgetItem *> registerMap;
+    QHash<QString,QTableWidgetItem *> registerMap;
 
 /**
  *  QTableWidget pointer to the table displayed in the RegisterWindow.
@@ -221,7 +219,7 @@ public slots:
  *  setFontHeightAndWidth to resize the rows and columns of the table
  *  based on the latest register contents.
  */
-    void receiveRegs(QMap<QString,QString>);
+    void receiveRegs(StringHash);
 
 /**
  *  \fn setDecimal

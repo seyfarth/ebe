@@ -212,6 +212,7 @@ void SourceFrame::run()
     breakLine = 0;
     breakFile = "";
 
+    QFile::remove("ebe_unbuffer.cpp");
     QFile::copy(":/src/ebe_unbuffer.cpp","ebe_unbuffer.cpp");
     QFile::setPermissions("ebe_unbuffer.cpp",
            QFile::ReadOwner | QFile::WriteOwner);
@@ -339,7 +340,7 @@ void SourceFrame::run()
         ext = pair.second;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
-        nm.start ( "nm -g " + object );
+        nm.start ( "nm -g \"" + object + "\"" );
         nm.waitForFinished();
         nm.setReadChannel(QProcess::StandardOutput);
         QString data = nm.readLine();
@@ -356,7 +357,7 @@ void SourceFrame::run()
                     } else if ( cppExts.contains(ext) ) {
                         ldCmd = ebe["build/cppld"].toString();
                     } else if ( asmExts.contains(ext) ) {
-                        ldCmd = ebe["build/asmld"].toString();
+                        ldCmd = ebe["build/ccld"].toString();
                     } else if ( fortranExts.contains(ext) ) {
                         ldCmd = ebe["build/fortranld"].toString();
                     }
@@ -918,7 +919,9 @@ void SourceFrame::templateAssembly()
     int index = tab->currentIndex();
     tab->setTabText(index,"hello.asm");
     QFile::remove("hello.asm");
-    QFile::copy(":/src/assembly/hello.asm","hello.asm");
+    QFile::copy(
+        QString(":/src/assembly/%1/hello.asm").arg(ebe["os/os"].toString()),
+        "hello.asm");
     QFile::setPermissions("hello.asm", QFile::ReadOwner | QFile::WriteOwner);
     source->open("hello.asm");
     source->setFontHeightAndWidth(fontHeight,fontWidth);

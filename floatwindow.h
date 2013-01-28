@@ -47,6 +47,7 @@ public:
     FloatWindow(QWidget *parent=0);
     void setFontHeightAndWidth ( int height, int width );
     void setRegister ( int n, QString value );
+    int count;
 
 public slots:
     void receiveFpRegs(QStringList);

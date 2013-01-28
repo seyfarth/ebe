@@ -83,21 +83,35 @@ void Settings::setDefaults()
 
     ebe["edit/tab_width"] = 4;
     ebe["edit/auto_indent"] = true;
-
+#if __linux__
+    ebe["os/linux"] = true;
+    ebe["os/mac"] = false;
+    ebe["os/os"] = "linux";
+    ebe["os/windows"] = false;
+    ebe["build/asm"] = "yasm -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
+#elif __APPLE__
     ebe["os/linux"] = false;
     ebe["os/mac"] = true;
     ebe["os/os"] = "mac";
     ebe["os/windows"] = false;
-
-    ebe["prettify"] = "astyle -A3 $source";
-    ebe["build/asm"] = "yasm -f macho64 -l $base.lst $source";
-    ebe["build/asmld"] = "ld -g -o $base";
-    ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 -o $base.o $source";
-    ebe["build/ccld"] = "gcc -g -o $base";
-    ebe["build/cpp"] = "g++ -g -c -Wfatal-errors -Wall -O0 -o $base.o $source";
-    ebe["build/cppld"] = "g++ -g -o $base";
-    ebe["build/fortran"] = "gfortran -g -c -Wfatal-errors -Wall -O0 -o $base.o $source";
-    ebe["build/fortranld"] = "gfortran -g -o $base";
+    ebe["build/asm"] = "yasm -f macho64 -l \"$base.lst\" \"$source\"";
+#else
+    ebe["os/linux"] = false;
+    ebe["os/mac"] = false;
+    ebe["os/os"] = "windows";
+    ebe["os/windows"] = true;
+#endif
+    ebe["prettify"] = "astyle -A3 -s$tab_width -t$tab_width \"$source\"";
+    ebe["build/asmld"] = "ld -g -o \"$base\"";
+    ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
+                      "-o \"$base.o\" \"$source\"";
+    ebe["build/ccld"] = "gcc -g -o \"$base\"";
+    ebe["build/cpp"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
+                      "-o \"$base.o\" \"$source\"";
+    ebe["build/cppld"] = "g++ -g -o \"$base\"";
+    ebe["build/fortran"] = "gfortran -g -c -Wfatal-errors -Wall -O0 "
+                      "-o \"$base.o\" \"$source\"";
+    ebe["build/fortranld"] = "gfortran -g -o \"$base\"";
 
 #ifdef Q_WS_WIN
     ebe["build/obj"] = "o";
@@ -136,7 +150,7 @@ void Settings::setDefaults()
     ebe["xmm/reverse"] = false;
 }
 
-QMap<QString,QVariant> newSettings;
+QVariantHash newSettings;
 
 SettingsDialog::SettingsDialog()
 : QDialog()

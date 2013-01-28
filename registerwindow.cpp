@@ -20,6 +20,12 @@ static QString names[5][4] = {
     { "rip", "eflags", "", "" }
 };
 
+static QString names32[3][4] = {
+    { "eax", "ebx", "ecx", "edx" },
+    { "esi", "edi", "ebp", "esp" },
+    { "eip", "eflags", "", "" }
+};
+
 /*
  *  Constructor
  */
@@ -60,7 +66,12 @@ RegisterWindow::RegisterWindow(QWidget *parent)
  *
  *  The fifth row is for rip and eflags
  */
-    table->setRowCount(5);
+
+    if ( wordSize == 64 ) {
+        table->setRowCount(5);
+    } else {
+        table->setRowCount(3);
+    }
     table->setColumnCount(8);
 
 /*
@@ -71,20 +82,38 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     QTableWidgetItem *name;
     QTableWidgetItem *val;
     table->verticalHeader()->hide(); table->horizontalHeader()->hide();
-    for ( int r = 0; r < 5; r++ ) {
-        for ( int c = 0; c < 4; c++ ) {
-            name = new QTableWidgetItem(names[r][c]+QString(" "));
-            name->setTextAlignment(Qt::AlignRight);
-            if ( r == 4 && c > 1 ) {
-                val = new QTableWidgetItem("");
-            } else {
-                val = new QTableWidgetItem("0");
+    if ( wordSize == 64 ) {
+        for ( int r = 0; r < 5; r++ ) {
+            for ( int c = 0; c < 4; c++ ) {
+                name = new QTableWidgetItem(names[r][c]+QString(" "));
+                name->setTextAlignment(Qt::AlignRight);
+                if ( r == 4 && c > 1 ) {
+                    val = new QTableWidgetItem("");
+                } else {
+                    val = new QTableWidgetItem("0");
+                }
+                registerMap[names[r][c]] = val;
+                table->setItem(r,c*2,name);
+                table->setItem(r,c*2+1,val);
             }
-            registerMap[names[r][c]] = val;
-            table->setItem(r,c*2,name);
-            table->setItem(r,c*2+1,val);
+        }
+    } else {
+        for ( int r = 0; r < 3; r++ ) {
+            for ( int c = 0; c < 4; c++ ) {
+                name = new QTableWidgetItem(names32[r][c]+QString(" "));
+                name->setTextAlignment(Qt::AlignRight);
+                if ( r == 2 && c > 1 ) {
+                    val = new QTableWidgetItem("");
+                } else {
+                    val = new QTableWidgetItem("0");
+                }
+                registerMap[names32[r][c]] = val;
+                table->setItem(r,c*2,name);
+                table->setItem(r,c*2+1,val);
+            }
         }
     }
+
 
 /*
  *  Resizing based on size hints which is not too accurate
@@ -114,11 +143,17 @@ RegisterWindow::RegisterWindow(QWidget *parent)
 /*
  *  Initialize namesList with all register names
  */
-    namesList << "rax" << "rbx" << "rcx" << "rdx"
-         << "rdi" << "rsi" << "rbp" << "rsp"
-         << "r8"  << "r9"  << "r10" << "r11"
-         << "r12" << "r13" << "r14" << "r15"
-         << "rip" << "eflags";
+    if ( wordSize == 64 ) {
+        namesList << "rax" << "rbx" << "rcx" << "rdx"
+             << "rdi" << "rsi" << "rbp" << "rsp"
+             << "r8"  << "r9"  << "r10" << "r11"
+             << "r12" << "r13" << "r14" << "r15"
+             << "rip" << "eflags";
+    } else {
+        namesList << "eax" << "ebx" << "ecx" << "edx"
+             << "edi" << "esi" << "ebp" << "esp"
+             << "eip" << "eflags";
+    }
 
 /*
  *  For each register name, create a Register object and save the
@@ -148,12 +183,13 @@ void RegisterWindow::setFontHeightAndWidth ( int height, int width )
     int max, length;
     fontHeight = height;
     fontWidth = width;
-    for ( int r = 0; r < 5; r++ ) {
+    int rows = table->rowCount();
+    for ( int r = 0; r < rows; r++ ) {
         table->setRowHeight(r,height+3);
     }
     for ( int c = 0; c < 8; c++ ) {
         max = 1;
-        for ( int r = 0; r < 5; r++ ) {
+        for ( int r = 0; r < rows; r++ ) {
             length = table->item(r,c)->text().length();
             if ( length > max ) max = length;
         }
@@ -177,7 +213,7 @@ void RegisterWindow::setRegister ( QString name, QString val )
  *  Slot triggered by the gdb class sending a map of register
  *  values.
  */
-void RegisterWindow::receiveRegs ( QMap<QString,QString> map )
+void RegisterWindow::receiveRegs ( StringHash map )
 {
 
     foreach ( QString key, map.keys() ) {
@@ -306,7 +342,7 @@ QString Register::value()
     long dec;
     bool ok;
     //qDebug() << name << format << contents;
-    if ( name == "rip" || name == "eflags" ) {
+    if ( name == "rip" || name == "eflags" || name == "eip" ) {
 /*
  *      rip and eflags should be just like gdb prints them
  */

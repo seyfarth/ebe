@@ -1,6 +1,7 @@
 #include "terminalwindow.h"
 #include "ptyreader.h"
 #include "settings.h"
+#include "gdb.h"
 #include <QKeyEvent>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -13,6 +14,7 @@
 #include <unistd.h>
 #endif
 
+extern GDB *gdb;
 
 TerminalWindow::TerminalWindow(QWidget *parent)
 : QFrame(parent)
@@ -51,7 +53,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
 
     layout->addWidget(edit);
 
-    lineEdit = new QLineEdit;
+    lineEdit = new InputEdit;
     QLabel *label = new QLabel(tr("Input"));
     QHBoxLayout *lineLayout = new QHBoxLayout;
     lineLayout->addWidget(label);
@@ -73,6 +75,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     connect(lineEdit,SIGNAL(returnPressed()),this,SLOT(lineEditReady()));
     connect(ptyReader,SIGNAL(dataReady(QString)),
             this,SLOT(dataReady(QString)) );
+    connect(lineEdit,SIGNAL(sendEOF()),gdb,SLOT(setEOF()));
     ptyReader->start();
 }
 
@@ -80,6 +83,53 @@ void TerminalWindow::dataReady(QString data)
 {
     edit->textCursor().insertText(data);
     edit->ensureCursorVisible();
+}
+
+InputEdit::InputEdit()
+: QLineEdit()
+{
+    flashCount = 0;
+    timer = new QTimer(this);
+    timer->stop();
+    connect(timer,SIGNAL(timeout()),this,SLOT(updateFlash()));
+    connect(gdb,SIGNAL(endFlash()),this,SLOT(endFlash()));
+}
+
+void InputEdit::keyPressEvent(QKeyEvent *e)
+{
+    int key = e->key();
+    bool control = (e->modifiers() & Qt::ControlModifier) != 0;
+    if ( control &&
+        (key == Qt::Key_D || key == Qt::Key_C || key == Qt::Key_Z) ) {
+        startFlash();
+        emit sendEOF();
+    } else {
+        QLineEdit::keyPressEvent(e);
+    }
+}
+
+void InputEdit::startFlash()
+{
+    timer->start(25);
+}
+
+void InputEdit::updateFlash()
+{
+    QPalette p=palette();
+    p.setColor(QPalette::Base,
+          QColor(80*sin(flashCount*0.023)+150,
+                 80*sin(flashCount*0.016+0.5)+150,
+                 60*sin(flashCount*0.021+1.0)+80));
+    setPalette(p);
+    flashCount++;
+}
+
+void InputEdit::endFlash()
+{
+    timer->stop();
+    QPalette p=palette();
+    p.setColor(QPalette::Base, QColor("white"));
+    setPalette(p);
 }
 
 void TerminalWindow::lineEditReady()

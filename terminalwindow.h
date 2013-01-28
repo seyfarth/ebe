@@ -4,6 +4,9 @@
 #include <QPlainTextEdit>
 #include <QFrame>
 #include <QString>
+#include <QTimer>
+#include <QPalette>
+#include <QColor>
 #include <QLineEdit>
 #include <QKeyEvent>
 #ifdef Q_WS_WIN
@@ -26,6 +29,28 @@ private:
 
 };
 
+class InputEdit : public QLineEdit
+{
+    Q_OBJECT 
+
+public:
+    InputEdit();
+
+private:
+    void keyPressEvent(QKeyEvent *e);
+    void startFlash();
+    QTimer *timer;
+    int flashCount;
+
+public slots:
+    void endFlash();
+    void updateFlash();
+
+signals:
+    void sendEOF();
+
+};
+
 class TerminalWindow : public QFrame
 {
     Q_OBJECT
@@ -40,7 +65,7 @@ private slots:
 
 public:
     TerminalEdit *edit;
-    QLineEdit *lineEdit;
+    InputEdit *lineEdit;
 #ifdef Q_WS_WIN
     HANDLE toChild;
     HANDLE fromChild;
@@ -52,6 +77,7 @@ public:
     int pty;
     int ptySlave;
     PtyReader *ptyReader;
+
 };
 
 #endif

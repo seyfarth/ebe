@@ -6,7 +6,7 @@
 
 extern GDB *gdb;
 extern BackTraceWindow *backTraceWindow;
-extern QMap<QString,int> sizeForType;
+extern IntHash sizeForType;
 extern DataWindow *dataWindow;
 
 DataTree *dataTree;
@@ -23,7 +23,7 @@ QStack<DataTree*> stack;
 
 static QSet<QString> simpleTypes;
 
-QMap<QString,ClassDefinition> classes;
+QHash<QString,ClassDefinition> classes;
 
 DataWindow::DataWindow(QWidget *parent)
 : QFrame(parent)
@@ -74,8 +74,8 @@ DataWindow::DataWindow(QWidget *parent)
               //this, SLOT(setData(QStringList)) );
     connect ( gdb, SIGNAL(resetData()),
               this, SLOT(resetData()) );
-    connect ( gdb, SIGNAL(sendClasses(QMap<QString,ClassDefinition>)),
-              this, SLOT(receiveClasses(QMap<QString,ClassDefinition>)) );
+    connect ( gdb, SIGNAL(sendClasses(QHash<QString,ClassDefinition>)),
+              this, SLOT(receiveClasses(QHash<QString,ClassDefinition>)) );
 }
 
 QSize DataWindow::sizeHint() const
@@ -116,7 +116,7 @@ void DataWindow::resetData()
     }
 }
 
-void DataWindow::receiveClasses(QMap<QString,ClassDefinition> c)
+void DataWindow::receiveClasses(QHash<QString,ClassDefinition> c)
 {
     //qDebug() << "receive classes" << c.keys();
     classes = c;

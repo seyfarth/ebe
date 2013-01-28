@@ -2,16 +2,6 @@
 #include "settings.h"
 #include <cstdio>
 
-static QString names[8][2] = {
-    { "xmm0", "xmm8" },
-    { "xmm1", "xmm9" },
-    { "xmm2", "xmm10" },
-    { "xmm3", "xmm11" },
-    { "xmm4", "xmm12" },
-    { "xmm5", "xmm13" },
-    { "xmm6", "xmm14" },
-    { "xmm7", "xmm15" }
-};
 
 FloatWindow::FloatWindow(QWidget *parent)
 : QFrame(parent)
@@ -20,11 +10,12 @@ FloatWindow::FloatWindow(QWidget *parent)
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 
+    count = wordSize == 64 ? 16 : 8;
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(10,10,10,10);
 
     table = new QTableWidget(this);
-    table->setRowCount(8);
+    table->setRowCount(count/2);
     table->setColumnCount(4);
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
@@ -32,12 +23,12 @@ FloatWindow::FloatWindow(QWidget *parent)
 
     QTableWidgetItem *name;
     QTableWidgetItem *value;
-    for ( int r = 0; r < 8; r++ ) {
+    for ( int r = 0; r < count/2; r++ ) {
         for ( int c = 0; c < 2; c++ ) {
-            name = new QTableWidgetItem(names[r][c]+QString(" "));
+            name = new QTableWidgetItem(QString("xmm%1 ").arg(c*(count/2)+r));
             name->setTextAlignment(Qt::AlignRight);
             value = new QTableWidgetItem("0.0");
-            regs[c*8+r] = value;
+            regs[c*(count/2)+r] = value;
             table->setItem(r,c*2,name);
             table->setItem(r,c*2+1,value);
         }
@@ -61,12 +52,12 @@ void FloatWindow::setFontHeightAndWidth ( int height, int width )
     int max, length;
     fontHeight = height;
     fontWidth  = width;
-    for ( int r = 0; r < 8; r++ ) {
+    for ( int r = 0; r < count/2; r++ ) {
         table->setRowHeight(r,height+3);
     }
     for ( int c = 0; c < 4; c++ ) {
         max = 1;
-        for ( int r = 0; r < 8; r++ ) {
+        for ( int r = 0; r < count/2; r++ ) {
             length = table->item(r,c)->text().length();
             if ( length > max ) max = length;
         }
@@ -77,7 +68,7 @@ void FloatWindow::setFontHeightAndWidth ( int height, int width )
 
 void FloatWindow::setRegister ( int n, QString value )
 {
-    if ( n >= 0 && n < 16 ) regs[n]->setText(value);
+    if ( n >= 0 && n < count ) regs[n]->setText(value);
 }
 
 void FloatWindow::receiveFpRegs ( QStringList data )
@@ -90,7 +81,7 @@ void FloatWindow::receiveFpRegs ( QStringList data )
     unsigned long x[4]={0,0,0,0};
 #endif
     //qDebug() << "fp receive" << data;
-    for (int i = 0; i < 16; i++ ) {
+    for (int i = 0; i < count; i++ ) {
         parts = data[i].split(QRegExp("\\s+"));
         //qDebug() << parts;
         for ( int j = 0; j < parts.length(); j++ ) {
@@ -157,7 +148,7 @@ void FloatWindow::formatRegister(QAction *action)
 {
     int n;
 
-    n = (table->currentColumn()/2) * 8 + table->currentRow();
+    n = (table->currentColumn()/2) * (count/2) + table->currentRow();
     //qDebug() << n << action->text();
     regValues[n].setFormat(action->text());
     setRegister(n,regValues[n].value());
@@ -166,7 +157,7 @@ void FloatWindow::formatRegister(QAction *action)
 
 void FloatWindow::formatAllRegisters(QAction *action)
 {
-    for ( int n = 0; n < 16; n++ ) {
+    for ( int n = 0; n < count; n++ ) {
         //qDebug() << n << action->text();
         regValues[n].setFormat(action->text());
         setRegister(n,regValues[n].value());

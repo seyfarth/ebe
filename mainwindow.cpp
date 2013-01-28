@@ -45,13 +45,61 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     settings = new Settings;
     settings->read();
-    QTimer *timer = new QTimer();
-    timer->setInterval(1);
-    timer->start();
+
+#ifdef Q_WS_WIN
+    QProcess where(this);
+    where.start("where objdump");
+    where.waitForFinished();
+    QByteArray data = where.readAllStandardOutput();
+    QString fileName;
+    fileName = QString(data.trimmed());
+    where.start(QString("objdump -f \"%1\"").arg(fileName));
+    where.waitForFinished();
+    data = where.readAllStandardOutput();
+    if ( QString(data).indexOf("x86-64") >= 0 ) {
+        wordSize = 64;
+    } else {
+        wordSize = 32;
+    }
+#endif
+#ifdef Q_OS_LINUX
+    QProcess which(this);
+    which.start("which objdump");
+    which.waitForFinished();
+    QByteArray data = which.readAllStandardOutput();
+    QString fileName;
+    fileName = QString(data.trimmed());
+    which.start(QString("objdump -f \"%1\"").arg(fileName));
+    which.waitForFinished();
+    data = which.readAllStandardOutput();
+    if ( QString(data).indexOf("x86-64") >= 0 ) {
+        wordSize = 64;
+    } else {
+        wordSize = 32;
+    }
+#endif
+#ifdef Q_OS_MAC
+    QProcess which(this);
+    which.start("which nm");
+    which.waitForFinished();
+    QByteArray data = which.readAllStandardOutput();
+    QString fileName;
+    fileName = QString(data.trimmed());
+    which.start(QString("file \"%1\"").arg(fileName));
+    which.waitForFinished();
+    data = which.readAllStandardOutput();
+    if ( QString(data).indexOf("x86_64") >= 0 ) {
+        wordSize = 64;
+    } else {
+        wordSize = 32;
+    }
+#endif
+
+    //qDebug() << wordSize;
 
     qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
-    qRegisterMetaType<QMap<QString,QString> >("QMap<QString,QString>");
-    qRegisterMetaType<QMap<QString,ClassDefinition> >("QMap<QString,ClassDefinition>");
+    qRegisterMetaType<StringHash>("StringHash");
+    qRegisterMetaType<QHash<QString,ClassDefinition> >("QHash<QString,ClassDefinition>");
     qApp->installEventFilter(this);
     
     gdbThread = new GDBThread();
@@ -77,12 +125,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
 
-    connect ( gdb, SIGNAL(sendRegs(QMap<QString,QString>)),
-              registerWindow, SLOT(receiveRegs(QMap<QString,QString>)) );
+    connect ( gdb, SIGNAL(sendRegs(StringHash)),
+              registerWindow, SLOT(receiveRegs(StringHash)) );
     connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
               floatWindow, SLOT(receiveFpRegs(QStringList)) );
     connect ( this, SIGNAL(sendWorkingDir(QString)),
               gdb, SLOT(receiveWorkingDir(QString)) );
+    restoreMainWindow();
 }
 
 void MainWindow::restoreMainWindow()

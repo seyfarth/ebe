@@ -36,7 +36,7 @@
  * of the GUI thread emit signals to initiate actions in the \c GDBThread.
  *
  * The \c GDBThread \c run function is called when the thread is started.
- * The main effect of \run is to create a new \c GDB object which includes
+ * The main effect of \c run is to create a new \c GDB object which includes
  * using \c QProcess to start \c gdb in a new process.  From that point
  * forward the \c GDBThread handles all interactions with \c gdb.
  *
@@ -147,7 +147,7 @@
  * \c RegisterWindow is a \c QTableWidget containing the names and values of
  * the 16 general purpose registers and \c rip and \c eflags.
  *
- * The \c RegistesWindow class implements a \contextMenuEvent function
+ * The \c RegistesWindow class implements a \c contextMenuEvent function
  * to generate popup menus when the user right-clicks in the widget.
  * This menu allows changing the format of registers and also will allow
  * the user to define a variable with an address taken from the value of
@@ -164,7 +164,7 @@
  * 
  * \subsection project Project dock widget
  *
- * An \ebe project is simply a text file with the extension ".ebe" 
+ * An \c ebe project is simply a text file with the extension ".ebe" 
  * containing the names of several files required for a program.
  * When the run button is clicked with a project
  * active all the compilable files are compiled and the program is built.
@@ -181,7 +181,7 @@
  * \subsection backtrace Backtrace dock widget
  *
  * The \c BackTraceWindow class is, as expected, derived from \c QFrame.
- * At this point its only purpose is to display the results of the \gdb
+ * At this point its only purpose is to display the results of the \c gdb
  * \c backtrace command.  This is a list of functions and line numbers
  * defining the sequence of function calls involved in reaching the current
  * state of the program being debugged.  This data is presented using a

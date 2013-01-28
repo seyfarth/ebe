@@ -25,4 +25,4 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            errorwindow.cpp gdb.cpp variable.cpp backtracewindow.cpp \
            highlighter.cpp
 
-RESOURCES += ebe.qrc
+RESOURCES = 

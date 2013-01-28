@@ -1,8 +1,5 @@
-#include <QtGui>
 #include <QApplication>
-#include <QPalette>
-#include <QColor>
-#include <QFont>
+#include <QResource>
 #include <stdio.h>
 
 #include "mainwindow.h"
@@ -10,11 +7,8 @@
 MainWindow *mainWin;
 int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(ebe);
     QApplication app(argc, argv);
-    QPalette pal = app.palette();
-    pal.setColor(QPalette::Window, QColor(218,218,228));
-    app.setPalette(pal);
+    QResource::registerResource("ebe.rcc");
     mainWin = new MainWindow;
     mainWin->show();
     if ( argc > 1 ) mainWin->open(argv[1]);

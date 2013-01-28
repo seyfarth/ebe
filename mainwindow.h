@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "types.h"
 #include <QMainWindow>
-#include <QString>
 #include <QEvent>
 #include "datawindow.h"
 #include "sourceframe.h"

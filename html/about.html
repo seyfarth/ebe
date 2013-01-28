@@ -3,6 +3,22 @@
 <title> About ebe </title>
 </head>
 
+
+<script>
+function wastememory(s,n)
+{
+    if ( n > 0 ) {
+        return wastememory(s+s,n-1);
+    }
+    return s;
+}
+
+function doit(n)
+{
+    document.getElementById("a").innerHTML = wastememory("hello",n);
+}
+</script>
+
 <body>
 
 <center>
@@ -38,6 +54,12 @@ GUI support.
 This version is written in C++ using QT, primarily for more sophisticated
 controls.
 </p>
+
+<p id="a">
+Stuff
+</p>
+
+<button onclick="doit(20)"> doit </button>
 
 </body>
 </html>
