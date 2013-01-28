@@ -392,7 +392,7 @@ void SourceFrame::run()
     //  Link object files to produce executable file
     //
     foreach ( StringPair pair, objectFiles ) {
-        ldCmd += " " + pair.first;
+        ldCmd += " \"" + pair.first + "\"";
     }
 
 
