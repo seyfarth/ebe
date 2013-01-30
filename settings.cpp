@@ -143,6 +143,8 @@ void Settings::setDefaults()
 
     ebe["backtrace/visible"] = true;
 
+    ebe["toybox/visible"] = true;
+
     ebe["tooltips/visible"] = true;
 
     ebe["complete/minimum"] = 4;

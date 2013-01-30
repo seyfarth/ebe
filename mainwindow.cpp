@@ -28,6 +28,7 @@ TerminalWindow *terminalWindow;
 BackTraceWindow *backTraceWindow;
 GDB *gdb;
 GDBThread *gdbThread;
+ToyBox *toyBox;
 
 QStatusBar *statusBar;
 
@@ -177,6 +178,7 @@ void MainWindow::restoreMainWindow()
     floatDock->setFloating(ebe["float/floating"].toBool());
     projectDock->setFloating(ebe["project/floating"].toBool());
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
+    toyBoxDock->setFloating(ebe["toybox/floating"].toBool());
     //consoleDock->setFloating(ebe["console/floating"].toBool());
 
     if ( ebe.contains("ebe/geometry") ) {
@@ -223,12 +225,14 @@ void MainWindow::saveSettings()
     ebe["float/floating"]    = floatDock->isFloating();
     ebe["project/floating"]  = projectDock->isFloating();
     ebe["terminal/floating"] = terminalDock->isFloating();
+    ebe["toybox/floating"] = toyBoxDock->isFloating();
     //ebe["console/floating"]  = consoleDock->isFloating();
     ebe["data/visible"]      = dataDock->isVisible();
     ebe["register/visible"]  = registerDock->isVisible();
     ebe["float/visible"]     = floatDock->isVisible();
     ebe["project/visible"]   = projectDock->isVisible();
     ebe["terminal/visible"]  = terminalDock->isVisible();
+    ebe["toybox/visible"]  = toyBoxDock->isVisible();
     //ebe["console/visible"]   = consoleDock->isVisible();
     settings->write();
 }
@@ -251,6 +255,7 @@ void MainWindow::setFontSize()
     dataWindow->setFontHeightAndWidth(height,width);
     floatWindow->setFontHeightAndWidth(height,width);
     registerWindow->setFontHeightAndWidth(height,width);
+    toyBox->setFontHeightAndWidth(height,width);
 }
 
 void MainWindow::increaseFont()
@@ -439,6 +444,7 @@ void MainWindow::createMenus()
     //viewMenu->addAction ( consoleDock->toggleViewAction() );
     viewMenu->addAction ( terminalDock->toggleViewAction() );
     viewMenu->addAction ( projectDock->toggleViewAction() );
+    viewMenu->addAction ( toyBoxDock->toggleViewAction() );
     addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)),
                           ebe["tooltips/visible"].toBool() );
     addToggle ( viewMenu, "Command line", sourceFrame,
@@ -632,8 +638,16 @@ void MainWindow::createDockWindows()
     terminalDock->setWidget(terminalWindow);
     addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
 
+    toyBoxDock = new QDockWidget(tr("Toy Box"));
+    toyBoxDock->setObjectName("Dock 7");
+    toyBoxDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    toyBox = new ToyBox(toyBoxDock);
+    toyBoxDock->setWidget(toyBox);
+    addDockWidget(Qt::LeftDockWidgetArea, toyBoxDock);
+
     //consoleDock = new QDockWidget(tr("Console"));
-    //consoleDock->setObjectName("Dock 7");
+    //consoleDock->setObjectName("Dock 8");
     //consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                               //Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     //consoleWindow = new ConsoleWindow(consoleDock);
@@ -646,6 +660,7 @@ void MainWindow::createDockWindows()
     projectDock->setVisible(ebe["project/visible"].toBool());
     backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
     terminalDock->setVisible(ebe["terminal/visible"].toBool());
+    toyBoxDock->setVisible(ebe["toybox/visible"].toBool());
     //consoleDock->setVisible(ebe["console/visible"].toBool());
 }
 
