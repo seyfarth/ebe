@@ -121,8 +121,13 @@ union AllTypes
 {
     double f8;
     float f4;
+#ifdef Q_WS_WIN
+    unsigned long long u8;
+    long long i8;
+#else
     unsigned long u8;
     long i8;
+#endif
     unsigned int u4;
     int i4;
     unsigned short u2;

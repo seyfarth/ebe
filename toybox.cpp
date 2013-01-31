@@ -184,6 +184,10 @@ void ToyExpression::setValue( QString t, QStringList values )
         } else if ( t == "bool" ) {
             formats << "bool" << "binary";
             format->addItems(formats);
+        } else if ( t == "float" || t == "double" ) {
+            formats << "decimal" << "hexadecimal" << "binary"
+                    << "binary fp" << "fields";
+            format->addItems(formats);
         } else {
             formats << "decimal" << "hexadecimal" << "binary";
             format->addItems(formats);
@@ -209,6 +213,74 @@ QString binary(AllTypes &a, int n)
     return s;
 }
 
+QString binaryFloat(AllTypes &a)
+{
+    QString s="";
+    int sign, exp;
+
+    if ( a.f4 == 0.0 ) return "0 * 2**0";
+    sign = a.u4 >> 31;
+    exp = ((a.u4 >> 23) & 0xff) - 127;
+    s = sign == 1 ? "-" : " ";
+    s += "1.";
+    for ( int i = 22; i >= 0; i-- ) {
+        s += (a.u4 & (1 << i)) != 0 ? "1" : "0";
+    }
+    s += QString(" * 2**%1").arg(exp);
+    return s;
+}
+
+QString binaryDouble(AllTypes &a)
+{
+    QString s="";
+    int sign, exp;
+
+    if ( a.f8 == 0.0 ) return "0 * 2**0";
+    sign = a.u8 >> 63;
+    qDebug() << "sign" << sign;
+    exp = ((a.u8 >> 52) & 0x7ff) - 1023;
+    qDebug() << "exp" << exp;
+    s = sign == 1 ? "-" : " ";
+    s += "1.";
+    for ( int i = 51; i >= 0; i-- ) {
+        printf("%lx %lx \n",a.u8,1UL<<i);
+        s += (a.u8 & (1L << i)) != 0 ? "1" : "0";
+    }
+    s += QString(" * 2**%1").arg(exp);
+    return s;
+}
+
+QString fieldsFloat(AllTypes &a)
+{
+    QString s="";
+    int b;
+    if ( a.f4 == 0.0 ) return "0 * 2**0";
+    s = (a.u4 >> 31) == 1 ? "1:" : "0:";
+    for ( b = 30; b >= 23; b-- ) {
+        s += (a.u4 & (1 << b)) != 0 ? "1" : "0";
+    }
+    s += ":";
+    for ( b = 22; b >= 0; b-- ) {
+        s += (a.u4 & (1 << b)) != 0 ? "1" : "0";
+    }
+    return s;
+}
+
+QString fieldsDouble(AllTypes &a)
+{
+    QString s="";
+    int b;
+    if ( a.f8 == 0.0 ) return "0 * 2**0";
+    s = (a.u8 >> 63) == 1 ? "1:" : "0:";
+    for ( b = 62; b >= 52; b-- ) {
+        s += (a.u8 & (1L << b)) != 0 ? "1" : "0";
+    }
+    s += ":";
+    for ( b = 51; b >= 0; b-- ) {
+        s += (a.u8 & (1L << b)) != 0 ? "1" : "0";
+    }
+    return s;
+}
 
 QString hexadecimal(AllTypes &a, int n)
 {
@@ -300,6 +372,10 @@ void ToyExpression::setValue()
             value->setText(hexadecimal(a,numBytes));
         } else if ( f == "binary" ) {
             value->setText(binary(a,numBytes));
+        } else if ( f == "binary fp" ) {
+            value->setText(binaryFloat(a));
+        } else if ( f == "fields" ) {
+            value->setText(fieldsFloat(a));
         } else {
             value->setText(QString("%1").arg(a.f4,0,'g',7));
         }
@@ -308,6 +384,10 @@ void ToyExpression::setValue()
             value->setText(hexadecimal(a,numBytes));
         } else if ( f == "binary" ) {
             value->setText(binary(a,numBytes));
+        } else if ( f == "binary fp" ) {
+            value->setText(binaryDouble(a));
+        } else if ( f == "fields" ) {
+            value->setText(fieldsDouble(a));
         } else {
             value->setText(QString("%1").arg(a.f8,0,'g',15));
         }
