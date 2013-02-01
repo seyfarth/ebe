@@ -237,14 +237,14 @@ QString binaryDouble(AllTypes &a)
 
     if ( a.f8 == 0.0 ) return "0 * 2**0";
     sign = a.u8 >> 63;
-    qDebug() << "sign" << sign;
+    //qDebug() << "sign" << sign;
     exp = ((a.u8 >> 52) & 0x7ff) - 1023;
-    qDebug() << "exp" << exp;
+    //qDebug() << "exp" << exp;
     s = sign == 1 ? "-" : " ";
     s += "1.";
     for ( int i = 51; i >= 0; i-- ) {
-        printf("%lx %lx \n",a.u8,1UL<<i);
-        s += (a.u8 & (1L << i)) != 0 ? "1" : "0";
+        //printf("%lx %lx \n",a.u8,1UL<<i);
+        s += ((a.u8 >> i) & 1) == 1 ? "1" : "0";
     }
     s += QString(" * 2**%1").arg(exp);
     return s;
@@ -273,11 +273,11 @@ QString fieldsDouble(AllTypes &a)
     if ( a.f8 == 0.0 ) return "0 * 2**0";
     s = (a.u8 >> 63) == 1 ? "1:" : "0:";
     for ( b = 62; b >= 52; b-- ) {
-        s += (a.u8 & (1L << b)) != 0 ? "1" : "0";
+        s += ((a.u8 >> b) & 1) == 1 ? "1" : "0";
     }
     s += ":";
     for ( b = 51; b >= 0; b-- ) {
-        s += (a.u8 & (1L << b)) != 0 ? "1" : "0";
+        s += ((a.u8 >> b) & 1) == 1 ? "1" : "0";
     }
     return s;
 }
