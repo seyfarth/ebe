@@ -535,6 +535,7 @@ void DataWindow::receiveGlobals(QStringList names, QStringList types,
     int n = names.length();
     DataItem *item;
     
+    //qDebug() << "receiveGlobals" << names;
     for ( int i = 0; i < n; i++ ) {
         item = globalMap->value(names[i]);
         if ( item == 0 ) {
@@ -549,6 +550,7 @@ void DataWindow::receiveGlobals(QStringList names, QStringList types,
             }
         }
     }
+    //qDebug() << "rg sort";
     globals->sortChildren(0,Qt::AscendingOrder);
 }
 
@@ -576,6 +578,7 @@ void DataWindow::receiveLocals(QStringList names, QStringList types, QStringList
     int n = names.length();
     DataItem *item;
     
+    //qDebug() << "receiveLocals" << names << level;
     while ( level < backTraceWindow->level ) {
         dataTree->hide();
         stack.push(dataTree);
@@ -613,6 +616,7 @@ void DataWindow::receiveLocals(QStringList names, QStringList types, QStringList
             }
         }
     }
+    //qDebug() << "rl sort";
     locals->sortChildren(0,Qt::AscendingOrder);
 }
 

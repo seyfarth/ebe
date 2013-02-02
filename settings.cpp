@@ -105,13 +105,14 @@ void Settings::setDefaults()
     ebe["build/asmld"] = "ld -g -o \"$base\"";
     ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
                       "-o \"$base.o\" \"$source\"";
-    ebe["build/ccld"] = "gcc -g -o \"$base\"";
+    ebe["build/libs"] = "-lstdc++";
+    ebe["build/ccld"] = "gcc -g -o \"$base\" ";
     ebe["build/cpp"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
                       "-o \"$base.o\" \"$source\"";
     ebe["build/cppld"] = "g++ -g -o \"$base\"";
     ebe["build/fortran"] = "gfortran -g -c -Wfatal-errors -Wall -O0 "
                       "-o \"$base.o\" \"$source\"";
-    ebe["build/fortranld"] = "gfortran -g -o \"$base\"";
+    ebe["build/fortranld"] = "gfortran -g -o \"$base\" ";
 
 #ifdef Q_WS_WIN
     ebe["build/obj"] = "o";
@@ -130,18 +131,18 @@ void Settings::setDefaults()
     ebe["data/visible"] = true;
 
     ebe["register/fg"] = "#c09000";
-    ebe["register/visible"] = true;
+    ebe["register/visible"] = false;
 
     ebe["float/visible"] = false;
 
-    ebe["project/visible"] = true;
+    ebe["project/visible"] = false;
     ebe["project/auto_open"] = true;
 
     ebe["terminal/visible"] = true;
 
     ebe["command/visible"] = true;
 
-    ebe["backtrace/visible"] = true;
+    ebe["backtrace/visible"] = false;
 
     ebe["toybox/visible"] = true;
 

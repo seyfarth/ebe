@@ -47,6 +47,7 @@ signals:
     void sendWorkingDir(QString);
 
 private:
+    void closeEvent ( QCloseEvent *e );
     void createMenus();
     void createStatusBar();
     void createDockWindows();

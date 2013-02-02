@@ -341,8 +341,11 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     getGlobals();
     getLocals();
     getArgs();
+    //qDebug() << "run";
     emit resetData();
+    //qDebug() << "run";
     getClasses();
+    //qDebug() << "Done run";
 }
 
 void GDB::doNext()
@@ -543,7 +546,7 @@ void GDB::getGlobals()
     QStringList values;
     QList<QList<int> > dimensions;
 
-    //qDebug() << "getGlobals";
+    //qDebug() << "getGlobals" << globals;
     getVars ( globals, names, types, values, dimensions );
     emit sendGlobals(names,types,values);
 }

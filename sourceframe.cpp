@@ -351,7 +351,7 @@ void SourceFrame::run()
             //qDebug() << parts;
             if ( parts.length() >= 3 ) {
                 if ( parts[1] == "T" && (parts[2] == "main" || parts[2] == "_main") ) {
-                    //qDebug() << "found main" << object;
+                    qDebug() << "found main" << object;
                     if ( cExts.contains(ext) ) {
                         ldCmd = ebe["build/ccld"].toString();
                     } else if ( cppExts.contains(ext) ) {
@@ -387,18 +387,19 @@ void SourceFrame::run()
                 QMessageBox::Ok, QMessageBox::Ok); 
         return;
     } 
-    //qDebug() << "ld cmd" << ldCmd;
     //
     //  Link object files to produce executable file
     //
     foreach ( StringPair pair, objectFiles ) {
         ldCmd += " \"" + pair.first + "\"";
     }
+    ldCmd += " " + ebe["build/libs"].toString();
+    qDebug() << "ld cmd" << ldCmd;
 
 
     QProcess ld(this);
     ldCmd.replace("$base",exeName);
-    //qDebug() << "ld cmd" << ldCmd;
+    qDebug() << "ld cmd" << ldCmd;
     ld.start ( ldCmd );
     ld.waitForFinished();
     ld.setReadChannel(QProcess::StandardError);

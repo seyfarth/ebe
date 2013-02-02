@@ -81,6 +81,10 @@ void FloatWindow::receiveFpRegs ( QStringList data )
     unsigned long x[4]={0,0,0,0};
 #endif
     //qDebug() << "fp receive" << data;
+    if ( data.length() < count ) {
+        qDebug() << "fpreg error";
+        return;
+    }
     for (int i = 0; i < count; i++ ) {
         parts = data[i].split(QRegExp("\\s+"));
         //qDebug() << parts;

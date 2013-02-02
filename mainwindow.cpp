@@ -135,6 +135,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     restoreMainWindow();
 }
 
+void MainWindow::closeEvent ( QCloseEvent *event )
+{
+    if ( sourceFrame->filesSaved() ) {
+#ifdef Q_WS_WIN
+        if ( needToKill ) TerminateProcess(hProcess,0);
+#endif
+        saveSettings();
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+
 void MainWindow::restoreMainWindow()
 {
     tooltipsVisible = ebe["tooltips/visible"].toBool();
@@ -184,12 +198,12 @@ void MainWindow::restoreMainWindow()
     if ( ebe.contains("ebe/geometry") ) {
         restoreGeometry(ebe["ebe/geometry"].toByteArray());
     } else {
-        resize(1000,800);
+        resize(1000,750);
     }
     if ( ebe.contains("ebe/state") ) {
         restoreState(ebe["ebe/state"].toByteArray());
     } else {
-        resize(1000,800);
+        resize(1000,750);
     }
     dataDock->setStyleSheet("QDockWidget::title { font-family: " +
                             ebe["variable_font"].toString() + "}" );
@@ -552,10 +566,10 @@ void MainWindow::displayHelp()
 
 void MainWindow::quit()
 {
-#ifdef Q_WS_WIN
-    if ( needToKill ) TerminateProcess(hProcess,0);
-#endif
     if ( sourceFrame->filesSaved() ) {
+#ifdef Q_WS_WIN
+        if ( needToKill ) TerminateProcess(hProcess,0);
+#endif
         saveSettings();
         qApp->quit();
     }
@@ -636,7 +650,7 @@ void MainWindow::createDockWindows()
                               Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     terminalWindow = new TerminalWindow(terminalDock);
     terminalDock->setWidget(terminalWindow);
-    addDockWidget(Qt::BottomDockWidgetArea, terminalDock);
+    addDockWidget(Qt::LeftDockWidgetArea, terminalDock);
 
     toyBoxDock = new QDockWidget(tr("Toy Box"));
     toyBoxDock->setObjectName("Dock 7");
@@ -652,7 +666,7 @@ void MainWindow::createDockWindows()
                               //Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     //consoleWindow = new ConsoleWindow(consoleDock);
     //consoleDock->setWidget(consoleWindow);
-    //addDockWidget(Qt::BottomDockWidgetArea, consoleDock);
+    //addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
 
     dataDock->setVisible(ebe["data/visible"].toBool());
     registerDock->setVisible(ebe["register/visible"].toBool());
