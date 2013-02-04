@@ -45,15 +45,13 @@ private:
     QStringList globals;
     QSet<QString> runCommands;
     QSet<QString> regs;
-    QSet<QString> simpleTypes;
     void getBackTrace();
     void getRegs();
     void getFpRegs();
     void getGlobals();
     void getLocals();
     void getClasses();
-    void getVars(QStringList &vars, QStringList &names, QStringList &types,
-                 QStringList &values, QList<QList<int> > &dims );
+    void getVars(QStringList &names, QList<VariableDefinition> &vars );
     void getArgs();
     bool hasAVX;
     bool testAVX();
@@ -80,9 +78,9 @@ signals:
     void sendRegs(StringHash);
     void sendFpRegs(QStringList);
     void sendData(QString,QString); 
-    void sendGlobals(QStringList,QStringList,QStringList); 
-    void sendLocals(QStringList,QStringList,QStringList); 
-    void sendParameters(QStringList,QStringList,QStringList); 
+    void sendGlobals(QList<VariableDefinition>);
+    void sendLocals(QList<VariableDefinition>);
+    void sendParameters(QList<VariableDefinition>);
     void sendClasses(QHash<QString,ClassDefinition> classes);
     void sendVar(DataMap *map, QString name, QString value);
     void dataReady(QStringList);

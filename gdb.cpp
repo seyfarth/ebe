@@ -14,6 +14,7 @@ extern GDB *gdb;
 QProcess *gdbProcess;
 
 IntHash sizeForType;
+QSet<QString> simpleTypes;
 char letterForSize[] = "bbhhwwwwg"; 
 
 #ifdef Q_WS_WIN
@@ -77,7 +78,12 @@ GDB::GDB()
                 << "long int" << "signed long int" << "unsigned long int"
                 << "long signed int" << "long unsigned int"
                 << "long long" << "signed long long" << "unsigned long long"
-                << "bool" << "float" << "double" << "long double";
+                << "bool" << "float" << "double" << "long double"
+                << "logical(kind=1)" << "logical(kind=2)"
+                << "logical(kind=4)" << "logical(kind=8)"
+                << "integer(kind=1)" << "integer(kind=2)"
+                << "integer(kind=4)" << "integer(kind=8)"
+                << "real(kind=4)" << "real(kind=8)";
     sizeForType["bool"] = sizeof(bool);
     sizeForType["char"] = sizeof(char);
     sizeForType["signed char"] = sizeof(signed char);
@@ -109,6 +115,16 @@ GDB::GDB()
     sizeForType["float"] = sizeof(float);
     sizeForType["double"] = sizeof(double);
     sizeForType["long double"] = sizeof(long double);
+    sizeForType["logical(kind=1)"] = 1;
+    sizeForType["logical(kind=2)"] = 2;
+    sizeForType["logical(kind=4)"] = 4;
+    sizeForType["logical(kind=8)"] = 8;
+    sizeForType["integer(kind=1)"] = 1;
+    sizeForType["integer(kind=2)"] = 2;
+    sizeForType["integer(kind=4)"] = 4;
+    sizeForType["integer(kind=8)"] = 8;
+    sizeForType["real(kind=4)"] = 4;
+    sizeForType["real(kind=8)"] = 8;
     if ( wordSize == 64 ) {
         numFloats = 16;
         regs << "rax" << "rbx" << "rcx" << "rdx"
@@ -295,7 +311,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     }
     if (! CreateProcess (
                 NULL,           // Application name
-                ws,      // Command line
+                ws,             // Command line
                 NULL,           // Process attributes
                 NULL,           // Thread attributes
                 TRUE,           // Inherit handles
@@ -541,25 +557,19 @@ void GDB::getFpRegs()
 
 void GDB::getGlobals()
 {
-    QStringList names;
-    QStringList types;
-    QStringList values;
-    QList<QList<int> > dimensions;
+    QList<VariableDefinition> vars;
 
     //qDebug() << "getGlobals" << globals;
-    getVars ( globals, names, types, values, dimensions );
-    emit sendGlobals(names,types,values);
+    getVars ( globals, vars );
+    emit sendGlobals(vars);
 }
 
 void GDB::getLocals()
 {
     QStringList locals;
-    QStringList names;
-    QStringList types;
-    QStringList values;
     QStringList results;
     QStringList parts;
-    QList<QList<int> > dimensions;
+    QList<VariableDefinition> vars;
 
     results = sendReceive(QString("info locals"));
     //qDebug() << "getLocals" << results;
@@ -572,54 +582,93 @@ void GDB::getLocals()
     }
     locals.sort();
 
-    getVars ( locals, names, types, values, dimensions );
+    getVars ( locals, vars );
 
     //qDebug() << names << types << values;
-    emit sendLocals(names,types,values);
+    emit sendLocals(vars);
 }
 
-void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
-                  QStringList &values, QList<QList<int> > &dimensions )
+void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
 {
     QStringList results;
     QStringList parts;
-    QString type;
-    QString name;
-    QString value;
     QString cmd;
     QString address;
-    QList<int> dim;
+    Limits dim;
+    bool ok;
+    bool fortran;
+    VariableDefinition var;
 
-    //qDebug() << "names" << vars;
-    foreach ( name, vars ) {
-        type = "";
-        value = "";
+    //qDebug() << "names" << names;
+    foreach ( QString name, names ) {
+        fortran = false;
+        var.name = name;
+        var.type = "";
+        var.value = "";
         results = sendReceive(QString("whatis %1").arg(name));
+        if ( results.length() > 0 && 
+             (results[0].indexOf("invalid") >= 0 ||
+              results[0].indexOf("(kind") >= 0 ) ) {
+            send ( "set language fortran");
+            results = sendReceive(QString("whatis %1").arg(name));
+            send ( "set language c++");
+            fortran = true;
+        }
+        var.isFortran = fortran;
         foreach ( QString r, results ) {
             //qDebug() << "r" << r;
             int i = r.indexOf("=");
             if ( i > 0 ) {
-                type = r.mid(i+2);
-                //qDebug() << name << type;
+                var.type = r.mid(i+2);
+                //qDebug() << name << var.type;
                 break;
             }
         }
 
-        int n1, n2=-1;
-        n1 = type.indexOf("[");
-        if ( n1 > 0 ) n2 = type.indexOf("]");
-        dim.clear();
-        while ( n1 > 0 && n2 > 0 ) {
-            dim.append(type.mid(n1+1,n2-n1-1).toInt());
-            n1 = type.indexOf("[",n2+1);
-            if ( n1 > 0 ) n2 = type.indexOf("]",n2+1);
+        var.dimensions.clear();
+        if ( fortran ) {
+            parts = var.type.split(QRegExp("\\s+"));
+            if ( parts.length() >= 2 ) {
+                QString d = parts[1];
+                d.chop(1);
+                d = d.mid(1);
+                //qDebug() << var.name << d;
+                parts = d.split(",");
+                foreach ( QString d2, parts ) {
+                    QStringList parts2 = d2.split(":");
+                    if ( parts2.length() == 1 ) {
+                        dim.first = 1;
+                        dim.last = parts2[0].toInt();
+                    } else if ( parts2.length() == 2 ) {
+                        dim.first = parts2[0].toInt();
+                        dim.last = parts2[1].toInt();
+                    } else {
+                        dim.first = 1;
+                        dim.last = 1;
+                    }
+                    var.dimensions.append(dim);
+                }
+            }
+        } else {
+            int n1, n2=-1;
+            n1 = var.type.indexOf("[");
+            if ( n1 > 0 ) n2 = var.type.indexOf("]");
+            var.dimensions.clear();
+            while ( n1 > 0 && n2 > 0 ) {
+                dim.first = 0;
+                dim.last = var.type.mid(n1+1,n2-n1-1).toInt()-1;
+                var.dimensions.append(dim);
+                n1 = var.type.indexOf("[",n2+1);
+                if ( n1 > 0 ) n2 = var.type.indexOf("]",n2+1);
+            }
         }
-        //qDebug() << "dims" << dim;
+        //qDebug() << "dimensions";
 
-        if ( type != "" ) {
-            if ( simpleTypes.contains(type) ) {
-                char sizeLetter = letterForSize[sizeForType[type]];
-                QString cmd = QString("x/%1 (unsigned char *)&%2").arg(sizeLetter).arg(name);
+        if ( var.type != "" ) {
+            if ( simpleTypes.contains(var.type) ) {
+                char sizeLetter = letterForSize[sizeForType[var.type]];
+                QString cmd = QString("x/%1 (unsigned char *)&%2")
+                              .arg(sizeLetter).arg(name);
                 //qDebug() << cmd;
                 results = sendReceive(cmd);
                 //qDebug() << results;
@@ -627,12 +676,39 @@ void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
                     //qDebug() << r;
                     parts = results[0].split(QRegExp(":\\s+"));
                     if ( parts.length() == 2 ) {
-                        value = parts[1];
+                        var.value = parts[1];
                         break;
                     }
                 }
-            } else if ( type == "std::string" ) {
-                value = "";
+            } else if ( var.type.indexOf("character") == 0 ) {
+                //qDebug() << name << var.type;
+                int i = var.type.indexOf("*");
+                if ( i < 0 ) break;
+                QString t = var.type.mid(i+1);
+                //qDebug() << name << var.type << t;
+                int n = t.toInt();
+                if ( n > 80 ) break;
+                results = sendReceive(QString("x/%1xb &%2").arg(n).arg(name));
+                //qDebug() << results;
+                var.value = "\"";
+                foreach ( QString r, results ) {
+                    i = r.indexOf(":");
+                    if ( i < 0 ) continue;
+                    r = r.mid(i+1);
+                    parts = r.split(QRegExp("\\s+"));
+                    foreach ( QString p, parts ) {
+                        if ( p == "" ) continue;
+                        n = p.toInt(&ok,16);
+                        if ( n >= ' ' && n <= 'z' ) {
+                            var.value += QChar(n);
+                        } else {
+                            var.value += "\\"+p;
+                        }
+                    }
+                }
+                var.value += "\"";
+            } else if ( var.type == "std::string" ) {
+                var.value = "";
                 cmd = QString("p %1._M_dataplus._M_p").arg(name);
                 //qDebug() << cmd;
                 results = sendReceive(cmd);
@@ -640,28 +716,28 @@ void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
                 if ( results.length() == 0 ) continue;
                 parts = results[0].split(QRegExp("\\s+"));
                 if ( parts.length() < 4 ) continue;
-                value = parts[3];
-            } else if ( dim.length() == 1 ) {
-                int n = dim[0];
-                if ( n > 10 ) n = 10;
-                value = "";
-                for ( int i = 0; i < n; i++ ) {
+                var.value = parts[3];
+            } else if ( var.dimensions.length() == 1 ) {
+                int n1 = var.dimensions[0].first;
+                int n2 = var.dimensions[0].last;
+                if ( n2-n1 > 10 ) n2 = n1+10;
+                var.value = "";
+                for ( int i = n1; i <= n2; i++ ) {
                     results = sendReceive(QString("print %1[%2]").arg(name).arg(i));
                     //qDebug() << name << results;
                     foreach ( QString r, results ) {
                         int j = r.indexOf("=");
                         if ( j > 0 ) {
-                            value += r.mid(j+2) + " ";
+                            var.value += r.mid(j+2) + " ";
                             break;
                         }
                     }
                 }
-            } else if ( type == "char **" ) {
-                value = "";
+            } else if ( var.type == "char **" ) {
+                var.value = "";
                 int i = 0;
                 while ( 1 ) {
-                    cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(name).arg(i*8);
-                    //qDebug() << cmd;
+                    cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(name).arg(i*(wordSize == 64?8:4));
                     results = sendReceive(cmd);
                     //qDebug() << results;
                     if ( results.length() == 0 ) break;
@@ -670,29 +746,28 @@ void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
                     address = parts[1];
                     if ( address == "0" ) break;
                     cmd = QString("x/sb %1").arg(address);
+                    //qDebug() << cmd;
                     results = sendReceive(cmd);
+                    if ( results[0].indexOf("out of bounds") >= 0 ) break;
                     if ( results.length() == 0 ) break;
                     parts = results[0].split(QRegExp(":\\s+"));
                     if ( parts.length() < 2 ) break;
-                    value += parts[1] + " ";
+                    var.value += parts[1] + " ";
                     i++;
                 }
-            } else if ( type.indexOf(" *") >= 0 ) {
+            } else if ( var.type.indexOf(" *") >= 0 ) {
                 QString cmd = QString("printf \"0x%x\\n\",%1").arg(name);
                 results = sendReceive(cmd);
                 if ( results.length() == 0 ) {
-                    value = "";
+                    var.value = "";
                 } else {
                     parts = results[0].split(QRegExp(":\\s+"));
-                    value = parts[parts.length()-1];
+                    var.value = parts[parts.length()-1];
                 }
             } else {
-                value = " ";
+                var.value = " ";
             } 
-            names.append(name);
-            types.append(type);
-            values.append(value);
-            dimensions.append(dim);
+            vars.append(var);
         }
     }
 }
@@ -700,15 +775,9 @@ void GDB::getVars(QStringList &vars, QStringList &names, QStringList &types,
 void GDB::getArgs()
 {
     QStringList args;
-    QStringList names;
-    QStringList types;
-    QStringList values;
     QStringList results;
     QStringList parts;
-    QList<QList<int> > dimensions;
-    QString type;
-    QString name;
-    QString value;
+    QList<VariableDefinition> vars;
 
     results = sendReceive(QString("info args"));
     //qDebug() << "getArgs" << results;
@@ -720,9 +789,9 @@ void GDB::getArgs()
         }
     }
     args.sort();
-    getVars ( args, names, types, values, dimensions );
+    getVars ( args, vars);
     //qDebug() << "parameters" << names << types << values;
-    emit sendParameters(names,types,values);
+    emit sendParameters(vars);
 }
 
 
@@ -762,7 +831,7 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
         result = "";
         int i = 0;
         while ( 1 ) {
-            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*8);
+            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*(wordSize == 64?8:4));
             //qDebug() << cmd;
             results = sendReceive(cmd);
             //qDebug() << results;
@@ -778,6 +847,17 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
             if ( parts.length() < 2 ) break;
             result += parts[1] + " ";
             i++;
+        }
+    } else if ( format == "String" ) {
+        cmd = QString("x/s (char *)%1").arg(name);
+        //qDebug() << cmd;
+        results = sendReceive(cmd);
+        //qDebug() << results;
+        if ( results.length() == 0 ) {
+            result = "";
+        } else {
+            parts = results[0].split(QRegExp(":\\s+"));
+            result = parts[parts.length()-1];
         }
     } else if ( format == "Pointer" ) {
         cmd = QString("printf \"0x%x\\n\",%1").arg(name);
@@ -832,6 +912,7 @@ void GDB::getData(QStringList request)
     QString address2;
 
 
+    //qDebug() << "getData" << request;
     if ( size < 0 || size > 8 ) return;
     char sizeLetter = letterForSize[size];
 
@@ -847,7 +928,7 @@ void GDB::getData(QStringList request)
         result = "";
         int i = 0;
         while ( 1 ) {
-            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*8);
+            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*(wordSize == 64?8:4));
             //qDebug() << cmd;
             results = sendReceive(cmd);
             //qDebug() << results;
@@ -867,6 +948,17 @@ void GDB::getData(QStringList request)
     } else if ( format == "Pointer" ) {
         cmd = QString("printf \"0x%x\\n\",%1").arg(name);
         results = sendReceive(cmd);
+        if ( results.length() == 0 ) {
+            result = "";
+        } else {
+            parts = results[0].split(QRegExp(":\\s+"));
+            result = parts[parts.length()-1];
+        }
+    } else if ( format == "String" ) {
+        cmd = QString("x/s (char *)%1").arg(address);
+        //qDebug() << cmd;
+        results = sendReceive(cmd);
+        //qDebug() << results;
         if ( results.length() == 0 ) {
             result = "";
         } else {
@@ -907,6 +999,7 @@ void GDB::getData(QStringList request)
 
 void GDB::setNormal()
 {
+    send("set language c++");
     if ( NullEOF ) {
         send("call __ebeSetNormal()");
         NullEOF = false;

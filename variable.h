@@ -38,6 +38,7 @@ public:
     QSpinBox *lastSpin;
     QSize sizeHint() const;
     void setMax(int max);
+    void setMin(int min);
     int min;
     int max;
 
@@ -51,12 +52,20 @@ public slots:
 signals:
 };
 
+struct Limits
+{
+    int first;
+    int last;
+};
+
 struct VariableDefinition
 {
     QString name;
     QString type;
-    QVector<int> dimensions;
+    QString value;
+    QList<Limits> dimensions;
     bool isSimple;
+    bool isFortran;
 };
 
 struct ClassDefinition

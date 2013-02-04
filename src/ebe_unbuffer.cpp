@@ -54,6 +54,7 @@ public:
 __EbeUnBuffer::__EbeUnBuffer()
 {
     setbuf(stdout,NULL);
+    setbuf(stderr,NULL);
 #ifdef __linux__
     __ebe_NULL_fp = fopen("/dev/null","r");
 #elif __APPLE__

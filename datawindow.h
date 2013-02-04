@@ -61,7 +61,9 @@ public:
     QString type;       ///< Type as reported by \c gdb
     QString address;    ///< For user-defined variables
     QString format;     ///< How the \c DataItem should look
+    QVector<Limits> dimensions;  ///< Array limits
     bool isSimple;      ///< Is the data simple, like char or int
+    bool isFortran;     ///< Was this a fortran variable
     int size;           ///< Number of bytes of data
     int first;          ///< First index to expand for arrays/pointers
     int last;           ///< Last index to expand for arrays/pointers
@@ -148,6 +150,7 @@ public:
     DataMap *userDefinedMap;
     DataItem *addDataItem(DataMap *map, QString n,
                           QString t, QString v);
+    QList<Limits> dimensions;
 
 
 public slots:
@@ -180,9 +183,9 @@ private slots:
     void resetData();
     void receiveClasses(QHash<QString,ClassDefinition> c);
     void receiveVar(DataMap *group, QString name, QString value);
-    void receiveGlobals(QStringList,QStringList,QStringList);
-    void receiveLocals(QStringList,QStringList,QStringList);
-    void receiveParameters(QStringList,QStringList,QStringList);
+    void receiveGlobals(QList<VariableDefinition>);
+    void receiveLocals(QList<VariableDefinition>);
+    void receiveParameters(QList<VariableDefinition>);
 
 private:
     QSize sizeHint() const;

@@ -131,7 +131,6 @@ ArrayBoundsDialog::ArrayBoundsDialog()
 
     layout->addLayout(buttonLayout);
 
-    setMax(3);
     setToolTip(tr("A pointer can point to an object or an array.\n") +
                tr("To point to an object set first and last to 0.") );
     setLayout(layout);
@@ -141,6 +140,12 @@ void ArrayBoundsDialog::setMax(int max)
 {
     firstSpin->setMaximum(max);
     lastSpin->setMaximum(max);
+}
+
+void ArrayBoundsDialog::setMin(int min)
+{
+    firstSpin->setMinimum(min);
+    lastSpin->setMinimum(min);
 }
 
 void ArrayBoundsDialog::setArrayBounds()
