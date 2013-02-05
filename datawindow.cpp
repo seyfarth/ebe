@@ -118,7 +118,7 @@ DataItem::DataItem()
 {
     name  = "";
     type  = "";
-    u8    = 0;
+    a.u8    = 0;
     first = 0;
     last  = 0;
     userDefined = false;
@@ -131,40 +131,48 @@ QString DataItem::value()
     if ( isSimple ) {
         switch ( size ) {
         case 1:
-            if ( format == "Character" ) val.sprintf("%c",c1);
-            else if ( format == "Decimal" ) val.sprintf("%d",i1);
-            else if ( format == "Unsigned decimal" ) val.sprintf("%d",u1);
-            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",u1);
-            else if ( format == "Boolean" ) val = b1 ? "true" : "false";
+            if ( format == "Character" ) val.sprintf("%c",a.c);
+            else if ( format == "Decimal" ) val.sprintf("%d",a.i1);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%d",a.u1);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",a.u1);
+            else if ( format == "Boolean" ) val = a.b1 ? "true" : "false";
+            else if ( format == "Binary" ) val = binary(a,1);
             else val = "";
             break;
         case 2:
-            if ( format == "Decimal" ) val.sprintf("%d",i2);
-            else if ( format == "Unsigned decimal" ) val.sprintf("%d",u2);
-            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",u2);
-            else if ( format == "Boolean" ) val = b1 ? "true" : "false";
+            if ( format == "Decimal" ) val.sprintf("%d",a.i2);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%d",a.u2);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",a.u2);
+            else if ( format == "Boolean" ) val = a.b1 ? "true" : "false";
+            else if ( format == "Binary" ) val = binary(a,2);
             else val = "";
             break;
         case 4:
-            if ( format == "Decimal" ) val.sprintf("%d",i4);
-            else if ( format == "Unsigned decimal" ) val.sprintf("%d",u4);
-            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",u4);
-            else if ( format == "Floating point" ) val.sprintf("%g",f4);
-            else if ( format == "Boolean" ) val = b1 ? "true" : "false";
+            if ( format == "Decimal" ) val.sprintf("%d",a.i4);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%d",a.u4);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%x",a.u4);
+            else if ( format == "Floating point" ) val.sprintf("%g",a.f4);
+            else if ( format == "Boolean" ) val = a.b1 ? "true" : "false";
+            else if ( format == "Binary" ) val = binary(a,4);
+            else if ( format == "Binary fp" ) val = binaryFloat(a);
+            else if ( format == "Fields" ) val = fieldsFloat(a);
             else val = "";
             break;
         case 8:
 #ifdef Q_WS_WIN
-            if ( format == "Decimal" ) val.sprintf("%lld",i8);
-            else if ( format == "Unsigned decimal" ) val.sprintf("%llu",u8);
-            else if ( format == "Hexadecimal" ) val.sprintf("0x%llx",u8);
+            if ( format == "Decimal" ) val.sprintf("%lld",a.i8);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%llu",a.u8);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%llx",a.u8);
 #else
-            if ( format == "Decimal" ) val.sprintf("%ld",i8);
-            else if ( format == "Unsigned decimal" ) val.sprintf("%ld",u8);
-            else if ( format == "Hexadecimal" ) val.sprintf("0x%lx",u8);
+            if ( format == "Decimal" ) val.sprintf("%ld",a.i8);
+            else if ( format == "Unsigned decimal" ) val.sprintf("%ld",a.u8);
+            else if ( format == "Hexadecimal" ) val.sprintf("0x%lx",a.u8);
 #endif
-            else if ( format == "Floating point" ) val.sprintf("%g",f8);
-            else if ( format == "Boolean" ) val = b1 ? "true" : "false";
+            else if ( format == "Floating point" ) val.sprintf("%g",a.f8);
+            else if ( format == "Boolean" ) val = a.b1 ? "true" : "false";
+            else if ( format == "Binary" ) val = binary(a,8);
+            else if ( format == "Binary fp" ) val = binaryDouble(a);
+            else if ( format == "Fields" ) val = fieldsDouble(a);
             else val = "";
             break;
         default:
@@ -241,26 +249,26 @@ void DataItem::setValue(QString v)
 
     stringValue = v;
     if ( isSimple ) {
-        u8 = 0;
+        a.u8 = 0;
         switch ( size ) {
         case 1:
-            u1 = v.toUInt(&ok,16);
+            a.u1 = v.toUInt(&ok,16);
             break;
         case 2:
-            u2 = v.toUInt(&ok,16);
+            a.u2 = v.toUInt(&ok,16);
             break;
         case 4:
-            u4 = v.toUInt(&ok,16);
+            a.u4 = v.toUInt(&ok,16);
             break;
         case 8:
 #ifdef Q_WS_WIN
-            u8 = v.toULongLong(&ok,16);
+            a.u8 = v.toULongLong(&ok,16);
 #else
-            u8 = v.toULong(&ok,16);
+            a.u8 = v.toULong(&ok,16);
 #endif
             break;
         }
-        //qDebug() << name << size << v << u8 << value();
+        //qDebug() << name << size << v << a.u8 << value();
     }
     setText(2,value());
 }
@@ -270,6 +278,20 @@ void DataItem::setRange(int f, int l)
     first = f;
     last = l;
     setName(name);
+}
+
+void DataTree::setBinary()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Binary";
+    d->setText(2,d->value());
+}
+
+void DataTree::setBool()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Boolean";
+    d->setText(2,d->value());
 }
 
 void DataTree::setDecimal()
@@ -297,6 +319,27 @@ void DataTree::setCharacter()
 {
     DataItem *d = (DataItem *)currentItem();
     d->format = "Character";
+    d->setText(2,d->value());
+}
+
+void DataTree::setFloatingPoint()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Floating point";
+    d->setText(2,d->value());
+}
+
+void DataTree::setBinaryFP()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Binary fp";
+    d->setText(2,d->value());
+}
+
+void DataTree::setFields()
+{
+    DataItem *d = (DataItem *)currentItem();
+    d->format = "Fields";
     d->setText(2,d->value());
 }
 
@@ -344,11 +387,12 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
         menu.exec(QCursor::pos());
     } else if ( item->isSimple ) {
         if ( type.indexOf("char") >= 0 ) {
-            QMenu menu("char menu");
+            QMenu menu("Character menu");
+            menu.addAction(tr("Character"),this,SLOT(setCharacter()));
             menu.addAction(tr("Decimal"),this,SLOT(setDecimal()));
             menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
             menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
-            menu.addAction(tr("Character"),this,SLOT(setCharacter()));
+            menu.addAction(tr("Binary"),this,SLOT(setBinary()));
             menu.exec(QCursor::pos());
         } else if ( type.indexOf("short") >= 0 || type.indexOf("int") >= 0 ||
                     type.indexOf("long") >= 0 || type.indexOf("real") >= 0 ) {
@@ -356,8 +400,23 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
             menu.addAction(tr("Signed decimal"),this,SLOT(setDecimal()));
             menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
             menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
+            menu.addAction(tr("Binary"),this,SLOT(setBinary()));
             menu.exec(QCursor::pos());
-        }
+        } else if ( type == "float" || type == "double" ||
+                    type.indexOf("real") >= 0 ) {
+            QMenu menu("Float menu");
+            menu.addAction(tr("Floating point"),this,SLOT(setFloatingPoint()));
+            menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
+            menu.addAction(tr("Binary"),this,SLOT(setBinary()));
+            menu.addAction(tr("Binary fp"),this,SLOT(setBinaryFP()));
+            menu.addAction(tr("Fields"),this,SLOT(setFields()));
+            menu.exec(QCursor::pos());
+        } else if ( type == "bool" || type.indexOf("logical") >= 0 ) {
+            QMenu menu("Boolean menu");
+            menu.addAction(tr("Boolean"),this,SLOT(setBool()));
+            menu.addAction(tr("Binary"),this,SLOT(setBinary()));
+            menu.exec(QCursor::pos());
+        } 
     }
 }
 

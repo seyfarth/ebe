@@ -218,7 +218,6 @@ QString binaryFloat(AllTypes &a)
     QString s="";
     int sign, exp;
 
-    if ( a.f4 == 0.0 ) return "0 * 2**0";
     sign = a.u4 >> 31;
     exp = ((a.u4 >> 23) & 0xff) - 127;
     s = sign == 1 ? "-" : " ";
@@ -235,7 +234,6 @@ QString binaryDouble(AllTypes &a)
     QString s="";
     int sign, exp;
 
-    if ( a.f8 == 0.0 ) return "0 * 2**0";
     sign = a.u8 >> 63;
     //qDebug() << "sign" << sign;
     exp = ((a.u8 >> 52) & 0x7ff) - 1023;
@@ -254,7 +252,6 @@ QString fieldsFloat(AllTypes &a)
 {
     QString s="";
     int b;
-    if ( a.f4 == 0.0 ) return "0 * 2**0";
     s = (a.u4 >> 31) == 1 ? "1:" : "0:";
     for ( b = 30; b >= 23; b-- ) {
         s += (a.u4 & (1 << b)) != 0 ? "1" : "0";
@@ -270,7 +267,6 @@ QString fieldsDouble(AllTypes &a)
 {
     QString s="";
     int b;
-    if ( a.f8 == 0.0 ) return "0 * 2**0";
     s = (a.u8 >> 63) == 1 ? "1:" : "0:";
     for ( b = 62; b >= 52; b-- ) {
         s += ((a.u8 >> b) & 1) == 1 ? "1" : "0";

@@ -77,36 +77,7 @@ public:
     DataMap *map;       ///< Map containing this \c DataItem
     QString stringValue;///< Value printed by \c gdb
 
-/**
- *  \union anonymous
- *
- *  The purpose of this union is to provide all the various basic
- *  data types for storing data for a \c DataItem.  For example,
- *  the data is stored as hexadecimal in \c u4 for a 4 byte item
- *  and it might then be displayed as a 4 byte \float using \c f4.
- */
-    union {
-        double f8;
-        float f4;
-#ifdef Q_WS_WIN
-        unsigned long long u8;
-#else
-        unsigned long u8;
-#endif
-        unsigned int u4;
-        unsigned short u2;
-        unsigned char u1;
-#ifdef Q_WS_WIN
-        long long i8;
-#else
-        long i8;
-#endif
-        int i4;
-        short i2;
-        signed char i1;
-        char c1;
-        bool b1;
-    };
+    AllTypes a;         ///< Union of all basic types
 };
 
 /**
@@ -158,6 +129,11 @@ public slots:
     void editUserVariable();
     void deleteUserVariable();
     void setDecimal();
+    void setFloatingPoint();
+    void setBool();
+    void setBinary();
+    void setBinaryFP();
+    void setFields();
     void setCharacter();
     void setUnsignedDecimal();
     void setHexadecimal();
