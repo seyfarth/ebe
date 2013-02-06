@@ -14,6 +14,7 @@
 
 #include "mainwindow.h"
 #include "errorwindow.h"
+#include "librarywindow.h"
 #include "sourcewindow.h"
 #include "settings.h"
 #include "stylesheet.h"
@@ -514,6 +515,8 @@ void MainWindow::createMenus()
         .arg(icon_size)), "class");
     templateToolBar->addAction(QIcon(QString(":/icons/%1/struct.png")
         .arg(icon_size)), "struct");
+    templateToolBar->addAction(QIcon(QString(":/icons/%1/library.png")
+        .arg(icon_size)), "library");
 
     connect ( templateToolBar, SIGNAL(actionTriggered(QAction*)),
         sourceFrame, SLOT(doTemplate(QAction*)) );

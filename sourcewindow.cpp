@@ -497,6 +497,16 @@ void SourceWindow::doTemplate(QAction *a)
     }
 }
 
+void SourceWindow::insertFile ( QString f )
+{
+    QFile in(f);
+    if ( in.open(QFile::ReadOnly) ) {
+        QString data = QString(in.readAll());
+        //qDebug() << data;
+        textEdit->textCursor().insertText(data);
+    }
+}
+
 void SourceWindow::createTextEdit()
 {
     textEdit = new SourceEdit(this);

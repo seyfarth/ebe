@@ -11,10 +11,7 @@ int main(int argc, char *argv[])
     setenv("QT_USE_NATIVE_WINDOWS","1",1);
 #endif
     QApplication app(argc, argv);
-    QString home;
-    home = getenv("EBE_HOME");
-    if ( home == "" ) home = ".";
-    QResource::registerResource(home+"/ebe.rcc");
+    QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
     mainWin = new MainWindow;
     mainWin->show();
     if ( argc > 1 ) mainWin->open(argv[1]);

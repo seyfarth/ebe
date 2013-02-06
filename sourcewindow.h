@@ -170,6 +170,7 @@ public:
     void gotoLine();
     void prettify();
     void doTemplate(QAction *a);
+    void insertFile(QString f);
 
 public slots:
     void open();

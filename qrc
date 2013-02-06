@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cat > ebe.qrc << EOF
+<!DOCTYPE RCC> <RCC version="1.0">
+<qresource>
+EOF
+dirs="icons library src html"
+find $dirs -type f -not -name '*~' | sed -e 's/^/\<file\>/' -e 's:$:\<\/file>:' >> ebe.qrc
+
+cat >> ebe.qrc << EOF2
+</qresource>
+</RCC>
+EOF2
+
+rcc -binary ebe.qrc -o ebe.rcc

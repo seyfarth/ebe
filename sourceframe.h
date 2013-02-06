@@ -69,6 +69,7 @@ public slots:
     void templateFortran();
     void updateCursorPosition();
     void doTemplate(QAction*);
+    void insertFile(QString f);
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

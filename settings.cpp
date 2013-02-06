@@ -120,6 +120,8 @@ void Settings::setDefaults()
     ebe["build/obj"] = "o";
 #endif
 
+    ebe["library/path"] = ":/library";
+
     ebe["buttons/visible"] = false;
     ebe["buttons/icons"] = true;
     ebe["buttons/icon_size"] = 32;

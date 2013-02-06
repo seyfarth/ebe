@@ -3,6 +3,7 @@
 #include "commandline.h"
 #include "stylesheet.h"
 #include "errorwindow.h"
+#include "librarywindow.h"
 #include "gdb.h"
 #include "settings.h"
 #ifdef Q_WS_WIN
@@ -953,10 +954,27 @@ void SourceFrame::find()
     }
 }
 
+void SourceFrame::insertFile(QString f)
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    if ( source ) {
+        source->insertFile(f);
+    }
+}
+
 void SourceFrame::doTemplate(QAction *a)
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
+    if ( a->text() == "library" ) {
+        if ( libraryWindow.isNull() ) {
+            libraryWindow = new LibraryWindow;
+        }
+        libraryWindow->show();
+        libraryWindow->setWindowState(Qt::WindowActive);
+        return;
+    }
     if ( source ) {
         source->doTemplate(a);
     }
