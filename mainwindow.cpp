@@ -561,7 +561,7 @@ void MainWindow::helpAction ( QMenu *menu, QString text, QString file )
 void MainWindow::displayHelp()
 {
     QAction *action = (QAction *)sender();
-    QWebView *view = new QWebView();
+    QWebView *view = new QWebView;
     view->load(QUrl("qrc:/html/"+action->data().toString()));
     view->setZoomFactor((double)fontSize/14);
     view->show();

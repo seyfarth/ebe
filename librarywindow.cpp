@@ -3,6 +3,7 @@
 #include "sourceframe.h"
 #include "settings.h"
 #include <QListWidget>
+#include <QWebView>
 #include <QListWidgetItem>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -62,15 +63,42 @@ void LibraryWindow::cd ( QString d )
         indent += "  ";
     }
 
-    files = dir.entryList();
+    QFile f(p+"/index");
+    if ( f.open(QFile::ReadOnly) ) {
+        QString s;
+        while ( (s = f.readLine()) != "" ) {
+            files << s.trimmed();
+        }
+        f.close();
+    } else {
+        files = dir.entryList();
+    }
     foreach ( QString file, files ) {
         dirs << d + "/" + file;
-        items << indent + file.replace("_", " ");
+        items << indent + file.replace("_", " ").
+                 replace(".html","").replace(".htm","");
     }
     files = dirs;
     qDebug() << files << items;
     list->addItems(items);
     libraryPath = d;
+
+    QListWidgetItem *it;
+    int n = files.count();
+    for ( i = 0; i < n; i++ ) {
+        it = list->item(i);
+        QFileInfo info(files[i]);
+        if ( info.isDir() ) {
+            qDebug() << i << "dir" << files[i];
+            it->setToolTip(tr("changes to a new directory"));
+        } else if ( info.isFile() ) {
+            if ( files[i].indexOf(".htm") > 0 ) {
+                it->setToolTip(tr("view a web page"));
+            } else {
+                it->setToolTip(tr("inserts code into the editor"));
+            }
+        }
+    }
 }
 
 void LibraryWindow::handleClick(QListWidgetItem *it)
@@ -82,6 +110,13 @@ void LibraryWindow::handleClick(QListWidgetItem *it)
     if ( info.isDir() ) {
         cd ( file );
     } else if ( info.isFile() ) {
-        sourceFrame->insertFile(file);
+        if ( file.indexOf(".htm") > 0 ) {
+            QWebView *view = new QWebView;
+            view->load(QUrl("qrc"+file));
+            view->setZoomFactor(ebe["font_size"].toInt()/14.0);
+            view->show();
+        } else {
+            sourceFrame->insertFile(file);
+        }
     }
 }
