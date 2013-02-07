@@ -41,12 +41,33 @@ void LibraryWindow::cd ( QString d )
     list->clear();
     files.clear();
     QDir dir(d);
-    files = dir.entryList();
-    if ( d != ":/library") files.insert(0,"..");
+    QString indent;
+    QString p = ":/library";
     QStringList items;
-    foreach ( QString file, files ) {
-        items << file.replace("_", " ");
+    int i;
+    QStringList dirs;
+    while ( p != d && indent.length() < 20 ) {
+        qDebug() << "adding" << p;
+        dirs << p;
+        i = p.lastIndexOf("/");
+        if ( i == 1 ) {
+            items << "top";
+        } else {
+            items << indent + p.mid(i+1);
+        }
+        i = p.length()+1;
+        while ( i < d.length() && d[i] != QChar('/') ) i++;
+        p = d.left(i);
+        qDebug() << "p is now" << p;
+        indent += "  ";
     }
+
+    files = dir.entryList();
+    foreach ( QString file, files ) {
+        dirs << d + "/" + file;
+        items << indent + file.replace("_", " ");
+    }
+    files = dirs;
     qDebug() << files << items;
     list->addItems(items);
     libraryPath = d;
@@ -55,12 +76,12 @@ void LibraryWindow::cd ( QString d )
 void LibraryWindow::handleClick(QListWidgetItem *it)
 {
     qDebug() << "row" << list->currentRow();
-    QString file = libraryPath + "/" + files[list->currentRow()];
+    QString file = files[list->currentRow()];
     qDebug() << "file" << file;
-    QFileInfo fi(file);
-    if ( fi.isDir() ) {
+    QFileInfo info(file);
+    if ( info.isDir() ) {
         cd ( file );
-    } else if ( fi.isFile() ) {
+    } else if ( info.isFile() ) {
         sourceFrame->insertFile(file);
     }
 }
