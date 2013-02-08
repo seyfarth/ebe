@@ -4,10 +4,10 @@
 #include <QHash>
 #include <QString>
 
-#ifndef STYLESHEET_CPP
-extern QHash<QString,QString> styles;
-#else
+#ifdef STYLESHEET_CPP
 QHash<QString,QString> styles;
+#else
+extern QHash<QString,QString> styles;
 #endif
 
 void initStyleSheet(QString key, QString style);

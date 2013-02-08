@@ -48,7 +48,7 @@ void LibraryWindow::cd ( QString d )
     int i;
     QStringList dirs;
     while ( p != d && indent.length() < 20 ) {
-        qDebug() << "adding" << p;
+        //qDebug() << "adding" << p;
         dirs << p;
         i = p.lastIndexOf("/");
         if ( i == 1 ) {
@@ -59,7 +59,7 @@ void LibraryWindow::cd ( QString d )
         i = p.length()+1;
         while ( i < d.length() && d[i] != QChar('/') ) i++;
         p = d.left(i);
-        qDebug() << "p is now" << p;
+        //qDebug() << "p is now" << p;
         indent += "  ";
     }
 
@@ -79,7 +79,7 @@ void LibraryWindow::cd ( QString d )
                  replace(".html","").replace(".htm","");
     }
     files = dirs;
-    qDebug() << files << items;
+    //qDebug() << files << items;
     list->addItems(items);
     libraryPath = d;
 
@@ -89,7 +89,7 @@ void LibraryWindow::cd ( QString d )
         it = list->item(i);
         QFileInfo info(files[i]);
         if ( info.isDir() ) {
-            qDebug() << i << "dir" << files[i];
+            //qDebug() << i << "dir" << files[i];
             it->setToolTip(tr("changes to a new directory"));
         } else if ( info.isFile() ) {
             if ( files[i].indexOf(".htm") > 0 ) {
@@ -103,9 +103,9 @@ void LibraryWindow::cd ( QString d )
 
 void LibraryWindow::handleClick(QListWidgetItem *it)
 {
-    qDebug() << "row" << list->currentRow();
+    //qDebug() << "row" << list->currentRow();
     QString file = files[list->currentRow()];
-    qDebug() << "file" << file;
+    //qDebug() << "file" << file;
     QFileInfo info(file);
     if ( info.isDir() ) {
         cd ( file );

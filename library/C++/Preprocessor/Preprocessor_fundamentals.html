@@ -1,0 +1,101 @@
+<html>
+<head>
+<title> Preprocessor Fundamentals </title>
+</head>
+
+
+<body>
+
+<center>
+<h1> Preprocessor Fundamentals  </h1>
+</center>
+
+<p>
+The C or C++ preprocessor is used as a means of transforming the input to the
+compiler.
+There are three common purposes for the preprocessor, though the preprocessor
+is a fairly general purpose language.
+</p>
+
+<ul>
+<li> Including header files as part of a file </li>
+<li> Conditional compilation </li>
+<li> Macros, which transform symbols </li>
+</ul>
+
+<h2> Header files </h2>
+
+<p>
+A header file is a file with source code in it, though generally
+header files include definitions of data and descriptions of functions.
+In C the header files generally have ".h" as am extension, though this is not
+required.
+The pattern for C++ is to have header files with no extension.
+Below is a common preprocessor statement to include C++ source code from
+a header file.
+</p>
+
+<pre>
+#include &lt;iostream&gt;
+</pre>
+
+<h2> Conditional compilation </h2>
+
+<p>
+Conditional compilation means either including some code or skipping it
+in a file.
+The following statement is a common pattern:
+</p>
+
+<pre>
+#ifndef SOMETHING
+#define SOMETHING
+...
+#endif
+</pre>
+
+<p>
+The test means "if not defined", so if the macro named SOMETHING is not
+defined the code represented by "..." is included in the compilation.
+If SOMETHING is defined the code is skipped.
+The pattern is used over and over and is called a "header guard".
+It makes it possible for a particular header file to be included several times
+during a compilation, but the code will be skipped for all inclusions
+after the first.
+</p>
+
+<h2> Macros </h2>
+
+<p>
+A macro is defined with the "#define" preprocessor command.
+A macro can be used as with the header guard for simply indicating that
+is defined.
+A macro can also define a translation.
+In the simplest case a macro has no parameters and allows a text 
+substitution to be done:
+</p>
+
+<pre>
+#define N 100
+</pre>
+
+<p>
+From that point forward the "identifier" N will be replace with 100.
+This can be useful for symbolic constants, though C++ has some
+better techniques.
+</p>
+
+<p>
+The macro defined next has w parameters and allows a more complex
+form of text substitution.
+</p>
+
+<pre>
+#define AVG(a,b,c) ((a+b+c)/3.0)
+</pre>
+
+<p>
+With this macro AVG(x,y,z) would be replaced by ((x+y+z)/3.0).
+</p>
+</body>
+</html>

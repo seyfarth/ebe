@@ -1,0 +1,4 @@
+//
+//  Read 1 value of the type of the array data into data[i]
+//
+    cin >> data[i];

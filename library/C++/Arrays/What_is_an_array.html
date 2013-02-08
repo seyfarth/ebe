@@ -1,0 +1,62 @@
+<html>
+<head>
+<title> Arrays </title>
+</head>
+
+<body>
+
+<center>
+<h1> Arrays  </h1>
+</center>
+
+<p>
+An array is a variable with a contiguous section of memory which can be
+used by specifying an array name and index.  Arrays can be of any basic type
+or user-defined types.
+In the array declaration below we declare an array of 100 ints.
+</p>
+
+<pre>
+     int data[100];
+</pre>
+
+<p>
+To use an element of the array you use the array name followed by an integer
+inside square brackets, like <code> data[0]</code>.
+The first element of the array is at index 0 and the last is one less than the
+size of the array.
+We can use variables as array indexes so we can set all the elements of
+<code>data</code> to 0 by:
+</p>
+
+<pre>
+     for ( int i = 0; i &lt; 100; i++ ) data[i] = 0;
+</pre>
+
+<p>
+The previous loop is a very common structure to use when processing arrays.
+The first index is 0 since the array starts at 0.
+The test is "less than" rather than "less than or equal" since you commonly
+know the size of an array or how many array elements to process.
+</p>
+
+<p>
+Occasionally it can be important to understand that the elements of an
+array are located contiguously in memory.
+For example, if <code>data[0]</code> is at location 1000000 and assuming that
+<dode>int</code>s are 4 bytes each, <code>data[1]</code> is at address
+1000004.
+Array addressing is very simple for the computer to do which means that it
+is very fast to use an array.
+It takes to same amount of time to use index 1000000 of an array as index 0.
+The address of an array element (using &amp; to mean address) for an
+array x of type T is
+</p>
+
+<pre>
+     &amp;x[i] == &amp;x + i * sizeof(T)
+</pre>
+
+
+</body>
+</html>
