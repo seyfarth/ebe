@@ -23,6 +23,8 @@ QStringList cExts;
 QStringList cppExts;
 QStringList asmExts;
 
+StringHash varToAddress;
+
 extern ProjectWindow *projectWindow;
 extern GDB *gdb;
 extern QStatusBar *statusBar;
@@ -413,6 +415,32 @@ void SourceFrame::run()
         errorWindow->show();
         return;
     }
+
+
+//
+//  Discover addresses of globals
+//
+    QProcess nm(this);
+    nm.start(QString("nm -a %1").arg(exeName));
+    nm.waitForFinished();
+    QString nmData = nm.readLine();
+    QStringList nmParts;
+    QRegExp rx1("\\s+");
+    QRegExp rx2("[a-zA-Z][a-zA-Z0-9_]*");
+    while ( nmData != "" ) {
+        nmParts = nmData.split(rx1);
+        if ( nmParts.length() >= 3 ) {
+            if ( nmParts[1] == "D" || nmParts[1] == "S" ||
+                 nmParts[1] == "d" || nmParts[1] == "s" ||
+                 nmParts[1] == "B" ) {
+                if ( rx2.exactMatch(nmParts[2]) ) {
+                    varToAddress[nmParts[2]] = "0x" + nmParts[0];
+                }
+            }
+        }
+        nmData = nm.readLine();
+    }
+
 
 
     //

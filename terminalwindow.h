@@ -1,14 +1,7 @@
 #ifndef TERMINALWINDOW_H
 #define TERMINALWINDOW_H
 
-#include <QPlainTextEdit>
-#include <QFrame>
-#include <QString>
-#include <QTimer>
-#include <QPalette>
-#include <QColor>
-#include <QLineEdit>
-#include <QKeyEvent>
+#include <QtGui>
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
@@ -62,10 +55,12 @@ public:
 private slots:
     void dataReady(QString data);
     void lineEditReady();
+    void clearTerminalWindow();
 
 public:
     TerminalEdit *edit;
     InputEdit *lineEdit;
+    QPushButton *clearButton;
 #ifdef Q_WS_WIN
     HANDLE toChild;
     HANDLE fromChild;

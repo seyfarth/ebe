@@ -156,7 +156,13 @@ void ToyBox::computeExpression()
         errorWindow->show();
         return;
     }
-    compile.start("./ebe_toybox");
+    QString program;
+#ifdef Q_WS_WIN
+    program = "ebe_toybox.exe";
+#else
+    program = "./ebe_toybox";
+#endif
+    compile.start(program);
     compile.waitForFinished();
     QString t = compile.readLine();
     t = t.trimmed();
@@ -168,6 +174,7 @@ void ToyBox::computeExpression()
 
 void ToyExpression::setValue( QString t, QStringList values )
 {
+    //qDebug() << "setValue" << t << values;
     if ( type->text() != t ) {
         QStringList formats;
         format->clear();

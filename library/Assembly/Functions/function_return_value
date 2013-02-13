@@ -1,0 +1,2 @@
+;       integer return:        rax
+;       floating point return: xmm0

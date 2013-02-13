@@ -11,15 +11,19 @@ public:
     DefineVariableDialog();
     QLineEdit *nameEdit;
     QLineEdit *addressEdit;
+    QComboBox *typeCombo;
     QComboBox *formatCombo;
-    QComboBox *sizeCombo;
+    QCheckBox *arrayCheck;
     QLineEdit *firstEdit;
     QLineEdit *lastEdit;
     QStringList result;
     QSize sizeHint() const;
+    QGridLayout *layout;
 
 public slots:
     void defineVariable();
+    void checkChanged(int);
+    void typeChanged(QString);
 
 private:
     QPushButton *okButton;
@@ -34,6 +38,7 @@ class ArrayBoundsDialog: public QDialog
 
 public:
     ArrayBoundsDialog();
+    QCheckBox *arrayCheck;
     QSpinBox *firstSpin;
     QSpinBox *lastSpin;
     QSize sizeHint() const;
@@ -48,6 +53,7 @@ private:
 
 public slots:
     void setArrayBounds();
+    void checkChanged(int);
 
 signals:
 };
