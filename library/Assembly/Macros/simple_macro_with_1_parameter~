@@ -1,0 +1,2 @@
+
+%define mangle(a) _Z1 %+ a

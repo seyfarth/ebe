@@ -1,0 +1,2 @@
+The %+ operator concatenates tokens, so mangle(fun) becomes _Z1fun
+%define mangle(a) _Z1 %+ a
