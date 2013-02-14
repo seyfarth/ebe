@@ -128,6 +128,36 @@ void ToyBox::computeExpression()
           << "int"   << "unsigned int"
           << "long"  << "unsigned long"
           << "float" << "double";
+    foreach ( ToyVariable *v, variables ) {
+        name = v->name->text().trimmed();
+        QString t = v->type->currentText().trimmed();
+        if ( name.length() > 0 && t.length() > 0 ) {
+            if ( t == "bool" ) {
+                code.append( QString("  printf(\"%d\\n\",%1);\n").arg(name) );
+            } else if ( t == "char" ) {
+                code.append( QString("  printf(\"\'%c\'\\n\",%1);\n").arg(name) );
+            } else if ( t == "signed char" ) {
+                code.append( QString("  printf(\"%d\\n\",int(%1));\n").arg(name) );
+            } else if ( t == "unsigned char" ) {
+                code.append( QString("  printf(\"0x%x\\n\",(unsigned int)(%1));\n").arg(name) );
+            } else if ( t == "short" ) {
+                code.append( QString("  printf(\"%d\\n\",%1);\n").arg(name) );
+            } else if ( t == "unsigned short" ) {
+                code.append( QString("  printf(\"0x%x\\n\",%1);\n").arg(name) );
+            } else if ( t == "int" ) {
+                code.append( QString("  printf(\"%d\\n\",%1);\n").arg(name) );
+            } else if ( t == "unsigned int" ) {
+                code.append( QString("  printf(\"0x%x\\n\",%1);\n").arg(name) );
+            } else if ( t == "long" ) {
+                code.append( QString("  printf(\"%ld\\n\",%1);\n").arg(name) );
+            } else if ( t == "unsigned long" ) {
+                code.append( QString("  printf(\"0x%lx\\n\",%1);\n").arg(name) );
+            } else if ( t == "float" || t == "double" ) {
+                code.append( QString("  printf(\"%g\\n\",%1);\n").arg(name) );
+            }
+        }
+    }
+
     foreach ( QString s, types ) {
         code.append(
            QString("  if ( typeid(__ebe_v) == typeid(%1) ) {\n").arg(s) +
@@ -164,6 +194,15 @@ void ToyBox::computeExpression()
 #endif
     compile.start(program);
     compile.waitForFinished();
+    foreach ( ToyVariable *v, variables ) {
+        name = v->name->text().trimmed();
+        type = v->type->currentText().trimmed();
+        if ( name.length() > 0 && type.length() > 0 ) {
+            QString data = compile.readLine();
+            data = data.trimmed();
+            v->value->setText(data);
+        }
+    }
     QString t = compile.readLine();
     t = t.trimmed();
     QString data = compile.readLine();
