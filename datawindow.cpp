@@ -22,6 +22,7 @@ DataMap *userDefinedMap;
 
 QStack<DataTree*> stack;
 
+extern StringHash varToAddress;
 
 QHash<QString,ClassDefinition> classes;
 
@@ -88,9 +89,13 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
     item = userDefinedMap->value(name);
     if ( item == 0 ) {
         item = dataTree->addDataItem(userDefinedMap,name,strings[1],"");
-        item->format=strings[2];
-        item->size=strings[3].toInt();
+        item->address = varToAddress[name];
+        if ( item->address == "" ) {
+            item->address = QString("&(%1)").arg(name);
+        }
         item->setRange(strings[4].toInt(),strings[5].toInt());
+        item->setType(strings[2]);
+        item->format=strings[3];
         userDefined->addChild ( item );
         userDefined->sortChildren ( 0, Qt::AscendingOrder );
     }
@@ -128,7 +133,7 @@ DataItem::DataItem()
 QString DataItem::value()
 {
     QString val;
-    if ( isSimple ) {
+    if ( isSimple && last == 0 ) {
         switch ( size ) {
         case 1:
             if ( format == "Character" ) val.sprintf("%c",a.c);
@@ -178,12 +183,16 @@ QString DataItem::value()
         default:
             val = "";
         }
+    } else if ( stringValue.indexOf("Illegal") >= 0 ) {
+        val = stringValue;
     } else if ( classes.contains(type) ) {
         val = "";
     } else {
         val = stringValue;
     }
     //qDebug() << "value" << name << format << val;
+    //qDebug() << "isSimple" << isSimple << ",  size" << size << ",  last" 
+             //<< last;
     return val;
 }
 QString DataItem::valueFromGdb()
@@ -236,7 +245,7 @@ void DataItem::setType(QString t)
     }
 
     setText(1,type);
-    if ( isSimple ) {
+    if ( isSimple && last == 0 ) {
         setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     } else {
         setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
@@ -248,7 +257,7 @@ void DataItem::setValue(QString v)
     bool ok;
 
     stringValue = v;
-    if ( isSimple ) {
+    if ( isSimple && last == 0 ) {
         a.u8 = 0;
         switch ( size ) {
         case 1:
@@ -350,17 +359,17 @@ void DataTree::editUserVariable()
     dialog->nameEdit->setText(d->name);
     dialog->addressEdit->setText(d->address);
     dialog->formatCombo->setCurrentIndex(dialog->formatCombo->findText(d->format));
-    dialog->sizeCombo->setCurrentIndex(dialog->sizeCombo->findText(QString("%1").arg(d->size)));
+    dialog->typeCombo->setCurrentIndex(dialog->typeCombo->findText(QString("%1").arg(d->type)));
     dialog->firstEdit->setText(QString("%1").arg(d->first));
     dialog->lastEdit->setText(QString("%1").arg(d->last));
     if ( dialog->exec() ) {
         userDefinedMap->remove(d->name);
         d->setName(dialog->nameEdit->text());
         d->address = dialog->addressEdit->text();
-        d->format = dialog->formatCombo->currentText();
-        d->size = dialog->sizeCombo->currentText().toInt();
         d->first = dialog->firstEdit->text().toInt();
         d->last = dialog->lastEdit->text().toInt();
+        d->setType(dialog->typeCombo->currentText());
+        d->format = dialog->formatCombo->currentText();
         userDefinedMap->insert(d->name,d);
         d->setText(2,d->value());
     }
@@ -395,7 +404,7 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
             menu.addAction(tr("Binary"),this,SLOT(setBinary()));
             menu.exec(QCursor::pos());
         } else if ( type.indexOf("short") >= 0 || type.indexOf("int") >= 0 ||
-                    type.indexOf("long") >= 0 || type.indexOf("real") >= 0 ) {
+                    type.indexOf("long") >= 0 ) {
             QMenu menu("Integer menu");
             menu.addAction(tr("Signed decimal"),this,SLOT(setDecimal()));
             menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
@@ -494,6 +503,22 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             it->addChild(d);
             dataWindow->request(d);
         }
+    } else if ( it->userDefined ) {
+        ArrayBoundsDialog *dialog = new ArrayBoundsDialog();
+        if ( dialog->exec() ) {
+            int min = dialog->min;
+            int max = dialog->max;
+            QString type = it->type;
+            for ( int i = min; i <= max; i++ ) {
+                fullName = it->name+QString("[%1]").arg(i);
+                d = addDataItem(it->map,fullName,type,"");
+                d->address=QString("%1+%2").arg(it->address).
+                           arg(it->size*i);
+                it->addChild(d);
+                dataWindow->request(d);
+            }
+        }
+        delete dialog;
     } else if ( (n = it->type.indexOf(" *")) > 0 ) {
         ArrayBoundsDialog *dialog = new ArrayBoundsDialog();
         if ( dialog->exec() ) {

@@ -55,9 +55,11 @@ TerminalWindow::TerminalWindow(QWidget *parent)
 
     lineEdit = new InputEdit;
     QLabel *label = new QLabel(tr("Input"));
+    clearButton = new QPushButton("Clear output");
     QHBoxLayout *lineLayout = new QHBoxLayout;
     lineLayout->addWidget(label);
     lineLayout->addWidget(lineEdit);
+    lineLayout->addWidget(clearButton);
     lineEdit->setToolTip(
         tr("Terminal input will only work from this input box."));
 
@@ -76,7 +78,13 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     connect(ptyReader,SIGNAL(dataReady(QString)),
             this,SLOT(dataReady(QString)) );
     connect(lineEdit,SIGNAL(sendEOF()),gdb,SLOT(setEOF()));
+    connect(clearButton,SIGNAL(clicked()),this,SLOT(clearTerminalWindow()) );
     ptyReader->start();
+}
+
+void TerminalWindow:: clearTerminalWindow()
+{
+    edit->clear();
 }
 
 void TerminalWindow::dataReady(QString data)

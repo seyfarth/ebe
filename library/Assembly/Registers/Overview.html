@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>Register overview</title></head><body>
+
+<h1> Register Overview </h1>
+
+<h2> General purpose registers </h2>
+
+<p>
+The Intel and AMD CPUs operating in 64 bit mode have 16 general purpose
+registers.
+Each register holds 64 bits and can be manipulated as 64, 32, 16 and 8 bit
+quantities.
+There are 8 registers which are descendents of the original 8086 registers and
+8 more which were added when AMD extended the instruction set to 64 bits
+</p>
+<table style="border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <th style="text-align: center;">&nbsp;Register&nbsp;</th>
+      <th style="text-align: center;">&nbsp;32 bit&nbsp; </th>
+      <th style="text-align: center;">&nbsp;16 bits&nbsp; </th>
+      <th style="text-align: center;">&nbsp;8 bits&nbsp;&nbsp; </th>
+      <th style="text-align: left;">Comments </th>
+    </tr>
+    <tr>
+      <td style="text-align: center;">rax </td>
+      <td style="text-align: center;">eax </td>
+      <td style="text-align: center;">ax </td>
+      <td style="text-align: center;">ah, al </td>
+      <td>general purpose, special for some instructions </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">rbx </td>
+      <td style="text-align: center;">ebx </td>
+      <td style="text-align: center;">bx </td>
+      <td style="text-align: center;">bh, bl </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">rcx </td>
+      <td style="text-align: center;">ecx </td>
+      <td style="text-align: center;">cx </td>
+      <td style="text-align: center;">ch, cl </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> rdx </td>
+      <td style="text-align: center;"> edx  </td>
+      <td style="text-align: center;"> dx </td>
+      <td style="text-align: center;"> dh, dl </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> rdi </td>
+      <td style="text-align: center;"> edi </td>
+      <td style="text-align: center;"> di </td>
+      <td style="text-align: center;"> dil </td>
+      <td>general purpose, destination index </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> rsi </td>
+      <td style="text-align: center;"> esi </td>
+      <td style="text-align: center;"> si </td>
+      <td style="text-align: center;"> sil </td>
+      <td>general purpose, source index </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> rbp </td>
+      <td style="text-align: center;"> ebp </td>
+      <td style="text-align: center;"> bp </td>
+      <td style="text-align: center;"> bpl </td>
+      <td> frame base pointer </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> rsp </td>
+      <td style="text-align: center;"> esp </td>
+      <td style="text-align: center;"> sp </td>
+      <td style="text-align: center;"> spl </td>
+      <td> stack pointer </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r8 </td>
+      <td style="text-align: center;"> r8d </td>
+      <td style="text-align: center;"> r8w </td>
+      <td style="text-align: center;"> r8b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r9 </td>
+      <td style="text-align: center;"> r9d </td>
+      <td style="text-align: center;"> r9w </td>
+      <td style="text-align: center;"> r9b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r10 </td>
+      <td style="text-align: center;"> r10d </td>
+      <td style="text-align: center;"> r10w </td>
+      <td style="text-align: center;"> r10b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r11 </td>
+      <td style="text-align: center;"> r11d </td>
+      <td style="text-align: center;"> r11w </td>
+      <td style="text-align: center;"> r11b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r12 </td>
+      <td style="text-align: center;"> r12d </td>
+      <td style="text-align: center;"> r12w </td>
+      <td style="text-align: center;"> r12b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r13 </td>
+      <td style="text-align: center;"> r13d </td>
+      <td style="text-align: center;"> r13w </td>
+      <td style="text-align: center;"> r13b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r14 </td>
+      <td style="text-align: center;"> r14d </td>
+      <td style="text-align: center;"> r14w </td>
+      <td style="text-align: center;"> r14b </td>
+      <td>general purpose </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> r15 </td>
+      <td style="text-align: center;"> r15d </td>
+      <td style="text-align: center;"> r15w </td>
+      <td style="text-align: center;"> r15b </td>
+      <td>general purpose </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2> Instruction pointer register </h2>
+
+<p>
+The instruction pointer register is named <code>rip</code>, though it is not
+commonly referred to directly in code.
+</p>
+
+<h2> Floating point registers </h2>
+
+<p>
+There are 2 sets of floating point registers.
+The old style of registers is a stack with registers <code>ST0-ST7</code>.
+The recommended set of 16 registers in 64 bit mode are named
+<code>XMM0-XMM15</code>.
+These registers are 128 bit registers which can me used in a variety of
+SIMD instructions.
+Some newer CPUs have extended these registers to 256 bits with new
+names <code> YMM0-YMM15</code>
+</p>
+
+</body></html>

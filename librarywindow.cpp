@@ -62,6 +62,14 @@ void LibraryWindow::cd ( QString d )
         //qDebug() << "p is now" << p;
         indent += "  ";
     }
+    dirs << p;
+    i = p.lastIndexOf("/");
+    if ( i == 1 ) {
+        items << "top";
+    } else {
+        items << indent + p.mid(i+1);
+    }
+    indent += "  ";
 
     QFile f(p+"/index");
     if ( f.open(QFile::ReadOnly) ) {

@@ -365,8 +365,10 @@ void SourceEdit::contextMenuEvent ( QContextMenuEvent * /* event */ )
     menu.addAction(tr("Cut"), this, SLOT(cut()) );
     menu.addAction(tr("Copy"), this, SLOT(copy()) );
     menu.addAction(tr("Paste"), this, SLOT(paste()) );
-    menu.addSeparator();
-    menu.addAction(tr("Define variable"), this, SLOT(defineVariable()) );
+    if ( gdb->running ) {
+        menu.addSeparator();
+        menu.addAction(tr("Define variable"), this, SLOT(defineVariable()) );
+    }
     menu.exec(QCursor::pos());
 }
 

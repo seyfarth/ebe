@@ -123,7 +123,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createMenus();
 
 
-    setUnifiedTitleAndToolBarOnMac(true);
+    setUnifiedTitleAndToolBarOnMac(false);
 
     QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
 
