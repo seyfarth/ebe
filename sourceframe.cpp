@@ -335,7 +335,7 @@ void SourceFrame::run()
     }
     if ( needEbeInc ) {
         QFile::remove("ebe.inc");
-        QFile::copy(":/src/assembly/","ebe.inc");
+        QFile::copy(":/src/assembly/ebe.inc","ebe.inc");
         QFile::setPermissions("ebe.inc",
                QFile::ReadOwner | QFile::WriteOwner);
     }

@@ -1,7 +1,5 @@
-%ifidni __OUTPUT_FORMAT__,macho64
-%macro defaultrel  0.nolist
         default  rel
-%endmacro
+%ifidni __OUTPUT_FORMAT__,macho64
 %define main _main
 %macro cname 1-*
 %rep %0
@@ -377,8 +375,4 @@
 %rotate 1
 %endrep
 %endmacro
-%macro defaultrel  0.nolist
-%endmacro
 %endif
-    defaultrel
-%undef defaultrel
