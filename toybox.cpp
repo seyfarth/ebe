@@ -456,10 +456,13 @@ ToyVariable::ToyVariable ( VariableTable *t, int r )
     table = t;
     row = r;
     name = new QLineEdit;
+    name->setToolTip(tr("Enter a name for a variable.\n"
+                        "A value is also required"));
     IdValidator *idValidator = new IdValidator;
     name->setValidator(idValidator);
     table->setCellWidget(row,0,name);
     type = new QComboBox;
+    type->setToolTip(tr("Select a type for your variable. "));
     QStringList types;
     types << " bool"
           << " char"  << " signed char"   << " unsigned char"
@@ -472,6 +475,7 @@ ToyVariable::ToyVariable ( VariableTable *t, int r )
 
     table->setCellWidget(row,1,type);
     value = new QLineEdit;
+    value->setToolTip(tr("Enter a value for the variable."));
     table->setCellWidget(row,2,value);
     NumberValidator *validator = new NumberValidator;
     value->setValidator(validator);
@@ -522,18 +526,24 @@ ToyExpression::ToyExpression(ExpressionTable *t, int r)
     table = t;
     row = r;
     expr = new QLineEdit;
+    expr->setToolTip(tr("Enter a C++ expression to evaluate"));
     table->setCellWidget(row,0,expr);
     button = new QPushButton;
+    button->setToolTip(tr("Click this button to evaluate the expression"));
     button->setText("do it");
     button->setProperty("row",r);
     table->setCellWidget(row,1,button);
     type = new QLineEdit;
+    type->setToolTip(tr("The type will be reported back from the evaluation"));
     type->setReadOnly(true);
     table->setCellWidget(row,2,type);
     format = new QComboBox;
+    format->setToolTip(tr("Select a format for the expression value"));
     format->setProperty("row",r);
     table->setCellWidget(row,3,format);
     value = new QLineEdit;
+    value->setToolTip(
+        tr("The value will be placed here when you click \"do it\""));
     value->setReadOnly(true);
     table->setCellWidget(row,4,value);
     connect ( format,  SIGNAL(activated(int)),

@@ -25,6 +25,11 @@ CommandLine::CommandLine(QWidget *parent)
     QLabel *label = new QLabel(tr("Command line"));
     layout->addWidget(label);
     lineEdit = new QLineEdit();
+    lineEdit->setToolTip(tr("Enter extra parameters for the command line\n"
+                            "for your program when it runs.  The command\n"
+                            "line parameters are the parameters to main\n"
+                            "in C and C++(argc and argv).  The first is\n"
+                            "always the name of the program."));
     layout->addWidget(lineEdit);
     setLayout(layout);
     setVisible(ebe["command/visible"].toBool());
