@@ -22,7 +22,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename={#MyAppName}64-{#MyAppVersion}-setup
+OutputBaseFilename={#MyAppName}-{#MyAppVersion}-update
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=yes
@@ -35,9 +35,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\cygwin\home\seyfarth\qtebe\release\{#MyAppExeName}"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
-Source: "C:\cygwin\home\seyfarth\qtebe\ebe.rcc"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
 Source: "C:\cygwin\home\seyfarth\qtebe\ebe.ico"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
-Source: "C:\gcc\*"; DestDir: "{app}\gcc"; Flags: ignoreversion recursesubdirs
+Source: "C:\cygwin\home\seyfarth\qtebe\ebe.rcc"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files   
 
 [Icons]
@@ -45,12 +44,12 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\gcc\bin\{#MyAppExeName}"; Working
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\gcc\bin\{#MyAppExeName}"; IconFilename: "{app}\gcc\bin\ebe.ico"; Tasks: desktopicon; WorkingDir: "{%USERPROFILE}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
-;[Run]
-;Filename: "{app}\gcc\bin\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec skipifsilent 
+[Run]
+Filename: "{app}\gcc\bin\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent 
 
 [Registry]
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{app}\gcc\bin;{olddata}"; Check: NeedsAddPath('{app}\gcc\bin')
-Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "EQ_LIBRARY_PATH"; ValueData: "{app}\gcc\lib\gcc\x86_64-w64-mingw32"
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "EQ_LIBRARY_PATH"; ValueData: "{app}\gcc\lib\gcc\i686-pc-mingw32"
 ;Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "EBE_HOME"; ValueData: "{app}"
 
 [Code]
