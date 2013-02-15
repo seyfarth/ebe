@@ -119,8 +119,8 @@ void ToyBox::computeExpression()
             code.append(QString("  %1 %2 = %3;\n").arg(type).arg(name).arg(val));
         }
     }
-    code.append(QString("  typeof(%1) __ebe_v;\n").arg(expression));
-    code.append(QString("  __ebe_v = %1;\n").arg(expression));
+    code.append(QString("  typeof((%1)) __ebe_v;\n").arg(expression));
+    code.append(QString("  __ebe_v = (%1);\n").arg(expression));
     QStringList types;
     types << "bool"
           << "char"  << "signed char"   << "unsigned char"
