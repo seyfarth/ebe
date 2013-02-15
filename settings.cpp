@@ -88,13 +88,13 @@ void Settings::setDefaults()
     ebe["os/mac"] = false;
     ebe["os/os"] = "linux";
     ebe["os/windows"] = false;
-    ebe["build/asm"] = "yasm -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P ebe.inc -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
 #elif __APPLE__
     ebe["os/linux"] = false;
     ebe["os/mac"] = true;
     ebe["os/os"] = "mac";
     ebe["os/windows"] = false;
-    ebe["build/asm"] = "yasm -f macho64 -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P ebe.inc -f macho64 -l \"$base.lst\" \"$source\"";
 #else
     ebe["os/linux"] = false;
     ebe["os/mac"] = false;

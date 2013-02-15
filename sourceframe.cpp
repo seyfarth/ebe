@@ -210,6 +210,7 @@ void SourceFrame::run()
     QString name;
     QString base;
     QString cmd;
+    bool needEbeInc = false;
 
     stop();
     breakLine = 0;
@@ -308,6 +309,7 @@ void SourceFrame::run()
             cmd = ebe["build/asm"].toString();
             cmd.replace("$base",base);
             cmd.replace("$source",name);
+            needEbeInc = true;
             //qDebug() << cmd;
         } else if ( fortranExts.contains(ext) ) {
             //qDebug() << name << "fortran";
@@ -330,6 +332,12 @@ void SourceFrame::run()
             errorWindow->show();
             return;
         }
+    }
+    if ( needEbeInc ) {
+        QFile::remove("ebe.inc");
+        QFile::copy(":/src/assembly/","ebe.inc");
+        QFile::setPermissions("ebe.inc",
+               QFile::ReadOwner | QFile::WriteOwner);
     }
     //
     //  Examine object files looking for main or _start or start
