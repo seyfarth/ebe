@@ -30,7 +30,7 @@ QString readLine()
 {
     QString result="";
     int n;
-#ifndef Q_WS_FIN
+#ifndef Q_WS_WIN
     gdbWaiting = true;
 #endif
     do {
@@ -43,7 +43,7 @@ QString readLine()
         //qDebug() << result;
     } while ( n == 0 || result.at(n-1) != '\n' );
     result.chop(1);
-#ifndef Q_WS_FIN
+#ifndef Q_WS_WIN
     gdbWaiting = false;
 #endif
     return result;
