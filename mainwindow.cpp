@@ -19,6 +19,7 @@
 #include "sourcewindow.h"
 #include "settings.h"
 #include "stylesheet.h"
+#include "instructions.h"
 
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
@@ -127,6 +128,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     createMenus();
 
+    readInstructions();
 
     setUnifiedTitleAndToolBarOnMac(false);
 
