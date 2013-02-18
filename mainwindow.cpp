@@ -10,6 +10,7 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <signal.h>
 #endif
 
 #include "mainwindow.h"
@@ -38,9 +39,13 @@ QToolBar *editToolBar;
 QToolBar *debugToolBar;
 QToolBar *templateToolBar;
 
+extern QProcess *gdbProcess;
+
 #ifdef Q_WS_WIN
 extern HANDLE hProcess;
 extern bool needToKill;
+#else
+extern int gdbWaiting;
 #endif
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -133,6 +138,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
               floatWindow, SLOT(receiveFpRegs(QStringList)) );
     connect ( this, SIGNAL(sendWorkingDir(QString)),
               gdb, SLOT(receiveWorkingDir(QString)) );
+    connect ( this, SIGNAL(doStop()), gdb, SLOT(doStop()) );
     restoreMainWindow();
 }
 
@@ -572,7 +578,12 @@ void MainWindow::quit()
     if ( sourceFrame->filesSaved() ) {
 #ifdef Q_WS_WIN
         if ( needToKill ) TerminateProcess(hProcess,0);
+#else
+        if ( gdbWaiting ) {
+            kill ( gdbProcess->pid(), 2 );
+        }
 #endif
+        emit doStop();
         saveSettings();
         qApp->quit();
     }

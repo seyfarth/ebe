@@ -22,12 +22,17 @@ bool needToKill;
 bool needToWake;
 HANDLE hProcess;
 HANDLE hThread;
+#else
+bool gdbWaiting;
 #endif
 
 QString readLine()
 {
     QString result="";
     int n;
+#ifndef Q_WS_FIN
+    gdbWaiting = true;
+#endif
     do {
         while ( gdbProcess->bytesAvailable() == 0 ) {
             gdbProcess->waitForReadyRead(0);
@@ -38,6 +43,9 @@ QString readLine()
         //qDebug() << result;
     } while ( n == 0 || result.at(n-1) != '\n' );
     result.chop(1);
+#ifndef Q_WS_FIN
+    gdbWaiting = false;
+#endif
     return result;
 }
 
@@ -444,21 +452,6 @@ void GDB::deleteBreakpoint(QString file, int line)
         send(QString("delete %1").arg(bp));
         bpHash.remove(f);
     }
-}
-
-FileLine::FileLine(QString f, int l)
-: file(f), line(l)
-{
-}
-
-bool FileLine::operator==(FileLine &f) const
-{
-    return file == f.file && line == f.line;
-}
-
-uint qHash(const FileLine &f)
-{
-    return qHash(f.file) ^ qHash(f.line);
 }
 
 void GDB::getBackTrace()

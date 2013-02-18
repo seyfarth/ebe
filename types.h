@@ -31,10 +31,42 @@ union AllTypes
     bool b1;
 };
 
+struct Range
+{
+    int first;
+    int last;
+};
+
 QString binary(AllTypes &a, int n);
 QString binaryFloat(AllTypes &a);
 QString binaryDouble(AllTypes &a);
 QString fieldsFloat(AllTypes &a);
 QString fieldsDouble(AllTypes &a);
+
+class FileLine
+{
+public:
+    QString file;
+    int line;
+    FileLine(QString f="", int l=0);
+    bool operator==(FileLine &x) const;
+};
+
+bool operator< ( const FileLine &a, const FileLine &b );
+
+uint qHash(const FileLine &f);
+
+class FileLabel
+{
+public:
+    QString file;
+    QString label;
+    FileLabel(QString f="", QString l=0);
+    bool operator==(FileLabel &x) const;
+};
+
+bool operator< ( const FileLabel &a, const FileLabel &b );
+
+uint qHash(const FileLabel &f);
 
 #endif

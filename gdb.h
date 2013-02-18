@@ -9,17 +9,6 @@
 #include "variable.h"
 #include "datawindow.h"
 
-class FileLine
-{
-public:
-    QString file;
-    int line;
-    FileLine(QString f, int l);
-    bool operator==(FileLine &x) const;
-};
-
-uint qHash(const FileLine &f);
-
 class GDBThread : public QThread
 {
 public:
