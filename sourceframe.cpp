@@ -316,11 +316,16 @@ void SourceFrame::run()
         } else if ( asmExts.contains(ext) ) {
             //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
+#if Q_OS_MAC
+            QString debugName = buildDebugAsm(name);
+            cmd.replace("$base",base);
+            cmd.replace("$source",debugName);
+#else
             cmd.replace("$base",base);
             cmd.replace("$source",name);
+#endif
             needEbeInc = true;
             //qDebug() << cmd;
-            buildDebugAsm(name);
         } else if ( fortranExts.contains(ext) ) {
             //qDebug() << name << "fortran";
             cmd = ebe["build/fortran"].toString();
@@ -580,7 +585,7 @@ void SourceFrame::run()
     emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints,globals);
 }
 
-void SourceFrame::buildDebugAsm ( QString fileName )
+QString SourceFrame::buildDebugAsm ( QString fileName )
 {
     QString debugFileName;
     int n = fileName.lastIndexOf("/");
@@ -601,11 +606,11 @@ void SourceFrame::buildDebugAsm ( QString fileName )
     QFile outFile(debugFileName);
     if ( !in.open(QFile::ReadOnly) ) {
         qDebug() << "failed to open" << fileName;
-        return;
+        return "";
     }
     if ( !outFile.open(QFile::WriteOnly) ) {
         qDebug() << "failed to open" << debugFileName;
-        return;
+        return "";
     }
     QTextStream out(&outFile);
     QString text;
@@ -621,6 +626,7 @@ void SourceFrame::buildDebugAsm ( QString fileName )
     in.close();
     out.flush();
     outFile.close();
+    return debugFileName;
 }
 
 

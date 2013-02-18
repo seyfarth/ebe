@@ -22,7 +22,7 @@ public:
     void saveIfChanged(QString file);
     void setNextLine(QString file,int line);
     void clearNextLine(QString file,int line);
-    void buildDebugAsm(QString file);
+    QString buildDebugAsm(QString file);
     int  fontHeight;
     int  fontWidth;
     bool filesSaved();
