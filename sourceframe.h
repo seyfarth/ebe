@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "sourcewindow.h"
+#include "types.h"
 
 class CommandLine;
 
@@ -74,7 +75,7 @@ public slots:
 
 signals:
     void doRun(QString exe, QString options, QStringList files,
-               QList<IntSet> breakpoints, QStringList globals);
+               QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doStep();
     void doContinue();

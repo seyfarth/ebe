@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     //qDebug() << wordSize;
 
-    qRegisterMetaType<QList<IntSet> >("QList<IntSet>");
+    qRegisterMetaType<QList<StringSet> >("QList<StringSet>");
     qRegisterMetaType<StringHash>("StringHash");
     qRegisterMetaType<QHash<QString,ClassDefinition> >("QHash<QString,ClassDefinition>");
     qApp->installEventFilter(this);

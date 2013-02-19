@@ -267,7 +267,7 @@ void GDB::initGdb()
 
 //public slots:
 void GDB::doRun(QString exe, QString options, QStringList files,
-          QList<IntSet> breakpoints, QStringList g)
+          QList<StringSet> breakpoints, QStringList g)
 {
     int i;
     int length = files.length();
@@ -283,7 +283,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
     send("delete breakpoints");
     for ( i = 0; i < length; i++ ) {
-        foreach ( int bp, breakpoints[i] ) {
+        foreach ( QString bp, breakpoints[i] ) {
             //qDebug() << files[i] << bp;
             setBreakpoint(files[i],bp);
         }
@@ -344,7 +344,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("attach "+QString("%1").arg(pi.dwProcessId));
     //send("delete breakpoints");
     //for ( i = 0; i < length; i++ ) {
-        //foreach ( int bp, breakpoints[i] ) {
+        //foreach ( QString bp, breakpoints[i] ) {
             ////qDebug() << files[i] << bp;
             ////qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
             //send(QString("break %1:%2").arg(files[i]).arg(bp) );
@@ -426,13 +426,18 @@ void GDB::doStop()
     running = false;
 }
 
-void GDB::setBreakpoint(QString file, int bp)
+void GDB::setBreakpoint(QString file, QString bp)
 {
     QStringList results;
     QStringList parts;
-    FileLine f(file,bp);
+    FileLabel f(file,bp);
     if ( bpHash.contains(f) ) return;
-    results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
+    if ( bp[0] == QChar('*') ) {
+        results = sendReceive(QString("break %1").arg(bp) );
+    } else {
+        qDebug() << QString("break \"%1\":%2").arg(file).arg(bp);
+        results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
+    }
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
         if ( parts[0] == "Breakpoint" ) {
@@ -443,9 +448,9 @@ void GDB::setBreakpoint(QString file, int bp)
     }
 }
 
-void GDB::deleteBreakpoint(QString file, int line)
+void GDB::deleteBreakpoint(QString file, QString line)
 {
-    FileLine f(file,line);
+    FileLabel f(file,line);
     int bp = bpHash[f];
     //qDebug() << "dbp" << file << line << bp;
     if ( bp > 0 ) {

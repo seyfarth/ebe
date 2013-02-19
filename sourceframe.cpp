@@ -149,8 +149,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
         layout->addLayout(buttonLayout);
     }
 
-    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)),
-            gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)) );
+    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
+            gdb, SLOT(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)) );
     connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
     connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
     connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
@@ -209,7 +209,8 @@ void SourceFrame::run()
     int length;
     QStringList globals;
     QStringList sourceFiles;
-    QList<IntSet> breakpoints;
+    QList<StringSet> breakpoints;
+    StringSet bps;
     QList<StringPair> objectFiles;
     QString object;
     QString exeName;
@@ -557,10 +558,16 @@ void SourceFrame::run()
     //  Start debugging
     //
     sourceFiles.clear();
+
+    QString s;
     for ( index = 0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
         sourceFiles.append ( source->fileName );
-        breakpoints.append ( *(source->breakpoints) );
+        bps.clear();
+        foreach ( int bp, *(source->breakpoints) ) {
+            bps.insert(s.setNum(bp));
+        }
+        breakpoints.append ( bps );
     }
     //qDebug() << "doRun" << sourceFiles << breakpoints;
     emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints,globals);

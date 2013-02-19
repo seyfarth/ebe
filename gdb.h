@@ -24,7 +24,7 @@ public:
     GDB();
     void initGdb();
     bool running;
-    QHash<FileLine,int> bpHash;
+    QHash<FileLabel,int> bpHash;
     int numFloats;
     bool NullEOF;
 
@@ -49,7 +49,7 @@ private:
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
-               QList<IntSet> breakpoints, QStringList globals);
+               QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doStep();
     void doContinue();
@@ -57,8 +57,8 @@ public slots:
     void getData(QStringList request);
     void requestVar(DataMap *map, QString name, QString address, QString type,
                     QString format, int size, int first, int last);
-    void setBreakpoint(QString,int);
-    void deleteBreakpoint(QString,int);
+    void setBreakpoint(QString,QString);
+    void deleteBreakpoint(QString,QString);
     void receiveWorkingDir(QString);
     void setEOF();
 
