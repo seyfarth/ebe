@@ -292,6 +292,8 @@ void SourceFrame::run()
     //qDebug() << "Files" << sourceFiles;
     //qDebug() << "exe" << exeName;
 
+    QStringList extraCmds;
+    QString extraCmd;
     foreach ( name, sourceFiles ) {
         //name = QDir::current().relativeFilePath(name);
         saveIfChanged(name);
@@ -300,7 +302,7 @@ void SourceFrame::run()
         length = name.length();
         ext = name.right(length-index-1);
         base = name.left(index);
-        //qDebug() << name << base << ext;
+        qDebug() << name << base << ext;
         if ( cppExts.contains(ext) ) {
             //qDebug() << name << "cpp";
             cmd = ebe["build/cpp"].toString();
@@ -316,10 +318,19 @@ void SourceFrame::run()
         } else if ( asmExts.contains(ext) ) {
             //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
-#if Q_OS_MAC
+#ifdef Q_OS_MAC
             QString debugName = buildDebugAsm(name);
             cmd.replace("$base",base);
             cmd.replace("$source",debugName);
+            extraCmd = ebe["build/asmlst"].toString();
+            extraCmd.replace("$base",base);
+            extraCmd.replace("$source",name);
+            extraCmds << extraCmd;
+            FileLine fl;
+            int n = base.lastIndexOf("/");
+            fl.file = base.mid(n+1);
+            fl.line = 0;
+            fileLineToAddress[fl] = 0;
 #else
             cmd.replace("$base",base);
             cmd.replace("$source",name);
@@ -347,6 +358,11 @@ void SourceFrame::run()
             errorWindow->show();
             return;
         }
+        foreach ( extraCmd, extraCmds ) {
+            compile.start(extraCmd);
+            compile.waitForFinished();
+        }
+
     }
 
     if ( needEbeInc ) {
@@ -461,57 +477,6 @@ void SourceFrame::run()
     foreach ( QString label, labelRange.keys() ) {
         qDebug() << label << labelRange[label].first << labelRange[label].last;
     }
-//
-//  On OS X locate symbols and line numbers from asm files
-//
-#ifdef Q_OS_MAC
-    foreach ( name, sourceFiles ) {
-        index = name.lastIndexOf('.');
-        if ( index == -1 ) continue;
-        length = name.length();
-        ext = name.right(length-index-1);
-        base = name.left(index);
-        if ( asmExts.contains(ext) ) {
-            FileLine fl(name,0);
-            QFile listing(base+".lst");
-            QString text;
-            QStringList parts;
-            bool ok;
-            bool inText = false;
-            if ( listing.open(QFile::ReadOnly) ) {
-                text = listing.readLine();
-                int line = 1;
-                while ( text != "" ) {
-                    text = text.mid(7);
-                    parts = text.split(QRegExp("\\s+"));
-                    //qDebug() << parts;
-                    if ( text[0] != QChar(' ') ) {
-                        if ( inText && parts.length() > 1 ) {
-                            fl.line = line;
-                            fileLineToAddress[fl] = parts[0].toInt(&ok,16);
-                            //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
-                        }
-                    } else if ( parts.length() > 1 && parts[1] == "%line" && parts[3] == name) {
-                        parts = parts[2].split(QRegExp("\\+"));
-                        if ( parts.length() == 2 ) {
-                            line = parts[0].toInt() - parts[1].toInt();
-                        }
-                    } else if ( parts.length() > 1 &&
-                                parts[1].startsWith("[se",Qt::CaseInsensitive) ) {
-                        if ( parts[2].startsWith(".text",Qt::CaseInsensitive) ) {
-                            inText = true;
-                        } else {
-                            inText = false;
-                        }
-                    }
-                    if ( text[27] != QChar('-') ) line++;
-                    text = listing.readLine();
-                }
-            }
-            listing.close();
-        }
-    }
-#endif
 
     if ( ldCmd == "" ) {
         QMessageBox::warning(this, tr("Warning"),
@@ -554,9 +519,14 @@ void SourceFrame::run()
     nm.waitForFinished();
     QString nmData = nm.readLine();
     QStringList nmParts;
+    QStringList parts;
+    bool ok;
     QRegExp rx1("\\s+");
     QRegExp rx2("[a-zA-Z_][.a-zA-Z0-9_]*");
+    QRegExp rx3("_line_");
+    FileLine fl;
     while ( nmData != "" ) {
+        //qDebug() << nmData;
         nmParts = nmData.split(rx1);
         if ( nmParts.length() >= 3 ) {
             if ( nmParts[1] == "D" || nmParts[1] == "S" ||
@@ -564,6 +534,17 @@ void SourceFrame::run()
                  nmParts[1] == "B" ) {
                 if ( rx2.exactMatch(nmParts[2]) ) {
                     varToAddress[nmParts[2]] = "0x" + nmParts[0];
+                }
+            } else if ( nmParts[1] == "T" || nmParts[1] == "t" ) {
+                parts = nmParts[2].split(QChar('.'));
+                if ( parts.length() == 2 ) {
+                    parts = parts[1].split(rx3);
+                    if ( parts.length() == 2 ) {
+                        fl.file = parts[0];
+                        fl.line = parts[1].toInt();
+                        fileLineToAddress[fl] = nmParts[0].toLong(&ok,16);
+                        //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
+                    }
                 }
             }
         }

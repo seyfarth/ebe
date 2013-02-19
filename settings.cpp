@@ -94,7 +94,8 @@ void Settings::setDefaults()
     ebe["os/mac"] = true;
     ebe["os/os"] = "mac";
     ebe["os/windows"] = false;
-    ebe["build/asm"] = "yasm -P ebe.inc -f macho64 -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P ebe.inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asmlst"] = "yasm -P ebe.inc -f macho64 -o /dev/null -l \"$base.lst\" \"$source\"";
 #else
     ebe["os/linux"] = false;
     ebe["os/mac"] = false;
