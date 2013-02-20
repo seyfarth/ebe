@@ -379,7 +379,16 @@ void SourceEdit::defineVariable()
     DefineVariableDialog *dialog = new DefineVariableDialog;
     dialog->nameEdit->setText(text);
     dialog->addressEdit->setText("&"+text);
-    if ( dialog->exec() ) emit sendVariableDefinition(dialog->result);
+    if ( dialog->exec() ) {
+    SourceWindow *p = (SourceWindow *)parent();
+        dialog->result.append(p->fileName);
+        int pos = textCursor().position();
+        QTextBlock block;
+        block = document()->findBlock(pos);
+        int line = block.blockNumber()+1;
+        dialog->result.append(QString("%1").arg(line));
+        emit sendVariableDefinition(dialog->result);
+    }
     delete dialog;
 }
 

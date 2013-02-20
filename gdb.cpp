@@ -933,8 +933,8 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString /* typ
         if ( results.length() == 0 ) {
             result = "";
         } else {
-            parts = results[0].split(QRegExp(":\\s+"));
-            result = parts[parts.length()-1];
+            int n = results[0].indexOf("\"");
+            result = results[0].mid(n);
         }
     } else if ( format == "Pointer" ) {
         cmd = QString("printf \"0x%x\\n\",%1").arg(address);

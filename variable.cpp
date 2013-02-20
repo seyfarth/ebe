@@ -109,8 +109,10 @@ QSize DefineVariableDialog::sizeHint() const
 
 void DefineVariableDialog::defineVariable()
 {
+    QString type = typeCombo->currentText();
+    //if ( arrayCheck->isChecked() ) type = type + " *";
     result << nameEdit->text() << addressEdit->text()
-           << typeCombo->currentText() << formatCombo->currentText()
+           << type << formatCombo->currentText()
            << firstEdit->text() << lastEdit->text();
     accept();
 }
