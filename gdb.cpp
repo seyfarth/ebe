@@ -27,6 +27,9 @@ HANDLE hThread;
 bool gdbWaiting;
 #endif
 
+unsigned int reg_masks[] = {    1,    4, 0x10, 0x40, 0x80, 0x400, 0x800 };
+QString reg_names[]      = { "CF", "PF", "AF", "ZF", "SF",  "DF",  "OF" };
+
 QString readLine()
 {
     QString result="";
@@ -563,9 +566,19 @@ void GDB::getRegs()
         parts = result.split(QRegExp("\\s+"));
         if ( regs.contains(parts[0]) ) {
             if ( parts[0] == "eflags" ) {
+                //qDebug() << "eflags" << parts;
                 index1 = result.indexOf('[');
                 index2 = result.indexOf(']');
-                map[parts[0]] = result.mid(index1+2,index2-index1-3);
+                if ( index1 < 0 || index2 < 0 ) {
+                    QString s="";
+                    int regdata = parts[2].toInt();
+                    for ( int i= 0; i < 7; i++ ) {
+                        if ( regdata & reg_masks[i] ) s += reg_names[i] + " ";
+                    }
+                    map["eflags"] = s;
+                } else {
+                    map[parts[0]] = result.mid(index1+2,index2-index1-3);
+                }
             } else {
                 map[parts[0]] = parts[1];
             }

@@ -314,7 +314,7 @@ void RegisterWindow::setHexAll()
 Register::Register(QString n)
 {
     name = n;
-    format = "decimal";
+    format = "hexadecimal";
     contents = "";
 }
 
