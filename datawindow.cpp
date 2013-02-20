@@ -379,6 +379,11 @@ void DataTree::editUserVariable()
 void DataTree::deleteUserVariable()
 {
     DataItem *item = (DataItem *)currentItem();
+    QList<QTreeWidgetItem*> kids = item->takeChildren();
+    foreach ( QTreeWidgetItem *t, kids ) {
+        ((DataItem *)t)->removeSubTree();
+        delete t;
+    }
     item->parent()->removeChild(item);
     userDefinedMap->remove(item->name);
     delete item;
