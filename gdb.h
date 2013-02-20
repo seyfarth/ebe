@@ -27,6 +27,9 @@ public:
     QHash<FileLabel,int> bpHash;
     int numFloats;
     bool NullEOF;
+    bool inAssembly;
+    QString asmFile;
+    int asmLine;
 
 private:
     void send(QString cmd, QString options="");

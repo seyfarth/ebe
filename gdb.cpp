@@ -9,6 +9,7 @@
 
 extern TerminalWindow *terminalWindow;
 extern int wordSize;
+extern QMap<FileLine,long> fileLineToAddress;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
@@ -271,6 +272,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
 {
     int i;
     int length = files.length();
+    inAssembly = false;
     globals = g;
     //qDebug() << "length" << length;
     running = false;
@@ -378,7 +380,17 @@ void GDB::doNext()
 {
     //qDebug() << "gdb next";
     if ( !running ) return;
+#ifdef Q_OS_MAC
+    if ( inAssembly ) {
+        FileLine fl(asmFile,asmLine+1);
+        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+        send("continue");
+    } else {
+        send("next");
+    }
+#else
     send("next");
+#endif
     setNormal();
     getBackTrace();
     if ( !running ) return;
@@ -393,7 +405,17 @@ void GDB::doNext()
 void GDB::doStep()
 {
     if ( !running ) return;
+#ifdef Q_OS_MAC
+    if ( inAssembly ) {
+        FileLine fl(asmFile,asmLine+1);
+        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+        send("step");
+    } else {
+        send("step");
+    }
+#else
     send("step");
+#endif
     setNormal();
     getBackTrace();
     if ( !running ) return;
@@ -435,7 +457,7 @@ void GDB::setBreakpoint(QString file, QString bp)
     if ( bp[0] == QChar('*') ) {
         results = sendReceive(QString("break %1").arg(bp) );
     } else {
-        qDebug() << QString("break \"%1\":%2").arg(file).arg(bp);
+        //qDebug() << QString("break \"%1\":%2").arg(file).arg(bp);
         results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
     }
     foreach ( QString result, results ) {
@@ -473,6 +495,8 @@ void GDB::getBackTrace()
     int n;
     int line;
     QString file;
+    QStringList parts;
+    QStringList pp;
     foreach ( QString s, results ) {
         //qDebug() << "gbt" << s;
         n = s.lastIndexOf(" at ");
@@ -483,9 +507,45 @@ void GDB::getBackTrace()
             line = file.mid(n+1).toInt();
             file = file.left(n);
             //qDebug() << "match at" << file << line;
+            inAssembly = false;
             emit nextInstruction(file,line);
             break;
+        } else if ( s.indexOf("_line_") >= 0 ) {
+            parts = s.split(QRegExp("\\s+"));
+            //qDebug() << parts;
+            for ( int i = 0; i < parts.length(); i++ ) {
+                pp = parts[i].split("_line_");
+                //qDebug() << "pp" << pp;
+                if ( pp.length() == 2 ) {
+                    line = pp[1].toInt();
+                    pp = pp[0].split(".");
+                    file = pp[1];
+                    //qDebug() << "nextInstruction" << file << line;
+                    inAssembly = true;
+                    FileLine fl(file,line);
+                    FileLine fl2(file,line+1);
+                    QMap<FileLine,long>::const_iterator it;
+                    QMap<FileLine,long>::const_iterator it2;
+                    it = fileLineToAddress.lowerBound(fl);
+                    it2 = fileLineToAddress.lowerBound(fl2);
+                    //qDebug() << it.value() << it2.value();
+                    while ( it.value() == it2.value() ) {
+                        line++;
+                        fl.line = line;
+                        fl2.line = line+1;
+                        it = fileLineToAddress.lowerBound(fl);
+                        it2 = fileLineToAddress.lowerBound(fl2);
+                        //qDebug() << it.value() << it2.value();
+                    }
+                    asmFile = file;
+                    asmLine = line;
+                    emit nextInstruction(file,line);
+                    break;
+                }
+            }
+            break;
         }
+
     }
     emit sendBackTrace(results);
 }
@@ -822,7 +882,7 @@ bool GDB::testAVX()
     return false;
 }
 
-void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
+void GDB::requestVar(DataMap *map, QString name, QString address, QString /* type */,
                      QString format, int size, int first, int last)
 {
     QStringList results;

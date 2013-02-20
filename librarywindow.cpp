@@ -109,7 +109,7 @@ void LibraryWindow::cd ( QString d )
     }
 }
 
-void LibraryWindow::handleClick(QListWidgetItem *it)
+void LibraryWindow::handleClick(QListWidgetItem * /* it */)
 {
     //qDebug() << "row" << list->currentRow();
     QString file = files[list->currentRow()];

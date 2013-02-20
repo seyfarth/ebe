@@ -21,7 +21,7 @@ public:
     void openInNewTab(QString name);
     void closeTabs();
     void saveIfChanged(QString file);
-    void setNextLine(QString file,int line);
+    void setNextLine(QString &file,int &line);
     void clearNextLine(QString file,int line);
     QString buildDebugAsm(QString file);
     int  fontHeight;
