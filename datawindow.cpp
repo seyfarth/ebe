@@ -103,10 +103,11 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
     }
     item = userDefinedMap->value(name);
     if ( item == 0 ) {
-        item = dataTree->addDataItem(userDefinedMap,name,strings[1],"");
-        item->address = varToAddress[name];
-        //qDebug() << "receiveVariableDefinition" << name << item->address;
-        //qDebug() << strings;
+        item = dataTree->addDataItem(userDefinedMap,name,strings[2],"");
+        item->address = strings[1];
+        if ( varToAddress.contains(name) ) {
+            item->address = varToAddress[name];
+        }
         if ( item->address == "" ) {
             item->address = QString("&(%1)").arg(name);
         }

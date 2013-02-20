@@ -380,7 +380,7 @@ void SourceEdit::defineVariable()
     dialog->nameEdit->setText(text);
     dialog->addressEdit->setText("&"+text);
     if ( dialog->exec() ) {
-    SourceWindow *p = (SourceWindow *)parent();
+        SourceWindow *p = (SourceWindow *)parent();
         dialog->result.append(p->fileName);
         int pos = textCursor().position();
         QTextBlock block;

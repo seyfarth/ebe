@@ -209,7 +209,12 @@ private:
  */
     void contextMenuEvent(QContextMenuEvent *event);
 
+signals:
+    void sendVariableDefinition(QStringList);
 public slots:
+
+    void defineVariableByAddress();
+
 /**
  *  \fn receiveRegs
  *

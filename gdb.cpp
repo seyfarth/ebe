@@ -550,6 +550,16 @@ void GDB::getBackTrace()
         }
 
     }
+    n = results.length();
+    int i;
+    for ( i = 0; i < n; i++ ) {
+        if ( results[i].indexOf("main.") >= 0 ) break;
+    }
+    if ( i < n ) {
+        for ( i++; i < n; i++ ) {
+            results.removeLast();
+        }
+    }
     emit sendBackTrace(results);
 }
 
@@ -904,7 +914,7 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString /* typ
     QString cmd;
     QString address2;
 
-    //qDebug() << name << address << type << format << size << first << last;
+    //qDebug() << name << address << format << size << first << last;
 
     if ( size < 0 || size > 8 ) return;
     char sizeLetter = letterForSize[size];
