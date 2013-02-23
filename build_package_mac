@@ -5,14 +5,8 @@ exe=${1:-qtebe}
 rm -rf $exe.d
 
 mkdir -p $exe.d
-otool -L $exe | while read x
-do
-    set -- $x
-    [[ $1 = ${exe}: ]] && continue
-    cp $1 $exe.d
-done
 
-cp $exe $exe.d/$exe.exe
+cp $exe $exe.d
 cp ebe.rcc $exe.d
 
 cat > $exe.d/README << EOF1
@@ -24,30 +18,19 @@ from within this directory:
     sh ./install directory_to_install
 
 This will install a shell script named $exe into the chosen directory
-and will copy all required shared object files into another directory
-named $exe.d in that same installation directory.  If you leave off
-the installation directory name, it will install in /usr/local/bin.
+and will copy all required files into another directory named $exe.d
+in that same installation directory.  If you leave off the installation
+directory name, it will install in /usr/local/bin.
 EOF1
 
-cat > $exe.d/$exe.init << EOF2
-#!/bin/bash
-export DYLD_LIBRARY_PATH=XXX
-exec DDD/$exe.d/$exe.exe "\$@"
-EOF2
-
-chmod a+x $exe.d/$exe.exe
-
-cat > $exe.d/install << EOF3
+cat > $exe.d/install << EOF2
 #!/bin/bash
 
 dir=\${1:-/usr/local/bin}
-mkdir -p \$dir/$exe.d
-sed -e "s:XXX:\$dir/$exe.d:" -e "s:DDD:\$dir:" < $exe.init > \$dir/$exe
-cp -p * \$dir/$exe.d
-chmod a+rx \$dir/$exe \$dir/$exe.d/$exe.exe
-chmod a+r \$dir/$exe.d/*
-rm \$dir/$exe.d/$exe.init
-EOF3
+cp * \$dir
+chmod a+rx \$dir/$exe
+chmod a+r \$dir/*ebe*
+EOF2
 
 chmod a+rx $exe.d/install
 

@@ -6,10 +6,10 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
-CONFIG -= app_bundle
 QT += webkit
+CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
-CONFIG += console release
+CONFIG += console release static
 
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \

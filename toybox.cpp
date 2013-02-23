@@ -232,7 +232,7 @@ void ToyBox::computeExpression()
     }
     compile.waitForFinished();
     QByteArray errors = compile.readAllStandardError();
-    if ( errors.length() > 0 ) {
+    if ( errors.length() > 0 && errors.indexOf("-macosx_version") < 0 ) {
         if ( errorWindow.isNull() ) errorWindow = new ErrorWindow;
         errorWindow->setWindowTitle("Errors in toy program");
         errorWindow->textEdit->setPlainText(QString(errors));
@@ -400,7 +400,7 @@ void ToyExpression::setValue()
     for ( int j = 0; j < hex.length(); j++ ) {
         a.b[j] = hex[j].toInt(&ok,16);
     }
-    if ( t == "bool" ) {
+    if ( t == "bool" || t.indexOf("logical") >= 0 ) {
         if ( f == "bool" ) {
             value->setText(a.b1 ? "true" : "false" );
         } else {
