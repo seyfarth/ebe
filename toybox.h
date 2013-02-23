@@ -37,12 +37,17 @@ public:
 
 class VariableTable: public QTableWidget
 {
+    Q_OBJECT
+
 public:
     VariableTable(ToyBox *p);
     void setFontHeightAndWidth ( int height, int width );
     ToyBox *box;
     int fontHeight;
     int fontWidth;
+
+public slots:
+    void switchLanguage(QString);
 };
 
 class ToyExpression: public QObject
@@ -82,6 +87,7 @@ class ToyBox : public QFrame
 
 public:
     ToyBox(QWidget *parent = 0);
+    QComboBox *languageCombo;
     VariableTable *variableTable;
     ExpressionTable *expressionTable;
 
@@ -89,10 +95,12 @@ public:
     QVector<ToyVariable *> variables;
     QVector<ToyExpression *> expressions;
     QString code;
+    QString language;
 
 public slots:
     void computeExpression();
     void formatResult(int);
+    void switchLanguage(QString);
 
 private:
 
