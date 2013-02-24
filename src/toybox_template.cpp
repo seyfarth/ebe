@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cmath>
 
 void print_type(double x)
 {
