@@ -45,7 +45,7 @@ the stream insertion operator, it must be used like this:
 </p>
 
 <pre>
-	cout << setprecision(2);
+	cout &lt;&lt; setprecision(2);
 </pre>
 
 <p>
@@ -63,7 +63,7 @@ your code like this:
 </p>
 
 <pre>
-	cout << fixed;
+	cout &lt;&lt; fixed;
 </pre>
 
 <p>
@@ -73,7 +73,7 @@ has no parameter and does not require <code>iomanip</code>. It will look like th
 <p>
 
 <pre>
-	cout << scientific;
+	cout &lt;&lt; scientific;
 </pre>
 
 <p>
@@ -84,7 +84,7 @@ this in your source code:
 </p>
 
 <pre>
-	cout << showpoint;
+	cout &lt;&lt; showpoint;
 </pre>
 
 <p>
@@ -95,10 +95,10 @@ columns of dollar amounts, like the following example demonstrates.
 </p>
 
 <pre>
-	cout << fixed << showpoint;
-	cout << setprecision(2);
+	cout &lt;&lt; fixed &lt;&lt; showpoint;
+	cout &lt;&lt; setprecision(2);
 	for(i=1; i<=n; i++)
-		cout << "\tPayment " << i << " reduces principal amount to:  " << principal << endl;
+		cout &lt;&lt; "\tPayment " &lt;&lt; i &lt;&lt; " reduces principal amount to:  " &lt;&lt; principal &lt;&lt; endl;
 </pre>
 
 <p>
@@ -110,7 +110,7 @@ is the best choice. In your code it will look like this:
 </p>
 
 <pre>
-	cout << setw(5) << x;
+	cout &lt;&lt; setw(5) &lt;&lt; x;
 </pre>
 
 <p>
@@ -124,8 +124,8 @@ field. When combined with <code>setw(n)</code> in your code, it will look like t
 </p>
 
 <pre>
-	cout << setfill('%');
-	cout << setw(10) << x;
+	cout &lt;&lt; setfill('%');
+	cout &lt;&lt; setw(10) &lt;&lt; x;
 </pre>
 
 
@@ -137,9 +137,9 @@ ostream variable manipulator. It will look like this in your code:
 </p>
 
 <pre>
-	cout << left;
-	cout << setfill('%');
-	cout << setw(10) << x;
+	cout &lt;&lt; left;
+	cout &lt;&lt; setfill('%');
+	cout &lt;&lt; setw(10) &lt;&lt; x;
 </pre>
 
 <p>
