@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "backtracewindow.h"
 #include "gdb.h"
+#include "types.h"
 #include <cstdio>
 
 extern GDB *gdb;
@@ -20,6 +21,7 @@ DataMap *parameterMap;
 DataMap *globalMap;
 DataMap *userDefinedMap;
 
+extern QHash<QString,Range> labelRange;
 QStack<DataTree*> stack;
 
 extern StringHash varToAddress;
@@ -86,13 +88,30 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
     DataItem *item;
     //qDebug() << "data rec var" << strings;
     QString name = strings[0];
+    int line = strings[7].toInt();
+    Range range;
+    if ( name[0] == QChar('.') ) {
+        foreach ( QString label, labelRange.keys() ) {
+            range = labelRange[label];
+            //qDebug() << label << range.first << range.last;
+            if ( line >= range.first && line <= range.last &&
+                 varToAddress.contains(label+name) ) {
+                name = label+name;
+                break;
+            }
+        }
+    }
     item = userDefinedMap->value(name);
     if ( item == 0 ) {
-        item = dataTree->addDataItem(userDefinedMap,name,strings[1],"");
-        item->address = varToAddress[name];
+        item = dataTree->addDataItem(userDefinedMap,name,strings[2],"");
+        item->address = strings[1];
+        if ( varToAddress.contains(name) ) {
+            item->address = varToAddress[name];
+        }
         if ( item->address == "" ) {
             item->address = QString("&(%1)").arg(name);
         }
+        if ( strings[3] == "String" && strings[5] == "0" ) strings[5] = "1";
         item->setRange(strings[4].toInt(),strings[5].toInt());
         item->setType(strings[2]);
         item->format=strings[3];
@@ -379,6 +398,11 @@ void DataTree::editUserVariable()
 void DataTree::deleteUserVariable()
 {
     DataItem *item = (DataItem *)currentItem();
+    QList<QTreeWidgetItem*> kids = item->takeChildren();
+    foreach ( QTreeWidgetItem *t, kids ) {
+        ((DataItem *)t)->removeSubTree();
+        delete t;
+    }
     item->parent()->removeChild(item);
     userDefinedMap->remove(item->name);
     delete item;

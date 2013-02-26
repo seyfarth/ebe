@@ -45,6 +45,7 @@ public slots:
 
 signals:
     void sendWorkingDir(QString);
+    void doStop();
 
 private:
     void closeEvent ( QCloseEvent *e );

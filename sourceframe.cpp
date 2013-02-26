@@ -4,8 +4,10 @@
 #include "stylesheet.h"
 #include "errorwindow.h"
 #include "librarywindow.h"
+#include "instructions.h"
 #include "gdb.h"
 #include "settings.h"
+#include "types.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
@@ -22,8 +24,14 @@ QStringList fortranExts;
 QStringList cExts;
 QStringList cppExts;
 QStringList asmExts;
+StringSet textLabels;
+
+QHash<QString,Range> labelRange;
+QHash<long,FileLine> addressToFileLine;
+QMap<FileLine,long> fileLineToAddress;
 
 StringHash varToAddress;
+QSet<FileLine> callLines;
 
 extern ProjectWindow *projectWindow;
 extern GDB *gdb;
@@ -142,8 +150,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
         layout->addLayout(buttonLayout);
     }
 
-    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)),
-            gdb, SLOT(doRun(QString,QString,QStringList,QList<IntSet>,QStringList)) );
+    connect ( this, SIGNAL(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
+            gdb, SLOT(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)) );
     connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
     connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
     connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
@@ -202,7 +210,8 @@ void SourceFrame::run()
     int length;
     QStringList globals;
     QStringList sourceFiles;
-    QList<IntSet> breakpoints;
+    QList<StringSet> breakpoints;
+    StringSet bps;
     QList<StringPair> objectFiles;
     QString object;
     QString exeName;
@@ -210,7 +219,10 @@ void SourceFrame::run()
     QString name;
     QString base;
     QString cmd;
+    bool needEbeInc = false;
 
+    addressToFileLine.clear();
+    labelRange.clear();
     stop();
     breakLine = 0;
     breakFile = "";
@@ -282,6 +294,9 @@ void SourceFrame::run()
     //qDebug() << "Files" << sourceFiles;
     //qDebug() << "exe" << exeName;
 
+    QStringList extraCmds;
+    QString extraCmd;
+    QStringList asmFiles;
     foreach ( name, sourceFiles ) {
         //name = QDir::current().relativeFilePath(name);
         saveIfChanged(name);
@@ -306,8 +321,25 @@ void SourceFrame::run()
         } else if ( asmExts.contains(ext) ) {
             //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
+#ifdef Q_OS_MAC
+            QString debugName = buildDebugAsm(name);
+            cmd.replace("$base",base);
+            cmd.replace("$source",debugName);
+            extraCmd = ebe["build/asmlst"].toString();
+            extraCmd.replace("$base",base);
+            extraCmd.replace("$source",name);
+            extraCmds << extraCmd;
+            FileLine fl;
+            int n = base.lastIndexOf("/");
+            asmFiles.append(base.mid(n+1));
+            fl.file = base.mid(n+1);
+            fl.line = 0;
+            fileLineToAddress[fl] = 0;
+#else
             cmd.replace("$base",base);
             cmd.replace("$source",name);
+#endif
+            needEbeInc = true;
             //qDebug() << cmd;
         } else if ( fortranExts.contains(ext) ) {
             //qDebug() << name << "fortran";
@@ -330,6 +362,18 @@ void SourceFrame::run()
             errorWindow->show();
             return;
         }
+        foreach ( extraCmd, extraCmds ) {
+            compile.start(extraCmd);
+            compile.waitForFinished();
+        }
+
+    }
+
+    if ( needEbeInc ) {
+        QFile::remove("ebe.inc");
+        QFile::copy(":/src/assembly/ebe.inc","ebe.inc");
+        QFile::setPermissions("ebe.inc",
+               QFile::ReadOwner | QFile::WriteOwner);
     }
     //
     //  Examine object files looking for main or _start or start
@@ -337,13 +381,14 @@ void SourceFrame::run()
     //
     //qDebug() << "building globals";
     QString ldCmd = "";
+    textLabels.clear();
     foreach ( StringPair pair, objectFiles ) {
         object = pair.first;
         if ( object == "ebe_unbuffer.o" ) continue;
         ext = pair.second;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
-        nm.start ( "nm -g \"" + object + "\"" );
+        nm.start ( "nm -a \"" + object + "\"" );
         nm.waitForFinished();
         nm.setReadChannel(QProcess::StandardOutput);
         QString data = nm.readLine();
@@ -376,13 +421,74 @@ void SourceFrame::run()
                     globals.append(parts[2]);
 #endif
                 }
+                if ( asmExts.contains(ext) && (parts[1] == "T" || parts[1] == "t") &&
+                     parts[2].indexOf(".") < 0 ) {
+                    textLabels.insert(parts[2]);
+                }
             }
             //qDebug() << data;
             data = nm.readLine();
         }
+#ifndef Q_WS_WIN
+        if ( asmExts.contains(ext) ) {
+            FileLine fl;
+            Range range;
+            QString labelToSave;
+            int m = object.lastIndexOf(".");
+            QString name;
+            if ( m < 0 ) name = object + "." + ext;
+            else name = object.left(m) + "." + ext;
+            QFile source(name);
+            fl.file = name;
+            if ( source.open(QFile::ReadOnly) ) {
+                QString text;
+                QString label;
+                QStringList parts;
+                text = source.readLine();
+                int line = 1;
+                while ( text != "" ) {
+                    parts = text.split(QRegExp("\\s+"));
+                    if ( parts.length() > 0 ) {
+                        label = parts[0];
+                        if ( label == "" && parts.length() > 1 ) label = parts[1];
+                        int n = label.length();
+                        if ( label[n-1] == QChar(':') ) label.chop(1);
+                        if ( textLabels.contains("_"+label) ) {
+                            label = "_" + label;
+                        }
+                        if ( textLabels.contains(label) ) {
+                            if ( labelToSave != "" ) {
+                                range.last = line-1;
+                                labelRange[labelToSave] = range;
+                            }
+                            range.first = line;
+                            labelToSave = label;
+                        }
+                    }
+                    if ( (parts.length() == 2 && parts[0].toUpper() == "CALL" ) ||
+                         (parts.length() == 3 && parts[1].toUpper() == "CALL" ) ||
+                         (parts.length() == 4 && parts[2].toUpper() == "CALL" ) ) {
+                        fl.line = line;
+                        callLines.insert(fl);
+                    }
+                    text = source.readLine();
+                    line++;
+                }
+                if ( labelToSave != "" ) {
+                    range.last = line-1;
+                    labelRange[labelToSave] = range;
+                }
+            }
+            source.close();
+        }
+#endif
     }
     globals.sort();
-    //qDebug() << "globals" << globals;
+    //qDebug() << "labels" << textLabels;
+
+    //foreach ( QString label, labelRange.keys() ) {
+        //qDebug() << label << labelRange[label].first << labelRange[label].last;
+    //}
 
     if ( ldCmd == "" ) {
         QMessageBox::warning(this, tr("Warning"),
@@ -425,9 +531,14 @@ void SourceFrame::run()
     nm.waitForFinished();
     QString nmData = nm.readLine();
     QStringList nmParts;
+    QStringList parts;
+    bool ok;
     QRegExp rx1("\\s+");
-    QRegExp rx2("[a-zA-Z][a-zA-Z0-9_]*");
+    QRegExp rx2("[a-zA-Z_][.a-zA-Z0-9_]*");
+    QRegExp rx3("_line_");
+    FileLine fl;
     while ( nmData != "" ) {
+        //qDebug() << nmData;
         nmParts = nmData.split(rx1);
         if ( nmParts.length() >= 3 ) {
             if ( nmParts[1] == "D" || nmParts[1] == "S" ||
@@ -436,25 +547,116 @@ void SourceFrame::run()
                 if ( rx2.exactMatch(nmParts[2]) ) {
                     varToAddress[nmParts[2]] = "0x" + nmParts[0];
                 }
+            } else if ( nmParts[1] == "T" || nmParts[1] == "t" ) {
+                parts = nmParts[2].split(QChar('.'));
+                if ( parts.length() == 2 ) {
+                    parts = parts[1].split(rx3);
+                    if ( parts.length() == 2 ) {
+                        fl.file = parts[0];
+                        fl.line = parts[1].toInt();
+                        fileLineToAddress[fl] = nmParts[0].toLong(&ok,16);
+                        //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
+                    }
+                }
             }
         }
         nmData = nm.readLine();
     }
-
-
+    //qDebug() << "globals" << varToAddress.keys();
 
     //
     //  Start debugging
     //
     sourceFiles.clear();
+
+    QString s;
     for ( index = 0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
         sourceFiles.append ( source->fileName );
-        breakpoints.append ( *(source->breakpoints) );
+#ifdef Q_OS_MAC
+        QString base;
+        QString ext;
+        FileLine fl;
+        long address;
+        QMap<FileLine,long>::const_iterator it;
+        int n = source->fileName.lastIndexOf("/");
+        if ( n >= 0 ) {
+            base = source->fileName.mid(n+1);
+            n = base.lastIndexOf(".");
+            if ( n >= 0 ) {
+                ext = base.mid(n+1);
+                base = base.left(n);
+            }
+        }
+        fl.file = base;
+#endif
+        bps.clear();
+        foreach ( int bp, *(source->breakpoints) ) {
+#ifdef Q_OS_MAC
+            if ( asmExts.contains(ext) ) {
+                fl.line = bp;
+                it = fileLineToAddress.lowerBound(fl);
+                if ( it.value() == 0L ) it = fileLineToAddress.upperBound(fl);
+                address = it.value();
+                bps.insert(QString("*%1").arg(address));
+            } else {
+                bps.insert(s.setNum(bp));
+            }
+#else
+            bps.insert(s.setNum(bp));
+#endif
+        }
+        breakpoints.append ( bps );
     }
     //qDebug() << "doRun" << sourceFiles << breakpoints;
     emit doRun(exeName,commandLine->text(),sourceFiles,breakpoints,globals);
 }
+
+QString SourceFrame::buildDebugAsm ( QString fileName )
+{
+    QString debugFileName;
+    int n = fileName.lastIndexOf("/");
+    if ( n >= 0 ) {
+        debugFileName = fileName.left(n) + "/debug_" + fileName.mid(n+1);
+    } else {
+        debugFileName = QString("debug_") + fileName;
+    }
+    //qDebug() << "buildDebugAsm" << debugFileName;
+
+    QString base = fileName.mid(n+1);
+    n = base.lastIndexOf(".");
+    base = base.left(n);
+
+    //qDebug() << "base" << base;
+
+    QFile in(fileName);
+    QFile outFile(debugFileName);
+    if ( !in.open(QFile::ReadOnly) ) {
+        qDebug() << "failed to open" << fileName;
+        return "";
+    }
+    if ( !outFile.open(QFile::WriteOnly) ) {
+        qDebug() << "failed to open" << debugFileName;
+        return "";
+    }
+    QTextStream out(&outFile);
+    QString text;
+    text = in.readLine();
+    int line = 1;
+    out << "ebedebug:\n";
+    while ( text != "" ) {
+        out << QString(".%2_line_%3:\n").arg(base).arg(line);
+        out << text;
+        text = in.readLine();
+        line++;
+    }
+    in.close();
+    out.flush();
+    outFile.close();
+    return debugFileName;
+}
+
+
 
 void SourceFrame::next()
 {
@@ -495,17 +697,51 @@ void SourceFrame::clearNextLine ( QString file, int line )
     breakLine = 0;
 }
 
-void SourceFrame::setNextLine ( QString file, int line )
+void SourceFrame::setNextLine ( QString &file, int & line )
 {
     //qDebug() << "snl" << file << line;
     if ( file == "" || line < 1 ) return;
     for ( int index=0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
+        //qDebug() << "source name" << source->fileName << file;
         if ( source->fileName == QDir::current().absoluteFilePath(file) ) {
             tab->setCurrentIndex(index);
             source->setNextLine(line);
             return;
+        } 
+#ifdef Q_OS_MAC
+        if ( file.indexOf(".") < 0 ) {
+            //FileLine fl(file,line);
+            //FileLine fl2(file,line+1);
+            //QMap<FileLine,long>::const_iterator it;
+            //QMap<FileLine,long>::const_iterator it2;
+            //it = fileLineToAddress.lowerBound(fl);
+            //it2 = fileLineToAddress.lowerBound(fl2);
+            //qDebug() << it.value() << it2.value();
+            //while ( it.value() == it2.value() ) {
+                //line++;
+                //fl.line = line;
+                //fl2.line = line+1;
+                //it = fileLineToAddress.lowerBound(fl);
+                //it2 = fileLineToAddress.lowerBound(fl2);
+                //qDebug() << it.value() << it2.value();
+            //}
+            int n = source->fileName.lastIndexOf("/");
+            if ( n < 0 ) continue;
+            QString base = source->fileName.mid(n+1);
+            n = base.lastIndexOf(".");
+            if ( n < 0 ) continue;
+            QString ext = base.mid(n+1);
+            if ( !asmExts.contains(ext) ) continue;
+            base = base.left(n);
+            if ( base == file ) {
+                file = source->fileName;
+                tab->setCurrentIndex(index);
+                source->setNextLine(line);
+                return;
+            }
         }
+#endif
     }
 }
 

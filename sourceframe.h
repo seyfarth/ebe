@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "sourcewindow.h"
+#include "types.h"
 
 class CommandLine;
 
@@ -20,8 +21,9 @@ public:
     void openInNewTab(QString name);
     void closeTabs();
     void saveIfChanged(QString file);
-    void setNextLine(QString file,int line);
+    void setNextLine(QString &file,int &line);
     void clearNextLine(QString file,int line);
+    QString buildDebugAsm(QString file);
     int  fontHeight;
     int  fontWidth;
     bool filesSaved();
@@ -73,7 +75,7 @@ public slots:
 
 signals:
     void doRun(QString exe, QString options, QStringList files,
-               QList<IntSet> breakpoints, QStringList globals);
+               QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doStep();
     void doContinue();

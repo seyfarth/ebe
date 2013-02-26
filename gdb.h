@@ -9,17 +9,6 @@
 #include "variable.h"
 #include "datawindow.h"
 
-class FileLine
-{
-public:
-    QString file;
-    int line;
-    FileLine(QString f, int l);
-    bool operator==(FileLine &x) const;
-};
-
-uint qHash(const FileLine &f);
-
 class GDBThread : public QThread
 {
 public:
@@ -35,9 +24,12 @@ public:
     GDB();
     void initGdb();
     bool running;
-    QHash<FileLine,int> bpHash;
+    QHash<FileLabel,int> bpHash;
     int numFloats;
     bool NullEOF;
+    bool inAssembly;
+    QString asmFile;
+    int asmLine;
 
 private:
     void send(QString cmd, QString options="");
@@ -60,7 +52,7 @@ private:
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
-               QList<IntSet> breakpoints, QStringList globals);
+               QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doStep();
     void doContinue();
@@ -68,8 +60,8 @@ public slots:
     void getData(QStringList request);
     void requestVar(DataMap *map, QString name, QString address, QString type,
                     QString format, int size, int first, int last);
-    void setBreakpoint(QString,int);
-    void deleteBreakpoint(QString,int);
+    void setBreakpoint(QString,QString);
+    void deleteBreakpoint(QString,QString);
     void receiveWorkingDir(QString);
     void setEOF();
 

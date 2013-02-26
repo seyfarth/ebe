@@ -37,11 +37,32 @@ ToyBox::ToyBox(QWidget *parent)
 #endif
     bytesPerType["float"] = 4;
     bytesPerType["double"] = 8;
+
+    bytesPerType["logical (kind=1)"] = 1;
+    bytesPerType["logical (kind=2)"] = 2;
+    bytesPerType["logical (kind=4)"] = 4;
+    bytesPerType["logical (kind=8)"] = 8;
+    bytesPerType["integer (kind=1)"] = 1;
+    bytesPerType["integer (kind=2)"] = 2;
+    bytesPerType["integer (kind=4)"] = 4;
+    bytesPerType["integer (kind=8)"] = 8;
+    bytesPerType["real (kind=4)"] = 4;
+    bytesPerType["real (kind=8)"] = 8;
 /*
  *  Set the frame to be raised with a width 4 bevel.
  */
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
+
+/*
+ *  Create a combobox to select programming language
+ */
+    languageCombo = new QComboBox;
+    languageCombo->addItem("C++");
+    languageCombo->addItem("Fortran");
+    languageCombo->setCurrentIndex(0);
+
+    language = "C++";
 
 /*
  *  Create a table to display the variables
@@ -64,11 +85,26 @@ ToyBox::ToyBox(QWidget *parent)
     layout->setContentsMargins(10,10,10,10);
 
 /*
+ *  Add the language combobox and a label to the layout
+ */
+
+    QHBoxLayout *languageLayout = new QHBoxLayout;
+    languageLayout->addWidget(new QLabel("Language"));
+    languageLayout->addWidget(languageCombo);
+    languageLayout->addStretch();
+    layout->addLayout(languageLayout);
+
+/*
  *  Add the tables to the layout and set the layout for the frame.
  */
     layout->addWidget(variableTable);
     layout->addWidget(expressionTable);
     setLayout(layout);
+
+    connect ( languageCombo, SIGNAL(activated(QString)),
+              this, SLOT(switchLanguage(QString)) );
+    connect ( languageCombo, SIGNAL(activated(QString)),
+              variableTable, SLOT(switchLanguage(QString)) );
 }
 
 /*
@@ -88,6 +124,11 @@ void ToyBox::formatResult(int /* index */)
     expressions[row]->setValue();
 }
 
+void ToyBox::switchLanguage ( QString lang )
+{
+    language = lang;
+}
+
 void ToyBox::computeExpression()
 {
     int i;
@@ -104,11 +145,19 @@ void ToyBox::computeExpression()
         return;
     }
 
-    code.append("#include <cstdio>\n"
-                "#include <typeinfo>\n"
-                "#include <cmath>\n"
-                "int main()\n"
-                "{\n");
+    QString templateFile = language == "C++" ?
+                        "toybox_template.cpp" : "toybox_template.f";
+    QFile in(QString(":/src/%1").arg(templateFile));
+    if ( !in.open(QFile::ReadOnly) ) {
+        qDebug() << "Could not open" << templateFile;
+        return;
+    }
+
+    QString t = in.readLine();
+    while ( t[0] != QChar('/') || t[1] != QChar('/') ) {
+        code.append(t);
+        t = in.readLine();
+    }
 
     QString name, type, val;
     foreach ( ToyVariable *v, variables ) {
@@ -116,40 +165,74 @@ void ToyBox::computeExpression()
         type = v->type->currentText().trimmed();
         val = v->value->text().trimmed();
         if ( name.length() > 0 && type.length() > 0 ) {
-            code.append(QString("  %1 %2 = %3;\n").arg(type).arg(name).arg(val));
+            if ( language == "C++" ) {
+                code.append(QString("    %1 %2 = %3;\n").arg(type).arg(name).arg(val));
+            } else {
+                code.append(QString("        %1 :: %2 = %3\n").arg(type).arg(name).arg(val));
+            }
         }
     }
-    code.append(QString("  typeof(%1) __ebe_v;\n").arg(expression));
-    code.append(QString("  __ebe_v = %1;\n").arg(expression));
-    QStringList types;
-    types << "bool"
-          << "char"  << "signed char"   << "unsigned char"
-          << "short" << "unsigned short"
-          << "int"   << "unsigned int"
-          << "long"  << "unsigned long"
-          << "float" << "double";
-    foreach ( QString s, types ) {
-        code.append(
-           QString("  if ( typeid(__ebe_v) == typeid(%1) ) {\n").arg(s) +
-           QString("     printf(\"%1\\n\");\n").arg(s) +
-           QString("     goto __wrap_up;\n") +
-           QString("}\n"));
+
+    if ( language == "C++" ) {
+        code.append(QString("    dump(%1);\n").arg(expression));
+    } else {
+        code.append(QString("        call dump(%1)\n").arg(expression));
     }
-    code.append("__wrap_up:\n");
-    code.append("  for ( int __ebe_i=0; __ebe_i < sizeof(__ebe_v); __ebe_i++ )\n");
-    code.append("    printf(\"%02x \",((unsigned char *)&__ebe_v)[__ebe_i]);\n");
-    code.append("  printf(\"\\n\");\n");
-    code.append("  return 0;\n"
-                "}\n");
-    QFile file("ebe_toybox.cpp");
+
+    if ( language == "C++" ) {
+        foreach ( ToyVariable *v, variables ) {
+            name = v->name->text().trimmed();
+            QString t = v->type->currentText().trimmed();
+            if ( name.length() > 0 && t.length() > 0 ) {
+                if ( t == "bool" ) {
+                    code.append( QString("    printf(\"%d\\n\",%1);\n").arg(name) );
+                } else if ( t == "char" ) {
+                    code.append( QString("    printf(\"\'%c\'\\n\",%1);\n").arg(name) );
+                } else if ( t == "signed char" ) {
+                    code.append( QString("    printf(\"%d\\n\",int(%1));\n").arg(name) );
+                } else if ( t == "unsigned char" ) {
+                    code.append( QString("    printf(\"0x%x\\n\",(unsigned int)(%1));\n").arg(name) );
+                } else if ( t == "short" ) {
+                    code.append( QString("    printf(\"%d\\n\",%1);\n").arg(name) );
+                } else if ( t == "unsigned short" ) {
+                    code.append( QString("    printf(\"0x%x\\n\",%1);\n").arg(name) );
+                } else if ( t == "int" ) {
+                    code.append( QString("    printf(\"%d\\n\",%1);\n").arg(name) );
+                } else if ( t == "unsigned int" ) {
+                    code.append( QString("    printf(\"0x%x\\n\",%1);\n").arg(name) );
+                } else if ( t == "long" ) {
+                    code.append( QString("    printf(\"%ld\\n\",%1);\n").arg(name) );
+                } else if ( t == "unsigned long" ) {
+                    code.append( QString("    printf(\"0x%lx\\n\",%1);\n").arg(name) );
+                } else if ( t == "float" || t == "double" ) {
+                    code.append( QString("    printf(\"%g\\n\",%1);\n").arg(name) );
+                }
+            }
+        }
+    }
+
+
+    t = in.readLine();
+    while ( t != "" ) {
+        code.append(t);
+        t = in.readLine();
+    }
+    in.close();
+
+    QString outFile = language == "C++" ? "ebe_toybox.cpp" : "ebe_toybox.f";
+    QFile file(outFile);
     file.open(QFile::WriteOnly);
     file.write(code.toAscii());
     file.close();
     QProcess compile(this);
-    compile.start("g++ -O0 ebe_toybox.cpp -o ebe_toybox");
+    if ( language == "C++" ) {
+        compile.start("g++ -O0 ebe_toybox.cpp -o ebe_toybox");
+    } else {
+        compile.start("gfortran -O0 ebe_toybox.f -o ebe_toybox");
+    }
     compile.waitForFinished();
     QByteArray errors = compile.readAllStandardError();
-    if ( errors.length() > 0 ) {
+    if ( errors.length() > 0 && errors.indexOf("-macosx_version") < 0 ) {
         if ( errorWindow.isNull() ) errorWindow = new ErrorWindow;
         errorWindow->setWindowTitle("Errors in toy program");
         errorWindow->textEdit->setPlainText(QString(errors));
@@ -164,12 +247,23 @@ void ToyBox::computeExpression()
 #endif
     compile.start(program);
     compile.waitForFinished();
-    QString t = compile.readLine();
+    t = compile.readLine();
     t = t.trimmed();
     QString data = compile.readLine();
     data = data.trimmed();
     QStringList values = data.split(' ');
     e->setValue(t,values);
+    if ( language == "C++" ) {
+        foreach ( ToyVariable *v, variables ) {
+            name = v->name->text().trimmed();
+            type = v->type->currentText().trimmed();
+            if ( name.length() > 0 && type.length() > 0 ) {
+                QString data = compile.readLine();
+                data = data.trimmed();
+                v->value->setText(data);
+            }
+        }
+    }
 }
 
 void ToyExpression::setValue( QString t, QStringList values )
@@ -188,10 +282,10 @@ void ToyExpression::setValue( QString t, QStringList values )
         } else if ( t == "signed char" ) {
             formats << "decimal" << "char" << "hexadecimal" << "binary";
             format->addItems(formats);
-        } else if ( t == "bool" ) {
+        } else if ( t == "bool" || t.indexOf("logical") >= 0 ) {
             formats << "bool" << "binary";
             format->addItems(formats);
-        } else if ( t == "float" || t == "double" ) {
+        } else if ( t == "float" || t == "double" || t.indexOf("real") >= 0 ) {
             formats << "decimal" << "hexadecimal" << "binary"
                     << "binary fp" << "fields";
             format->addItems(formats);
@@ -306,7 +400,7 @@ void ToyExpression::setValue()
     for ( int j = 0; j < hex.length(); j++ ) {
         a.b[j] = hex[j].toInt(&ok,16);
     }
-    if ( t == "bool" ) {
+    if ( t == "bool" || t.indexOf("logical") >= 0 ) {
         if ( f == "bool" ) {
             value->setText(a.b1 ? "true" : "false" );
         } else {
@@ -321,6 +415,14 @@ void ToyExpression::setValue()
             value->setText(QString("%1").arg(a.i1));
         } else {
             value->setText(QString(QChar(a.c)));
+        }
+    } else if ( t.indexOf("integer") >= 0 ) {
+        if ( f == "hexadecimal" ) {
+            value->setText(hexadecimal(a,numBytes));
+        } else if ( f == "binary" ) {
+            value->setText(binary(a,numBytes));
+        } else {
+            value->setText(QString("%1").arg(a.i8));
         }
     } else if ( t == "short" ) {
         if ( f == "hexadecimal" ) {
@@ -370,7 +472,7 @@ void ToyExpression::setValue()
         } else {
             value->setText(QString("%1").arg(a.u8));
         }
-    } else if ( t == "float" ) {
+    } else if ( t == "float" || t == "real (kind=4)" ) {
         if ( f == "hexadecimal" ) {
             value->setText(hexadecimal(a,numBytes));
         } else if ( f == "binary" ) {
@@ -382,7 +484,7 @@ void ToyExpression::setValue()
         } else {
             value->setText(QString("%1").arg(a.f4,0,'g',7));
         }
-    } else if ( t == "double" ) {
+    } else if ( t == "double" || t == "real (kind=8)" ) {
         if ( f == "hexadecimal" ) {
             value->setText(hexadecimal(a,numBytes));
         } else if ( f == "binary" ) {
@@ -417,10 +519,13 @@ ToyVariable::ToyVariable ( VariableTable *t, int r )
     table = t;
     row = r;
     name = new QLineEdit;
+    name->setToolTip(tr("Enter a name for a variable.\n"
+                        "A value is also required"));
     IdValidator *idValidator = new IdValidator;
     name->setValidator(idValidator);
     table->setCellWidget(row,0,name);
     type = new QComboBox;
+    type->setToolTip(tr("Select a type for your variable. "));
     QStringList types;
     types << " bool"
           << " char"  << " signed char"   << " unsigned char"
@@ -433,9 +538,49 @@ ToyVariable::ToyVariable ( VariableTable *t, int r )
 
     table->setCellWidget(row,1,type);
     value = new QLineEdit;
+    value->setToolTip(tr("Enter a value for the variable."));
     table->setCellWidget(row,2,value);
     NumberValidator *validator = new NumberValidator;
     value->setValidator(validator);
+}
+
+void VariableTable::switchLanguage ( QString language )
+{
+    int i;
+    QComboBox *type;
+    QStringList types;
+
+    if ( language == "C++" ) {
+        types << " bool"
+              << " char"  << " signed char"   << " unsigned char"
+              << " short" << " unsigned short"
+              << " int"   << " unsigned int"
+              << " long"  << " unsigned long"
+              << " float" << " double";
+        for ( i = 0; i < rowCount(); i++ ) {
+            type = (QComboBox *) cellWidget(i,1);
+            type->clear();
+            type->addItems(types);
+            type->setCurrentIndex(6);
+        }
+    } else {
+        types << " logical (kind=8)"
+              << " logical (kind=4)"
+              << " logical (kind=2)"
+              << " logical (kind=1)"
+              << " integer (kind=8)"
+              << " integer (kind=4)"
+              << " integer (kind=2)"
+              << " integer (kind=1)"
+              << " real (kind=8)"
+              << " real (kind=4)";
+        for ( i = 0; i < rowCount(); i++ ) {
+            type = (QComboBox *) cellWidget(i,1);
+            type->clear();
+            type->addItems(types);
+            type->setCurrentIndex(5);
+        }
+    }
 }
 
 VariableTable::VariableTable(ToyBox *p)
@@ -483,18 +628,24 @@ ToyExpression::ToyExpression(ExpressionTable *t, int r)
     table = t;
     row = r;
     expr = new QLineEdit;
+    expr->setToolTip(tr("Enter a C++ expression to evaluate"));
     table->setCellWidget(row,0,expr);
     button = new QPushButton;
+    button->setToolTip(tr("Click this button to evaluate the expression"));
     button->setText("do it");
     button->setProperty("row",r);
     table->setCellWidget(row,1,button);
     type = new QLineEdit;
+    type->setToolTip(tr("The type will be reported back from the evaluation"));
     type->setReadOnly(true);
     table->setCellWidget(row,2,type);
     format = new QComboBox;
+    format->setToolTip(tr("Select a format for the expression value"));
     format->setProperty("row",r);
     table->setCellWidget(row,3,format);
     value = new QLineEdit;
+    value->setToolTip(
+        tr("The value will be placed here when you click \"do it\""));
     value->setReadOnly(true);
     table->setCellWidget(row,4,value);
     connect ( format,  SIGNAL(activated(int)),

@@ -117,8 +117,8 @@ private slots:
     void ignore();
 
 signals:
-    void sendBreakpoint(QString,int);
-    void deleteBreakpoint(QString,int);
+    void sendBreakpoint(QString,QString);
+    void deleteBreakpoint(QString,QString);
 };
 
 

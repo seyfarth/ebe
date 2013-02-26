@@ -9,6 +9,7 @@
 
 extern TerminalWindow *terminalWindow;
 extern int wordSize;
+extern QMap<FileLine,long> fileLineToAddress;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
@@ -22,12 +23,20 @@ bool needToKill;
 bool needToWake;
 HANDLE hProcess;
 HANDLE hThread;
+#else
+bool gdbWaiting;
 #endif
+
+unsigned int reg_masks[] = {    1,    4, 0x10, 0x40, 0x80, 0x400, 0x800 };
+QString reg_names[]      = { "CF", "PF", "AF", "ZF", "SF",  "DF",  "OF" };
 
 QString readLine()
 {
     QString result="";
     int n;
+#ifndef Q_WS_WIN
+    gdbWaiting = true;
+#endif
     do {
         while ( gdbProcess->bytesAvailable() == 0 ) {
             gdbProcess->waitForReadyRead(0);
@@ -38,6 +47,9 @@ QString readLine()
         //qDebug() << result;
     } while ( n == 0 || result.at(n-1) != '\n' );
     result.chop(1);
+#ifndef Q_WS_WIN
+    gdbWaiting = false;
+#endif
     return result;
 }
 
@@ -259,10 +271,11 @@ void GDB::initGdb()
 
 //public slots:
 void GDB::doRun(QString exe, QString options, QStringList files,
-          QList<IntSet> breakpoints, QStringList g)
+          QList<StringSet> breakpoints, QStringList g)
 {
     int i;
     int length = files.length();
+    inAssembly = false;
     globals = g;
     //qDebug() << "length" << length;
     running = false;
@@ -275,7 +288,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
     send("delete breakpoints");
     for ( i = 0; i < length; i++ ) {
-        foreach ( int bp, breakpoints[i] ) {
+        foreach ( QString bp, breakpoints[i] ) {
             //qDebug() << files[i] << bp;
             setBreakpoint(files[i],bp);
         }
@@ -336,7 +349,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("attach "+QString("%1").arg(pi.dwProcessId));
     //send("delete breakpoints");
     //for ( i = 0; i < length; i++ ) {
-        //foreach ( int bp, breakpoints[i] ) {
+        //foreach ( QString bp, breakpoints[i] ) {
             ////qDebug() << files[i] << bp;
             ////qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
             //send(QString("break %1:%2").arg(files[i]).arg(bp) );
@@ -370,7 +383,17 @@ void GDB::doNext()
 {
     //qDebug() << "gdb next";
     if ( !running ) return;
+#ifdef Q_OS_MAC
+    if ( inAssembly ) {
+        FileLine fl(asmFile,asmLine+1);
+        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+        send("continue");
+    } else {
+        send("next");
+    }
+#else
     send("next");
+#endif
     setNormal();
     getBackTrace();
     if ( !running ) return;
@@ -385,7 +408,17 @@ void GDB::doNext()
 void GDB::doStep()
 {
     if ( !running ) return;
+#ifdef Q_OS_MAC
+    if ( inAssembly ) {
+        FileLine fl(asmFile,asmLine+1);
+        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+        send("step");
+    } else {
+        send("step");
+    }
+#else
     send("step");
+#endif
     setNormal();
     getBackTrace();
     if ( !running ) return;
@@ -418,13 +451,18 @@ void GDB::doStop()
     running = false;
 }
 
-void GDB::setBreakpoint(QString file, int bp)
+void GDB::setBreakpoint(QString file, QString bp)
 {
     QStringList results;
     QStringList parts;
-    FileLine f(file,bp);
+    FileLabel f(file,bp);
     if ( bpHash.contains(f) ) return;
-    results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
+    if ( bp[0] == QChar('*') ) {
+        results = sendReceive(QString("break %1").arg(bp) );
+    } else {
+        //qDebug() << QString("break \"%1\":%2").arg(file).arg(bp);
+        results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
+    }
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
         if ( parts[0] == "Breakpoint" ) {
@@ -435,30 +473,15 @@ void GDB::setBreakpoint(QString file, int bp)
     }
 }
 
-void GDB::deleteBreakpoint(QString file, int line)
+void GDB::deleteBreakpoint(QString file, QString line)
 {
-    FileLine f(file,line);
+    FileLabel f(file,line);
     int bp = bpHash[f];
     //qDebug() << "dbp" << file << line << bp;
     if ( bp > 0 ) {
         send(QString("delete %1").arg(bp));
         bpHash.remove(f);
     }
-}
-
-FileLine::FileLine(QString f, int l)
-: file(f), line(l)
-{
-}
-
-bool FileLine::operator==(FileLine &f) const
-{
-    return file == f.file && line == f.line;
-}
-
-uint qHash(const FileLine &f)
-{
-    return qHash(f.file) ^ qHash(f.line);
 }
 
 void GDB::getBackTrace()
@@ -475,6 +498,8 @@ void GDB::getBackTrace()
     int n;
     int line;
     QString file;
+    QStringList parts;
+    QStringList pp;
     foreach ( QString s, results ) {
         //qDebug() << "gbt" << s;
         n = s.lastIndexOf(" at ");
@@ -485,8 +510,54 @@ void GDB::getBackTrace()
             line = file.mid(n+1).toInt();
             file = file.left(n);
             //qDebug() << "match at" << file << line;
+            inAssembly = false;
             emit nextInstruction(file,line);
             break;
+        } else if ( s.indexOf("_line_") >= 0 ) {
+            parts = s.split(QRegExp("\\s+"));
+            //qDebug() << parts;
+            for ( int i = 0; i < parts.length(); i++ ) {
+                pp = parts[i].split("_line_");
+                //qDebug() << "pp" << pp;
+                if ( pp.length() == 2 ) {
+                    line = pp[1].toInt();
+                    pp = pp[0].split(".");
+                    file = pp[1];
+                    //qDebug() << "nextInstruction" << file << line;
+                    inAssembly = true;
+                    FileLine fl(file,line);
+                    FileLine fl2(file,line+1);
+                    QMap<FileLine,long>::const_iterator it;
+                    QMap<FileLine,long>::const_iterator it2;
+                    it = fileLineToAddress.lowerBound(fl);
+                    it2 = fileLineToAddress.lowerBound(fl2);
+                    //qDebug() << it.value() << it2.value();
+                    while ( it.value() == it2.value() ) {
+                        line++;
+                        fl.line = line;
+                        fl2.line = line+1;
+                        it = fileLineToAddress.lowerBound(fl);
+                        it2 = fileLineToAddress.lowerBound(fl2);
+                        //qDebug() << it.value() << it2.value();
+                    }
+                    asmFile = file;
+                    asmLine = line;
+                    emit nextInstruction(file,line);
+                    break;
+                }
+            }
+            break;
+        }
+
+    }
+    n = results.length();
+    int i;
+    for ( i = 0; i < n; i++ ) {
+        if ( results[i].indexOf("main.") >= 0 ) break;
+    }
+    if ( i < n ) {
+        for ( i++; i < n; i++ ) {
+            results.removeLast();
         }
     }
     emit sendBackTrace(results);
@@ -505,9 +576,19 @@ void GDB::getRegs()
         parts = result.split(QRegExp("\\s+"));
         if ( regs.contains(parts[0]) ) {
             if ( parts[0] == "eflags" ) {
+                //qDebug() << "eflags" << parts;
                 index1 = result.indexOf('[');
                 index2 = result.indexOf(']');
-                map[parts[0]] = result.mid(index1+2,index2-index1-3);
+                if ( index1 < 0 || index2 < 0 ) {
+                    QString s="";
+                    int regdata = parts[2].toInt();
+                    for ( int i= 0; i < 7; i++ ) {
+                        if ( regdata & reg_masks[i] ) s += reg_names[i] + " ";
+                    }
+                    map["eflags"] = s;
+                } else {
+                    map[parts[0]] = result.mid(index1+2,index2-index1-3);
+                }
             } else {
                 map[parts[0]] = parts[1];
             }
@@ -824,7 +905,7 @@ bool GDB::testAVX()
     return false;
 }
 
-void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
+void GDB::requestVar(DataMap *map, QString name, QString address, QString /* type */,
                      QString format, int size, int first, int last)
 {
     QStringList results;
@@ -833,7 +914,7 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
     QString cmd;
     QString address2;
 
-    //qDebug() << name << address << type << format << size << first << last;
+    //qDebug() << name << address << format << size << first << last;
 
     if ( size < 0 || size > 8 ) return;
     char sizeLetter = letterForSize[size];
@@ -875,8 +956,8 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString type,
         if ( results.length() == 0 ) {
             result = "";
         } else {
-            parts = results[0].split(QRegExp(":\\s+"));
-            result = parts[parts.length()-1];
+            int n = results[0].indexOf("\"");
+            result = results[0].mid(n);
         }
     } else if ( format == "Pointer" ) {
         cmd = QString("printf \"0x%x\\n\",%1").arg(address);

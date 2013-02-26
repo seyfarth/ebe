@@ -1,0 +1,83 @@
+Here are the Windows installers for the ebe IDE.  There are 2 installers: one for 32 bit Windows and one for 64 bit Windows.  Each installer installs the gcc compiler collection from http://www.equation.com.  Ebe itself is a 32 bit application which has been compiled with the Microsoft command line C++ compiler.
+
+Generally it would be a better choice to select the version with the largest version number.  There are usually new features and problems fixed with newer versions.  For example version 2.0.10 includes the first version of the toybox and it is probably more reliable than  2.0.09.  Version 2.0.09 has better support for 32 bit compilations than 2.0.08.
+
+ebe32-2.0.??-setup.exe:  includes 32 bit compilers:  gcc, g++, gfortran
+
+ebe64-2.0.??-setup.exe:  includes 64 bit compilers:  gcc, g++, gfortran
+
+ebe-2.0.??-update.exe: includes just the latest ebe.  This will update
+installs from 2.0.08 forward.
+
+Both installers should run fine under 64 bit Windows.  Only the 32 bit installer will work properly under 32 bit Windows.  It would install and ebe would start, but the compilers would not run.
+
+This code has been tested under Windows 7.  It is unknown whether there are issues with other versions of Windows.
+
+Coding for the Qt version of ebe started in November 2012.  At this point the code is too new to be considered production-quality.  Check back frequently for updates.  If you want to update you can download the ebe.exe file and copy it into the gcc\bin directory from the original install.  The gcc portions are not changing.
+
+Problem
+=======
+Repeated installs are leaving the program's directory in the Path variable multiple times.
+
+Change log:
+
+2.0.18  Results now can be used to update variables in the toybox
+        This means with variable a, a++ will update the value of a.
+
+2.0.17  Added files to library
+        Improved data support for assembly and fortran
+        Added clear button to terminal window
+        Revised variable definition dialog
+        Added array checkbox to array bounds and variable definition dialogs
+
+2.0.16  Added libary of code snippets; icon on template toolbar
+        Revised program to find ebe.rcc with .exe file
+
+2.0.15  Added a missing DLL: msvcr100.dll
+
+2.0.14  Changed the installer to avoid needing to logout and back in
+
+2.0.13  Added more options for formatting floating point data
+           in the data window.
+
+2.0.12  First version supporting Fortran debugging
+           Handles basic types and arrays
+        Fixed handling or char ** and char * types
+        Fixed identification of globals under Windows
+        Fixed output of stderr to be unbuffered
+
+2.0.11  Added more floating point formats to the toybox
+        Fixed link commands for Fortran and C
+        Added closeEvent function to mainwindow
+        Fortran debugging is not really useful yet
+
+2.0.10  First version with toybox - spreadsheet like tool to experiment
+            with C++ numeric expressions
+
+2.0.09  Fixed problem with spaces in pathnames
+        Implemented EOF handling using Control-D (C OR Z)
+        Handling of data types for 32 bit programs improved
+        Users will probably need to remove old .ebe.ini files
+
+
+2.0.06  Solved problem with loading template main programs
+        Repaired gdb.cpp data item types/sizes issues
+        Fetched settings from .ebe.ini on directory change
+        Made settings changes take effect upon save
+        Allowed _ to start identifiers
+
+2.0.05  Gave up on reading template code from resource files and used
+            string constants.
+        Removed a pointless char array from gdb.cpp.
+
+2.0.04  Repaired problem with determining next line/file from gdb
+        Fixed issue with added lines looking like breakpoints after
+            setting 1 breakpoint.
+        Bug: When lines are deleted breakpoints are not handled properly.
+
+2.0.03  Added change directory to file menu
+        Added code to implement project popup menu
+        Non-functional version
+
+2.0.02  Added edit settings menu option
+        Added function key shortcuts for debugging

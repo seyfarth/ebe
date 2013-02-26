@@ -61,7 +61,8 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     lineLayout->addWidget(lineEdit);
     lineLayout->addWidget(clearButton);
     lineEdit->setToolTip(
-        tr("Terminal input will only work from this input box."));
+        tr("Terminal input will only work from this input box.\n"
+           "Press Control-D to send end of file."));
 
     layout->addLayout(lineLayout);
     setLayout(layout);

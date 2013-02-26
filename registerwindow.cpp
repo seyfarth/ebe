@@ -1,4 +1,5 @@
 #include "registerwindow.h"
+#include "datawindow.h"
 #include "settings.h"
 #include <QDebug>
 #include <QHeaderView>
@@ -8,6 +9,8 @@
 #include <QVBoxLayout>
 #include <QTableWidgetItem>
 #include <cstdio>
+
+extern DataWindow *dataWindow;
 
 /**
  * Static matrix of register names matching the pattern in the table
@@ -162,6 +165,9 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     foreach ( QString name, namesList ) {
         regs[name] = new Register(name);
     }
+
+    connect ( this, SIGNAL(sendVariableDefinition(QStringList)),
+              dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
 }
 
 /*
@@ -255,6 +261,19 @@ void RegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
     menu.exec(QCursor::pos());
 }
 
+void RegisterWindow::defineVariableByAddress()
+{
+    QString address = table->currentItem()->text();
+    DefineVariableDialog *dialog = new DefineVariableDialog;
+    dialog->addressEdit->setText(address);
+    if ( dialog->exec() ) {
+        dialog->result.append("");
+        dialog->result.append("");
+        emit sendVariableDefinition(dialog->result);
+    }
+    delete dialog;
+}
+
 /*
  *  Change the current table item's format to decimal.
  */
@@ -314,7 +333,7 @@ void RegisterWindow::setHexAll()
 Register::Register(QString n)
 {
     name = n;
-    format = "decimal";
+    format = "hexadecimal";
     contents = "";
 }
 
