@@ -14,6 +14,7 @@
 #include "backtracewindow.h"
 #include "gdb.h"
 #include "toybox.h"
+#include "bitbucket.h"
 #include "settings.h"
 
 QT_BEGIN_NAMESPACE
@@ -69,6 +70,7 @@ private:
     QDockWidget *consoleDock;
     QDockWidget *backTraceDock;
     QDockWidget *toyBoxDock;
+    QDockWidget *bitBucketDock;
 
     QAction *dataVisible;
     QAction *registerVisible;

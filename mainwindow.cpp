@@ -29,6 +29,7 @@ ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
 //ConsoleWindow *consoleWindow;
 BackTraceWindow *backTraceWindow;
+BitBucket *bitBucket;
 GDB *gdb;
 GDBThread *gdbThread;
 ToyBox *toyBox;
@@ -132,7 +133,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(false);
 
-    QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
+    //QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
 
     connect ( gdb, SIGNAL(sendRegs(StringHash)),
               registerWindow, SLOT(receiveRegs(StringHash)) );
@@ -202,6 +203,7 @@ void MainWindow::restoreMainWindow()
     projectDock->setFloating(ebe["project/floating"].toBool());
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
     toyBoxDock->setFloating(ebe["toybox/floating"].toBool());
+    bitBucketDock->setFloating(ebe["bitbucket/floating"].toBool());
     //consoleDock->setFloating(ebe["console/floating"].toBool());
 
     if ( ebe.contains("ebe/geometry") ) {
@@ -249,6 +251,7 @@ void MainWindow::saveSettings()
     ebe["project/floating"]  = projectDock->isFloating();
     ebe["terminal/floating"] = terminalDock->isFloating();
     ebe["toybox/floating"] = toyBoxDock->isFloating();
+    ebe["bitbucket/floating"] = bitBucketDock->isFloating();
     //ebe["console/floating"]  = consoleDock->isFloating();
     ebe["data/visible"]      = dataDock->isVisible();
     ebe["register/visible"]  = registerDock->isVisible();
@@ -256,6 +259,7 @@ void MainWindow::saveSettings()
     ebe["project/visible"]   = projectDock->isVisible();
     ebe["terminal/visible"]  = terminalDock->isVisible();
     ebe["toybox/visible"]  = toyBoxDock->isVisible();
+    ebe["bitbucket/visible"]  = bitBucketDock->isVisible();
     //ebe["console/visible"]   = consoleDock->isVisible();
     settings->write();
 }
@@ -468,6 +472,7 @@ void MainWindow::createMenus()
     viewMenu->addAction ( terminalDock->toggleViewAction() );
     viewMenu->addAction ( projectDock->toggleViewAction() );
     viewMenu->addAction ( toyBoxDock->toggleViewAction() );
+    viewMenu->addAction ( bitBucketDock->toggleViewAction() );
     addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)),
                           ebe["tooltips/visible"].toBool() );
     addToggle ( viewMenu, "Command line", sourceFrame,
@@ -676,8 +681,16 @@ void MainWindow::createDockWindows()
     toyBoxDock->setWidget(toyBox);
     addDockWidget(Qt::LeftDockWidgetArea, toyBoxDock);
 
+    bitBucketDock = new QDockWidget(tr("Bit Bucket"));
+    bitBucketDock->setObjectName("Dock 8");
+    bitBucketDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    bitBucket = new BitBucket;
+    bitBucketDock->setWidget(bitBucket);
+    addDockWidget(Qt::LeftDockWidgetArea, bitBucketDock);
+
     //consoleDock = new QDockWidget(tr("Console"));
-    //consoleDock->setObjectName("Dock 8");
+    //consoleDock->setObjectName("Dock 9");
     //consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
                               //Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
     //consoleWindow = new ConsoleWindow(consoleDock);
@@ -691,6 +704,7 @@ void MainWindow::createDockWindows()
     backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
     terminalDock->setVisible(ebe["terminal/visible"].toBool());
     toyBoxDock->setVisible(ebe["toybox/visible"].toBool());
+    bitBucketDock->setVisible(ebe["bitbucket/visible"].toBool());
     //consoleDock->setVisible(ebe["console/visible"].toBool());
 }
 

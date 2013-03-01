@@ -149,6 +149,8 @@ void Settings::setDefaults()
 
     ebe["toybox/visible"] = true;
 
+    ebe["bitbucket/visible"] = true;
+
     ebe["tooltips/visible"] = true;
 
     ebe["complete/minimum"] = 4;
