@@ -5,9 +5,9 @@
     ToyBox class
 */
 
-#include "types.h"
 #include <QtGui>
-
+#include "types.h"
+#include "validators.h"
 
 class ToyBox;
 class VariableTable;
@@ -109,20 +109,6 @@ private:
     int fontWidth;          //< The width of a fixed width character
     int fontHeight;         //< The height of a fixed width character
 
-};
-
-class NumberValidator: public QValidator
-{
-public:
-    NumberValidator();
-    QValidator::State validate ( QString &s, int &pos ) const;
-};
-
-class IdValidator: public QValidator
-{
-public:
-    IdValidator();
-    QValidator::State validate ( QString &s, int &pos ) const;
 };
 
 #endif
