@@ -184,7 +184,7 @@ void BinaryBitPanel::orStep1()
 void BinaryBitPanel::orStep2()
 {
     output = new BinaryNumber;
-    output->setBits(value1 || value2 ,8);
+    output->setBits(value1 || value2 ,16, 8);
     table->setCellWidget(2,2,output);
     table->setCellWidget(2,3,new QLabel("Result as a binary bool"));
     table->setCellWidget(2,1,new QLabel(""));
@@ -236,7 +236,7 @@ void BinaryBitPanel::andStep1()
 void BinaryBitPanel::andStep2()
 {
     output = new BinaryNumber;
-    output->setBits(value1 && value2 ,8);
+    output->setBits(value1 && value2 ,16, 8);
     table->setCellWidget(2,2,output);
     table->setCellWidget(2,3,new QLabel("Result as a binary bool"));
     table->setCellWidget(2,1,new QLabel(""));

@@ -1,5 +1,4 @@
 #include "unarybitpanel.h"
-#include "validators.h"
 #include "settings.h"
 
 UnaryBitPanel::UnaryBitPanel(QWidget *parent) : QFrame(parent)

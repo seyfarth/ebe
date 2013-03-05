@@ -13,10 +13,11 @@ public:
     char chars[80];
 
     void clear();
-    void setBits( int x, int w );
+    void setBits( int x, int w, int show=-1 );
     void setText( QString s, int w );
     QSize sizeHint() const;
     int width;
+    int show;
     int charSize;
 
 protected:

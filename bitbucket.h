@@ -5,6 +5,7 @@
 #include "types.h"
 #include "unarybitpanel.h"
 #include "binarybitpanel.h"
+#include "intconvert.h"
 
 class CommandLine;
 
@@ -20,6 +21,7 @@ public:
 
     UnaryBitPanel *unaryPanel;
     BinaryBitPanel *binaryPanel;
+    IntConvert *intConvertPanel;
 
 public slots:
 

@@ -15,11 +15,13 @@ void BinaryNumber::clear()
     for ( int i = 0; i < 80; i++ ) chars[i] = ' ';
 }
 
-void BinaryNumber::setBits( int x, int w )
+void BinaryNumber::setBits( int x, int w, int s )
 {
     width = w;
+    show = s >= 0 ? s : w;
     for ( int bit = 0; bit <= w; bit++ ) {
-        chars[bit] = (x >> bit) & 1 ? '1' : '0';
+        if ( bit >= show ) chars[bit] = ' ';
+        else chars[bit] = (x >> bit) & 1 ? '1' : '0';
     }
 }
 
@@ -50,7 +52,7 @@ void BinaryNumber::paintEvent ( QPaintEvent *event )
     //painter.setRenderHint(QPainter::AntiAliasing,true);
     QFont font("courier");
     charSize = ebe["font_size"].toInt();
-    font.setPixelSize(charSize);
+    font.setPixelSize(charSize+3);
     font.setBold(true);
     painter.setFont(font);
 

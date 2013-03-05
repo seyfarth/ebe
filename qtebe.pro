@@ -9,7 +9,7 @@ INCLUDEPATH += .
 QT += webkit
 CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
-CONFIG += console release static
+CONFIG += console release static debug
 
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
@@ -19,7 +19,8 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            errorwindow.h gdb.h variable.h backtracewindow.h \
            highlighter.h toybox.h librarywindow.h instructions.h \
            types.h bitbucket.h unarybitpanel.h validators.h \
-           binarynumber.h binarybitpanel.h integeredit.h
+           binarynumber.h binarybitpanel.h integeredit.h \
+           intconvert.h
 
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
@@ -28,6 +29,7 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            errorwindow.cpp gdb.cpp variable.cpp backtracewindow.cpp \
            highlighter.cpp toybox.cpp librarywindow.cpp instructions.cpp \
            types.cpp bitbucket.cpp unarybitpanel.cpp validators.cpp \
-           binarynumber.cpp binarybitpanel.cpp integeredit.cpp
+           binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
+           intconvert.cpp
 
 RESOURCES = 
