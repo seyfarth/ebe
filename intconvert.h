@@ -25,6 +25,7 @@ public:
     int value;
     int computedValue;
     int bit;
+    int nibble;
     int fontSize;
 
     QString op;
@@ -33,6 +34,8 @@ public slots:
     void selectOperator(QString);
     void decimalToBinary1();
     void decimalToBinary2();
+    void decimalToHex1();
+    void decimalToHex2();
 
 private:
 

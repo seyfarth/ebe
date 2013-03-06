@@ -13,6 +13,7 @@ public:
     char chars[80];
 
     void clear();
+    void setNibbles( int x, int w, int show=-1 );
     void setBits( int x, int w, int show=-1 );
     void setText( QString s, int w );
     QSize sizeHint() const;

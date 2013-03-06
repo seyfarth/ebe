@@ -77,7 +77,22 @@ void IntConvert::selectOperator(QString o)
         table->setHorizontalHeaderLabels(headers);
         doit = new QPushButton("to binary");
         table->setCellWidget(0,1,doit);
+        table->setColumnWidth(5,16*fontSize+5);
         connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToBinary1()) );
+    } else if ( o == "Decimal to Hex" ) {
+        op = o;
+        table->clear();
+        table->setColumnCount(7);
+        table->setRowCount(1);
+        inputEdit = new IntegerEdit;
+        table->setCellWidget(0,0,inputEdit);
+        headers << "Input" << "Conversion" << " n " << "n / 16" << "n % 16"
+                << "Result" << "Comment";
+        table->setHorizontalHeaderLabels(headers);
+        doit = new QPushButton("to hex");
+        table->setCellWidget(0,1,doit);
+        table->setColumnWidth(5,4*fontSize+5);
+        connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToHex1()) );
     } else {
         qDebug() << "Unknown operator:" << op;
     }
@@ -87,6 +102,7 @@ void IntConvert::decimalToBinary1()
 {
     QLabel *label;
     value = inputEdit->value();
+    value = value & 0xffff;
     computedValue = 0;
     bit = 0;
     table->setCellWidget(0,6,new QLabel("Value copied into column 3"));
@@ -132,4 +148,56 @@ void IntConvert::decimalToBinary2()
     table->setCellWidget(bit,5,new QLabel(""));
     connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToBinary2()) );
     table->setCellWidget(bit,6,new QLabel("moved n/2 to n in new row"));
+}
+
+void IntConvert::decimalToHex1()
+{
+    QLabel *label;
+    value = inputEdit->value();
+    value = value & 0xffff;
+    computedValue = 0;
+    nibble = 0;
+    table->setCellWidget(0,6,new QLabel("Value copied into column 3"));
+    label = new QLabel(QString("%1").arg(value));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(0,2,label);
+    connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToHex2()) );
+}
+
+void IntConvert::decimalToHex2()
+{
+    int n = value % 16;
+    QLabel *label;
+
+    output = new BinaryNumber;
+    computedValue = (n << (nibble*4)) + computedValue;
+    output->setNibbles(computedValue,4,nibble+1);
+    
+    table->setCellWidget(nibble,1,new QLabel(""));
+    doit->setText("");
+    doit->setDisabled(true);
+    label = new QLabel(QString("%1").arg(value/16));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(nibble,3,label);
+    label = new QLabel(QString("%1").arg(value%16));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(nibble,4,label);
+    table->setCellWidget(nibble,5,output);
+    table->setCellWidget(nibble,6,new QLabel("divide by 16"));
+    
+    value = value >> 4;
+    if ( value == 0 ) return;
+    nibble++;
+    table->setRowCount(nibble+1);
+    doit = new QPushButton("to hex");
+    table->setCellWidget(nibble,1,doit);
+    label = new QLabel(QString("%1").arg(value));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(nibble,0,new QLabel(""));
+    table->setCellWidget(nibble,2,label);
+    table->setCellWidget(nibble,3,new QLabel(""));
+    table->setCellWidget(nibble,4,new QLabel(""));
+    table->setCellWidget(nibble,5,new QLabel(""));
+    connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToHex2()) );
+    table->setCellWidget(nibble,6,new QLabel("moved n/16 to n in new row"));
 }

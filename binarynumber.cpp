@@ -25,6 +25,20 @@ void BinaryNumber::setBits( int x, int w, int s )
     }
 }
 
+void BinaryNumber::setNibbles( int x, int w, int s )
+{
+    int nibble;
+    width = w;
+    show = s >= 0 ? s : w;
+    for ( int bit = 0; bit <= w; bit++ ) {
+        if ( bit >= show ) chars[bit] = ' ';
+        else {
+            nibble = (x >> (bit*4)) & 0xf;
+            chars[bit] = nibble > 9 ? 'A'+nibble-10 : '0'+nibble;
+        }
+    }
+}
+
 void BinaryNumber::setText(QString s, int w )
 {
     int n = s.length();
