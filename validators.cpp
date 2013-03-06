@@ -47,7 +47,6 @@ QValidator::State IntegerValidator::validate(QString &s, int & /* pos */ ) const
     QString t = s.trimmed();
     if ( t == "" ) return QValidator::Intermediate;
     if ( t == "-" ) return QValidator::Intermediate;
-    if ( t == "'" ) return QValidator::Intermediate;
     if ( t == "+" ) return QValidator::Intermediate;
     if ( t == "0x" ) return QValidator::Intermediate;
     if ( t == "0b" ) return QValidator::Intermediate;

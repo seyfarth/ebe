@@ -25,6 +25,7 @@ public:
     int value;
     int computedValue;
     int bit;
+    int row;
     int nibble;
     int fontSize;
 
@@ -36,6 +37,8 @@ public slots:
     void decimalToBinary2();
     void decimalToHex1();
     void decimalToHex2();
+    void binaryToDecimal1();
+    void binaryToDecimal2();
 
 private:
 

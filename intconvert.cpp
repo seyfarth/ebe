@@ -15,7 +15,7 @@ IntConvert::IntConvert(QWidget *parent) : QFrame(parent)
 
     QStringList ops;
     ops << "Decimal to Binary" << "Decimal to Hex"
-        << "Binary to Decimal"  << "Hex to Decimal"
+        << "Binary to Decimal" << "Hex to Decimal"
         << "Binary to Hex" << "Hex to Binary";
 
     convertCombo->addItems(ops);
@@ -77,7 +77,13 @@ void IntConvert::selectOperator(QString o)
         table->setHorizontalHeaderLabels(headers);
         doit = new QPushButton("to binary");
         table->setCellWidget(0,1,doit);
+        table->setColumnWidth(0,8*fontSize);
+        table->setColumnWidth(1,8*fontSize);
+        table->setColumnWidth(2,4*fontSize);
+        table->setColumnWidth(3,4*fontSize);
+        table->setColumnWidth(4,4*fontSize);
         table->setColumnWidth(5,16*fontSize+5);
+        table->setColumnWidth(6,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToBinary1()) );
     } else if ( o == "Decimal to Hex" ) {
         op = o;
@@ -89,10 +95,36 @@ void IntConvert::selectOperator(QString o)
         headers << "Input" << "Conversion" << " n " << "n / 16" << "n % 16"
                 << "Result" << "Comment";
         table->setHorizontalHeaderLabels(headers);
+        table->setColumnWidth(0,8*fontSize);
+        table->setColumnWidth(1,8*fontSize);
+        table->setColumnWidth(2,4*fontSize);
+        table->setColumnWidth(3,4*fontSize);
+        table->setColumnWidth(4,4*fontSize);
+        table->setColumnWidth(5,4*fontSize+5);
+        table->setColumnWidth(6,16*fontSize);
         doit = new QPushButton("to hex");
         table->setCellWidget(0,1,doit);
-        table->setColumnWidth(5,4*fontSize+5);
         connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToHex1()) );
+    } else if ( o == "Binary to Decimal" ) {
+        op = o;
+        table->clear();
+        table->setColumnCount(7);
+        table->setRowCount(1);
+        inputEdit = new IntegerEdit;
+        table->setCellWidget(0,0,inputEdit);
+        headers << "Input" << "Conversion" << "number" << "bit"
+                << "2**bit" << "Result" << "Comment";
+        table->setHorizontalHeaderLabels(headers);
+        doit = new QPushButton("to decimal");
+        table->setCellWidget(0,1,doit);
+        table->setColumnWidth(0,8*fontSize);
+        table->setColumnWidth(1,8*fontSize);
+        table->setColumnWidth(2,16*fontSize+5);
+        table->setColumnWidth(3,4*fontSize);
+        table->setColumnWidth(5,6*fontSize);
+        table->setColumnWidth(5,6*fontSize);
+        table->setColumnWidth(6,16*fontSize);
+        connect ( doit, SIGNAL(clicked()), this, SLOT(binaryToDecimal1()) );
     } else {
         qDebug() << "Unknown operator:" << op;
     }
@@ -101,11 +133,17 @@ void IntConvert::selectOperator(QString o)
 void IntConvert::decimalToBinary1()
 {
     QLabel *label;
+    if ( ! inputEdit->isValid() ) {
+        QMessageBox::warning(this,tr("Warning"),
+            tr("The input value is not complete."),
+            QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
     value = inputEdit->value();
     value = value & 0xffff;
     computedValue = 0;
     bit = 0;
-    table->setCellWidget(0,6,new QLabel("Value copied into column 3"));
+    table->setCellWidget(0,6,new QLabel("Value & 0xffff copied into column 3"));
     label = new QLabel(QString("%1").arg(value));
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(0,2,label);
@@ -150,14 +188,95 @@ void IntConvert::decimalToBinary2()
     table->setCellWidget(bit,6,new QLabel("moved n/2 to n in new row"));
 }
 
+void IntConvert::binaryToDecimal1()
+{
+    if ( ! inputEdit->isValid() ) {
+        QMessageBox::warning(this,tr("Warning"),
+            tr("The input value is not complete."),
+            QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
+    value = inputEdit->value();
+    value = value & 0xffff;
+    computedValue = 0;
+    bit = 0;
+    row = 0;
+    binaryToDecimal2();
+}
+
+void IntConvert::binaryToDecimal2()
+{
+    int n = value % 2;
+    //qDebug() << "value" << value << ",  n" << n;
+    while ( n == 0 && bit < 16 ) {
+        bit++;
+        value = value >> 1;
+        n = value % 2;
+    }
+    if ( n == 0 ) {
+        table->setCellWidget(bit,1,new QLabel(""));
+        return;
+    }
+    //qDebug() << "value" << value << ",  n" << n;
+
+    QLabel *label;
+
+        //headers << "Input" << "Conversion" << "number" << "bit"
+        //        << "2**bit" << "Sum" << "Comment";
+    computedValue = (1 << bit) + computedValue;
+    table->setCellWidget(row,1,new QLabel(""));
+    output = new BinaryNumber;
+    output->setBits(inputEdit->value()&0xffff,16);
+    output->setHighlight(bit);
+    table->setCellWidget(row,2,output);
+    label = new QLabel(QString("%1").arg(bit));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(row,3,label);
+    label = new QLabel(QString("%1").arg(1 << bit));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(row,4,label);
+    label = new QLabel(QString("%1").arg(computedValue));
+    label->setAlignment(Qt::AlignCenter);
+    table->setCellWidget(row,5,label);
+    table->setCellWidget(row,6, new QLabel(
+           QString("Result is value for rightmost %1 bits").arg(bit+1)
+           ));
+    
+    value = value >> 1;
+    bit++;
+
+    if ( value == 0 ) {
+        table->setCellWidget(row,6, new QLabel("Done"));
+        return;
+    }
+
+    row++;
+    table->setRowCount(row+1);
+    doit = new QPushButton("to decimal");
+    table->setCellWidget(row,0,new QLabel(""));
+    table->setCellWidget(row,1,doit);
+    table->setCellWidget(row,2,new QLabel(""));
+    table->setCellWidget(row,3,new QLabel(""));
+    table->setCellWidget(row,4,new QLabel(""));
+    table->setCellWidget(row,5,new QLabel(""));
+    table->setCellWidget(row,6,new QLabel(""));
+    connect ( doit, SIGNAL(clicked()), this, SLOT(binaryToDecimal2()) );
+}
+
 void IntConvert::decimalToHex1()
 {
     QLabel *label;
+    if ( ! inputEdit->isValid() ) {
+        QMessageBox::warning(this,tr("Warning"),
+            tr("The input value is not complete."),
+            QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
     value = inputEdit->value();
     value = value & 0xffff;
     computedValue = 0;
     nibble = 0;
-    table->setCellWidget(0,6,new QLabel("Value copied into column 3"));
+    table->setCellWidget(0,6,new QLabel("Value & 0xffff copied into column 3"));
     label = new QLabel(QString("%1").arg(value));
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(0,2,label);

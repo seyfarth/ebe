@@ -16,9 +16,11 @@ public:
     void setNibbles( int x, int w, int show=-1 );
     void setBits( int x, int w, int show=-1 );
     void setText( QString s, int w );
+    void setHighlight(int h);
     QSize sizeHint() const;
     int width;
     int show;
+    int highlight;
     int charSize;
 
 protected:

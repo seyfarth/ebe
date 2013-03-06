@@ -9,9 +9,11 @@ class IntegerEdit : public QLineEdit
 {
 public:
     IntegerEdit();
+    IntegerValidator *val;
     int value();
     void setValue(int,int=10);
     void setValue(bool);
+    bool isValid();
 };
 
 #endif
