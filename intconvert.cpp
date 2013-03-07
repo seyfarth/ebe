@@ -185,7 +185,7 @@ void IntConvert::selectOperator(QString o)
         table->setColumnWidth(5,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(hexToBinary1()) );
     } else {
-        qDebug() << "Unknown operator:" << op;
+        qDebug() << "Unknown operator:" << o;
     }
 }
 

@@ -161,7 +161,7 @@ void BinaryBitPanel::selectOperator(QString o)
         table->setCellWidget(1,3,new QLabel(""));
         connect ( doit, SIGNAL(clicked()), this, SLOT(rotateRightStep1()) );
     } else {
-        qDebug() << "Unknown operator:" << op;
+        qDebug() << "Unknown operator:" << o;
     }
 }
 

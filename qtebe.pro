@@ -20,7 +20,7 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            highlighter.h toybox.h librarywindow.h instructions.h \
            types.h bitbucket.h unarybitpanel.h validators.h \
            binarynumber.h binarybitpanel.h integeredit.h \
-           intconvert.h
+           intconvert.h intmath.h
 
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
@@ -30,6 +30,6 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            highlighter.cpp toybox.cpp librarywindow.cpp instructions.cpp \
            types.cpp bitbucket.cpp unarybitpanel.cpp validators.cpp \
            binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
-           intconvert.cpp
+           intconvert.cpp intmath.cpp
 
 RESOURCES = 

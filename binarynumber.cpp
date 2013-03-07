@@ -27,6 +27,11 @@ void BinaryNumber::setBits( int x, int w, int s )
     }
 }
 
+void BinaryNumber::setBit ( int x, int bit )
+{
+    chars[bit] = x & 1 ? '1' : '0';
+}
+
 void BinaryNumber::setNibbles( int x, int w, int s )
 {
     int nibble;

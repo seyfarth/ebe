@@ -92,7 +92,7 @@ void UnaryBitPanel::selectOperator(QString o)
         table->setCellWidget(0,3,new QLabel(""));
         connect ( doit, SIGNAL(clicked()), this, SLOT(bitwiseNotStep1()) );
     } else {
-        qDebug() << "Unknown operator:" << op;
+        qDebug() << "Unknown operator:" << o;
     }
 }
 

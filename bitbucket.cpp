@@ -19,10 +19,12 @@ BitBucket::BitBucket(QWidget *parent) : QFrame(parent)
     unaryPanel = new UnaryBitPanel;
     binaryPanel = new BinaryBitPanel;
     intConvertPanel = new IntConvert;
+    intMathPanel = new IntMath;
 
     tab->addTab ( unaryPanel, "Unary operators" );
     tab->addTab ( binaryPanel, "Binary bit operators" );
     tab->addTab ( intConvertPanel, "Integer conversions" );
+    tab->addTab ( intMathPanel, "Integer math" );
 
     layout->addWidget(tab);
 

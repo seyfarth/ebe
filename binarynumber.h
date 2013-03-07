@@ -15,6 +15,7 @@ public:
     void clear();
     void setNibbles( int x, int w, int show=-1 );
     void setBits( int x, int w, int show=-1 );
+    void setBit(int x, int b);
     void setText( QString s, int w );
     void setHighlight(int l, int h=-1);
     QSize sizeHint() const;
