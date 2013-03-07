@@ -7,7 +7,8 @@ BinaryNumber::BinaryNumber()
 {
     width = 16;
     charSize = 20;
-    highlight = -1;
+    highlightLow = -1;
+    highlightHigh = -1;
     clear();
 }
 
@@ -55,9 +56,10 @@ QSize BinaryNumber::sizeHint() const
     return ( QSize(charSize*width,charSize) );
 }
 
-void BinaryNumber::setHighlight(int h)
+void BinaryNumber::setHighlight(int l, int h)
 {
-    highlight = h;
+    highlightLow = l;
+    highlightHigh = h >= 0 ? h : l;
 }
 
 void BinaryNumber::paintEvent ( QPaintEvent *event )
@@ -81,7 +83,7 @@ void BinaryNumber::paintEvent ( QPaintEvent *event )
     for ( int i = 0; i <= width; i++ ) {
         t = QChar(chars[i]);
         x = charSize/4 + charSize*(width-i-1);
-        if ( i == highlight ) {
+        if ( i >= highlightLow && i <= highlightHigh ) {
             painter.setPen(QColor("red"));
             painter.drawText(x,y,t);
             painter.setPen(QColor("black"));

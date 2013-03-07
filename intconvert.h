@@ -39,6 +39,12 @@ public slots:
     void decimalToHex2();
     void binaryToDecimal1();
     void binaryToDecimal2();
+    void hexToDecimal1();
+    void hexToDecimal2();
+    void binaryToHex1();
+    void binaryToHex2();
+    void hexToBinary1();
+    void hexToBinary2();
 
 private:
 
