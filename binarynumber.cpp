@@ -10,11 +10,23 @@ BinaryNumber::BinaryNumber()
     highlightLow = -1;
     highlightHigh = -1;
     clear();
+    underline = false;
+    overline = false;
 }
 
 void BinaryNumber::clear()
 {
     for ( int i = 0; i < 80; i++ ) chars[i] = ' ';
+}
+
+void BinaryNumber::setUnderline()
+{
+    underline = true;
+}
+
+void BinaryNumber::setOverline()
+{
+    overline = true;
 }
 
 void BinaryNumber::setBits( int x, int w, int s )
@@ -83,8 +95,12 @@ void BinaryNumber::paintEvent ( QPaintEvent *event )
     font.setBold(true);
     painter.setFont(font);
 
-    setFixedSize(charSize*width, charSize+4 );
+    int height;
+    height = underline ? charSize + 8 : charSize + 4;
+    if ( overline ) height += 4;
+    setFixedSize(charSize*width, height );
     y = 2+charSize;
+    if ( overline ) y = 5+charSize;
     for ( int i = 0; i <= width; i++ ) {
         t = QChar(chars[i]);
         x = charSize/4 + charSize*(width-i-1);
@@ -95,5 +111,13 @@ void BinaryNumber::paintEvent ( QPaintEvent *event )
         } else {
             painter.drawText(x,y,t);
         }
+    }
+    if ( underline ) {
+        y = charSize + 5;
+        painter.drawLine((width-show)*charSize,y,width*charSize,y);
+    }
+    if ( overline ) {
+        y = 3;
+        painter.drawLine((width-show)*charSize,y,width*charSize,y);
     }
 }

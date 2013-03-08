@@ -38,6 +38,8 @@ public slots:
     void selectOperator(QString);
     void add1();
     void add2();
+    void multiply1();
+    void multiply2();
 
 private:
 

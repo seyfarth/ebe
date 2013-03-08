@@ -23,6 +23,10 @@ public:
     int show;
     int highlightLow, highlightHigh;
     int charSize;
+    bool underline;
+    void setUnderline();
+    bool overline;
+    void setOverline();
 
 protected:
     void paintEvent ( QPaintEvent *event );
