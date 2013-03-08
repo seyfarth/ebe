@@ -112,8 +112,11 @@ void BinaryNumber::paintEvent ( QPaintEvent *event )
             painter.drawText(x,y,t);
         }
     }
+    QPen pen(QColor("black"));
+    pen.setWidth(2);
+    painter.setPen(pen);
     if ( underline ) {
-        y = charSize + 5;
+        y = charSize + 7;
         painter.drawLine((width-show)*charSize,y,width*charSize,y);
     }
     if ( overline ) {

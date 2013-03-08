@@ -116,8 +116,8 @@ void IntMath::add1()
     value2 = value2 & 0xffff;
     bit = 0;
     table->setCellWidget(0,3,new QLabel(" Carries"));
-    table->setCellWidget(1,3,new QLabel(" Value & 0xffff copied into column 3"));
-    table->setCellWidget(2,3,new QLabel(" Value & 0xffff copied into column 3"));
+    table->setCellWidget(1,3,new QLabel(" a & 0xffff copied into column 3"));
+    table->setCellWidget(2,3,new QLabel(" b & 0xffff copied into column 3"));
     table->setCellWidget(3,3,new QLabel(" Sum"));
     carry->clear();
     carry->setBits ( value2, 17, 0 );
@@ -177,8 +177,8 @@ void IntMath::multiply1()
     value2 = value2 & 0xffff;
     bit = 0;
     row = 2;
-    table->setCellWidget(0,3,new QLabel(" Value & 0xffff copied into column 3"));
-    table->setCellWidget(1,3,new QLabel(" Value & 0xffff copied into column 3"));
+    table->setCellWidget(0,3,new QLabel(" a & 0xffff copied into column 3"));
+    table->setCellWidget(1,3,new QLabel(" b & 0xffff copied into column 3"));
     input1->clear();
     input1->setBits ( value1, 32, 16 );
     table->setCellWidget(0,2,input1);
@@ -196,18 +196,22 @@ void IntMath::multiply2()
     while ( bit < 16 && ((value2 >> bit) & 1) == 0 ) bit++;
 
     if ( bit >= 16 ) {
+        input2->setHighlight(-1);
         output = new BinaryNumber;
         output->setBits(value1*value2,32,32);
         output->setOverline();
         table->setCellWidget(row,2,output);
         table->setCellWidget(row,1,new QLabel(""));
+        table->setCellWidget(row,3,new QLabel(" Product"));
         table->update();
         return;
     }
 
+    input2->setHighlight(bit);
     output = new BinaryNumber;
     output->setBits(value1,32-bit,16);
     table->setCellWidget(row,2,output);
+    table->setCellWidget(row,3,new QLabel(QString(" a << %1").arg(bit)));
     table->setRowCount(row+2);
     table->setCellWidget(row,1,new QLabel(""));
     doit = new QPushButton("*");
