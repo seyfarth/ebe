@@ -7,6 +7,7 @@
 #include "binarybitpanel.h"
 #include "intconvert.h"
 #include "intmath.h"
+#include "floatconvert.h"
 
 class CommandLine;
 
@@ -24,6 +25,7 @@ public:
     BinaryBitPanel *binaryPanel;
     IntConvert *intConvertPanel;
     IntMath *intMathPanel;
+    FloatConvert *floatConvertPanel;
 
 public slots:
 

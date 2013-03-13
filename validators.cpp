@@ -64,6 +64,28 @@ QValidator::State IntegerValidator::validate(QString &s, int & /* pos */ ) const
     return QValidator::Invalid;
 }
 
+FloatValidator::FloatValidator()
+: QValidator()
+{
+}
+
+QValidator::State FloatValidator::validate(QString &s, int & /* pos */ ) const
+{
+    QString t = s.trimmed();
+    if ( t == "" ) return QValidator::Intermediate;
+    if ( t == "-" ) return QValidator::Intermediate;
+    if ( t == "+" ) return QValidator::Intermediate;
+    QRegExp rx1(QString("0x[0-9a-fA-F]{8}"));
+    QRegExp rx2(QString("0x[0-9a-fA-F]{0,7}"));
+    QRegExp rx3(QString("[-+]?[0-9]+(\\.[0-9]*)?"));
+    QRegExp rx4(QString("[-+]?[0-9]*(\\.[0-9]*)"));
+    if ( rx1.exactMatch(t) ) return QValidator::Acceptable;
+    if ( rx2.exactMatch(t) ) return QValidator::Intermediate;
+    if ( rx3.exactMatch(t) ) return QValidator::Acceptable;
+    if ( rx4.exactMatch(t) ) return QValidator::Acceptable;
+    return QValidator::Invalid;
+}
+
 IdValidator::IdValidator()
 : QValidator()
 {

@@ -19,6 +19,13 @@ public:
     QValidator::State validate ( QString &s, int &pos ) const;
 };
 
+class FloatValidator: public QValidator
+{
+public:
+    FloatValidator();
+    QValidator::State validate ( QString &s, int &pos ) const;
+};
+
 class IdValidator: public QValidator
 {
 public:
