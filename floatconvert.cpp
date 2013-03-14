@@ -160,7 +160,7 @@ void FloatConvert::hexToFloat2()
         input->setHighlight(31);
         //table->setCellWidget(1,0,input);
         table->setRowCount(row+1);
-        sign = value >> 31;
+        sign = (value & 0x80000000) == 0 ? 0 : 1;
         table->setCellWidget(row-1,1,new QLabel(""));
         label = new QLabel(QString("%1").arg(sign));
         label->setAlignment(Qt::AlignCenter);
@@ -197,7 +197,17 @@ void FloatConvert::hexToFloat2()
         doit = new QPushButton("to float");
         table->setCellWidget(row,1,doit);
         row++;
-        toFloatState = ExponentValue;
+        if ( exponentField == 0 ) {
+            toFloatState = Denormalized;
+        } else if ( exponentField == 255 ) {
+            if ( (value & 0x7fffff) == 0 ) {
+                toFloatState = Infinity;
+            } else {
+                toFloatState = NaN;
+            }
+        } else {
+            toFloatState = ExponentValue;
+        }
         connect ( doit, SIGNAL(clicked()), this, SLOT(hexToFloat2()) );
         break;
 
@@ -320,6 +330,62 @@ void FloatConvert::hexToFloat2()
         }
         table->setCellWidget(row,2,label);
         break;
+
+    case Denormalized:
+        exponentValue = -126;
+        fractionValue = value & 0x7fffff;
+        bit = 23;
+        result = 0.0;
+        input->setHighlight(-1);
+        table->setRowCount(row+1);
+        table->setCellWidget(row-1,1,new QLabel(""));
+        output = new BinaryNumber;
+        output->setBits ( fractionValue, 24 );
+        table->setCellWidget(row,0,output);
+        label = new QLabel(" Denormalized float has no implicit 1");
+        table->setCellWidget(row,2,label);
+        table->setVerticalHeaderItem(row,new QTableWidgetItem("Fraction value"));
+        doit = new QPushButton("to float");
+        table->setCellWidget(row,1,doit);
+        row++;
+        toFloatState = BinaryValue;
+        connect ( doit, SIGNAL(clicked()), this, SLOT(hexToFloat2()) );
+        break;
+
+    case Infinity:
+        input->setHighlight(-1);
+        table->setRowCount(row+1);
+        table->setCellWidget(row-1,1,new QLabel(""));
+        if ( sign == 0 ) {
+            label = new QLabel("positive infinity");
+        } else {
+            label = new QLabel("negative infinity");
+        }
+        label->setAlignment(Qt::AlignCenter);
+        table->setCellWidget(row,0,label);
+        label = new QLabel(" Exponent == 255 && fraction == 0 ==> infinity");
+        table->setCellWidget(row,2,label);
+        table->setVerticalHeaderItem(row,new QTableWidgetItem("Infinity"));
+        break;
+
+    case NaN:
+        input->setHighlight(-1);
+        table->setRowCount(row+1);
+        table->setCellWidget(row-1,1,new QLabel(""));
+        if ( (value & 0x400000) == 0 ) {
+            label = new QLabel("SNaN - signaling not-a-number");
+        } else {
+            label = new QLabel("QNaN - quiet not-a-number");
+        }
+        label->setAlignment(Qt::AlignCenter);
+        table->setCellWidget(row,0,label);
+        label = new QLabel(" Exponent == 255 && fraction != 0 ==> NaN");
+        table->setCellWidget(row,2,label);
+        table->setVerticalHeaderItem(row,new QTableWidgetItem("NaN"));
+
+        break;
+
+
 
     }
 }

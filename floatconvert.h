@@ -8,7 +8,8 @@
 enum ToFloatState { Zero, NegativeZero, Bits, SignBit,
                     ExponentField, ExponentValue,
                     FractionField, FractionValue,
-                    BinaryValue, BitValue, Result };
+                    BinaryValue, BitValue, Result,
+                    Denormalized, Infinity, NaN };
                     
 class FloatConvert : public QFrame
 {
