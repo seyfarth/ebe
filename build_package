@@ -20,6 +20,7 @@ do
 done
 
 cp $exe $exe.d/$exe.exe
+cp ebe.rcc $exe.d
 
 cat > $exe.d/README << EOF1
             Installation instructions for $exe
