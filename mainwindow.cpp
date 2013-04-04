@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setUnifiedTitleAndToolBarOnMac(false);
 
-    //QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
+    QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
 
     connect ( gdb, SIGNAL(sendRegs(StringHash)),
               registerWindow, SLOT(receiveRegs(StringHash)) );

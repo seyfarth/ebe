@@ -219,7 +219,6 @@ void SourceFrame::run()
     QString name;
     QString base;
     QString cmd;
-    bool needEbeInc = false;
 
     addressToFileLine.clear();
     labelRange.clear();
@@ -305,7 +304,8 @@ void SourceFrame::run()
         length = name.length();
         ext = name.right(length-index-1);
         base = name.left(index);
-        //qDebug() << name << base << ext;
+        qDebug() << name << base << ext;
+	qDebug() << "exts" << asmExts;
         if ( cppExts.contains(ext) ) {
             //qDebug() << name << "cpp";
             cmd = ebe["build/cpp"].toString();
@@ -339,8 +339,12 @@ void SourceFrame::run()
             cmd.replace("$base",base);
             cmd.replace("$source",name);
 #endif
-            needEbeInc = true;
-            //qDebug() << cmd;
+	    qDebug() << "copying ebe.inc";
+	    QFile::remove("ebe.inc");
+	    QFile::copy(":/src/assembly/ebe.inc","ebe.inc");
+	    QFile::setPermissions("ebe.inc",
+               QFile::ReadOwner | QFile::WriteOwner);
+            qDebug() << cmd;
         } else if ( fortranExts.contains(ext) ) {
             //qDebug() << name << "fortran";
             cmd = ebe["build/fortran"].toString();
@@ -369,12 +373,6 @@ void SourceFrame::run()
 
     }
 
-    if ( needEbeInc ) {
-        QFile::remove("ebe.inc");
-        QFile::copy(":/src/assembly/ebe.inc","ebe.inc");
-        QFile::setPermissions("ebe.inc",
-               QFile::ReadOwner | QFile::WriteOwner);
-    }
     //
     //  Examine object files looking for main or _start or start
     //  and building list of globals
@@ -452,17 +450,19 @@ void SourceFrame::run()
                         label = parts[0];
                         if ( label == "" && parts.length() > 1 ) label = parts[1];
                         int n = label.length();
-                        if ( label[n-1] == QChar(':') ) label.chop(1);
-                        if ( textLabels.contains("_"+label) ) {
-                            label = "_" + label;
-                        }
-                        if ( textLabels.contains(label) ) {
-                            if ( labelToSave != "" ) {
-                                range.last = line-1;
-                                labelRange[labelToSave] = range;
+                        if ( n > 0 ) {
+                            if ( label[n-1] == QChar(':') ) label.chop(1);
+                            if ( textLabels.contains("_"+label) ) {
+                                label = "_" + label;
                             }
-                            range.first = line;
-                            labelToSave = label;
+                            if ( textLabels.contains(label) ) {
+                                if ( labelToSave != "" ) {
+                                    range.last = line-1;
+                                    labelRange[labelToSave] = range;
+                                }
+                                range.first = line;
+                                labelToSave = label;
+                            }
                         }
                     }
                     if ( (parts.length() == 2 && parts[0].toUpper() == "CALL" ) ||
