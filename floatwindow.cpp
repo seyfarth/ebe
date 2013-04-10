@@ -44,7 +44,7 @@ FloatWindow::FloatWindow(QWidget *parent)
 
 QSize FloatWindow::sizeHint() const
 {
-    return QSize(300,50);
+    return QSize(200,10);
 }
 
 void FloatWindow::setFontHeightAndWidth ( int height, int width )

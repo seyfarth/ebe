@@ -169,7 +169,7 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
             case Qt::Key_Enter:
             case Qt::Key_Return:
             case Qt::Key_Escape:
-            case Qt::Key_Tab:
+            //case Qt::Key_Tab:
             case Qt::Key_Backtab:
                 e->ignore();
                 return; // let the completer do default behavior
@@ -542,7 +542,7 @@ void SourceWindow::open(QString name)
 
     QByteArray text = file.readAll();
     int length = text.count();
-    if ( text[length-1] == '\n' ) text.chop(1);
+    if ( length > 0 && text[length-1] == '\n' ) text.chop(1);
     int i = 0;
     int column = 0;
     int next;

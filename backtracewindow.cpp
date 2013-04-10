@@ -39,7 +39,7 @@ BackTraceWindow::BackTraceWindow(QWidget *parent)
  */
 QSize BackTraceWindow::sizeHint() const
 {
-    return QSize(300,50);
+    return QSize(200,10);
 }
 
 /**

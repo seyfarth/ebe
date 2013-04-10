@@ -177,7 +177,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
  */
 QSize RegisterWindow::sizeHint() const
 {
-    return QSize(300,50);
+    return QSize(200,10);
 }
 
 /*

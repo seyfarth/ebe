@@ -845,8 +845,8 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
                     cmd = QString("x/sb %1").arg(address);
                     //qDebug() << cmd;
                     results = sendReceive(cmd);
-                    if ( results[0].indexOf("out of bounds") >= 0 ) break;
                     if ( results.length() == 0 ) break;
+                    if ( results[0].indexOf("out of bounds") >= 0 ) break;
                     parts = results[0].split(QRegExp(":\\s+"));
                     if ( parts.length() < 2 ) break;
                     var.value += parts[1] + " ";

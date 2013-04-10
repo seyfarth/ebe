@@ -149,7 +149,7 @@ void Settings::setDefaults()
 
     ebe["toybox/visible"] = true;
 
-    ebe["bitbucket/visible"] = true;
+    ebe["bitbucket/visible"] = false;
 
     ebe["tooltips/visible"] = true;
 

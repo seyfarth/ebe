@@ -21,6 +21,10 @@
 #include "stylesheet.h"
 #include "instructions.h"
 
+extern bool userSetGeometry;
+extern int  userWidth;
+extern int  userHeight;
+
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
 RegisterWindow *registerWindow;
@@ -206,13 +210,17 @@ void MainWindow::restoreMainWindow()
     bitBucketDock->setFloating(ebe["bitbucket/floating"].toBool());
     //consoleDock->setFloating(ebe["console/floating"].toBool());
 
-    if ( ebe.contains("ebe/geometry") ) {
+    if ( !userSetGeometry &&  ebe.contains("ebe/geometry") ) {
         restoreGeometry(ebe["ebe/geometry"].toByteArray());
+    } else if ( userSetGeometry ) {
+        resize(userWidth,userHeight);
     } else {
         resize(1000,750);
     }
-    if ( ebe.contains("ebe/state") ) {
+    if ( !userSetGeometry && ebe.contains("ebe/state") ) {
         restoreState(ebe["ebe/state"].toByteArray());
+    } else if ( userSetGeometry ) {
+        resize(userWidth,userHeight);
     } else {
         resize(1000,750);
     }
@@ -703,7 +711,9 @@ void MainWindow::createDockWindows()
     projectDock->setVisible(ebe["project/visible"].toBool());
     backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
     terminalDock->setVisible(ebe["terminal/visible"].toBool());
+    if ( userSetGeometry && userHeight < 768 ) ebe["toybox/visible"] = false;
     toyBoxDock->setVisible(ebe["toybox/visible"].toBool());
+    if ( userSetGeometry && userHeight < 768 ) ebe["bitbucket/visible"] = false;
     bitBucketDock->setVisible(ebe["bitbucket/visible"].toBool());
     //consoleDock->setVisible(ebe["console/visible"].toBool());
 }

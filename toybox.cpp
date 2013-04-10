@@ -118,7 +118,7 @@ ToyBox::ToyBox(QWidget *parent)
  */
 QSize ToyBox::sizeHint() const
 {
-    return QSize(300,50);
+    return QSize(200,10);
 }
 
 void ToyBox::formatResult(int /* index */)
