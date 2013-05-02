@@ -1,0 +1,10 @@
+    select case ( n )
+    case (1)
+        _               ! statements to execute if n = 1
+    case (2)
+        _
+    case (3:10)         ! multiple values matched
+        _
+    default case
+        _
+    end select

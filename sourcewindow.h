@@ -132,9 +132,12 @@ public:
     SourceWindow(QWidget *parent=0);
     void setFontHeightAndWidth(int height, int width);
     void setLineNumbers(int nLines);
+    void saveCursor();
+    void restoreCursor();
     bool fileChanged();
     void saveBeforeQuit();
     QString fileName;
+    QString language;
     bool changed;
     bool saved;
     bool opened;
@@ -171,6 +174,7 @@ public:
     void prettify();
     void doTemplate(QAction *a);
     void insertFile(QString f);
+    QString languageFromFile(QString file);
 
 public slots:
     void open();

@@ -1,0 +1,1 @@
+    character (len=80) :: name    ! Fortran has no real strings

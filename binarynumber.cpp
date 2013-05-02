@@ -58,7 +58,7 @@ void BinaryNumber::setNibbles( int x, int w, int s )
     }
 }
 
-void BinaryNumber::setText(QString s, int w )
+void BinaryNumber::setText(QString s, int /* w */ )
 {
     int n = s.length();
 
@@ -79,7 +79,7 @@ void BinaryNumber::setHighlight(int l, int h)
     highlightHigh = h >= 0 ? h : l;
 }
 
-void BinaryNumber::paintEvent ( QPaintEvent *event )
+void BinaryNumber::paintEvent ( QPaintEvent * /* event */ )
 {
     QString t;
     int x;

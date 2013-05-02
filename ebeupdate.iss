@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ebe"
-#define MyAppVersion "2.0.18"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "Ray Seyfarth"
 #define MyAppURL "http://www.rayseyfarth.com/ebe"
 #define MyAppExeName "qtebe.exe"
@@ -48,8 +48,8 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Filename: "{app}\gcc\bin\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent 
 
 [Registry]
-Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{app}\gcc\bin;{olddata}"; Check: NeedsAddPath('{app}\gcc\bin')
-Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "EQ_LIBRARY_PATH"; ValueData: "{app}\gcc\lib\gcc\i686-pc-mingw32"
+;Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{app}\gcc\bin;{olddata}"; Check: NeedsAddPath('{app}\gcc\bin')
+;Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "EQ_LIBRARY_PATH"; ValueData: "{app}\gcc\lib\gcc\i686-pc-mingw32"
 ;Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "EBE_HOME"; ValueData: "{app}"
 
 [Code]

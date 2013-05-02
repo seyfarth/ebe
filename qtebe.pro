@@ -9,7 +9,7 @@ INCLUDEPATH += .
 QT += webkit
 CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
-CONFIG += console release static debug
+CONFIG += console release static
 
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \

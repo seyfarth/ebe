@@ -499,12 +499,18 @@ void SourceWindow::doTemplate(QAction *a)
     if ( n > 0 ) name = name.left(n);
     //qDebug() << name;
 
-    //qDebug() << QString(":/src/%1").arg(name);
-    QFile in(QString(":/src/%1").arg(name));
-    if ( in.open(QFile::ReadOnly) ) {
-        QString data = QString(in.readAll());
-        //qDebug() << data;
-        textEdit->textCursor().insertText(data);
+    if ( language == "assembly" ) {
+        QFile in(QString(":/src/%1/%2/%3").arg(language).arg(ebe.os).arg(name));
+        if ( in.open(QFile::ReadOnly) ) {
+            QString data = QString(in.readAll());
+            textEdit->textCursor().insertText(data);
+        }
+    } else {
+        QFile in(QString(":/src/%1/%2").arg(language).arg(name));
+        if ( in.open(QFile::ReadOnly) ) {
+            QString data = QString(in.readAll());
+            textEdit->textCursor().insertText(data);
+        }
     }
 }
 
@@ -568,8 +574,11 @@ void SourceWindow::open(QString name)
 
     file.close();
 
+    language = languageFromFile(fileName);
     opened = true;
     changed = false;
+    restoreCursor();
+    textEdit->setFocus();
 }
 
 void SourceWindow::open()
@@ -633,8 +642,11 @@ void SourceWindow::open()
 
     file.close();
     projectWindow->addFile(fileName);
+    language = languageFromFile(fileName);
     opened = true;
     changed = false;
+    restoreCursor();
+    textEdit->setFocus();
 }
 
 void SourceWindow::saveAs()
@@ -665,8 +677,10 @@ void SourceWindow::saveAs()
 
     // File changed variable, reset to false
     //qDebug() << "Saved it as " << fileName;
+    language = languageFromFile(fileName);
     changed = false;
     saved = true;
+    saveCursor();
 }
 
 void SourceWindow::save()
@@ -686,7 +700,34 @@ void SourceWindow::save()
         // File changed variable, reset to false
         changed = false;
         saved = true;
+        saveCursor();
     }
+}
+
+void SourceWindow::saveCursor()
+{
+    ebe[QString("cursor/%1").arg(fileName)] = textEdit->textCursor().position();
+}
+
+void SourceWindow::restoreCursor()
+{
+    QTextCursor cursor = textEdit->textCursor();
+    cursor.setPosition(ebe[QString("cursor/%1").arg(fileName)].toInt());
+    textEdit->setTextCursor(cursor);
+    center();
+}
+
+QString SourceWindow::languageFromFile ( QString file )
+{
+    int n = file.lastIndexOf('.');
+    if ( n > 0 ) {
+        QString ext = fileName.mid(n+1);
+        if ( cppExts.contains(ext) ) return "cpp";
+        if ( cExts.contains(ext) ) return "c";
+        if ( asmExts.contains(ext) ) return "assembly";
+        if ( fortranExts.contains(ext) ) return "fortran";
+    }
+    return "";
 }
 
 void SourceWindow::createButtons()

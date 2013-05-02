@@ -1,0 +1,2 @@
+    real :: x               ! gfortran 4 byte floating point
+    real (kind=8) :: y      ! gfortran 8 byte floating point
