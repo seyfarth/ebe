@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ebe"
-#define MyAppVersion "2.0.18"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "Ray Seyfarth"
 #define MyAppURL "http://www.rayseyfarth.com/ebe"
 #define MyAppExeName "qtebe.exe"

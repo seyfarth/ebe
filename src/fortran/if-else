@@ -1,0 +1,5 @@
+    if ( a /= 1 ) then
+        write(*,*) "a is small"
+    else
+        write(*,*) "a is large"
+    end if

@@ -1,0 +1,9 @@
+    type fruit
+        integer            :: n
+        character (len=16) :: color
+    end type fruit
+
+    type (fruit) apples
+
+    apples%n = 10
+    apples%color = "red"

@@ -11,16 +11,40 @@ installs from 2.0.08 forward.
 
 Both installers should run fine under 64 bit Windows.  Only the 32 bit installer will work properly under 32 bit Windows.  It would install and ebe would start, but the compilers would not run.
 
-This code has been tested under Windows 7.  It is unknown whether there are issues with other versions of Windows.
+This code has been tested under Windows 7 and 8.  It is unknown whether there are issues with other versions of Windows.
 
-Coding for the Qt version of ebe started in November 2012.  At this point the code is too new to be considered production-quality.  Check back frequently for updates.  If you want to update you can download the ebe.exe file and copy it into the gcc\bin directory from the original install.  The gcc portions are not changing.
+There are still many changes planned for qtebe.  In particular the library in the program (bottom icon on the C++ code toolbar) will be growing.  Check back frequently for updates.  The gcc portions are not changing, so using the ebe-2.0.??-update.exe should be a quicker way to udate your software.
 
-Problem
-=======
-Repeated installs are leaving the program's directory in the Path variable multiple times.
+Problems
+========
+
+The ebe configuration file ".ebe.ini" can be a source of problems.  For example early versions of the config file did not have quotes around file names while later ones do.  This can mean a failure with files/directories with spaces in the name.  So it should be an early step in coping with a problem to remove ".ebe.ini" from the directory you were using.
+
+Repeated installs are leaving the program's directory in the Path variable multiple times.  The update exes are modified to no change the Path.
 
 Change log:
+===========
+2.1.0   Added support for Windows Assenbly programming
+        Rearranged library files
+        Prepared Fortran files to include from the code snippet toolbar
+        Added code to save/restore cursor positions for files
 
+2.0.25  Fixed problem with restoring widget sizes
+
+2.0.24  Added integer add and and multiply to bit bucket
+
+2.0.23  Added integer conversions to bit bucket.
+
+2.0.22  First version of the bit bucket
+        Illustrates bit operators ! - ~ | || & && ^ << >> rotate left/right
+
+2.0.21  Left out cmath from new C++ toybox code
+
+2.0.20  Added support for Fortran to the toybox.
+
+2.0.19  Changes to support assembly under OS X
+        Changes to data window
+        
 2.0.18  Results now can be used to update variables in the toybox
         This means with variable a, a++ will update the value of a.
 

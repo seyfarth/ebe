@@ -84,23 +84,28 @@ void Settings::setDefaults()
     ebe["edit/tab_width"] = 4;
     ebe["edit/auto_indent"] = true;
 #if __linux__
-    ebe["os/linux"] = true;
-    ebe["os/mac"] = false;
-    ebe["os/os"] = "linux";
-    ebe["os/windows"] = false;
+    ebe["linux"] = true;
+    ebe["mac"] = false;
+    ebe["os"] = "linux";
+    ebe["windows"] = false;
     ebe["build/asm"] = "yasm -P ebe.inc -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe.os = "linux";
 #elif __APPLE__
-    ebe["os/linux"] = false;
-    ebe["os/mac"] = true;
-    ebe["os/os"] = "mac";
-    ebe["os/windows"] = false;
+    ebe["linux"] = false;
+    ebe["mac"] = true;
+    ebe["os"] = "mac";
+    ebe["windows"] = false;
     ebe["build/asm"] = "yasm -P ebe.inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/asmlst"] = "yasm -P ebe.inc -f macho64 -o /dev/null -l \"$base.lst\" \"$source\"";
+    ebe.os = "mac";
 #else
-    ebe["os/linux"] = false;
-    ebe["os/mac"] = false;
-    ebe["os/os"] = "windows";
-    ebe["os/windows"] = true;
+    ebe["linux"] = false;
+    ebe["mac"] = false;
+    ebe["os"] = "windows";
+    ebe["windows"] = true;
+    ebe["build/asm"] = "yasm -P ebe.inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asmlst"] = "yasm -P ebe.inc -f win64 -o junk_$base.o -l \"$base.lst\" \"$source\"";
+    ebe.os = "windows";
 #endif
     ebe["prettify"] = "astyle -A3 -s$tab_width -t$tab_width \"$source\"";
     ebe["build/asmld"] = "ld -g -o \"$base\"";
@@ -158,7 +163,7 @@ void Settings::setDefaults()
     ebe["xmm/reverse"] = false;
 }
 
-QVariantHash newSettings;
+SettingsHash newSettings;
 
 SettingsDialog::SettingsDialog()
 : QDialog()

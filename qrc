@@ -13,3 +13,4 @@ cat >> ebe.qrc << EOF2
 EOF2
 
 rcc -binary ebe.qrc -o ebe.rcc
+cp ebe.rcc release

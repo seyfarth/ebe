@@ -9,7 +9,7 @@
 
 extern TerminalWindow *terminalWindow;
 extern int wordSize;
-extern QMap<FileLine,long> fileLineToAddress;
+extern QMap<FileLine,unsigned long> fileLineToAddress;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
@@ -383,7 +383,7 @@ void GDB::doNext()
 {
     //qDebug() << "gdb next";
     if ( !running ) return;
-#ifdef Q_OS_MAC
+#if defined Q_OS_MAC || defined Q_WS_WIN
     if ( inAssembly ) {
         FileLine fl(asmFile,asmLine+1);
         send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
@@ -408,7 +408,7 @@ void GDB::doNext()
 void GDB::doStep()
 {
     if ( !running ) return;
-#ifdef Q_OS_MAC
+#if defined Q_OS_MAC || defined Q_WS_WIN
     if ( inAssembly ) {
         FileLine fl(asmFile,asmLine+1);
         send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
@@ -456,8 +456,12 @@ void GDB::setBreakpoint(QString file, QString bp)
     QStringList results;
     QStringList parts;
     FileLabel f(file,bp);
-    if ( bpHash.contains(f) ) return;
+    if ( bpHash.contains(f) ) {
+        //qDebug() << "bp" << bp << "exists";
+        return;
+    }
     if ( bp[0] == QChar('*') ) {
+        //qDebug() << "setting" << bp;
         results = sendReceive(QString("break %1").arg(bp) );
     } else {
         //qDebug() << QString("break \"%1\":%2").arg(file).arg(bp);
@@ -527,8 +531,8 @@ void GDB::getBackTrace()
                     inAssembly = true;
                     FileLine fl(file,line);
                     FileLine fl2(file,line+1);
-                    QMap<FileLine,long>::const_iterator it;
-                    QMap<FileLine,long>::const_iterator it2;
+                    QMap<FileLine,unsigned long>::const_iterator it;
+                    QMap<FileLine,unsigned long>::const_iterator it2;
                     it = fileLineToAddress.lowerBound(fl);
                     it2 = fileLineToAddress.lowerBound(fl2);
                     //qDebug() << it.value() << it2.value();

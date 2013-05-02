@@ -118,11 +118,18 @@ private slots:
     void saveValue(int);
 };
 
+class SettingsHash: public QVariantHash
+{
+    public:
+    QString os;
+
+};
+
 #ifdef SETTINGS_CPP
-QVariantHash ebe;
+SettingsHash ebe;
 int wordSize;
 #else
-extern QVariantHash ebe;
+extern SettingsHash ebe;
 extern int wordSize;
 #endif
 

@@ -1,0 +1,5 @@
+   integer function square ( n )
+       implicit none            ! no implicit declarations
+       integer, intent(in) :: n ! declare n as an input parameter
+       doit = n * n             ! assign to a variable with the function name
+   end function square

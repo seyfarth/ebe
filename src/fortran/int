@@ -1,0 +1,2 @@
+      integer   :: x            ! declares x of type integer
+      integer (kind=8) :: y     ! gfortran 8 byte integer

@@ -1,0 +1,2 @@
+;       rcx/xmm0, rdx/xmm1, r8/xmm2, r9/xmm3 then stack
+;       must had 4 quadwords free on the stack top before a call
