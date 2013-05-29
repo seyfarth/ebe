@@ -380,6 +380,7 @@ void SourceFrame::run()
     //qDebug() << "building globals";
     QString ldCmd = "";
     textLabels.clear();
+    qDebug() << objectFiles;
     foreach ( StringPair pair, objectFiles ) {
         object = pair.first;
         if ( object == "ebe_unbuffer.o" ) continue;
@@ -409,6 +410,10 @@ void SourceFrame::run()
                     } else if ( fortranExts.contains(ext) ) {
                         ldCmd = ebe["build/fortranld"].toString();
                     }
+                } else if ( parts[1] == "T" &&
+                        (parts[2] == "start" || parts[2] == "_start") ) {
+                    ldCmd = ebe["build/asmld"].toString();
+                    objectFiles.removeFirst();
                 } else if ( parts[1] == "B" || parts[1] == "D" ||
                             parts[1] == "G" || parts[1] == "C" ) {
 #if defined Q_OS_MAC || defined Q_WS_WIN

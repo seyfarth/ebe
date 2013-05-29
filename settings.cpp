@@ -89,6 +89,7 @@ void Settings::setDefaults()
     ebe["os"] = "linux";
     ebe["windows"] = false;
     ebe["build/asm"] = "yasm -P ebe.inc -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe["build/asmld"] = "ld -o \"$base\"";
     ebe.os = "linux";
 #elif __APPLE__
     ebe["linux"] = false;
@@ -97,6 +98,7 @@ void Settings::setDefaults()
     ebe["windows"] = false;
     ebe["build/asm"] = "yasm -P ebe.inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/asmlst"] = "yasm -P ebe.inc -f macho64 -o /dev/null -l \"$base.lst\" \"$source\"";
+    ebe["build/asmld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe.os = "mac";
 #else
     ebe["linux"] = false;
@@ -105,10 +107,10 @@ void Settings::setDefaults()
     ebe["windows"] = true;
     ebe["build/asm"] = "yasm -P ebe.inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/asmlst"] = "yasm -P ebe.inc -f win64 -o junk_$base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asmld"] = "ld -o \"$base\"";
     ebe.os = "windows";
 #endif
     ebe["prettify"] = "astyle -A3 -s$tab_width -t$tab_width \"$source\"";
-    ebe["build/asmld"] = "ld -g -o \"$base\"";
     ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
                       "-o \"$base.o\" \"$source\"";
     ebe["build/libs"] = "-lstdc++";
