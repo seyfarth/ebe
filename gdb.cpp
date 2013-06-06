@@ -171,9 +171,9 @@ void GDB::send(QString cmd, QString /*options*/)
     cmd.chop(1);
     QString result;
     result = readLine();
-    //qDebug() << "result:" << result;
+    qDebug() << "result:" << result;
     while ( result.left(5) != "(gdb)" ) {
-        //qDebug() << "result" << result;
+        qDebug() << "result" << result;
         //if ( runCommands.contains(cmd) ) {
             //if ( rx1.indexIn(result) >= 0 ) {
                 //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
@@ -275,7 +275,6 @@ void GDB::doRun(QString exe, QString options, QStringList files,
 {
     int i;
     int length = files.length();
-    inAssembly = false;
     globals = g;
     //qDebug() << "length" << length;
     running = false;
@@ -383,17 +382,7 @@ void GDB::doNext()
 {
     //qDebug() << "gdb next";
     if ( !running ) return;
-#if defined Q_OS_MAC || defined Q_WS_WIN
-    if ( inAssembly ) {
-        FileLine fl(asmFile,asmLine+1);
-        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
-        send("continue");
-    } else {
-        send("next");
-    }
-#else
     send("next");
-#endif
     setNormal();
     getBackTrace();
     if ( !running ) return;
@@ -408,17 +397,41 @@ void GDB::doNext()
 void GDB::doStep()
 {
     if ( !running ) return;
-#if defined Q_OS_MAC || defined Q_WS_WIN
-    if ( inAssembly ) {
-        FileLine fl(asmFile,asmLine+1);
-        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
-        send("step");
-    } else {
-        send("step");
-    }
-#else
     send("step");
-#endif
+    setNormal();
+    getBackTrace();
+    if ( !running ) return;
+    getRegs();
+    getFpRegs();
+    getGlobals();
+    getLocals();
+    getArgs();
+    emit resetData();
+}
+
+void GDB::doNextInstruction()
+{
+    qDebug() << "nexti";
+    if ( !running ) return;
+    send("nexti");
+    setNormal();
+    getBackTrace();
+    if ( !running ) return;
+    getRegs();
+    getFpRegs();
+    getGlobals();
+    getLocals();
+    getArgs();
+    emit resetData();
+}
+
+void GDB::doCall()
+{
+    FileLine fl(asmFile,asmLine+1);
+    qDebug() << "call from" << asmFile << asmLine;
+    if ( !running ) return;
+    send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+    send("continue");
     setNormal();
     getBackTrace();
     if ( !running ) return;
@@ -514,7 +527,6 @@ void GDB::getBackTrace()
             line = file.mid(n+1).toInt();
             file = file.left(n);
             //qDebug() << "match at" << file << line;
-            inAssembly = false;
             emit nextInstruction(file,line);
             break;
         } else if ( s.indexOf("_line_") >= 0 ) {
@@ -528,7 +540,6 @@ void GDB::getBackTrace()
                     pp = pp[0].split(".");
                     file = pp[1];
                     //qDebug() << "nextInstruction" << file << line;
-                    inAssembly = true;
                     FileLine fl(file,line);
                     FileLine fl2(file,line+1);
                     QMap<FileLine,unsigned long>::const_iterator it;

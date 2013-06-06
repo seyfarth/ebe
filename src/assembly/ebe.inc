@@ -67,6 +67,7 @@
 %define execvpe _ %+ execvpe
 %define exit _ %+ exit
 %define exp _ %+ exp
+%define fclose _ %+ fclose
 %define fcntl _ %+ fcntl
 %define fdopen _ %+ fdopen
 %define fdopendir _ %+ fdopendir

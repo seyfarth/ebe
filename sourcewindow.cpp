@@ -381,7 +381,7 @@ void SourceEdit::defineVariable()
     dialog->addressEdit->setText("&"+text);
     if ( dialog->exec() ) {
         SourceWindow *p = (SourceWindow *)parent();
-        dialog->result.append(p->fileName);
+        dialog->result.append(p->file.source);
         int pos = textCursor().position();
         QTextBlock block;
         block = document()->findBlock(pos);
@@ -499,14 +499,14 @@ void SourceWindow::doTemplate(QAction *a)
     if ( n > 0 ) name = name.left(n);
     //qDebug() << name;
 
-    if ( language == "assembly" ) {
-        QFile in(QString(":/src/%1/%2/%3").arg(language).arg(ebe.os).arg(name));
+    if ( file.language == "assembly" ) {
+        QFile in(QString(":/src/%1/%2/%3").arg(file.language).arg(ebe.os).arg(name));
         if ( in.open(QFile::ReadOnly) ) {
             QString data = QString(in.readAll());
             textEdit->textCursor().insertText(data);
         }
     } else {
-        QFile in(QString(":/src/%1/%2").arg(language).arg(name));
+        QFile in(QString(":/src/%1/%2").arg(file.language).arg(name));
         if ( in.open(QFile::ReadOnly) ) {
             QString data = QString(in.readAll());
             textEdit->textCursor().insertText(data);
@@ -533,20 +533,21 @@ void SourceWindow::createTextEdit()
 void SourceWindow::open(QString name)
 {
     tab_width = ebe["edit/tab_width"].toInt();
-    QFile file(name);
+    QFile f(name);
 
-    if (! file.open(QIODevice::ReadWrite))
+    if (! f.open(QIODevice::ReadWrite))
     {
-        if ( ! file.open(QIODevice::ReadOnly) ) {
+        if ( ! f.open(QIODevice::ReadOnly) ) {
             QMessageBox::critical(this, tr("Error"),
                     tr("Failed to open file ") + name );
             return;
         }
     }
 
-    fileName = QDir::current().absoluteFilePath(name);
+    file.source = QDir::current().absoluteFilePath(name);
+    file.setLanguage();
 
-    QByteArray text = file.readAll();
+    QByteArray text = f.readAll();
     int length = text.count();
     if ( length > 0 && text[length-1] == '\n' ) text.chop(1);
     int i = 0;
@@ -572,9 +573,8 @@ void SourceWindow::open(QString name)
     textEdit->addWords(QString(text));
     textEdit->setPlainText(text);
 
-    file.close();
+    f.close();
 
-    language = languageFromFile(fileName);
     opened = true;
     changed = false;
     restoreCursor();
@@ -600,20 +600,20 @@ void SourceWindow::open()
         return;
     }
 
-    QFile file(name);
+    QFile f(name);
 
-    if (! file.open(QIODevice::ReadWrite))
+    if (! f.open(QIODevice::ReadWrite))
     {
-        if ( ! file.open(QIODevice::ReadOnly) ) {
+        if ( ! f.open(QIODevice::ReadOnly) ) {
             QMessageBox::critical(this, tr("Error"),
                     tr("Failed to open file ") + name );
             return;
         }
     }
 
-    fileName = QDir::current().absoluteFilePath(name);
+    file.source = QDir::current().absoluteFilePath(name);
 
-    QByteArray text = file.readAll();
+    QByteArray text = f.readAll();
     int length = text.count();
     if ( text[length-1] == '\n' ) text.chop(1);
     int i = 0;
@@ -640,9 +640,9 @@ void SourceWindow::open()
     textEdit->setPlainText(text);
     setFontHeightAndWidth(sourceFrame->fontHeight,sourceFrame->fontWidth);
 
-    file.close();
-    projectWindow->addFile(fileName);
-    language = languageFromFile(fileName);
+    f.close();
+    projectWindow->addFile(file.source);
+    file.setLanguage();
     opened = true;
     changed = false;
     restoreCursor();
@@ -659,25 +659,25 @@ void SourceWindow::saveAs()
         return;
     }
 
-    QFile file(name);
+    QFile f(name);
 
-    if (! file.open(QIODevice::WriteOnly))
+    if (! f.open(QIODevice::WriteOnly))
     {
         QMessageBox::critical(this, tr("Error"),
                 tr("Failed to open file for writing") + name );
         return;
     }
 
-    fileName = QDir::current().absoluteFilePath(name);
+    file.source = QDir::current().absoluteFilePath(name);
 
-    QTextStream stream(&file);
+    QTextStream stream(&f);
     stream << textEdit->toPlainText()+"\n";
     stream.flush();
-    file.close();
+    f.close();
 
     // File changed variable, reset to false
-    //qDebug() << "Saved it as " << fileName;
-    language = languageFromFile(fileName);
+    //qDebug() << "Saved it as " << file.source;
+    file.setLanguage();
     changed = false;
     saved = true;
     saveCursor();
@@ -685,17 +685,17 @@ void SourceWindow::saveAs()
 
 void SourceWindow::save()
 {
-    QFile file(fileName);
+    QFile f(file.source);
     saved = false;
-    if (! file.open(QIODevice::WriteOnly)) {
+    if (! f.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(this, tr("Error"), tr("Failed to open file ") +
-                fileName + tr(" for saving."));
+                file.source + tr(" for saving."));
         return;
     } else {
-        QTextStream stream(&file);
+        QTextStream stream(&f);
         stream << textEdit->toPlainText()+"\n";
         stream.flush();
-        file.close();
+        f.close();
 
         // File changed variable, reset to false
         changed = false;
@@ -706,28 +706,15 @@ void SourceWindow::save()
 
 void SourceWindow::saveCursor()
 {
-    ebe[QString("cursor/%1").arg(fileName)] = textEdit->textCursor().position();
+    ebe[QString("cursor/%1").arg(file.source)] = textEdit->textCursor().position();
 }
 
 void SourceWindow::restoreCursor()
 {
     QTextCursor cursor = textEdit->textCursor();
-    cursor.setPosition(ebe[QString("cursor/%1").arg(fileName)].toInt());
+    cursor.setPosition(ebe[QString("cursor/%1").arg(file.source)].toInt());
     textEdit->setTextCursor(cursor);
     center();
-}
-
-QString SourceWindow::languageFromFile ( QString file )
-{
-    int n = file.lastIndexOf('.');
-    if ( n > 0 ) {
-        QString ext = fileName.mid(n+1);
-        if ( cppExts.contains(ext) ) return "cpp";
-        if ( cExts.contains(ext) ) return "c";
-        if ( asmExts.contains(ext) ) return "assembly";
-        if ( fortranExts.contains(ext) ) return "fortran";
-    }
-    return "";
 }
 
 void SourceWindow::createButtons()
@@ -834,12 +821,12 @@ void SourceWindow::comment()
     int startBlock = block.blockNumber();
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
-    int n = fileName.lastIndexOf('.');
+    int n = file.source.lastIndexOf('.');
     if ( n < 0 ) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = fileName.mid(n+1);
+    QString ext = file.source.mid(n+1);
     int pos;
     if ( cppExts.contains(ext) ) {
         for ( int i = startBlock; i <= endBlock; i++ ) {
@@ -864,12 +851,12 @@ void SourceWindow::unComment()
     int startBlock = block.blockNumber();
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
-    int n = fileName.lastIndexOf('.');
+    int n = file.source.lastIndexOf('.');
     if ( n < 0 ) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = fileName.mid(n+1);
+    QString ext = file.source.mid(n+1);
     int pos;
     QString t;
     if ( cppExts.contains(ext) ) {
@@ -900,12 +887,12 @@ void SourceWindow::indent()
     int startBlock = block.blockNumber();
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
-    int n = fileName.lastIndexOf('.');
+    int n = file.source.lastIndexOf('.');
     if ( n < 0 ) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = fileName.mid(n+1);
+    QString ext = file.source.mid(n+1);
     int pos;
     QString prefix;
     for ( int i=0; i < tab_width; i++ ) prefix += " ";
@@ -933,12 +920,12 @@ void SourceWindow::unIndent()
     int startBlock = block.blockNumber();
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
-    int n = fileName.lastIndexOf('.');
+    int n = file.source.lastIndexOf('.');
     if ( n < 0 ) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = fileName.mid(n+1);
+    QString ext = file.source.mid(n+1);
     int pos;
     QString t;
     QString prefix;
@@ -1097,11 +1084,11 @@ void SourceWindow::prettify()
     save();
     QProcess indent(this);
     QString cmd = ebe["prettify"].toString();
-    cmd.replace("$source",fileName);
+    cmd.replace("$source",file.source);
     cmd.replace("$tab_width",ebe["edit/tab_width"].toString());
     indent.start(cmd);
     indent.waitForFinished();
-    open(fileName);
+    open(file.source);
 }
 
 void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
@@ -1115,11 +1102,11 @@ void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
     if ( breakpoints->contains(block+1) ) {
         breakpoints->remove(block+1);
         cursorForPosition(e->pos()).setBlockFormat(normalFormat);
-        emit deleteBreakpoint(myParent->fileName,s.setNum(block+1));
+        emit deleteBreakpoint(myParent->file.source,s.setNum(block+1));
     } else {
         breakpoints->insert(block+1);
         cursorForPosition(e->pos()).setBlockFormat(breakFormat);
-        emit sendBreakpoint(myParent->fileName,s.setNum(block+1));
+        emit sendBreakpoint(myParent->file.source,s.setNum(block+1));
     }
     //foreach ( int line, *breakpoints ) {
     //qDebug() << "bp at" << line;
@@ -1152,7 +1139,7 @@ void LineNumberEdit::dropAllBreakpoints()
     foreach ( int line, *breakpoints ) {
         //qDebug() << "bp at" << line;
         breakpoints->remove(line);
-        emit deleteBreakpoint(myParent->fileName,s.setNum(line));
+        emit deleteBreakpoint(myParent->file.source,s.setNum(line));
         //eventPosition.setX(0);
         //eventPosition.setY((line-p->topNumber)*p->fontHeight+p->fontHeight/2+1);
         //qDebug() << "Pos" << eventPosition;
@@ -1169,7 +1156,7 @@ void LineNumberEdit::setBreakpoint()
     //qDebug() << "set" << row;
     //qDebug() << "block" << block;
     breakpoints->insert(block+1);
-    emit sendBreakpoint(myParent->fileName,s.setNum(block+1));
+    emit sendBreakpoint(myParent->file.source,s.setNum(block+1));
     cursorForPosition(eventPosition).setBlockFormat(breakFormat);
 }
 
@@ -1183,7 +1170,7 @@ void LineNumberEdit::dropBreakpoint()
     //qDebug() << "set" << row;
     //qDebug() << "block" << block;
     breakpoints->remove(block+1);
-    emit deleteBreakpoint(myParent->fileName,s.setNum(block+1));
+    emit deleteBreakpoint(myParent->file.source,s.setNum(block+1));
     cursorForPosition(eventPosition).setBlockFormat(normalFormat);
 }
 

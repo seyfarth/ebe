@@ -5,7 +5,6 @@
 #include <QHeaderView>
 #include <QTableWidget>
 #include <QMenu>
-#include <QString>
 #include <QVBoxLayout>
 #include <QTableWidgetItem>
 #include <cstdio>

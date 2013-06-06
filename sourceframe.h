@@ -29,6 +29,7 @@ public:
     bool filesSaved();
     QLabel *cursorPosition;
     void close(QString);
+    bool inAssembly;
 
 public slots:
     void nextInstruction(QString file,int line);
@@ -77,6 +78,8 @@ signals:
     void doRun(QString exe, QString options, QStringList files,
                QList<StringSet> breakpoints, QStringList globals);
     void doNext();
+    void doNextInstruction();
+    void doCall();
     void doStep();
     void doContinue();
     void doStop();

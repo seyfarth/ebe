@@ -1,13 +1,12 @@
 #ifndef STYLESHEET_H
 #define STYLESHEET_H
 
-#include <QHash>
-#include <QString>
+#include "types.h"
 
 #ifdef STYLESHEET_CPP
-QHash<QString,QString> styles;
+StringHash styles;
 #else
-extern QHash<QString,QString> styles;
+extern StringHash styles;
 #endif
 
 void initStyleSheet(QString key, QString style);

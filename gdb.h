@@ -27,7 +27,6 @@ public:
     QHash<FileLabel,int> bpHash;
     int numFloats;
     bool NullEOF;
-    bool inAssembly;
     QString asmFile;
     int asmLine;
 
@@ -54,6 +53,8 @@ public slots:
     void doRun(QString exe, QString options, QStringList files,
                QList<StringSet> breakpoints, QStringList globals);
     void doNext();
+    void doNextInstruction();
+    void doCall();
     void doStep();
     void doContinue();
     void doStop();

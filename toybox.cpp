@@ -1,7 +1,7 @@
 #include "toybox.h"
 #include "errorwindow.h"
 
-QHash<QString,int> bytesPerType;
+IntHash bytesPerType;
 
 /*
  *  Constructor

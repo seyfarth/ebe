@@ -4,6 +4,7 @@
 #include <QtGui>
 #include "variable.h"
 #include "highlighter.h"
+#include "file.h"
 
 class SourceEdit;
 class SourceWindow;
@@ -136,8 +137,7 @@ public:
     void restoreCursor();
     bool fileChanged();
     void saveBeforeQuit();
-    QString fileName;
-    QString language;
+    File file;
     bool changed;
     bool saved;
     bool opened;
@@ -174,7 +174,6 @@ public:
     void prettify();
     void doTemplate(QAction *a);
     void insertFile(QString f);
-    QString languageFromFile(QString file);
 
 public slots:
     void open();
