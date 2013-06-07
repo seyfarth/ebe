@@ -8,6 +8,7 @@ class File
 public:
     File();
     QString base;
+    QString simple;
     QString source;
     QString object;
     QString ext;

@@ -10,6 +10,9 @@
 extern TerminalWindow *terminalWindow;
 extern int wordSize;
 extern QMap<FileLine,unsigned long> fileLineToAddress;
+extern QHash<unsigned long,FileLine> addressToFileLine;
+extern QString breakFile;
+extern int breakLine;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
@@ -171,9 +174,9 @@ void GDB::send(QString cmd, QString /*options*/)
     cmd.chop(1);
     QString result;
     result = readLine();
-    qDebug() << "result:" << result;
+    //qDebug() << "result:" << result;
     while ( result.left(5) != "(gdb)" ) {
-        qDebug() << "result" << result;
+        //qDebug() << "result" << result;
         //if ( runCommands.contains(cmd) ) {
             //if ( rx1.indexIn(result) >= 0 ) {
                 //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
@@ -411,7 +414,7 @@ void GDB::doStep()
 
 void GDB::doNextInstruction()
 {
-    qDebug() << "nexti";
+    //qDebug() << "nexti";
     if ( !running ) return;
     send("nexti");
     setNormal();
@@ -427,8 +430,8 @@ void GDB::doNextInstruction()
 
 void GDB::doCall()
 {
-    FileLine fl(asmFile,asmLine+1);
-    qDebug() << "call from" << asmFile << asmLine;
+    FileLine fl(breakFile,breakLine+1);
+    //qDebug() << "call from" << breakFile << breakLine;
     if ( !running ) return;
     send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
     send("continue");
@@ -529,37 +532,20 @@ void GDB::getBackTrace()
             //qDebug() << "match at" << file << line;
             emit nextInstruction(file,line);
             break;
-        } else if ( s.indexOf("_line_") >= 0 ) {
+        } else if ( s.indexOf(" in ") >= 0 ) {
             parts = s.split(QRegExp("\\s+"));
             //qDebug() << parts;
-            for ( int i = 0; i < parts.length(); i++ ) {
-                pp = parts[i].split("_line_");
-                //qDebug() << "pp" << pp;
-                if ( pp.length() == 2 ) {
-                    line = pp[1].toInt();
-                    pp = pp[0].split(".");
-                    file = pp[1];
-                    //qDebug() << "nextInstruction" << file << line;
-                    FileLine fl(file,line);
-                    FileLine fl2(file,line+1);
-                    QMap<FileLine,unsigned long>::const_iterator it;
-                    QMap<FileLine,unsigned long>::const_iterator it2;
-                    it = fileLineToAddress.lowerBound(fl);
-                    it2 = fileLineToAddress.lowerBound(fl2);
-                    //qDebug() << it.value() << it2.value();
-                    while ( it.value() == it2.value() ) {
-                        line++;
-                        fl.line = line;
-                        fl2.line = line+1;
-                        it = fileLineToAddress.lowerBound(fl);
-                        it2 = fileLineToAddress.lowerBound(fl2);
-                        //qDebug() << it.value() << it2.value();
-                    }
-                    asmFile = file;
-                    asmLine = line;
-                    emit nextInstruction(file,line);
-                    break;
-                }
+            unsigned long address;
+            bool ok;
+            address = parts[1].toULong(&ok,16);
+            //qDebug() << "address" <<  address;
+            FileLine fl;
+            if ( addressToFileLine.contains(address) ) {
+                fl = addressToFileLine[address];
+                //qDebug() << "ok" << ok << address;
+                emit nextInstruction(fl.file,fl.line);
+            } else {
+                qDebug() << "Could not interpret address:" << address;
             }
             break;
         }

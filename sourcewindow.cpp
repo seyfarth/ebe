@@ -499,7 +499,7 @@ void SourceWindow::doTemplate(QAction *a)
     if ( n > 0 ) name = name.left(n);
     //qDebug() << name;
 
-    if ( file.language == "assembly" ) {
+    if ( file.language == "asm" ) {
         QFile in(QString(":/src/%1/%2/%3").arg(file.language).arg(ebe.os).arg(name));
         if ( in.open(QFile::ReadOnly) ) {
             QString data = QString(in.readAll());

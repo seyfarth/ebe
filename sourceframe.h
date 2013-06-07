@@ -97,9 +97,6 @@ private:
     QPushButton *stopButton;
 
     CommandLine *commandLine;
-
-    QString breakFile;
-    int breakLine;
 };
 
 #endif

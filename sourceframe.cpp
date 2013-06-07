@@ -26,11 +26,13 @@ QStringList asmExts;
 StringSet textLabels;
 
 QHash<QString,Range> labelRange;
-QHash<long,FileLine> addressToFileLine;
+QHash<unsigned long,FileLine> addressToFileLine;
 QMap<FileLine,unsigned long> fileLineToAddress;
-QMap<QString,int> linesPerFile;
 StringHash textToFile;
 StringHash objectToSource;
+
+QString breakFile;
+int breakLine;
 
 StringHash varToAddress;
 QHash<QString,unsigned long> textToAddress;
@@ -224,9 +226,9 @@ void SourceFrame::run()
     QString cmd;
 
     addressToFileLine.clear();
+    fileLineToAddress.clear();
     textToAddress.clear();
     textToFile.clear();
-    linesPerFile.clear();
     labelRange.clear();
     objectToSource.clear();
     stop();
@@ -315,6 +317,7 @@ void SourceFrame::run()
     QString extraCmd;
     foreach ( file, files ) {
         //name = QDir::current().relativeFilePath(name);
+        //qDebug() << file.source << file.object << file.language;
         saveIfChanged(file.source);
         if ( file.ext == "" ) continue;
         if ( file.language == "cpp" ) {
@@ -333,8 +336,7 @@ void SourceFrame::run()
             cmd = ebe["build/asm"].toString();
 #if defined Q_OS_MAC || defined Q_WS_WIN
             FileLine fl;
-            int n = file.base.lastIndexOf("/");
-            fl.file = file.base.mid(n+1);
+            fl.file = file.source;
             fl.line = 0;
             fileLineToAddress[fl] = 0;
 #endif
@@ -384,7 +386,6 @@ void SourceFrame::run()
     foreach ( file, files ) {
         object = file.object;
         if ( object == "ebe_unbuffer.o" ) continue;
-        ext = file.ext;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
         nm.start ( "nm -a \"" + object + "\"" );
@@ -401,13 +402,13 @@ void SourceFrame::run()
             if ( parts.length() >= 3 ) {
                 if ( parts[1] == "T" && (parts[2] == "main" || parts[2] == "_main") ) {
                     //qDebug() << "found main" << object;
-                    if ( cExts.contains(ext) ) {
+                    if ( file.language == "c" ) {
                         ldCmd = ebe["build/ccld"].toString();
-                    } else if ( cppExts.contains(ext) ) {
+                    } else if ( file.language == "cpp" ) {
                         ldCmd = ebe["build/cppld"].toString();
-                    } else if ( asmExts.contains(ext) ) {
+                    } else if ( file.language == "asm" ) {
                         ldCmd = ebe["build/ccld"].toString();
-                    } else if ( fortranExts.contains(ext) ) {
+                    } else if ( file.language == "fortran" ) {
                         ldCmd = ebe["build/fortranld"].toString();
                     }
                 } else if ( parts[1] == "T" &&
@@ -436,16 +437,14 @@ void SourceFrame::run()
             data = nm.readLine();
         }
 //#ifndef Q_WS_WIN
-        if ( asmExts.contains(ext) ) {
+        //qDebug() << "language" << file.language;
+        if ( file.language == "asm" ) {
+            //qDebug() << "scanning" << file.source;
             FileLine fl;
             Range range;
             QString labelToSave;
-            int m = object.lastIndexOf(".");
-            QString name;
-            if ( m < 0 ) name = object + "." + ext;
-            else name = object.left(m) + "." + ext;
-            QFile source(name);
-            fl.file = name;
+            QFile source(file.source);
+            fl.file = file.source;
             int line;
             if ( source.open(QFile::ReadOnly) ) {
                 QString text;
@@ -455,6 +454,7 @@ void SourceFrame::run()
                 line = 1;
                 while ( text != "" ) {
                     parts = text.split(QRegExp("\\s+"));
+                    //qDebug() << parts;
                     if ( parts.length() > 0 ) {
                         label = parts[0];
                         if ( label == "" && parts.length() > 1 ) label = parts[1];
@@ -477,7 +477,7 @@ void SourceFrame::run()
                     if ( (parts.length() >= 2 && parts[0].toUpper() == "CALL" ) ||
                          (parts.length() >= 2 && parts[1].toUpper() == "CALL" ) ) {
                         fl.line = line;
-                        qDebug() << "call at" << name << line;
+                        //qDebug() << "call at" << name << line;
                         callLines.insert(fl);
                     }
                     text = source.readLine();
@@ -489,7 +489,6 @@ void SourceFrame::run()
                 }
             }
             source.close();
-            linesPerFile[name] = line-1;
         }
 //#endif
     }
@@ -536,7 +535,10 @@ void SourceFrame::run()
 //  On OS X and Windows locate symbols and line numbers from asm files
 //
 #if defined Q_OS_MAC || defined Q_WS_WIN
-    foreach ( file, files ) {
+    int line;
+    QList<File>::iterator i;
+    for ( i = files.begin(); i != files.end(); i++ ) {
+        file = *i;
         if ( file.language == "asm" ) {
             FileLine fl(file.source,0);
             QFile listing(file.base+".lst");
@@ -546,7 +548,7 @@ void SourceFrame::run()
             bool inText = false;
             if ( listing.open(QFile::ReadOnly) ) {
                 text = listing.readLine();
-                int line = 1;
+                line = 1;
                 while ( text != "" ) {
                     text = text.mid(7);
                     parts = text.split(QRegExp("\\s+"));
@@ -575,6 +577,7 @@ void SourceFrame::run()
                 }
             }
             listing.close();
+            i->lineCount = line-1;
         }
     }
 #endif
@@ -607,8 +610,8 @@ void SourceFrame::run()
             } else if ( nmParts[1] == "T" ) {
                 nmParts[0] = "0x" + nmParts[0];
                 textToAddress[nmParts[2]] = nmParts[0].toULong(&ok,16);
-                qDebug() << "text" << nmParts[2] << textToAddress[nmParts[2]]
-                         << textToFile[nmParts[2]];
+                //qDebug() << "text" << nmParts[2] << textToAddress[nmParts[2]]
+                         //<< textToFile[nmParts[2]];
             }
         }
         nmData = nm.readLine();
@@ -621,15 +624,46 @@ void SourceFrame::run()
 //
 #if defined Q_OS_MAC || defined Q_WS_WIN
     foreach ( file, files ) {
+        //qDebug() << "nm loop" << file.source << file.language << file.object;
         if ( file.language == "asm" ) {
             nm.start(QString("nm -gn %1").arg(file.object));
             nm.waitForFinished();
             nmData = nm.readLine();
+            //qDebug() << "nm" << file.object;
             while ( nmData != "" ) {
                 //qDebug() << nmData;
                 nmParts = nmData.split(rx1);
                 if ( nmParts.length() >= 3 ) {
                     if ( nmParts[1] == "T" ) {
+                        //qDebug() << "T" << nmParts;
+                        //qDebug() << "t2a" << textToAddress[nmParts[2]];
+                        if ( textToAddress.contains(nmParts[2]) ) {
+                            unsigned long adjust = textToAddress[nmParts[2]];
+                            adjust -= nmParts[0].toULong(&ok,16);
+                            //qDebug() << "adjust" << adjust;
+                            int line = file.lineCount;
+                            //qDebug() << "line" << line;
+                            unsigned long address = 0;
+                            fl.file = file.source;
+                            while ( line > 0 ) {
+                                fl.line = line;
+                                if ( fileLineToAddress.contains(fl) ) {
+                                    address = fileLineToAddress[fl] + adjust;
+                                    //qDebug() << "found fl" << fl.file << fl.line << address;
+                                    fileLineToAddress[fl] = address;
+                                    addressToFileLine[address] = fl;
+                                } else {
+                                    //qDebug() << "not found fl" << fl.file << fl.line << address;
+                                    fileLineToAddress[fl] = address;
+                                }
+                                line--;
+                            }
+                            fl.line = file.lineCount;
+                            address = fileLineToAddress[fl];
+                            fl.line++;
+                            fileLineToAddress[fl] = address;
+                            break;
+                        }
                     }
                 }
                 nmData = nm.readLine();
@@ -652,16 +686,18 @@ void SourceFrame::run()
         FileLine fl;
         long address;
         QMap<FileLine,unsigned long>::const_iterator it;
-        fl.file = source->file.base;
+        fl.file = source->file.source;
 #endif
         bps.clear();
         foreach ( int bp, *(source->breakpoints) ) {
 #if defined Q_OS_MAC || defined Q_WS_WIN
             if ( source->file.language == "asm" ) {
                 fl.line = bp;
+                //qDebug() << "fl2a" << fileLineToAddress[fl];
                 it = fileLineToAddress.lowerBound(fl);
                 if ( it.value() == 0L ) it = fileLineToAddress.upperBound(fl);
                 address = it.value();
+                //qDebug() << "bp" << fl.file << fl.line << address;
                 bps.insert(QString("*0x%1").arg(address,1,16));
             } else {
                 bps.insert(s.setNum(bp));
@@ -728,7 +764,7 @@ void SourceFrame::next()
     clearNextLine(breakFile,breakLine);
     if ( inAssembly && (ebe.os == "mac" || ebe.os == "windows") ) {    
         FileLine fl(breakFile,breakLine);
-        qDebug() << "file line" << breakFile << breakLine;
+        //qDebug() << "file line" << breakFile << breakLine;
         if ( callLines.contains(fl) ) emit doCall();
         else emit doNextInstruction();
     } else {
@@ -780,7 +816,7 @@ void SourceFrame::setNextLine ( QString &file, int & line )
     if ( file == "" || line < 1 ) return;
     for ( int index=0; index < tab->count(); index++ ) {
         source = (SourceWindow *)tab->widget(index);
-        //qDebug() << "source name" << source->fileName << file;
+        //qDebug() << "source name" << source->file.source << file;
         if ( source->file.source == QDir::current().absoluteFilePath(file) ) {
             tab->setCurrentIndex(index);
             source->setNextLine(line);
@@ -834,16 +870,16 @@ void SourceFrame::nextInstruction ( QString file, int line )
     index = file.lastIndexOf('.');
     if ( index < 0 ) index = file.lastIndexOf('_');
     inAssembly = false;
-    qDebug() << ebe.os << "inAssembly" << inAssembly << file << line;
+    //qDebug() << ebe.os << "inAssembly" << inAssembly << file << line;
     if ( index > 0 ) {
         length = file.length();
         ext = file.right(length-index-1);
-        qDebug() << ext;
+        //qDebug() << ext;
         inAssembly = asmExts.contains(ext);
-        file = file.left(length-4);
+        //file = file.left(length-4);
     }
-    qDebug() << "inAssembly" << inAssembly;
-    if ( file != "" ) breakFile = file;
+    //qDebug() << "inAssembly" << inAssembly;
+    breakFile = file;
     breakLine = line;
     setNextLine(breakFile,breakLine);
 }
