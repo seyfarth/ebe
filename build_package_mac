@@ -1,6 +1,6 @@
 #!/bin/bash
 
-exe=${1:-qtebe}
+exe=${1:-ebe}
 
 rm -rf $exe.d
 
