@@ -546,6 +546,7 @@ void SourceWindow::open(QString name)
 
     file.source = QDir::current().absoluteFilePath(name);
     file.setLanguage();
+    ebe["language"] = file.language;
 
     QByteArray text = f.readAll();
     int length = text.count();
