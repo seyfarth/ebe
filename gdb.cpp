@@ -2,6 +2,7 @@
 #include <QTimer>
 #include <cstdio>
 #include "gdb.h"
+#include "settings.h"
 #include "terminalwindow.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -609,6 +610,7 @@ void GDB::getFpRegs()
                 "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     //qDebug() << "getFpRegs";
+    bool reverse = ebe["xmm/reverse"].toBool();
     for ( int i = 0; i < numFloats; i++ ) {
         if ( hasAVX ) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
@@ -618,8 +620,13 @@ void GDB::getFpRegs()
                 //qDebug() << "index" << rx.indexIn(res);
                 if ( rx1.indexIn(res) >= 0 ) {
                     //qDebug() << "res" << rx.cap(1);
-                    data.append(rx1.cap(1)+" "+rx1.cap(2)+" "
-                               +rx1.cap(3)+" "+rx1.cap(4));
+                    if ( reverse ) {
+                        data.append(rx1.cap(2)+" "+rx1.cap(1)+" "
+                                   +rx1.cap(4)+" "+rx1.cap(3));
+                    } else {
+                        data.append(rx1.cap(1)+" "+rx1.cap(2)+" "
+                                   +rx1.cap(3)+" "+rx1.cap(4));
+                    }
                 }
             }
         } else {
@@ -630,7 +637,11 @@ void GDB::getFpRegs()
                 //qDebug() << "index" << rx.indexIn(res);
                 if ( rx2.indexIn(res) >= 0 ) {
                     //qDebug() << "res" << rx.cap(1);
-                    data.append(rx2.cap(1)+" "+rx2.cap(2)+" 0x0 0x0");
+                    if ( reverse ) {
+                        data.append(rx2.cap(2)+" "+rx2.cap(1)+" 0x0 0x0");
+                    } else {
+                        data.append(rx2.cap(1)+" "+rx2.cap(2)+" 0x0 0x0");
+                    }
                 }
             }
         }

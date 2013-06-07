@@ -588,11 +588,18 @@ void SourceWindow::open()
     //qDebug() << "sw open";
     opened = false;
 
+    QString selected = tr("C/C++ files (*.c* *.h *.t *akefile)");
+    if ( ebe["language"].toString() == "fortran" )
+        selected = tr("Fortran files (*.f* *.F* *akefile)");
+    else if ( ebe["language"].toString() == "asm" )
+        selected = tr("Assembly files (*.asm *.s *akefile)");
+
     QString name = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
             tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
             tr("Fortran files (*.f* *.F* *akefile);;")+
             tr("Assembly files (*.asm *.s *akefile);;") +
-            tr("All files (*)")
+            tr("All files (*)"),
+            &selected
     );
 
     if (name == "")
@@ -643,6 +650,7 @@ void SourceWindow::open()
     f.close();
     projectWindow->addFile(file.source);
     file.setLanguage();
+    ebe["language"] = file.language;
     opened = true;
     changed = false;
     restoreCursor();

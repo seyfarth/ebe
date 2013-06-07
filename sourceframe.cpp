@@ -340,15 +340,23 @@ void SourceFrame::run()
             fl.line = 0;
             fileLineToAddress[fl] = 0;
 #endif
-            cmd.replace("$base",file.base);
-            cmd.replace("$source",file.source);
 
             //qDebug() << "copying ebe.inc";
-            QFile::remove("ebe.inc");
-            QFile::copy(":/src/assembly/ebe.inc","ebe.inc");
-            QFile::setPermissions("ebe.inc",
+            QString ebeInc;
+            ebeInc = file.source;
+            int n = ebeInc.lastIndexOf('/');
+            if ( n < 0 ) ebeInc = "ebe.inc";
+            else ebeInc = ebeInc.left(n) + "/ebe.inc";
+            qDebug() << "ebeInc" << ebeInc;
+            QFile::remove(ebeInc);
+            QFile::copy(":/src/assembly/ebe.inc",ebeInc);
+            QFile::setPermissions(ebeInc,
                QFile::ReadOwner | QFile::WriteOwner);
-            //qDebug() << cmd;
+
+            cmd.replace("$base",file.base);
+            cmd.replace("$source",file.source);
+            cmd.replace("$ebe_inc",ebeInc);
+            qDebug() << cmd;
         } else if ( file.language == "fortran" ) {
             //qDebug() << name << "fortran";
             cmd = ebe["build/fortran"].toString();

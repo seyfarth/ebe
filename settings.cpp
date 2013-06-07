@@ -83,32 +83,35 @@ void Settings::setDefaults()
 
     ebe["edit/tab_width"] = 4;
     ebe["edit/auto_indent"] = true;
+
+    ebe["language"] = "cpp";
 #if __linux__
     ebe["linux"] = true;
     ebe["mac"] = false;
     ebe["os"] = "linux";
     ebe["windows"] = false;
-    ebe["build/asm"] = "yasm -P ebe.inc -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P $ebe_inc -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe.os = "linux";
+    ebe["xmm/reverse"] = false;
 #elif __APPLE__
     ebe["linux"] = false;
     ebe["mac"] = true;
     ebe["os"] = "mac";
     ebe["windows"] = false;
-    ebe["build/asm"] = "yasm -P ebe.inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
-    ebe["build/asmlst"] = "yasm -P ebe.inc -f macho64 -o /dev/null -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P $ebe_inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe.os = "mac";
+    ebe["xmm/reverse"] = true;
 #else
     ebe["linux"] = false;
     ebe["mac"] = false;
     ebe["os"] = "windows";
     ebe["windows"] = true;
-    ebe["build/asm"] = "yasm -P ebe.inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
-    ebe["build/asmlst"] = "yasm -P ebe.inc -f win64 -o junk_$base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P $ebe_inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe.os = "windows";
+    ebe["xmm/reverse"] = false;
 #endif
     ebe["prettify"] = "astyle -A3 -s$tab_width -t$tab_width \"$source\"";
     ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
