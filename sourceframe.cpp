@@ -914,7 +914,7 @@ void SourceFrame::updateCursorPosition()
     QTextCursor cursor = source->textEdit->textCursor();
     QTextBlock block = cursor.block();
     int row = block.blockNumber()+1;
-    int column = cursor.positionInBlock()+1;
+    int column = cursor.position() - block.position() + 1;
     cursorPosition->setText(QString("line %1, column %2").arg(row).arg(column));
 }
 

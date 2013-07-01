@@ -14,3 +14,5 @@ EOF2
 
 rcc -binary ebe.qrc -o ebe.rcc
 cp ebe.rcc release
+
+echo "Success! ebe.rcc has been created and copied to release."

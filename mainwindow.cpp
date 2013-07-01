@@ -291,6 +291,7 @@ void MainWindow::setFontSize()
     floatWindow->setFontHeightAndWidth(height,width);
     registerWindow->setFontHeightAndWidth(height,width);
     toyBox->setFontHeightAndWidth(height,width);
+    bitBucket->setFontHeightAndWidth(height,width);
 }
 
 void MainWindow::increaseFont()

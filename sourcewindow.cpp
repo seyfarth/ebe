@@ -190,8 +190,8 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         lastKey = key;
         QTextCursor cursor = textCursor();
         if ( autoIndent ) {
-            int col = cursor.positionInBlock();
             QTextBlock block = cursor.block();
+            int col = cursor.position() - block.position();
             QString t = block.text();
             int prev = (col-1)/tab_width*tab_width;
             //qDebug() << "prev" << prev << col;
@@ -239,15 +239,16 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
     } else if ( key == Qt::Key_Tab && mod == 0 ) {
         lastKey = 0;
         QTextCursor cursor = textCursor();
-        int col = cursor.positionInBlock();
+        QTextBlock block = cursor.block();
+        int col = cursor.position() - block.position();
         int next = (col+tab_width)/tab_width*tab_width;
         int n = next - col;
         for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
     } else if ( key == Qt::Key_Tab && mod & Qt::ControlModifier ) {
         lastKey = 0;
         QTextCursor cursor = textCursor();
-        int col = cursor.positionInBlock();
         QTextBlock block = cursor.block();
+        int col = cursor.position() - block.position();
         QString t = block.text();
         int prev = (col-1)/tab_width*tab_width;
         //qDebug() << "prev" << prev << col;
@@ -299,7 +300,6 @@ void SourceEdit::indentNewLine(int x)
     //qDebug() << "inl";
     tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textCursor();
-    //int col = cursor.positionInBlock();
     QTextBlock block = cursor.block();
     QString t = block.text();
     int n = t.length();

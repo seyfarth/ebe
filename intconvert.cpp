@@ -59,6 +59,9 @@ void IntConvert::setFontHeightAndWidth ( int height, int width )
 {
     fontHeight = height;
     fontWidth  = width;
+    for ( int row = 0; row < table->rowCount(); row++ ) {
+        table->setRowHeight(row,fontHeight+4);
+    }
 }
 
 void IntConvert::selectOperator(QString o)

@@ -40,5 +40,10 @@ void BitBucket::setFontHeightAndWidth ( int height, int width )
 {
     fontHeight = height;
     fontWidth = width;
+    unaryPanel->setFontHeightAndWidth(height,width);
+    binaryPanel->setFontHeightAndWidth(height,width);
+    intConvertPanel->setFontHeightAndWidth(height,width);
+    intMathPanel->setFontHeightAndWidth(height,width);
+    floatConvertPanel->setFontHeightAndWidth(height,width);
 }
 

@@ -6,7 +6,7 @@ BinaryNumber::BinaryNumber()
 : QWidget()
 {
     width = 16;
-    charSize = 20;
+    charSize = ebe["font_size"].toInt();
     highlightLow = -1;
     highlightHigh = -1;
     clear();
@@ -70,7 +70,8 @@ void BinaryNumber::setText(QString s, int /* w */ )
 
 QSize BinaryNumber::sizeHint() const
 {
-    return ( QSize(charSize*width,charSize) );
+    int charSize = ebe["font_size"].toInt();
+    return ( QSize(charSize*width,underline?charSize+8:charSize+4) );
 }
 
 void BinaryNumber::setHighlight(int l, int h)
