@@ -58,6 +58,8 @@ private:
     QAction *addToggle ( QMenu *menu, QString text, QObject *object,
                      const char *slot, bool checked );
     bool eventFilter ( QObject *object, QEvent *event );
+    void checkTools();
+    bool toolExists(QString t);
 
     bool tooltipsVisible;
     Settings *settings;

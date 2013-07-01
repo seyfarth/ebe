@@ -497,10 +497,11 @@ void SourceWindow::doTemplate(QAction *a)
     QString name = a->iconText();
     int n = name.indexOf(':');
     if ( n > 0 ) name = name.left(n);
-    //qDebug() << name;
+    qDebug() << name << file.language << ebe.os;
+
 
     if ( file.language == "asm" ) {
-        QFile in(QString(":/src/%1/%2/%3").arg(file.language).arg(ebe.os).arg(name));
+        QFile in(QString(":/src/%1/%2/%3").arg("assembly").arg(ebe.os).arg(name));
         if ( in.open(QFile::ReadOnly) ) {
             QString data = QString(in.readAll());
             textEdit->textCursor().insertText(data);

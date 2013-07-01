@@ -131,6 +131,8 @@ void Settings::setDefaults()
     ebe["build/obj"] = "o";
 #endif
 
+    ebe["check/tools"] = true;
+
     ebe["library/path"] = ":/library";
 
     ebe["buttons/visible"] = false;

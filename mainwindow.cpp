@@ -4,7 +4,6 @@
 #include <QtWebKit>
 #include <QWebView>
 #include <QApplication>
-#include <QKeySequence>
 #include <QMessageBox>
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -135,6 +134,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     readInstructions();
 
+    checkTools();
+
     setUnifiedTitleAndToolBarOnMac(false);
 
     QTimer::singleShot(0,this,SLOT(restoreMainWindow()));
@@ -148,6 +149,64 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect ( this, SIGNAL(doStop()), gdb, SLOT(doStop()) );
     restoreMainWindow();
 }
+
+bool MainWindow::toolExists(QString tool)
+{
+    QString path;
+    QStringList pathList;
+    path = qgetenv("PATH").constData();
+    pathList = path.split(":");
+    if ( ebe.os == "windows" ) tool += ".exe";
+    foreach (QString dir, pathList ) {
+        path = dir + "/" + tool;
+        if ( QDir::current().exists(path) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void MainWindow::checkTools()
+{
+    QStringList missing;
+    QStringList missingCritical;
+    if ( ebe["check/tools"].toBool() ) {
+        if ( ! toolExists("gdb") ) missingCritical += "gdb";
+        if ( ! toolExists("gcc") ) missingCritical += "gcc";
+        if ( ! toolExists("gfortran") ) missing += "gfortran";
+        if ( ! toolExists("yasm") ) missing += "yasm";
+        if ( ! toolExists("astyle") ) missing += "astyle";
+        if ( missing.length() > 0 || missingCritical.length() > 0 ) {
+            qDebug() << "oops";
+            QString message;
+
+            message = "<b>Some tools used by ebe are missing:</b>";
+            message += "<br />";
+            message += "<br />";
+            foreach ( QString tool, missingCritical ) {
+                message += "   critical: " + tool + "<br />";
+            }
+            foreach ( QString tool, missing ) {
+                message += "   non-critical: " + tool + "<br />";
+            }
+            message += "<br />";
+            message += "Critical tools are needed by almost everyone.";
+            message += "<br />";
+            message += "Non-critical tools are not needed by everyone.";
+            message += "<br />";
+            message += "<br />";
+            message += "Click <b>Ignore</b> to ignore this test in the future.";
+            message += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            message += "<br />";
+            message += "Click <b>OK</b> to run ebe and test again next time";
+            message += "<br />";
+            int ret = QMessageBox::warning(this,"Missing tools",
+                message, QMessageBox::Ok | QMessageBox::Ignore );
+            if ( ret == QMessageBox::Ignore ) ebe["check/tools"] = false;
+        }
+    }
+}
+
 
 void MainWindow::closeEvent ( QCloseEvent *event )
 {

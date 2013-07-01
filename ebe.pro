@@ -32,4 +32,4 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
            intconvert.cpp intmath.cpp floatedit.cpp floatconvert.cpp file.cpp
 
-RESOURCES = 
+RESOURCES += ebe.qrc

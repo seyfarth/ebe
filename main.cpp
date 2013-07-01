@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
     setenv("QT_USE_NATIVE_WINDOWS","1",1);
 #endif
     QApplication app(argc, argv);
-    QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
+    //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
     if ( argc >= 3 ) {
         if ( strcmp(argv[1],"-g") == 0 ) {
-            char *p = index(argv[2],'x');
+            char *p = strchr(argv[2],'x');
             if ( p ) {
                 userSetGeometry = true;
                 userWidth = atoi(argv[2]);

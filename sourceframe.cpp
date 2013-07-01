@@ -255,6 +255,7 @@ void SourceFrame::run()
     File file;
     file.source = "ebe_unbuffer.cpp";
     file.object = "ebe_unbuffer.o";
+    file.base   = "ebe_unbuffer";
     file.language = "cpp";
     file.ext = "cpp";
     files << file;
@@ -317,14 +318,14 @@ void SourceFrame::run()
     QString extraCmd;
     foreach ( file, files ) {
         //name = QDir::current().relativeFilePath(name);
-        //qDebug() << file.source << file.object << file.language;
+        qDebug() << file.source << file.object << file.language;
         saveIfChanged(file.source);
         if ( file.ext == "" ) continue;
         if ( file.language == "cpp" ) {
             cmd = ebe["build/cpp"].toString();
             cmd.replace("$base",file.base);
             cmd.replace("$source",file.source);
-            //qDebug() << cmd;
+            qDebug() << cmd;
         } else if ( file.language == "c" ) {
             //qDebug() << name << "c";
             cmd = ebe["build/cc"].toString();
@@ -332,7 +333,7 @@ void SourceFrame::run()
             cmd.replace("$source",file.source);
             //qDebug() << cmd;
         } else if ( file.language == "asm" ) {
-            //qDebug() << name << "asm";
+            qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
 #if defined Q_OS_MAC || defined Q_WS_WIN
             FileLine fl;
