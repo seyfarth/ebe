@@ -85,7 +85,7 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     c->setCaseSensitivity(Qt::CaseSensitive);
     c->setWrapAround(false);
 
-    highlighter = new Highlighter(document());
+    highlighter = new CppHighlighter(document());
 
     connect ( this, SIGNAL(cursorPositionChanged()), 
               sourceFrame, SLOT(updateCursorPosition()) );
@@ -548,6 +548,11 @@ void SourceWindow::open(QString name)
     file.source = QDir::current().absoluteFilePath(name);
     file.setLanguage();
     ebe["language"] = file.language;
+    if ( file.language == "fortran" ) {
+        textEdit->highlighter = new FortranHighlighter(textEdit->document());
+    } else if ( file.language == "asm" ) {
+        textEdit->highlighter = new AsmHighlighter(textEdit->document());
+    }
 
     QByteArray text = f.readAll();
     int length = text.count();
@@ -653,6 +658,11 @@ void SourceWindow::open()
     projectWindow->addFile(file.source);
     file.setLanguage();
     ebe["language"] = file.language;
+    if ( file.language == "fortran" ) {
+        textEdit->highlighter = new FortranHighlighter(textEdit->document());
+    } else if ( file.language == "asm" ) {
+        textEdit->highlighter = new AsmHighlighter(textEdit->document());
+    }
     opened = true;
     changed = false;
     restoreCursor();
@@ -688,6 +698,11 @@ void SourceWindow::saveAs()
     // File changed variable, reset to false
     //qDebug() << "Saved it as " << file.source;
     file.setLanguage();
+    if ( file.language == "fortran" ) {
+        textEdit->highlighter = new FortranHighlighter(textEdit->document());
+    } else if ( file.language == "asm" ) {
+        textEdit->highlighter = new AsmHighlighter(textEdit->document());
+    }
     changed = false;
     saved = true;
     saveCursor();

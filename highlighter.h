@@ -12,15 +12,10 @@ QT_END_NAMESPACE
 
 class Highlighter : public QSyntaxHighlighter
 {
-    Q_OBJECT
-
 public:
     Highlighter(QTextDocument *parent = 0);
 
 protected:
-    void highlightBlock(const QString &text);
-
-private:
     QSet<QString> keywords;
     QString operators;
 
@@ -33,6 +28,33 @@ private:
     QTextCharFormat operatorFormat;
     QTextCharFormat illegalFormat;
     QTextCharFormat preprocessorFormat;
+};
+
+class AsmHighlighter : public Highlighter
+{
+public:
+    AsmHighlighter(QTextDocument *parent = 0);
+protected:
+    void highlightBlock(const QString &text);
+
+};
+
+class CppHighlighter : public Highlighter
+{
+public:
+    CppHighlighter(QTextDocument *parent = 0);
+protected:
+    void highlightBlock(const QString &text);
+
+};
+
+class FortranHighlighter : public Highlighter
+{
+public:
+    FortranHighlighter(QTextDocument *parent = 0);
+protected:
+    void highlightBlock(const QString &text);
+
 };
 
 #endif
