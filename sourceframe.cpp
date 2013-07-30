@@ -318,14 +318,14 @@ void SourceFrame::run()
     QString extraCmd;
     foreach ( file, files ) {
         //name = QDir::current().relativeFilePath(name);
-        qDebug() << file.source << file.object << file.language;
+        //qDebug() << file.source << file.object << file.language;
         saveIfChanged(file.source);
         if ( file.ext == "" ) continue;
         if ( file.language == "cpp" ) {
             cmd = ebe["build/cpp"].toString();
             cmd.replace("$base",file.base);
             cmd.replace("$source",file.source);
-            qDebug() << cmd;
+            //qDebug() << cmd;
         } else if ( file.language == "c" ) {
             //qDebug() << name << "c";
             cmd = ebe["build/cc"].toString();
@@ -333,7 +333,7 @@ void SourceFrame::run()
             cmd.replace("$source",file.source);
             //qDebug() << cmd;
         } else if ( file.language == "asm" ) {
-            qDebug() << name << "asm";
+            //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
 #if defined Q_OS_MAC || defined Q_WS_WIN
             FileLine fl;
@@ -348,7 +348,7 @@ void SourceFrame::run()
             int n = ebeInc.lastIndexOf('/');
             if ( n < 0 ) ebeInc = "ebe.inc";
             else ebeInc = ebeInc.left(n) + "/ebe.inc";
-            qDebug() << "ebeInc" << ebeInc;
+            //qDebug() << "ebeInc" << ebeInc;
             QFile::remove(ebeInc);
             QFile::copy(":/src/assembly/ebe.inc",ebeInc);
             QFile::setPermissions(ebeInc,
@@ -357,7 +357,7 @@ void SourceFrame::run()
             cmd.replace("$base",file.base);
             cmd.replace("$source",file.source);
             cmd.replace("$ebe_inc",ebeInc);
-            qDebug() << cmd;
+            //qDebug() << cmd;
         } else if ( file.language == "fortran" ) {
             //qDebug() << name << "fortran";
             cmd = ebe["build/fortran"].toString();

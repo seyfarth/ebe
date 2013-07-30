@@ -7,6 +7,7 @@
 QT_BEGIN_NAMESPACE
 class QPlainTextEdit;
 class QLineEdit;
+class QScrollBar;
 QT_END_NAMESPACE
 
 class ConsoleWindow : public QFrame
@@ -17,10 +18,16 @@ public:
     ConsoleWindow(QWidget *parent=0);
 
 private slots:
+    void log(QString);
+    void sendCommand();
+
+signals:
+    void doCommand(QString);
 
 private:
     QPlainTextEdit *textEdit;
     QLineEdit *commandLine;
+    QScrollBar *scrollBar;
 };
 
 #endif

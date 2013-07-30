@@ -1,15 +1,18 @@
 #include "consolewindow.h"
+#include "gdb.h"
 #include "settings.h"
 #include <QPushButton>
 #include <QPlainTextEdit>
 #include <QLineEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QScrollBar>
 #include <QTextCursor>
 #include <QApplication>
 #include <QLabel>
 #include <QFile>
 
+extern GDB *gdb;
 
 ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 {
@@ -33,4 +36,21 @@ ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
     layout->addWidget(textEdit);
     layout->addLayout(commandLayout);
     setLayout(layout);
+
+    scrollBar = textEdit->verticalScrollBar();
+
+    connect(gdb,SIGNAL(log(QString)),this,SLOT(log(QString)));
+    connect(commandLine,SIGNAL(returnPressed()),this,SLOT(sendCommand()));
+    connect(this,SIGNAL(doCommand(QString)),gdb,SLOT(doCommand(QString)));
+}
+
+void ConsoleWindow::log ( QString s )
+{
+    textEdit->textCursor().insertText(s+'\n');
+    scrollBar->setValue(textEdit->document()->lineCount()-1);
+}
+
+void ConsoleWindow::sendCommand()
+{
+    emit doCommand(commandLine->text());
 }

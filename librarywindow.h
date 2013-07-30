@@ -10,6 +10,8 @@
 QT_BEGIN_NAMESPACE
 class QListWidget;
 class QListWidgetItem;
+class QWebView;
+class QClipboard;
 QT_END_NAMESPACE
 
 class LibraryWindow : public QFrame
@@ -23,9 +25,12 @@ public:
     QString libraryPath;
     QStringList components;
     QStringList files;
+    QClipboard *clipboard;
+    QPointer<QWebView> view;
 
 private slots:
     void handleClick ( QListWidgetItem *it );
+    void copy();
 
 private:
     void cd ( QString dir );

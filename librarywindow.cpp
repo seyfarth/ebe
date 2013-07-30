@@ -4,7 +4,9 @@
 #include "settings.h"
 #include <QListWidget>
 #include <QWebView>
+#include <QWebFrame>
 #include <QListWidgetItem>
+#include <QClipboard>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
@@ -21,11 +23,13 @@ LibraryWindow::LibraryWindow(QWidget *parent) : QFrame(parent)
     layout->setSpacing(5);
     layout->setContentsMargins(10,10,10,10);
 
+    clipboard = QApplication::clipboard();
     list = new QListWidget(this);
     layout->addWidget(list);
     setLayout(layout);
     setWindowFlags(Qt::Window|Qt::WindowStaysOnTopHint);
     show();
+    view = NULL;
     connect ( list, SIGNAL(itemClicked(QListWidgetItem*)),
               this, SLOT(handleClick(QListWidgetItem*)) );
     cd ( ebe["library/path"].toString() );
@@ -118,13 +122,17 @@ void LibraryWindow::handleClick(QListWidgetItem * /* it */)
     if ( info.isDir() ) {
         cd ( file );
     } else if ( info.isFile() ) {
-        if ( file.indexOf(".htm") > 0 ) {
-            QWebView *view = new QWebView;
-            view->load(QUrl("qrc"+file));
-            view->setZoomFactor(ebe["font_size"].toInt()/14.0);
-            view->show();
-        } else {
-            sourceFrame->insertFile(file);
-        }
+        if ( view.isNull() ) view = new QWebView;
+        view->load(QUrl("qrc"+file));
+        view->setZoomFactor(ebe["font_size"].toInt()/14.0);
+        view->show();
+        connect(view,SIGNAL(loadFinished(bool)),this,SLOT(copy()));
     }
+}
+
+void LibraryWindow::copy()
+{
+    QString s=view->page()->currentFrame()->toPlainText();
+    s.chop(1);
+    clipboard->setText(s);
 }

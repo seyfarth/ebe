@@ -58,6 +58,7 @@ public slots:
     void doStep();
     void doContinue();
     void doStop();
+    void doCommand(QString);
     void getData(QStringList request);
     void requestVar(DataMap *map, QString name, QString address, QString type,
                     QString format, int size, int first, int last);
@@ -80,6 +81,7 @@ signals:
     void sendBackTrace(QStringList);
     void resetData();
     void endFlash();
+    void log(QString);
 };
 
 #endif

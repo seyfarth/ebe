@@ -4,6 +4,7 @@
 #include "gdb.h"
 #include "settings.h"
 #include "terminalwindow.h"
+#include "consolewindow.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
@@ -17,6 +18,8 @@ extern int breakLine;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
+
+extern ConsoleWindow *consoleWindow;
 
 IntHash sizeForType;
 QSet<QString> simpleTypes;
@@ -175,6 +178,7 @@ void GDB::send(QString cmd, QString /*options*/)
     cmd.chop(1);
     QString result;
     result = readLine();
+    emit log(result);
     //qDebug() << "result:" << result;
     while ( result.left(5) != "(gdb)" ) {
         //qDebug() << "result" << result;
@@ -189,6 +193,7 @@ void GDB::send(QString cmd, QString /*options*/)
             //}
         //}
         result = readLine();
+        emit log(result);
         //qDebug() << "result:" << result;
     }
 }
@@ -201,10 +206,12 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
     gdbProcess->write(cmd.toAscii());
     QString result;
     result = readLine();
+    emit log(result);
     //qDebug() << "result:" << result;
     while ( result.right(5) != "(gdb)" ) {
         list.append(result);
         result = readLine();
+        emit log(result);
         //qDebug() << "result:" << result;
     }
     if ( result.length() > 5 ) list.append(result);
@@ -274,6 +281,11 @@ void GDB::initGdb()
 }
 
 //public slots:
+void GDB::doCommand(QString cmd)
+{
+    send(cmd);
+}
+
 void GDB::doRun(QString exe, QString options, QStringList files,
           QList<StringSet> breakpoints, QStringList g)
 {

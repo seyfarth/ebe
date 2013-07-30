@@ -30,7 +30,7 @@ RegisterWindow *registerWindow;
 FloatWindow *floatWindow;
 ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
-//ConsoleWindow *consoleWindow;
+ConsoleWindow *consoleWindow;
 BackTraceWindow *backTraceWindow;
 BitBucket *bitBucket;
 GDB *gdb;
@@ -267,7 +267,7 @@ void MainWindow::restoreMainWindow()
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
     toyBoxDock->setFloating(ebe["toybox/floating"].toBool());
     bitBucketDock->setFloating(ebe["bitbucket/floating"].toBool());
-    //consoleDock->setFloating(ebe["console/floating"].toBool());
+    consoleDock->setFloating(ebe["console/floating"].toBool());
 
     if ( !userSetGeometry &&  ebe.contains("ebe/geometry") ) {
         restoreGeometry(ebe["ebe/geometry"].toByteArray());
@@ -293,8 +293,8 @@ void MainWindow::restoreMainWindow()
                             ebe["variable_font"].toString() + "}" );
     terminalDock->setStyleSheet("QDockWidget::title { font-family: " +
                             ebe["variable_font"].toString() + "}" );
-    //consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
-                            //ebe["variable_font"].toString() + "}" );
+    consoleDock->setStyleSheet("QDockWidget::title { font-family: " +
+                            ebe["variable_font"].toString() + "}" );
 
     fontSize = ebe["font_size"].toInt();
     setFontSize();
@@ -319,7 +319,7 @@ void MainWindow::saveSettings()
     ebe["terminal/floating"] = terminalDock->isFloating();
     ebe["toybox/floating"] = toyBoxDock->isFloating();
     ebe["bitbucket/floating"] = bitBucketDock->isFloating();
-    //ebe["console/floating"]  = consoleDock->isFloating();
+    ebe["console/floating"]  = consoleDock->isFloating();
     ebe["data/visible"]      = dataDock->isVisible();
     ebe["register/visible"]  = registerDock->isVisible();
     ebe["float/visible"]     = floatDock->isVisible();
@@ -327,7 +327,7 @@ void MainWindow::saveSettings()
     ebe["terminal/visible"]  = terminalDock->isVisible();
     ebe["toybox/visible"]  = toyBoxDock->isVisible();
     ebe["bitbucket/visible"]  = bitBucketDock->isVisible();
-    //ebe["console/visible"]   = consoleDock->isVisible();
+    ebe["console/visible"]   = consoleDock->isVisible();
     settings->write();
 }
 
@@ -536,7 +536,7 @@ void MainWindow::createMenus()
     viewMenu->addAction ( registerDock->toggleViewAction() );
     viewMenu->addAction ( floatDock->toggleViewAction() );
     viewMenu->addAction ( backTraceDock->toggleViewAction() );
-    //viewMenu->addAction ( consoleDock->toggleViewAction() );
+    viewMenu->addAction ( consoleDock->toggleViewAction() );
     viewMenu->addAction ( terminalDock->toggleViewAction() );
     viewMenu->addAction ( projectDock->toggleViewAction() );
     viewMenu->addAction ( toyBoxDock->toggleViewAction() );
@@ -757,13 +757,13 @@ void MainWindow::createDockWindows()
     bitBucketDock->setWidget(bitBucket);
     addDockWidget(Qt::LeftDockWidgetArea, bitBucketDock);
 
-    //consoleDock = new QDockWidget(tr("Console"));
-    //consoleDock->setObjectName("Dock 9");
-    //consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
-                              //Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
-    //consoleWindow = new ConsoleWindow(consoleDock);
-    //consoleDock->setWidget(consoleWindow);
-    //addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
+    consoleDock = new QDockWidget(tr("Console"));
+    consoleDock->setObjectName("Dock 9");
+    consoleDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                       Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    consoleWindow = new ConsoleWindow(consoleDock);
+    consoleDock->setWidget(consoleWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
 
     dataDock->setVisible(ebe["data/visible"].toBool());
     registerDock->setVisible(ebe["register/visible"].toBool());
@@ -775,7 +775,7 @@ void MainWindow::createDockWindows()
     toyBoxDock->setVisible(ebe["toybox/visible"].toBool());
     if ( userSetGeometry && userHeight < 768 ) ebe["bitbucket/visible"] = false;
     bitBucketDock->setVisible(ebe["bitbucket/visible"].toBool());
-    //consoleDock->setVisible(ebe["console/visible"].toBool());
+    consoleDock->setVisible(ebe["console/visible"].toBool());
 }
 
 void MainWindow::editSettings()

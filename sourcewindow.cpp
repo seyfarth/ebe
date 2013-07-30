@@ -425,7 +425,6 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 
     heightInPixels = 0;
     textHeight = 0;
-    numLines = 0;
     changed = false;
     topNumber = 0;
     bottomNumber = 0;
@@ -592,7 +591,6 @@ void SourceWindow::open()
 {
     // How shall we set status bar text here?
 
-    //qDebug() << "sw open";
     opened = false;
 
     QString selected = tr("C/C++ files (*.c* *.h *.t *akefile)");
