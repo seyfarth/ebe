@@ -1,0 +1,3 @@
+a:      db      'a'
+ab:     db      'a', 'b'    ; Multiple characters
+chars:  db      'ab'        ; Another way to define 2 characters

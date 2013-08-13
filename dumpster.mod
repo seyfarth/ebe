@@ -1,0 +1,74 @@
+GFORTRAN module version '9' created from toybox_template.f
+MD5:95165279a9a007c721619d0fee0d4f7f -- If you edit this, you'll get what you deserve.
+
+(() () () () () () () () () () () () () () () () () () () () () () () ()
+() () ())
+
+()
+
+(('dump' 'dumpster' 2 3 4 5 6 7 8 9 10 11))
+
+()
+
+()
+
+()
+
+(11 'd_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 12 0 (13) () 0 () ()
+() 0 0)
+14 'dumpster' 'dumpster' '' 1 ((MODULE UNKNOWN-INTENT UNKNOWN-PROC
+UNKNOWN UNKNOWN 0 0) (UNKNOWN 0 0 0 0 UNKNOWN ()) 0 0 () () 0 () () () 0
+0)
+10 'f_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 15 0 (16) () 0 () ()
+() 0 0)
+6 'i1_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 17 0 (18) () 0 () ()
+() 0 0)
+7 'i2_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 19 0 (20) () 0 () ()
+() 0 0)
+8 'i4_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 21 0 (22) () 0 () ()
+() 0 0)
+9 'i8_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 23 0 (24) () 0 () ()
+() 0 0)
+2 'l1_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 25 0 (26) () 0 () ()
+() 0 0)
+3 'l2_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 27 0 (28) () 0 () ()
+() 0 0)
+4 'l4_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 29 0 (30) () 0 () ()
+() 0 0)
+5 'l8_dump' 'dumpster' '' 1 ((PROCEDURE UNKNOWN-INTENT MODULE-PROC DECL
+UNKNOWN 0 0 SUBROUTINE) (UNKNOWN 0 0 0 0 UNKNOWN ()) 31 0 (32) () 0 () ()
+() 0 0)
+13 'x' '' '' 12 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (REAL 8 0 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+16 'x' '' '' 15 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (REAL 4 0 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+24 'x' '' '' 23 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (INTEGER 8 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
+22 'x' '' '' 21 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
+20 'x' '' '' 19 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (INTEGER 2 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
+18 'x' '' '' 17 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (INTEGER 1 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
+32 'x' '' '' 31 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (LOGICAL 8 0 0 0 LOGICAL ()) 0 0 () () 0 () () () 0 0)
+30 'x' '' '' 29 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (LOGICAL 4 0 0 0 LOGICAL ()) 0 0 () () 0 () () () 0 0)
+28 'x' '' '' 27 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (LOGICAL 2 0 0 0 LOGICAL ()) 0 0 () () 0 () () () 0 0)
+26 'x' '' '' 25 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN UNKNOWN 0
+0 DUMMY) (LOGICAL 1 0 0 0 LOGICAL ()) 0 0 () () 0 () () () 0 0)
+)
+
+('d_dump' 0 11 'dumpster' 0 14 'f_dump' 0 10 'i1_dump' 0 6 'i2_dump' 0 7
+'i4_dump' 0 8 'i8_dump' 0 9 'l1_dump' 0 2 'l2_dump' 0 3 'l4_dump' 0 4
+'l8_dump' 0 5)

@@ -1,0 +1,3 @@
+    ; badh or badH  h/H suffix - confusion with identifiers
+    ; 0abch         definitely not an identifier
+    ; $0abc         requires 0

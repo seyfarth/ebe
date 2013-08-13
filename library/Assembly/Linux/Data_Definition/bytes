@@ -1,0 +1,4 @@
+number: db      1               ; Decimal
+hex:    db      0x0a            ; Hexadecimal
+bin:    db      01010101b       ; Binary 
+array:  db      1, 2, 1111b     ; Multiple values

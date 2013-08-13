@@ -1,0 +1,2 @@
+C, c or * in column 1
+anything from ! to eol (when not part of a string)
