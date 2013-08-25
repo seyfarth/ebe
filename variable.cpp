@@ -4,7 +4,7 @@ DefineVariableDialog::DefineVariableDialog()
 : QDialog()
 {
     setObjectName("Define Variable");
-    setWindowTitle("Define Variable");
+    setWindowTitle(tr("Define Variable"));
     //setFrameStyle ( QFrame::Panel | QFrame::Raised );
     //setLineWidth(4);
     setModal(true);
@@ -57,7 +57,7 @@ DefineVariableDialog::DefineVariableDialog()
     layout->addWidget ( lastEdit, 6, 1 );
 
     okButton = new QPushButton("OK");
-    cancelButton = new QPushButton("Cancel");
+    cancelButton = new QPushButton(tr("Cancel"));
     connect(okButton, SIGNAL(clicked()), this, SLOT(defineVariable()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
     connect(typeCombo,SIGNAL(currentIndexChanged(QString)),
@@ -121,7 +121,7 @@ ArrayBoundsDialog::ArrayBoundsDialog()
 : QDialog()
 {
     setObjectName("Set Array Bounds");
-    setWindowTitle("Set Array Bounds");
+    setWindowTitle(tr("Set Array Bounds"));
     //setFrameStyle ( QFrame::Panel | QFrame::Raised );
     //setLineWidth(4);
     setModal(true);
@@ -151,7 +151,7 @@ ArrayBoundsDialog::ArrayBoundsDialog()
     layout->addLayout(lastLayout);
 
     okButton = new QPushButton("OK");
-    cancelButton = new QPushButton("Cancel");
+    cancelButton = new QPushButton(tr("Cancel"));
     connect(okButton, SIGNAL(clicked()), this, SLOT(setArrayBounds()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
     connect(arrayCheck,SIGNAL(stateChanged(int)),

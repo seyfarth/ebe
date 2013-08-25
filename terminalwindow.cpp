@@ -55,7 +55,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
 
     lineEdit = new InputEdit;
     QLabel *label = new QLabel(tr("Input"));
-    clearButton = new QPushButton("Clear output");
+    clearButton = new QPushButton(tr("Clear output"));
     QHBoxLayout *lineLayout = new QHBoxLayout;
     lineLayout->addWidget(label);
     lineLayout->addWidget(lineEdit);
@@ -156,12 +156,12 @@ void TerminalWindow::lineEditReady()
         a[1] = '\n';
         WriteFile(toChild,a.data(),2,&res,NULL);
     } else if ( ! WriteFile(toChild,a.data(),n,&res,NULL) ) {
-        qDebug() << "error writing to child on lineEditReady";
+        qDebug() << tr("error writing to child on lineEditReady");
     }
     dataReady(s+"\n");
 #else
     if ( write(pty,a.data(),a.length()) < 1 ) {
-        qDebug() << "error writing to pty on lineEditReady";
+        qDebug() << tr("error writing to pty on lineEditReady");
     }
 #endif
     lineEdit->clear();

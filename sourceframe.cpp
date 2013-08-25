@@ -1071,11 +1071,11 @@ bool SourceFrame::filesSaved()
 
     if ( filesToSave.length() > 0 ) {
         QString msg;
-        msg = "The following files have not been saved:\n";
+        msg = tr("The following files have not been saved:\n");
         foreach ( QString name, filesToSave ) {
             msg += "        " + name + "\n";
         }
-        msg += "Do you wish to save them all?";
+        msg += tr("Do you wish to save them all?");
         int ret = QMessageBox::warning(this, tr("Warning"), msg,
                 QMessageBox::Save | QMessageBox::Discard |
                 QMessageBox::Cancel,
@@ -1276,7 +1276,7 @@ void SourceFrame::prettify()
 void SourceFrame::newFile()
 {
     source = new SourceWindow;
-    int index = tab->addTab(source,"unnamed");
+    int index = tab->addTab(source,tr("unnamed"));
     tab->setCurrentIndex(index);
 }
 

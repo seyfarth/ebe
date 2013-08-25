@@ -14,11 +14,12 @@ UnaryBitPanel::UnaryBitPanel(QWidget *parent) : QFrame(parent)
     operatorCombo = new QComboBox(this);
 
     QStringList ops;
-    ops << "!  Boolean not" << "-  Negative" << "~  Bitwise not";
+    ops << tr("!  Boolean not") << tr("-  Negative")
+        << tr("~  Bitwise not");
     operatorCombo->addItems(ops);
 
     QHBoxLayout *opLayout = new QHBoxLayout;
-    opLayout->addWidget(new QLabel("Operator "));
+    opLayout->addWidget(new QLabel(tr("Operator ")));
     opLayout->addWidget(operatorCombo);
     opLayout->addStretch();
 
@@ -30,7 +31,8 @@ UnaryBitPanel::UnaryBitPanel(QWidget *parent) : QFrame(parent)
     table->setColumnCount(4);
     table->setRowCount(1);
     QStringList headers;
-    headers << "Input" << "Operator" << "Result" << "Comment";
+    headers << tr("Input") << tr("Operator") << tr("Result")
+            << tr("Comment");
     table->setHorizontalHeaderLabels(headers);
 
     //number = new BinaryNumber;
@@ -57,7 +59,7 @@ UnaryBitPanel::UnaryBitPanel(QWidget *parent) : QFrame(parent)
     connect ( operatorCombo, SIGNAL(activated(QString)),
               this, SLOT(selectOperator(QString)) );
 
-    selectOperator("! Boolean not");
+    selectOperator(tr("!  Boolean not"));
 
 }
 
@@ -92,7 +94,7 @@ void UnaryBitPanel::selectOperator(QString o)
         table->setCellWidget(0,3,new QLabel(""));
         connect ( doit, SIGNAL(clicked()), this, SLOT(bitwiseNotStep1()) );
     } else {
-        qDebug() << "Unknown operator:" << o;
+        qDebug() << tr("Unknown operator:") << o;
     }
 }
 
@@ -100,7 +102,7 @@ void UnaryBitPanel::notStep1()
 {
     value = inputEdit->value();
     input->setBits(value,16);
-    table->setCellWidget(0,3,new QLabel("Value converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Value converted to binary")));
     table->setRowCount(2);
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton("!");
@@ -113,7 +115,7 @@ void UnaryBitPanel::notStep2()
     output1 = new BinaryNumber;
     output1->setBits(!value,8);
     table->setCellWidget(1,2,output1);
-    table->setCellWidget(1,3,new QLabel("Result as a binary bool"));
+    table->setCellWidget(1,3,new QLabel(tr("Result as a binary bool")));
     table->setCellWidget(1,1,new QLabel(""));
 }
 
@@ -121,7 +123,7 @@ void UnaryBitPanel::bitwiseNotStep1()
 {
     value = inputEdit->value();
     input->setBits(value,16);
-    table->setCellWidget(0,3,new QLabel("Value converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Value converted to binary")));
     table->setRowCount(2);
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton("~");
@@ -134,7 +136,7 @@ void UnaryBitPanel::bitwiseNotStep2()
     output1 = new BinaryNumber;
     output1->setBits(~value,16);
     table->setCellWidget(1,2,output1);
-    table->setCellWidget(1,3,new QLabel("All bits flipped"));
+    table->setCellWidget(1,3,new QLabel(tr("All bits flipped")));
     table->setCellWidget(1,1,new QLabel(""));
 }
 
@@ -142,7 +144,7 @@ void UnaryBitPanel::negateStep1()
 {
     value = inputEdit->value();
     input->setBits(value,16);
-    table->setCellWidget(0,3,new QLabel("Value converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Value converted to binary")));
     table->setRowCount(2);
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton("-");
@@ -156,7 +158,7 @@ void UnaryBitPanel::negateStep2()
     output1->setBits(~value,16);
     table->setRowCount(3);
     table->setCellWidget(1,2,output1);
-    table->setCellWidget(1,3,new QLabel("All bits flipped"));
+    table->setCellWidget(1,3,new QLabel(tr("All bits flipped")));
     table->setCellWidget(1,1,new QLabel(""));
     doit = new QPushButton("-");
     table->setCellWidget(2,1,doit);
@@ -168,7 +170,7 @@ void UnaryBitPanel::negateStep3()
     add1 = new BinaryNumber;
     add1->setText("+ 1",16);
     table->setCellWidget(2,2,add1);
-    table->setCellWidget(2,3,new QLabel("Adding 1"));
+    table->setCellWidget(2,3,new QLabel(tr("Adding 1")));
     table->setRowCount(4);
     table->setCellWidget(2,1,new QLabel(""));
     doit = new QPushButton("-");
@@ -181,6 +183,6 @@ void UnaryBitPanel::negateStep4()
     output2 = new BinaryNumber;
     output2->setBits(-value,16);
     table->setCellWidget(3,2,output2);
-    table->setCellWidget(3,3,new QLabel("Twos complement"));
+    table->setCellWidget(3,3,new QLabel(tr("Twos complement")));
     table->setCellWidget(3,1,new QLabel(""));
 }

@@ -13,12 +13,12 @@ IntMath::IntMath(QWidget *parent) : QFrame(parent)
     mathCombo = new QComboBox(this);
 
     QStringList ops;
-    ops << "Addition" << "Multiplication";
+    ops << tr("Addition") << tr("Multiplication");
 
     mathCombo->addItems(ops);
 
     QHBoxLayout *opLayout = new QHBoxLayout;
-    opLayout->addWidget(new QLabel("Operation "));
+    opLayout->addWidget(new QLabel(tr("Operation ")));
     opLayout->addWidget(mathCombo);
     opLayout->addStretch();
 
@@ -35,7 +35,7 @@ IntMath::IntMath(QWidget *parent) : QFrame(parent)
               this, SLOT(selectOperator(QString)) );
 
 
-    selectOperator("Addition");
+    selectOperator(tr("Addition"));
 }
 
 void IntMath::setFontHeightAndWidth ( int height, int width )
@@ -49,7 +49,7 @@ void IntMath::selectOperator(QString o)
     QStringList headers;
 
     fontSize = ebe["font_size"].toInt();
-    if ( o == "Addition" ) {
+    if ( o == tr("Addition") ) {
         op = o;
         input1 = new BinaryNumber;
         input2 = new BinaryNumber;
@@ -62,7 +62,8 @@ void IntMath::selectOperator(QString o)
         table->setCellWidget(1,0,input1Edit);
         input2Edit = new IntegerEdit;
         table->setCellWidget(2,0,input2Edit);
-        headers << "Input" << "Operator" << "Bits" << "Comment";
+        headers << tr("Input") << tr("Operator") << tr("Bits")
+                << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
         doit = new QPushButton("+");
         table->setCellWidget(3,1,doit);
@@ -71,7 +72,7 @@ void IntMath::selectOperator(QString o)
         table->setColumnWidth(2,17*fontSize+5);
         table->setColumnWidth(3,20*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(add1()) );
-    } else if ( o == "Multiplication" ) {
+    } else if ( o == tr("Multiplication") ) {
         op = o;
         input1 = new BinaryNumber;
         input2 = new BinaryNumber;
@@ -82,7 +83,8 @@ void IntMath::selectOperator(QString o)
         table->setCellWidget(0,0,input1Edit);
         input2Edit = new IntegerEdit;
         table->setCellWidget(1,0,input2Edit);
-        headers << "Input" << "Operator" << "Bits" << "Comment";
+        headers << tr("Input") << tr("Operator") << tr("Bits")
+                << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
         doit = new QPushButton("*");
         table->setCellWidget(2,1,doit);
@@ -92,7 +94,7 @@ void IntMath::selectOperator(QString o)
         table->setColumnWidth(3,20*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(multiply1()) );
     } else {
-        qDebug() << "Unknown operator:" << o;
+        qDebug() << tr("Unknown operator:") << o;
     }
 }
 
@@ -115,10 +117,10 @@ void IntMath::add1()
     value2 = input2Edit->value();
     value2 = value2 & 0xffff;
     bit = 0;
-    table->setCellWidget(0,3,new QLabel(" Carries"));
-    table->setCellWidget(1,3,new QLabel(" a & 0xffff copied into column 3"));
-    table->setCellWidget(2,3,new QLabel(" b & 0xffff copied into column 3"));
-    table->setCellWidget(3,3,new QLabel(" Sum"));
+    table->setCellWidget(0,3,new QLabel(tr(" Carries")));
+    table->setCellWidget(1,3,new QLabel(tr(" a & 0xffff copied into column 3")));
+    table->setCellWidget(2,3,new QLabel(tr(" b & 0xffff copied into column 3")));
+    table->setCellWidget(3,3,new QLabel(tr(" Sum")));
     carry->clear();
     carry->setBits ( value2, 17, 0 );
     table->setCellWidget(0,2,carry);
@@ -177,8 +179,8 @@ void IntMath::multiply1()
     value2 = value2 & 0xffff;
     bit = 0;
     row = 2;
-    table->setCellWidget(0,3,new QLabel(" a & 0xffff copied into column 3"));
-    table->setCellWidget(1,3,new QLabel(" b & 0xffff copied into column 3"));
+    table->setCellWidget(0,3,new QLabel(tr(" a & 0xffff copied into column 3")));
+    table->setCellWidget(1,3,new QLabel(tr(" b & 0xffff copied into column 3")));
     input1->clear();
     input1->setBits ( value1, 32, 16 );
     table->setCellWidget(0,2,input1);
@@ -202,7 +204,7 @@ void IntMath::multiply2()
         output->setOverline();
         table->setCellWidget(row,2,output);
         table->setCellWidget(row,1,new QLabel(""));
-        table->setCellWidget(row,3,new QLabel(" Product"));
+        table->setCellWidget(row,3,new QLabel(tr(" Product")));
         table->update();
         return;
     }

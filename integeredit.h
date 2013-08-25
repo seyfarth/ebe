@@ -7,6 +7,7 @@
 
 class IntegerEdit : public QLineEdit
 {
+    Q_OBJECT
 public:
     IntegerEdit();
     IntegerValidator *val;

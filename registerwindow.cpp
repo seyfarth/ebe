@@ -235,7 +235,7 @@ void RegisterWindow::receiveRegs ( StringHash map )
 void RegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     int column = table->currentColumn();
-    QMenu menu("Register menu");
+    QMenu menu(tr("Register menu"));
     if ( column % 2 == 0 ) {
 /*
  *      If the column is an even number, this is a register name

@@ -17,6 +17,6 @@ void readInstructions()
         }
         file.close();
     } else {
-        qDebug() << "Could not open :/src/assembly/instructions";
+        qDebug() << QFile::tr("Could not open :/src/assembly/instructions");
     }
 }

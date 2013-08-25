@@ -14,14 +14,14 @@ IntConvert::IntConvert(QWidget *parent) : QFrame(parent)
     convertCombo = new QComboBox(this);
 
     QStringList ops;
-    ops << "Decimal to Binary" << "Decimal to Hex"
-        << "Binary to Decimal" << "Hex to Decimal"
-        << "Binary to Hex" << "Hex to Binary";
+    ops << tr("Decimal to Binary") << tr("Decimal to Hex")
+        << tr("Binary to Decimal") << tr("Hex to Decimal")
+        << tr("Binary to Hex") << tr("Hex to Binary");
 
     convertCombo->addItems(ops);
 
     QHBoxLayout *opLayout = new QHBoxLayout;
-    opLayout->addWidget(new QLabel("Operator "));
+    opLayout->addWidget(new QLabel(tr("Operator ")));
     opLayout->addWidget(convertCombo);
     opLayout->addStretch();
 
@@ -46,12 +46,12 @@ IntConvert::IntConvert(QWidget *parent) : QFrame(parent)
 
     setLayout(layout);
 
-    doit = new QPushButton("to binary");
+    doit = new QPushButton(tr("to binary"));
 
     connect ( convertCombo, SIGNAL(activated(QString)),
               this, SLOT(selectOperator(QString)) );
 
-    selectOperator("Decimal to Binary");
+    selectOperator(tr("Decimal to Binary"));
 
 }
 
@@ -68,17 +68,18 @@ void IntConvert::selectOperator(QString o)
 {
     QStringList headers;
 
-    if ( o == "Decimal to Binary" ) {
+    if ( o == tr("Decimal to Binary") ) {
         op = o;
         table->clear();
         table->setColumnCount(7);
         table->setRowCount(1);
         inputEdit = new IntegerEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "Input" << "Conversion" << " n " << "n / 2" << "n % 2"
-                << "Result" << "Comment";
+        headers << tr("Input") << tr("Conversion")
+                << " n " << "n / 2" << "n % 2"
+                << tr("Result") << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
-        doit = new QPushButton("to binary");
+        doit = new QPushButton(tr("to binary"));
         table->setCellWidget(0,1,doit);
         table->setColumnWidth(0,8*fontSize);
         table->setColumnWidth(1,8*fontSize);
@@ -88,15 +89,16 @@ void IntConvert::selectOperator(QString o)
         table->setColumnWidth(5,16*fontSize+5);
         table->setColumnWidth(6,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToBinary1()) );
-    } else if ( o == "Decimal to Hex" ) {
+    } else if ( o == tr("Decimal to Hex") ) {
         op = o;
         table->clear();
         table->setColumnCount(7);
         table->setRowCount(1);
         inputEdit = new IntegerEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "Input" << "Conversion" << " n " << "n / 16" << "n % 16"
-                << "Result" << "Comment";
+        headers << tr("Input") << tr("Conversion")
+                << " n " << "n / 16" << "n % 16"
+                << tr("Result") << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
         table->setColumnWidth(0,8*fontSize);
         table->setColumnWidth(1,8*fontSize);
@@ -108,17 +110,17 @@ void IntConvert::selectOperator(QString o)
         doit = new QPushButton("to hex");
         table->setCellWidget(0,1,doit);
         connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToHex1()) );
-    } else if ( o == "Binary to Decimal" ) {
+    } else if ( o == tr("Binary to Decimal") ) {
         op = o;
         table->clear();
         table->setColumnCount(7);
         table->setRowCount(1);
         inputEdit = new IntegerEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "Input" << "Conversion" << "number" << "bit"
-                << "2**bit" << "Result" << "Comment";
+        headers << tr("Input") << tr("Conversion") << tr("number") << "bit"
+                << "2**bit" << tr("Result") << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
-        doit = new QPushButton("to decimal");
+        doit = new QPushButton(tr("to decimal"));
         table->setCellWidget(0,1,doit);
         table->setColumnWidth(0,8*fontSize);
         table->setColumnWidth(1,8*fontSize);
@@ -128,17 +130,18 @@ void IntConvert::selectOperator(QString o)
         table->setColumnWidth(5,6*fontSize);
         table->setColumnWidth(6,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(binaryToDecimal1()) );
-    } else if ( o == "Hex to Decimal" ) {
+    } else if ( o == tr("Hex to Decimal") ) {
         op = o;
         table->clear();
         table->setColumnCount(8);
         table->setRowCount(1);
         inputEdit = new IntegerEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "Input" << "Conversion" << "number" << "nibble"
-                << "2**nibble" << "nibble value" << "Result" << "Comment";
+        headers << tr("Input") << tr("Conversion") << tr("number")
+                << tr("nibble") << tr("2**nibble") << tr("nibble value")
+                << tr("Result") << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
-        doit = new QPushButton("to decimal");
+        doit = new QPushButton(tr("to decimal"));
         table->setCellWidget(0,1,doit);
         table->setColumnWidth(0,8*fontSize);
         table->setColumnWidth(1,8*fontSize);
@@ -149,15 +152,15 @@ void IntConvert::selectOperator(QString o)
         table->setColumnWidth(6,6*fontSize);
         table->setColumnWidth(7,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(hexToDecimal1()) );
-    } else if ( o == "Binary to Hex" ) {
+    } else if ( o == tr("Binary to Hex") ) {
         op = o;
         table->clear();
         table->setColumnCount(6);
         table->setRowCount(1);
         inputEdit = new IntegerEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "Input" << "Conversion" << "number" << "nibble"
-                << "Result" << "Comment";
+        headers << tr("Input") << tr("Conversion") << tr("number")
+                << tr("nibble") << tr("Result") << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
         doit = new QPushButton("to hex");
         table->setCellWidget(0,1,doit);
@@ -168,17 +171,17 @@ void IntConvert::selectOperator(QString o)
         table->setColumnWidth(4,5*fontSize);
         table->setColumnWidth(5,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(binaryToHex1()) );
-    } else if ( o == "Hex to Binary" ) {
+    } else if ( o == tr("Hex to Binary") ) {
         op = o;
         table->clear();
         table->setColumnCount(6);
         table->setRowCount(1);
         inputEdit = new IntegerEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "Input" << "Conversion" << "number" << "nibble"
-                << "Result" << "Comment";
+        headers << tr("Input") << tr("Conversion") << tr("number")
+                << tr("nibble") << tr("Result") << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
-        doit = new QPushButton("to binary");
+        doit = new QPushButton(tr("to binary"));
         table->setCellWidget(0,1,doit);
         table->setColumnWidth(0,8*fontSize);
         table->setColumnWidth(1,8*fontSize);
@@ -188,7 +191,7 @@ void IntConvert::selectOperator(QString o)
         table->setColumnWidth(5,16*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(hexToBinary1()) );
     } else {
-        qDebug() << "Unknown operator:" << o;
+        qDebug() << tr("Unknown operator:") << o;
     }
 }
 
@@ -205,7 +208,7 @@ void IntConvert::decimalToBinary1()
     value = value & 0xffff;
     computedValue = 0;
     bit = 0;
-    table->setCellWidget(0,6,new QLabel("Value & 0xffff copied into column 3"));
+    table->setCellWidget(0,6,new QLabel(tr("Value & 0xffff copied into column 3")));
     label = new QLabel(QString("%1").arg(value));
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(0,2,label);
@@ -231,13 +234,13 @@ void IntConvert::decimalToBinary2()
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(bit,4,label);
     table->setCellWidget(bit,5,output);
-    table->setCellWidget(bit,6,new QLabel("divide by 2"));
+    table->setCellWidget(bit,6,new QLabel(tr("divide by 2")));
     
     value = value >> 1;
     if ( value == 0 ) return;
     bit++;
     table->setRowCount(bit+1);
-    doit = new QPushButton("to binary");
+    doit = new QPushButton(tr("to binary"));
     table->setCellWidget(bit,1,doit);
     label = new QLabel(QString("%1").arg(value));
     label->setAlignment(Qt::AlignCenter);
@@ -247,7 +250,7 @@ void IntConvert::decimalToBinary2()
     table->setCellWidget(bit,4,new QLabel(""));
     table->setCellWidget(bit,5,new QLabel(""));
     connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToBinary2()) );
-    table->setCellWidget(bit,6,new QLabel("moved n/2 to n in new row"));
+    table->setCellWidget(bit,6,new QLabel(tr("moved n/2 to n in new row")));
 }
 
 void IntConvert::decimalToHex1()
@@ -263,7 +266,7 @@ void IntConvert::decimalToHex1()
     value = value & 0xffff;
     computedValue = 0;
     nibble = 0;
-    table->setCellWidget(0,6,new QLabel("Value & 0xffff copied into column 3"));
+    table->setCellWidget(0,6,new QLabel(tr("Value & 0xffff copied into column 3")));
     label = new QLabel(QString("%1").arg(value));
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(0,2,label);
@@ -289,13 +292,13 @@ void IntConvert::decimalToHex2()
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(nibble,4,label);
     table->setCellWidget(nibble,5,output);
-    table->setCellWidget(nibble,6,new QLabel("divide by 16"));
+    table->setCellWidget(nibble,6,new QLabel(tr("divide by 16")));
     
     value = value >> 4;
     if ( value == 0 ) return;
     nibble++;
     table->setRowCount(nibble+1);
-    doit = new QPushButton("to hex");
+    doit = new QPushButton(tr("to hex"));
     table->setCellWidget(nibble,1,doit);
     label = new QLabel(QString("%1").arg(value));
     label->setAlignment(Qt::AlignCenter);
@@ -305,7 +308,7 @@ void IntConvert::decimalToHex2()
     table->setCellWidget(nibble,4,new QLabel(""));
     table->setCellWidget(nibble,5,new QLabel(""));
     connect ( doit, SIGNAL(clicked()), this, SLOT(decimalToHex2()) );
-    table->setCellWidget(nibble,6,new QLabel("moved n/16 to n in new row"));
+    table->setCellWidget(nibble,6,new QLabel(tr("moved n/16 to n in new row")));
 }
 
 void IntConvert::binaryToDecimal1()
@@ -359,20 +362,20 @@ void IntConvert::binaryToDecimal2()
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(row,5,label);
     table->setCellWidget(row,6, new QLabel(
-           QString("Result is value for rightmost %1 bits").arg(bit+1)
+           QString(tr("Result is value for rightmost %1 bits")).arg(bit+1)
            ));
     
     value = value >> 1;
     bit++;
 
     if ( value == 0 ) {
-        table->setCellWidget(row,6, new QLabel("Done"));
+        table->setCellWidget(row,6, new QLabel(tr("Done")));
         return;
     }
 
     row++;
     table->setRowCount(row+1);
-    doit = new QPushButton("to decimal");
+    doit = new QPushButton(tr("to decimal"));
     table->setCellWidget(row,0,new QLabel(""));
     table->setCellWidget(row,1,doit);
     table->setCellWidget(row,2,new QLabel(""));
@@ -435,20 +438,20 @@ void IntConvert::hexToDecimal2()
     label->setAlignment(Qt::AlignCenter);
     table->setCellWidget(row,6,label);
     table->setCellWidget(row,7, new QLabel(
-           QString("Result is value for rightmost %1 nibbles").arg(nibble+1)
+           QString(tr("Result is value for rightmost %1 nibbles")).arg(nibble+1)
            ));
     
     value = value >> 4;
     nibble++;
 
     if ( value == 0 ) {
-        table->setCellWidget(row,7, new QLabel("Done"));
+        table->setCellWidget(row,7, new QLabel(tr("Done")));
         return;
     }
 
     row++;
     table->setRowCount(row+1);
-    doit = new QPushButton("to decimal");
+    doit = new QPushButton(tr("to decimal"));
     table->setCellWidget(row,0,new QLabel(""));
     table->setCellWidget(row,1,doit);
     table->setCellWidget(row,2,new QLabel(""));
@@ -508,7 +511,7 @@ void IntConvert::binaryToHex2()
 
     row++;
     table->setRowCount(row+1);
-    doit = new QPushButton("to hex");
+    doit = new QPushButton(tr("to hex"));
     table->setCellWidget(row,0,new QLabel(""));
     table->setCellWidget(row,1,doit);
     table->setCellWidget(row,2,new QLabel(""));
@@ -571,7 +574,7 @@ void IntConvert::hexToBinary2()
 
     row++;
     table->setRowCount(row+1);
-    doit = new QPushButton("to binary");
+    doit = new QPushButton(tr("to binary"));
     table->setCellWidget(row,0,new QLabel(""));
     table->setCellWidget(row,1,doit);
     table->setCellWidget(row,2,new QLabel(""));

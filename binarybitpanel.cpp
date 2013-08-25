@@ -15,11 +15,11 @@ BinaryBitPanel::BinaryBitPanel(QWidget *parent) : QFrame(parent)
     operatorCombo = new QComboBox(this);
 
     QStringList ops;
-    ops << "|| Boolean or" << "| Bitwise or"
-        << "&& Boolean and" << "& Bitwise and"
-        << "^  Exclusive or" 
-        << "<< Shift left" << ">> Shift right" << ">> Signed shift right"
-        << "@< Rotate left" << "@> Rotate right";
+    ops << tr("|| Boolean or") << tr("| Bitwise or")
+        << tr("&& Boolean and") << tr("& Bitwise and")
+        << tr("^  Exclusive or")
+        << tr("<< Shift left") << tr(">> Shift right") << tr(">> Signed shift right")
+        << tr("@< Rotate left") << tr("@> Rotate right");
     operatorCombo->addItems(ops);
 
     QHBoxLayout *opLayout = new QHBoxLayout;
@@ -35,7 +35,8 @@ BinaryBitPanel::BinaryBitPanel(QWidget *parent) : QFrame(parent)
     table->setColumnCount(4);
     table->setRowCount(2);
     QStringList headers;
-    headers << "Input" << "Operator" << "Result" << "Comment";
+    headers << tr("Input") << tr("Operator") << tr("Result")
+            << tr("Comment");
     table->setHorizontalHeaderLabels(headers);
 
     //number = new BinaryNumber;
@@ -66,7 +67,7 @@ BinaryBitPanel::BinaryBitPanel(QWidget *parent) : QFrame(parent)
     connect ( operatorCombo, SIGNAL(activated(QString)),
               this, SLOT(selectOperator(QString)) );
 
-    selectOperator("|| Boolean or");
+    selectOperator(tr("|| Boolean or"));
 
 }
 
@@ -173,7 +174,7 @@ void BinaryBitPanel::orStep1()
     value2 = input2Edit->value();
     input2->setBits(value2,16);
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -186,7 +187,7 @@ void BinaryBitPanel::orStep2()
     output = new BinaryNumber;
     output->setBits(value1 || value2 ,16, 8);
     table->setCellWidget(2,2,output);
-    table->setCellWidget(2,3,new QLabel("Result as a binary bool"));
+    table->setCellWidget(2,3,new QLabel(tr("Result as a binary bool")));
     table->setCellWidget(2,1,new QLabel(""));
 }
 
@@ -199,7 +200,7 @@ void BinaryBitPanel::bitwiseOrStep1()
     value2 = input2Edit->value();
     input2->setBits(value2,16);
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -212,7 +213,7 @@ void BinaryBitPanel::bitwiseOrStep2()
     output = new BinaryNumber;
     output->setBits(value1 | value2 ,16);
     table->setCellWidget(2,2,output);
-    table->setCellWidget(2,3,new QLabel("Result"));
+    table->setCellWidget(2,3,new QLabel(tr("Result")));
     table->setCellWidget(2,1,new QLabel(""));
 }
 
@@ -225,7 +226,7 @@ void BinaryBitPanel::andStep1()
     value2 = input2Edit->value();
     input2->setBits(value2,16);
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -238,7 +239,7 @@ void BinaryBitPanel::andStep2()
     output = new BinaryNumber;
     output->setBits(value1 && value2 ,16, 8);
     table->setCellWidget(2,2,output);
-    table->setCellWidget(2,3,new QLabel("Result as a binary bool"));
+    table->setCellWidget(2,3,new QLabel(tr("Result as a binary bool")));
     table->setCellWidget(2,1,new QLabel(""));
 }
 
@@ -251,7 +252,7 @@ void BinaryBitPanel::bitwiseAndStep1()
     value2 = input2Edit->value();
     input2->setBits(value2,16);
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -264,7 +265,7 @@ void BinaryBitPanel::bitwiseAndStep2()
     output = new BinaryNumber;
     output->setBits(value1 & value2 ,16);
     table->setCellWidget(2,2,output);
-    table->setCellWidget(2,3,new QLabel("Result"));
+    table->setCellWidget(2,3,new QLabel(tr("Result")));
     table->setCellWidget(2,1,new QLabel(""));
 }
 
@@ -277,7 +278,7 @@ void BinaryBitPanel::xorStep1()
     value2 = input2Edit->value();
     input2->setBits(value2,16);
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -290,7 +291,7 @@ void BinaryBitPanel::xorStep2()
     output = new BinaryNumber;
     output->setBits(value1 ^ value2 ,16);
     table->setCellWidget(2,2,output);
-    table->setCellWidget(2,3,new QLabel("Result"));
+    table->setCellWidget(2,3,new QLabel(tr("Result")));
     table->setCellWidget(2,1,new QLabel(""));
 }
 
@@ -305,7 +306,7 @@ void BinaryBitPanel::shiftLeftStep1()
     if ( value2 > 16 ) value2 = 16;
     count = 1;
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -321,7 +322,7 @@ void BinaryBitPanel::shiftLeftStep2()
     table->setCellWidget(count+1,2,output);
     table->setCellWidget(count+1,1,new QLabel(""));
     if ( count == value2 ) {
-        table->setCellWidget(count+1,3,new QLabel("Result"));
+        table->setCellWidget(count+1,3,new QLabel(tr("Result")));
     } else {
         doit = new QPushButton(op);
         table->setRowCount(count+3);
@@ -341,7 +342,7 @@ void BinaryBitPanel::shiftRightStep1()
     if ( value2 > 16 ) value2 = 16;
     count = 1;
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -357,7 +358,7 @@ void BinaryBitPanel::shiftRightStep2()
     table->setCellWidget(count+1,2,output);
     table->setCellWidget(count+1,1,new QLabel(""));
     if ( count == value2 ) {
-        table->setCellWidget(count+1,3,new QLabel("Result"));
+        table->setCellWidget(count+1,3,new QLabel(tr("Result")));
     } else {
         doit = new QPushButton(op);
         table->setRowCount(count+3);
@@ -377,7 +378,7 @@ void BinaryBitPanel::signedShiftRightStep1()
     if ( value2 > 16 ) value2 = 16;
     count = 1;
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -393,7 +394,7 @@ void BinaryBitPanel::signedShiftRightStep2()
     table->setCellWidget(count+1,2,output);
     table->setCellWidget(count+1,1,new QLabel(""));
     if ( count == value2 ) {
-        table->setCellWidget(count+1,3,new QLabel("Result"));
+        table->setCellWidget(count+1,3,new QLabel(tr("Result")));
     } else {
         doit = new QPushButton(op);
         table->setRowCount(count+3);
@@ -414,7 +415,7 @@ void BinaryBitPanel::rotateLeftStep1()
     if ( value2 > 16 ) value2 = 16;
     count = 1;
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -433,7 +434,7 @@ void BinaryBitPanel::rotateLeftStep2()
     table->setCellWidget(count+1,2,output);
     table->setCellWidget(count+1,1,new QLabel(""));
     if ( count == value2 ) {
-        table->setCellWidget(count+1,3,new QLabel("Result"));
+        table->setCellWidget(count+1,3,new QLabel(tr("Result")));
     } else {
         doit = new QPushButton(op);
         table->setRowCount(count+3);
@@ -454,7 +455,7 @@ void BinaryBitPanel::rotateRightStep1()
     if ( value2 > 16 ) value2 = 16;
     count = 1;
 
-    table->setCellWidget(0,3,new QLabel("Values converted to binary"));
+    table->setCellWidget(0,3,new QLabel(tr("Values converted to binary")));
     table->setCellWidget(0,1,new QLabel(""));
     doit = new QPushButton(op);
     table->setRowCount(3);
@@ -473,7 +474,7 @@ void BinaryBitPanel::rotateRightStep2()
     table->setCellWidget(count+1,2,output);
     table->setCellWidget(count+1,1,new QLabel(""));
     if ( count == value2 ) {
-        table->setCellWidget(count+1,3,new QLabel("Result"));
+        table->setCellWidget(count+1,3,new QLabel(tr("Result")));
     } else {
         doit = new QPushButton(op);
         table->setRowCount(count+3);

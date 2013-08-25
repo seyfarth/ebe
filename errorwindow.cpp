@@ -10,7 +10,7 @@
 ErrorWindow::ErrorWindow(QWidget *parent) : QFrame(parent)
 {
     setObjectName("Errors");
-    setWindowTitle("Errors");
+    setWindowTitle(tr("Errors"));
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 

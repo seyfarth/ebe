@@ -7,6 +7,8 @@
 
 class FloatEdit : public QLineEdit
 {
+    Q_OBJECT
+
 public:
     FloatEdit();
     FloatValidator *val;

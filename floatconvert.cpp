@@ -43,7 +43,7 @@ FloatConvert::FloatConvert(QWidget *parent) : QFrame(parent)
 
     setLayout(layout);
 
-    doit = new QPushButton("to binary");
+    doit = new QPushButton(tr("to binary"));
 
     connect ( convertCombo, SIGNAL(activated(QString)),
               this, SLOT(selectOperator(QString)) );
@@ -69,17 +69,17 @@ void FloatConvert::selectOperator(QString o)
         table->setRowCount(1);
         inputEdit = new FloatEdit;
         table->setCellWidget(0,0,inputEdit);
-        headers << "" << "" << "Comment";
+        headers << "" << "" << tr("Comment");
         table->setHorizontalHeaderLabels(headers);
-        table->setVerticalHeaderItem(0,new QTableWidgetItem("Input"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(0,new QTableWidgetItem(tr("Input")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(0,1,doit);
         table->setColumnWidth(0,32*fontSize+5);
         table->setColumnWidth(1,6*fontSize);
         table->setColumnWidth(2,28*fontSize);
         connect ( doit, SIGNAL(clicked()), this, SLOT(hexToFloat1()) );
     } else {
-        qDebug() << "Unknown operator:" << o;
+        qDebug() << tr("Unknown operator:") << o;
     }
 }
 
@@ -124,9 +124,9 @@ void FloatConvert::hexToFloat2()
         label = new QLabel("0.0");
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
-        label = new QLabel(" All bits are 0 so the number is 0");
+        label = new QLabel(tr(" All bits are 0 so the number is 0"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Value"));
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Value")));
         break;
 
     case NegativeZero:
@@ -135,9 +135,9 @@ void FloatConvert::hexToFloat2()
         label = new QLabel("-0.0");
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
-        label = new QLabel(" Bits 0-30 are 0 so the number is -0");
+        label = new QLabel(tr(" Bits 0-30 are 0 so the number is -0"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Value"));
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Value")));
         break;
 
     case Bits:
@@ -146,9 +146,9 @@ void FloatConvert::hexToFloat2()
         input->setBits(value, 32, 32 );
         table->setCellWidget(row-1,1,new QLabel(""));
         table->setCellWidget(row,0,input);
-        label = new QLabel(" Number converted to binary");
+        label = new QLabel(tr(" Number converted to binary"));
         table->setCellWidget(row,2,label);
-        doit = new QPushButton("to float");
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         table->setVerticalHeaderItem(row,new QTableWidgetItem("Bits"));
         row++;
@@ -166,13 +166,13 @@ void FloatConvert::hexToFloat2()
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
         if ( sign == 0 ) {
-            label = new QLabel(" Sign bit (bit 31) is 0. The number is positive");
+            label = new QLabel(tr(" Sign bit (bit 31) is 0. The number is positive"));
         } else {
-            label = new QLabel(" Sign bit (bit 31) is 1. The number is negative");
+            label = new QLabel(tr(" Sign bit (bit 31) is 1. The number is negative"));
         }
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Sign bit"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Sign bit")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         if ( (value & 0x7fffffff) == 0 ) {
@@ -191,10 +191,10 @@ void FloatConvert::hexToFloat2()
         label = new QLabel(QString("%1").arg(exponentField));
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
-        label = new QLabel(" The exponent field is bits 23 - 30");
+        label = new QLabel(tr(" The exponent field is bits 23 - 30"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Exponent field"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Exponent field")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         if ( exponentField == 0 ) {
@@ -219,10 +219,10 @@ void FloatConvert::hexToFloat2()
         label = new QLabel(QString("%1").arg(exponentValue));
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
-        label = new QLabel(" The exponent value is the field value - 127");
+        label = new QLabel(tr(" The exponent value is the field value - 127"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Exponent value"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Exponent value")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         toFloatState = FractionField;
@@ -237,10 +237,10 @@ void FloatConvert::hexToFloat2()
         output = new BinaryNumber;
         output->setBits ( fractionField, 24, 23 );
         table->setCellWidget(row,0,output);
-        label = new QLabel(" The exponent field is the rightmost 23 bits");
+        label = new QLabel(tr(" The exponent field is the rightmost 23 bits"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Fraction field"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Fraction field")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         toFloatState = FractionValue;
@@ -255,10 +255,10 @@ void FloatConvert::hexToFloat2()
         output = new BinaryNumber;
         output->setBits ( fractionValue, 24 );
         table->setCellWidget(row,0,output);
-        label = new QLabel(" The exponent value has an implicit 1 bit");
+        label = new QLabel(tr(" The exponent value has an implicit 1 bit"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Fraction value"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Fraction value")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         toFloatState = BinaryValue;
@@ -275,10 +275,10 @@ void FloatConvert::hexToFloat2()
         table->setRowCount(row+1);
         table->setCellWidget(row-1,1,new QLabel(""));
         table->setCellWidget(row,0,label);
-        label = new QLabel(" Value as a binary number times 2 to a power");
+        label = new QLabel(tr(" Value as a binary number times 2 to a power"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Binary value"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Binary value")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         bit = 23;
@@ -303,12 +303,12 @@ void FloatConvert::hexToFloat2()
         table->setRowCount(row+1);
         table->setCellWidget(row-1,1,new QLabel(""));
         table->setCellWidget(row,0,label);
-        label = new QLabel(QString(" Bit %1 value is 2**%2").arg(bit).
+        label = new QLabel(QString(tr(" Bit %1 value is 2**%2")).arg(bit).
                            arg(bit-23+exponentValue));
         table->setCellWidget(row,2,label);
         table->setVerticalHeaderItem(row,new QTableWidgetItem(
                QString("Bit %1").arg(bit)));
-        doit = new QPushButton("to float");
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         bit--;
@@ -324,9 +324,9 @@ void FloatConvert::hexToFloat2()
         table->setCellWidget(row-1,1,new QLabel(""));
         table->setCellWidget(row,0,label);
         if ( sign == 0 ) {
-            label = new QLabel(QString(" Add the bit values"));
+            label = new QLabel(QString(tr(" Add the bit values")));
         } else {
-            label = new QLabel(QString(" Add the bit values and multiply by -1"));
+            label = new QLabel(QString(tr(" Add the bit values and multiply by -1")));
         }
         table->setCellWidget(row,2,label);
         break;
@@ -342,10 +342,10 @@ void FloatConvert::hexToFloat2()
         output = new BinaryNumber;
         output->setBits ( fractionValue, 24 );
         table->setCellWidget(row,0,output);
-        label = new QLabel(" Denormalized float has no implicit 1");
+        label = new QLabel(tr(" Denormalized float has no implicit 1"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Fraction value"));
-        doit = new QPushButton("to float");
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Fraction value")));
+        doit = new QPushButton(tr("to float"));
         table->setCellWidget(row,1,doit);
         row++;
         toFloatState = BinaryValue;
@@ -357,15 +357,15 @@ void FloatConvert::hexToFloat2()
         table->setRowCount(row+1);
         table->setCellWidget(row-1,1,new QLabel(""));
         if ( sign == 0 ) {
-            label = new QLabel("positive infinity");
+            label = new QLabel(tr("positive infinity"));
         } else {
-            label = new QLabel("negative infinity");
+            label = new QLabel(tr("negative infinity"));
         }
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
-        label = new QLabel(" Exponent == 255 && fraction == 0 ==> infinity");
+        label = new QLabel(tr(" Exponent == 255 && fraction == 0 ==> infinity"));
         table->setCellWidget(row,2,label);
-        table->setVerticalHeaderItem(row,new QTableWidgetItem("Infinity"));
+        table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Infinity")));
         break;
 
     case NaN:
@@ -373,19 +373,15 @@ void FloatConvert::hexToFloat2()
         table->setRowCount(row+1);
         table->setCellWidget(row-1,1,new QLabel(""));
         if ( (value & 0x400000) == 0 ) {
-            label = new QLabel("SNaN - signaling not-a-number");
+            label = new QLabel(tr("SNaN - signaling not-a-number"));
         } else {
-            label = new QLabel("QNaN - quiet not-a-number");
+            label = new QLabel(tr("QNaN - quiet not-a-number"));
         }
         label->setAlignment(Qt::AlignCenter);
         table->setCellWidget(row,0,label);
-        label = new QLabel(" Exponent == 255 && fraction != 0 ==> NaN");
+        label = new QLabel(tr(" Exponent == 255 && fraction != 0 ==> NaN"));
         table->setCellWidget(row,2,label);
         table->setVerticalHeaderItem(row,new QTableWidgetItem("NaN"));
-
         break;
-
-
-
     }
 }

@@ -176,7 +176,7 @@ SettingsDialog::SettingsDialog()
 : QDialog()
 {
     setObjectName("Settings dialog");
-    setWindowTitle("Edit Settings");
+    setWindowTitle(tr("Edit Settings"));
     setModal(true);
 
     newSettings = ebe;
@@ -195,17 +195,17 @@ SettingsDialog::SettingsDialog()
     SettingsFrame *frame;
     
     columnLayout = new QVBoxLayout;
-    frame = new SettingsFrame("Debug colors");
+    frame = new SettingsFrame(tr("Debug colors"));
 
-    frame->addColorSetter("Background", "bg_color");
-    frame->addColorSetter("Breakpoint fg", "break_fg");
-    frame->addColorSetter("Breakpoint bg", "break_bg");
-    frame->addColorSetter("Find fg", "find_fg");
-    frame->addColorSetter("Find bg", "find_bg");
-    frame->addColorSetter("Line number fg", "numbers_fg");
-    frame->addColorSetter("Line number bg", "numbers_bg");
-    frame->addColorSetter("Next line fg", "next_fg");
-    frame->addColorSetter("Next line bg", "next_bg");
+    frame->addColorSetter(tr("Background"), "bg_color");
+    frame->addColorSetter(tr("Breakpoint fg"), "break_fg");
+    frame->addColorSetter(tr("Breakpoint bg"), "break_bg");
+    frame->addColorSetter(tr("Find fg"), "find_fg");
+    frame->addColorSetter(tr("Find bg"), "find_bg");
+    frame->addColorSetter(tr("Line number fg"), "numbers_fg");
+    frame->addColorSetter(tr("Line number bg"), "numbers_bg");
+    frame->addColorSetter(tr("Next line fg"), "next_fg");
+    frame->addColorSetter(tr("Next line bg"), "next_bg");
     frame->addStretch();
     columnLayout->addWidget(frame);
     //mainLayout->addLayout(columnLayout);
@@ -213,13 +213,13 @@ SettingsDialog::SettingsDialog()
     //columnLayout = new QVBoxLayout;
     frame = new SettingsFrame("Other colors");
 
-    frame->addColorSetter("Register","reg_fg");
-    frame->addColorSetter("Register title","reg_title_fg");
+    frame->addColorSetter(tr("Register"),"reg_fg");
+    frame->addColorSetter(tr("Register title"),"reg_title_fg");
 
-    frame->addColorSetter("Tooltip","tooltip_bg");
-    frame->addColorSetter("Table","table_bg");
-    frame->addColorSetter("List","list_bg");
-    frame->addColorSetter("Tree","tree_bg");
+    frame->addColorSetter(tr("Tooltip"),"tooltip_bg");
+    frame->addColorSetter(tr("Table"),"table_bg");
+    frame->addColorSetter(tr("List"),"list_bg");
+    frame->addColorSetter(tr("Tree"),"tree_bg");
     frame->addStretch();
     columnLayout->addWidget(frame);
     mainLayout->addLayout(columnLayout);
@@ -227,17 +227,17 @@ SettingsDialog::SettingsDialog()
     columnLayout = new QVBoxLayout;
     frame = new SettingsFrame("Highlight colors");
 
-    frame->addColorSetter("Comment", "comment_fg");
-    frame->addColorSetter("Identifier", "id_fg");
-    frame->addColorSetter("Reserved", "reserved_fg");
-    frame->addColorSetter("String", "string_fg");
-    frame->addColorSetter("Number", "numeric");
-    frame->addColorSetter("Operator", "operator_fg");
-    frame->addColorSetter("Instruction", "instruction_fg");
-    frame->addColorSetter("Macro", "macro_fg");
-    frame->addColorSetter("Preprocessor","preprocessor_fg");
-    frame->addColorSetter("Illegal fg", "illegal_fg");
-    frame->addColorSetter("Illegal bg", "illegal_bg");
+    frame->addColorSetter(tr("Comment"), "comment_fg");
+    frame->addColorSetter(tr("Identifier"), "id_fg");
+    frame->addColorSetter(tr("Reserved"), "reserved_fg");
+    frame->addColorSetter(tr("String"), "string_fg");
+    frame->addColorSetter(tr("Number"), "numeric");
+    frame->addColorSetter(tr("Operator"), "operator_fg");
+    frame->addColorSetter(tr("Instruction"), "instruction_fg");
+    frame->addColorSetter(tr("Macro"), "macro_fg");
+    frame->addColorSetter(tr("Preprocessor"),"preprocessor_fg");
+    frame->addColorSetter(tr("Illegal fg"), "illegal_fg");
+    frame->addColorSetter(tr("Illegal bg"), "illegal_bg");
     frame->addStretch();
     columnLayout->addWidget(frame);
 
@@ -262,36 +262,36 @@ SettingsDialog::SettingsDialog()
     Spinner *spin;
     ComboBox *box;
     QStringList strings;
-    frame = new SettingsFrame("Options");
-    spin = frame->addSpinner("Tab spacing","edit/tab_width");
+    frame = new SettingsFrame(tr("Options"));
+    spin = frame->addSpinner(tr("Tab spacing"),"edit/tab_width");
     spin->setRange(2,16);
-    spin = frame->addSpinner("Completion minimum","complete/minimum");
+    spin = frame->addSpinner(tr("Completion minimum"),"complete/minimum");
     spin->setRange(4,32);
-    box = frame->addComboBox("Toolbar icon size","toolbars/icon_size");
+    box = frame->addComboBox(tr("Toolbar icon size"),"toolbars/icon_size");
     strings << "16" << "24" << "32" << "48";
     box->setChoices(strings);
-    box = frame->addComboBox("Debug button icon size","buttons/icon_size");
+    box = frame->addComboBox(tr("Debug button icon size"),"buttons/icon_size");
     box->setChoices(strings);
-    frame->addCheckBox("Auto-indent","edit/auto_indent");
-    frame->addCheckBox("Auto-open project files","edit/auto_indent");
-    frame->addCheckBox("Display debug buttons","buttons/visible");
-    frame->addCheckBox("Icons on debug buttons","buttons/icons");
-    frame->addCheckBox("XMM Reverse","xmm/reverse");
+    frame->addCheckBox(tr("Auto-indent"),"edit/auto_indent");
+    frame->addCheckBox(tr("Auto-open project files"),"edit/auto_indent");
+    frame->addCheckBox(tr("Display debug buttons"),"buttons/visible");
+    frame->addCheckBox(tr("Icons on debug buttons"),"buttons/icons");
+    frame->addCheckBox(tr("XMM Reverse"),"xmm/reverse");
     frame->addStretch();
     columnLayout->addWidget(frame);
     //mainLayout->addLayout(columnLayout);
 
     //columnLayout = new QVBoxLayout;
-    frame = new SettingsFrame("External commands");
-    frame->addLineEdit("Prettify","prettify");
-    frame->addLineEdit("Assemble","build/asm");
-    frame->addLineEdit("Link asm","build/asmld");
-    frame->addLineEdit("C Compile","build/cc");
-    frame->addLineEdit("Link C","build/ccld");
-    frame->addLineEdit("Compile C++","build/cpp");
-    frame->addLineEdit("Link C","build/cppld");
-    frame->addLineEdit("Compile Fortran","build/fortran");
-    frame->addLineEdit("Link Fortran","build/fortranld");
+    frame = new SettingsFrame(tr("External commands"));
+    frame->addLineEdit(tr("Prettify"),"prettify");
+    frame->addLineEdit(tr("Assemble"),"build/asm");
+    frame->addLineEdit(tr("Link asm"),"build/asmld");
+    frame->addLineEdit(tr("C Compile"),"build/cc");
+    frame->addLineEdit(tr("Link C"),"build/ccld");
+    frame->addLineEdit(tr("Compile C++"),"build/cpp");
+    frame->addLineEdit(tr("Link C"),"build/cppld");
+    frame->addLineEdit(tr("Compile Fortran"),"build/fortran");
+    frame->addLineEdit(tr("Link Fortran"),"build/fortranld");
     frame->addStretch();
     columnLayout->addWidget(frame);
     mainLayout->addLayout(columnLayout);

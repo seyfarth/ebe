@@ -89,7 +89,7 @@ ToyBox::ToyBox(QWidget *parent)
  */
 
     QHBoxLayout *languageLayout = new QHBoxLayout;
-    languageLayout->addWidget(new QLabel("Language"));
+    languageLayout->addWidget(new QLabel(tr("Language")));
     languageLayout->addWidget(languageCombo);
     languageLayout->addStretch();
     layout->addLayout(languageLayout);
@@ -153,7 +153,7 @@ void ToyBox::computeExpression()
                         "toybox_template.cpp" : "toybox_template.f";
     QFile in(QString(":/src/%1").arg(templateFile));
     if ( !in.open(QFile::ReadOnly) ) {
-        qDebug() << "Could not open" << templateFile;
+        qDebug() << tr("Could not open") << templateFile;
         return;
     }
 
@@ -594,7 +594,7 @@ VariableTable::VariableTable(ToyBox *p)
     setColumnCount(3);
     setRowCount(5);
     QStringList headers;
-    headers << "Variable name" << "Type" << "Value";
+    headers << tr("Variable name") << tr("Type") << tr("Value");
     setHorizontalHeaderLabels(headers);
     ToyVariable *v;
     for ( int i=0; i < 5; i++ ) {
@@ -665,7 +665,8 @@ ExpressionTable::ExpressionTable(ToyBox *p)
     setColumnCount(5);
     setRowCount(5);
     QStringList headers;
-    headers << "Expression" << "Execute" << "Type" << "Format" << "Result";
+    headers << tr("Expression") << tr("Execute") << tr("Type")
+            << tr("Format") << tr("Result");
     setHorizontalHeaderLabels(headers);
     ToyExpression *e;
     for ( int i=0; i < 5; i++ ) {

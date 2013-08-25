@@ -107,9 +107,9 @@ void FloatWindow::contextMenuEvent ( QContextMenuEvent * /* event */ )
     QMenu *menu;
     QMenu *single;
     QMenu *all;
-    menu   = new QMenu("Float format");
-    single = menu->addMenu("Format for 1 register");
-    all    = menu->addMenu("Format for all registers");
+    menu   = new QMenu(tr("Float format"));
+    single = menu->addMenu(tr("Format for 1 register"));
+    all    = menu->addMenu(tr("Format for all registers"));
     single->addAction("float");
     single->addAction("double");
     single->addAction("4 floats");

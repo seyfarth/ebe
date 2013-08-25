@@ -11,6 +11,10 @@ CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
 CONFIG += console release static
 
+TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts
+
+CODECFORTR   = ISO-9=8859-5
+
 # Input
 HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            terminalwindow.h registerwindow.h consolewindow.h \

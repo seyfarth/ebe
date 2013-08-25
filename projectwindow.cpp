@@ -32,13 +32,13 @@ void ProjectWindow::ignore()
 void ProjectWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     if ( projectFileName == "" ) {
-        QMenu menu("Project menu");
+        QMenu menu(tr("Project menu"));
         menu.addAction(tr("New project"), this, SLOT(newProject()) );
         menu.addAction(tr("Open project"), this, SLOT(openProject()) );
         menu.addAction(tr("ignore"), this, SLOT(ignore()) );
         menu.exec(QCursor::pos());
     } else {
-        QMenu menu("Project menu");
+        QMenu menu(tr("Project menu"));
         menu.addAction(tr("Add file to project"), this, SLOT(addFile()) );
         menu.addAction(tr("Open file in editor"), this, SLOT(editFile()) );
         menu.addAction(tr("Drop file from project"), this, SLOT(dropFile()) );

@@ -414,13 +414,13 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
     QString type = item->type;
     //qDebug() << item->name << type << item->value();
     if ( item->userDefined ) {
-        QMenu menu("Variable menu");
+        QMenu menu(tr("Variable menu"));
         menu.addAction(tr("Edit variable"),this,SLOT(editUserVariable()));
         menu.addAction(tr("Delete variable"),this,SLOT(deleteUserVariable()));
         menu.exec(QCursor::pos());
     } else if ( item->isSimple ) {
         if ( type.indexOf("char") >= 0 ) {
-            QMenu menu("Character menu");
+            QMenu menu(tr("Character menu"));
             menu.addAction(tr("Character"),this,SLOT(setCharacter()));
             menu.addAction(tr("Decimal"),this,SLOT(setDecimal()));
             menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
@@ -429,7 +429,7 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
             menu.exec(QCursor::pos());
         } else if ( type.indexOf("short") >= 0 || type.indexOf("int") >= 0 ||
                     type.indexOf("long") >= 0 ) {
-            QMenu menu("Integer menu");
+            QMenu menu(tr("Integer menu"));
             menu.addAction(tr("Signed decimal"),this,SLOT(setDecimal()));
             menu.addAction(tr("Unsigned decimal"),this,SLOT(setUnsignedDecimal()));
             menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
@@ -437,7 +437,7 @@ void DataTree::contextMenuEvent ( QContextMenuEvent * /*event*/ )
             menu.exec(QCursor::pos());
         } else if ( type == "float" || type == "double" ||
                     type.indexOf("real") >= 0 ) {
-            QMenu menu("Float menu");
+            QMenu menu(tr("Float menu"));
             menu.addAction(tr("Floating point"),this,SLOT(setFloatingPoint()));
             menu.addAction(tr("Hexadecimal"),this,SLOT(setHexadecimal()));
             menu.addAction(tr("Binary"),this,SLOT(setBinary()));
@@ -469,10 +469,10 @@ DataTree::DataTree(QWidget *parent)
     ::parameterMap = parameterMap = new DataMap;
     ::userDefinedMap = userDefinedMap = new DataMap;
 
-    ::globals = globals = addDataItem(globalMap,"globals","","");
-    ::locals = locals = addDataItem(localMap,"locals","","");
-    ::parameters = parameters = addDataItem(parameterMap,"parameters","","");
-    ::userDefined = userDefined = addDataItem(userDefinedMap,"user-defined","","");
+    ::globals = globals = addDataItem(globalMap,tr("globals"),"","");
+    ::locals = locals = addDataItem(localMap,tr("locals"),"","");
+    ::parameters = parameters = addDataItem(parameterMap,tr("parameters"),"","");
+    ::userDefined = userDefined = addDataItem(userDefinedMap,tr("user-defined"),"","");
 
     addTopLevelItem(globals);
     globals->setExpanded(true);

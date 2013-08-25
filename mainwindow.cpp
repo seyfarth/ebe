@@ -180,27 +180,27 @@ void MainWindow::checkTools()
             qDebug() << "oops";
             QString message;
 
-            message = "<b>Some tools used by ebe are missing:</b>";
+            message = "<b>"+tr("Some tools used by ebe are missing:")+"</b>";
             message += "<br />";
             message += "<br />";
             foreach ( QString tool, missingCritical ) {
-                message += "   critical: " + tool + "<br />";
+                message += tr("   critical: ") + tool + "<br />";
             }
             foreach ( QString tool, missing ) {
-                message += "   non-critical: " + tool + "<br />";
+                message += tr("   non-critical: ") + tool + "<br />";
             }
             message += "<br />";
-            message += "Critical tools are needed by almost everyone.";
+            message += tr("Critical tools are needed by almost everyone.");
             message += "<br />";
-            message += "Non-critical tools are not needed by everyone.";
+            message += tr("Non-critical tools are not needed by everyone.");
             message += "<br />";
             message += "<br />";
-            message += "Click <b>Ignore</b> to ignore this test in the future.";
+            message += tr("Click <b>Ignore</b> to ignore this test in the future.");
             message += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             message += "<br />";
-            message += "Click <b>OK</b> to run ebe and test again next time";
+            message += tr("Click <b>OK</b> to run ebe and test again next time");
             message += "<br />";
-            int ret = QMessageBox::warning(this,"Missing tools",
+            int ret = QMessageBox::warning(this,tr("Missing tools"),
                 message, QMessageBox::Ok | QMessageBox::Ignore );
             if ( ret == QMessageBox::Ignore ) ebe["check/tools"] = false;
         }
@@ -541,9 +541,9 @@ void MainWindow::createMenus()
     viewMenu->addAction ( projectDock->toggleViewAction() );
     viewMenu->addAction ( toyBoxDock->toggleViewAction() );
     viewMenu->addAction ( bitBucketDock->toggleViewAction() );
-    addToggle ( viewMenu, "Tooltips", this, SLOT(setTooltipsVisible(bool)),
+    addToggle ( viewMenu, tr("Tooltips"), this, SLOT(setTooltipsVisible(bool)),
                           ebe["tooltips/visible"].toBool() );
-    addToggle ( viewMenu, "Command line", sourceFrame,
+    addToggle ( viewMenu, tr("Command line"), sourceFrame,
                           SLOT(setCommandLineVisible(bool)),
                           ebe["command/visible"].toBool() );
 
@@ -555,35 +555,35 @@ void MainWindow::createMenus()
                         QKeySequence::ZoomOut );
 
     helpMenu = menuBar()->addMenu(tr("&Help "));
-    helpAction ( helpMenu, "Getting started", "start.html" );
-    helpAction ( helpMenu, "Projects", "projects.html" );
-    helpAction ( helpMenu, "Editing", "editing.html" );
-    helpAction ( helpMenu, "Breakpoints", "breakpoints.html" );
-    helpAction ( helpMenu, "Running", "running.html" );
-    helpAction ( helpMenu, "About", "about.html" );
+    helpAction ( helpMenu, tr("Getting started"), "start.html" );
+    helpAction ( helpMenu, tr("Projects"), "projects.html" );
+    helpAction ( helpMenu, tr("Editing"), "editing.html" );
+    helpAction ( helpMenu, tr("Breakpoints"), "breakpoints.html" );
+    helpAction ( helpMenu, tr("Running"), "running.html" );
+    helpAction ( helpMenu, tr("About"), "about.html" );
 
     templateToolBar->addAction(QIcon(QString(":/icons/%1/cin.png")
-        .arg(icon_size)), "cin: input" );
+        .arg(icon_size)), tr("cin: input" ));
     templateToolBar->addAction(QIcon(QString(":/icons/%1/cout.png")
-        .arg(icon_size)), "cout: output");
+        .arg(icon_size)), tr("cout: output"));
     templateToolBar->addSeparator();
     templateToolBar->addAction(QIcon(QString(":/icons/%1/if.png")
         .arg(icon_size)), "if");
     templateToolBar->addAction(QIcon(QString(":/icons/%1/if-else.png")
         .arg(icon_size)), "if-else");
     templateToolBar->addAction(QIcon(QString(":/icons/%1/switch.png")
-        .arg(icon_size)), "switch: multi-way branch");
+        .arg(icon_size)), tr("switch: multi-way branch"));
     templateToolBar->addAction(QIcon(QString(":/icons/%1/for.png")
-        .arg(icon_size)), "for: counting loop");
+        .arg(icon_size)), tr("for: counting loop"));
     templateToolBar->addAction(QIcon(QString(":/icons/%1/while.png")
-        .arg(icon_size)), "while: general loop with test at the top");
+        .arg(icon_size)), tr("while: general loop with test at the top"));
     templateToolBar->addAction(QIcon(QString(":/icons/%1/do-while.png")
-        .arg(icon_size)), "do-while: general loop with test at the bottom");
+        .arg(icon_size)), tr("do-while: general loop with test at the bottom"));
     templateToolBar->addSeparator();
     templateToolBar->addAction(QIcon(QString(":/icons/%1/double.png")
-        .arg(icon_size)), "double: floating point number");
+        .arg(icon_size)), tr("double: floating point number"));
     templateToolBar->addAction(QIcon(QString(":/icons/%1/int.png")
-        .arg(icon_size)), "int: an integer");
+        .arg(icon_size)), tr("int: an integer"));
     templateToolBar->addAction(QIcon(QString(":/icons/%1/string.png")
         .arg(icon_size)), "string");
     templateToolBar->addSeparator();
@@ -597,7 +597,7 @@ void MainWindow::createMenus()
     templateToolBar->addAction(QIcon(QString(":/icons/%1/struct.png")
         .arg(icon_size)), "struct");
     templateToolBar->addAction(QIcon(QString(":/icons/%1/library.png")
-        .arg(icon_size)), "library");
+        .arg(icon_size)), tr("library"));
 
     connect ( templateToolBar, SIGNAL(actionTriggered(QAction*)),
         sourceFrame, SLOT(doTemplate(QAction*)) );

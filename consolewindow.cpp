@@ -25,7 +25,7 @@ ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
     layout->setContentsMargins(10,10,10,10);
 
     QHBoxLayout *commandLayout = new QHBoxLayout;
-    QLabel *label = new QLabel("gdb command");
+    QLabel *label = new QLabel(tr("gdb command"));
     label->setStyleSheet ( "font-family: " +
                             ebe["variable_font"].toString() );
     commandLayout->addWidget(label);

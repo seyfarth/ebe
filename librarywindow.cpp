@@ -15,7 +15,7 @@ extern SourceFrame *sourceFrame;
 LibraryWindow::LibraryWindow(QWidget *parent) : QFrame(parent)
 {
     setObjectName("Library");
-    setWindowTitle("Library");
+    setWindowTitle(tr("Library"));
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
     setLineWidth(4);
 

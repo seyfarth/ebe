@@ -2,12 +2,14 @@
 #include <QResource>
 #include <stdio.h>
 #include <string.h>
+#include <QTranslator>
 
 #include "mainwindow.h"
 
 bool userSetGeometry = false;
 int  userWidth;
 int  userHeight;
+QTranslator translator;
 
 MainWindow *mainWin;
 int main(int argc, char *argv[])
@@ -17,6 +19,7 @@ int main(int argc, char *argv[])
 #endif
     QApplication app(argc, argv);
     //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
+
     if ( argc >= 3 ) {
         if ( strcmp(argv[1],"-g") == 0 ) {
             char *p = strchr(argv[2],'x');

@@ -351,9 +351,9 @@ void GDB::doRun(QString exe, QString options, QStringList files,
                 &si,            // Startup info
                 &pi)            // Process information
         ) {
-        qDebug() << "Could not create process" << exe;
+        qDebug() << tr("Could not create process") << exe;
         DWORD error = GetLastError();
-        qDebug() << "error" << error;
+        qDebug() << tr("error") << error;
         return;
     }
     //qDebug() << "pid" << pi.dwProcessId;
@@ -526,7 +526,7 @@ void GDB::getBackTrace()
          results[0][0] != '#' ) {
         running = false;
         results.clear();
-        results.append("Program not running");
+        results.append(tr("Program not running"));
     }
     int n;
     int line;
@@ -558,7 +558,7 @@ void GDB::getBackTrace()
                 //qDebug() << "ok" << ok << address;
                 emit nextInstruction(fl.file,fl.line);
             } else {
-                qDebug() << "Could not interpret address:" << address;
+                qDebug() << tr("Could not interpret address:") << address;
             }
             break;
         }
