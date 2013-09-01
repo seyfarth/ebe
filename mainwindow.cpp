@@ -23,6 +23,8 @@
 extern bool userSetGeometry;
 extern int  userWidth;
 extern int  userHeight;
+extern QApplication *app;
+extern Settings *settings;
 
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
@@ -55,8 +57,6 @@ extern int gdbWaiting;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    settings = new Settings;
-    settings->read();
 
 #ifdef Q_WS_WIN
     QProcess where(this);
@@ -370,20 +370,20 @@ void MainWindow::createMenus()
 {
     int icon_size = ebe["toolbars/icon_size"].toInt();
 
-    fileToolBar = new QToolBar("File toolbar",this);
-    fileToolBar->setObjectName("File toolbar");
+    fileToolBar = new QToolBar(tr("File toolbar"),this);
+    fileToolBar->setObjectName(tr("File toolbar"));
     fileToolBar->setIconSize(QSize(icon_size,icon_size));
 
-    editToolBar = new QToolBar("Edit toolbar",this);
-    editToolBar->setObjectName("Edit toolbar");
+    editToolBar = new QToolBar(tr("Edit toolbar"),this);
+    editToolBar->setObjectName(tr("Edit toolbar"));
     editToolBar->setIconSize(QSize(icon_size,icon_size));
 
-    debugToolBar = new QToolBar("Debug toolbar",this);
-    debugToolBar->setObjectName("Debug toolbar");
+    debugToolBar = new QToolBar(tr("Debug toolbar"),this);
+    debugToolBar->setObjectName(tr("Debug toolbar"));
     debugToolBar->setIconSize(QSize(icon_size,icon_size));
 
-    templateToolBar = new QToolBar("Code template toolbar",this);
-    templateToolBar->setObjectName("Template toolbar");
+    templateToolBar = new QToolBar(tr("Code template toolbar"),this);
+    templateToolBar->setObjectName(tr("Template toolbar"));
     templateToolBar->setIconSize(QSize(icon_size,icon_size));
 
     menuBar()->setStyleSheet("font-family: "+ebe["variable_font"].toString());

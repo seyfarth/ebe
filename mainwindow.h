@@ -62,7 +62,6 @@ private:
     bool toolExists(QString t);
 
     bool tooltipsVisible;
-    Settings *settings;
 
     QDockWidget *dataDock;
     QDockWidget *registerDock;

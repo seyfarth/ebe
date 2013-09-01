@@ -543,6 +543,7 @@ Botão direito do mouse para mudar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="194"/>
         <source> The exponent field is bits 23 - 30</source>
+        <oldsource> The fraction field is bits 23 - 30</oldsource>
         <translation> O campo expoente é pedaços 23-30</translation>
     </message>
     <message>
@@ -562,8 +563,9 @@ Botão direito do mouse para mudar formatos.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="240"/>
-        <source> The exponent field is the rightmost 23 bits</source>
-        <translation> O campo expoente é o mais à direita 23 bits</translation>
+        <source> The fraction field is the rightmost 23 bits</source>
+        <oldsource> The exponent field is the rightmost 23 bits</oldsource>
+        <translation> O campo de fração é o mais à direita 23 bits</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="242"/>
@@ -1115,6 +1117,34 @@ Botão direito do mouse para mudar formatos.</translation>
         <translation>Ferramentas ausentes</translation>
     </message>
     <message>
+        <location filename="mainwindow.cpp" line="373"/>
+        <location filename="mainwindow.cpp" line="374"/>
+        <source>File toolbar</source>
+        <translation>Barra de archivo</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="377"/>
+        <location filename="mainwindow.cpp" line="378"/>
+        <source>Edit toolbar</source>
+        <translation>Barra de edición</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="381"/>
+        <location filename="mainwindow.cpp" line="382"/>
+        <source>Debug toolbar</source>
+        <translation>Barra de depuración</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="385"/>
+        <source>Code template toolbar</source>
+        <translation>Barra de plantilla de código</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="386"/>
+        <source>Template toolbar</source>
+        <translation>Barra de plantilla de código</translation>
+    </message>
+    <message>
         <location filename="mainwindow.cpp" line="390"/>
         <source>&amp;File</source>
         <translation>&amp;Arquivo</translation>
@@ -1620,12 +1650,14 @@ Botão direito do mouse para mudar formatos.</translation>
     <message>
         <location filename="registerwindow.cpp" line="135"/>
         <source>Right click on register names to change formats.
-Right clock on a register&apos;s value to define a variable
+Right click on a register&apos;s value to define a variable
 with the address contained in the register.</source>
-        <translation>Botão direito do mouse sobre os nomes de registro para
-mudar formatos.  Relógio direito sobre o valor de um
-registrador para definir uma variável com o endereço
-contido no registo.
+        <oldsource>Right click on register names to change formats.
+Right clock on a register&apos;s value to define a variable
+with the address contained in the register.</oldsource>
+        <translation>Botão direito do mouse sobre os nomes de registro para mudar formatos.
+Botão direito do mouse sobre o valor de um registrador para definir uma
+variável com o endereço contido no registo..
 </translation>
     </message>
     <message>
@@ -1662,248 +1694,258 @@ contido no registo.
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="179"/>
+        <location filename="settings.cpp" line="190"/>
         <source>Edit Settings</source>
         <translation>Editar Configurações</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="198"/>
+        <location filename="settings.cpp" line="209"/>
         <source>Debug colors</source>
         <translation>Cores de depuração</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="200"/>
+        <location filename="settings.cpp" line="211"/>
         <source>Background</source>
         <translation>Fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="201"/>
+        <location filename="settings.cpp" line="212"/>
         <source>Breakpoint fg</source>
         <translation>Ponto de interrupção pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="202"/>
+        <location filename="settings.cpp" line="213"/>
         <source>Breakpoint bg</source>
         <translation>Ponto de interrupção fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="203"/>
+        <location filename="settings.cpp" line="214"/>
         <source>Find fg</source>
         <translation>Localizar pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="204"/>
+        <location filename="settings.cpp" line="215"/>
         <source>Find bg</source>
         <translation>Localizar fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="205"/>
+        <location filename="settings.cpp" line="216"/>
         <source>Line number fg</source>
         <translation>Número da linha pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="206"/>
+        <location filename="settings.cpp" line="217"/>
         <source>Line number bg</source>
         <translation>Número da linha fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="207"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Next line fg</source>
         <translation>Próxima linha pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="208"/>
+        <location filename="settings.cpp" line="219"/>
         <source>Next line bg</source>
         <translation>Próxima linha fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="225"/>
+        <source>Other colors</source>
+        <translation>Outras Cores</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="227"/>
         <source>Register</source>
         <translation>Registro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Register title</source>
         <translation>Título de registo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="230"/>
         <source>Tooltip</source>
         <translation>Dica</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="220"/>
+        <location filename="settings.cpp" line="231"/>
         <source>Table</source>
         <translation>Mesa</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="221"/>
+        <location filename="settings.cpp" line="232"/>
         <source>List</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="222"/>
+        <location filename="settings.cpp" line="233"/>
         <source>Tree</source>
         <translation>Árvore</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="239"/>
+        <source>Highlight colors</source>
+        <translation>Cores de Destaque</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="241"/>
         <source>Comment</source>
         <translation>Comentar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Identifier</source>
         <translation>Identificador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="243"/>
         <source>Reserved</source>
         <translation>Reservado</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="244"/>
         <source>String</source>
         <translation>Corda</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="234"/>
+        <location filename="settings.cpp" line="245"/>
         <source>Number</source>
         <translation>Número</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="235"/>
+        <location filename="settings.cpp" line="246"/>
         <source>Operator</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="236"/>
+        <location filename="settings.cpp" line="247"/>
         <source>Instruction</source>
         <translation>Instrução</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="237"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Macro</source>
         <translation>Macro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="238"/>
+        <location filename="settings.cpp" line="249"/>
         <source>Preprocessor</source>
         <translation>Pré-processador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="250"/>
         <source>Illegal fg</source>
         <translation>Ilegal pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="240"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Illegal bg</source>
         <translation>Ilegal fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="265"/>
+        <location filename="settings.cpp" line="276"/>
         <source>Options</source>
         <translation>Opções</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="266"/>
+        <location filename="settings.cpp" line="277"/>
         <source>Tab spacing</source>
         <translation>Espaçamento tab</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="268"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Completion minimum</source>
         <translation>Completando mínimo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="270"/>
+        <location filename="settings.cpp" line="281"/>
         <source>Toolbar icon size</source>
         <translation>Toolbar tamanho dos ícones</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="273"/>
+        <location filename="settings.cpp" line="284"/>
         <source>Debug button icon size</source>
         <translation>Depurar botão de tamanho de ícone</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="275"/>
+        <location filename="settings.cpp" line="286"/>
         <source>Auto-indent</source>
         <translation>Auto-recuo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="287"/>
         <source>Auto-open project files</source>
         <translation>Arquivos de projeto auto-abertas</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="288"/>
         <source>Display debug buttons</source>
         <translation>Mostrar botões de depuração</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="278"/>
+        <location filename="settings.cpp" line="289"/>
         <source>Icons on debug buttons</source>
         <translation>Ícones em botões de depuração</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="290"/>
         <source>XMM Reverse</source>
         <translation>XMM Reversa</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="285"/>
+        <location filename="settings.cpp" line="296"/>
         <source>External commands</source>
         <translation>Os comandos externos</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Prettify</source>
         <translation>Embelezar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="298"/>
         <source>Assemble</source>
         <translation>Montar programa</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Link asm</source>
         <translation>Ligar asm</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="300"/>
         <source>C Compile</source>
         <translation>C Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
-        <location filename="settings.cpp" line="292"/>
+        <location filename="settings.cpp" line="301"/>
+        <location filename="settings.cpp" line="303"/>
         <source>Link C</source>
         <translation>Ligar C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="291"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Compile C++</source>
         <translation>C++ Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="293"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Compile Fortran</source>
         <translation>Fortran Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="294"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Link Fortran</source>
         <translation>Ligar Fortran</translation>
     </message>
@@ -2003,9 +2045,9 @@ para ser aceito no argv ordem</translation>
         <location filename="sourceframe.cpp" line="268"/>
         <location filename="sourceframe.cpp" line="280"/>
         <location filename="sourceframe.cpp" line="295"/>
-        <location filename="sourceframe.cpp" line="512"/>
-        <location filename="sourceframe.cpp" line="984"/>
-        <location filename="sourceframe.cpp" line="1079"/>
+        <location filename="sourceframe.cpp" line="515"/>
+        <location filename="sourceframe.cpp" line="990"/>
+        <location filename="sourceframe.cpp" line="1085"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
@@ -2037,30 +2079,31 @@ Você quer salvar o arquivo?</translation>
         <translation>, não tem a extensão. Ebe.</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="513"/>
+        <location filename="sourceframe.cpp" line="516"/>
         <source>None of the source files defines main</source>
         <translation>Nenhum dos arquivos de origem define main</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="985"/>
+        <location filename="sourceframe.cpp" line="991"/>
         <source>This file has changed.
 Do you want save the file?</source>
         <translation>Este arquivo foi alterado.
 Você quer salvar o arquivo?</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1074"/>
+        <location filename="sourceframe.cpp" line="1080"/>
         <source>The following files have not been saved:
 </source>
         <translation>Os seguintes arquivos não foram salvos:</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1078"/>
+        <location filename="sourceframe.cpp" line="1084"/>
         <source>Do you wish to save them all?</source>
         <translation>Você deseja salvar a todos?</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1279"/>
+        <location filename="sourceframe.cpp" line="188"/>
+        <location filename="sourceframe.cpp" line="1285"/>
         <source>unnamed</source>
         <translation>anônimo</translation>
     </message>

@@ -185,7 +185,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     setLayout(layout);
 
     source = new SourceWindow;
-    int index = tab->addTab(source,"unnamed");
+    int index = tab->addTab(source,tr("unnamed"));
     tab->setCurrentIndex(index);
 
     fortranExts << "f" << "F" << "for" << "FOR" << "f90" << "F90"
@@ -288,7 +288,7 @@ void SourceFrame::run()
     } else {
         QStringList sourceFiles;
         sourceFiles = projectWindow->fileNames;
-        sourceFiles << "ebe_unbuffer.cpp";
+        //sourceFiles << "ebe_unbuffer.cpp";
         exeName = projectWindow->projectFileName;
         index = exeName.lastIndexOf('.');
         if ( index == -1 ) {
@@ -316,6 +316,7 @@ void SourceFrame::run()
 
     QStringList extraCmds;
     QString extraCmd;
+    definesStart = false;
     foreach ( file, files ) {
         //name = QDir::current().relativeFilePath(name);
         //qDebug() << file.source << file.object << file.language;
@@ -393,6 +394,7 @@ void SourceFrame::run()
     QString ldCmd = "";
     textLabels.clear();
     foreach ( file, files ) {
+        //qDebug() << "file" << file.source;
         object = file.object;
         if ( object == "ebe_unbuffer.o" ) continue;
         //qDebug() << "object" << object << ext;
@@ -424,6 +426,7 @@ void SourceFrame::run()
                         (parts[2] == "start" || parts[2] == "_start") ) {
                     ldCmd = ebe["build/asmld"].toString();
                     files.removeFirst();
+                    definesStart = true;
                 } else if ( parts[1] == "B" || parts[1] == "D" ||
                             parts[1] == "G" || parts[1] == "C" ) {
 #if defined Q_OS_MAC || defined Q_WS_WIN
@@ -517,10 +520,13 @@ void SourceFrame::run()
     //
     //  Link object files to produce executable file
     //
+    //qDebug() << "ld cmd" << ldCmd;
     foreach ( file, files ) {
+        //qDebug() << "file" << file.source;
         if ( file.object != "" ) ldCmd += " \"" + file.object + "\"";
+        //qDebug() << "ld cmd" << ldCmd;
     }
-    ldCmd += " " + ebe["build/libs"].toString();
+    if ( ! definesStart ) ldCmd += " " + ebe["build/libs"].toString();
     //qDebug() << "ld cmd" << ldCmd;
 
 

@@ -30,6 +30,7 @@ public:
     QLabel *cursorPosition;
     void close(QString);
     bool inAssembly;
+    bool definesStart;
 
 public slots:
     void nextInstruction(QString file,int line);

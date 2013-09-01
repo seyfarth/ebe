@@ -133,7 +133,7 @@ RegisterWindow::RegisterWindow(QWidget *parent)
  */
     table->setToolTip(
         tr("Right click on register names to change formats.\n"
-           "Right clock on a register's value to define a variable\n"
+           "Right click on a register's value to define a variable\n"
            "with the address contained in the register."));
 
 /*

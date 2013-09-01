@@ -1,10 +1,16 @@
 #define SETTINGS_CPP
 #include "settings.h"
+#include "stylesheet.h"
+#include "language.h"
 #include <QDir>
 #include <QFile>
+#include <QLocale>
 #include <QStringList>
 #include <QFileDialog>
+#include <QStyledItemDelegate>
 #include <QDebug>
+
+extern Languages languages;
 
 Settings::Settings()
 {
@@ -168,6 +174,17 @@ void Settings::setDefaults()
     ebe["complete/minimum"] = 4;
 
     ebe["xmm/reverse"] = false;
+
+    QString languageCode;
+    languageCode = QLocale::system().name();
+    if ( languageCode.length() > 2 ) {
+        languageCode = languageCode.left(2);
+    } else {
+        languageCode = "en";
+    }
+
+    ebe["language_code"] = languageCode;
+    ebe["language_name"] = languages.codeToName[languageCode];
 }
 
 SettingsHash newSettings;
@@ -181,6 +198,9 @@ SettingsDialog::SettingsDialog()
 
     newSettings = ebe;
 
+    addStyleSheet ( "Settings",
+      QString("QComboBox QAbstractItemView::item {height: %1px}")
+             .arg(int(ebe["font_size"].toInt()*1.25)));
     QPoint pos = QCursor::pos();
     int y = pos.y()-300;
     if ( y < 100 ) y = 100;
@@ -211,7 +231,7 @@ SettingsDialog::SettingsDialog()
     //mainLayout->addLayout(columnLayout);
 
     //columnLayout = new QVBoxLayout;
-    frame = new SettingsFrame("Other colors");
+    frame = new SettingsFrame(tr("Other colors"));
 
     frame->addColorSetter(tr("Register"),"reg_fg");
     frame->addColorSetter(tr("Register title"),"reg_title_fg");
@@ -225,13 +245,13 @@ SettingsDialog::SettingsDialog()
     mainLayout->addLayout(columnLayout);
 
     columnLayout = new QVBoxLayout;
-    frame = new SettingsFrame("Highlight colors");
+    frame = new SettingsFrame(tr("Highlight colors"));
 
     frame->addColorSetter(tr("Comment"), "comment_fg");
     frame->addColorSetter(tr("Identifier"), "id_fg");
     frame->addColorSetter(tr("Reserved"), "reserved_fg");
     frame->addColorSetter(tr("String"), "string_fg");
-    frame->addColorSetter(tr("Number"), "numeric");
+    frame->addColorSetter(tr("Number"), "numeric_fg");
     frame->addColorSetter(tr("Operator"), "operator_fg");
     frame->addColorSetter(tr("Instruction"), "instruction_fg");
     frame->addColorSetter(tr("Macro"), "macro_fg");
@@ -239,6 +259,16 @@ SettingsDialog::SettingsDialog()
     frame->addColorSetter(tr("Illegal fg"), "illegal_fg");
     frame->addColorSetter(tr("Illegal bg"), "illegal_bg");
     frame->addStretch();
+    columnLayout->addWidget(frame);
+
+    frame = new SettingsFrame(tr("Language"));
+
+    ComboBox *box = frame->addComboBox(tr("Language"),"language_name");
+    QStringList names;
+    foreach ( QString code, languages.languageCodes ) {
+        names << languages.codeToName[code];
+    }
+    box->setChoices(names);
     columnLayout->addWidget(frame);
 
     QFrame *f = new QFrame;
@@ -260,7 +290,6 @@ SettingsDialog::SettingsDialog()
 
     columnLayout = new QVBoxLayout;
     Spinner *spin;
-    ComboBox *box;
     QStringList strings;
     frame = new SettingsFrame(tr("Options"));
     spin = frame->addSpinner(tr("Tab spacing"),"edit/tab_width");
@@ -304,6 +333,9 @@ void SettingsDialog::save()
 {
     //qDebug() << "Saving";
     ebe = newSettings;
+    ebe["language_code"] =
+        languages.nameToCode[ebe["language_name"].toString()];
+    languages.setLanguage();
     accept();
 }
 
@@ -445,6 +477,9 @@ ComboBox::ComboBox(QString v)
 : QComboBox()
 {
     var = v;
+    setSizeAdjustPolicy ( QComboBox::AdjustToContents );
+    QStyledItemDelegate* itemDelegate = new QStyledItemDelegate();
+    setItemDelegate(itemDelegate);
 }
 
 void ComboBox::setChoices(QStringList items)

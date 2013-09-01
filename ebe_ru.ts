@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>ArrayBoundsDialog</name>
     <message>
         <location filename="variable.cpp" line="124"/>
         <source>Set Array Bounds</source>
-        <translation>Limites du tableau</translation>
+        <translation>Установить Границы массива</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="136"/>
         <source>array variable</source>
-        <translation>variable du tableau</translation>
+        <translation>переменная массива</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="142"/>
         <source>First index</source>
-        <translation>Premier indice</translation>
+        <translation>Первый индекс</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="148"/>
         <source>Last index</source>
-        <translation>Dernier indice</translation>
+        <translation>Последний индекс</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="154"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>отменить</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="169"/>
         <source>A pointer can point to an object or an array.
 </source>
-        <translation>Un pointeur peut pointer vers un objet ou un tableau.</translation>
+        <translation>Указатель может указывать на объект или массив.</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="170"/>
         <source>To point to an object set first and last to 0.</source>
-        <translation>Pour pointer vers un objet, mettre le premier et le dernier à 0.</translation>
+        <translation>Для указания на объект установлен первый и последний в 0.</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="202"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation>ошибка</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="203"/>
         <source>The first index can&apos;t be
  greater than the last.</source>
-        <translation>Le premier indice ne peut pas
-être supérieur au dernier.</translation>
+        <translation>Первый индекс не может быть
+больше, чем последний.</translation>
     </message>
 </context>
 <context>
@@ -58,62 +58,62 @@
         <location filename="binarybitpanel.cpp" line="18"/>
         <location filename="binarybitpanel.cpp" line="70"/>
         <source>|| Boolean or</source>
-        <translation>|| Ou booléen</translation>
+        <translation>|| Логическое ИЛИ</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="18"/>
         <source>| Bitwise or</source>
-        <translation>| OU binaire</translation>
+        <translation>| Побитовое ИЛИ</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp;&amp; Boolean and</source>
-        <translation>&amp;&amp; Et booléen</translation>
+        <translation>&amp;&amp; Логическое И</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp; Bitwise and</source>
-        <translation>&amp; ET binaire</translation>
+        <translation>&amp; Побитовое и</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="20"/>
         <source>^  Exclusive or</source>
-        <translation>^  Ou exclusif</translation>
+        <translation>^ Исключающее ИЛИ</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&lt;&lt; Shift left</source>
-        <translation>&lt;&lt; Décalage à gauche</translation>
+        <translation>&lt;&lt; Сдвиг влево</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Shift right</source>
-        <translation>&gt;&gt; Décalage à droite</translation>
+        <translation>&gt;&gt; Сдвиг вправо</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Signed shift right</source>
-        <translation>&gt;&gt; Décalage à droite signé</translation>
+        <translation>&gt;&gt; Подписано сдвиг вправо</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
         <source>@&lt; Rotate left</source>
-        <translation>@&lt; Rotation à gauche</translation>
+        <translation>@&lt; Повернуть влево</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
         <source>@&gt; Rotate right</source>
-        <translation>@&lt; Rotation à droite</translation>
+        <translation>@&gt; Повернуть вправо</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation>вход</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation>Oператор</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
@@ -126,12 +126,12 @@
         <location filename="binarybitpanel.cpp" line="437"/>
         <location filename="binarybitpanel.cpp" line="477"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation>Rезультат</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="39"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="177"/>
@@ -145,13 +145,13 @@
         <location filename="binarybitpanel.cpp" line="418"/>
         <location filename="binarybitpanel.cpp" line="458"/>
         <source>Values converted to binary</source>
-        <translation>Valeurs converties en binaire</translation>
+        <translation>Значения преобразуются в двоичные</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="190"/>
         <location filename="binarybitpanel.cpp" line="242"/>
         <source>Result as a binary bool</source>
-        <translation>Résultat booléen binaire</translation>
+        <translation>Результат в виде двоичного bool</translation>
     </message>
 </context>
 <context>
@@ -159,27 +159,27 @@
     <message>
         <location filename="bitbucket.cpp" line="25"/>
         <source>Unary operators</source>
-        <translation>Opérateurs unaires</translation>
+        <translation>Yнарные операторы</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="26"/>
         <source>Binary bit operators</source>
-        <translation>Opérateurs binaires de bits </translation>
+        <translation>Бинарные операторы немного</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="27"/>
         <source>Integer conversions</source>
-        <translation>Conversions entières</translation>
+        <translation>целое преобразования</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="28"/>
         <source>Integer math</source>
-        <translation>Mathématiques entier</translation>
+        <translation>целыми числами</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="29"/>
         <source>Float conversions</source>
-        <translation>Conversions flottante</translation>
+        <translation>Поплавок преобразования</translation>
     </message>
 </context>
 <context>
@@ -187,7 +187,7 @@
     <message>
         <location filename="commandline.cpp" line="25"/>
         <source>Command line</source>
-        <translation>Ligne de commande</translation>
+        <translation>Командная строка</translation>
     </message>
     <message>
         <location filename="commandline.cpp" line="28"/>
@@ -196,11 +196,12 @@ for your program when it runs.  The command
 line parameters are the parameters to main
 in C and C++(argc and argv).  The first is
 always the name of the program.</source>
-        <translation>Entrez les paramètres supplémentaires de la ligne de 
-commande pour votre programme lors de son exécution.
-Les paramètres de la ligne de commande sont les
-paramètres principaux en C et C + + (argc et argv).
-Le premier doit toujours être le nom du programme.</translation>
+        <translation>Введите дополнительные параметры для командной
+строки для вашей программы, когда он работает.
+команда Оперативные параметры вступают в
+параметрах к основной В C и C++ (и argc argv). Первый
+всегда название программы.
+</translation>
     </message>
 </context>
 <context>
@@ -208,7 +209,7 @@ Le premier doit toujours être le nom du programme.</translation>
     <message>
         <location filename="consolewindow.cpp" line="28"/>
         <source>gdb command</source>
-        <translation>commande gdb</translation>
+        <translation>команда gdb</translation>
     </message>
 </context>
 <context>
@@ -216,45 +217,45 @@ Le premier doit toujours être le nom du programme.</translation>
     <message>
         <location filename="datawindow.cpp" line="417"/>
         <source>Variable menu</source>
-        <translation>Menu variable</translation>
+        <translation>Переменная меню</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="418"/>
         <source>Edit variable</source>
-        <translation>Modifier la variable</translation>
+        <translation>Изменение переменной</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="419"/>
         <source>Delete variable</source>
-        <translation>Supprimer la variable</translation>
+        <translation>Удалить переменную</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="423"/>
         <source>Character menu</source>
-        <translation>Menu caractère</translation>
+        <translation>меню персонажа</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="424"/>
         <source>Character</source>
-        <translation>Caractère</translation>
+        <translation>Nерсонаж</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="425"/>
         <source>Decimal</source>
-        <translation>Décimal</translation>
+        <translation>десятичный</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="426"/>
         <location filename="datawindow.cpp" line="434"/>
         <source>Unsigned decimal</source>
-        <translation>Décimal non signé</translation>
+        <translation>десятичный без знака</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="427"/>
         <location filename="datawindow.cpp" line="435"/>
         <location filename="datawindow.cpp" line="442"/>
         <source>Hexadecimal</source>
-        <translation>Hexadécimal</translation>
+        <translation>шестнадцатеричный</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="428"/>
@@ -262,77 +263,77 @@ Le premier doit toujours être le nom du programme.</translation>
         <location filename="datawindow.cpp" line="443"/>
         <location filename="datawindow.cpp" line="450"/>
         <source>Binary</source>
-        <translation>Binaire</translation>
+        <translation>двоичный</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="432"/>
         <source>Integer menu</source>
-        <translation>Menu entier</translation>
+        <translation>Целое меню</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="433"/>
         <source>Signed decimal</source>
-        <translation>Décimal signé</translation>
+        <translation>Подписано десятичных</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="440"/>
         <source>Float menu</source>
-        <translation>Menu flottant</translation>
+        <translation>Поплавок меню</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="441"/>
         <source>Floating point</source>
-        <translation>Virgule flottante</translation>
+        <translation>плавающая запятая</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="444"/>
         <source>Binary fp</source>
-        <translation>Binaire vf</translation>
+        <translation>Двоичной плавающей точкой</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="445"/>
         <source>Fields</source>
-        <translation>Champs</translation>
+        <translation>Поля</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="449"/>
         <source>Boolean</source>
-        <translation>Booléen</translation>
+        <translation>логический</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="462"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation>Hазвание</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="463"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Tип</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="464"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="472"/>
         <source>globals</source>
-        <translation>globals</translation>
+        <translation>глобальные</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="473"/>
         <source>locals</source>
-        <translation>locales</translation>
+        <translation>локальные</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="474"/>
         <source>parameters</source>
-        <translation>paramètres</translation>
+        <translation>параметры</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="475"/>
         <source>user-defined</source>
-        <translation>Défini par l&apos;usager</translation>
+        <translation>пользовательские</translation>
     </message>
 </context>
 <context>
@@ -341,8 +342,8 @@ Le premier doit toujours être le nom du programme.</translation>
         <location filename="datawindow.cpp" line="44"/>
         <source>Left click on a &gt; symbol to expand an item.
 Right click to change formats.</source>
-        <translation>Faites un clic gauche sur un symbole &gt; pour développer un élément.
-Faites un clic droit pour changer les formats.</translation>
+        <translation>Щелкните левой кнопкой мыши на символ&gt;, чтобы развернуть элемент.
+Щелкните правой кнопкой мыши, чтобы изменить формат.</translation>
     </message>
 </context>
 <context>
@@ -350,47 +351,47 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="variable.cpp" line="7"/>
         <source>Define Variable</source>
-        <translation>Définir Variable</translation>
+        <translation>Определите переменные</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="18"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation>Hазвание</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="22"/>
         <source>Address</source>
-        <translation>Adresse</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="36"/>
         <source>type</source>
-        <translation>type</translation>
+        <translation>тип</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="41"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation>Формат</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="45"/>
         <source>array variable</source>
-        <translation>variable tableau</translation>
+        <translation>переменная массива</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="49"/>
         <source>First</source>
-        <translation>Premier</translation>
+        <translation>первый</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="54"/>
         <source>Last</source>
-        <translation>Dernier</translation>
+        <translation>последний</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="60"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>отменить</translation>
     </message>
 </context>
 <context>
@@ -398,7 +399,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="errorwindow.cpp" line="13"/>
         <source>Errors</source>
-        <translation>Erreurs</translation>
+        <translation>Ошибки</translation>
     </message>
 </context>
 <context>
@@ -406,27 +407,27 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="toybox.cpp" line="668"/>
         <source>Expression</source>
-        <translation>Expression</translation>
+        <translation>Bыражение</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="668"/>
         <source>Execute</source>
-        <translation>Exécuter</translation>
+        <translation>Выполнять</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="668"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Tип</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="669"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation>Формат</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="669"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation>Rезультат</translation>
     </message>
 </context>
 <context>
@@ -434,12 +435,12 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="1266"/>
         <source>Find</source>
-        <translation>Rechercher</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1272"/>
         <source>Replace</source>
-        <translation>Remplacer</translation>
+        <translation>3амена</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1278"/>
@@ -462,17 +463,17 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="floatconvert.cpp" line="46"/>
         <source>to binary</source>
-        <translation>en binaire</translation>
+        <translation>в двоичную</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="72"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="74"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation>вход</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="75"/>
@@ -486,166 +487,166 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="floatconvert.cpp" line="311"/>
         <location filename="floatconvert.cpp" line="348"/>
         <source>to float</source>
-        <translation>en flottante</translation>
+        <translation>плавать</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="82"/>
         <source>Unknown operator:</source>
-        <translation>Opérateur inconnu :</translation>
+        <translation>Неизвестный оператор:</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="89"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="90"/>
         <source>The input value is not complete.</source>
-        <translation>La valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation>Входное значение не является полной.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="127"/>
         <source> All bits are 0 so the number is 0</source>
-        <translation> Tous les bits sont 0, le nombre est donc 0</translation>
+        <translation> Все биты 0, так это число равно 0</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="129"/>
         <location filename="floatconvert.cpp" line="140"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="138"/>
         <source> Bits 0-30 are 0 so the number is -0</source>
-        <translation> Les bits 0-30 sont à 0 si le nombre est -0</translation>
+        <translation> Биты 0-30 равны 0, так что число равно -0</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="149"/>
         <source> Number converted to binary</source>
-        <translation> Nombre converti en binaire</translation>
+        <translation> Число преобразуется в двоичный</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="169"/>
         <source> Sign bit (bit 31) is 0. The number is positive</source>
-        <translation> Le signe (bit 31) est à 0. Le nombre est positif</translation>
+        <translation> Знаковый бит (бит 31) равна 0.Число положительное</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="171"/>
         <source> Sign bit (bit 31) is 1. The number is negative</source>
-        <translation> Le signe (bit 31) est à 1. Le nombre est négatif</translation>
+        <translation> Знаковый бит (бит 31) 1.Число отрицательное</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="174"/>
         <source>Sign bit</source>
-        <translation>Bit de signe</translation>
+        <translation>Знаковый бит</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="194"/>
         <source> The exponent field is bits 23 - 30</source>
         <oldsource> The fraction field is bits 23 - 30</oldsource>
-        <translation>Le champ d&apos;exposant est formé des bits 23 - 30</translation>
+        <translation>Показатель поле биты 23 - 30</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="196"/>
         <source>Exponent field</source>
-        <translation>Champ d&apos;exposant</translation>
+        <translation>поле экспоненты</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="222"/>
         <source> The exponent value is the field value - 127</source>
-        <translation> La valeur de l&apos;exposant est la valeur du champ - 127</translation>
+        <translation>Значение показателя является значение поля - 127</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="224"/>
         <source>Exponent value</source>
-        <translation>Valeur de l&apos;exposant</translation>
+        <translation>Значение показателя</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="240"/>
         <source> The fraction field is the rightmost 23 bits</source>
         <oldsource> The exponent field is the rightmost 23 bits</oldsource>
-        <translation> Le champ de la fraction est composé des 23 bits les plus à droite</translation>
+        <translation> Ное поле, правый 23 бита</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="242"/>
         <source>Fraction field</source>
-        <translation>Champ de la fraction</translation>
+        <translation>Фракция поля</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
         <source> The exponent value has an implicit 1 bit</source>
-        <translation> La valeur de l&apos;exposant dispose d&apos;un implicite 1 bit</translation>
+        <translation> Значение экспоненты имеет неявный 1 бит</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
         <location filename="floatconvert.cpp" line="347"/>
         <source>Fraction value</source>
-        <translation>Valeur de la fraction</translation>
+        <translation>Фракция значения</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="278"/>
         <source> Value as a binary number times 2 to a power</source>
-        <translation> Valeur binaire multipliée par 2 à une puissance</translation>
+        <translation> Значение в виде двоичного числа 2 раза к источнику</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="280"/>
         <source>Binary value</source>
-        <translation>Valeur binaire</translation>
+        <translation>двоичной</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="306"/>
         <source> Bit %1 value is 2**%2</source>
-        <translation>La valeur du bit %1 est 2**%2</translation>
+        <translation> Бит %1 значение 2**%2</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="327"/>
         <source> Add the bit values</source>
-        <translation> Ajouter les valeurs de bit</translation>
+        <translation> Добавить битные значения</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="329"/>
         <source> Add the bit values and multiply by -1</source>
-        <translation> Ajoutez les valeurs de bits et de multiplier par -1</translation>
+        <translation> Добавить значения бит и умножить на -1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="345"/>
         <source> Denormalized float has no implicit 1</source>
-        <translation> Un nombre flottant dénormalisée n&apos;a pas de 1 implicite</translation>
+        <translation> Денормализованные поплавок не имеет неявные 1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="360"/>
         <source>positive infinity</source>
-        <translation>infini positif</translation>
+        <translation>положительной бесконечности</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="362"/>
         <source>negative infinity</source>
-        <translation>infini négatif</translation>
+        <translation>минус бесконечность</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="366"/>
         <source> Exponent == 255 &amp;&amp; fraction == 0 ==&gt; infinity</source>
-        <translation> Exposant == 255 &amp;&amp; fraction == 0 ==&gt; infini</translation>
+        <translation> Экспонент == 255 &amp;&amp; фракции == 0 ==&gt; бесконечность</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="368"/>
         <source>Infinity</source>
-        <translation>Infini</translation>
+        <translation>бесконечность</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="376"/>
         <source>SNaN - signaling not-a-number</source>
-        <translation>SNaN - signalisation n&apos;est pas un chiffre</translation>
+        <translation>SNaN - сигнализация не является числом</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="378"/>
         <source>QNaN - quiet not-a-number</source>
-        <translation>QNaN - quiet n&apos;est pas un chiffre</translation>
+        <translation>QNaN - тихо не-число</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="382"/>
         <source> Exponent == 255 &amp;&amp; fraction != 0 ==&gt; NaN</source>
-        <translation>Exposant == 255 &amp;&amp; fraction! = 0 ==&gt; NaN </translation>
+        <translation> Экспонент == 255 &amp;&amp; фракции! = 0 ==&gt; NaN</translation>
     </message>
 </context>
 <context>
@@ -653,7 +654,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="floatedit.cpp" line="11"/>
         <source>Enter an float value or 0xDEADBEEF (8 hex nibbles)</source>
-        <translation>Entrez un nombre flottant ou 0xDEADBEEF (8 nibbles hexadécimaux)</translation>
+        <translation>Введите значение теркой или 0xDEADBEEF (8 грызет шестнадцатеричное)</translation>
     </message>
 </context>
 <context>
@@ -661,22 +662,22 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="floatwindow.cpp" line="22"/>
         <source>Right click to change register formats.</source>
-        <translation>Faites un clic droit pour changer les formats de registre.</translation>
+        <translation>Щелкните правой кнопкой мыши, чтобы изменить регистр форматов.</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="110"/>
         <source>Float format</source>
-        <translation>Format flottant</translation>
+        <translation>Поплавок формате</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="111"/>
         <source>Format for 1 register</source>
-        <translation>Format pour 1 registre</translation>
+        <translation>Формат 1 регистра</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="112"/>
         <source>Format for all registers</source>
-        <translation>Format de tous les registres</translation>
+        <translation>Формат для всех регистров</translation>
     </message>
 </context>
 <context>
@@ -684,22 +685,22 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="gdb.cpp" line="354"/>
         <source>Could not create process</source>
-        <translation>Impossible de créer le processus</translation>
+        <translation>Не удалось создать процесс</translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="356"/>
         <source>error</source>
-        <translation>erreur</translation>
+        <translation>ошибка</translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="529"/>
         <source>Program not running</source>
-        <translation>Le programme n&apos;est pas en cours d&apos;exécution</translation>
+        <translation>Программа не выполняется</translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="561"/>
         <source>Could not interpret address:</source>
-        <translation>Impossible d&apos;interpréter l&apos;adresse:</translation>
+        <translation>Не удалось интерпретировать адресу:</translation>
     </message>
 </context>
 <context>
@@ -709,42 +710,42 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="54"/>
         <location filename="intconvert.cpp" line="71"/>
         <source>Decimal to Binary</source>
-        <translation>Décimal à Binaire</translation>
+        <translation>Десятичного числа в двоичное</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="17"/>
         <location filename="intconvert.cpp" line="92"/>
         <source>Decimal to Hex</source>
-        <translation>Décimal a Hex</translation>
+        <translation>Десятичной в шестнадцатеричную</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="113"/>
         <source>Binary to Decimal</source>
-        <translation>Binaire en décimal</translation>
+        <translation>Двоичной в десятичную</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="133"/>
         <source>Hex to Decimal</source>
-        <translation>Hex en Decimal</translation>
+        <translation>Шестнадцатеричных чисел в десятичной</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
         <location filename="intconvert.cpp" line="155"/>
         <source>Binary to Hex</source>
-        <translation>Binaire a Hex</translation>
+        <translation>Двоичной в шестнадцатеричное</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
         <location filename="intconvert.cpp" line="174"/>
         <source>Hex to Binary</source>
-        <translation>Hex a Binaire</translation>
+        <translation>Шестнадцатеричных чисел в двоичной</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="24"/>
         <source>Operator </source>
-        <translation>Opérateur </translation>
+        <translation>Oператор </translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="49"/>
@@ -753,7 +754,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="243"/>
         <location filename="intconvert.cpp" line="577"/>
         <source>to binary</source>
-        <translation>a binaire</translation>
+        <translation>в двоичную</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="78"/>
@@ -763,7 +764,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>Input</source>
-        <translation>Entrées</translation>
+        <translation>вход</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="78"/>
@@ -773,7 +774,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>Conversion</source>
-        <translation>Conversion</translation>
+        <translation>преобразование</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="80"/>
@@ -783,7 +784,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation>Rезультат</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="80"/>
@@ -793,7 +794,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="120"/>
@@ -801,7 +802,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>number</source>
-        <translation>nombre</translation>
+        <translation>число</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="123"/>
@@ -809,24 +810,29 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="378"/>
         <location filename="intconvert.cpp" line="454"/>
         <source>to decimal</source>
-        <translation>en décimal</translation>
+        <translation>в десятичную</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>nibble</source>
-        <translation>nibble</translation>
+        <translation>клев</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>2**nibble</source>
-        <translation>2**nibble</translation>
+        <translation>2**клев</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>nibble value</source>
-        <translation>valeur du nibble</translation>
+        <translation>клев значения</translation>
+    </message>
+    <message>
+        <location filename="intconvert.cpp" line="194"/>
+        <source>Unknown operator:</source>
+        <translation>Неизвестный оператор:</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="202"/>
@@ -836,7 +842,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="469"/>
         <location filename="intconvert.cpp" line="527"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="203"/>
@@ -846,60 +852,55 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="470"/>
         <location filename="intconvert.cpp" line="528"/>
         <source>The input value is not complete.</source>
-        <translation>La valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation>Входное значение не является полной.</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="211"/>
         <location filename="intconvert.cpp" line="269"/>
         <source>Value &amp; 0xffff copied into column 3</source>
-        <translation>Valeur &amp; 0xffff copiée dans la colonne 3</translation>
+        <translation>Значение &amp; 0xffff копируется в графе 3</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="237"/>
         <source>divide by 2</source>
-        <translation>diviser par 2</translation>
+        <translation>разделить на 2</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="253"/>
         <source>moved n/2 to n in new row</source>
-        <translation>déplacé n / 2 à n dans la nouvelle rangée</translation>
+        <translation>переехал п/2 до п в новой строке</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="295"/>
         <source>divide by 16</source>
-        <translation>diviser par 16</translation>
+        <translation>разделить на 16</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="301"/>
         <location filename="intconvert.cpp" line="514"/>
         <source>to hex</source>
-        <translation>a hex</translation>
+        <translation>в шестнадцатеричное</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="311"/>
         <source>moved n/16 to n in new row</source>
-        <translation>Déplacé n/16 à n dans la nouvelle rangée</translation>
+        <translation>переехал п/16 до п в новой строке</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="365"/>
         <source>Result is value for rightmost %1 bits</source>
-        <translation>Le résultat est la valeur des %1 bits les plus à droite</translation>
+        <translation>Результат является соотношение цены и правые %1 бит</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="372"/>
         <location filename="intconvert.cpp" line="448"/>
         <source>Done</source>
-        <translation>Terminé</translation>
+        <translation>сделанный</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="441"/>
         <source>Result is value for rightmost %1 nibbles</source>
-        <translation>Le résultat est la valeur des %1 nibbles les plus à droite</translation>
-    </message>
-    <message>
-        <location filename="intconvert.cpp" line="194"/>
-        <source>Unknown operator:</source>
-        <translation>Opérateur inconnu:</translation>
+        <translation>Результат является соотношение цены и правые %1 грызет</translation>
     </message>
 </context>
 <context>
@@ -909,47 +910,47 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intmath.cpp" line="38"/>
         <location filename="intmath.cpp" line="52"/>
         <source>Addition</source>
-        <translation>Addition</translation>
+        <translation>дополнение</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="16"/>
         <location filename="intmath.cpp" line="75"/>
         <source>Multiplication</source>
-        <translation>Multiplication</translation>
+        <translation>умножение</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="21"/>
         <source>Operation </source>
-        <translation>Opération </translation>
+        <translation>Oперация </translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation>вход</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation>Oператор</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Bits</source>
-        <translation>Bits</translation>
+        <translation>Биты</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="66"/>
         <location filename="intmath.cpp" line="87"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="97"/>
         <source>Unknown operator:</source>
-        <translation>Opérateur Inconnu:</translation>
+        <translation>Неизвестный оператор:</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="104"/>
@@ -957,46 +958,46 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intmath.cpp" line="165"/>
         <location filename="intmath.cpp" line="171"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="105"/>
         <location filename="intmath.cpp" line="166"/>
         <source>The first input value is not complete.</source>
-        <translation>La première valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation>Первое входное значение не завершена.</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="111"/>
         <location filename="intmath.cpp" line="172"/>
         <source>The second input value is not complete.</source>
-        <translation>La deuxième valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation>Второе входное значение не завершена.</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="120"/>
         <source> Carries</source>
-        <translation> Report (Carries)</translation>
+        <translation> переноска</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="121"/>
         <location filename="intmath.cpp" line="182"/>
         <source> a &amp; 0xffff copied into column 3</source>
-        <translation> a &amp; 0xffff copié dans la colonne 3</translation>
+        <translation> a &amp; 0xffff копируется в графе 3</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="122"/>
         <location filename="intmath.cpp" line="183"/>
         <source> b &amp; 0xffff copied into column 3</source>
-        <translation> b &amp; 0xffff copié dans la colonne 3</translation>
+        <translation> b &amp; 0xffff копируется в графе 3</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="123"/>
         <source> Sum</source>
-        <translation> Somme</translation>
+        <translation> Cумма</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="207"/>
         <source> Product</source>
-        <translation> Produit</translation>
+        <translation> продукт</translation>
     </message>
 </context>
 <context>
@@ -1005,8 +1006,9 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="integeredit.cpp" line="9"/>
         <source>Enter an integer or bool
 0x... for hex, 0b... for binary</source>
-        <translation>Entrez un nombre entier ou un booléen
-0x ... pour hex, 0b ... pour binaire</translation>
+        <translation>Введите целое число или bool
+0x ... для шестнадцатеричных
+0b ... для двоичных</translation>
     </message>
 </context>
 <context>
@@ -1014,22 +1016,22 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="librarywindow.cpp" line="18"/>
         <source>Library</source>
-        <translation>Librairie</translation>
+        <translation>библиотека</translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="105"/>
         <source>changes to a new directory</source>
-        <translation>changer pour un nouveau répertoire</translation>
+        <translation>изменения в новый каталог</translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="108"/>
         <source>view a web page</source>
-        <translation>afficher une page web</translation>
+        <translation>просмотра веб-страницы</translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="110"/>
         <source>inserts code into the editor</source>
-        <translation>insérer le code dans l&apos;éditeur</translation>
+        <translation>вставки кода в редакторе</translation>
     </message>
 </context>
 <context>
@@ -1037,7 +1039,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="1218"/>
         <source>Line number</source>
-        <translation>Numéro de ligne</translation>
+        <translation>номер строки</translation>
     </message>
 </context>
 <context>
@@ -1045,27 +1047,27 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="825"/>
         <source>Click on a line number to set or reset a breakpoint</source>
-        <translation>Cliquez sur un numéro de ligne pour définir ou redéfinir un point d&apos;arrêt</translation>
+        <translation>Нажмите на номер строки для установки или сброса точки останова</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1143"/>
         <source>Set breakpoint</source>
-        <translation>Définir point d&apos;arrêt</translation>
+        <translation>Установить точку останова</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1145"/>
         <source>Drop breakpoint</source>
-        <translation>Retirer un point d&apos;arrêt</translation>
+        <translation>падение останова</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1147"/>
         <source>Drop all breakpoints</source>
-        <translation>Retirer tous les points d&apos;arrêt</translation>
+        <translation>Отбросьте все точки останова</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1149"/>
         <source>ignore</source>
-        <translation>ignorer</translation>
+        <translation>игнорировать</translation>
     </message>
 </context>
 <context>
@@ -1078,485 +1080,486 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="mainwindow.cpp" line="183"/>
         <source>Some tools used by ebe are missing:</source>
-        <translation>Certains outils utilisés par ebe sont manquants:</translation>
+        <translation>Некоторые инструменты, используемые эбе отсутствуют:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="187"/>
         <source>   critical: </source>
-        <translation>   critique:</translation>
+        <translation>   критическим: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
         <source>   non-critical: </source>
-        <translation>   non critique:</translation>
+        <translation>   некритическое: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
         <source>Critical tools are needed by almost everyone.</source>
-        <translation>Les outils essentiels sont nécessaires pour presque tout le monde.</translation>
+        <translation>Критические инструменты необходимы почти все.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="195"/>
         <source>Non-critical tools are not needed by everyone.</source>
-        <translation>Les outils non critiques ne sont pas nécessaires pour tout le monde.</translation>
+        <translation>Некритический инструменты не нужны всем.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="198"/>
         <source>Click &lt;b&gt;Ignore&lt;/b&gt; to ignore this test in the future.</source>
-        <translation>Cliquez sur &lt;b&gt; Ignorer &lt;/ b&gt; pour ignorer ce test dans l&apos;avenir.</translation>
+        <translation>Нажмите &lt;b&gt; Игнорировать &lt;/b&gt;, чтобы игнорировать этот тест в будущем.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="201"/>
         <source>Click &lt;b&gt;OK&lt;/b&gt; to run ebe and test again next time</source>
-        <translation>Cliquez sur &lt;b&gt; OK &lt;/ b&gt; pour exécuter ebe et tester la prochaine fois</translation>
+        <translation>Нажмите &lt;b&gt;OK&lt;/b&gt; для запуска и тестирования эбе снова в следующий раз</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="203"/>
         <source>Missing tools</source>
-        <translation>Outils manquants</translation>
+        <translation>Отсутствие инструментов</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="373"/>
         <location filename="mainwindow.cpp" line="374"/>
         <source>File toolbar</source>
-        <translation>Barre d&apos;outils de fichiers</translation>
+        <translation>панели инструментов Файл</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="377"/>
         <location filename="mainwindow.cpp" line="378"/>
         <source>Edit toolbar</source>
-        <translation>Barre d&apos;outils de édition</translation>
+        <translation>Редактировать панели инструментов</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="381"/>
         <location filename="mainwindow.cpp" line="382"/>
         <source>Debug toolbar</source>
-        <translation>Barre d&apos;outils de débogage</translation>
+        <translation>панель инструментов отладки</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="385"/>
         <source>Code template toolbar</source>
-        <translation>Barre d&apos;outils de modèle de code</translation>
+        <translation>Код шаблона панели инструментов</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="386"/>
         <source>Template toolbar</source>
-        <translation>Barre d&apos;outils de modèle</translation>
+        <translation>Код шаблона панели инструментов</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="390"/>
         <source>&amp;File</source>
-        <translation>&amp;Document</translation>
+        <translation>&amp;Файл</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="391"/>
         <location filename="mainwindow.cpp" line="416"/>
         <source>New</source>
-        <translation>Nouveau</translation>
+        <translation>Hовое</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="393"/>
         <source>&amp;Template</source>
-        <translation>&amp;Modèle</translation>
+        <translation>&amp;Шаблон</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="394"/>
         <source>C Program</source>
-        <translation>Programme C</translation>
+        <translation>Программа C</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="396"/>
         <source>C++ Program</source>
-        <translation>Programme C++</translation>
+        <translation>Программа C++</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="397"/>
         <source>Assembly Program</source>
-        <translation>Programme Assembleur</translation>
+        <translation>Программа Ассамблеи</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="399"/>
         <source>Fortran Program</source>
-        <translation>Programme Fortran</translation>
+        <translation>Программа Fortran</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="400"/>
         <location filename="mainwindow.cpp" line="418"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation>Oткрыть</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="401"/>
         <location filename="mainwindow.cpp" line="420"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="402"/>
         <location filename="mainwindow.cpp" line="422"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation>Сохранить как</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="403"/>
         <location filename="mainwindow.cpp" line="424"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation>Cкряга</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="404"/>
         <source>Change directory</source>
-        <translation>Changez de répertoire</translation>
+        <translation>Перейдите в каталог</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="406"/>
         <location filename="mainwindow.cpp" line="429"/>
         <source>New project</source>
-        <translation>Nouveau projet</translation>
+        <translation>Новый проект</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="407"/>
         <location filename="mainwindow.cpp" line="432"/>
         <source>Open project</source>
-        <translation>Ouvrir le projet</translation>
+        <translation>Открытый проект</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="408"/>
         <location filename="mainwindow.cpp" line="435"/>
         <source>Close project</source>
-        <translation>Fermer le projet</translation>
+        <translation>Закрыть проект</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="410"/>
         <location filename="mainwindow.cpp" line="413"/>
         <source>Quit</source>
-        <translation>Quitter</translation>
+        <translation>увольняться</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="439"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Édition</translation>
+        <translation>&amp;Редактировать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="440"/>
         <location filename="mainwindow.cpp" line="486"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation>Кошка</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="441"/>
         <location filename="mainwindow.cpp" line="488"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>Копирование текста</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="442"/>
         <location filename="mainwindow.cpp" line="490"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation>Пасты</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="444"/>
         <location filename="mainwindow.cpp" line="493"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation>аннулировать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="445"/>
         <location filename="mainwindow.cpp" line="495"/>
         <source>Redo</source>
-        <translation>Rétablir</translation>
+        <translation>переделывать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="447"/>
         <source>Comment</source>
-        <translation>Commenter</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="449"/>
         <source>Uncomment</source>
-        <translation>Décommenter</translation>
+        <translation>Раскомментировать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="451"/>
         <source>indent</source>
-        <translation>Ajouter indentation</translation>
+        <translation>Oтступ</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="453"/>
         <location filename="mainwindow.cpp" line="500"/>
         <source>Unindent</source>
-        <translation>Retirer indentation</translation>
+        <translation>Oтменить отступ</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="456"/>
         <location filename="mainwindow.cpp" line="503"/>
         <source>Find</source>
-        <translation>Rechercher</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="458"/>
         <location filename="mainwindow.cpp" line="505"/>
         <source>Select all</source>
-        <translation>Sélectionner tout</translation>
+        <translation>Выбрать все</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="460"/>
         <source>Select none</source>
-        <translation>Ne rien sélectionner</translation>
+        <translation>Выберите ничего</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="463"/>
         <location filename="mainwindow.cpp" line="507"/>
         <source>Prettify</source>
-        <translation>Pomponner</translation>
+        <translation>Yкрашать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="465"/>
         <source>Edit settings</source>
-        <translation>Modifier paramètres</translation>
+        <translation>Изменить настройки</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="467"/>
         <source>&amp;Move</source>
-        <translation>&amp;Déplacer</translation>
+        <translatorcomment>&amp;Переместить</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="468"/>
         <source>Page forward</source>
-        <translation>Page suivante</translation>
+        <translation>страницу вперед</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="470"/>
         <source>Page backward</source>
-        <translation>page précédente</translation>
+        <translation>Cтраницу назад</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="472"/>
         <source>Go to line 1</source>
-        <translation>Aller à la ligne 1</translation>
+        <translation>Перейти к строке 1</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="474"/>
         <source>Go to last line</source>
-        <translation>Aller à la dernière ligne</translation>
+        <translation>Перейти к последней строке</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="476"/>
         <source>Go to line n</source>
-        <translation>Aller à la ligne n</translation>
+        <translation>Перейти к строке n</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="478"/>
         <source>Go to top of screen</source>
-        <translation>Aller au haut de l&apos;écran</translation>
+        <translation>К верхней части экрана</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="480"/>
         <source>Go to bottom</source>
-        <translation>Aller en bas</translation>
+        <translation>Идти ко дну</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="482"/>
         <source>Move line to middle</source>
-        <translation>Déplacez la ligne au milieu</translation>
+        <translation>Переместить линию к средней</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="498"/>
         <source>Indent</source>
-        <translation>Indenter</translation>
+        <translation>Oтступ</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="510"/>
         <location filename="mainwindow.cpp" line="554"/>
         <source>Decrease font</source>
-        <translation>Diminuer la police</translation>
+        <translation>Уменьшить шрифт</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="512"/>
         <location filename="mainwindow.cpp" line="552"/>
         <source>Increase font</source>
-        <translation>Agrandir la police</translation>
+        <translation>Увеличить размер</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="517"/>
         <source>Run (F5)</source>
-        <translation>Exécuter (F5)</translation>
+        <translation>Запустить (F5)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="520"/>
         <source>Next (F6)</source>
-        <translation>Suivant (F6)</translation>
+        <translation>Следующая (F6)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="523"/>
         <source>Step (F7)</source>
-        <translation>Etape (F7)</translation>
+        <translation>Стадию (F7)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="526"/>
         <source>Continue (F8)</source>
-        <translation>Continuer (F8)</translation>
+        <translation>Продолжить (F8)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="529"/>
         <source>stop (F9)</source>
-        <translation>Arrêt (F9)</translation>
+        <translation>Стоп (F9)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="534"/>
         <source>&amp;View</source>
-        <translation>&amp;Voir</translation>
+        <translation>&amp;Cмотреть</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="544"/>
         <source>Tooltips</source>
-        <translation>Info-bulles</translation>
+        <translation>Подсказки</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="546"/>
         <source>Command line</source>
-        <translation>Ligne de commande</translation>
+        <translation>Командная строка</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="551"/>
         <source>F&amp;ont</source>
-        <translation>P&amp;olice</translation>
+        <translation>&amp;Шрифт</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="557"/>
         <source>&amp;Help </source>
-        <translation>&amp;Aide </translation>
+        <translation>&amp;Помощь</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="558"/>
         <source>Getting started</source>
-        <translation>Débuter</translation>
+        <translation>Приступая к работе</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="559"/>
         <source>Projects</source>
-        <translation>Projets</translation>
+        <translation>Проекты</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="560"/>
         <source>Editing</source>
-        <translation>Édition</translation>
+        <translation>Редактирование</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="561"/>
         <source>Breakpoints</source>
-        <translation>Points d&apos;arrêt</translation>
+        <translation>Точки останова</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="562"/>
         <source>Running</source>
-        <translation>En exécution</translation>
+        <translation>Запуск</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="563"/>
         <source>About</source>
-        <translation>À propos</translation>
+        <translation>О</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="566"/>
         <source>cin: input</source>
-        <translation>cin: entrée</translation>
+        <translation>cin: вход</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="568"/>
         <source>cout: output</source>
-        <translation>cout: sortie</translation>
+        <translation>cout: выпускать</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="575"/>
         <source>switch: multi-way branch</source>
-        <translation>swith: branche multi-voies</translation>
+        <translation>switch: многоходовой филиал</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="577"/>
         <source>for: counting loop</source>
-        <translation>for: boucle à compteur</translation>
+        <translation>for: считая петли</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="579"/>
         <source>while: general loop with test at the top</source>
-        <translation>while: boucle générale avec essai au début</translation>
+        <translation>while: общий цикл с тестов в верхней</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="581"/>
         <source>do-while: general loop with test at the bottom</source>
-        <translation>do-while: boucle générale avec essai à la fin</translation>
+        <translation>do-while: общий цикл с теста на дне</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="584"/>
         <source>double: floating point number</source>
-        <translation>double: nombre en virgule flottante</translation>
+        <translation>double: число с плавающей точкой</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="586"/>
         <source>int: an integer</source>
-        <translation>int: un nombre entier</translation>
+        <translation>int: целое</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="600"/>
         <source>library</source>
-        <translation>library</translation>
+        <translation>библиотека</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="671"/>
         <source>Select working directory</source>
-        <translation>Sélectionner le répertoire de travail</translation>
+        <translation>Выберите рабочий каталог</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="686"/>
         <source>Ready</source>
-        <translation>Prêt</translation>
+        <translation>Готово</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="691"/>
         <source>Data</source>
-        <translation>Données</translation>
+        <translation>Данные</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="700"/>
         <source>Registers</source>
-        <translation>Registres</translation>
+        <translation>Регистры</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="709"/>
         <source>Floating Point Registers</source>
-        <translation>Registres en Virgule flottante</translation>
+        <translation>Регистров с плавающей точкой</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="718"/>
         <source>Project</source>
-        <translation>Projet</translation>
+        <translation>Проект</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="727"/>
         <source>Back Trace</source>
-        <translation>Trace</translation>
+        <translation>Oбратной трассировки</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="736"/>
         <source>Terminal</source>
-        <translation>Terminal</translation>
+        <translation>Терминал</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="744"/>
         <source>Toy Box</source>
-        <translation>Coffre à Jouets</translation>
+        <translation>Ящик для игрушек</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="752"/>
         <source>Bit Bucket</source>
-        <translation>Seau Bit</translation>
+        <translation>Битоприемник</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="760"/>
         <source>Console</source>
-        <translation>Console</translation>
+        <translation>Консоль</translation>
     </message>
 </context>
 <context>
@@ -1564,76 +1567,76 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="projectwindow.cpp" line="12"/>
         <source>Right click to see project options</source>
-        <translation>Faites un clic droit pour afficher les options du projet</translation>
+        <translation>Щелкните правой кнопкой мыши, чтобы увидеть варианты проектов,</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="35"/>
         <location filename="projectwindow.cpp" line="41"/>
         <source>Project menu</source>
-        <translation>Menu projet</translation>
+        <translation>Проект меню</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="36"/>
         <source>New project</source>
-        <translation>Nouveau projet</translation>
+        <translation>Новый проект</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="37"/>
         <source>Open project</source>
-        <translation>Ouvrir projet</translation>
+        <translation>Открытый проект</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="38"/>
         <location filename="projectwindow.cpp" line="46"/>
         <source>ignore</source>
-        <translation>ignorer</translation>
+        <translation>игнорировать</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="42"/>
         <source>Add file to project</source>
-        <translation>Ajouter le fichier au projet</translation>
+        <translation>Добавить файл в проект</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="43"/>
         <source>Open file in editor</source>
-        <translation>Ouvrir le fichier dans l&apos;éditeur</translation>
+        <translation>Открыть файл в редакторе</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="44"/>
         <source>Drop file from project</source>
-        <translation>Retirer le fichier du projet</translation>
+        <translation>Падение файл из проекта</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="45"/>
         <source>Close project</source>
-        <translation>Fermer le projet</translation>
+        <translation>Закрыть проект</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="55"/>
         <location filename="projectwindow.cpp" line="138"/>
         <source>Select project name</source>
-        <translation>Sélectionnez le nom du projet</translation>
+        <translation>Выберите имя проекта</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="55"/>
         <location filename="projectwindow.cpp" line="138"/>
         <source>Projects (*.ebe)</source>
-        <translation>Projets (*.ebe)</translation>
+        <translation>Проекты (*.ebe)</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="102"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation>Oшибка</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="103"/>
         <source>Failed to open </source>
-        <translation>Impossible d&apos;ouvrir </translation>
+        <translation>Не удалось открыть </translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="103"/>
         <source> for writing</source>
-        <translation> pour l&apos;écriture</translation>
+        <translation> для записи</translation>
     </message>
 </context>
 <context>
@@ -1641,7 +1644,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="instructions.cpp" line="20"/>
         <source>Could not open :/src/assembly/instructions</source>
-        <translation>Impossible d&apos;ouvrir :/src/assembly/instructions </translation>
+        <translation>Не удается открыть :/src/assembly/instructions</translation>
     </message>
 </context>
 <context>
@@ -1654,39 +1657,39 @@ with the address contained in the register.</source>
         <oldsource>Right click on register names to change formats.
 Right clock on a register&apos;s value to define a variable
 with the address contained in the register.</oldsource>
-        <translation>Faites un clic droit sur ​​les noms de registre pour en changer les formats.
-Faites un clic droit droit sur ​​la valeur d&apos;un registre pour définir une variable
-avec l&apos;adresse contenue à l&apos;intérieur du registre.</translation>
+        <translation>Щелкните правой кнопкой мыши на имени регистров изменением формата.
+Щелкните правой кнопкой мыши по значению регистра для определения
+переменной с адресом, содержащимся в регистре.</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="238"/>
         <source>Register menu</source>
-        <translation>Menu registre</translation>
+        <translation>Зарегистрируйтесь меню</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="244"/>
         <source>Decimal format</source>
-        <translation>Format décimal</translation>
+        <translation>Десятичный формат</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="245"/>
         <source>Hexadecimal format</source>
-        <translation>Format hexadécimal</translation>
+        <translation>Шестнадцатеричном формате</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="247"/>
         <source>Decimal format - all</source>
-        <translation>Format décimal - tous</translation>
+        <translation>Десятичный формат - все</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="249"/>
         <source>Hexadecimal format - all</source>
-        <translation>Format hexadécimal - tous</translation>
+        <translation>Шестнадцатеричном формате - все</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="257"/>
         <source>Define a variable with this address</source>
-        <translation>Définir une variable avec cette adresse</translation>
+        <translation>Определить переменную с этим адресом</translation>
     </message>
 </context>
 <context>
@@ -1694,258 +1697,258 @@ avec l&apos;adresse contenue à l&apos;intérieur du registre.</translation>
     <message>
         <location filename="settings.cpp" line="190"/>
         <source>Edit Settings</source>
-        <translation>Modifier paramètres</translation>
+        <translation>Изменить настройки</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="209"/>
         <source>Debug colors</source>
-        <translation>Couleurs de débogage</translation>
+        <translation>Отладка цветов</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="211"/>
         <source>Background</source>
-        <translation>Fond</translation>
+        <translation>Фон</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="212"/>
         <source>Breakpoint fg</source>
-        <translation>point d&apos;arrêt pp</translation>
+        <translation>Точка останова переднем плане</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="213"/>
         <source>Breakpoint bg</source>
-        <translation>point d&apos;arrêt fond</translation>
+        <translation>Точка останова фоне</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="214"/>
         <source>Find fg</source>
-        <translation>Trouver pp</translation>
+        <translation>Поиск переднем плане</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="215"/>
         <source>Find bg</source>
-        <translation>Trouver fond</translation>
+        <translation>Поиск фоне</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="216"/>
         <source>Line number fg</source>
-        <translation>Ligne numéro pp</translation>
+        <translation>Номер строки переднем плане</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="217"/>
         <source>Line number bg</source>
-        <translation>Ligne numéro fond</translation>
+        <translation>Номер строки фоне</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="218"/>
         <source>Next line fg</source>
-        <translation>Ligne suivante pp</translation>
+        <translation>Следующая линия переднего плана</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="219"/>
         <source>Next line bg</source>
-        <translation>Ligne suivante fond</translation>
+        <translation>Следующая линия фон</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="225"/>
         <source>Other colors</source>
-        <translation>Autres Couleurs</translation>
+        <translation>Другие цвета</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="227"/>
         <source>Register</source>
-        <translation>Registre</translation>
+        <translation>Регистры</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="228"/>
         <source>Register title</source>
-        <translation>Titre du registre</translation>
+        <translation>Регистрация названия</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="230"/>
         <source>Tooltip</source>
-        <translation>Info-bulle</translation>
+        <translation>Подсказки</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="231"/>
         <source>Table</source>
-        <translation>Tableau</translation>
+        <translation>Таблица</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="232"/>
         <source>List</source>
-        <translation>Liste</translation>
+        <translation>Список</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="233"/>
         <source>Tree</source>
-        <translation>Arbre</translation>
+        <translation>Дерево</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="239"/>
         <source>Highlight colors</source>
-        <translation>Couleurs de Surbrillance</translation>
+        <translation>Цвета выделения</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="241"/>
         <source>Comment</source>
-        <translation>Remarque</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="242"/>
         <source>Identifier</source>
-        <translation>Identifiant</translation>
+        <translation>Идентификатор</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="243"/>
         <source>Reserved</source>
-        <translation>Réservé</translation>
+        <translation>Зарезервированное</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="244"/>
         <source>String</source>
-        <translation>String</translation>
+        <translation>Строки</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="245"/>
         <source>Number</source>
-        <translation>Nombre</translation>
+        <translation>Число</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="246"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation>Oператор</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="247"/>
         <source>Instruction</source>
-        <translation>Instruction</translation>
+        <translation>Инструкция</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="248"/>
         <source>Macro</source>
-        <translation>Macro</translation>
+        <translation>Макро</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="249"/>
         <source>Preprocessor</source>
-        <translation>Préprocesseur</translation>
+        <translation>Препроцессор</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="250"/>
         <source>Illegal fg</source>
-        <translation>Illégal pp</translation>
+        <translation>Незаконное переднем плане</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="251"/>
         <source>Illegal bg</source>
-        <translation>Illégal fond</translation>
+        <translation>Незаконное фоне</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="259"/>
         <source>Save</source>
-        <translation>Sauver</translation>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="260"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation>отменить</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="276"/>
         <source>Options</source>
-        <translation>Options</translation>
+        <translation>Опции</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="277"/>
         <source>Tab spacing</source>
-        <translation>Espacement de tabulation</translation>
+        <translation>Табуляции</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="279"/>
         <source>Completion minimum</source>
-        <translation>Achèvement minimum</translation>
+        <translation>Завершение минимальным</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="281"/>
         <source>Toolbar icon size</source>
-        <translation>Taille de l&apos;icône de la barre d&apos;outils</translation>
+        <translation>Размер значков</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="284"/>
         <source>Debug button icon size</source>
-        <translation>Taille de l&apos;icône du bouton déboguer</translation>
+        <translation>Отладка Размер значок кнопки</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="286"/>
         <source>Auto-indent</source>
-        <translation>Auto-indentation</translation>
+        <translation>Автоотступа</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="287"/>
         <source>Auto-open project files</source>
-        <translation>Ouverture automatique des fichiers de projets</translation>
+        <translation>Автоматически открывать файлы проектов</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="288"/>
         <source>Display debug buttons</source>
-        <translation>Afficher les boutons de débogage</translation>
+        <translation>Отображение кнопок отладки</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="289"/>
         <source>Icons on debug buttons</source>
-        <translation>Icônes de boutons de débogage</translation>
+        <translation>Значки на кнопки отладки</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="290"/>
         <source>XMM Reverse</source>
-        <translation>XMM inverse</translation>
+        <translation>Обратный XMM</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="296"/>
         <source>External commands</source>
-        <translation>Commandes externes</translation>
+        <translation>Внешние команды</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="297"/>
         <source>Prettify</source>
-        <translation>Pomponner</translation>
+        <translation>Yкрашать</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="298"/>
         <source>Assemble</source>
-        <translation>Assembler</translation>
+        <translation>Соберите</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="299"/>
         <source>Link asm</source>
-        <translation>Lien asm</translation>
+        <translation>Ссылка asm</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="300"/>
         <source>C Compile</source>
-        <translation>Compiler en C</translation>
+        <translation>Компиляция C</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="301"/>
         <location filename="settings.cpp" line="303"/>
         <source>Link C</source>
-        <translation>Lien C</translation>
+        <translation>Ссылка C</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="302"/>
         <source>Compile C++</source>
-        <translation>Compiler en C++</translation>
+        <translation>Компиляция C++</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="304"/>
         <source>Compile Fortran</source>
-        <translation>Compiler en Fortran</translation>
+        <translation>Компиляция Fortran</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="305"/>
         <source>Link Fortran</source>
-        <translation>Lien Fortran</translation>
+        <translation>Ссылка Fortran</translation>
     </message>
 </context>
 <context>
@@ -1956,40 +1959,41 @@ avec l&apos;adresse contenue à l&apos;intérieur du registre.</translation>
 Mark a variable and right click to define
 a user-defined variable. This is most
 useful for assembly language.</source>
-        <translation>Faites un clic droit pour faire apparaître un menu.
-Marquez une variable et faites un clic droit pour définir
-la variable définie par l&apos;utilisateur. Ceci est surtout
-utile en assembleur.</translation>
+        <translation>Щелкните правой кнопкой мыши для вызова меню.
+Отметить переменную и щелкните правой кнопкой мыши,
+чтобы определить пользовательской переменной. Это
+наиболее полезно для ассемблера.
+</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="362"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation>аннулировать</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="363"/>
         <source>Redo</source>
-        <translation>Rétablir</translation>
+        <translation>переделывать</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="365"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation>Кошка</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="366"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation>Копирование текста</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="367"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation>Пасты</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="370"/>
         <source>Define variable</source>
-        <translation>Définir variable</translation>
+        <translation>Определите переменные</translation>
     </message>
 </context>
 <context>
@@ -1997,46 +2001,54 @@ utile en assembleur.</translation>
     <message>
         <location filename="sourceframe.cpp" line="83"/>
         <source>Click this button to exit from ebe</source>
-        <translation>Cliquez sur ce bouton pour quitter ebe</translation>
+        <translation>Нажмите эту кнопку, чтобы выйти из ebe</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="85"/>
         <source>Compile and run your program</source>
-        <translation>Compiler et exécuter votre programme</translation>
+        <translation>Скомпилировать и запустить программу</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="96"/>
         <source>Execute the current statement in the same function</source>
-        <translation>Exécutez l&apos;instruction en cours dans la même fonction</translation>
+        <translation>Выполнение текущего оператора в той же функции</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="108"/>
         <source>Execute the current statement possibly stepping
 into a different function</source>
-        <translation>Exécutez l&apos;instruction en entrant possiblement
-dans une autre fonction</translation>
+        <translation>Выполнение текущего оператора возможно шагая
+в другую функцию</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="120"/>
         <source>Execute statements starting at the current statement
 continuing until the program ends or a breakpoint
 is reached.</source>
-        <translation>Exécuter les instructions à partir de l&apos;instruction en cours et
-continuer jusqu&apos;à la fin du programme ou l&apos;atteinte d&apos;un point d&apos;arrêt.</translation>
+        <translation>Выполнить инструкции, начиная с текущего заявление
+продолжается, пока программа не будет завершена или
+останова достигнута.</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="133"/>
         <source>End this debugging session and continue editing</source>
-        <translation>Terminer la session de débogage et continuer l&apos;édition</translation>
+        <translation>Конец этой сеанс отладки и продолжить редактирование</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="171"/>
         <source>This input field is for executing your program with
 command line parameters to be accepted in the argv
 array</source>
-        <translation>Ce champ de saisie est pour l&apos;exécution de votre programme avec
-paramètres de ligne de commande à être acceptés dans le argv
-gamme</translation>
+        <translation>Это поле ввода для выполнения вашей программы с
+Параметры командной строки, чтобы быть принятым
+в argv массив
+</translation>
+    </message>
+    <message>
+        <location filename="sourceframe.cpp" line="188"/>
+        <location filename="sourceframe.cpp" line="1285"/>
+        <source>unnamed</source>
+        <translation>неназванный</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="268"/>
@@ -2046,63 +2058,57 @@ gamme</translation>
         <location filename="sourceframe.cpp" line="990"/>
         <location filename="sourceframe.cpp" line="1085"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="269"/>
         <source>This file has not been named.
 Do you want save the file?</source>
-        <translation>Ce fichier n&apos;a pas été nommé.
-Voulez-vous enregistrer le fichier?</translation>
+        <translation>Этот файл не был назван.
+Вы хотите сохранить файл?</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="281"/>
         <source>The file name, </source>
-        <translation>Le nom du fichier, </translation>
+        <translation>Имя файла, </translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="282"/>
         <source>, lacks an extension.</source>
-        <translation>, manque d&apos;une extension.</translation>
+        <translation>, не имеет расширение.</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="296"/>
         <source>The project file name, </source>
-        <translation>Nom du fichier de projet, </translation>
+        <translation>Имя файла проекта, </translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="297"/>
         <source>, lacks the .ebe extension.</source>
-        <translation>, n&apos;a pas l&apos;extension ebe.</translation>
+        <translation>, не хватает. Эбе расширение.</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="516"/>
         <source>None of the source files defines main</source>
-        <translation>Aucun des fichiers source définit main</translation>
+        <translation>Ни один из исходных файлов не определяет main</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="991"/>
         <source>This file has changed.
 Do you want save the file?</source>
-        <translation>Ce fichier a changé.
-Voulez-vous sauver le fichier?</translation>
+        <translation>Этот файл был изменен.
+Вы хотите сохранить файл?</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="1080"/>
         <source>The following files have not been saved:
 </source>
-        <translation>Les fichiers suivants n&apos;ont pas été enregistrées:</translation>
+        <translation>Следующие файлы не были сохранены:</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="1084"/>
         <source>Do you wish to save them all?</source>
-        <translation>Souhaitez-vous les sauvegarder?</translation>
-    </message>
-    <message>
-        <location filename="sourceframe.cpp" line="188"/>
-        <location filename="sourceframe.cpp" line="1285"/>
-        <source>unnamed</source>
-        <translation>sans nom</translation>
+        <translation>Вы хотите, чтобы спасти их всех?</translation>
     </message>
 </context>
 <context>
@@ -2113,69 +2119,69 @@ Voulez-vous sauver le fichier?</translation>
         <location filename="sourcewindow.cpp" line="684"/>
         <location filename="sourcewindow.cpp" line="714"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation>Oшибка</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="542"/>
         <location filename="sourcewindow.cpp" line="621"/>
         <location filename="sourcewindow.cpp" line="714"/>
         <source>Failed to open file </source>
-        <translation>Impossible d&apos;ouvrir le fichier </translation>
+        <translation>Не удалось открыть файл </translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="596"/>
         <source>C/C++ files (*.c* *.h *.t *akefile)</source>
-        <translation>Fichiers C/C++ (*.c* *. h *.t *akefile)</translation>
+        <translation>C/C++ файлы (*.c* *.h *.t *akefile)</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="598"/>
         <source>Fortran files (*.f* *.F* *akefile)</source>
-        <translation>Fichiers Fortran (*.c* *. h *.t *akefile)</translation>
+        <translation>Fortran файлы (*.f* *.F* *akefile)</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="600"/>
         <source>Assembly files (*.asm *.s *akefile)</source>
-        <translation>Fichiers Assembleur (*.asm *.s *akefile)</translation>
+        <translation>Ассамблея файлы (*.asm *.s *akefile)</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="602"/>
         <source>Open File</source>
-        <translation>Ouvrir fichier</translation>
+        <translation>Открыть файл</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="603"/>
         <source>C/C++ files (*.c* *.h* *.t *akefile);;</source>
-        <translation>Fichiers C/C++ (*.c* *. h *.t *akefile);;</translation>
+        <translation>C/C++ файлы (*.c* *.h* *.t *akefile);;</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="604"/>
         <source>Fortran files (*.f* *.F* *akefile);;</source>
-        <translation>Fichiers Fortran (*.c* *. h *.t *akefile);;</translation>
+        <translation>Fortran файлы (*.f* *.F* *akefile);;</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="605"/>
         <source>Assembly files (*.asm *.s *akefile);;</source>
-        <translation>Fichiers Assembleur (*.asm *.s *akefile);;</translation>
+        <translation>Ассамблея файлы (*.asm *.s *akefile);;</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="606"/>
         <source>All files (*)</source>
-        <translation>Tous les fichiers (*)</translation>
+        <translation>Все файлы (*)</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="672"/>
         <source>Save file as</source>
-        <translation>Enregistrer le fichier sous </translation>
+        <translation>Сохранить файл как</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="685"/>
         <source>Failed to open file for writing</source>
-        <translation>Impossible d&apos;ouvrir le fichier en écriture</translation>
+        <translation>Не удалось открыть файл для записи</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="715"/>
         <source> for saving.</source>
-        <translation> pour enregistrement.</translation>
+        <translation> для сохранения.</translation>
     </message>
 </context>
 <context>
@@ -2183,29 +2189,29 @@ Voulez-vous sauver le fichier?</translation>
     <message>
         <location filename="terminalwindow.cpp" line="57"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation>вход</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="58"/>
         <source>Clear output</source>
-        <translation>Effacer sortie</translation>
+        <translation>Очистить вывод</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="64"/>
         <source>Terminal input will only work from this input box.
 Press Control-D to send end of file.</source>
-        <translation>La saisie au terminal fonctionne uniquement à partir de cette zone
-de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
+        <translation>Входных терминалов будет работать только с этого поля ввода.
+Нажмите Control-D для отправки конца файла.</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="159"/>
         <source>error writing to child on lineEditReady</source>
-        <translation>erreur d&apos;écriture vers l&apos;enfant sur ​​lineEditReady</translation>
+        <translation>Ошибка записи в ребенка на lineEditReady</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="164"/>
         <source>error writing to pty on lineEditReady</source>
-        <translation>erreur d&apos;écriture vers pty sur ​​lineEditReady</translation>
+        <translation>Ошибка записи в pty на lineEditReady</translation>
     </message>
 </context>
 <context>
@@ -2213,22 +2219,22 @@ de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
     <message>
         <location filename="toybox.cpp" line="92"/>
         <source>Language</source>
-        <translation>Langage</translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="146"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="147"/>
         <source>Your expression is empty.</source>
-        <translation>Votre expression est vide.</translation>
+        <translation>Ваше выражение пусто.</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="156"/>
         <source>Could not open</source>
-        <translation>Impossible d&apos;ouvrir </translation>
+        <translation>Не удается открыть</translation>
     </message>
 </context>
 <context>
@@ -2236,27 +2242,27 @@ de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
     <message>
         <location filename="toybox.cpp" line="635"/>
         <source>Enter a C++ expression to evaluate</source>
-        <translation>Entrez une expression C++ à évaluer</translation>
+        <translation>Введите C + + выражение для вычисления</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="638"/>
         <source>Click this button to evaluate the expression</source>
-        <translation>Cliquez sur ce bouton pour évaluer l&apos;expression</translation>
+        <translation>Нажмите эту кнопку для вычисления выражения</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="643"/>
         <source>The type will be reported back from the evaluation</source>
-        <translation>Le type sera retourné suite à l&apos;évaluation</translation>
+        <translation>Типа будет сообщено в стороне от оценки</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="647"/>
         <source>Select a format for the expression value</source>
-        <translation>Sélectionner un format pour la valeur de l&apos;expression</translation>
+        <translation>Выберите формат значения выражения</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="652"/>
         <source>The value will be placed here when you click &quot;do it&quot;</source>
-        <translation>La valeur sera placé ici lorsque vous cliquez sur &quot;do It&quot;</translation>
+        <translation>Значение будут размещены здесь при нажатии кнопки &quot;do it&quot;</translation>
     </message>
 </context>
 <context>
@@ -2265,18 +2271,18 @@ de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
         <location filename="toybox.cpp" line="526"/>
         <source>Enter a name for a variable.
 A value is also required</source>
-        <translation>Entrez un nom pour une variable.
-Une valeur est également nécessaire</translation>
+        <translation>Введите имя переменной.
+Значение также требуется</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="532"/>
         <source>Select a type for your variable. </source>
-        <translation>Sélectionnez le type de votre variable.</translation>
+        <translation>Выберите тип вашей переменной.</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="545"/>
         <source>Enter a value for the variable.</source>
-        <translation>Entrez une valeur pour la variable.</translation>
+        <translation>Введите значение для переменной.</translation>
     </message>
 </context>
 <context>
@@ -2285,75 +2291,75 @@ Une valeur est également nécessaire</translation>
         <location filename="unarybitpanel.cpp" line="17"/>
         <location filename="unarybitpanel.cpp" line="62"/>
         <source>!  Boolean not</source>
-        <translation>!  Booléen non</translation>
+        <translation>!  булевы не</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="17"/>
         <source>-  Negative</source>
-        <translation>-  Négatif</translation>
+        <translation>-  Отрицательная</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="18"/>
         <source>~  Bitwise not</source>
-        <translation>~  Binaire non</translation>
+        <translation>~  Побитовое НЕ</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="22"/>
         <source>Operator </source>
-        <translation>Opérateur </translation>
+        <translation>Oператор </translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation>вход</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation>Oператор</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation>Rезультат</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="35"/>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation>Kомментировать</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="97"/>
         <source>Unknown operator:</source>
-        <translation>Opérateur inconnu:</translation>
+        <translation>Неизвестный оператор:</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="105"/>
         <location filename="unarybitpanel.cpp" line="126"/>
         <location filename="unarybitpanel.cpp" line="147"/>
         <source>Value converted to binary</source>
-        <translation>Valeur converti en binaire</translation>
+        <translation>Значение преобразуется в двоичный</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="118"/>
         <source>Result as a binary bool</source>
-        <translation>Résultat sous forme d&apos;un booléen binaire</translation>
+        <translation>Результат в виде двоичного bool</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="139"/>
         <location filename="unarybitpanel.cpp" line="161"/>
         <source>All bits flipped</source>
-        <translation>Tous les bits inversés</translation>
+        <translation>Все биты перевернуто</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="173"/>
         <source>Adding 1</source>
-        <translation>Ajout 1</translation>
+        <translation>Добавление 1</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="186"/>
         <source>Twos complement</source>
-        <translation>Complément de deux</translation>
+        <translation>Дополнение до двух</translation>
     </message>
 </context>
 <context>
@@ -2361,17 +2367,17 @@ Une valeur est également nécessaire</translation>
     <message>
         <location filename="toybox.cpp" line="597"/>
         <source>Variable name</source>
-        <translation>Nom de la variable</translation>
+        <translation>имя переменной</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="597"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation>Tип</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="597"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation>Значение</translation>
     </message>
 </context>
 </TS>

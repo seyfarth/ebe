@@ -21,7 +21,7 @@
     <message>
         <location filename="variable.cpp" line="148"/>
         <source>Last index</source>
-        <translation>Última índice</translation>
+        <translation>Último índice</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="154"/>
@@ -37,7 +37,7 @@
     <message>
         <location filename="variable.cpp" line="170"/>
         <source>To point to an object set first and last to 0.</source>
-        <translation>Para apuntar a un objeto situado primero y el último a 0.</translation>
+        <translation>Para apuntar a un objeto poner el primero y el último a 0.</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="202"/>
@@ -49,7 +49,7 @@
         <source>The first index can&apos;t be
  greater than the last.</source>
         <translation>El primer índice no puede ser
-  mayor que la anterior.</translation>
+  mayor que el último.</translation>
     </message>
 </context>
 <context>
@@ -58,7 +58,7 @@
         <location filename="binarybitpanel.cpp" line="18"/>
         <location filename="binarybitpanel.cpp" line="70"/>
         <source>|| Boolean or</source>
-        <translation>|| Booleano OR</translation>
+        <translation>|| OR Booleano</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="18"/>
@@ -68,17 +68,17 @@
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp;&amp; Boolean and</source>
-        <translation>&amp;&amp; Booleano y</translation>
+        <translation>&amp;&amp; AND Booleano</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp; Bitwise and</source>
-        <translation>&amp; Bit a bit y</translation>
+        <translation>&amp; AND bit a bit</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="20"/>
         <source>^  Exclusive or</source>
-        <translation>^  Exclusiva o</translation>
+        <translation>^ OR Exclusiva </translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
@@ -93,7 +93,7 @@
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Signed shift right</source>
-        <translation>&gt;&gt; Signed desplazamiento a la derecha</translation>
+        <translation>&gt;&gt; Desplazamiento a la derecha Con Signo</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
@@ -108,7 +108,7 @@
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
@@ -151,7 +151,7 @@
         <location filename="binarybitpanel.cpp" line="190"/>
         <location filename="binarybitpanel.cpp" line="242"/>
         <source>Result as a binary bool</source>
-        <translation>Resultado como bool binario</translation>
+        <translation>Resultado como booleano binario</translation>
     </message>
 </context>
 <context>
@@ -174,12 +174,12 @@
     <message>
         <location filename="bitbucket.cpp" line="28"/>
         <source>Integer math</source>
-        <translation>Matemática entera</translation>
+        <translation>Matemática de enteros</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="29"/>
         <source>Float conversions</source>
-        <translation>Flotador conversiones</translation>
+        <translation>Conversiones en Coma Flotante</translation>
     </message>
 </context>
 <context>
@@ -197,9 +197,8 @@ line parameters are the parameters to main
 in C and C++(argc and argv).  The first is
 always the name of the program.</source>
         <translation>Introduzca los parámetros adicionales de la línea
-de comandos para su programa cuando se ejecuta.
-El comando parámetros de la línea son los parámetros
-a principal en C y C + + (argc y argv). El primero es 
+de comandos para la ejecución del programa.
+Son los parámetros a la función main de C y C + + (argc y argv). El primero es 
 siempre el nombre del programa.</translation>
     </message>
 </context>
@@ -216,7 +215,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="417"/>
         <source>Variable menu</source>
-        <translation>Menú variable</translation>
+        <translation>Menú de variables</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="418"/>
@@ -231,7 +230,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="423"/>
         <source>Character menu</source>
-        <translation>menú caracter</translation>
+        <translation>Menú de carácteres</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="424"/>
@@ -267,7 +266,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="432"/>
         <source>Integer menu</source>
-        <translation>Menú entero</translation>
+        <translation>Menú de Enteros</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="433"/>
@@ -277,7 +276,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="440"/>
         <source>Float menu</source>
-        <translation>Menú flotador</translation>
+        <translation>Menú de Floats</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="441"/>
@@ -287,7 +286,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="444"/>
         <source>Binary fp</source>
-        <translation>binario pf</translation>
+        <translation>Binario pf</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="445"/>
@@ -317,7 +316,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="472"/>
         <source>globals</source>
-        <translation>globals</translation>
+        <translation>globales</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="473"/>
@@ -332,7 +331,7 @@ siempre el nombre del programa.</translation>
     <message>
         <location filename="datawindow.cpp" line="475"/>
         <source>user-defined</source>
-        <translation>definido usuario</translation>
+        <translation>definidas por el usuario</translation>
     </message>
 </context>
 <context>
@@ -341,7 +340,7 @@ siempre el nombre del programa.</translation>
         <location filename="datawindow.cpp" line="44"/>
         <source>Left click on a &gt; symbol to expand an item.
 Right click to change formats.</source>
-        <translation>Izquierda haga clic en un símbolo&gt; para expandir un elemento.
+        <translation>Haga clicl izquierdo en un símbolo&gt; para expandir un elemento.
 Haga clic derecho para cambiar formatos.</translation>
     </message>
 </context>
@@ -385,7 +384,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="variable.cpp" line="54"/>
         <source>Last</source>
-        <translation>Ultimo</translation>
+        <translation>Último</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="60"/>
@@ -472,7 +471,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="74"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="75"/>
@@ -486,7 +485,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="floatconvert.cpp" line="311"/>
         <location filename="floatconvert.cpp" line="348"/>
         <source>to float</source>
-        <translation>de punto flotante</translation>
+        <translation>a punto flotante</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="82"/>
@@ -501,7 +500,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="90"/>
         <source>The input value is not complete.</source>
-        <translation>El valor de entrada no es completa.</translation>
+        <translation>El valor de entrada no está completo.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="127"/>
@@ -517,12 +516,12 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="138"/>
         <source> Bits 0-30 are 0 so the number is -0</source>
-        <translation> Los bits 0-30 son 0 por lo que el número es -0</translation>
+        <translation> Los bits del 0 al 30 son 0 por lo que el número es -0</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="149"/>
         <source> Number converted to binary</source>
-        <translation> Número convierte a binario</translation>
+        <translation> Número convertido a binario</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="169"/>
@@ -542,12 +541,12 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="194"/>
         <source> The exponent field is bits 23 - 30</source>
-        <translation> El campo de bits de exponente es 23 - 30</translation>
+        <translation> El campo de exponente va del bit 23 al 30</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="196"/>
         <source>Exponent field</source>
-        <translation>Campo exponente</translation>
+        <translation>Campo de exponente</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="222"/>
@@ -561,8 +560,9 @@ Haga clic derecho para cambiar formatos.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="240"/>
-        <source> The exponent field is the rightmost 23 bits</source>
-        <translation> El campo exponente es los 23 bits más a la derecha</translation>
+        <source> The fraction field is the rightmost 23 bits</source>
+        <oldsource> The exponent field is the rightmost 23 bits</oldsource>
+        <translation type="unfinished"> El campo exponente comprende los 23 bits más a la derecha</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="242"/>
@@ -572,18 +572,18 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
         <source> The exponent value has an implicit 1 bit</source>
-        <translation> El valor del exponente tiene un implícito 1 bit</translation>
+        <translation> El valor del exponente tiene un bit implícito a 1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
         <location filename="floatconvert.cpp" line="347"/>
         <source>Fraction value</source>
-        <translation>valor de la fracción</translation>
+        <translation>Valor de la fracción</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="278"/>
         <source> Value as a binary number times 2 to a power</source>
-        <translation> Valor como un número multiplicado binarias 2 a una potencia</translation>
+        <translation> Valor del binario desplazado a la derecha una vez (multiplicar por 2)</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="280"/>
@@ -593,27 +593,27 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="306"/>
         <source> Bit %1 value is 2**%2</source>
-        <translation>Bit %1 valor es 2 ** %2</translation>
+        <translation>el valor del Bit %1 es 2 ** %2</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="327"/>
         <source> Add the bit values</source>
-        <translation> Agregue los valores de bit</translation>
+        <translation> Suma los valores de bits</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="329"/>
         <source> Add the bit values and multiply by -1</source>
-        <translation> Agregue los valores de bit y multiplicar por -1</translation>
+        <translation> Suma los valores de bits y multiplica por -1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="345"/>
         <source> Denormalized float has no implicit 1</source>
-        <translation>Float desnormalizado tiene implícita 1</translation>
+        <translation>Float desnormalizado no tiene 1 implícito</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="360"/>
         <source>positive infinity</source>
-        <translation>infinito positivo</translation>
+        <translation>Infinito positivo</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="362"/>
@@ -633,12 +633,12 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatconvert.cpp" line="376"/>
         <source>SNaN - signaling not-a-number</source>
-        <translation>SNAN - señalización not-a-number</translation>
+        <translation>SNaN - señalización not-a-number</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="378"/>
         <source>QNaN - quiet not-a-number</source>
-        <translation>QNaN - quiet not-a-number</translation>
+        <translation>QNaN - quiet(casi) not-a-number</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="382"/>
@@ -651,7 +651,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatedit.cpp" line="11"/>
         <source>Enter an float value or 0xDEADBEEF (8 hex nibbles)</source>
-        <translation>Introduzca un valor flotante o 0xDEADBEEF (8 nibbles hexadecimales)</translation>
+        <translation>Introduzca un valor float o 0xDEADBEEF (8 nibbles hexadecimales)</translation>
     </message>
 </context>
 <context>
@@ -664,7 +664,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="floatwindow.cpp" line="110"/>
         <source>Float format</source>
-        <translation>Flotador formato</translation>
+        <translation>Formato float</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="111"/>
@@ -692,7 +692,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="gdb.cpp" line="529"/>
         <source>Program not running</source>
-        <translation>El programa no se ejecuta</translation>
+        <translation>El programa no se está ejecutando</translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="561"/>
@@ -725,7 +725,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="133"/>
         <source>Hex to Decimal</source>
-        <translation>Hex a Decimal</translation>
+        <translation>Hexadecimal a Decimal</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
@@ -737,7 +737,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intconvert.cpp" line="19"/>
         <location filename="intconvert.cpp" line="174"/>
         <source>Hex to Binary</source>
-        <translation>Hex a Binario</translation>
+        <translation>Hexadecimal a Binario</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="24"/>
@@ -761,7 +761,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="78"/>
@@ -824,7 +824,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>nibble value</source>
-        <translation>valor nibble</translation>
+        <translation>valor del nibble</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="194"/>
@@ -849,7 +849,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intconvert.cpp" line="470"/>
         <location filename="intconvert.cpp" line="528"/>
         <source>The input value is not complete.</source>
-        <translation>El valor de entrada no es completa.</translation>
+        <translation>El valor de entrada no está completo.</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="211"/>
@@ -865,7 +865,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="intconvert.cpp" line="253"/>
         <source>moved n/2 to n in new row</source>
-        <translation>movido n / 2 para n en la nueva fila</translation>
+        <translation>movido n/2 a n en la nueva fila</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="295"/>
@@ -876,7 +876,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intconvert.cpp" line="301"/>
         <location filename="intconvert.cpp" line="514"/>
         <source>to hex</source>
-        <translation>a hex</translation>
+        <translation>a Hexadecimal</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="311"/>
@@ -886,7 +886,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="intconvert.cpp" line="365"/>
         <source>Result is value for rightmost %1 bits</source>
-        <translation>El resultado es un valor de más a la derecha %1 bits</translation>
+        <translation>El resultado es un valor de los %1 bits más a la derecha</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="372"/>
@@ -897,7 +897,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="intconvert.cpp" line="441"/>
         <source>Result is value for rightmost %1 nibbles</source>
-        <translation>El resultado es un valor de más a la derecha %1 nibbles</translation>
+        <translation>El resultado es un valor de los %1 nibbles más a la derecha</translation>
     </message>
 </context>
 <context>
@@ -924,7 +924,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
@@ -961,30 +961,30 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="intmath.cpp" line="105"/>
         <location filename="intmath.cpp" line="166"/>
         <source>The first input value is not complete.</source>
-        <translation>El primer valor de entrada no es completa.</translation>
+        <translation>El primer valor de entrada no está completo.</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="111"/>
         <location filename="intmath.cpp" line="172"/>
         <source>The second input value is not complete.</source>
-        <translation>El segundo valor de entrada no es completa.</translation>
+        <translation>El segundo valor de entrada no está completo.</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="120"/>
         <source> Carries</source>
-        <translation> Llevas</translation>
+        <translation> &quot;Llevadas&quot;</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="121"/>
         <location filename="intmath.cpp" line="182"/>
         <source> a &amp; 0xffff copied into column 3</source>
-        <translation> a &amp; 0xffff copia en la columna 3</translation>
+        <translation> a &amp; 0xffff copiado en la columna 3</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="122"/>
         <location filename="intmath.cpp" line="183"/>
         <source> b &amp; 0xffff copied into column 3</source>
-        <translation> b &amp; 0xffff copia en la columna 3</translation>
+        <translation> b &amp; 0xffff copiado en la columna 3</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="123"/>
@@ -1003,7 +1003,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="integeredit.cpp" line="9"/>
         <source>Enter an integer or bool
 0x... for hex, 0b... for binary</source>
-        <translation>Introduzca un número entero o bool
+        <translation>Introduzca un número entero o booleano
 0x ... para hexadecimal, 0b ... de binarios</translation>
     </message>
 </context>
@@ -1012,7 +1012,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="librarywindow.cpp" line="18"/>
         <source>Library</source>
-        <translation>Libreria</translation>
+        <translation>Librería</translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="105"/>
@@ -1053,12 +1053,12 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="1145"/>
         <source>Drop breakpoint</source>
-        <translation>Caída punto de interrupción</translation>
+        <translation>Quitar punto de interrupción</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1147"/>
         <source>Drop all breakpoints</source>
-        <translation>Descartar todos los puntos de interrupción</translation>
+        <translation>Quitar todos los puntos de interrupción</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1149"/>
@@ -1086,32 +1086,60 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
         <source>   non-critical: </source>
-        <translation>   no crítica: </translation>
+        <translation>   no crítico: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
         <source>Critical tools are needed by almost everyone.</source>
-        <translation>Herramientas fundamentales son necesarios para casi todo el mundo.</translation>
+        <translation>Las herramientas fundamentales son necesarias para casi todo el mundo.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="195"/>
         <source>Non-critical tools are not needed by everyone.</source>
-        <translation>Herramientas no críticos no son necesarios para todos.</translation>
+        <translation>Las herramientas no críticos no son necesarias para todos.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="198"/>
         <source>Click &lt;b&gt;Ignore&lt;/b&gt; to ignore this test in the future.</source>
-        <translation>Haga clic &lt;b&gt; Ignorar &lt;/b&gt; para ignorar esta prueba en el futuro.</translation>
+        <translation>Haga clic &lt;b&gt; en Ignorar &lt;/b&gt; para ignorar esta prueba en el futuro.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="201"/>
         <source>Click &lt;b&gt;OK&lt;/b&gt; to run ebe and test again next time</source>
-        <translation>Haga clic &lt;b&gt; Aceptar &lt;/b&gt; para ejecutar ebe y probar la próxima vez</translation>
+        <translation>Haga clic &lt;b&gt; en Aceptar &lt;/b&gt; para ejecutar ebe y probar la próxima vez</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="203"/>
         <source>Missing tools</source>
         <translation>Herramientas que faltan</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="373"/>
+        <location filename="mainwindow.cpp" line="374"/>
+        <source>File toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="377"/>
+        <location filename="mainwindow.cpp" line="378"/>
+        <source>Edit toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="381"/>
+        <location filename="mainwindow.cpp" line="382"/>
+        <source>Debug toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="385"/>
+        <source>Code template toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="386"/>
+        <source>Template toolbar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="390"/>
@@ -1142,7 +1170,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="397"/>
         <source>Assembly Program</source>
-        <translation>Programa Assenbly</translation>
+        <translation>Programa Assembly</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="399"/>
@@ -1176,7 +1204,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="404"/>
         <source>Change directory</source>
-        <translation>Cambie el directorio</translation>
+        <translation>Cambiar de directorio</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="406"/>
@@ -1200,7 +1228,7 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="mainwindow.cpp" line="410"/>
         <location filename="mainwindow.cpp" line="413"/>
         <source>Quit</source>
-        <translation>Dejar</translation>
+        <translation>Salir</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="439"/>
@@ -1245,18 +1273,18 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="449"/>
         <source>Uncomment</source>
-        <translation>Elimine comentario</translation>
+        <translation>Eliminar comentario</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="451"/>
         <source>indent</source>
-        <translation>endentar</translation>
+        <translation>indentar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="453"/>
         <location filename="mainwindow.cpp" line="500"/>
         <source>Unindent</source>
-        <translation>cambiar a la izquierda</translation>
+        <translation>Desindentar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="456"/>
@@ -1268,12 +1296,12 @@ Haga clic derecho para cambiar formatos.</translation>
         <location filename="mainwindow.cpp" line="458"/>
         <location filename="mainwindow.cpp" line="505"/>
         <source>Select all</source>
-        <translation>Seleccione todos</translation>
+        <translation>Seleccionar todos</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="460"/>
         <source>Select none</source>
-        <translation>seleccionar nada</translation>
+        <translation>No seleccionar nada</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="463"/>
@@ -1319,22 +1347,22 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="478"/>
         <source>Go to top of screen</source>
-        <translation>Ir a la superior de pantalla</translation>
+        <translation>Ir a la parte superior de pantalla</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="480"/>
         <source>Go to bottom</source>
-        <translation>Ir al fondo</translation>
+        <translation>Ir abajo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="482"/>
         <source>Move line to middle</source>
-        <translation>Mueva la línea de media</translation>
+        <translation>Mover la línea al medio</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="498"/>
         <source>Indent</source>
-        <translation>Endentar</translation>
+        <translation>Indentar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="510"/>
@@ -1371,7 +1399,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="529"/>
         <source>stop (F9)</source>
-        <translation>cesar (F9)</translation>
+        <translation>Parar (F9)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="534"/>
@@ -1381,7 +1409,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="544"/>
         <source>Tooltips</source>
-        <translation>Tooltips</translation>
+        <translation>Consejos</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="546"/>
@@ -1396,7 +1424,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="557"/>
         <source>&amp;Help </source>
-        <translation>&amp;Ayudar</translation>
+        <translation>&amp;Ayuda</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="558"/>
@@ -1431,12 +1459,12 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="566"/>
         <source>cin: input</source>
-        <translation>cin: input</translation>
+        <translation>cin: entrada</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="568"/>
         <source>cout: output</source>
-        <translation>cout: imprimir</translation>
+        <translation>cout: salida</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="575"/>
@@ -1446,22 +1474,22 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="577"/>
         <source>for: counting loop</source>
-        <translation>for: contando loop</translation>
+        <translation>for: bucle contador</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="579"/>
         <source>while: general loop with test at the top</source>
-        <translation>while: bucle en general con la prueba en la parte superior</translation>
+        <translation>while: bucle con la condición en la parte superior</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="581"/>
         <source>do-while: general loop with test at the bottom</source>
-        <translation>do-while: bucle en general con la prueba en la parte inferior</translation>
+        <translation>do-while: bucle con la condición en la parte inferior</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="584"/>
         <source>double: floating point number</source>
-        <translation>double: número de punto flotante</translation>
+        <translation>double: número en coma flotante</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="586"/>
@@ -1471,7 +1499,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="600"/>
         <source>library</source>
-        <translation>libreria</translation>
+        <translation>librería</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="671"/>
@@ -1496,7 +1524,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="709"/>
         <source>Floating Point Registers</source>
-        <translation>Punto Flotante Registros</translation>
+        <translation>Registros de Punto Flotante</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="718"/>
@@ -1506,7 +1534,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="mainwindow.cpp" line="727"/>
         <source>Back Trace</source>
-        <translation>Volver Traza</translation>
+        <translation>Traza</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="736"/>
@@ -1571,7 +1599,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="projectwindow.cpp" line="44"/>
         <source>Drop file from project</source>
-        <translation>Soltar archivo de proyecto</translation>
+        <translation>Eliminar archivo del proyecto</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="45"/>
@@ -1619,7 +1647,7 @@ Haga clic derecho para cambiar formatos.</translation>
     <message>
         <location filename="registerwindow.cpp" line="135"/>
         <source>Right click on register names to change formats.
-Right clock on a register&apos;s value to define a variable
+Right click on a register&apos;s value to define a variable
 with the address contained in the register.</source>
         <translation>Haga clic derecho sobre los nombres de registro para cambiar formatos.
 Reloj derecho del ratón en el valor de un registro para definir una variable
@@ -1628,7 +1656,7 @@ con la dirección contenida en el registro.</translation>
     <message>
         <location filename="registerwindow.cpp" line="238"/>
         <source>Register menu</source>
-        <translation>Menú Registro</translation>
+        <translation>Menú de Registros</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="244"/>
@@ -1638,7 +1666,7 @@ con la dirección contenida en el registro.</translation>
     <message>
         <location filename="registerwindow.cpp" line="245"/>
         <source>Hexadecimal format</source>
-        <translation>Formato hexadecimal</translation>
+        <translation>Formato Hexadecimal</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="247"/>
@@ -1659,248 +1687,258 @@ con la dirección contenida en el registro.</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="179"/>
+        <location filename="settings.cpp" line="190"/>
         <source>Edit Settings</source>
         <translation>Editar la Configuración</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="198"/>
+        <location filename="settings.cpp" line="209"/>
         <source>Debug colors</source>
         <translation>Colores de depuración</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="200"/>
+        <location filename="settings.cpp" line="211"/>
         <source>Background</source>
         <translation>Fondo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="201"/>
+        <location filename="settings.cpp" line="212"/>
         <source>Breakpoint fg</source>
-        <translation>punto de interrupción pp</translation>
+        <translation>Punto de interrupción pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="202"/>
+        <location filename="settings.cpp" line="213"/>
         <source>Breakpoint bg</source>
-        <translation>punto de interrupción fondo</translation>
+        <translation>Punto de interrupción fondo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="203"/>
+        <location filename="settings.cpp" line="214"/>
         <source>Find fg</source>
         <translation>Buscar pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="204"/>
+        <location filename="settings.cpp" line="215"/>
         <source>Find bg</source>
         <translation>Buscar fondo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="205"/>
+        <location filename="settings.cpp" line="216"/>
         <source>Line number fg</source>
-        <translation>número de línea pp</translation>
+        <translation>Número de línea pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="206"/>
+        <location filename="settings.cpp" line="217"/>
         <source>Line number bg</source>
         <translation>número de línea fondo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="207"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Next line fg</source>
         <translation>Siguiente línea pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="208"/>
+        <location filename="settings.cpp" line="219"/>
         <source>Next line bg</source>
         <translation>Siguiente línea fondo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="225"/>
+        <source>Other colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="227"/>
         <source>Register</source>
         <translation>Registro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Register title</source>
         <translation>Registro título</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="230"/>
         <source>Tooltip</source>
         <translation>Tooltip</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="220"/>
+        <location filename="settings.cpp" line="231"/>
         <source>Table</source>
         <translation>Tabla</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="221"/>
+        <location filename="settings.cpp" line="232"/>
         <source>List</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="222"/>
+        <location filename="settings.cpp" line="233"/>
         <source>Tree</source>
-        <translation>Arbol</translation>
+        <translation>Árbol</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="239"/>
+        <source>Highlight colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="241"/>
         <source>Comment</source>
         <translation>Comentario</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Identifier</source>
         <translation>Identificador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="243"/>
         <source>Reserved</source>
         <translation>Reservado</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="244"/>
         <source>String</source>
-        <translation>Cuerda</translation>
+        <translation>Cadena</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="234"/>
+        <location filename="settings.cpp" line="245"/>
         <source>Number</source>
         <translation>Número</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="235"/>
+        <location filename="settings.cpp" line="246"/>
         <source>Operator</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="236"/>
+        <location filename="settings.cpp" line="247"/>
         <source>Instruction</source>
         <translation>Instrucción</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="237"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Macro</source>
         <translation>Macro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="238"/>
+        <location filename="settings.cpp" line="249"/>
         <source>Preprocessor</source>
         <translation>Preprocesador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="250"/>
         <source>Illegal fg</source>
-        <translation>Ilegal pp</translation>
+        <translation>pp Ilegal</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="240"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Illegal bg</source>
-        <translation>Ilegal fondo</translation>
+        <translation>Fondo ilegal </translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="265"/>
+        <location filename="settings.cpp" line="276"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="266"/>
+        <location filename="settings.cpp" line="277"/>
         <source>Tab spacing</source>
         <translation>Espaciado de tabulación</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="268"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Completion minimum</source>
         <translation>Mínimo de finalización</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="270"/>
+        <location filename="settings.cpp" line="281"/>
         <source>Toolbar icon size</source>
         <translation>Toolbar tamaño de icono</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="273"/>
+        <location filename="settings.cpp" line="284"/>
         <source>Debug button icon size</source>
-        <translation>Depurar botón de tamaño de con</translation>
+        <translation>Botón de depucación tamaño de icono</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="275"/>
+        <location filename="settings.cpp" line="286"/>
         <source>Auto-indent</source>
-        <translation>Auto-endentar</translation>
+        <translation>Auto-indentar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="287"/>
         <source>Auto-open project files</source>
-        <translation>Archivos de proyecto Auto-abiertas</translation>
+        <translation>Auto-abrir Archivos de proyecto</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="288"/>
         <source>Display debug buttons</source>
         <translation>Muestra los botones de depuración</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="278"/>
+        <location filename="settings.cpp" line="289"/>
         <source>Icons on debug buttons</source>
         <translation>Los iconos de botones de depuración</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="290"/>
         <source>XMM Reverse</source>
-        <translation>XMM Reverso</translation>
+        <translation>Invertir XMM</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="285"/>
+        <location filename="settings.cpp" line="296"/>
         <source>External commands</source>
         <translation>Comandos externos</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Prettify</source>
         <translation>Embellecer</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="298"/>
         <source>Assemble</source>
         <translation>Ensamblar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Link asm</source>
-        <translation>Enlace asm</translation>
+        <translation>Linkear asm</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="300"/>
         <source>C Compile</source>
-        <translation>C Compilar</translation>
+        <translation>Compilar C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
-        <location filename="settings.cpp" line="292"/>
+        <location filename="settings.cpp" line="301"/>
+        <location filename="settings.cpp" line="303"/>
         <source>Link C</source>
-        <translation>Enlace C</translation>
+        <translation>Linkear C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="291"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Compile C++</source>
-        <translation>C++ Compilar</translation>
+        <translation>Compilar C++</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="293"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Compile Fortran</source>
         <translation>Fortran Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="294"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Link Fortran</source>
         <translation>Enlace Fortran</translation>
     </message>
@@ -1954,7 +1992,7 @@ variable de una definida por el usuario. Esto es más
     <message>
         <location filename="sourceframe.cpp" line="83"/>
         <source>Click this button to exit from ebe</source>
-        <translation>Haga clic en este botón para salir del ebe</translation>
+        <translation>Haga clic en este botón para salir de ebe</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="85"/>
@@ -1970,7 +2008,7 @@ variable de una definida por el usuario. Esto es más
         <location filename="sourceframe.cpp" line="108"/>
         <source>Execute the current statement possibly stepping
 into a different function</source>
-        <translation>Ejecute la instrucción actual posiblemente entrar
+        <translation>Ejecute la instrucción actual posiblemente entrando
 en una función diferente</translation>
     </message>
     <message>
@@ -1993,16 +2031,16 @@ de interrupción se alcanza.</translation>
 command line parameters to be accepted in the argv
 array</source>
         <translation>Este campo de entrada es para la ejecución de su programa con
-Parámetros de línea de comandos para ser aceptado en el argv
+Parámetros de línea de comandos que pasan al argv
 colección</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="268"/>
         <location filename="sourceframe.cpp" line="280"/>
         <location filename="sourceframe.cpp" line="295"/>
-        <location filename="sourceframe.cpp" line="512"/>
-        <location filename="sourceframe.cpp" line="984"/>
-        <location filename="sourceframe.cpp" line="1079"/>
+        <location filename="sourceframe.cpp" line="515"/>
+        <location filename="sourceframe.cpp" line="990"/>
+        <location filename="sourceframe.cpp" line="1085"/>
         <source>Warning</source>
         <translation>Aviso</translation>
     </message>
@@ -2034,30 +2072,31 @@ Do you want save the file?</source>
         <translation>, carece de la extensión ebe.</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="513"/>
+        <location filename="sourceframe.cpp" line="516"/>
         <source>None of the source files defines main</source>
         <translation>Ninguno de los archivos de origen define main</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="985"/>
+        <location filename="sourceframe.cpp" line="991"/>
         <source>This file has changed.
 Do you want save the file?</source>
         <translation>Este archivo ha cambiado.
 ¿Desea guardar el archivo?</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1074"/>
+        <location filename="sourceframe.cpp" line="1080"/>
         <source>The following files have not been saved:
 </source>
         <translation>Los siguientes archivos no se han guardado:</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1078"/>
+        <location filename="sourceframe.cpp" line="1084"/>
         <source>Do you wish to save them all?</source>
-        <translation>¿Quieres salvarlos a todos?</translation>
+        <translation>¿Quieres guardarlos todos?</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1279"/>
+        <location filename="sourceframe.cpp" line="188"/>
+        <location filename="sourceframe.cpp" line="1285"/>
         <source>unnamed</source>
         <translation>sin nombre</translation>
     </message>
@@ -2140,24 +2179,24 @@ Do you want save the file?</source>
     <message>
         <location filename="terminalwindow.cpp" line="57"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="58"/>
         <source>Clear output</source>
-        <translation>Claro imprimir</translation>
+        <translation>Limpiar Entrada</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="64"/>
         <source>Terminal input will only work from this input box.
 Press Control-D to send end of file.</source>
-        <translation>Terminal de entrada sólo funcionará desde este cuadro de entrada.
-Pulse Control-D para enviar final del archivo.</translation>
+        <translation>El terminal de entrada sólo funcionará desde este cuadro de entrada.
+Pulse Control-D para enviar EOF.</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="159"/>
         <source>error writing to child on lineEditReady</source>
-        <translation>error al escribir en el niño en lineEditReady</translation>
+        <translation>error al escribir en el &quot;child&quot; en lineEditReady</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="164"/>
@@ -2193,7 +2232,7 @@ Pulse Control-D para enviar final del archivo.</translation>
     <message>
         <location filename="toybox.cpp" line="635"/>
         <source>Enter a C++ expression to evaluate</source>
-        <translation>Introduzca una expresión de C + + para evaluar</translation>
+        <translation>Introduzca una expresión en C + + para evaluar</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="638"/>
@@ -2213,7 +2252,7 @@ Pulse Control-D para enviar final del archivo.</translation>
     <message>
         <location filename="toybox.cpp" line="652"/>
         <source>The value will be placed here when you click &quot;do it&quot;</source>
-        <translation>El valor se pone aquí al hacer clic en &quot;do it&quot;</translation>
+        <translation>El valor se pone aquí al hacer clic</translation>
     </message>
 </context>
 <context>
@@ -2242,7 +2281,7 @@ También se requiere un valor</translation>
         <location filename="unarybitpanel.cpp" line="17"/>
         <location filename="unarybitpanel.cpp" line="62"/>
         <source>!  Boolean not</source>
-        <translation>!  Booleano no</translation>
+        <translation>! NOT Booleano</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="17"/>
@@ -2252,7 +2291,7 @@ También se requiere un valor</translation>
     <message>
         <location filename="unarybitpanel.cpp" line="18"/>
         <source>~  Bitwise not</source>
-        <translation>~  Bit a bit no</translation>
+        <translation>~ NOT Bit a bit</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="22"/>
@@ -2262,7 +2301,7 @@ También se requiere un valor</translation>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Input</source>
-        <translation>Input</translation>
+        <translation>Entrada</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
@@ -2289,7 +2328,7 @@ También se requiere un valor</translation>
         <location filename="unarybitpanel.cpp" line="126"/>
         <location filename="unarybitpanel.cpp" line="147"/>
         <source>Value converted to binary</source>
-        <translation>Valor convierte a binario</translation>
+        <translation>Valor convertido a binario</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="118"/>
@@ -2300,12 +2339,12 @@ También se requiere un valor</translation>
         <location filename="unarybitpanel.cpp" line="139"/>
         <location filename="unarybitpanel.cpp" line="161"/>
         <source>All bits flipped</source>
-        <translation>Todos los bits volteado</translation>
+        <translation>Todos los bits volteados</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="173"/>
         <source>Adding 1</source>
-        <translation>Adición 1</translation>
+        <translation>Sumar 1</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="186"/>

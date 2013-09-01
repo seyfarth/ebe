@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.0">
 <context>
     <name>ArrayBoundsDialog</name>
     <message>
         <location filename="variable.cpp" line="124"/>
         <source>Set Array Bounds</source>
-        <translation>Limites du tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="136"/>
         <source>array variable</source>
-        <translation>variable du tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="142"/>
         <source>First index</source>
-        <translation>Premier indice</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="148"/>
         <source>Last index</source>
-        <translation>Dernier indice</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="154"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="169"/>
         <source>A pointer can point to an object or an array.
 </source>
-        <translation>Un pointeur peut pointer vers un objet ou un tableau.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="170"/>
         <source>To point to an object set first and last to 0.</source>
-        <translation>Pour pointer vers un objet, mettre le premier et le dernier à 0.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="202"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="203"/>
         <source>The first index can&apos;t be
  greater than the last.</source>
-        <translation>Le premier indice ne peut pas
-être supérieur au dernier.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -58,62 +57,62 @@
         <location filename="binarybitpanel.cpp" line="18"/>
         <location filename="binarybitpanel.cpp" line="70"/>
         <source>|| Boolean or</source>
-        <translation>|| Ou booléen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="18"/>
         <source>| Bitwise or</source>
-        <translation>| OU binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp;&amp; Boolean and</source>
-        <translation>&amp;&amp; Et booléen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp; Bitwise and</source>
-        <translation>&amp; ET binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="20"/>
         <source>^  Exclusive or</source>
-        <translation>^  Ou exclusif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&lt;&lt; Shift left</source>
-        <translation>&lt;&lt; Décalage à gauche</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Shift right</source>
-        <translation>&gt;&gt; Décalage à droite</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Signed shift right</source>
-        <translation>&gt;&gt; Décalage à droite signé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
         <source>@&lt; Rotate left</source>
-        <translation>@&lt; Rotation à gauche</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
         <source>@&gt; Rotate right</source>
-        <translation>@&lt; Rotation à droite</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
@@ -126,12 +125,12 @@
         <location filename="binarybitpanel.cpp" line="437"/>
         <location filename="binarybitpanel.cpp" line="477"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="39"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="177"/>
@@ -145,13 +144,13 @@
         <location filename="binarybitpanel.cpp" line="418"/>
         <location filename="binarybitpanel.cpp" line="458"/>
         <source>Values converted to binary</source>
-        <translation>Valeurs converties en binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="190"/>
         <location filename="binarybitpanel.cpp" line="242"/>
         <source>Result as a binary bool</source>
-        <translation>Résultat booléen binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -159,27 +158,27 @@
     <message>
         <location filename="bitbucket.cpp" line="25"/>
         <source>Unary operators</source>
-        <translation>Opérateurs unaires</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="26"/>
         <source>Binary bit operators</source>
-        <translation>Opérateurs binaires de bits </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="27"/>
         <source>Integer conversions</source>
-        <translation>Conversions entières</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="28"/>
         <source>Integer math</source>
-        <translation>Mathématiques entier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="29"/>
         <source>Float conversions</source>
-        <translation>Conversions flottante</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -187,7 +186,7 @@
     <message>
         <location filename="commandline.cpp" line="25"/>
         <source>Command line</source>
-        <translation>Ligne de commande</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="commandline.cpp" line="28"/>
@@ -196,11 +195,7 @@ for your program when it runs.  The command
 line parameters are the parameters to main
 in C and C++(argc and argv).  The first is
 always the name of the program.</source>
-        <translation>Entrez les paramètres supplémentaires de la ligne de 
-commande pour votre programme lors de son exécution.
-Les paramètres de la ligne de commande sont les
-paramètres principaux en C et C + + (argc et argv).
-Le premier doit toujours être le nom du programme.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -208,7 +203,7 @@ Le premier doit toujours être le nom du programme.</translation>
     <message>
         <location filename="consolewindow.cpp" line="28"/>
         <source>gdb command</source>
-        <translation>commande gdb</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -216,45 +211,45 @@ Le premier doit toujours être le nom du programme.</translation>
     <message>
         <location filename="datawindow.cpp" line="417"/>
         <source>Variable menu</source>
-        <translation>Menu variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="418"/>
         <source>Edit variable</source>
-        <translation>Modifier la variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="419"/>
         <source>Delete variable</source>
-        <translation>Supprimer la variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="423"/>
         <source>Character menu</source>
-        <translation>Menu caractère</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="424"/>
         <source>Character</source>
-        <translation>Caractère</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="425"/>
         <source>Decimal</source>
-        <translation>Décimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="426"/>
         <location filename="datawindow.cpp" line="434"/>
         <source>Unsigned decimal</source>
-        <translation>Décimal non signé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="427"/>
         <location filename="datawindow.cpp" line="435"/>
         <location filename="datawindow.cpp" line="442"/>
         <source>Hexadecimal</source>
-        <translation>Hexadécimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="428"/>
@@ -262,77 +257,77 @@ Le premier doit toujours être le nom du programme.</translation>
         <location filename="datawindow.cpp" line="443"/>
         <location filename="datawindow.cpp" line="450"/>
         <source>Binary</source>
-        <translation>Binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="432"/>
         <source>Integer menu</source>
-        <translation>Menu entier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="433"/>
         <source>Signed decimal</source>
-        <translation>Décimal signé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="440"/>
         <source>Float menu</source>
-        <translation>Menu flottant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="441"/>
         <source>Floating point</source>
-        <translation>Virgule flottante</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="444"/>
         <source>Binary fp</source>
-        <translation>Binaire vf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="445"/>
         <source>Fields</source>
-        <translation>Champs</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="449"/>
         <source>Boolean</source>
-        <translation>Booléen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="462"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="463"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="464"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="472"/>
         <source>globals</source>
-        <translation>globals</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="473"/>
         <source>locals</source>
-        <translation>locales</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="474"/>
         <source>parameters</source>
-        <translation>paramètres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="475"/>
         <source>user-defined</source>
-        <translation>Défini par l&apos;usager</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -341,8 +336,7 @@ Le premier doit toujours être le nom du programme.</translation>
         <location filename="datawindow.cpp" line="44"/>
         <source>Left click on a &gt; symbol to expand an item.
 Right click to change formats.</source>
-        <translation>Faites un clic gauche sur un symbole &gt; pour développer un élément.
-Faites un clic droit pour changer les formats.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -350,47 +344,47 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="variable.cpp" line="7"/>
         <source>Define Variable</source>
-        <translation>Définir Variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="18"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="22"/>
         <source>Address</source>
-        <translation>Adresse</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="36"/>
         <source>type</source>
-        <translation>type</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="41"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="45"/>
         <source>array variable</source>
-        <translation>variable tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="49"/>
         <source>First</source>
-        <translation>Premier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="54"/>
         <source>Last</source>
-        <translation>Dernier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="variable.cpp" line="60"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -398,7 +392,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="errorwindow.cpp" line="13"/>
         <source>Errors</source>
-        <translation>Erreurs</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -406,27 +400,27 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="toybox.cpp" line="668"/>
         <source>Expression</source>
-        <translation>Expression</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="668"/>
         <source>Execute</source>
-        <translation>Exécuter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="668"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="669"/>
         <source>Format</source>
-        <translation>Format</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="669"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -434,27 +428,27 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="1266"/>
         <source>Find</source>
-        <translation>Rechercher</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1272"/>
         <source>Replace</source>
-        <translation>Remplacer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1278"/>
         <source>Ctrl+F</source>
-        <translation>Ctrl+F</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1280"/>
         <source>Ctrl+R</source>
-        <translation>Ctrl+R</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1282"/>
         <source>Ctrl+C</source>
-        <translation>Ctrl+C</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -462,17 +456,17 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="floatconvert.cpp" line="46"/>
         <source>to binary</source>
-        <translation>en binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="72"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="74"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="75"/>
@@ -486,166 +480,166 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="floatconvert.cpp" line="311"/>
         <location filename="floatconvert.cpp" line="348"/>
         <source>to float</source>
-        <translation>en flottante</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="82"/>
         <source>Unknown operator:</source>
-        <translation>Opérateur inconnu :</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="89"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="90"/>
         <source>The input value is not complete.</source>
-        <translation>La valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="127"/>
         <source> All bits are 0 so the number is 0</source>
-        <translation> Tous les bits sont 0, le nombre est donc 0</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="129"/>
         <location filename="floatconvert.cpp" line="140"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="138"/>
         <source> Bits 0-30 are 0 so the number is -0</source>
-        <translation> Les bits 0-30 sont à 0 si le nombre est -0</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="149"/>
         <source> Number converted to binary</source>
-        <translation> Nombre converti en binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="169"/>
         <source> Sign bit (bit 31) is 0. The number is positive</source>
-        <translation> Le signe (bit 31) est à 0. Le nombre est positif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="171"/>
         <source> Sign bit (bit 31) is 1. The number is negative</source>
-        <translation> Le signe (bit 31) est à 1. Le nombre est négatif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="174"/>
         <source>Sign bit</source>
-        <translation>Bit de signe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="194"/>
         <source> The exponent field is bits 23 - 30</source>
         <oldsource> The fraction field is bits 23 - 30</oldsource>
-        <translation>Le champ d&apos;exposant est formé des bits 23 - 30</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="196"/>
         <source>Exponent field</source>
-        <translation>Champ d&apos;exposant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="222"/>
         <source> The exponent value is the field value - 127</source>
-        <translation> La valeur de l&apos;exposant est la valeur du champ - 127</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="224"/>
         <source>Exponent value</source>
-        <translation>Valeur de l&apos;exposant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="240"/>
         <source> The fraction field is the rightmost 23 bits</source>
         <oldsource> The exponent field is the rightmost 23 bits</oldsource>
-        <translation> Le champ de la fraction est composé des 23 bits les plus à droite</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="242"/>
         <source>Fraction field</source>
-        <translation>Champ de la fraction</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
         <source> The exponent value has an implicit 1 bit</source>
-        <translation> La valeur de l&apos;exposant dispose d&apos;un implicite 1 bit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
         <location filename="floatconvert.cpp" line="347"/>
         <source>Fraction value</source>
-        <translation>Valeur de la fraction</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="278"/>
         <source> Value as a binary number times 2 to a power</source>
-        <translation> Valeur binaire multipliée par 2 à une puissance</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="280"/>
         <source>Binary value</source>
-        <translation>Valeur binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="306"/>
         <source> Bit %1 value is 2**%2</source>
-        <translation>La valeur du bit %1 est 2**%2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="327"/>
         <source> Add the bit values</source>
-        <translation> Ajouter les valeurs de bit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="329"/>
         <source> Add the bit values and multiply by -1</source>
-        <translation> Ajoutez les valeurs de bits et de multiplier par -1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="345"/>
         <source> Denormalized float has no implicit 1</source>
-        <translation> Un nombre flottant dénormalisée n&apos;a pas de 1 implicite</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="360"/>
         <source>positive infinity</source>
-        <translation>infini positif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="362"/>
         <source>negative infinity</source>
-        <translation>infini négatif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="366"/>
         <source> Exponent == 255 &amp;&amp; fraction == 0 ==&gt; infinity</source>
-        <translation> Exposant == 255 &amp;&amp; fraction == 0 ==&gt; infini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="368"/>
         <source>Infinity</source>
-        <translation>Infini</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="376"/>
         <source>SNaN - signaling not-a-number</source>
-        <translation>SNaN - signalisation n&apos;est pas un chiffre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="378"/>
         <source>QNaN - quiet not-a-number</source>
-        <translation>QNaN - quiet n&apos;est pas un chiffre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="382"/>
         <source> Exponent == 255 &amp;&amp; fraction != 0 ==&gt; NaN</source>
-        <translation>Exposant == 255 &amp;&amp; fraction! = 0 ==&gt; NaN </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -653,7 +647,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="floatedit.cpp" line="11"/>
         <source>Enter an float value or 0xDEADBEEF (8 hex nibbles)</source>
-        <translation>Entrez un nombre flottant ou 0xDEADBEEF (8 nibbles hexadécimaux)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -661,22 +655,22 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="floatwindow.cpp" line="22"/>
         <source>Right click to change register formats.</source>
-        <translation>Faites un clic droit pour changer les formats de registre.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="110"/>
         <source>Float format</source>
-        <translation>Format flottant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="111"/>
         <source>Format for 1 register</source>
-        <translation>Format pour 1 registre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="112"/>
         <source>Format for all registers</source>
-        <translation>Format de tous les registres</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -684,22 +678,22 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="gdb.cpp" line="354"/>
         <source>Could not create process</source>
-        <translation>Impossible de créer le processus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="356"/>
         <source>error</source>
-        <translation>erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="529"/>
         <source>Program not running</source>
-        <translation>Le programme n&apos;est pas en cours d&apos;exécution</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="gdb.cpp" line="561"/>
         <source>Could not interpret address:</source>
-        <translation>Impossible d&apos;interpréter l&apos;adresse:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -709,42 +703,42 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="54"/>
         <location filename="intconvert.cpp" line="71"/>
         <source>Decimal to Binary</source>
-        <translation>Décimal à Binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="17"/>
         <location filename="intconvert.cpp" line="92"/>
         <source>Decimal to Hex</source>
-        <translation>Décimal a Hex</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="113"/>
         <source>Binary to Decimal</source>
-        <translation>Binaire en décimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="133"/>
         <source>Hex to Decimal</source>
-        <translation>Hex en Decimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
         <location filename="intconvert.cpp" line="155"/>
         <source>Binary to Hex</source>
-        <translation>Binaire a Hex</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
         <location filename="intconvert.cpp" line="174"/>
         <source>Hex to Binary</source>
-        <translation>Hex a Binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="24"/>
         <source>Operator </source>
-        <translation>Opérateur </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="49"/>
@@ -753,7 +747,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="243"/>
         <location filename="intconvert.cpp" line="577"/>
         <source>to binary</source>
-        <translation>a binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="78"/>
@@ -763,7 +757,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>Input</source>
-        <translation>Entrées</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="78"/>
@@ -773,7 +767,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>Conversion</source>
-        <translation>Conversion</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="80"/>
@@ -783,7 +777,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="80"/>
@@ -793,7 +787,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="120"/>
@@ -801,7 +795,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="162"/>
         <location filename="intconvert.cpp" line="181"/>
         <source>number</source>
-        <translation>nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="123"/>
@@ -809,24 +803,29 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="378"/>
         <location filename="intconvert.cpp" line="454"/>
         <source>to decimal</source>
-        <translation>en décimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>nibble</source>
-        <translation>nibble</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>2**nibble</source>
-        <translation>2**nibble</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>nibble value</source>
-        <translation>valeur du nibble</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="intconvert.cpp" line="194"/>
+        <source>Unknown operator:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="202"/>
@@ -836,7 +835,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="469"/>
         <location filename="intconvert.cpp" line="527"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="203"/>
@@ -846,60 +845,55 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intconvert.cpp" line="470"/>
         <location filename="intconvert.cpp" line="528"/>
         <source>The input value is not complete.</source>
-        <translation>La valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="211"/>
         <location filename="intconvert.cpp" line="269"/>
         <source>Value &amp; 0xffff copied into column 3</source>
-        <translation>Valeur &amp; 0xffff copiée dans la colonne 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="237"/>
         <source>divide by 2</source>
-        <translation>diviser par 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="253"/>
         <source>moved n/2 to n in new row</source>
-        <translation>déplacé n / 2 à n dans la nouvelle rangée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="295"/>
         <source>divide by 16</source>
-        <translation>diviser par 16</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="301"/>
         <location filename="intconvert.cpp" line="514"/>
         <source>to hex</source>
-        <translation>a hex</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="311"/>
         <source>moved n/16 to n in new row</source>
-        <translation>Déplacé n/16 à n dans la nouvelle rangée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="365"/>
         <source>Result is value for rightmost %1 bits</source>
-        <translation>Le résultat est la valeur des %1 bits les plus à droite</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="372"/>
         <location filename="intconvert.cpp" line="448"/>
         <source>Done</source>
-        <translation>Terminé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="441"/>
         <source>Result is value for rightmost %1 nibbles</source>
-        <translation>Le résultat est la valeur des %1 nibbles les plus à droite</translation>
-    </message>
-    <message>
-        <location filename="intconvert.cpp" line="194"/>
-        <source>Unknown operator:</source>
-        <translation>Opérateur inconnu:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -909,47 +903,47 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intmath.cpp" line="38"/>
         <location filename="intmath.cpp" line="52"/>
         <source>Addition</source>
-        <translation>Addition</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="16"/>
         <location filename="intmath.cpp" line="75"/>
         <source>Multiplication</source>
-        <translation>Multiplication</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="21"/>
         <source>Operation </source>
-        <translation>Opération </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Bits</source>
-        <translation>Bits</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="66"/>
         <location filename="intmath.cpp" line="87"/>
         <source>Comment</source>
-        <translation>Mettre en commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="97"/>
         <source>Unknown operator:</source>
-        <translation>Opérateur Inconnu:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="104"/>
@@ -957,46 +951,46 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="intmath.cpp" line="165"/>
         <location filename="intmath.cpp" line="171"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="105"/>
         <location filename="intmath.cpp" line="166"/>
         <source>The first input value is not complete.</source>
-        <translation>La première valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="111"/>
         <location filename="intmath.cpp" line="172"/>
         <source>The second input value is not complete.</source>
-        <translation>La deuxième valeur d&apos;entrée n&apos;est pas complète.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="120"/>
         <source> Carries</source>
-        <translation> Report (Carries)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="121"/>
         <location filename="intmath.cpp" line="182"/>
         <source> a &amp; 0xffff copied into column 3</source>
-        <translation> a &amp; 0xffff copié dans la colonne 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="122"/>
         <location filename="intmath.cpp" line="183"/>
         <source> b &amp; 0xffff copied into column 3</source>
-        <translation> b &amp; 0xffff copié dans la colonne 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="123"/>
         <source> Sum</source>
-        <translation> Somme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="207"/>
         <source> Product</source>
-        <translation> Produit</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1005,8 +999,7 @@ Faites un clic droit pour changer les formats.</translation>
         <location filename="integeredit.cpp" line="9"/>
         <source>Enter an integer or bool
 0x... for hex, 0b... for binary</source>
-        <translation>Entrez un nombre entier ou un booléen
-0x ... pour hex, 0b ... pour binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1014,22 +1007,22 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="librarywindow.cpp" line="18"/>
         <source>Library</source>
-        <translation>Librairie</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="105"/>
         <source>changes to a new directory</source>
-        <translation>changer pour un nouveau répertoire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="108"/>
         <source>view a web page</source>
-        <translation>afficher une page web</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="110"/>
         <source>inserts code into the editor</source>
-        <translation>insérer le code dans l&apos;éditeur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1037,7 +1030,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="1218"/>
         <source>Line number</source>
-        <translation>Numéro de ligne</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1045,27 +1038,27 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="sourcewindow.cpp" line="825"/>
         <source>Click on a line number to set or reset a breakpoint</source>
-        <translation>Cliquez sur un numéro de ligne pour définir ou redéfinir un point d&apos;arrêt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1143"/>
         <source>Set breakpoint</source>
-        <translation>Définir point d&apos;arrêt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1145"/>
         <source>Drop breakpoint</source>
-        <translation>Retirer un point d&apos;arrêt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1147"/>
         <source>Drop all breakpoints</source>
-        <translation>Retirer tous les points d&apos;arrêt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1149"/>
         <source>ignore</source>
-        <translation>ignorer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1073,490 +1066,490 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="mainwindow.cpp" line="129"/>
         <source>ebe</source>
-        <translation>ebe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="183"/>
         <source>Some tools used by ebe are missing:</source>
-        <translation>Certains outils utilisés par ebe sont manquants:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="187"/>
         <source>   critical: </source>
-        <translation>   critique:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
         <source>   non-critical: </source>
-        <translation>   non critique:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
         <source>Critical tools are needed by almost everyone.</source>
-        <translation>Les outils essentiels sont nécessaires pour presque tout le monde.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="195"/>
         <source>Non-critical tools are not needed by everyone.</source>
-        <translation>Les outils non critiques ne sont pas nécessaires pour tout le monde.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="198"/>
         <source>Click &lt;b&gt;Ignore&lt;/b&gt; to ignore this test in the future.</source>
-        <translation>Cliquez sur &lt;b&gt; Ignorer &lt;/ b&gt; pour ignorer ce test dans l&apos;avenir.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="201"/>
         <source>Click &lt;b&gt;OK&lt;/b&gt; to run ebe and test again next time</source>
-        <translation>Cliquez sur &lt;b&gt; OK &lt;/ b&gt; pour exécuter ebe et tester la prochaine fois</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="203"/>
         <source>Missing tools</source>
-        <translation>Outils manquants</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="373"/>
         <location filename="mainwindow.cpp" line="374"/>
         <source>File toolbar</source>
-        <translation>Barre d&apos;outils de fichiers</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="377"/>
         <location filename="mainwindow.cpp" line="378"/>
         <source>Edit toolbar</source>
-        <translation>Barre d&apos;outils de édition</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="381"/>
         <location filename="mainwindow.cpp" line="382"/>
         <source>Debug toolbar</source>
-        <translation>Barre d&apos;outils de débogage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="385"/>
         <source>Code template toolbar</source>
-        <translation>Barre d&apos;outils de modèle de code</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="386"/>
         <source>Template toolbar</source>
-        <translation>Barre d&apos;outils de modèle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="390"/>
         <source>&amp;File</source>
-        <translation>&amp;Document</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="391"/>
         <location filename="mainwindow.cpp" line="416"/>
         <source>New</source>
-        <translation>Nouveau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="393"/>
         <source>&amp;Template</source>
-        <translation>&amp;Modèle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="394"/>
         <source>C Program</source>
-        <translation>Programme C</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="396"/>
         <source>C++ Program</source>
-        <translation>Programme C++</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="397"/>
         <source>Assembly Program</source>
-        <translation>Programme Assembleur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="399"/>
         <source>Fortran Program</source>
-        <translation>Programme Fortran</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="400"/>
         <location filename="mainwindow.cpp" line="418"/>
         <source>Open</source>
-        <translation>Ouvrir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="401"/>
         <location filename="mainwindow.cpp" line="420"/>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="402"/>
         <location filename="mainwindow.cpp" line="422"/>
         <source>Save as</source>
-        <translation>Enregistrer sous</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="403"/>
         <location filename="mainwindow.cpp" line="424"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="404"/>
         <source>Change directory</source>
-        <translation>Changez de répertoire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="406"/>
         <location filename="mainwindow.cpp" line="429"/>
         <source>New project</source>
-        <translation>Nouveau projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="407"/>
         <location filename="mainwindow.cpp" line="432"/>
         <source>Open project</source>
-        <translation>Ouvrir le projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="408"/>
         <location filename="mainwindow.cpp" line="435"/>
         <source>Close project</source>
-        <translation>Fermer le projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="410"/>
         <location filename="mainwindow.cpp" line="413"/>
         <source>Quit</source>
-        <translation>Quitter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="439"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Édition</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="440"/>
         <location filename="mainwindow.cpp" line="486"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="441"/>
         <location filename="mainwindow.cpp" line="488"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="442"/>
         <location filename="mainwindow.cpp" line="490"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="444"/>
         <location filename="mainwindow.cpp" line="493"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="445"/>
         <location filename="mainwindow.cpp" line="495"/>
         <source>Redo</source>
-        <translation>Rétablir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="447"/>
         <source>Comment</source>
-        <translation>Commenter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="449"/>
         <source>Uncomment</source>
-        <translation>Décommenter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="451"/>
         <source>indent</source>
-        <translation>Ajouter indentation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="453"/>
         <location filename="mainwindow.cpp" line="500"/>
         <source>Unindent</source>
-        <translation>Retirer indentation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="456"/>
         <location filename="mainwindow.cpp" line="503"/>
         <source>Find</source>
-        <translation>Rechercher</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="458"/>
         <location filename="mainwindow.cpp" line="505"/>
         <source>Select all</source>
-        <translation>Sélectionner tout</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="460"/>
         <source>Select none</source>
-        <translation>Ne rien sélectionner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="463"/>
         <location filename="mainwindow.cpp" line="507"/>
         <source>Prettify</source>
-        <translation>Pomponner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="465"/>
         <source>Edit settings</source>
-        <translation>Modifier paramètres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="467"/>
         <source>&amp;Move</source>
-        <translation>&amp;Déplacer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="468"/>
         <source>Page forward</source>
-        <translation>Page suivante</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="470"/>
         <source>Page backward</source>
-        <translation>page précédente</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="472"/>
         <source>Go to line 1</source>
-        <translation>Aller à la ligne 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="474"/>
         <source>Go to last line</source>
-        <translation>Aller à la dernière ligne</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="476"/>
         <source>Go to line n</source>
-        <translation>Aller à la ligne n</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="478"/>
         <source>Go to top of screen</source>
-        <translation>Aller au haut de l&apos;écran</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="480"/>
         <source>Go to bottom</source>
-        <translation>Aller en bas</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="482"/>
         <source>Move line to middle</source>
-        <translation>Déplacez la ligne au milieu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="498"/>
         <source>Indent</source>
-        <translation>Indenter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="510"/>
         <location filename="mainwindow.cpp" line="554"/>
         <source>Decrease font</source>
-        <translation>Diminuer la police</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="512"/>
         <location filename="mainwindow.cpp" line="552"/>
         <source>Increase font</source>
-        <translation>Agrandir la police</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="517"/>
         <source>Run (F5)</source>
-        <translation>Exécuter (F5)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="520"/>
         <source>Next (F6)</source>
-        <translation>Suivant (F6)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="523"/>
         <source>Step (F7)</source>
-        <translation>Etape (F7)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="526"/>
         <source>Continue (F8)</source>
-        <translation>Continuer (F8)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="529"/>
         <source>stop (F9)</source>
-        <translation>Arrêt (F9)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="534"/>
         <source>&amp;View</source>
-        <translation>&amp;Voir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="544"/>
         <source>Tooltips</source>
-        <translation>Info-bulles</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="546"/>
         <source>Command line</source>
-        <translation>Ligne de commande</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="551"/>
         <source>F&amp;ont</source>
-        <translation>P&amp;olice</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="557"/>
         <source>&amp;Help </source>
-        <translation>&amp;Aide </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="558"/>
         <source>Getting started</source>
-        <translation>Débuter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="559"/>
         <source>Projects</source>
-        <translation>Projets</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="560"/>
         <source>Editing</source>
-        <translation>Édition</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="561"/>
         <source>Breakpoints</source>
-        <translation>Points d&apos;arrêt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="562"/>
         <source>Running</source>
-        <translation>En exécution</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="563"/>
         <source>About</source>
-        <translation>À propos</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="566"/>
         <source>cin: input</source>
-        <translation>cin: entrée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="568"/>
         <source>cout: output</source>
-        <translation>cout: sortie</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="575"/>
         <source>switch: multi-way branch</source>
-        <translation>swith: branche multi-voies</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="577"/>
         <source>for: counting loop</source>
-        <translation>for: boucle à compteur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="579"/>
         <source>while: general loop with test at the top</source>
-        <translation>while: boucle générale avec essai au début</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="581"/>
         <source>do-while: general loop with test at the bottom</source>
-        <translation>do-while: boucle générale avec essai à la fin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="584"/>
         <source>double: floating point number</source>
-        <translation>double: nombre en virgule flottante</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="586"/>
         <source>int: an integer</source>
-        <translation>int: un nombre entier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="600"/>
         <source>library</source>
-        <translation>library</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="671"/>
         <source>Select working directory</source>
-        <translation>Sélectionner le répertoire de travail</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="686"/>
         <source>Ready</source>
-        <translation>Prêt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="691"/>
         <source>Data</source>
-        <translation>Données</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="700"/>
         <source>Registers</source>
-        <translation>Registres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="709"/>
         <source>Floating Point Registers</source>
-        <translation>Registres en Virgule flottante</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="718"/>
         <source>Project</source>
-        <translation>Projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="727"/>
         <source>Back Trace</source>
-        <translation>Trace</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="736"/>
         <source>Terminal</source>
-        <translation>Terminal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="744"/>
         <source>Toy Box</source>
-        <translation>Coffre à Jouets</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="752"/>
         <source>Bit Bucket</source>
-        <translation>Seau Bit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="760"/>
         <source>Console</source>
-        <translation>Console</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1564,76 +1557,76 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="projectwindow.cpp" line="12"/>
         <source>Right click to see project options</source>
-        <translation>Faites un clic droit pour afficher les options du projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="35"/>
         <location filename="projectwindow.cpp" line="41"/>
         <source>Project menu</source>
-        <translation>Menu projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="36"/>
         <source>New project</source>
-        <translation>Nouveau projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="37"/>
         <source>Open project</source>
-        <translation>Ouvrir projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="38"/>
         <location filename="projectwindow.cpp" line="46"/>
         <source>ignore</source>
-        <translation>ignorer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="42"/>
         <source>Add file to project</source>
-        <translation>Ajouter le fichier au projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="43"/>
         <source>Open file in editor</source>
-        <translation>Ouvrir le fichier dans l&apos;éditeur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="44"/>
         <source>Drop file from project</source>
-        <translation>Retirer le fichier du projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="45"/>
         <source>Close project</source>
-        <translation>Fermer le projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="55"/>
         <location filename="projectwindow.cpp" line="138"/>
         <source>Select project name</source>
-        <translation>Sélectionnez le nom du projet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="55"/>
         <location filename="projectwindow.cpp" line="138"/>
         <source>Projects (*.ebe)</source>
-        <translation>Projets (*.ebe)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="102"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="103"/>
         <source>Failed to open </source>
-        <translation>Impossible d&apos;ouvrir </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="103"/>
         <source> for writing</source>
-        <translation> pour l&apos;écriture</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1641,7 +1634,7 @@ Faites un clic droit pour changer les formats.</translation>
     <message>
         <location filename="instructions.cpp" line="20"/>
         <source>Could not open :/src/assembly/instructions</source>
-        <translation>Impossible d&apos;ouvrir :/src/assembly/instructions </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1654,39 +1647,37 @@ with the address contained in the register.</source>
         <oldsource>Right click on register names to change formats.
 Right clock on a register&apos;s value to define a variable
 with the address contained in the register.</oldsource>
-        <translation>Faites un clic droit sur ​​les noms de registre pour en changer les formats.
-Faites un clic droit droit sur ​​la valeur d&apos;un registre pour définir une variable
-avec l&apos;adresse contenue à l&apos;intérieur du registre.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="238"/>
         <source>Register menu</source>
-        <translation>Menu registre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="244"/>
         <source>Decimal format</source>
-        <translation>Format décimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="245"/>
         <source>Hexadecimal format</source>
-        <translation>Format hexadécimal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="247"/>
         <source>Decimal format - all</source>
-        <translation>Format décimal - tous</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="249"/>
         <source>Hexadecimal format - all</source>
-        <translation>Format hexadécimal - tous</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="257"/>
         <source>Define a variable with this address</source>
-        <translation>Définir une variable avec cette adresse</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1694,258 +1685,258 @@ avec l&apos;adresse contenue à l&apos;intérieur du registre.</translation>
     <message>
         <location filename="settings.cpp" line="190"/>
         <source>Edit Settings</source>
-        <translation>Modifier paramètres</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="209"/>
         <source>Debug colors</source>
-        <translation>Couleurs de débogage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="211"/>
         <source>Background</source>
-        <translation>Fond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="212"/>
         <source>Breakpoint fg</source>
-        <translation>point d&apos;arrêt pp</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="213"/>
         <source>Breakpoint bg</source>
-        <translation>point d&apos;arrêt fond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="214"/>
         <source>Find fg</source>
-        <translation>Trouver pp</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="215"/>
         <source>Find bg</source>
-        <translation>Trouver fond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="216"/>
         <source>Line number fg</source>
-        <translation>Ligne numéro pp</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="217"/>
         <source>Line number bg</source>
-        <translation>Ligne numéro fond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="218"/>
         <source>Next line fg</source>
-        <translation>Ligne suivante pp</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="219"/>
         <source>Next line bg</source>
-        <translation>Ligne suivante fond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="225"/>
         <source>Other colors</source>
-        <translation>Autres Couleurs</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="227"/>
         <source>Register</source>
-        <translation>Registre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="228"/>
         <source>Register title</source>
-        <translation>Titre du registre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="230"/>
         <source>Tooltip</source>
-        <translation>Info-bulle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="231"/>
         <source>Table</source>
-        <translation>Tableau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="232"/>
         <source>List</source>
-        <translation>Liste</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="233"/>
         <source>Tree</source>
-        <translation>Arbre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="239"/>
         <source>Highlight colors</source>
-        <translation>Couleurs de Surbrillance</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="241"/>
         <source>Comment</source>
-        <translation>Remarque</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="242"/>
         <source>Identifier</source>
-        <translation>Identifiant</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="243"/>
         <source>Reserved</source>
-        <translation>Réservé</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="244"/>
         <source>String</source>
-        <translation>String</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="245"/>
         <source>Number</source>
-        <translation>Nombre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="246"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="247"/>
         <source>Instruction</source>
-        <translation>Instruction</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="248"/>
         <source>Macro</source>
-        <translation>Macro</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="249"/>
         <source>Preprocessor</source>
-        <translation>Préprocesseur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="250"/>
         <source>Illegal fg</source>
-        <translation>Illégal pp</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="251"/>
         <source>Illegal bg</source>
-        <translation>Illégal fond</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="259"/>
         <source>Save</source>
-        <translation>Sauver</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="260"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="276"/>
         <source>Options</source>
-        <translation>Options</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="277"/>
         <source>Tab spacing</source>
-        <translation>Espacement de tabulation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="279"/>
         <source>Completion minimum</source>
-        <translation>Achèvement minimum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="281"/>
         <source>Toolbar icon size</source>
-        <translation>Taille de l&apos;icône de la barre d&apos;outils</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="284"/>
         <source>Debug button icon size</source>
-        <translation>Taille de l&apos;icône du bouton déboguer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="286"/>
         <source>Auto-indent</source>
-        <translation>Auto-indentation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="287"/>
         <source>Auto-open project files</source>
-        <translation>Ouverture automatique des fichiers de projets</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="288"/>
         <source>Display debug buttons</source>
-        <translation>Afficher les boutons de débogage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="289"/>
         <source>Icons on debug buttons</source>
-        <translation>Icônes de boutons de débogage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="290"/>
         <source>XMM Reverse</source>
-        <translation>XMM inverse</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="296"/>
         <source>External commands</source>
-        <translation>Commandes externes</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="297"/>
         <source>Prettify</source>
-        <translation>Pomponner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="298"/>
         <source>Assemble</source>
-        <translation>Assembler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="299"/>
         <source>Link asm</source>
-        <translation>Lien asm</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="300"/>
         <source>C Compile</source>
-        <translation>Compiler en C</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="301"/>
         <location filename="settings.cpp" line="303"/>
         <source>Link C</source>
-        <translation>Lien C</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="302"/>
         <source>Compile C++</source>
-        <translation>Compiler en C++</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="304"/>
         <source>Compile Fortran</source>
-        <translation>Compiler en Fortran</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="settings.cpp" line="305"/>
         <source>Link Fortran</source>
-        <translation>Lien Fortran</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1956,40 +1947,37 @@ avec l&apos;adresse contenue à l&apos;intérieur du registre.</translation>
 Mark a variable and right click to define
 a user-defined variable. This is most
 useful for assembly language.</source>
-        <translation>Faites un clic droit pour faire apparaître un menu.
-Marquez une variable et faites un clic droit pour définir
-la variable définie par l&apos;utilisateur. Ceci est surtout
-utile en assembleur.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="362"/>
         <source>Undo</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="363"/>
         <source>Redo</source>
-        <translation>Rétablir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="365"/>
         <source>Cut</source>
-        <translation>Couper</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="366"/>
         <source>Copy</source>
-        <translation>Copier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="367"/>
         <source>Paste</source>
-        <translation>Coller</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="370"/>
         <source>Define variable</source>
-        <translation>Définir variable</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1997,46 +1985,48 @@ utile en assembleur.</translation>
     <message>
         <location filename="sourceframe.cpp" line="83"/>
         <source>Click this button to exit from ebe</source>
-        <translation>Cliquez sur ce bouton pour quitter ebe</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="85"/>
         <source>Compile and run your program</source>
-        <translation>Compiler et exécuter votre programme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="96"/>
         <source>Execute the current statement in the same function</source>
-        <translation>Exécutez l&apos;instruction en cours dans la même fonction</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="108"/>
         <source>Execute the current statement possibly stepping
 into a different function</source>
-        <translation>Exécutez l&apos;instruction en entrant possiblement
-dans une autre fonction</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="120"/>
         <source>Execute statements starting at the current statement
 continuing until the program ends or a breakpoint
 is reached.</source>
-        <translation>Exécuter les instructions à partir de l&apos;instruction en cours et
-continuer jusqu&apos;à la fin du programme ou l&apos;atteinte d&apos;un point d&apos;arrêt.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="133"/>
         <source>End this debugging session and continue editing</source>
-        <translation>Terminer la session de débogage et continuer l&apos;édition</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="171"/>
         <source>This input field is for executing your program with
 command line parameters to be accepted in the argv
 array</source>
-        <translation>Ce champ de saisie est pour l&apos;exécution de votre programme avec
-paramètres de ligne de commande à être acceptés dans le argv
-gamme</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="sourceframe.cpp" line="188"/>
+        <location filename="sourceframe.cpp" line="1285"/>
+        <source>unnamed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="268"/>
@@ -2046,63 +2036,55 @@ gamme</translation>
         <location filename="sourceframe.cpp" line="990"/>
         <location filename="sourceframe.cpp" line="1085"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="269"/>
         <source>This file has not been named.
 Do you want save the file?</source>
-        <translation>Ce fichier n&apos;a pas été nommé.
-Voulez-vous enregistrer le fichier?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="281"/>
         <source>The file name, </source>
-        <translation>Le nom du fichier, </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="282"/>
         <source>, lacks an extension.</source>
-        <translation>, manque d&apos;une extension.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="296"/>
         <source>The project file name, </source>
-        <translation>Nom du fichier de projet, </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="297"/>
         <source>, lacks the .ebe extension.</source>
-        <translation>, n&apos;a pas l&apos;extension ebe.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="516"/>
         <source>None of the source files defines main</source>
-        <translation>Aucun des fichiers source définit main</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="991"/>
         <source>This file has changed.
 Do you want save the file?</source>
-        <translation>Ce fichier a changé.
-Voulez-vous sauver le fichier?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="1080"/>
         <source>The following files have not been saved:
 </source>
-        <translation>Les fichiers suivants n&apos;ont pas été enregistrées:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="1084"/>
         <source>Do you wish to save them all?</source>
-        <translation>Souhaitez-vous les sauvegarder?</translation>
-    </message>
-    <message>
-        <location filename="sourceframe.cpp" line="188"/>
-        <location filename="sourceframe.cpp" line="1285"/>
-        <source>unnamed</source>
-        <translation>sans nom</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2113,69 +2095,69 @@ Voulez-vous sauver le fichier?</translation>
         <location filename="sourcewindow.cpp" line="684"/>
         <location filename="sourcewindow.cpp" line="714"/>
         <source>Error</source>
-        <translation>Erreur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="542"/>
         <location filename="sourcewindow.cpp" line="621"/>
         <location filename="sourcewindow.cpp" line="714"/>
         <source>Failed to open file </source>
-        <translation>Impossible d&apos;ouvrir le fichier </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="596"/>
         <source>C/C++ files (*.c* *.h *.t *akefile)</source>
-        <translation>Fichiers C/C++ (*.c* *. h *.t *akefile)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="598"/>
         <source>Fortran files (*.f* *.F* *akefile)</source>
-        <translation>Fichiers Fortran (*.c* *. h *.t *akefile)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="600"/>
         <source>Assembly files (*.asm *.s *akefile)</source>
-        <translation>Fichiers Assembleur (*.asm *.s *akefile)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="602"/>
         <source>Open File</source>
-        <translation>Ouvrir fichier</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="603"/>
         <source>C/C++ files (*.c* *.h* *.t *akefile);;</source>
-        <translation>Fichiers C/C++ (*.c* *. h *.t *akefile);;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="604"/>
         <source>Fortran files (*.f* *.F* *akefile);;</source>
-        <translation>Fichiers Fortran (*.c* *. h *.t *akefile);;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="605"/>
         <source>Assembly files (*.asm *.s *akefile);;</source>
-        <translation>Fichiers Assembleur (*.asm *.s *akefile);;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="606"/>
         <source>All files (*)</source>
-        <translation>Tous les fichiers (*)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="672"/>
         <source>Save file as</source>
-        <translation>Enregistrer le fichier sous </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="685"/>
         <source>Failed to open file for writing</source>
-        <translation>Impossible d&apos;ouvrir le fichier en écriture</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="715"/>
         <source> for saving.</source>
-        <translation> pour enregistrement.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2183,29 +2165,28 @@ Voulez-vous sauver le fichier?</translation>
     <message>
         <location filename="terminalwindow.cpp" line="57"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="58"/>
         <source>Clear output</source>
-        <translation>Effacer sortie</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="64"/>
         <source>Terminal input will only work from this input box.
 Press Control-D to send end of file.</source>
-        <translation>La saisie au terminal fonctionne uniquement à partir de cette zone
-de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="159"/>
         <source>error writing to child on lineEditReady</source>
-        <translation>erreur d&apos;écriture vers l&apos;enfant sur ​​lineEditReady</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="164"/>
         <source>error writing to pty on lineEditReady</source>
-        <translation>erreur d&apos;écriture vers pty sur ​​lineEditReady</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2213,22 +2194,22 @@ de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
     <message>
         <location filename="toybox.cpp" line="92"/>
         <source>Language</source>
-        <translation>Langage</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="146"/>
         <source>Warning</source>
-        <translation>Attention</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="147"/>
         <source>Your expression is empty.</source>
-        <translation>Votre expression est vide.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="156"/>
         <source>Could not open</source>
-        <translation>Impossible d&apos;ouvrir </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2236,27 +2217,27 @@ de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
     <message>
         <location filename="toybox.cpp" line="635"/>
         <source>Enter a C++ expression to evaluate</source>
-        <translation>Entrez une expression C++ à évaluer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="638"/>
         <source>Click this button to evaluate the expression</source>
-        <translation>Cliquez sur ce bouton pour évaluer l&apos;expression</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="643"/>
         <source>The type will be reported back from the evaluation</source>
-        <translation>Le type sera retourné suite à l&apos;évaluation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="647"/>
         <source>Select a format for the expression value</source>
-        <translation>Sélectionner un format pour la valeur de l&apos;expression</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="652"/>
         <source>The value will be placed here when you click &quot;do it&quot;</source>
-        <translation>La valeur sera placé ici lorsque vous cliquez sur &quot;do It&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2265,18 +2246,17 @@ de saisie.  Appuyez sur Ctrl+D pour envoyer la fin du fichier.</translation>
         <location filename="toybox.cpp" line="526"/>
         <source>Enter a name for a variable.
 A value is also required</source>
-        <translation>Entrez un nom pour une variable.
-Une valeur est également nécessaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="532"/>
         <source>Select a type for your variable. </source>
-        <translation>Sélectionnez le type de votre variable.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="545"/>
         <source>Enter a value for the variable.</source>
-        <translation>Entrez une valeur pour la variable.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2285,75 +2265,75 @@ Une valeur est également nécessaire</translation>
         <location filename="unarybitpanel.cpp" line="17"/>
         <location filename="unarybitpanel.cpp" line="62"/>
         <source>!  Boolean not</source>
-        <translation>!  Booléen non</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="17"/>
         <source>-  Negative</source>
-        <translation>-  Négatif</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="18"/>
         <source>~  Bitwise not</source>
-        <translation>~  Binaire non</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="22"/>
         <source>Operator </source>
-        <translation>Opérateur </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Input</source>
-        <translation>Entrée</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Operator</source>
-        <translation>Opérateur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Result</source>
-        <translation>Résultat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="35"/>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="97"/>
         <source>Unknown operator:</source>
-        <translation>Opérateur inconnu:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="105"/>
         <location filename="unarybitpanel.cpp" line="126"/>
         <location filename="unarybitpanel.cpp" line="147"/>
         <source>Value converted to binary</source>
-        <translation>Valeur converti en binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="118"/>
         <source>Result as a binary bool</source>
-        <translation>Résultat sous forme d&apos;un booléen binaire</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="139"/>
         <location filename="unarybitpanel.cpp" line="161"/>
         <source>All bits flipped</source>
-        <translation>Tous les bits inversés</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="173"/>
         <source>Adding 1</source>
-        <translation>Ajout 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="186"/>
         <source>Twos complement</source>
-        <translation>Complément de deux</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2361,17 +2341,17 @@ Une valeur est également nécessaire</translation>
     <message>
         <location filename="toybox.cpp" line="597"/>
         <source>Variable name</source>
-        <translation>Nom de la variable</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="597"/>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="597"/>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

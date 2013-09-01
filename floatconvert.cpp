@@ -237,7 +237,7 @@ void FloatConvert::hexToFloat2()
         output = new BinaryNumber;
         output->setBits ( fractionField, 24, 23 );
         table->setCellWidget(row,0,output);
-        label = new QLabel(tr(" The exponent field is the rightmost 23 bits"));
+        label = new QLabel(tr(" The fraction field is the rightmost 23 bits"));
         table->setCellWidget(row,2,label);
         table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Fraction field")));
         doit = new QPushButton(tr("to float"));

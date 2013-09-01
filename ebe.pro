@@ -9,9 +9,11 @@ INCLUDEPATH += .
 QT += webkit
 CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
-CONFIG += console release static
+CONFIG += console debug static
 
-TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts
+TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts \
+               ebe_hi.ts ebe_zh.ts ebe_ru.ts ebe_ar.ts ebe_bn.ts \
+               ebe_in.ts ebe_ja.ts
 
 CODECFORTR   = ISO-9=8859-5
 
@@ -24,7 +26,8 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            highlighter.h toybox.h librarywindow.h instructions.h \
            types.h bitbucket.h unarybitpanel.h validators.h \
            binarynumber.h binarybitpanel.h integeredit.h \
-           intconvert.h intmath.h floatedit.h floatconvert.h file.h
+           intconvert.h intmath.h floatedit.h floatconvert.h file.h \
+           language.h
 
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
@@ -34,6 +37,7 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            highlighter.cpp toybox.cpp librarywindow.cpp instructions.cpp \
            types.cpp bitbucket.cpp unarybitpanel.cpp validators.cpp \
            binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
-           intconvert.cpp intmath.cpp floatedit.cpp floatconvert.cpp file.cpp
+           intconvert.cpp intmath.cpp floatedit.cpp floatconvert.cpp file.cpp \
+           language.cpp
 
 RESOURCES += ebe.qrc

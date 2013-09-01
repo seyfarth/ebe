@@ -83,7 +83,7 @@
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&lt;&lt; Shift left</source>
-        <translation>&lt;&lt; Skift kvar</translation>
+        <translation>&lt;&lt; vänsterskift</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="bitbucket.cpp" line="28"/>
         <source>Integer math</source>
-        <translation>Heltalsmatematikprocessor</translation>
+        <translation>Heltalsräkning</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="29"/>
@@ -542,7 +542,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="floatconvert.cpp" line="194"/>
         <source> The exponent field is bits 23 - 30</source>
-        <translation> Den exponent fältet är bitarna 23 - 30 För</translation>
+        <translation> Den exponent fältet är bitarna 23 - 30</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="196"/>
@@ -608,7 +608,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="floatconvert.cpp" line="345"/>
         <source> Denormalized float has no implicit 1</source>
-        <translation> Denormaliserade float har ingen ovillkorlig 1</translation>
+        <translation> Denormaliserade flyttal har ingen ovillkorlig 1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="360"/>
@@ -623,7 +623,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="floatconvert.cpp" line="366"/>
         <source> Exponent == 255 &amp;&amp; fraction == 0 ==&gt; infinity</source>
-        <translation>Exponent == 255 &amp;&amp; fraktion == 0 ==&gt; oändligheten</translation>
+        <translation> Exponent == 255 &amp;&amp; fraktion == 0 ==&gt; oändligheten</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="368"/>
@@ -651,7 +651,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="floatedit.cpp" line="11"/>
         <source>Enter an float value or 0xDEADBEEF (8 hex nibbles)</source>
-        <translation>Ange ett flyttal eller 0xDEADBEEF (8 hex napp)</translation>
+        <translation>Ange ett flyttal eller 0xDEADBEEF (8 hex nybble)</translation>
     </message>
 </context>
 <context>
@@ -814,17 +814,17 @@ Högerklicka för att ändra format.</translation>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>nibble</source>
-        <translation>nibble</translation>
+        <translation>nybble</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>2**nibble</source>
-        <translation>2**nibble</translation>
+        <translation>2**nybble</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>nibble value</source>
-        <translation>nibble värde</translation>
+        <translation>nybble värde</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="194"/>
@@ -897,7 +897,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="intconvert.cpp" line="441"/>
         <source>Result is value for rightmost %1 nibbles</source>
-        <translation>Resultatet är värdet för längst till höger %1 nibbles</translation>
+        <translation>Resultatet är värdet för längst till höger %1 nybble</translation>
     </message>
 </context>
 <context>
@@ -1116,7 +1116,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="mainwindow.cpp" line="390"/>
         <source>&amp;File</source>
-        <translation>&amp;Arkiv</translation>
+        <translation>&amp;Fil</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="391"/>
@@ -1142,7 +1142,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="mainwindow.cpp" line="397"/>
         <source>Assembly Program</source>
-        <translation>Montering Programmet</translation>
+        <translation>Assembler Programmet</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="399"/>
@@ -1250,13 +1250,13 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="mainwindow.cpp" line="451"/>
         <source>indent</source>
-        <translation>strecksatsen</translation>
+        <translation>indrag</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="453"/>
         <location filename="mainwindow.cpp" line="500"/>
         <source>Unindent</source>
-        <translation>ångra strecksatsen</translation>
+        <translation>Minska indrag</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="456"/>
@@ -1334,7 +1334,7 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="mainwindow.cpp" line="498"/>
         <source>Indent</source>
-        <translation>Strecksatsen</translation>
+        <translation>Indrag</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="510"/>
@@ -1540,7 +1540,7 @@ Högerklicka för att ändra format.</translation>
         <location filename="projectwindow.cpp" line="35"/>
         <location filename="projectwindow.cpp" line="41"/>
         <source>Project menu</source>
-        <translation>Projekt-menyn</translation>
+        <translation>Projekt menyn</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="36"/>
@@ -1786,7 +1786,7 @@ variabel med adressen som finns i registret.</translation>
     <message>
         <location filename="settings.cpp" line="238"/>
         <source>Preprocessor</source>
-        <translation>Hjälpprocessor</translation>
+        <translation>Preprocessor</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="239"/>
@@ -1831,7 +1831,7 @@ variabel med adressen som finns i registret.</translation>
     <message>
         <location filename="settings.cpp" line="273"/>
         <source>Debug button icon size</source>
-        <translation>Debug storlek knappikon</translation>
+        <translation>Debug knappikon storlek</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="275"/>
@@ -1871,7 +1871,7 @@ variabel med adressen som finns i registret.</translation>
     <message>
         <location filename="settings.cpp" line="287"/>
         <source>Assemble</source>
-        <translation>Montera</translation>
+        <translation>Assemble</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="288"/>
@@ -1964,13 +1964,13 @@ Detta är mest användbart för assembler.</translation>
     <message>
         <location filename="sourceframe.cpp" line="96"/>
         <source>Execute the current statement in the same function</source>
-        <translation>Kör den aktuella uttalande i samma funktion</translation>
+        <translation>Utför det aktuella kommandot i samma funktion</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="108"/>
         <source>Execute the current statement possibly stepping
 into a different function</source>
-        <translation>Kör den aktuella uttalandet eventuellt kliva
+        <translation>Kör den aktuella kommandot eventuellt steg
 in i en annan funktion</translation>
     </message>
     <message>
@@ -2009,7 +2009,7 @@ kommandoradsparametrarna att bli accepterad i argv array</translation>
         <location filename="sourceframe.cpp" line="269"/>
         <source>This file has not been named.
 Do you want save the file?</source>
-        <translation>Denna fil har utsetts.
+        <translation>Denna fil har inget namn.
 Vill du spara filen?</translation>
     </message>
     <message>
@@ -2020,7 +2020,7 @@ Vill du spara filen?</translation>
     <message>
         <location filename="sourceframe.cpp" line="282"/>
         <source>, lacks an extension.</source>
-        <translation>saknar en förlängning.</translation>
+        <translation>, saknar en förlängning.</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="296"/>
@@ -2030,7 +2030,7 @@ Vill du spara filen?</translation>
     <message>
         <location filename="sourceframe.cpp" line="297"/>
         <source>, lacks the .ebe extension.</source>
-        <translation>, saknar det. ebe förlängning.</translation>
+        <translation>, saknar det .ebe förlängning.</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="513"/>
@@ -2048,7 +2048,8 @@ Vill du spara filen?</translation>
         <location filename="sourceframe.cpp" line="1074"/>
         <source>The following files have not been saved:
 </source>
-        <translation>Följande filer har inte sparats:</translation>
+        <translation>Följande filer sparas inte:
+</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="1078"/>
@@ -2058,7 +2059,7 @@ Vill du spara filen?</translation>
     <message>
         <location filename="sourceframe.cpp" line="1279"/>
         <source>unnamed</source>
-        <translation>namngiven</translation>
+        <translation>untitled</translation>
     </message>
 </context>
 <context>
@@ -2091,7 +2092,7 @@ Vill du spara filen?</translation>
     <message>
         <location filename="sourcewindow.cpp" line="600"/>
         <source>Assembly files (*.asm *.s *akefile)</source>
-        <translation>Montering filer (*.asm *.s *akefile)</translation>
+        <translation>Assembler filer (*.asm *.s *akefile)</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="602"/>
@@ -2111,7 +2112,7 @@ Vill du spara filen?</translation>
     <message>
         <location filename="sourcewindow.cpp" line="605"/>
         <source>Assembly files (*.asm *.s *akefile);;</source>
-        <translation>Montering filer (*.asm *.s *akefile);;</translation>
+        <translation>Assembler filer (*.asm *.s *akefile);;</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="606"/>
