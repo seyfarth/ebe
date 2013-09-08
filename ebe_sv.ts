@@ -561,8 +561,9 @@ Högerklicka för att ändra format.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="240"/>
-        <source> The exponent field is the rightmost 23 bits</source>
-        <translation> Den exponent fältet är längst till höger i 23 bitar</translation>
+        <source> The fraction field is the rightmost 23 bits</source>
+        <oldsource> The exponent field is the rightmost 23 bits</oldsource>
+        <translation type="unfinished"> Den exponent fältet är längst till höger i 23 bitar</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="242"/>
@@ -571,8 +572,9 @@ Högerklicka för att ändra format.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
-        <source> The exponent value has an implicit 1 bit</source>
-        <translation>Den exponent värdet har en implicit 1 bit</translation>
+        <source> The fraction value has an implicit 1 bit</source>
+        <oldsource> The exponent value has an implicit 1 bit</oldsource>
+        <translation> Fraktionen värde har en implicit 1 bit</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
@@ -1008,6 +1010,59 @@ Högerklicka för att ändra format.</translation>
     </message>
 </context>
 <context>
+    <name>Languages</name>
+    <message>
+        <location filename="language.cpp" line="21"/>
+        <source>Arabic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="24"/>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="27"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="30"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="33"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="36"/>
+        <source>Hindi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="39"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="42"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="45"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="48"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibraryWindow</name>
     <message>
         <location filename="librarywindow.cpp" line="18"/>
@@ -1112,6 +1167,34 @@ Högerklicka för att ändra format.</translation>
         <location filename="mainwindow.cpp" line="203"/>
         <source>Missing tools</source>
         <translation>Saknade verktyg</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="373"/>
+        <location filename="mainwindow.cpp" line="374"/>
+        <source>File toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="377"/>
+        <location filename="mainwindow.cpp" line="378"/>
+        <source>Edit toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="381"/>
+        <location filename="mainwindow.cpp" line="382"/>
+        <source>Debug toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="385"/>
+        <source>Code template toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="386"/>
+        <source>Template toolbar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="390"/>
@@ -1619,9 +1702,12 @@ Högerklicka för att ändra format.</translation>
     <message>
         <location filename="registerwindow.cpp" line="135"/>
         <source>Right click on register names to change formats.
-Right clock on a register&apos;s value to define a variable
+Right click on a register&apos;s value to define a variable
 with the address contained in the register.</source>
-        <translation>Högerklicka på registernamn att ändra format.
+        <oldsource>Right click on register names to change formats.
+Right clock on a register&apos;s value to define a variable
+with the address contained in the register.</oldsource>
+        <translation type="unfinished">Högerklicka på registernamn att ändra format.
 Rätt klocka på ett registers värde att definiera en
 variabel med adressen som finns i registret.</translation>
     </message>
@@ -1659,248 +1745,264 @@ variabel med adressen som finns i registret.</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="179"/>
+        <location filename="settings.cpp" line="196"/>
         <source>Edit Settings</source>
         <translation>Redigera Inställningar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="198"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Debug colors</source>
         <translation>Debug färger</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="200"/>
+        <location filename="settings.cpp" line="220"/>
         <source>Background</source>
         <translation>Bakgrund</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="201"/>
+        <location filename="settings.cpp" line="221"/>
         <source>Breakpoint fg</source>
         <translation>Brytpunkt fg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="202"/>
+        <location filename="settings.cpp" line="222"/>
         <source>Breakpoint bg</source>
         <translation>Brytpunkt bg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="203"/>
+        <location filename="settings.cpp" line="223"/>
         <source>Find fg</source>
         <translation>Söka fg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="204"/>
+        <location filename="settings.cpp" line="224"/>
         <source>Find bg</source>
         <translation>Söka bg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="205"/>
+        <location filename="settings.cpp" line="225"/>
         <source>Line number fg</source>
         <translation>Radnummer fg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="206"/>
+        <location filename="settings.cpp" line="226"/>
         <source>Line number bg</source>
         <translation>Radnummer bg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="207"/>
+        <location filename="settings.cpp" line="227"/>
         <source>Next line fg</source>
         <translation>Nästa rad fg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="208"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Next line bg</source>
         <translation>Nästa rad bg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="234"/>
+        <source>Other colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="236"/>
         <source>Register</source>
         <translation>Register</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="237"/>
         <source>Register title</source>
         <translation>Registrera titel</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="239"/>
         <source>Tooltip</source>
         <translation>Verktygstips</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="220"/>
+        <location filename="settings.cpp" line="240"/>
         <source>Table</source>
         <translation>Tabell</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="221"/>
+        <location filename="settings.cpp" line="241"/>
         <source>List</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="222"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Tree</source>
         <translation>Träd</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="248"/>
+        <source>Highlight colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="250"/>
         <source>Comment</source>
         <translation>Kommentera</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Identifier</source>
         <translation>Identifierare</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="252"/>
         <source>Reserved</source>
         <translation>Reserverat</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="253"/>
         <source>String</source>
         <translation>Sträng</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="234"/>
+        <location filename="settings.cpp" line="254"/>
         <source>Number</source>
         <translation>Nummer</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="235"/>
+        <location filename="settings.cpp" line="255"/>
         <source>Operator</source>
         <translation>Operatör </translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="236"/>
+        <location filename="settings.cpp" line="256"/>
         <source>Instruction</source>
         <translation>Instruktion</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="237"/>
+        <location filename="settings.cpp" line="257"/>
         <source>Macro</source>
         <translation>Makro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="238"/>
+        <location filename="settings.cpp" line="258"/>
         <source>Preprocessor</source>
         <translation>Preprocessor</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Illegal fg</source>
         <translation>Olaglig fg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="240"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Illegal bg</source>
         <translation>Olaglig bg</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="264"/>
+        <location filename="settings.cpp" line="266"/>
+        <source>Language</source>
+        <translation type="unfinished">Språk</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="278"/>
         <source>Save</source>
         <translation>Spara</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="265"/>
+        <location filename="settings.cpp" line="294"/>
         <source>Options</source>
         <translation>Alternativ</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="266"/>
+        <location filename="settings.cpp" line="295"/>
         <source>Tab spacing</source>
         <translation>Tabbavståndet</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="268"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Completion minimum</source>
         <translation>Slutförande minimum</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="270"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Toolbar icon size</source>
         <translation>Verktygsradsikon storlek</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="273"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Debug button icon size</source>
         <translation>Debug knappikon storlek</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="275"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Auto-indent</source>
         <translation>Auto-indrag</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Auto-open project files</source>
         <translation>Auto-öppna projektfiler</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="306"/>
         <source>Display debug buttons</source>
         <translation>Visa debug knappar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="278"/>
+        <location filename="settings.cpp" line="307"/>
         <source>Icons on debug buttons</source>
         <translation>Ikoner på debug knappar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="308"/>
         <source>XMM Reverse</source>
         <translation>XMM Omvända</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="285"/>
+        <location filename="settings.cpp" line="314"/>
         <source>External commands</source>
         <translation>Externa kommandon</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="315"/>
         <source>Prettify</source>
         <translation>Försköna</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="316"/>
         <source>Assemble</source>
         <translation>Assemble</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="317"/>
         <source>Link asm</source>
         <translation>Länk asm</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="318"/>
         <source>C Compile</source>
         <translation>Kompilera C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
-        <location filename="settings.cpp" line="292"/>
+        <location filename="settings.cpp" line="319"/>
+        <location filename="settings.cpp" line="321"/>
         <source>Link C</source>
         <translation>Länk C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="291"/>
+        <location filename="settings.cpp" line="320"/>
         <source>Compile C++</source>
         <translation>Kompilera C++</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="293"/>
+        <location filename="settings.cpp" line="322"/>
         <source>Compile Fortran</source>
         <translation>Kompilera Fortran</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="294"/>
+        <location filename="settings.cpp" line="323"/>
         <source>Link Fortran</source>
         <translation>Länk Fortran</translation>
     </message>
@@ -1999,9 +2101,9 @@ kommandoradsparametrarna att bli accepterad i argv array</translation>
         <location filename="sourceframe.cpp" line="268"/>
         <location filename="sourceframe.cpp" line="280"/>
         <location filename="sourceframe.cpp" line="295"/>
-        <location filename="sourceframe.cpp" line="512"/>
-        <location filename="sourceframe.cpp" line="984"/>
-        <location filename="sourceframe.cpp" line="1079"/>
+        <location filename="sourceframe.cpp" line="515"/>
+        <location filename="sourceframe.cpp" line="990"/>
+        <location filename="sourceframe.cpp" line="1085"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -2033,31 +2135,32 @@ Vill du spara filen?</translation>
         <translation>, saknar det .ebe förlängning.</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="513"/>
+        <location filename="sourceframe.cpp" line="516"/>
         <source>None of the source files defines main</source>
         <translation>Ingen av källfilerna definierar main</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="985"/>
+        <location filename="sourceframe.cpp" line="991"/>
         <source>This file has changed.
 Do you want save the file?</source>
         <translation>Denna fil har ändrats.
 Vill du spara filen?</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1074"/>
+        <location filename="sourceframe.cpp" line="1080"/>
         <source>The following files have not been saved:
 </source>
         <translation>Följande filer sparas inte:
 </translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1078"/>
+        <location filename="sourceframe.cpp" line="1084"/>
         <source>Do you wish to save them all?</source>
         <translation>Vill du spara dem alla?</translation>
     </message>
     <message>
-        <location filename="sourceframe.cpp" line="1279"/>
+        <location filename="sourceframe.cpp" line="188"/>
+        <location filename="sourceframe.cpp" line="1285"/>
         <source>unnamed</source>
         <translation>untitled</translation>
     </message>

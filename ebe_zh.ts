@@ -571,8 +571,9 @@ Right click to change formats.</source>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
-        <source> The exponent value has an implicit 1 bit</source>
-        <translation>指数值有一个隐含的1位</translation>
+        <source> The fraction value has an implicit 1 bit</source>
+        <oldsource> The exponent value has an implicit 1 bit</oldsource>
+        <translation type="unfinished">指数值有一个隐含的1位</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
@@ -1005,6 +1006,59 @@ Right click to change formats.</source>
 0x... for hex, 0b... for binary</source>
         <translation>输入一个整数或bool
 为0x...十六进制，0B...二进制</translation>
+    </message>
+</context>
+<context>
+    <name>Languages</name>
+    <message>
+        <location filename="language.cpp" line="21"/>
+        <source>Arabic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="24"/>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="27"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="30"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="33"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="36"/>
+        <source>Hindi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="39"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="42"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="45"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="48"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1690,258 +1744,264 @@ with the address contained in the register.</oldsource>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="190"/>
+        <location filename="settings.cpp" line="196"/>
         <source>Edit Settings</source>
         <translation>编辑设置</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="209"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Debug colors</source>
         <translation>调试颜色</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="211"/>
+        <location filename="settings.cpp" line="220"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="212"/>
+        <location filename="settings.cpp" line="221"/>
         <source>Breakpoint fg</source>
         <translation>断点前景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="213"/>
+        <location filename="settings.cpp" line="222"/>
         <source>Breakpoint bg</source>
         <translation>断点背景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="214"/>
+        <location filename="settings.cpp" line="223"/>
         <source>Find fg</source>
         <translation>找到前景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="215"/>
+        <location filename="settings.cpp" line="224"/>
         <source>Find bg</source>
         <translation>发现背景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="225"/>
         <source>Line number fg</source>
         <translation>行号前景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="226"/>
         <source>Line number bg</source>
         <translation>行号背景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="218"/>
+        <location filename="settings.cpp" line="227"/>
         <source>Next line fg</source>
         <translation>下一行前景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Next line bg</source>
         <translation>下一行背景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="225"/>
+        <location filename="settings.cpp" line="234"/>
         <source>Other colors</source>
         <translation>其他颜色</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="227"/>
+        <location filename="settings.cpp" line="236"/>
         <source>Register</source>
         <translation>寄存器</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="228"/>
+        <location filename="settings.cpp" line="237"/>
         <source>Register title</source>
         <translation>注册标题</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="239"/>
         <source>Tooltip</source>
         <translation>工具提示</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="240"/>
         <source>Table</source>
         <translation>表</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="241"/>
         <source>List</source>
         <translation>一览</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Tree</source>
         <translation>树</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Highlight colors</source>
         <translation>高亮颜色</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="241"/>
+        <location filename="settings.cpp" line="250"/>
         <source>Comment</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="242"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Identifier</source>
         <translation>识别码</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="243"/>
+        <location filename="settings.cpp" line="252"/>
         <source>Reserved</source>
         <translation>保留字</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="244"/>
+        <location filename="settings.cpp" line="253"/>
         <source>String</source>
         <translation>字符串</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="245"/>
+        <location filename="settings.cpp" line="254"/>
         <source>Number</source>
         <translation>数</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="246"/>
+        <location filename="settings.cpp" line="255"/>
         <source>Operator</source>
         <translation>运算符</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="247"/>
+        <location filename="settings.cpp" line="256"/>
         <source>Instruction</source>
         <translation>指令</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="257"/>
         <source>Macro</source>
         <translation>宏</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="258"/>
         <source>Preprocessor</source>
         <translation>预处理</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="250"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Illegal fg</source>
         <translation>非法前景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="251"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Illegal bg</source>
         <translation>非法背景</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="259"/>
+        <location filename="settings.cpp" line="264"/>
+        <location filename="settings.cpp" line="266"/>
+        <source>Language</source>
+        <translation type="unfinished">语</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="278"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="260"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="294"/>
         <source>Options</source>
         <translation>选项</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="295"/>
         <source>Tab spacing</source>
         <translation>标签间距</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Completion minimum</source>
         <translation>完成最低</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="281"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Toolbar icon size</source>
         <translation>工具栏图标的大小</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="284"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Debug button icon size</source>
         <translation>调试按钮图标大小</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Auto-indent</source>
         <translation>自动缩进</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Auto-open project files</source>
         <translation>自动打开的项目文件</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="306"/>
         <source>Display debug buttons</source>
         <translation>显示调试按钮</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="307"/>
         <source>Icons on debug buttons</source>
         <translation>调试按钮的图标</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
+        <location filename="settings.cpp" line="308"/>
         <source>XMM Reverse</source>
         <translation>XMM反向</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="296"/>
+        <location filename="settings.cpp" line="314"/>
         <source>External commands</source>
         <translation>外部命令</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="297"/>
+        <location filename="settings.cpp" line="315"/>
         <source>Prettify</source>
         <translation>美化</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="298"/>
+        <location filename="settings.cpp" line="316"/>
         <source>Assemble</source>
         <translation>组装</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="299"/>
+        <location filename="settings.cpp" line="317"/>
         <source>Link asm</source>
         <translation>链接汇编程序</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="300"/>
+        <location filename="settings.cpp" line="318"/>
         <source>C Compile</source>
         <translation>编译 C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="301"/>
-        <location filename="settings.cpp" line="303"/>
+        <location filename="settings.cpp" line="319"/>
+        <location filename="settings.cpp" line="321"/>
         <source>Link C</source>
         <translation>链接 C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="302"/>
+        <location filename="settings.cpp" line="320"/>
         <source>Compile C++</source>
         <translation>编译 C++</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="304"/>
+        <location filename="settings.cpp" line="322"/>
         <source>Compile Fortran</source>
         <translation>编译 Fortran</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="305"/>
+        <location filename="settings.cpp" line="323"/>
         <source>Link Fortran</source>
         <translation>链接 Fortran</translation>
     </message>

@@ -224,7 +224,7 @@ void FortranHighlighter::highlightBlock(const QString &text)
     if ( previousBlockState() != 0 ) {
         start = i;
         if ( previousBlockState() == '"' ) {
-            startChar == QChar('"');
+            startChar = QChar('"');
             goto StringMore;
         } else if ( previousBlockState() == '\'' ) {
             startChar = QChar('\'');

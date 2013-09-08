@@ -1,0 +1,7 @@
+#!/bin/bash
+
+./qrc
+qmake
+make clean
+qrelease
+make

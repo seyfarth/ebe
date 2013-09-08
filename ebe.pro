@@ -13,7 +13,7 @@ CONFIG += console debug static
 
 TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts \
                ebe_hi.ts ebe_zh.ts ebe_ru.ts ebe_ar.ts ebe_bn.ts \
-               ebe_in.ts ebe_ja.ts
+               ebe_in.ts ebe_ja.ts ebe_da.ts
 
 CODECFORTR   = ISO-9=8859-5
 

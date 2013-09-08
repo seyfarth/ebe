@@ -574,8 +574,9 @@ Right click to change formats.</source>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
-        <source> The exponent value has an implicit 1 bit</source>
-        <translation> प्रतिपादक मूल्य एक अंतर्निहित 1 सा है</translation>
+        <source> The fraction value has an implicit 1 bit</source>
+        <oldsource> The exponent value has an implicit 1 bit</oldsource>
+        <translation type="unfinished"> प्रतिपादक मूल्य एक अंतर्निहित 1 सा है</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
@@ -1008,6 +1009,59 @@ Right click to change formats.</source>
 0x... for hex, 0b... for binary</source>
         <translation>एक पूर्णांक या बूलियन दर्ज
 0x ... हेक्स के लिए, 0b ... द्विआधारी के लिए</translation>
+    </message>
+</context>
+<context>
+    <name>Languages</name>
+    <message>
+        <location filename="language.cpp" line="21"/>
+        <source>Arabic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="24"/>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="27"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="30"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="33"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="36"/>
+        <source>Hindi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="39"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="42"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="45"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="48"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1693,258 +1747,264 @@ with the address contained in the register.</oldsource>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="190"/>
+        <location filename="settings.cpp" line="196"/>
         <source>Edit Settings</source>
         <translation>सेटिंग्स संपादित करें</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="209"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Debug colors</source>
         <translation>इस पते के साथ एक चर परिभाषित करें</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="211"/>
+        <location filename="settings.cpp" line="220"/>
         <source>Background</source>
         <translation>पृष्ठभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="212"/>
+        <location filename="settings.cpp" line="221"/>
         <source>Breakpoint fg</source>
         <translation>ब्रेकपाइंट अग्रभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="213"/>
+        <location filename="settings.cpp" line="222"/>
         <source>Breakpoint bg</source>
         <translation>ब्रेकपाइंट पृष्ठभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="214"/>
+        <location filename="settings.cpp" line="223"/>
         <source>Find fg</source>
         <translation>अग्रभूमि पाते</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="215"/>
+        <location filename="settings.cpp" line="224"/>
         <source>Find bg</source>
         <translation>पृष्ठभूमि पाते</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="225"/>
         <source>Line number fg</source>
         <translation>लाइन संख्या अग्रभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="226"/>
         <source>Line number bg</source>
         <translation>लाइन संख्या पृष्ठभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="218"/>
+        <location filename="settings.cpp" line="227"/>
         <source>Next line fg</source>
         <translation>अगली पंक्ति अग्रभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Next line bg</source>
         <translation>अगली पंक्ति पृष्ठभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="225"/>
+        <location filename="settings.cpp" line="234"/>
         <source>Other colors</source>
         <translation>अन्य रंगों</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="227"/>
+        <location filename="settings.cpp" line="236"/>
         <source>Register</source>
         <translation>रजिस्टर</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="228"/>
+        <location filename="settings.cpp" line="237"/>
         <source>Register title</source>
         <translation>शीर्षक रजिस्टर</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="239"/>
         <source>Tooltip</source>
         <translation>टूलटिप</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="240"/>
         <source>Table</source>
         <translation>तालिका</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="241"/>
         <source>List</source>
         <translation>सूची</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Tree</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Highlight colors</source>
         <translation>हाइलाइट रंग</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="241"/>
+        <location filename="settings.cpp" line="250"/>
         <source>Comment</source>
         <translation>टिप्पणी</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="242"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Identifier</source>
         <translation>पहचानकर्ता</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="243"/>
+        <location filename="settings.cpp" line="252"/>
         <source>Reserved</source>
         <translation>आरक्षित</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="244"/>
+        <location filename="settings.cpp" line="253"/>
         <source>String</source>
         <translation>स्ट्रिंग</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="245"/>
+        <location filename="settings.cpp" line="254"/>
         <source>Number</source>
         <translation>संख्या</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="246"/>
+        <location filename="settings.cpp" line="255"/>
         <source>Operator</source>
         <translation>ऑपरेटर</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="247"/>
+        <location filename="settings.cpp" line="256"/>
         <source>Instruction</source>
         <translation>अनुदेश</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="257"/>
         <source>Macro</source>
         <translation>मैक्रो</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="258"/>
         <source>Preprocessor</source>
         <translation>पूर्वप्रक्रमक</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="250"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Illegal fg</source>
         <translation>अवैध अग्रभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="251"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Illegal bg</source>
         <translation>अवैध पृष्ठभूमि</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="259"/>
+        <location filename="settings.cpp" line="264"/>
+        <location filename="settings.cpp" line="266"/>
+        <source>Language</source>
+        <translation type="unfinished">भाषा</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="278"/>
         <source>Save</source>
         <translation>को बचाने</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="260"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="294"/>
         <source>Options</source>
         <translation>विकल्प</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="295"/>
         <source>Tab spacing</source>
         <translation>टैब रिक्ति</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Completion minimum</source>
         <translation>समापन न्यूनतम</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="281"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Toolbar icon size</source>
         <translation>टूलबार आइकन आकार</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="284"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Debug button icon size</source>
         <translation>बटन आइकन आकार डिबग</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Auto-indent</source>
         <translation>ऑटो इंडेंट</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Auto-open project files</source>
         <translation>ऑटो खुले परियोजना फ़ाइलों</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="306"/>
         <source>Display debug buttons</source>
         <translation>डिबग बटन प्रदर्शित करें</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="307"/>
         <source>Icons on debug buttons</source>
         <translation>डिबग बटन पर प्रतीक</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
+        <location filename="settings.cpp" line="308"/>
         <source>XMM Reverse</source>
         <translation>XMM रिवर्स</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="296"/>
+        <location filename="settings.cpp" line="314"/>
         <source>External commands</source>
         <translation>बाहरी कमांड</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="297"/>
+        <location filename="settings.cpp" line="315"/>
         <source>Prettify</source>
         <translation>सँवारना</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="298"/>
+        <location filename="settings.cpp" line="316"/>
         <source>Assemble</source>
         <translation>इकट्ठा</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="299"/>
+        <location filename="settings.cpp" line="317"/>
         <source>Link asm</source>
         <translation>कड़ी asm</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="300"/>
+        <location filename="settings.cpp" line="318"/>
         <source>C Compile</source>
         <translation>C संकलन</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="301"/>
-        <location filename="settings.cpp" line="303"/>
+        <location filename="settings.cpp" line="319"/>
+        <location filename="settings.cpp" line="321"/>
         <source>Link C</source>
         <translation>कड़ी C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="302"/>
+        <location filename="settings.cpp" line="320"/>
         <source>Compile C++</source>
         <translation>C++ संकलन</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="304"/>
+        <location filename="settings.cpp" line="322"/>
         <source>Compile Fortran</source>
         <translation>Fortran संकलन</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="305"/>
+        <location filename="settings.cpp" line="323"/>
         <source>Link Fortran</source>
         <translation>कड़ी Fortran</translation>
     </message>

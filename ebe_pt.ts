@@ -574,8 +574,9 @@ Botão direito do mouse para mudar formatos.</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
-        <source> The exponent value has an implicit 1 bit</source>
-        <translation> O valor do expoente tem um implícito 1 bit</translation>
+        <source> The fraction value has an implicit 1 bit</source>
+        <oldsource> The exponent value has an implicit 1 bit</oldsource>
+        <translation type="unfinished"> O valor do expoente tem um implícito 1 bit</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
@@ -1008,6 +1009,59 @@ Botão direito do mouse para mudar formatos.</translation>
 0x... for hex, 0b... for binary</source>
         <translation>Digite um número inteiro ou bool
 0x ... para hex, 0b ... para binário</translation>
+    </message>
+</context>
+<context>
+    <name>Languages</name>
+    <message>
+        <location filename="language.cpp" line="21"/>
+        <source>Arabic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="24"/>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="27"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="30"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="33"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="36"/>
+        <source>Hindi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="39"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="42"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="45"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="48"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1694,258 +1748,264 @@ variável com o endereço contido no registo..
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="190"/>
+        <location filename="settings.cpp" line="196"/>
         <source>Edit Settings</source>
         <translation>Editar Configurações</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="209"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Debug colors</source>
         <translation>Cores de depuração</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="211"/>
+        <location filename="settings.cpp" line="220"/>
         <source>Background</source>
         <translation>Fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="212"/>
+        <location filename="settings.cpp" line="221"/>
         <source>Breakpoint fg</source>
         <translation>Ponto de interrupção pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="213"/>
+        <location filename="settings.cpp" line="222"/>
         <source>Breakpoint bg</source>
         <translation>Ponto de interrupção fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="214"/>
+        <location filename="settings.cpp" line="223"/>
         <source>Find fg</source>
         <translation>Localizar pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="215"/>
+        <location filename="settings.cpp" line="224"/>
         <source>Find bg</source>
         <translation>Localizar fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="225"/>
         <source>Line number fg</source>
         <translation>Número da linha pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="226"/>
         <source>Line number bg</source>
         <translation>Número da linha fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="218"/>
+        <location filename="settings.cpp" line="227"/>
         <source>Next line fg</source>
         <translation>Próxima linha pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Next line bg</source>
         <translation>Próxima linha fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="225"/>
+        <location filename="settings.cpp" line="234"/>
         <source>Other colors</source>
         <translation>Outras Cores</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="227"/>
+        <location filename="settings.cpp" line="236"/>
         <source>Register</source>
         <translation>Registro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="228"/>
+        <location filename="settings.cpp" line="237"/>
         <source>Register title</source>
         <translation>Título de registo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="239"/>
         <source>Tooltip</source>
         <translation>Dica</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="240"/>
         <source>Table</source>
         <translation>Mesa</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="241"/>
         <source>List</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Tree</source>
         <translation>Árvore</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Highlight colors</source>
         <translation>Cores de Destaque</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="241"/>
+        <location filename="settings.cpp" line="250"/>
         <source>Comment</source>
         <translation>Comentar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="242"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Identifier</source>
         <translation>Identificador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="243"/>
+        <location filename="settings.cpp" line="252"/>
         <source>Reserved</source>
         <translation>Reservado</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="244"/>
+        <location filename="settings.cpp" line="253"/>
         <source>String</source>
         <translation>Corda</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="245"/>
+        <location filename="settings.cpp" line="254"/>
         <source>Number</source>
         <translation>Número</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="246"/>
+        <location filename="settings.cpp" line="255"/>
         <source>Operator</source>
         <translation>Operador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="247"/>
+        <location filename="settings.cpp" line="256"/>
         <source>Instruction</source>
         <translation>Instrução</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="257"/>
         <source>Macro</source>
         <translation>Macro</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="258"/>
         <source>Preprocessor</source>
         <translation>Pré-processador</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="250"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Illegal fg</source>
         <translation>Ilegal pp</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="251"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Illegal bg</source>
         <translation>Ilegal fundo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="259"/>
+        <location filename="settings.cpp" line="264"/>
+        <location filename="settings.cpp" line="266"/>
+        <source>Language</source>
+        <translation type="unfinished">Linguagem</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="278"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="260"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="294"/>
         <source>Options</source>
         <translation>Opções</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="295"/>
         <source>Tab spacing</source>
         <translation>Espaçamento tab</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Completion minimum</source>
         <translation>Completando mínimo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="281"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Toolbar icon size</source>
         <translation>Toolbar tamanho dos ícones</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="284"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Debug button icon size</source>
         <translation>Depurar botão de tamanho de ícone</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Auto-indent</source>
         <translation>Auto-recuo</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Auto-open project files</source>
         <translation>Arquivos de projeto auto-abertas</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="306"/>
         <source>Display debug buttons</source>
         <translation>Mostrar botões de depuração</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="307"/>
         <source>Icons on debug buttons</source>
         <translation>Ícones em botões de depuração</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
+        <location filename="settings.cpp" line="308"/>
         <source>XMM Reverse</source>
         <translation>XMM Reversa</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="296"/>
+        <location filename="settings.cpp" line="314"/>
         <source>External commands</source>
         <translation>Os comandos externos</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="297"/>
+        <location filename="settings.cpp" line="315"/>
         <source>Prettify</source>
         <translation>Embelezar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="298"/>
+        <location filename="settings.cpp" line="316"/>
         <source>Assemble</source>
         <translation>Montar programa</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="299"/>
+        <location filename="settings.cpp" line="317"/>
         <source>Link asm</source>
         <translation>Ligar asm</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="300"/>
+        <location filename="settings.cpp" line="318"/>
         <source>C Compile</source>
         <translation>C Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="301"/>
-        <location filename="settings.cpp" line="303"/>
+        <location filename="settings.cpp" line="319"/>
+        <location filename="settings.cpp" line="321"/>
         <source>Link C</source>
         <translation>Ligar C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="302"/>
+        <location filename="settings.cpp" line="320"/>
         <source>Compile C++</source>
         <translation>C++ Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="304"/>
+        <location filename="settings.cpp" line="322"/>
         <source>Compile Fortran</source>
         <translation>Fortran Compilar</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="305"/>
+        <location filename="settings.cpp" line="323"/>
         <source>Link Fortran</source>
         <translation>Ligar Fortran</translation>
     </message>

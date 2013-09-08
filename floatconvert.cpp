@@ -255,7 +255,7 @@ void FloatConvert::hexToFloat2()
         output = new BinaryNumber;
         output->setBits ( fractionValue, 24 );
         table->setCellWidget(row,0,output);
-        label = new QLabel(tr(" The exponent value has an implicit 1 bit"));
+        label = new QLabel(tr(" The fraction value has an implicit 1 bit"));
         table->setCellWidget(row,2,label);
         table->setVerticalHeaderItem(row,new QTableWidgetItem(tr("Fraction value")));
         doit = new QPushButton(tr("to float"));

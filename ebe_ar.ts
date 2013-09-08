@@ -569,8 +569,9 @@ Right click to change formats.</source>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
-        <source> The exponent value has an implicit 1 bit</source>
-        <translation>قيمة الأس ديه الضمني 1 بت</translation>
+        <source> The fraction value has an implicit 1 bit</source>
+        <oldsource> The exponent value has an implicit 1 bit</oldsource>
+        <translation>قيمة جزء ديه الضمني 1 بت</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
@@ -1004,6 +1005,59 @@ Right click to change formats.</source>
 0x... for hex, 0b... for binary</source>
         <translation>إدخال عدد صحيح أو booll
 استخدام 0x ... للعرافة، 0x... للحصول على ثنائي</translation>
+    </message>
+</context>
+<context>
+    <name>Languages</name>
+    <message>
+        <location filename="language.cpp" line="21"/>
+        <source>Arabic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="24"/>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="27"/>
+        <source>English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="30"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="33"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="36"/>
+        <source>Hindi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="39"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="42"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="45"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="language.cpp" line="48"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1689,258 +1743,264 @@ with the address contained in the register.</oldsource>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="settings.cpp" line="190"/>
+        <location filename="settings.cpp" line="196"/>
         <source>Edit Settings</source>
         <translation>تعديل إعدادات</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="209"/>
+        <location filename="settings.cpp" line="218"/>
         <source>Debug colors</source>
         <translation>تصحيح الالوان</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="211"/>
+        <location filename="settings.cpp" line="220"/>
         <source>Background</source>
         <translation>خلفية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="212"/>
+        <location filename="settings.cpp" line="221"/>
         <source>Breakpoint fg</source>
         <translation>نقطة التوقف بالمقدمة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="213"/>
+        <location filename="settings.cpp" line="222"/>
         <source>Breakpoint bg</source>
         <translation>خلفية توقف</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="214"/>
+        <location filename="settings.cpp" line="223"/>
         <source>Find fg</source>
         <translation>البحث المقدمة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="215"/>
+        <location filename="settings.cpp" line="224"/>
         <source>Find bg</source>
         <translation>البحث عن الخلفية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="216"/>
+        <location filename="settings.cpp" line="225"/>
         <source>Line number fg</source>
         <translation>خط الأعداد المقدمة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="217"/>
+        <location filename="settings.cpp" line="226"/>
         <source>Line number bg</source>
         <translation>رقم السطر الخلفية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="218"/>
+        <location filename="settings.cpp" line="227"/>
         <source>Next line fg</source>
         <translation>الخط التالى المقدمة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="219"/>
+        <location filename="settings.cpp" line="228"/>
         <source>Next line bg</source>
         <translation>الخط التالى الخلفية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="225"/>
+        <location filename="settings.cpp" line="234"/>
         <source>Other colors</source>
         <translation>الألوان الأخرى</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="227"/>
+        <location filename="settings.cpp" line="236"/>
         <source>Register</source>
         <translation>سجل</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="228"/>
+        <location filename="settings.cpp" line="237"/>
         <source>Register title</source>
         <translation>عنوان التسجيل</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="230"/>
+        <location filename="settings.cpp" line="239"/>
         <source>Tooltip</source>
         <translation>اداة التلميح</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="231"/>
+        <location filename="settings.cpp" line="240"/>
         <source>Table</source>
         <translation>جدول</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="232"/>
+        <location filename="settings.cpp" line="241"/>
         <source>List</source>
         <translation>قائمة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="233"/>
+        <location filename="settings.cpp" line="242"/>
         <source>Tree</source>
         <translation>شجرة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="239"/>
+        <location filename="settings.cpp" line="248"/>
         <source>Highlight colors</source>
         <translation>تسليط الضوء على الألوان</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="241"/>
+        <location filename="settings.cpp" line="250"/>
         <source>Comment</source>
         <translation>تعليق</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="242"/>
+        <location filename="settings.cpp" line="251"/>
         <source>Identifier</source>
         <translation>المعرف</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="243"/>
+        <location filename="settings.cpp" line="252"/>
         <source>Reserved</source>
         <translation>محجوزة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="244"/>
+        <location filename="settings.cpp" line="253"/>
         <source>String</source>
         <translation>سلسلة حرفية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="245"/>
+        <location filename="settings.cpp" line="254"/>
         <source>Number</source>
         <translation>عدد</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="246"/>
+        <location filename="settings.cpp" line="255"/>
         <source>Operator</source>
         <translation>المعامل</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="247"/>
+        <location filename="settings.cpp" line="256"/>
         <source>Instruction</source>
         <translation>تعليمات</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="248"/>
+        <location filename="settings.cpp" line="257"/>
         <source>Macro</source>
         <translation>ماكرو</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="249"/>
+        <location filename="settings.cpp" line="258"/>
         <source>Preprocessor</source>
         <translation>قبل المعالج</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="250"/>
+        <location filename="settings.cpp" line="259"/>
         <source>Illegal fg</source>
         <translation>المقدمة غير قانونية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="251"/>
+        <location filename="settings.cpp" line="260"/>
         <source>Illegal bg</source>
         <translation>خلفية غير قانونية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="259"/>
+        <location filename="settings.cpp" line="264"/>
+        <location filename="settings.cpp" line="266"/>
+        <source>Language</source>
+        <translation type="unfinished">لغة</translation>
+    </message>
+    <message>
+        <location filename="settings.cpp" line="278"/>
         <source>Save</source>
         <translation>حفظ</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="260"/>
+        <location filename="settings.cpp" line="279"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="276"/>
+        <location filename="settings.cpp" line="294"/>
         <source>Options</source>
         <translation>خيارات</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="277"/>
+        <location filename="settings.cpp" line="295"/>
         <source>Tab spacing</source>
         <translation>علامة التبويب مسافة</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="279"/>
+        <location filename="settings.cpp" line="297"/>
         <source>Completion minimum</source>
         <translation>الحد الأدنى الانتهاء</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="281"/>
+        <location filename="settings.cpp" line="299"/>
         <source>Toolbar icon size</source>
         <translation>شريط الأدوات حجم الرمز</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="284"/>
+        <location filename="settings.cpp" line="302"/>
         <source>Debug button icon size</source>
         <translation>تصحيح زر حجم الرمز</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="286"/>
+        <location filename="settings.cpp" line="304"/>
         <source>Auto-indent</source>
         <translation>المسافة البادئة الاوتوماتيكية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="287"/>
+        <location filename="settings.cpp" line="305"/>
         <source>Auto-open project files</source>
         <translation>الفتح الاوتوماتيكى لملفات المشروع</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="288"/>
+        <location filename="settings.cpp" line="306"/>
         <source>Display debug buttons</source>
         <translation>عرض أزرار التصحيح</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="289"/>
+        <location filename="settings.cpp" line="307"/>
         <source>Icons on debug buttons</source>
         <translation>الرموز على أزرار التصحيح</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="290"/>
+        <location filename="settings.cpp" line="308"/>
         <source>XMM Reverse</source>
         <translation>عكسي XMM</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="296"/>
+        <location filename="settings.cpp" line="314"/>
         <source>External commands</source>
         <translation>أوامر خارجية</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="297"/>
+        <location filename="settings.cpp" line="315"/>
         <source>Prettify</source>
         <translation>زين</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="298"/>
+        <location filename="settings.cpp" line="316"/>
         <source>Assemble</source>
         <translation>تجميع</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="299"/>
+        <location filename="settings.cpp" line="317"/>
         <source>Link asm</source>
         <translation>رابط الاسمبلى</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="300"/>
+        <location filename="settings.cpp" line="318"/>
         <source>C Compile</source>
         <translation>مترجم C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="301"/>
-        <location filename="settings.cpp" line="303"/>
+        <location filename="settings.cpp" line="319"/>
+        <location filename="settings.cpp" line="321"/>
         <source>Link C</source>
         <translation>الرابط C</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="302"/>
+        <location filename="settings.cpp" line="320"/>
         <source>Compile C++</source>
         <translation>مترجم C++</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="304"/>
+        <location filename="settings.cpp" line="322"/>
         <source>Compile Fortran</source>
         <translation>مترجم الفورتران</translation>
     </message>
     <message>
-        <location filename="settings.cpp" line="305"/>
+        <location filename="settings.cpp" line="323"/>
         <source>Link Fortran</source>
         <translation>رابط فورتران</translation>
     </message>
