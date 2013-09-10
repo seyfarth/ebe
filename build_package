@@ -53,7 +53,12 @@ sed -e "s:XXX:\$dir/$exe.d:" -e "s:DDD:\$dir:" < $exe.init > \$dir/$exe
 cp -p * \$dir/$exe.d
 chmod a+rx \$dir/$exe \$dir/$exe.d/$exe.exe
 chmod a+r \$dir/$exe.d/*
-rm \$dir/$exe.d/$exe.init
+cd \$dir/$exe.d
+for lib in lib*.[0-9]*
+do
+    ln -s \$lib \$(echo \$lib | sed -e 's/\.[[0-9]]*\$//')
+done
+rm $exe.init
 EOF3
 
 chmod a+rx $exe.d/install

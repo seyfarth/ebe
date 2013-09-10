@@ -9,7 +9,7 @@ INCLUDEPATH += .
 QT += webkit
 CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
-CONFIG += console debug static
+CONFIG += console release static
 
 TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts \
                ebe_hi.ts ebe_zh.ts ebe_ru.ts ebe_ar.ts ebe_bn.ts \
