@@ -2,6 +2,9 @@
 #define FLOATCONVERT_H
 
 #include <QtGui>
+#include <QComboBox>
+#include <QTableWidget>
+#include <QPushButton>
 #include "binarynumber.h"
 #include "floatedit.h"
 

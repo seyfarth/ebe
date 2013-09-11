@@ -64,7 +64,11 @@ void BinaryNumber::setText(QString s, int /* w */ )
 
     clear();
     for ( int i = 0; i < n; i++ ) {
+#if QT_VERSION >= 0x050000
+        chars[n-i-1] = s[i].toLatin1();
+#else
         chars[n-i-1] = s[i].toAscii();
+#endif
     }
 }
 

@@ -2,6 +2,10 @@
 #define INTCONVERT_H
 
 #include <QtGui>
+#include <QTableWidget>
+#include <QComboBox>
+#include <QPushButton>
+
 #include "binarynumber.h"
 #include "integeredit.h"
 

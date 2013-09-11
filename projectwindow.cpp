@@ -2,6 +2,9 @@
 #include "sourceframe.h"
 #include "settings.h"
 #include <cstdio>
+#include <QMenu>
+#include <QFileDialog>
+#include <QMessageBox>
 
 extern SourceFrame *sourceFrame;
 

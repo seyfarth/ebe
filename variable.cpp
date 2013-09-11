@@ -1,4 +1,6 @@
 #include "variable.h"
+#include <QLabel>
+#include <QMessageBox>
 
 DefineVariableDialog::DefineVariableDialog()
 : QDialog()

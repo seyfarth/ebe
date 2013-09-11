@@ -6,6 +6,11 @@
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
+#include <QStatusBar>
+#include <QScrollBar>
+#include <QMessageBox>
+#include <QMenu>
+#include <QFileDialog>
 
 extern DataWindow *dataWindow;
 extern ProjectWindow *projectWindow;

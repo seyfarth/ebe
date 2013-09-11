@@ -2,6 +2,7 @@
 #include "librarywindow.h"
 #include "sourceframe.h"
 #include "settings.h"
+#include <QApplication>
 #include <QListWidget>
 #include <QWebView>
 #include <QWebFrame>

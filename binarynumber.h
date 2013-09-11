@@ -2,6 +2,7 @@
 #define BINARYNUMBER_H
 
 #include <QtGui>
+#include <QWidget>
 
 
 class BinaryNumber : public QWidget

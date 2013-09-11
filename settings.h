@@ -2,6 +2,15 @@
 #define SETTINGS_H
 
 #include <QtGui>
+#include <QTabWidget>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QDialog>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QCheckBox>
 
 class Settings : public QObject
 {

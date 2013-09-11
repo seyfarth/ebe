@@ -2,6 +2,7 @@
 #define BACKTRACEWINDOW_H
 
 #include <QtGui>
+#include <QListWidget>
 
 /**
  *  \class BackTraceWindow

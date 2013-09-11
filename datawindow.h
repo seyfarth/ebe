@@ -4,6 +4,7 @@
 #include "types.h"
 #include <QtGui>
 #include "variable.h"
+#include <QTreeWidget>
 
 class DataGroup;
 class DataItem;

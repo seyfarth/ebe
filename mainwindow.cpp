@@ -5,6 +5,10 @@
 #include <QWebView>
 #include <QApplication>
 #include <QMessageBox>
+#include <QDockWidget>
+#include <QToolBar>
+#include <QMenuBar>
+#include <QFileDialog>
 #ifdef Q_WS_WIN
 #include <windows.h>
 #else

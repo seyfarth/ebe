@@ -1,5 +1,7 @@
 #include "floatconvert.h"
 #include "settings.h"
+#include <QLabel>
+#include <QMessageBox>
 
 FloatConvert::FloatConvert(QWidget *parent) : QFrame(parent)
 {

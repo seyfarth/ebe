@@ -1,6 +1,12 @@
 #include "toybox.h"
 #include "errorwindow.h"
 
+#include <QPlainTextEdit>
+#include <QLabel>
+#include <QMessageBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+
 IntHash bytesPerType;
 
 /*
@@ -226,7 +232,11 @@ void ToyBox::computeExpression()
     QString outFile = language == "C++" ? "ebe_toybox.cpp" : "ebe_toybox.f";
     QFile file(outFile);
     file.open(QFile::WriteOnly);
+#if QT_VERSION >= 0x050000
+    file.write(code.toLocal8Bit().constData());
+#else
     file.write(code.toAscii());
+#endif
     file.close();
     QProcess compile(this);
     if ( language == "C++" ) {

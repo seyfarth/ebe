@@ -49,10 +49,11 @@ public:
     QString file;
     int line;
     FileLine(QString f="", int l=0);
-    bool operator==(FileLine &x) const;
 };
 
 bool operator< ( const FileLine &a, const FileLine &b );
+
+bool operator==(const FileLine &a, const FileLine &b);
 
 uint qHash(const FileLine &f);
 
@@ -62,9 +63,9 @@ public:
     QString file;
     QString label;
     FileLabel(QString f="", QString l=0);
-    bool operator==(FileLabel &x) const;
 };
 
+bool operator==(const FileLabel &a, const FileLabel &b);
 bool operator< ( const FileLabel &a, const FileLabel &b );
 
 uint qHash(const FileLabel &f);

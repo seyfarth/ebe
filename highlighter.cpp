@@ -235,8 +235,10 @@ void FortranHighlighter::highlightBlock(const QString &text)
     More:
         if ( i >= n ) return;
         setCurrentBlockState(0);
-        if ( i == 0 && (t[i].toAscii() == 'c' || t[i].toAscii() == 'C'
-                        || t[i].toAscii() == '*') ) goto Comment;
+        if ( i == 0 && (t[i].toUpper() == 'C'
+                        || t[i].toUpper() == '*') ) goto Comment;
+        //if ( i == 0 && (t[i].toAscii() == 'c' || t[i].toAscii() == 'C'
+                        //|| t[i].toAscii() == '*') ) goto Comment;
         if ( t[i].isLetter() || t[i] == QChar('_') ) goto Identifier;
         if ( t[i].isDigit() ) goto Number;
         if ( t[i] == QChar('#') ) goto Preprocessor;

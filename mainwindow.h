@@ -4,6 +4,7 @@
 #include "types.h"
 #include <QMainWindow>
 #include <QEvent>
+#include <QStatusBar>
 #include "datawindow.h"
 #include "sourceframe.h"
 #include "registerwindow.h"

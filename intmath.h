@@ -2,6 +2,9 @@
 #define INTMATH_H
 
 #include <QtGui>
+#include <QComboBox>
+#include <QPushButton>
+#include <QTableWidget>
 #include "binarynumber.h"
 #include "integeredit.h"
 

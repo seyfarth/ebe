@@ -4,6 +4,7 @@
 #include "gdb.h"
 #include "types.h"
 #include <cstdio>
+#include <QMenu>
 
 extern GDB *gdb;
 extern BackTraceWindow *backTraceWindow;

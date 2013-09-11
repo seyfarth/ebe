@@ -8,6 +8,8 @@
 #include <QStringList>
 #include <QFileDialog>
 #include <QStyledItemDelegate>
+#include <QLabel>
+#include <QColorDialog>
 #include <QDebug>
 
 extern Languages languages;

@@ -1,5 +1,7 @@
 #include "intmath.h"
 #include "settings.h"
+#include <QLabel>
+#include <QMessageBox>
 
 IntMath::IntMath(QWidget *parent) : QFrame(parent)
 {

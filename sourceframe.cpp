@@ -1,3 +1,5 @@
+#include <QStatusBar>
+#include <QMessageBox>
 #include "sourceframe.h"
 #include "projectwindow.h"
 #include "commandline.h"

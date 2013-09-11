@@ -2,6 +2,7 @@
 #define SOURCEFRAME_H
 
 #include <QtGui>
+#include <QLabel>
 #include "sourcewindow.h"
 #include "types.h"
 

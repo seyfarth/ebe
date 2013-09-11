@@ -2,6 +2,9 @@
 #define FLOATWINDOW_H
 
 #include <QtGui>
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QMenu>
 
 class FpRegister
 {

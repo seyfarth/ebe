@@ -1,6 +1,9 @@
 #include "intconvert.h"
 #include "settings.h"
 
+#include <QLabel>
+#include <QMessageBox>
+
 IntConvert::IntConvert(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );
@@ -538,8 +541,10 @@ void IntConvert::hexToBinary1()
 }
 
 static char *bits[] = {
-    "0000", "0001" , "0010", "0011", "0100", "0101", "0110", "0111",
-    "1000", "1001" , "1010", "1011", "1100", "1101", "1110", "1111"
+    (char *)"0000", (char *)"0001", (char *)"0010", (char *)"0011",
+    (char *)"0100", (char *)"0101", (char *)"0110", (char *)"0111",
+    (char *)"1000", (char *)"1001", (char *)"1010", (char *)"1011",
+    (char *)"1100", (char *)"1101", (char *)"1110", (char *)"1111"
 };
 
 void IntConvert::hexToBinary2()

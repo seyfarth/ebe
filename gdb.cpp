@@ -174,7 +174,11 @@ void GDB::send(QString cmd, QString /*options*/)
     }
 #endif
     cmd += '\n';
+#if QT_VERSION >= 0x050000
+    gdbProcess->write(cmd.toLocal8Bit().constData());
+#else
     gdbProcess->write(cmd.toAscii());
+#endif
     cmd.chop(1);
     QString result;
     result = readLine();
@@ -203,7 +207,11 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
     QStringList list;
     //qDebug() << cmd;
     cmd += '\n';
+#if QT_VERSION >= 0x050000
+    gdbProcess->write(cmd.toLocal8Bit().constData());
+#else
     gdbProcess->write(cmd.toAscii());
+#endif
     QString result;
     result = readLine();
     emit log(result);

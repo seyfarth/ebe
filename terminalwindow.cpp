@@ -146,7 +146,11 @@ void TerminalWindow::lineEditReady()
     QString s;
     QByteArray a;
     s = lineEdit->text();
+#if QT_VERSION >= 0x050000
+    a = s.toLatin1();
+#else
     a = s.toAscii();
+#endif
     a.append('\n');
 #ifdef Q_WS_WIN
     DWORD n=a.length();

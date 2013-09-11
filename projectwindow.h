@@ -6,6 +6,7 @@
 */
 
 #include <QtGui>
+#include <QListWidget>
 
 class ProjectWindow : public QFrame
 {

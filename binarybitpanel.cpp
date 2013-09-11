@@ -1,6 +1,7 @@
 #include "binarybitpanel.h"
 #include "validators.h"
 #include "settings.h"
+#include <QLabel>
 
 BinaryBitPanel::BinaryBitPanel(QWidget *parent) : QFrame(parent)
 {

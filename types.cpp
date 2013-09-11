@@ -5,9 +5,9 @@ FileLine::FileLine(QString f, int l)
 {
 }
 
-bool FileLine::operator==(FileLine &f) const
+bool operator==(const FileLine &a, const FileLine &b)
 {
-    return file == f.file && line == f.line;
+    return a.file == b.file && a.line == b.line;
 }
 
 uint qHash(const FileLine &f)
@@ -26,9 +26,9 @@ FileLabel::FileLabel(QString f, QString l)
 {
 }
 
-bool FileLabel::operator==(FileLabel &f) const
+bool operator==(const FileLabel &a, const FileLabel &b)
 {
-    return file == f.file && label == f.label;
+    return a.file == b.file && a.label == b.label;
 }
 
 uint qHash(const FileLabel &f)

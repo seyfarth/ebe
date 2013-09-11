@@ -2,6 +2,9 @@
 #define SOURCEWINDOW_H
 
 #include <QtGui>
+#include <QPlainTextEdit>
+#include <QCompleter>
+#include <QAction>
 #include "variable.h"
 #include "highlighter.h"
 #include "file.h"

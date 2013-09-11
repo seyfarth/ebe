@@ -6,6 +6,10 @@
 */
 
 #include <QtGui>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QPushButton>
+#include <QTableWidget>
 #include "types.h"
 #include "validators.h"
 

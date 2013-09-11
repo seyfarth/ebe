@@ -2,6 +2,9 @@
 #define UNARYBITPANEL_H
 
 #include <QtGui>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QComboBox>
 #include "binarynumber.h"
 #include "integeredit.h"
 

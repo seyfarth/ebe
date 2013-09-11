@@ -2,6 +2,13 @@
 #define VARIABLE_H
 
 #include <QtGui>
+#include <QDialog>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QSpinBox>
 
 class DefineVariableDialog: public QDialog
 {

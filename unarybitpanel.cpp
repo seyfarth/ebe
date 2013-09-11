@@ -1,6 +1,8 @@
 #include "unarybitpanel.h"
 #include "settings.h"
 
+#include <QLabel>
+
 UnaryBitPanel::UnaryBitPanel(QWidget *parent) : QFrame(parent)
 {
     setFrameStyle ( QFrame::Panel | QFrame::Raised );

@@ -6,6 +6,10 @@
 #include <windows.h>
 #endif
 
+#include <QPlainTextEdit>
+#include <QLineEdit>
+#include <QFrame>
+#include <QPushButton>
 class PtyReader;
 
 class TerminalEdit : public QPlainTextEdit

@@ -3,10 +3,17 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+#TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
-QT += webkit
+
+lessThan(QT_MAJOR_VERSION,5) {
+    QT += webkit
+}
+equals(QT_MAJOR_VERSION,5) {
+    QT += widgets webkitwidgets
+}
+
 CONFIG -= app_bundle
 #CONFIG += console release embed_manifest_exe
 CONFIG += console release static
