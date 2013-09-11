@@ -7,7 +7,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QDebug>
-#define _XOPEN_SOURCE
+//#define _XOPEN_SOURCE
 #include <stdlib.h>
 #include <fcntl.h>
 #ifndef Q_WS_WIN
