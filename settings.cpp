@@ -98,7 +98,7 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "linux";
     ebe["windows"] = false;
-    ebe["build/asm"] = "yasm -P $ebe_inc -f elf64 -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P $ebe_inc -f elf64 -o $base.o -g dwarf2 -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe.os = "linux";
     ebe["xmm/reverse"] = false;

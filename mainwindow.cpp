@@ -181,7 +181,7 @@ void MainWindow::checkTools()
         if ( ! toolExists("yasm") ) missing += "yasm";
         if ( ! toolExists("astyle") ) missing += "astyle";
         if ( missing.length() > 0 || missingCritical.length() > 0 ) {
-            qDebug() << "oops";
+            //qDebug() << "oops";
             QString message;
 
             message = "<b>"+tr("Some tools used by ebe are missing:")+"</b>";
@@ -672,6 +672,7 @@ void MainWindow::changeDirectory()
 {
     QString dir;
 
+    //qDebug() << tr("Select working directory") << QDir::currentPath();
     dir = QFileDialog::getExistingDirectory(this,tr("Select working directory"),
                 QDir::currentPath(), QFileDialog::ShowDirsOnly );
     if ( dir != "" ) {

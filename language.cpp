@@ -35,6 +35,9 @@ void Languages::initLanguages()
     languageCodes << "de";
     codeToName["de"] = tr("German");
 
+    languageCodes << "in";
+    codeToName["in"] = tr("Indonesian");
+
     languageCodes << "hi";
     codeToName["hi"] = tr("Hindi");
 
