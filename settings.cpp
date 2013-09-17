@@ -14,6 +14,8 @@
 
 extern Languages languages;
 
+QSet<QString> expertKeys;
+
 Settings::Settings()
 {
     setDefaults();
@@ -26,8 +28,11 @@ bool Settings::read()
     settings = new QSettings ( fileName, QSettings::IniFormat );
     QStringList keys = settings->allKeys();
     int n = keys.count();
+    bool expertMode = settings->value("ebe/expert").toBool();
     for ( int i = 0; i < n; i++ ) {
-        ebe[keys[i]] = settings->value(keys[i]);
+        if ( !expertMode || expertKeys.contains(keys[i]) ) {
+            ebe[keys[i]] = settings->value(keys[i]);
+        }
         //qDebug() << keys[i] << ebe[keys[i]].toString();
     }
     delete settings;
@@ -133,6 +138,12 @@ void Settings::setDefaults()
                       "-o \"$base.o\" \"$source\"";
     ebe["build/fortranld"] = "gfortran -g -o \"$base\" ";
 
+    ebe["ebe/expert"] = false;
+
+    expertKeys << "build/cc" << "build/libs" << "build/ccld"
+               << "build/cpp" << "build/cppld" << "build/fortran"
+               << "build/fortranld" << "build/asm" << "build/asmld";
+               
 #ifdef Q_WS_WIN
     ebe["build/obj"] = "o";
 #else
