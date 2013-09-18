@@ -239,11 +239,6 @@ void SourceFrame::run()
     callLines.clear();
     inAssembly = false;
 
-    QFile::remove("ebe_unbuffer.cpp");
-    QFile::copy(":/src/ebe_unbuffer.cpp","ebe_unbuffer.cpp");
-    QFile::setPermissions("ebe_unbuffer.cpp",
-           QFile::ReadOwner | QFile::WriteOwner);
-
 #ifdef Q_WS_WIN
     if ( needToKill ) {
         //printf("Killing handle %d\n",hProcess);
@@ -254,27 +249,36 @@ void SourceFrame::run()
     //
     //  Determine all source files
     //
+    index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    name = source->file.source;;
+    if ( name == "" ) {
+        int ret = QMessageBox::warning(this, tr("Warning"),
+                tr("This file has not been named.\n"
+                    "Do you want save the file?"),
+                QMessageBox::Save 
+                | QMessageBox::Cancel, QMessageBox::Save);
+        if ( ret == QMessageBox::Save ) save();
+        return;
+    }
+    int k = name.lastIndexOf("/");
+    if ( k == -1 ) k = name.lastIndexOf("\\");
+    QString defaultDir;
+    if ( k >= 0 ) defaultDir = name.left(k+1);
     File file;
-    file.source = "ebe_unbuffer.cpp";
-    file.object = "ebe_unbuffer.o";
-    file.base   = "ebe_unbuffer";
+    file.source = defaultDir + "ebe_unbuffer.cpp";
+    file.object = defaultDir + "ebe_unbuffer.o";
+    file.base   = defaultDir + "ebe_unbuffer";
     file.language = "cpp";
     file.ext = "cpp";
     files << file;
 
+    QFile::remove(file.source);
+    QFile::copy(":/src/ebe_unbuffer.cpp",file.source);
+    QFile::setPermissions(file.source,
+           QFile::ReadOwner | QFile::WriteOwner);
+
     if ( projectWindow->projectFileName == "" ) {
-        index = tab->currentIndex();
-        source = (SourceWindow *)tab->widget(index);
-        name = source->file.source;;
-        if ( name == "" ) {
-            int ret = QMessageBox::warning(this, tr("Warning"),
-                    tr("This file has not been named.\n"
-                        "Do you want save the file?"),
-                    QMessageBox::Save 
-                    | QMessageBox::Cancel, QMessageBox::Save);
-            if ( ret == QMessageBox::Save ) save();
-            return;
-        }
         files << source->file;
         //qDebug() << "bpts" << *(source->breakpoints);
         index = name.lastIndexOf('.');
