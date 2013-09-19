@@ -272,6 +272,7 @@ void SourceFrame::run()
     file.language = "cpp";
     file.ext = "cpp";
     files << file;
+    //qDebug() << "File" << file.source;
 
     QFile::remove(file.source);
     QFile::copy(":/src/ebe_unbuffer.cpp",file.source);
@@ -361,6 +362,7 @@ void SourceFrame::run()
             QFile::setPermissions(ebeInc,
                QFile::ReadOwner | QFile::WriteOwner);
 
+            //qDebug() << cmd;
             cmd.replace("$base",file.base);
             cmd.replace("$source",file.source);
             cmd.replace("$ebe_inc",ebeInc);
@@ -402,7 +404,7 @@ void SourceFrame::run()
     foreach ( file, files ) {
         //qDebug() << "file" << file.source;
         object = file.object;
-        if ( object == "ebe_unbuffer.o" ) continue;
+        if ( object == defaultDir + "ebe_unbuffer.o" ) continue;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
         nm.start ( "nm -a \"" + object + "\"" );

@@ -30,7 +30,9 @@ bool Settings::read()
     int n = keys.count();
     bool expertMode = settings->value("ebe/expert").toBool();
     for ( int i = 0; i < n; i++ ) {
-        if ( !expertMode || expertKeys.contains(keys[i]) ) {
+        //qDebug() << keys[i] << ebe[keys[i]].toString();
+        //qDebug() << "key" << expertMode << keys[i] << settings->value(keys[i]);
+        if ( expertMode || !expertKeys.contains(keys[i]) ) {
             ebe[keys[i]] = settings->value(keys[i]);
         }
         //qDebug() << keys[i] << ebe[keys[i]].toString();
