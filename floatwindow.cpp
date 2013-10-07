@@ -89,11 +89,7 @@ void FloatWindow::receiveFpRegs ( QStringList data )
         parts = data[i].split(QRegExp("\\s+"));
         //qDebug() << parts;
         for ( int j = 0; j < parts.length(); j++ ) {
-#ifdef Q_WS_WIN
-            x[j] = parts[j].mid(2).toLongLong(&ok,16);
-#else
-            x[j] = parts[j].mid(2).toLong(&ok,16);
-#endif
+            x[j] = parts[j].toULongLong(&ok,16);
         }
         //qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
         regValues[i].setValue(x);

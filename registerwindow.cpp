@@ -366,7 +366,8 @@ QString Register::value()
  */
         return contents;
     } else if ( format == "decimal" ) {
-        dec = contents.toLong(&ok,16);
+        dec = contents.toULongLong(&ok,16);
+        //qDebug() << "reg" << ok << contents << dec;
         return QString("%1").arg(dec);
     } else {
         return contents;

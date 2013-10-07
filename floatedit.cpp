@@ -25,7 +25,7 @@ int FloatEdit::value()
     AllTypes x;
     x.i8 = 0;
     if ( t.left(2) == "0x" || t.left(2) == "0X" ) {
-        x.i8 = t.mid(2).toLong(&ok,16);
+        x.i8 = t.toULongLong(&ok,16);
     } else {
         x.f4 = t.toFloat();
     }
