@@ -38,6 +38,8 @@ struct Range
 };
 
 QString binary(AllTypes &a, int n);
+QString hexFloat(AllTypes &a);
+QString hexDouble(AllTypes &a);
 QString binaryFloat(AllTypes &a);
 QString binaryDouble(AllTypes &a);
 QString fieldsFloat(AllTypes &a);

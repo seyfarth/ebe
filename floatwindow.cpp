@@ -1,5 +1,6 @@
 #include "floatwindow.h"
 #include "settings.h"
+#include "types.h"
 #include <cstdio>
 
 
@@ -107,7 +108,13 @@ void FloatWindow::contextMenuEvent ( QContextMenuEvent * /* event */ )
     single = menu->addMenu(tr("Format for 1 register"));
     all    = menu->addMenu(tr("Format for all registers"));
     single->addAction("float");
+    single->addAction("float hex");
+    single->addAction("float binary fp");
+    single->addAction("float fields");
     single->addAction("double");
+    single->addAction("double hex");
+    single->addAction("double binary fp");
+    single->addAction("double fields");
     single->addAction("4 floats");
     single->addAction("2 doubles");
     single->addAction("16 bytes");
@@ -122,7 +129,13 @@ void FloatWindow::contextMenuEvent ( QContextMenuEvent * /* event */ )
     single->addAction("4 longs");
     single->addAction("2 int128s");
     all->addAction("float");
+    all->addAction("float hex");
+    all->addAction("float binary fp");
+    all->addAction("float fields");
     all->addAction("double");
+    all->addAction("double hex");
+    all->addAction("double binary fp");
+    all->addAction("double fields");
     all->addAction("4 floats");
     all->addAction("2 doubles");
     all->addAction("16 bytes");
@@ -185,10 +198,25 @@ QString FpRegister::value()
     QString s;
     QString t;
     s.sprintf("%12g",f8[0]);
+    AllTypes a;
+
+    a.u8 = u8[0];
     if ( format == "float") {
         s.sprintf("%g",f4[0]);
+    } else if ( format == "float hex") {
+        s = hexFloat(a);
+    } else if ( format == "float binary fp") {
+        s = binaryFloat(a);
+    } else if ( format == "float fields") {
+        s = fieldsFloat(a);
     } else if ( format == "double") {
         s.sprintf("%g",f8[0]);
+    } else if ( format == "double hex") {
+        s = hexDouble(a);
+    } else if ( format == "double binary fp") {
+        s = binaryDouble(a);
+    } else if ( format == "double fields") {
+        s = fieldsDouble(a);
     } else if ( format == "4 floats") {
         s.sprintf("%g %g %g %g",f4[0],f4[1],f4[2],f4[3]);
     } else if ( format == "2 doubles") {

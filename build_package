@@ -56,7 +56,7 @@ chmod a+r \$dir/$exe.d/*
 cd \$dir/$exe.d
 for lib in lib*.[0-9]*
 do
-    ln -s \$lib \$(echo \$lib | sed -e 's/\.[[0-9]]*\$//')
+    ln -sf \$lib \$(echo \$lib | sed -e 's/\.[[0-9]]*\$//')
 done
 rm $exe.init
 EOF3
