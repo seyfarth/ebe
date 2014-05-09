@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="zh_CN">
 <context>
@@ -37,7 +37,7 @@
     <message>
         <location filename="variable.cpp" line="170"/>
         <source>To point to an object set first and last to 0.</source>
-        <translation>要指向一个对象设置为0，第一个和最后。</translation>
+        <translation>要指向一个对象，设置第一个和最后一个索引都为0。</translation>
     </message>
     <message>
         <location filename="variable.cpp" line="202"/>
@@ -48,8 +48,7 @@
         <location filename="variable.cpp" line="203"/>
         <source>The first index can&apos;t be
  greater than the last.</source>
-        <translation>第一个索引不能是 
-大于最后.</translation>
+        <translation>第一个索引不能大于最后一个索引.</translation>
     </message>
 </context>
 <context>
@@ -58,52 +57,52 @@
         <location filename="binarybitpanel.cpp" line="18"/>
         <location filename="binarybitpanel.cpp" line="70"/>
         <source>|| Boolean or</source>
-        <translation>|| 布尔或</translation>
+        <translation>|| 或运算</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="18"/>
         <source>| Bitwise or</source>
-        <translation>| 位或</translation>
+        <translation>| 按位或运算</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp;&amp; Boolean and</source>
-        <translation>&amp;&amp; 布尔和</translation>
+        <translation>&amp;&amp; 与运算</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="19"/>
         <source>&amp; Bitwise and</source>
-        <translation>＆ 位和</translation>
+        <translation>＆ 按位与运算</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="20"/>
         <source>^  Exclusive or</source>
-        <translation>^ 异或</translation>
+        <translation>^ 异或运算</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&lt;&lt; Shift left</source>
-        <translation>&lt;&lt; 左移</translation>
+        <translation>&lt;&lt; 左移位</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Shift right</source>
-        <translation>&gt;&gt; 右移</translation>
+        <translation>&gt;&gt; 右移位</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="21"/>
         <source>&gt;&gt; Signed shift right</source>
-        <translation>&gt;&gt; 符号右移</translation>
+        <translation>&gt;&gt; 有符号右移位</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
         <source>@&lt; Rotate left</source>
-        <translation>@&lt; 向左旋转</translation>
+        <translation>@&lt; 循环左移位</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="22"/>
         <source>@&gt; Rotate right</source>
-        <translation>@&gt; 向右旋转</translation>
+        <translation>@&gt; 循环右移位</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="38"/>
@@ -126,7 +125,7 @@
         <location filename="binarybitpanel.cpp" line="437"/>
         <location filename="binarybitpanel.cpp" line="477"/>
         <source>Result</source>
-        <translation>导致</translation>
+        <translation>结果</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="39"/>
@@ -145,13 +144,13 @@
         <location filename="binarybitpanel.cpp" line="418"/>
         <location filename="binarybitpanel.cpp" line="458"/>
         <source>Values converted to binary</source>
-        <translation>值转换为二进制</translation>
+        <translation>把值转换为二进制</translation>
     </message>
     <message>
         <location filename="binarybitpanel.cpp" line="190"/>
         <location filename="binarybitpanel.cpp" line="242"/>
         <source>Result as a binary bool</source>
-        <translation>作为二进制布尔结果</translation>
+        <translation>输出结果是一个布尔</translation>
     </message>
 </context>
 <context>
@@ -164,7 +163,7 @@
     <message>
         <location filename="bitbucket.cpp" line="26"/>
         <source>Binary bit operators</source>
-        <translation>二进制位运算符</translation>
+        <translation>二进制按位运算符</translation>
     </message>
     <message>
         <location filename="bitbucket.cpp" line="27"/>
@@ -179,7 +178,7 @@
     <message>
         <location filename="bitbucket.cpp" line="29"/>
         <source>Float conversions</source>
-        <translation>浮点转换</translation>
+        <translation>浮点数转换</translation>
     </message>
 </context>
 <context>
@@ -196,9 +195,9 @@ for your program when it runs.  The command
 line parameters are the parameters to main
 in C and C++(argc and argv).  The first is
 always the name of the program.</source>
-        <translation>输入额外的命令行参数当它运行你的程序. 
-该命令行参数的参数是主在C和C+ +
-(argc和argv）。第一个是总的程序的名称。</translation>
+        <translation>当运行程序时，输入额外的命令行参数。
+        这些命令行参数将作为C和C++ main函数的参数(argc和argv）。
+        第一个参数一定是该程序的名称。</translation>
     </message>
 </context>
 <context>
@@ -206,7 +205,7 @@ always the name of the program.</source>
     <message>
         <location filename="consolewindow.cpp" line="28"/>
         <source>gdb command</source>
-        <translation>gdb 的命令</translation>
+        <translation>gdb命令</translation>
     </message>
 </context>
 <context>
@@ -229,12 +228,12 @@ always the name of the program.</source>
     <message>
         <location filename="datawindow.cpp" line="423"/>
         <source>Character menu</source>
-        <translation>字符菜单</translation>
+        <translation>字符变量菜单</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="424"/>
         <source>Character</source>
-        <translation>字符</translation>
+        <translation>字符变量</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="425"/>
@@ -270,12 +269,12 @@ always the name of the program.</source>
     <message>
         <location filename="datawindow.cpp" line="433"/>
         <source>Signed decimal</source>
-        <translation>符号十进制</translation>
+        <translation>有符号十进制</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="440"/>
         <source>Float menu</source>
-        <translation>浮点菜单</translation>
+        <translation>浮点变量菜单</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="441"/>
@@ -285,12 +284,12 @@ always the name of the program.</source>
     <message>
         <location filename="datawindow.cpp" line="444"/>
         <source>Binary fp</source>
-        <translation>二进制浮点</translation>
+        <translation>二进制浮点数</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="445"/>
         <source>Fields</source>
-        <translation>字段</translation>
+        <translation>域</translation>
     </message>
     <message>
         <location filename="datawindow.cpp" line="449"/>
@@ -339,8 +338,8 @@ always the name of the program.</source>
         <location filename="datawindow.cpp" line="44"/>
         <source>Left click on a &gt; symbol to expand an item.
 Right click to change formats.</source>
-        <translation>左键点击一个&gt;符号以展开一个项目。 
-右键单击要更改格式。</translation>
+        <translation>左键点击&gt;符号以展开一个项目。 
+点击右键来更改格式。</translation>
     </message>
 </context>
 <context>
@@ -424,7 +423,7 @@ Right click to change formats.</source>
     <message>
         <location filename="toybox.cpp" line="669"/>
         <source>Result</source>
-        <translation>导致</translation>
+        <translation>结果</translation>
     </message>
 </context>
 <context>
@@ -442,17 +441,17 @@ Right click to change formats.</source>
     <message>
         <location filename="sourcewindow.cpp" line="1278"/>
         <source>Ctrl+F</source>
-        <translation>器 F</translation>
+        <translation>Ctrl+F</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1280"/>
         <source>Ctrl+R</source>
-        <translation>控制 R</translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="1282"/>
         <source>Ctrl+C</source>
-        <translation>控制 C</translation>
+        <translation>Ctrl+C</translation>
     </message>
 </context>
 <context>
@@ -460,7 +459,7 @@ Right click to change formats.</source>
     <message>
         <location filename="floatconvert.cpp" line="46"/>
         <source>to binary</source>
-        <translation>为二进制</translation>
+        <translation>转为二进制</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="72"/>
@@ -484,12 +483,12 @@ Right click to change formats.</source>
         <location filename="floatconvert.cpp" line="311"/>
         <location filename="floatconvert.cpp" line="348"/>
         <source>to float</source>
-        <translation>为浮点</translation>
+        <translation>转为浮点数</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="82"/>
         <source>Unknown operator:</source>
-        <translation>未知的运算符：</translation>
+        <translation>未知运算符：</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="89"/>
@@ -499,12 +498,12 @@ Right click to change formats.</source>
     <message>
         <location filename="floatconvert.cpp" line="90"/>
         <source>The input value is not complete.</source>
-        <translation>输入的值是不完整的。</translation>
+        <translation>输入的值不完整。</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="127"/>
         <source> All bits are 0 so the number is 0</source>
-        <translation>所有位均为0，所以数字是0</translation>
+        <translation>所有位均为0，所以数值是0</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="129"/>
@@ -515,43 +514,43 @@ Right click to change formats.</source>
     <message>
         <location filename="floatconvert.cpp" line="138"/>
         <source> Bits 0-30 are 0 so the number is -0</source>
-        <translation>0-30位为0，这样的数量是-0</translation>
+        <translation>0-30位为0，这样的数是-0</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="149"/>
         <source> Number converted to binary</source>
-        <translation>号码转换为二进制</translation>
+        <translation>数值转换为二进制</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="169"/>
         <source> Sign bit (bit 31) is 0. The number is positive</source>
-        <translation>符号位（第31位）是0。这个数字是积极的</translation>
+        <translation>符号位（第31位）是0。这个数是正数</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="171"/>
         <source> Sign bit (bit 31) is 1. The number is negative</source>
-        <translation>符号位（第31位）是1。该数字为负</translation>
+        <translation>符号位（第31位）是1。该数为负数</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="174"/>
         <source>Sign bit</source>
-        <translation>注册位</translation>
+        <translation>符号位</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="194"/>
         <source> The exponent field is bits 23 - 30</source>
         <oldsource> The fraction field is bits 23 - 30</oldsource>
-        <translation>指数域是位 23 - 30</translation>
+        <translation>指数域是23 - 30位</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="196"/>
         <source>Exponent field</source>
-        <translation>指数领域</translation>
+        <translation>指数域</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="222"/>
         <source> The exponent value is the field value - 127</source>
-        <translation>指数值的字段值 - 127</translation>
+        <translation>指数值的大小等于指数域的值减去127</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="224"/>
@@ -562,18 +561,18 @@ Right click to change formats.</source>
         <location filename="floatconvert.cpp" line="240"/>
         <source> The fraction field is the rightmost 23 bits</source>
         <oldsource> The exponent field is the rightmost 23 bits</oldsource>
-        <translation> 分数场是最右边的23位</translation>
+        <translation> 代表分数的是最右边的23位</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="242"/>
         <source>Fraction field</source>
-        <translation>小数字段</translation>
+        <translation>分数域</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="258"/>
         <source> The fraction value has an implicit 1 bit</source>
         <oldsource> The exponent value has an implicit 1 bit</oldsource>
-        <translation type="unfinished">指数值有一个隐含的1位</translation>
+        <translation type="unfinished">分数值包括一个隐含位</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="260"/>
@@ -584,7 +583,7 @@ Right click to change formats.</source>
     <message>
         <location filename="floatconvert.cpp" line="278"/>
         <source> Value as a binary number times 2 to a power</source>
-        <translation>一个二进制数乘以2的幂的值作为</translation>
+        <translation>值表达为一个二进制的数乘以2的幂</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="280"/>
@@ -594,22 +593,22 @@ Right click to change formats.</source>
     <message>
         <location filename="floatconvert.cpp" line="306"/>
         <source> Bit %1 value is 2**%2</source>
-        <translation>位%1的值是2**%2</translation>
+        <translation>位%1的值是2**%2 </translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="327"/>
         <source> Add the bit values</source>
-        <translation>添加位值</translation>
+        <translation>添加上位值</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="329"/>
         <source> Add the bit values and multiply by -1</source>
-        <translation>添加的位值，并乘以-1</translation>
+        <translation>添加位值，并乘以-1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="345"/>
         <source> Denormalized float has no implicit 1</source>
-        <translation>规格化持股量有没有隐式1</translation>
+        <translation>去规格化尾数没有隐含1</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="360"/>
@@ -624,7 +623,7 @@ Right click to change formats.</source>
     <message>
         <location filename="floatconvert.cpp" line="366"/>
         <source> Exponent == 255 &amp;&amp; fraction == 0 ==&gt; infinity</source>
-        <translation>指数等于255，分数等于0意味着无穷大</translation>
+        <translation>指数等于255但分数等于0，意味着无穷大</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="368"/>
@@ -633,18 +632,18 @@ Right click to change formats.</source>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="376"/>
-        <source>SNaN - signaling not-a-number</source>
-        <translation>SNaN -信号不是一个数 </translation>
+        <source>SNaN - signalling not-a-number</source>
+        <translation>SNaN - 不是一个数值</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="378"/>
         <source>QNaN - quiet not-a-number</source>
-        <translation>QNaN -不安静的数 </translation>
+        <translation>QNaN - 不是一个数值</translation>
     </message>
     <message>
         <location filename="floatconvert.cpp" line="382"/>
         <source> Exponent == 255 &amp;&amp; fraction != 0 ==&gt; NaN</source>
-        <translation>指数等于255，分数不等于0意味着NAN</translation>
+        <translation>指数等于255但分数不等于0，意味着NAN</translation>
     </message>
 </context>
 <context>
@@ -652,7 +651,7 @@ Right click to change formats.</source>
     <message>
         <location filename="floatedit.cpp" line="11"/>
         <source>Enter an float value or 0xDEADBEEF (8 hex nibbles)</source>
-        <translation>输入浮点值或的是0xDEADBEEF（8进制啃）</translation>
+        <translation>输入浮点值或者是0xDEADBEEF（8个十六进制的半字节）</translation>
     </message>
 </context>
 <context>
@@ -660,22 +659,22 @@ Right click to change formats.</source>
     <message>
         <location filename="floatwindow.cpp" line="22"/>
         <source>Right click to change register formats.</source>
-        <translation>右键单击要更改寄存器的格式。</translation>
+        <translation>单击右键更改寄存器的格式。</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="110"/>
         <source>Float format</source>
-        <translation>浮点格式</translation>
+        <translation>浮点数格式</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="111"/>
         <source>Format for 1 register</source>
-        <translation>1寄存器的格式</translation>
+        <translation>格式化1个寄存器</translation>
     </message>
     <message>
         <location filename="floatwindow.cpp" line="112"/>
         <source>Format for all registers</source>
-        <translation>所有寄存器的格式</translation>
+        <translation>格式化所有寄存器</translation>
     </message>
 </context>
 <context>
@@ -708,7 +707,7 @@ Right click to change formats.</source>
         <location filename="intconvert.cpp" line="54"/>
         <location filename="intconvert.cpp" line="71"/>
         <source>Decimal to Binary</source>
-        <translation>十进制到二进制</translation>
+        <translation>十进制转换为二进制</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="17"/>
@@ -720,19 +719,19 @@ Right click to change formats.</source>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="113"/>
         <source>Binary to Decimal</source>
-        <translation>二进制到十进制</translation>
+        <translation>二进制转换为十进制</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="18"/>
         <location filename="intconvert.cpp" line="133"/>
         <source>Hex to Decimal</source>
-        <translation>十六进制到十进制</translation>
+        <translation>十六进制转换为十进制</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
         <location filename="intconvert.cpp" line="155"/>
         <source>Binary to Hex</source>
-        <translation>二进制十六进制</translation>
+        <translation>二进制转换为十六进制</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="19"/>
@@ -752,7 +751,7 @@ Right click to change formats.</source>
         <location filename="intconvert.cpp" line="243"/>
         <location filename="intconvert.cpp" line="577"/>
         <source>to binary</source>
-        <translation>为二进制</translation>
+        <translation>转为二进制</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="78"/>
@@ -782,7 +781,7 @@ Right click to change formats.</source>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>Result</source>
-        <translation>导致</translation>
+        <translation>结果</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="80"/>
@@ -815,17 +814,17 @@ Right click to change formats.</source>
         <location filename="intconvert.cpp" line="163"/>
         <location filename="intconvert.cpp" line="182"/>
         <source>nibble</source>
-        <translation>蚕食</translation>
+        <translation>半字节</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>2**nibble</source>
-        <translation>2**蚕食</translation>
+        <translation>2**半字节</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="141"/>
         <source>nibble value</source>
-        <translation>蚕食价值</translation>
+        <translation>半字节的值</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="194"/>
@@ -850,44 +849,44 @@ Right click to change formats.</source>
         <location filename="intconvert.cpp" line="470"/>
         <location filename="intconvert.cpp" line="528"/>
         <source>The input value is not complete.</source>
-        <translation>输入的值是不完整的。</translation>
+        <translation>输入的值不完整。</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="211"/>
         <location filename="intconvert.cpp" line="269"/>
         <source>Value &amp; 0xffff copied into column 3</source>
-        <translation>价值 * 0XFFFF 复制到第3列</translation>
+        <translation>数值 &amp; 0XFFFF 后复制到第3列</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="237"/>
-        <source>divide by 2</source>
+        <source>divided by 2 </source>
         <translation>除以2</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="253"/>
         <source>moved n/2 to n in new row</source>
-        <translation>移动 n/2 到 n 新行</translation>
+        <translation>在下一行里，用n/2的值替代n</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="295"/>
-        <source>divide by 16</source>
+        <source>divided by 16</source>
         <translation>除以16</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="301"/>
         <location filename="intconvert.cpp" line="514"/>
         <source>to hex</source>
-        <translation>十六进制</translation>
+        <translation>转换为十六进制</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="311"/>
         <source>moved n/16 to n in new row</source>
-        <translation>移动 n/16 到 n 新行</translation>
+        <translation>在新行里用 n/16 替代 n</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="365"/>
         <source>Result is value for rightmost %1 bits</source>
-        <translation>结果是最右边的 %1 位值</translation>
+        <translation>结果是最右边的%1位值</translation>
     </message>
     <message>
         <location filename="intconvert.cpp" line="372"/>
@@ -898,7 +897,7 @@ Right click to change formats.</source>
     <message>
         <location filename="intconvert.cpp" line="441"/>
         <source>Result is value for rightmost %1 nibbles</source>
-        <translation>结果是最右边的%1，半字节的值</translation>
+        <translation>结果是最右边的%1个半字节的值</translation>
     </message>
 </context>
 <context>
@@ -908,7 +907,7 @@ Right click to change formats.</source>
         <location filename="intmath.cpp" line="38"/>
         <location filename="intmath.cpp" line="52"/>
         <source>Addition</source>
-        <translation>增加</translation>
+        <translation>加法</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="16"/>
@@ -919,7 +918,7 @@ Right click to change formats.</source>
     <message>
         <location filename="intmath.cpp" line="21"/>
         <source>Operation </source>
-        <translation>手术 </translation>
+        <translation>运算 </translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="65"/>
@@ -937,7 +936,7 @@ Right click to change formats.</source>
         <location filename="intmath.cpp" line="65"/>
         <location filename="intmath.cpp" line="86"/>
         <source>Bits</source>
-        <translation>位</translation>
+        <translation>二进制位</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="66"/>
@@ -962,13 +961,13 @@ Right click to change formats.</source>
         <location filename="intmath.cpp" line="105"/>
         <location filename="intmath.cpp" line="166"/>
         <source>The first input value is not complete.</source>
-        <translation>第一输入值是不完整的。</translation>
+        <translation>第一输入值不完整。</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="111"/>
         <location filename="intmath.cpp" line="172"/>
         <source>The second input value is not complete.</source>
-        <translation>第2输入值是不完整的。</translation>
+        <translation>第2输入值不完整。</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="120"/>
@@ -979,13 +978,13 @@ Right click to change formats.</source>
         <location filename="intmath.cpp" line="121"/>
         <location filename="intmath.cpp" line="182"/>
         <source> a &amp; 0xffff copied into column 3</source>
-        <translation>a＆0XFFFF复制的入列3</translation>
+        <translation>a ＆ 0XFFFF 后复制入列3</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="122"/>
         <location filename="intmath.cpp" line="183"/>
         <source> b &amp; 0xffff copied into column 3</source>
-        <translation>b＆0XFFFF复制的入列3</translation>
+        <translation>b＆0XFFFF 后复制入列3</translation>
     </message>
     <message>
         <location filename="intmath.cpp" line="123"/>
@@ -995,7 +994,7 @@ Right click to change formats.</source>
     <message>
         <location filename="intmath.cpp" line="207"/>
         <source> Product</source>
-        <translation> 产品</translation>
+        <translation> 积</translation>
     </message>
 </context>
 <context>
@@ -1004,8 +1003,7 @@ Right click to change formats.</source>
         <location filename="integeredit.cpp" line="9"/>
         <source>Enter an integer or bool
 0x... for hex, 0b... for binary</source>
-        <translation>输入一个整数或bool
-为0x...十六进制，0B...二进制</translation>
+        <translation>输入一个整数或布尔 0x...代表十六进制，0B...代表二进制</translation>
     </message>
 </context>
 <context>
@@ -1066,12 +1064,12 @@ Right click to change formats.</source>
     <message>
         <location filename="librarywindow.cpp" line="18"/>
         <source>Library</source>
-        <translation>库</translation>
+        <translation>程序库</translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="105"/>
         <source>changes to a new directory</source>
-        <translation>更改到一个新的目录</translation>
+        <translation>更换到一个新的目录</translation>
     </message>
     <message>
         <location filename="librarywindow.cpp" line="108"/>
@@ -1081,7 +1079,7 @@ Right click to change formats.</source>
     <message>
         <location filename="librarywindow.cpp" line="110"/>
         <source>inserts code into the editor</source>
-        <translation>到编辑器中插入代码</translation>
+        <translation>把代码插入到编辑器中</translation>
     </message>
 </context>
 <context>
@@ -1130,7 +1128,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="183"/>
         <source>Some tools used by ebe are missing:</source>
-        <translation>ebe 使用一些工具丢失：</translation>
+        <translation>缺少一些ebe必需用的工具：</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="187"/>
@@ -1145,22 +1143,22 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
         <source>Critical tools are needed by almost everyone.</source>
-        <translation>几乎每个人都需要的关键工具。</translation>
+        <translation>都需要的关键工具。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="195"/>
         <source>Non-critical tools are not needed by everyone.</source>
-        <translation>不是每个人都需要非关键工具。</translation>
+        <translation>非关键工具不一定都需要。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="198"/>
         <source>Click &lt;b&gt;Ignore&lt;/b&gt; to ignore this test in the future.</source>
-        <translation>点击&lt;b&gt;忽略&lt;/b&gt;在未来忽略这个测试。</translation>
+        <translation>点击&lt;b&gt;忽略&lt;/b&gt;以在今后省略这个测试。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="201"/>
         <source>Click &lt;b&gt;OK&lt;/b&gt; to run ebe and test again next time</source>
-        <translation>点击&lt;b&gt;确定&lt;/b&gt;来运行 ebe，并再次测试下一次</translation>
+        <translation>点击&lt;b&gt;确定&lt;/b&gt;以在运行ebe前保留测试</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="203"/>
@@ -1193,7 +1191,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="386"/>
         <source>Template toolbar</source>
-        <translation>代码模板工具栏</translation>
+        <translation>模板工具栏</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="390"/>
@@ -1204,7 +1202,7 @@ Right click to change formats.</source>
         <location filename="mainwindow.cpp" line="391"/>
         <location filename="mainwindow.cpp" line="416"/>
         <source>New</source>
-        <translation>新</translation>
+        <translation>新文件</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="393"/>
@@ -1332,13 +1330,13 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="451"/>
         <source>indent</source>
-        <translation>缩进</translation>
+        <translation>缩排</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="453"/>
         <location filename="mainwindow.cpp" line="500"/>
         <source>Unindent</source>
-        <translation>取消缩进</translation>
+        <translation>取消缩排</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="456"/>
@@ -1355,13 +1353,13 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="460"/>
         <source>Select none</source>
-        <translation>选择“无”</translation>
+        <translation>全不选</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="463"/>
         <location filename="mainwindow.cpp" line="507"/>
         <source>Prettify</source>
-        <translation>美化</translation>
+        <translation>程序规范化</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="465"/>
@@ -1386,7 +1384,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="472"/>
         <source>Go to line 1</source>
-        <translation>转到1号线</translation>
+        <translation>转到行1</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="474"/>
@@ -1396,7 +1394,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="476"/>
         <source>Go to line n</source>
-        <translation>转到n号线</translation>
+        <translation>转到行n</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="478"/>
@@ -1406,17 +1404,17 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="480"/>
         <source>Go to bottom</source>
-        <translation>转到屏幕顶部</translation>
+        <translation>转到屏幕底部</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="482"/>
-        <source>Move line to middle</source>
-        <translation>移动中间线</translation>
+        <source>Move line to middle </source>
+        <translation>把该行移到屏幕中间</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="498"/>
         <source>Indent</source>
-        <translation>缩进</translation>
+        <translation>缩排</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="510"/>
@@ -1428,7 +1426,7 @@ Right click to change formats.</source>
         <location filename="mainwindow.cpp" line="512"/>
         <location filename="mainwindow.cpp" line="552"/>
         <source>Increase font</source>
-        <translation>增加字体</translation>
+        <translation>增大字体</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="517"/>
@@ -1438,7 +1436,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="520"/>
         <source>Next (F6)</source>
-        <translation>下一步“（F6）</translation>
+        <translation>下一步 （F6）</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="523"/>
@@ -1458,7 +1456,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="534"/>
         <source>&amp;View</source>
-        <translation>视图</translation>
+        <translation>浏览</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="544"/>
@@ -1473,7 +1471,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="551"/>
         <source>F&amp;ont</source>
-        <translation>字形</translation>
+        <translation>字体</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="557"/>
@@ -1518,7 +1516,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="568"/>
         <source>cout: output</source>
-        <translation>cout: 产量</translation>
+        <translation>cout: 输出</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="575"/>
@@ -1533,17 +1531,17 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="579"/>
         <source>while: general loop with test at the top</source>
-        <translation>while: 一般测试循环的顶部</translation>
+        <translation>while: 一般循环，测试在顶部</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="581"/>
         <source>do-while: general loop with test at the bottom</source>
-        <translation>do-while: 一般循环测试底部</translation>
+        <translation>do-while: 一般循环，测试在底部</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="584"/>
         <source>double: floating point number</source>
-        <translation>double: 浮点数</translation>
+        <translation>double: 双精度浮点数</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="586"/>
@@ -1553,7 +1551,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="600"/>
         <source>library</source>
-        <translation>库</translation>
+        <translation>程序库</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="671"/>
@@ -1563,7 +1561,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="686"/>
         <source>Ready</source>
-        <translation>准备</translation>
+        <translation>准备好了</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="691"/>
@@ -1603,7 +1601,7 @@ Right click to change formats.</source>
     <message>
         <location filename="mainwindow.cpp" line="752"/>
         <source>Bit Bucket</source>
-        <translation>比特斗</translation>
+        <translation>比特位斗</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="760"/>
@@ -1616,7 +1614,7 @@ Right click to change formats.</source>
     <message>
         <location filename="projectwindow.cpp" line="12"/>
         <source>Right click to see project options</source>
-        <translation>右键点击查看项目选项</translation>
+        <translation>点击右键查看项目选项</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="35"/>
@@ -1643,7 +1641,7 @@ Right click to change formats.</source>
     <message>
         <location filename="projectwindow.cpp" line="42"/>
         <source>Add file to project</source>
-        <translation>添加文件到工程</translation>
+        <translation>添加文件到项目</translation>
     </message>
     <message>
         <location filename="projectwindow.cpp" line="43"/>
@@ -1685,7 +1683,7 @@ Right click to change formats.</source>
     <message>
         <location filename="projectwindow.cpp" line="103"/>
         <source> for writing</source>
-        <translation> 写入</translation>
+        <translation> 用于写入</translation>
     </message>
 </context>
 <context>
@@ -1704,11 +1702,9 @@ Right click to change formats.</source>
 Right click on a register&apos;s value to define a variable
 with the address contained in the register.</source>
         <oldsource>Right click on register names to change formats.
-Right clock on a register&apos;s value to define a variable
+Right click on a register&apos;s value to define a variable
 with the address contained in the register.</oldsource>
-        <translation>右键单击寄存器名称更改格式。 
-右键单击一个寄存器定义一个变量的值 
-地址寄存器中。</translation>
+        <translation>用右键单击寄存器名来更改格式。右键单击一个寄存器的值就能把这个寄存器中储存的地址赋予给一个变量。</translation>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="238"/>
@@ -1737,8 +1733,8 @@ with the address contained in the register.</oldsource>
     </message>
     <message>
         <location filename="registerwindow.cpp" line="257"/>
-        <source>Define a variable with this address</source>
-        <translation>这个地址定义一个变量</translation>
+        <source>Define a variable with this address </source>
+        <translation>把变量定义在这个地址上</translation>
     </message>
 </context>
 <context>
@@ -1761,42 +1757,42 @@ with the address contained in the register.</oldsource>
     <message>
         <location filename="settings.cpp" line="221"/>
         <source>Breakpoint fg</source>
-        <translation>断点前景</translation>
+        <translation>断点的前景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="222"/>
         <source>Breakpoint bg</source>
-        <translation>断点背景</translation>
+        <translation>断点的背景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="223"/>
         <source>Find fg</source>
-        <translation>找到前景</translation>
+        <translation>寻找的前景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="224"/>
         <source>Find bg</source>
-        <translation>发现背景</translation>
+        <translation>寻找的背景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="225"/>
         <source>Line number fg</source>
-        <translation>行号前景</translation>
+        <translation>行号的前景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="226"/>
         <source>Line number bg</source>
-        <translation>行号背景</translation>
+        <translation>行号的背景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="227"/>
         <source>Next line fg</source>
-        <translation>下一行前景</translation>
+        <translation>"下一行"的前景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="228"/>
         <source>Next line bg</source>
-        <translation>下一行背景</translation>
+        <translation>"下一行"的背景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="234"/>
@@ -1825,8 +1821,8 @@ with the address contained in the register.</oldsource>
     </message>
     <message>
         <location filename="settings.cpp" line="241"/>
-        <source>List</source>
-        <translation>一览</translation>
+        <source>List </source>
+        <translation>列表</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="242"/>
@@ -1846,7 +1842,7 @@ with the address contained in the register.</oldsource>
     <message>
         <location filename="settings.cpp" line="251"/>
         <source>Identifier</source>
-        <translation>识别码</translation>
+        <translation>标识符</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="252"/>
@@ -1881,23 +1877,23 @@ with the address contained in the register.</oldsource>
     <message>
         <location filename="settings.cpp" line="258"/>
         <source>Preprocessor</source>
-        <translation>预处理</translation>
+        <translation>预处理器</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="259"/>
         <source>Illegal fg</source>
-        <translation>非法前景</translation>
+        <translation>错误显示的前景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="260"/>
         <source>Illegal bg</source>
-        <translation>非法背景</translation>
+        <translation>错误显示的背景颜色</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="264"/>
         <location filename="settings.cpp" line="266"/>
         <source>Language</source>
-        <translation type="unfinished">语</translation>
+        <translation type="unfinished">语言</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="278"/>
@@ -1917,12 +1913,12 @@ with the address contained in the register.</oldsource>
     <message>
         <location filename="settings.cpp" line="295"/>
         <source>Tab spacing</source>
-        <translation>标签间距</translation>
+        <translation>标志间距</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="297"/>
         <source>Completion minimum</source>
-        <translation>完成最低</translation>
+        <translation>最低完成</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="299"/>
@@ -1937,12 +1933,12 @@ with the address contained in the register.</oldsource>
     <message>
         <location filename="settings.cpp" line="304"/>
         <source>Auto-indent</source>
-        <translation>自动缩进</translation>
+        <translation>自动缩排</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="305"/>
         <source>Auto-open project files</source>
-        <translation>自动打开的项目文件</translation>
+        <translation>自动打开项目文件</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="306"/>
@@ -1967,12 +1963,12 @@ with the address contained in the register.</oldsource>
     <message>
         <location filename="settings.cpp" line="315"/>
         <source>Prettify</source>
-        <translation>美化</translation>
+        <translation>程序规范化</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="316"/>
         <source>Assemble</source>
-        <translation>组装</translation>
+        <translation>汇编</translation>
     </message>
     <message>
         <location filename="settings.cpp" line="317"/>
@@ -2013,11 +2009,9 @@ with the address contained in the register.</oldsource>
         <source>Right click to popup a menu.
 Mark a variable and right click to define
 a user-defined variable. This is most
-useful for assembly language.</source>
-        <translation>右键单击弹出菜单。 
-标记一个变量，然后右键单击定义 
-用户定义的变量。这是最有有用的 
-汇编语言。</translation>
+useful for assembly language</source>
+        <translation>单击右键弹出菜单。 
+选定一个变量，然后单击右键来产生用户定义的变量。这对写汇编语言程序很有用。</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="362"/>
@@ -2060,49 +2054,42 @@ useful for assembly language.</source>
     <message>
         <location filename="sourceframe.cpp" line="85"/>
         <source>Compile and run your program</source>
-        <translation>编译并运行你的程序</translation>
+        <translation>编译并运行程序</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="96"/>
         <source>Execute the current statement in the same function</source>
-        <translation>执行中的当前语句相同的功能</translation>
+        <translation>在同一函数中执行当前语句</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="108"/>
         <source>Execute the current statement possibly stepping
 into a different function</source>
-        <translation>执行当前语句可能加强 
-到一个不同的函数</translation>
+        <translation>执行当前语句可能会进入到一个不同的函数</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="120"/>
         <source>Execute statements starting at the current statement
 continuing until the program ends or a breakpoint
 is reached.</source>
-        <translation>在当前语句开始执行语句 
-持续直到程序结束或断点 
-就达到了。</translation>
+        <translation>在当前语句处开始执行语句,持续直到程序结束或到达一个断点。</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="133"/>
         <source>End this debugging session and continue editing</source>
-        <translation>结束调试会话并继续编辑</translation>
+        <translation>结束程序调试再继续编辑</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="171"/>
         <source>This input field is for executing your program with
-command line parameters to be accepted in the argv
-array</source>
-        <translation>该输入字段执行程序 
-在argv被接受命令行参数 
-排列
-</translation>
+command line parameters to be accepted in the argv array</source>
+        <translation>该输入区接收的是在命令行执行程序时的参数。这样的参数会被接收到argv数组里</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="188"/>
         <location filename="sourceframe.cpp" line="1285"/>
         <source>unnamed</source>
-        <translation>无名</translation>
+        <translation>未名</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="268"/>
@@ -2119,7 +2106,7 @@ array</source>
         <source>This file has not been named.
 Do you want save the file?</source>
         <translation>该文件还没有被命名。 
-你想保存的文件吗？</translation>
+你想保存它吗？</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="281"/>
@@ -2129,7 +2116,7 @@ Do you want save the file?</source>
     <message>
         <location filename="sourceframe.cpp" line="282"/>
         <source>, lacks an extension.</source>
-        <translation>，缺乏一个扩展。</translation>
+        <translation>，缺少一个扩展名。</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="296"/>
@@ -2139,19 +2126,19 @@ Do you want save the file?</source>
     <message>
         <location filename="sourceframe.cpp" line="297"/>
         <source>, lacks the .ebe extension.</source>
-        <translation>，缺乏 ebe 扩展。</translation>
+        <translation>，缺少 .ebe 扩展名。</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="516"/>
         <source>None of the source files defines main</source>
-        <translation>源文件没有定义 main</translation>
+        <translation>所有源程序都没有定义 main</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="991"/>
         <source>This file has changed.
 Do you want save the file?</source>
         <translation>此文件已更改。 
-你想保存的文件吗？</translation>
+你想保存它吗？</translation>
     </message>
     <message>
         <location filename="sourceframe.cpp" line="1080"/>
@@ -2162,7 +2149,7 @@ Do you want save the file?</source>
     <message>
         <location filename="sourceframe.cpp" line="1084"/>
         <source>Do you wish to save them all?</source>
-        <translation>你想拯救他们呢？</translation>
+        <translation>你想都保存吗？</translation>
     </message>
 </context>
 <context>
@@ -2195,7 +2182,7 @@ Do you want save the file?</source>
     <message>
         <location filename="sourcewindow.cpp" line="600"/>
         <source>Assembly files (*.asm *.s *akefile)</source>
-        <translation>大会文件 (*.asm *.s *akefile)</translation>
+        <translation>汇编文件 (*.asm *.s *akefile)</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="602"/>
@@ -2215,7 +2202,7 @@ Do you want save the file?</source>
     <message>
         <location filename="sourcewindow.cpp" line="605"/>
         <source>Assembly files (*.asm *.s *akefile);;</source>
-        <translation>大会文件 (*.asm *.s *akefile);;</translation>
+        <translation>汇编文件 (*.asm *.s *akefile);;</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="606"/>
@@ -2230,12 +2217,12 @@ Do you want save the file?</source>
     <message>
         <location filename="sourcewindow.cpp" line="685"/>
         <source>Failed to open file for writing</source>
-        <translation>无法打开文件写入</translation>
+        <translation>无法打开文件来编写</translation>
     </message>
     <message>
         <location filename="sourcewindow.cpp" line="715"/>
         <source> for saving.</source>
-        <translation> 为节省。</translation>
+        <translation> 为保存。</translation>
     </message>
 </context>
 <context>
@@ -2254,18 +2241,18 @@ Do you want save the file?</source>
         <location filename="terminalwindow.cpp" line="64"/>
         <source>Terminal input will only work from this input box.
 Press Control-D to send end of file.</source>
-        <translation>端子输入只会工作，从这个输入框。 
-按控制D发送文件结束。</translation>
+        <translation>终端输入只能在这个输入框里进行。 
+按Control－D来标志输入结束。</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="159"/>
         <source>error writing to child on lineEditReady</source>
-        <translation>错误写入孩子lineEditReady</translation>
+        <translation>在写入子程序lineEditReady时发生错误</translation>
     </message>
     <message>
         <location filename="terminalwindow.cpp" line="164"/>
         <source>error writing to pty on lineEditReady</source>
-        <translation>出现写入错误，到 pty lineEditReady 的</translation>
+        <translation>在写入到pty lineEditReady时发生错误</translation>
     </message>
 </context>
 <context>
@@ -2273,7 +2260,7 @@ Press Control-D to send end of file.</source>
     <message>
         <location filename="toybox.cpp" line="92"/>
         <source>Language</source>
-        <translation>语</translation>
+        <translation>语言</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="146"/>
@@ -2296,17 +2283,17 @@ Press Control-D to send end of file.</source>
     <message>
         <location filename="toybox.cpp" line="635"/>
         <source>Enter a C++ expression to evaluate</source>
-        <translation>输入一个 C++ 表达式评估</translation>
+        <translation>输入一个C++表达式来计算</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="638"/>
         <source>Click this button to evaluate the expression</source>
-        <translation>点击此按钮来计算表达式</translation>
+        <translation>点击此键来计算表达式</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="643"/>
         <source>The type will be reported back from the evaluation</source>
-        <translation>将被报告的类型从评价</translation>
+        <translation>计算过程会自动确认最后的数据类型</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="647"/>
@@ -2316,7 +2303,7 @@ Press Control-D to send end of file.</source>
     <message>
         <location filename="toybox.cpp" line="652"/>
         <source>The value will be placed here when you click &quot;do it&quot;</source>
-        <translation>该值将被放在这里，当您点击“do it”</translation>
+        <translation>当你点击“do it”，值将被放在这里</translation>
     </message>
 </context>
 <context>
@@ -2325,18 +2312,17 @@ Press Control-D to send end of file.</source>
         <location filename="toybox.cpp" line="526"/>
         <source>Enter a name for a variable.
 A value is also required</source>
-        <translation>输入变量的名称。 
-还需要值</translation>
+        <translation>输入变量的名称， 并给变量赋值</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="532"/>
         <source>Select a type for your variable. </source>
-        <translation>为您的变量中选择一种类型。</translation>
+        <translation>为变量选择一种类型。</translation>
     </message>
     <message>
         <location filename="toybox.cpp" line="545"/>
         <source>Enter a value for the variable.</source>
-        <translation>输入的变量值。</translation>
+        <translation>输入变量值。</translation>
     </message>
 </context>
 <context>
@@ -2345,7 +2331,7 @@ A value is also required</source>
         <location filename="unarybitpanel.cpp" line="17"/>
         <location filename="unarybitpanel.cpp" line="62"/>
         <source>!  Boolean not</source>
-        <translation>！布尔不</translation>
+        <translation>！布尔运算符非</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="17"/>
@@ -2355,7 +2341,7 @@ A value is also required</source>
     <message>
         <location filename="unarybitpanel.cpp" line="18"/>
         <source>~  Bitwise not</source>
-        <translation>〜位非</translation>
+        <translation>~ 按位运算符非</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="22"/>
@@ -2375,7 +2361,7 @@ A value is also required</source>
     <message>
         <location filename="unarybitpanel.cpp" line="34"/>
         <source>Result</source>
-        <translation>导致</translation>
+        <translation>结果</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="35"/>
@@ -2397,23 +2383,23 @@ A value is also required</source>
     <message>
         <location filename="unarybitpanel.cpp" line="118"/>
         <source>Result as a binary bool</source>
-        <translation>作为二进制布尔结果</translation>
+        <translation>输出结果是一个布尔</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="139"/>
         <location filename="unarybitpanel.cpp" line="161"/>
         <source>All bits flipped</source>
-        <translation>所有位翻转</translation>
+        <translation>所有的位都按位求反</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="173"/>
         <source>Adding 1</source>
-        <translation>加入1</translation>
+        <translation>加1</translation>
     </message>
     <message>
         <location filename="unarybitpanel.cpp" line="186"/>
         <source>Twos complement</source>
-        <translation>2的补</translation>
+        <translation>2的补码</translation>
     </message>
 </context>
 <context>
@@ -2435,3 +2421,4 @@ A value is also required</source>
     </message>
 </context>
 </TS>
+

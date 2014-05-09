@@ -464,6 +464,7 @@ DataTree::DataTree(QWidget *parent)
     header->setText(1,tr("Type"));
     header->setText(2,tr("Value"));
     setHeaderItem(header);
+    DataItem *stack;
 
     ::globalMap = globalMap = new DataMap;
     ::localMap = localMap  = new DataMap;
@@ -476,16 +477,27 @@ DataTree::DataTree(QWidget *parent)
     ::userDefined = userDefined = addDataItem(userDefinedMap,tr("user-defined"),"","");
 
     addTopLevelItem(globals);
+    //globals->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     globals->setExpanded(true);
     addTopLevelItem(locals);
+    //locals->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     locals->setExpanded(true);
     addTopLevelItem(parameters);
+    //parameters->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     parameters->setExpanded(true);
     addTopLevelItem(userDefined);
+    //userDefined->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     userDefined->setExpanded(true);
+    stack = addDataItem(globalMap,"stack","unsigned long *","");
+    stack->address = "$rsp";
+    stack->first = 0;
+    stack->last = 5;
+    globals->addChild(stack);
     
     connect ( this, SIGNAL(itemExpanded(QTreeWidgetItem*)),
               this, SLOT(expandDataItem(QTreeWidgetItem*)) );
+    connect ( this, SIGNAL(itemCollapsed(QTreeWidgetItem*)),
+              this, SLOT(collapseDataItem(QTreeWidgetItem*)) );
 }
 
 DataTree::~DataTree()
@@ -503,6 +515,20 @@ DataTree::~DataTree()
     delete parameterMap;
     delete userDefinedMap;
 }
+
+void DataTree::collapseDataItem(QTreeWidgetItem *item)
+{
+    int index;
+
+    DataItem *it = (DataItem *)item;
+    //qDebug() << "collapse";
+    index = indexOfTopLevelItem(item);
+    //qDebug() << "index" << index;
+    if ( index >= 0 ) return;
+    //qDebug() << "collapsing";
+    it->setExpanded(false);
+}
+
 void DataTree::expandDataItem(QTreeWidgetItem *item)
 {
     DataItem *it = (DataItem *)item;
@@ -510,15 +536,21 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
     QString fullName;
     ClassDefinition c;
     int n;
+
+    //if ( item == globals ) qDebug() << "globals expand";
     c = classes[it->type];
     QList<QTreeWidgetItem*> kids = it->takeChildren();
     foreach ( QTreeWidgetItem *t, kids ) {
-        ((DataItem *)t)->removeSubTree();
-        delete t;
+        //if ( item == globals ) qDebug() << "globals delete child";
+        if ( item != globals ) {
+            ((DataItem *)t)->removeSubTree();
+            delete t;
+        }
     }
     if ( c.name != "" ) {
         foreach ( VariableDefinition v, c.members ) {
             fullName = it->name + "." + v.name;
+            //if ( item == globals ) qDebug() << "globals adding child" << fullName;
             d = addDataItem(it->map,fullName,v.type,"");
             if ( it->map == globalMap ) {
                 d->address="&(::"+fullName+")";
@@ -556,7 +588,12 @@ void DataTree::expandDataItem(QTreeWidgetItem *item)
             for ( int i = min; i <= max; i++ ) {
                 fullName = it->name+QString("[%1]").arg(i);
                 d = addDataItem(it->map,fullName,type,"");
-                d->address="&("+fullName+")";
+                if ( it->address == "$rsp" ) {
+                    d->address = QString("$rsp+%1").arg(i*8);
+                    d->format = "Hexadecimal";
+                } else {
+                    d->address="&("+fullName+")";
+                }
                 it->addChild(d);
                 dataWindow->request(d);
             }
@@ -691,7 +728,6 @@ void DataWindow::receiveGlobals(QList<VariableDefinition> vars)
 {
     DataItem *item;
     
-    //qDebug() << "receiveGlobals" << names;
     foreach ( VariableDefinition v, vars ) {
         item = globalMap->value(v.name);
         if ( item == 0 ) {
@@ -742,7 +778,6 @@ void DataWindow::receiveLocals(QList<VariableDefinition> vars)
 {
     DataItem *item;
     
-    //qDebug() << "receiveLocals" << names << level;
     while ( level < backTraceWindow->level ) {
         dataTree->hide();
         stack.push(dataTree);

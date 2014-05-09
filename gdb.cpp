@@ -300,6 +300,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     int i;
     int length = files.length();
     globals = g;
+    globals.append("stack");
     //qDebug() << "length" << length;
     running = false;
     bpHash.clear();
@@ -718,27 +719,34 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
     //qDebug() << "names" << names;
     foreach ( QString name, names ) {
         fortran = false;
-        var.name = name;
-        var.type = "";
-        var.value = "";
-        results = sendReceive(QString("whatis %1").arg(name));
-        //qDebug() << "results" << results;
-        if ( results.length() > 0 && 
-             (results[0].indexOf("invalid") >= 0 ||
-              results[0].indexOf("(kind") >= 0 ) ) {
-            send ( "set language fortran");
+        if ( &names == &globals && name == "stack" ) {
+            var.name = name;
+            var.type = "unsigned long *";
+            var.value = "";
+            name = "$rsp";
+        } else {
+            var.name = name;
+            var.type = "";
+            var.value = "";
             results = sendReceive(QString("whatis %1").arg(name));
-            send ( "set language c++");
-            fortran = true;
-        }
-        var.isFortran = fortran;
-        foreach ( QString r, results ) {
-            //qDebug() << "r" << r;
-            int i = r.indexOf("=");
-            if ( i > 0 ) {
-                var.type = r.mid(i+2);
-                //qDebug() << name << var.type;
-                break;
+            //qDebug() << "results" << results;
+            if ( results.length() > 0 && 
+                 (results[0].indexOf("invalid") >= 0 ||
+                  results[0].indexOf("(kind") >= 0 ) ) {
+                send ( "set language fortran");
+                results = sendReceive(QString("whatis %1").arg(name));
+                send ( "set language c++");
+                fortran = true;
+            }
+            var.isFortran = fortran;
+            foreach ( QString r, results ) {
+                //qDebug() << "r" << r;
+                int i = r.indexOf("=");
+                if ( i > 0 ) {
+                    var.type = r.mid(i+2);
+                    //qDebug() << name << var.type;
+                    break;
+                }
             }
         }
 
@@ -883,6 +891,20 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
                     if ( parts.length() < 2 ) break;
                     var.value += parts[1] + " ";
                     i++;
+                }
+            } else if ( &names == &globals && var.name == "stack" ) {
+                QString cmd = QString("x/6xg %1").arg(name);
+                results = sendReceive(cmd);
+                if ( results.length() == 0 ) {
+                    var.value = "";
+                } else {
+                    var.value = "";
+                    foreach ( QString r, results ) {
+                        parts = r.split(QRegExp("\\s+"));
+                        for ( int i = 1; i < parts.length(); i++ ) {
+                            var.value.append(parts[i]+" ");
+                        }
+                    }
                 }
             } else if ( var.type.indexOf(" *") >= 0 ) {
                 QString cmd = QString("printf \"0x%x\\n\",%1").arg(name);

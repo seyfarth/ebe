@@ -3,5 +3,6 @@
 ./qrc
 qmake
 make clean
-qrelease
+lrelease ebe.pro
 make
+sudo cp ebe *.qm /usr/bin

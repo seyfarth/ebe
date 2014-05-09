@@ -127,6 +127,7 @@ public:
 
 public slots:
     void expandDataItem(QTreeWidgetItem*);
+    void collapseDataItem(QTreeWidgetItem*);
     void editUserVariable();
     void deleteUserVariable();
     void setDecimal();
