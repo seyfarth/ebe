@@ -399,6 +399,7 @@ void SourceEdit::defineVariable()
 
 void SourceEdit::resizeEvent(QResizeEvent *e)
 {
+    QPlainTextEdit::resizeEvent(e);
     heightInPixels = e->size().height();
     //qDebug() << "Size " << e->size();
     //qDebug() << "ht " << heightInPixels;
@@ -492,6 +493,8 @@ void SourceWindow::newHeight ( int height )
     heightInPixels = height;
     if ( fontHeight > 0 ) textHeight = heightInPixels / fontHeight;
     else textHeight = 10;
+    //qDebug() << "lines" << textDoc->lineCount();
+    //qDebug() << "newheight" << textHeight;
     setLineNumbers(textDoc->lineCount());
 }
 
@@ -501,7 +504,7 @@ void SourceWindow::doTemplate(QAction *a)
     QString name = a->iconText();
     int n = name.indexOf(':');
     if ( n > 0 ) name = name.left(n);
-    qDebug() << name << file.language << ebe.os;
+    //qDebug() << name << file.language << ebe.os;
 
 
     if ( file.language == "asm" ) {
@@ -595,20 +598,33 @@ void SourceWindow::open(QString name)
 void SourceWindow::open()
 {
     // How shall we set status bar text here?
+    QString patterns;
 
     opened = false;
 
+    //qDebug() << "language" << ebe["language"];
     QString selected = tr("C/C++ files (*.c* *.h *.t *akefile)");
-    if ( ebe["language"].toString() == "fortran" )
+    if ( ebe["language"].toString() == "fortran" ) {
         selected = tr("Fortran files (*.f* *.F* *akefile)");
-    else if ( ebe["language"].toString() == "asm" )
+        patterns = tr("Fortran files (*.f* *.F* *akefile);;") +
+                   tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
+                   tr("Assembly files (*.asm *.s *akefile);;");
+    } else if ( ebe["language"].toString() == "asm" ) {
+        //qDebug() << "asm";
         selected = tr("Assembly files (*.asm *.s *akefile)");
+        patterns = tr("Assembly files (*.asm *.s *akefile);;") +
+                   tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
+                   tr("Fortran files (*.f* *.F* *akefile);;");
+    } else {
+        patterns = tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
+                   tr("Fortran files (*.f* *.F* *akefile);;") +
+                   tr("Assembly files (*.asm *.s *akefile);;");
+    }
+
+    //qDebug() << selected;
 
     QString name = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
-            tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
-            tr("Fortran files (*.f* *.F* *akefile);;")+
-            tr("Assembly files (*.asm *.s *akefile);;") +
-            tr("All files (*)"),
+            patterns + tr("All files (*)"),
             &selected
     );
 
@@ -802,11 +818,13 @@ void SourceWindow::setLineNumbers(int nLines)
 
 void SourceWindow::setNextLine(int line)
 {
-    //qDebug() << "snl" << line;
+    //qDebug() << "sw snl" << line;
     QTextDocument *doc = textEdit->document();
     bool saveChanged = changed;
     QTextCursor(doc->findBlockByNumber(line-1)).setBlockFormat(breakFormat);
+    //qDebug() << "scroll set" << line-1-textHeight/2;
     scrollBar->setValue(line-1-textHeight/2);
+    setLineNumbers(textDoc->lineCount());
     changed = saveChanged;
 }
 

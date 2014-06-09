@@ -393,8 +393,8 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    getGlobals();
     getLocals();
+    getGlobals();
     getArgs();
     //qDebug() << "run";
     emit resetData();
@@ -413,8 +413,8 @@ void GDB::doNext()
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    getGlobals();
     getLocals();
+    getGlobals();
     getArgs();
     emit resetData();
 }
@@ -428,8 +428,8 @@ void GDB::doStep()
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    getGlobals();
     getLocals();
+    getGlobals();
     getArgs();
     emit resetData();
 }
@@ -444,8 +444,8 @@ void GDB::doNextInstruction()
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    getGlobals();
     getLocals();
+    getGlobals();
     getArgs();
     emit resetData();
 }
@@ -462,8 +462,8 @@ void GDB::doCall()
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    getGlobals();
     getLocals();
+    getGlobals();
     getArgs();
     emit resetData();
 }
@@ -477,8 +477,8 @@ void GDB::doContinue()
     if ( !running ) return;
     getRegs();
     getFpRegs();
-    getGlobals();
     getLocals();
+    getGlobals();
     getArgs();
     emit resetData();
 }
@@ -895,6 +895,8 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
             } else if ( &names == &globals && var.name == "stack" ) {
                 QString cmd = QString("x/6xg %1").arg(name);
                 results = sendReceive(cmd);
+                //qDebug() << "cmd" << cmd;
+                //qDebug() << "results" << results;
                 if ( results.length() == 0 ) {
                     var.value = "";
                 } else {

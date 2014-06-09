@@ -277,6 +277,7 @@ void DataItem::setValue(QString v)
     bool ok;
 
     stringValue = v;
+    //qDebug() << name << size << v << a.u8 << value() << v;
     if ( isSimple && last == 0 ) {
         a.u8 = 0;
         switch ( size ) {
@@ -475,6 +476,10 @@ DataTree::DataTree(QWidget *parent)
     ::locals = locals = addDataItem(localMap,tr("locals"),"","");
     ::parameters = parameters = addDataItem(parameterMap,tr("parameters"),"","");
     ::userDefined = userDefined = addDataItem(userDefinedMap,tr("user-defined"),"","");
+    globalMap->remove("globals");
+    localMap->remove("locals");
+    parameterMap->remove("parameters");
+    userDefinedMap->remove("user-defined");
 
     addTopLevelItem(globals);
     //globals->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
@@ -728,8 +733,11 @@ void DataWindow::receiveGlobals(QList<VariableDefinition> vars)
 {
     DataItem *item;
     
+    //qDebug() << "vars" << vars;
     foreach ( VariableDefinition v, vars ) {
+        //qDebug() << "v" << v.name << v.value;
         item = globalMap->value(v.name);
+        //qDebug() << "item" << item;
         if ( item == 0 ) {
             item = dataTree->addDataItem(globalMap,v.name,v.type,v.value);
             item->address = QString("&(::%1").arg(v.name);
@@ -746,12 +754,12 @@ void DataWindow::receiveGlobals(QList<VariableDefinition> vars)
             }
             item->isFortran = v.isFortran;
             int n = item->childCount();
+            //qDebug() << "child count" << n;
             for ( int j = 0; j < n; j++ ) {
                 request((DataItem *)item->child(j));
             }
         }
     }
-    //qDebug() << "rg sort";
     globals->sortChildren(0,Qt::AscendingOrder);
 }
 
@@ -778,6 +786,7 @@ void DataWindow::receiveLocals(QList<VariableDefinition> vars)
 {
     DataItem *item;
     
+    //qDebug() << "rl" << level << backTraceWindow->level;
     while ( level < backTraceWindow->level ) {
         dataTree->hide();
         stack.push(dataTree);
@@ -874,6 +883,15 @@ DataItem *DataTree::addDataItem ( DataMap *map, QString n,
         d->address = QString("&(%1)").arg(n);
     }
     d->map = map;
+    //if ( map == globalMap ) {
+        //qDebug() << "adi globals" << n << v;
+    //} else if ( map == localMap ) {
+        //qDebug() << "adi locals" << n << v;
+    //} else if ( map == parameterMap ) {
+        //qDebug() << "adi params" << n << v;
+    //} else if ( map == userDefinedMap ) {
+        //qDebug() << "adi user" << n << v;
+    //}
     map->insert(n,d);
     return d;
 }
