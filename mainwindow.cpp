@@ -118,6 +118,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     qRegisterMetaType<QHash<QString,ClassDefinition> >("QHash<QString,ClassDefinition>");
     qApp->installEventFilter(this);
     
+    checkTools();
+
     gdbThread = new GDBThread();
     gdbThread->start();
 #ifdef Q_WS_WIN
@@ -137,8 +139,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createMenus();
 
     readInstructions();
-
-    checkTools();
 
     setUnifiedTitleAndToolBarOnMac(false);
 
@@ -210,7 +210,6 @@ void MainWindow::checkTools()
         }
     }
 }
-
 
 void MainWindow::closeEvent ( QCloseEvent *event )
 {
@@ -452,7 +451,7 @@ void MainWindow::createMenus()
                         QKeySequence("Ctrl+K") );
     editMenu->addAction(tr("Uncomment"), sourceFrame, SLOT(unComment()),
                         QKeySequence("Ctrl+U")  );
-    editMenu->addAction(tr("indent"), sourceFrame, SLOT(indent()),
+    editMenu->addAction(tr("Indent"), sourceFrame, SLOT(indent()),
                         QKeySequence("Ctrl+>")  );
     editMenu->addAction(tr("Unindent"), sourceFrame, SLOT(unIndent()),
                         QKeySequence("Ctrl+<")  );

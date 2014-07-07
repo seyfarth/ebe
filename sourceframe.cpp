@@ -47,6 +47,15 @@ extern SourceFrame *sourceFrame;
 
 typedef QPair<QString,QString> StringPair;
 
+TabWidget::TabWidget() : QTabWidget()
+{
+}
+
+QTabBar * TabWidget::bar()
+{
+    return tabBar();
+}
+
 SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 {
     sourceFrame = this;
@@ -174,12 +183,17 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
                 "command line parameters to be accepted in the argv\n"
                 "array") );
 
-    tab = new QTabWidget;
+    tab = new TabWidget;
+    tabBar = tab->bar();
+    tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
+    tabBar->setToolTip(tr("Right click to popup tab menu"));
 
     layout->addWidget(commandLine);
     layout->addWidget(tab);
 
     connect ( tab, SIGNAL(currentChanged(int)), this, SLOT(changedTab(int)) );
+    connect ( tabBar, SIGNAL(customContextMenuRequested(const QPoint&)),
+              this, SLOT(tabContextMenu(const QPoint &)));
 
     cursorPosition = new QLabel(this);
     statusBar->addPermanentWidget(cursorPosition);
@@ -195,6 +209,18 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     cExts << "c" << "C";
     cppExts << "cpp" << "CPP" << "c++" << "C++" << "cc" << "CC";
     asmExts << "asm" << "ASM" << "s" << "S";
+}
+
+void SourceFrame::tabContextMenu(const QPoint & pos)
+{
+    int i;
+    i = tabBar->tabAt(pos);
+    tab->setCurrentIndex(i);
+    QMenu menu(tr("Source menu"));
+    menu.addAction(tr("Open file in this tab"), this, SLOT(reopen()));
+    menu.addAction(tr("Open file in new tab"), this, SLOT(open(bool)));
+    menu.addAction(tr("Close file"), this, SLOT(close()));
+    menu.exec(QCursor::pos());
 }
 
 void SourceFrame::saveIfChanged(QString file)
@@ -974,7 +1000,7 @@ void SourceFrame::open(bool /* checked */)
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
-    //qDebug() << "open" << index << source << source->textDoc->characterCount();
+    qDebug() << "open" << index << source << source->textDoc->characterCount();
     if ( !source || source->textDoc->characterCount() > 1 ) {
         source = new SourceWindow;
         index = tab->addTab(source,"");
@@ -989,7 +1015,7 @@ void SourceFrame::open(bool /* checked */)
     }
 }
 
-void SourceFrame::close()
+void SourceFrame::reopen()
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
@@ -1000,21 +1026,60 @@ void SourceFrame::close()
                         "Do you want save the file?"),
                     QMessageBox::Save | QMessageBox::Discard
                     | QMessageBox::Cancel, QMessageBox::Save);
+            if ( ret == QMessageBox::Save ) {
+                save();
+            }
+        }
+        source->clear();
+    }
+    open(true);
+}
+
+void SourceFrame::close()
+{
+    int index = tab->currentIndex();
+    source = (SourceWindow *)tab->widget(index);
+    qDebug() << "close" << tab->count();
+    if ( source ) {
+        if ( source->changed ) {
+            int ret = QMessageBox::warning(this, tr("Warning"),
+                    tr("This file has changed.\n"
+                        "Do you want save the file?"),
+                    QMessageBox::Save | QMessageBox::Discard
+                    | QMessageBox::Cancel, QMessageBox::Save);
             switch ( ret ) {
                 case QMessageBox::Save:
                     save();
-                    source->close();
-                    delete source;
+                    if ( tab->count() < 2 ) {
+                        source->clear();
+                    } else {
+                        source->close();
+                        delete source;
+                    }
+                    tab->setTabText(index,tr("unnamed"));
+                    source->file.source = "";
                     break;
                 case QMessageBox::Discard:
                     //tab->removeTab(index);
-                    source->close();
-                    delete source;
+                    if ( tab->count() < 2 ) {
+                        source->clear();
+                    } else {
+                        source->close();
+                        delete source;
+                    }
+                    tab->setTabText(index,tr("unnamed"));
+                    source->file.source = "";
+                    break;
             }
         } else {
-            //tab->removeTab(index);
-            source->close();
-            delete source;
+            if ( tab->count() < 2 ) {
+                source->clear();
+            } else {
+                source->close();
+                delete source;
+            }
+            tab->setTabText(index,tr("unnamed"));
+            source->file.source = "";
         }
     }
 }

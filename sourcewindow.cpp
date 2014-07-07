@@ -457,6 +457,11 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
             this, SLOT(scrollBarRangeChanged(int,int)));
 }
 
+void SourceWindow::clear()
+{
+    textEdit->clear();
+}
+
 void SourceWindow::setFontHeightAndWidth ( int height, int width )
 {
     fontHeight = height;

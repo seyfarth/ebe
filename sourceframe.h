@@ -3,10 +3,12 @@
 
 #include <QtGui>
 #include <QLabel>
+#include <QTabBar>
 #include "sourcewindow.h"
 #include "types.h"
 
 class CommandLine;
+class TabWidget;
 
 class SourceFrame : public QFrame
 {
@@ -32,12 +34,15 @@ public:
     void close(QString);
     bool inAssembly;
     bool definesStart;
+    QTabBar *tabBar;
 
 public slots:
+    void tabContextMenu(const QPoint & pos );
     void nextInstruction(QString file,int line);
     void setCommandLineVisible(bool);
     void changedTab(int index);
     void open(bool);
+    void reopen();
     void save();
     void saveAs();
     void close();
@@ -87,7 +92,7 @@ signals:
     void doStop();
 
 private:
-    QTabWidget *tab;
+    TabWidget *tab;
 
     SourceWindow *source;
 
@@ -99,6 +104,13 @@ private:
     QPushButton *stopButton;
 
     CommandLine *commandLine;
+};
+
+class TabWidget : public QTabWidget
+{
+public:
+    QTabBar *bar();
+    TabWidget();
 };
 
 #endif

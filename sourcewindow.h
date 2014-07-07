@@ -177,6 +177,7 @@ public:
     void prettify();
     void doTemplate(QAction *a);
     void insertFile(QString f);
+    void clear();
 
 public slots:
     void open();
