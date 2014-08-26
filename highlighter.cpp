@@ -236,7 +236,8 @@ void FortranHighlighter::highlightBlock(const QString &text)
         if ( i >= n ) return;
         setCurrentBlockState(0);
         if ( i == 0 && (t[i].toUpper() == 'C'
-                        || t[i].toUpper() == '*') ) goto Comment;
+                        || t[i].toUpper() == '*'
+                        || t[i] == '!' ) ) goto Comment;
         //if ( i == 0 && (t[i].toAscii() == 'c' || t[i].toAscii() == 'C'
                         //|| t[i].toAscii() == '*') ) goto Comment;
         if ( t[i].isLetter() || t[i] == QChar('_') ) goto Identifier;

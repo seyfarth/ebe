@@ -864,9 +864,14 @@ void SourceWindow::comment()
 {
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
-    if ( !cursor.hasSelection() ) return;
-    int start = cursor.selectionStart();
-    int end = cursor.selectionEnd();
+    int start;
+    int end;
+    if ( cursor.hasSelection() ) {
+        start = cursor.selectionStart();
+        end = cursor.selectionEnd();
+    } else {
+        start = end = cursor.position();
+    }
     QTextBlock block;
     block = doc->findBlock(start);
     int startBlock = block.blockNumber();
@@ -879,13 +884,22 @@ void SourceWindow::comment()
     }
     QString ext = file.source.mid(n+1);
     int pos;
+    QString commentMark;
     if ( cppExts.contains(ext) ) {
-        for ( int i = startBlock; i <= endBlock; i++ ) {
-            block = doc->findBlockByNumber(i);
-            pos = block.position();
-            cursor.setPosition(pos);
-            cursor.insertText("//");
-        }
+        commentMark = "//";
+    } else if ( fortranExts.contains(ext) ) {
+        commentMark = "!";
+    } else if ( asmExts.contains(ext) ) {
+        commentMark = ";";
+    } else {
+        return;
+    }
+
+    for ( int i = startBlock; i <= endBlock; i++ ) {
+        block = doc->findBlockByNumber(i);
+        pos = block.position();
+        cursor.setPosition(pos);
+        cursor.insertText(commentMark);
     }
 
 }
@@ -894,9 +908,14 @@ void SourceWindow::unComment()
 {
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
-    if ( !cursor.hasSelection() ) return;
-    int start = cursor.selectionStart();
-    int end = cursor.selectionEnd();
+    int start;
+    int end;
+    if ( cursor.hasSelection() ) {
+        start = cursor.selectionStart();
+        end = cursor.selectionEnd();
+    } else {
+        start = end = cursor.position();
+    }
     QTextBlock block;
     block = doc->findBlock(start);
     int startBlock = block.blockNumber();
@@ -910,29 +929,43 @@ void SourceWindow::unComment()
     QString ext = file.source.mid(n+1);
     int pos;
     QString t;
+    QString commentMark;
     if ( cppExts.contains(ext) ) {
-        for ( int i = startBlock; i <= endBlock; i++ ) {
-            block = doc->findBlockByNumber(i);
-            pos = block.position();
-            cursor.setPosition(pos);
-            cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,2);
-            t = cursor.selectedText();
-            if ( t == "//" ) cursor.deleteChar();
-        }
-        cursor.setPosition(start);
-        cursor.setPosition(end,QTextCursor::KeepAnchor);
+        commentMark = "//";
+    } else if ( fortranExts.contains(ext) ) {
+        commentMark = "!";
+    } else if ( asmExts.contains(ext) ) {
+        commentMark = ";";
+    } else {
+        return;
     }
+    for ( int i = startBlock; i <= endBlock; i++ ) {
+        block = doc->findBlockByNumber(i);
+        pos = block.position();
+        cursor.setPosition(pos);
+        cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,
+                            commentMark.length());
+        t = cursor.selectedText();
+        if ( t == commentMark ) cursor.deleteChar();
+    }
+    cursor.setPosition(start);
+    cursor.setPosition(end,QTextCursor::KeepAnchor);
 
 }
 
 void SourceWindow::indent()
 {
+    int start;
+    int end;
     tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
-    if ( !cursor.hasSelection() ) return;
-    int start = cursor.selectionStart();
-    int end = cursor.selectionEnd();
+    if ( cursor.hasSelection() ) {
+        start = cursor.selectionStart();
+        end = cursor.selectionEnd();
+    } else {
+        start = end = cursor.position();
+    }
     QTextBlock block;
     block = doc->findBlock(start);
     int startBlock = block.blockNumber();
@@ -947,13 +980,11 @@ void SourceWindow::indent()
     int pos;
     QString prefix;
     for ( int i=0; i < tab_width; i++ ) prefix += " ";
-    if ( cppExts.contains(ext) ) {
-        for ( int i = startBlock; i <= endBlock; i++ ) {
-            block = doc->findBlockByNumber(i);
-            pos = block.position();
-            cursor.setPosition(pos);
-            cursor.insertText(prefix);
-        }
+    for ( int i = startBlock; i <= endBlock; i++ ) {
+        block = doc->findBlockByNumber(i);
+        pos = block.position();
+        cursor.setPosition(pos);
+        cursor.insertText(prefix);
     }
 
 }
@@ -963,9 +994,14 @@ void SourceWindow::unIndent()
     tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
-    if ( !cursor.hasSelection() ) return;
-    int start = cursor.selectionStart();
-    int end = cursor.selectionEnd();
+    int start;
+    int end;
+    if ( cursor.hasSelection() ) {
+        start = cursor.selectionStart();
+        end = cursor.selectionEnd();
+    } else {
+        start = end = cursor.position();
+    }
     QTextBlock block;
     block = doc->findBlock(start);
     int startBlock = block.blockNumber();
@@ -981,18 +1017,16 @@ void SourceWindow::unIndent()
     QString t;
     QString prefix;
     for ( int i=0; i < tab_width; i++ ) prefix += " ";
-    if ( cppExts.contains(ext) ) {
-        for ( int i = startBlock; i <= endBlock; i++ ) {
-            block = doc->findBlockByNumber(i);
-            pos = block.position();
-            cursor.setPosition(pos);
-            cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,tab_width);
-            t = cursor.selectedText();
-            if ( t == prefix ) cursor.deleteChar();
-        }
-        cursor.setPosition(start);
-        cursor.setPosition(end,QTextCursor::KeepAnchor);
+    for ( int i = startBlock; i <= endBlock; i++ ) {
+        block = doc->findBlockByNumber(i);
+        pos = block.position();
+        cursor.setPosition(pos);
+        cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,tab_width);
+        t = cursor.selectedText();
+        if ( t == prefix ) cursor.deleteChar();
     }
+    cursor.setPosition(start);
+    cursor.setPosition(end,QTextCursor::KeepAnchor);
 
 }
 
