@@ -118,7 +118,7 @@ void LibraryWindow::handleClick(QListWidgetItem * /* it */)
 {
     //qDebug() << "row" << list->currentRow();
     QString file = files[list->currentRow()];
-    //qDebug() << "file" << file;
+    qDebug() << "file" << file;
     QFileInfo info(file);
     if ( info.isDir() ) {
         cd ( file );

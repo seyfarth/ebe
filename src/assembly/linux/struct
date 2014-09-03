@@ -1,5 +1,14 @@
-struct MyStruct
-{
-    int a;
-    double b;
-}
+
+        struc   Customer
+c_id    resq    1       ; reserve 1 quadword
+c_name  resb    16      ; reserver 16 bytes
+c_date  resd    1       ; perhaps for a Julian date
+        align   8
+        endstruc
+
+;       Customer_size is defined as the size of 1 struct
+;       This is useful for allocating an array of structs
+;
+;       Use c_name as an equate for the offset of c_name
+
+

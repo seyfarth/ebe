@@ -1,5 +1,7 @@
 #!/bin/bash
 
+find library src html -name '*~' -exec rm \{} \;
+
 cat > ebe.qrc << EOF
 <!DOCTYPE RCC> <RCC version="1.0">
 <qresource>
