@@ -1,0 +1,2 @@
+    ; "Hello" or 'Hello'
+    ; No terminating 0 byte as in C/C++

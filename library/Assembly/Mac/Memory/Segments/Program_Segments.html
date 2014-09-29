@@ -1,0 +1,88 @@
+<html>
+
+<head>
+</head>
+<body>
+<center>
+<h1> Program Segments </h1>
+</center>
+
+<p>
+A program generally has several different uses for memory.
+The most obvious use is for code which is stored in an area of memory
+referred to as the "text" segment identified as ".text".
+In an assembly program you switch to the data segment using
+
+<pre>
+        segment .text
+</pre>
+You can also use the keyword "section" rather than segment.
+</p>
+
+<h2> Defined data </h2>
+
+<p>
+The segment for storing data with predefined values is the "data"
+segment identified as ".data":
+<pre>
+        segment .data
+</pre>
+You can use this to store data like a counter or a printf format:
+<pre>
+        segment .data
+i:      dd      1
+format: db      "The count in %d", 0x0a, 0 ; C string with newline
+</pre>
+<p>
+
+<h2> Reserved data </h2>
+
+<p>
+Part of the data for a program is for some memory with data initialized
+to all zeroes.
+This is called the "bss" segment which stands for "block started by
+symbol".
+Typically this data will be used for global data which will be
+written by the program when it executes.
+<pre>
+        segment .bss
+</pre>
+You define variables in the bss segment using a collection of
+pseudo-ops beginning with the prefix "res" meaning "reserve":
+<pre>
+        segment .bss
+sum:    resw    1       ; reserve 1 word of memory
+data:   resd    10      ; reserve 10 double words (4 bytes each)
+name:   resb    17      ; reserve bytes for a C string
+avg:    resq    1       ; reserve 1 quad-word (8 bytes)
+</pre>
+</p>
+
+<h2> Stack </h2>
+
+<p>
+A program uses a run-time stack to implement function calls.
+There is no explicit reference required to reference a stack segment
+in assembly language.
+The stack is used for function call frames which hold pointers to
+previous call frames, parameters, local variables and the return address.
+</p>
+
+<h2> Heap </h2>
+
+<p>
+When a program allocates memory it uses a region of memory commonly
+referred to as the heap.
+Like the stack there is no reason to explicitly refer to the heap
+segment.
+Instead a program can call a function like malloc receiving an
+address from the heap which it will generally need to save somewhere
+in memory.
+The pointer to the allocated memory could be stored in a global
+variable is the data or bss segment, in a local variable in a
+function's call frame or possibly in a data structure which itself
+was dynamically allocated.
+</p>
+
+</body>
+</html>

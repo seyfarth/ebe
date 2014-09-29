@@ -1,0 +1,4 @@
+    ; 'A'       A single character
+    ;           Can be from 1 to 4 characters
+    ; 'ABCD'    4 characters in memory as 'A', 'B', 'C', 'D'
+    ; "A"       No real difference from 'A'
