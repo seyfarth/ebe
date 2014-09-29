@@ -7,7 +7,7 @@ f:
         sub     rsp, 32     ; space for 4 quadword local variables
 
     ;return 0;
-        xor     eax         ; return value in rax
+        xor     eax, eax    ; return value in rax
         leave               ; undo initial push-mov
         ret 
 ;}

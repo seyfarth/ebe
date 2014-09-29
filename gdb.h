@@ -82,6 +82,7 @@ signals:
     void resetData();
     void endFlash();
     void log(QString);
+    void error(QString);
 };
 
 #endif

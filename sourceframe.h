@@ -80,6 +80,7 @@ public slots:
     void updateCursorPosition();
     void doTemplate(QAction*);
     void insertFile(QString f);
+    void error(QString s);
 
 signals:
     void doRun(QString exe, QString options, QStringList files,

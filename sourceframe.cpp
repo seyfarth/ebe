@@ -1,4 +1,5 @@
 #include <QStatusBar>
+#include <QMenu>
 #include <QMessageBox>
 #include "sourceframe.h"
 #include "projectwindow.h"
@@ -176,6 +177,8 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     connect ( this, SIGNAL(doStop()), gdb, SLOT(doStop()) );
     connect ( gdb, SIGNAL(nextInstruction(QString,int)),
             this, SLOT(nextInstruction(QString,int)) );
+    connect ( gdb, SIGNAL(error(QString)),
+            this, SLOT(error(QString)) );
 
     commandLine = new CommandLine();
     commandLine->setToolTip (
@@ -905,6 +908,11 @@ void SourceFrame::setNextLine ( QString &file, int & line )
         }
 #endif
     }
+}
+
+void SourceFrame::error ( QString s )
+{
+    QMessageBox::critical(this,"Error",s);
 }
 
 void SourceFrame::nextInstruction ( QString file, int line )

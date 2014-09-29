@@ -198,6 +198,7 @@ void GDB::send(QString cmd, QString /*options*/)
         //}
         result = readLine();
         emit log(result);
+        if ( result.startsWith("Program received signal") ) emit error(result);
         //qDebug() << "result:" << result;
     }
 }
