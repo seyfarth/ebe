@@ -1,5 +1,4 @@
 #include <QStatusBar>
-#include <QMenu>
 #include <QMessageBox>
 #include "sourceframe.h"
 #include "projectwindow.h"
@@ -22,6 +21,7 @@ extern HANDLE hProcess;
 extern bool needToKill;
 #endif
 
+QStringList halExts;
 QStringList fortranExts;
 QStringList cExts;
 QStringList cppExts;
@@ -171,6 +171,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
             gdb, SLOT(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)) );
     connect ( this, SIGNAL(doNext()), gdb, SLOT(doNext()) );
     connect ( this, SIGNAL(doNextInstruction()), gdb, SLOT(doNextInstruction()) );
+    connect ( this, SIGNAL(doStepInstruction()), gdb, SLOT(doStepInstruction()) );
     connect ( this, SIGNAL(doCall()), gdb, SLOT(doCall()) );
     connect ( this, SIGNAL(doStep()), gdb, SLOT(doStep()) );
     connect ( this, SIGNAL(doContinue()), gdb, SLOT(doContinue()) );
@@ -196,7 +197,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
 
     connect ( tab, SIGNAL(currentChanged(int)), this, SLOT(changedTab(int)) );
     connect ( tabBar, SIGNAL(customContextMenuRequested(const QPoint&)),
-              this, SLOT(tabContextMenu(const QPoint &)));
+            this, SLOT(tabContextMenu(const QPoint &)));
 
     cursorPosition = new QLabel(this);
     statusBar->addPermanentWidget(cursorPosition);
@@ -207,6 +208,7 @@ SourceFrame::SourceFrame(QWidget *parent) : QFrame(parent)
     int index = tab->addTab(source,tr("unnamed"));
     tab->setCurrentIndex(index);
 
+    halExts << "hal" << "HAL";
     fortranExts << "f" << "F" << "for" << "FOR" << "f90" << "F90"
         << "f95" << "F95" << "ftn" << "FTN";
     cExts << "c" << "C";
@@ -253,7 +255,6 @@ void SourceFrame::run()
     QString exeName;
     QString ext;
     QString name;
-    QString base;
     QString cmd;
 
     addressToFileLine.clear();
@@ -306,7 +307,7 @@ void SourceFrame::run()
     QFile::remove(file.source);
     QFile::copy(":/src/ebe_unbuffer.cpp",file.source);
     QFile::setPermissions(file.source,
-           QFile::ReadOwner | QFile::WriteOwner);
+            QFile::ReadOwner | QFile::WriteOwner);
 
     if ( projectWindow->projectFileName == "" ) {
         files << source->file;
@@ -379,6 +380,7 @@ void SourceFrame::run()
             fileLineToAddress[fl] = 0;
 #endif
 
+#if !defined Q_WS_WIN
             //qDebug() << "copying ebe.inc";
             QString ebeInc;
             ebeInc = file.source;
@@ -389,12 +391,13 @@ void SourceFrame::run()
             QFile::remove(ebeInc);
             QFile::copy(":/src/assembly/ebe.inc",ebeInc);
             QFile::setPermissions(ebeInc,
-               QFile::ReadOwner | QFile::WriteOwner);
+                    QFile::ReadOwner | QFile::WriteOwner);
 
+            cmd.replace("$ebe_inc",ebeInc);
+#endif
             //qDebug() << cmd;
             cmd.replace("$base",file.base);
             cmd.replace("$source",file.source);
-            cmd.replace("$ebe_inc",ebeInc);
             //qDebug() << cmd;
         } else if ( file.language == "fortran" ) {
             //qDebug() << name << "fortran";
@@ -403,8 +406,10 @@ void SourceFrame::run()
             cmd.replace("$source",file.source);
             //qDebug() << cmd;
         }
-        object = base + "." + ebe["build/obj"].toString();
-        //qDebug() << "cccmd" << cmd;
+        object = file.base + "." + ebe["build/obj"].toString();
+        QFile::remove(object);
+        //qDebug() << "cmd" << cmd;
+        //qDebug() << "object" << object;
         QProcess compile(this);
         compile.start(cmd);
         compile.waitForFinished();
@@ -442,7 +447,7 @@ void SourceFrame::run()
         nm.setReadChannel(QProcess::StandardOutput);
         QString data = nm.readLine();
         QStringList parts;
-	    //qDebug() << data;
+        //qDebug() << data;
         while ( data != "" ) {
             //qDebug() << data;
             parts = data.split(QRegExp("\\s+"));
@@ -465,7 +470,7 @@ void SourceFrame::run()
                     files.removeFirst();
                     definesStart = true;
                 } else if ( parts[1] == "B" || parts[1] == "D" ||
-                            parts[1] == "G" || parts[1] == "C" ) {
+                        parts[1] == "G" || parts[1] == "C" ) {
 #if defined Q_OS_MAC || defined Q_WS_WIN
                     if ( parts[2].at(0) == '_' ) {
                         globals.append(parts[2].mid(1));
@@ -477,7 +482,7 @@ void SourceFrame::run()
 #endif
                 }
                 if ( asmExts.contains(ext) && (parts[1] == "T" || parts[1] == "t") &&
-                     parts[2].indexOf(".") < 0 ) {
+                        parts[2].indexOf(".") < 0 ) {
                     textLabels.insert(parts[2]);
                     textToFile[parts[2]] = objectToSource[object];
                 }
@@ -485,7 +490,7 @@ void SourceFrame::run()
             //qDebug() << data;
             data = nm.readLine();
         }
-//#ifndef Q_WS_WIN
+        //#ifndef Q_WS_WIN
         //qDebug() << "language" << file.language;
         if ( file.language == "asm" ) {
             //qDebug() << "scanning" << file.source;
@@ -524,7 +529,7 @@ void SourceFrame::run()
                         }
                     }
                     if ( (parts.length() >= 2 && parts[0].toUpper() == "CALL" ) ||
-                         (parts.length() >= 2 && parts[1].toUpper() == "CALL" ) ) {
+                            (parts.length() >= 2 && parts[1].toUpper() == "CALL" ) ) {
                         fl.line = line;
                         //qDebug() << "call at" << name << line;
                         callLines.insert(fl);
@@ -539,13 +544,13 @@ void SourceFrame::run()
             }
             source.close();
         }
-//#endif
+        //#endif
     }
     globals.sort();
     //qDebug() << "labels" << textLabels;
 
     //foreach ( QString label, labelRange.keys() ) {
-        //qDebug() << label << labelRange[label].first << labelRange[label].last;
+    //qDebug() << label << labelRange[label].first << labelRange[label].last;
     //}
 
     if ( ldCmd == "" ) {
@@ -583,9 +588,9 @@ void SourceFrame::run()
         return;
     }
 
-//
-//  On OS X and Windows locate symbols and line numbers from asm files
-//
+    //
+    //  On OS X and Windows locate symbols and line numbers from asm files
+    //
 #if defined Q_OS_MAC || defined Q_WS_WIN
     int line;
     QList<File>::iterator i;
@@ -617,14 +622,21 @@ void SourceFrame::run()
                             line = parts[0].toInt() - parts[1].toInt();
                         }
                     } else if ( parts.length() > 1 &&
-                                parts[1].startsWith("[se",Qt::CaseInsensitive) ) {
+                            parts[1].startsWith("[se",Qt::CaseInsensitive) ) {
                         if ( parts[2].startsWith(".text",Qt::CaseInsensitive) ) {
                             inText = true;
                         } else {
                             inText = false;
                         }
                     }
-                    if ( text[27] != QChar('-') ) line++;
+                    if ( text[36] != QChar('<') || text[38] != QChar('>') ) {
+                        if ( parts.length() > 1 ) {
+                            int n = parts[1].length();
+                            if ( parts[1][n-1] != QChar('-') ) line++;
+                        } else {
+                            line++;
+                        }
+                    }
                     text = listing.readLine();
                 }
             }
@@ -634,9 +646,9 @@ void SourceFrame::run()
     }
 #endif
 
-//
-//  Discover addresses of globals
-//
+    //
+    //  Discover addresses of globals
+    //
     textToAddress.clear();
     QProcess nm(this);
     nm.start(QString("nm -a %1").arg(exeName));
@@ -654,8 +666,8 @@ void SourceFrame::run()
         nmParts = nmData.split(rx1);
         if ( nmParts.length() >= 3 ) {
             if ( nmParts[1] == "D" || nmParts[1] == "S" ||
-                 nmParts[1] == "d" || nmParts[1] == "s" ||
-                 nmParts[1] == "B" ) {
+                    nmParts[1] == "d" || nmParts[1] == "s" ||
+                    nmParts[1] == "B" ) {
                 if ( rx2.exactMatch(nmParts[2]) ) {
                     varToAddress[nmParts[2]] = "0x" + nmParts[0];
                 }
@@ -663,17 +675,17 @@ void SourceFrame::run()
                 nmParts[0] = "0x" + nmParts[0];
                 textToAddress[nmParts[2]] = nmParts[0].toULong(&ok,16);
                 //qDebug() << "text" << nmParts[2] << textToAddress[nmParts[2]]
-                         //<< textToFile[nmParts[2]];
+                //<< textToFile[nmParts[2]];
             }
         }
         nmData = nm.readLine();
     }
     //qDebug() << "globals" << varToAddress.keys();
 
-//
-//  Translate line numbers for asm files to actual addresses
-//  Windows and Mac
-//
+    //
+    //  Translate line numbers for asm files to actual addresses
+    //  Windows and Mac
+    //
 #if defined Q_OS_MAC || defined Q_WS_WIN
     foreach ( file, files ) {
         //qDebug() << "nm loop" << file.source << file.language << file.object;
@@ -828,7 +840,7 @@ void SourceFrame::step()
 {
     clearNextLine(breakFile,breakLine);
     if ( inAssembly && (ebe.os == "mac" || ebe.os == "windows") ) {    
-        emit doNextInstruction();
+        emit doStepInstruction();
     } else {
         emit doStep();
     }
@@ -884,12 +896,12 @@ void SourceFrame::setNextLine ( QString &file, int & line )
             //it2 = fileLineToAddress.lowerBound(fl2);
             //qDebug() << it.value() << it2.value();
             //while ( it.value() == it2.value() ) {
-                //line++;
-                //fl.line = line;
-                //fl2.line = line+1;
-                //it = fileLineToAddress.lowerBound(fl);
-                //it2 = fileLineToAddress.lowerBound(fl2);
-                //qDebug() << it.value() << it2.value();
+            //line++;
+            //fl.line = line;
+            //fl2.line = line+1;
+            //it = fileLineToAddress.lowerBound(fl);
+            //it2 = fileLineToAddress.lowerBound(fl2);
+            //qDebug() << it.value() << it2.value();
             //}
             int n = source->file.source.lastIndexOf("/");
             if ( n < 0 ) continue;
@@ -1008,7 +1020,7 @@ void SourceFrame::open(bool /* checked */)
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
-    qDebug() << "open" << index << source << source->textDoc->characterCount();
+    //qDebug() << "open" << index << source << source->textDoc->characterCount();
     if ( !source || source->textDoc->characterCount() > 1 ) {
         source = new SourceWindow;
         index = tab->addTab(source,"");
@@ -1047,7 +1059,7 @@ void SourceFrame::close()
 {
     int index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
-    qDebug() << "close" << tab->count();
+    //qDebug() << "close" << tab->count();
     if ( source ) {
         if ( source->changed ) {
             int ret = QMessageBox::warning(this, tr("Warning"),
@@ -1411,10 +1423,26 @@ void SourceFrame::templateAssembly()
     tab->setTabText(index,"hello.asm");
     QFile::remove("hello.asm");
     QFile::copy(
-        QString(":/src/assembly/%1/hello.asm").arg(ebe.os),
-        "hello.asm");
+            QString(":/src/assembly/%1/hello.asm").arg(ebe.os),
+            "hello.asm");
     QFile::setPermissions("hello.asm", QFile::ReadOwner | QFile::WriteOwner);
     source->open("hello.asm");
+    source->setFontHeightAndWidth(fontHeight,fontWidth);
+}
+
+void SourceFrame::templateHal()
+{
+    if ( !source || source->textEdit->document()->characterCount() > 1 ) {
+        source = new SourceWindow;
+        int index = tab->addTab(source,"hello.hal");
+        tab->setCurrentIndex(index);
+    }
+    int index = tab->currentIndex();
+    tab->setTabText(index,"hello.asm");
+    QFile::remove("hello.asm");
+    QFile::copy( QString(":/src/hal/hello.hal"), "hello.hal");
+    QFile::setPermissions("hello.hal", QFile::ReadOwner | QFile::WriteOwner);
+    source->open("hello.hal");
     source->setFontHeightAndWidth(fontHeight,fontWidth);
 }
 

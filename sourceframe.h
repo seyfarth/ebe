@@ -77,6 +77,7 @@ public slots:
     void templateCpp();
     void templateAssembly();
     void templateFortran();
+    void templateHal();
     void updateCursorPosition();
     void doTemplate(QAction*);
     void insertFile(QString f);
@@ -87,6 +88,7 @@ signals:
                QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doNextInstruction();
+    void doStepInstruction();
     void doCall();
     void doStep();
     void doContinue();

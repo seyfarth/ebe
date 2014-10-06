@@ -1,0 +1,31 @@
+
+;    switch ( i ) {
+        mov     scr1, [i]    ; prepare to test rax several times
+
+;    case 1:
+        cmp     scr1, 1
+        jne     case_2
+
+;       Do something for i == 1
+
+;    break;
+        jmp     switch_end
+        
+;    case 2:
+case_2:
+        cmp     scr1, 2
+        jne     case_3
+
+;       Do something for i == 2
+
+;    break;
+        jmp     switch_end
+
+;    default:
+case_3:
+
+;       Do something for the default case
+
+;    }
+switch_end:
+

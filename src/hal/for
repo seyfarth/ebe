@@ -1,0 +1,15 @@
+
+;   for ( int i=0; i < 10; i++ ) {
+;   using scr1 for i
+        xor     scr1d, scr1d    ; i=0
+top_of_for:
+        cmp     scr1d, 10       ; test the first and every iteration
+        jnl     end_of_for
+;
+;       Do whatever
+;
+        inc     scr1d           ; i++
+        jmp     top_of_for
+;    }
+end_of_for:
+

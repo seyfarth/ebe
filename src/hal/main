@@ -1,0 +1,15 @@
+        segment .text
+        global  main     ; Tell linker about main
+main:
+        push    rfp
+        mov     rfp, rsp ; setup stack frame
+        reserve L, P     ; L: number of local variables
+                         ; P: max number of parameters to called functions 
+
+; Up to 4 (Windows) or 6 integer parameters in par1-par4; maybe par5-par6
+; Up to 4 (Windows) 8 float parameters in xmm0-xmm7
+; Windows call with double, int, double, int parameters: xmm0 par2 xmm2 par4
+; Linux/OS X call: xmm0 par1 xmm1 par2
+
+        leave
+        ret

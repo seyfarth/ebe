@@ -422,6 +422,7 @@ void GDB::doNext()
 
 void GDB::doStep()
 {
+    //qDebug() << "gdb step";
     if ( !running ) return;
     send("step");
     setNormal();
@@ -451,11 +452,28 @@ void GDB::doNextInstruction()
     emit resetData();
 }
 
+void GDB::doStepInstruction()
+{
+    //qDebug() << "stepi";
+    if ( !running ) return;
+    send("stepi");
+    setNormal();
+    getBackTrace();
+    if ( !running ) return;
+    getRegs();
+    getFpRegs();
+    getGlobals();
+    getLocals();
+    getArgs();
+    emit resetData();
+}
+
 void GDB::doCall()
 {
     FileLine fl(breakFile,breakLine+1);
     //qDebug() << "call from" << breakFile << breakLine;
     if ( !running ) return;
+    //qDebug() << "tbreak *" << fileLineToAddress[fl];
     send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
     send("continue");
     setNormal();
@@ -471,6 +489,7 @@ void GDB::doCall()
 
 void GDB::doContinue()
 {
+    //qDebug() << "continue";
     if ( !running ) return;
     send("continue");
     setNormal();
@@ -565,7 +584,7 @@ void GDB::getBackTrace()
             FileLine fl;
             if ( addressToFileLine.contains(address) ) {
                 fl = addressToFileLine[address];
-                //qDebug() << "ok" << ok << address;
+                //qDebug() << "ok" << ok << address << fl.file << fl.line;
                 emit nextInstruction(fl.file,fl.line);
             } else {
                 qDebug() << tr("Could not interpret address:") << address;

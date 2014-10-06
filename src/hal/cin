@@ -1,0 +1,13 @@
+
+;   cin >> i;
+        segment .data
+format: db      "%d", 0     ; add ending 0 byte to strings
+        segment .text
+        lea     par1, [format] ; parameter 1 for scanf
+        lea     par2, [i]      ; parameter 2 for scanf
+        xor     retd, retd     ; Linux: 0 floating point parameters
+        call    scanf
+
+;       Test retd vs 1 after scanf to see if it worked.
+;       scanf returns the number of items it has read
+

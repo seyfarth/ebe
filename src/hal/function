@@ -1,0 +1,15 @@
+;int f ( int x )
+;{
+        segment .text
+f:
+        push    rfp
+        mov     rfp, rsp  ; create stack frame
+        reserve L, P      ; generates sub rsp, M
+                          ; L: number of desired local variables
+                          ; P: maximum number of parameters in called functions
+
+    ;return 0;
+        xor     retd, retd  ; return value in retq (rax)
+        leave               ; undo initial push-mov-sub
+        ret 
+;}

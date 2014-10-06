@@ -54,6 +54,7 @@ public slots:
                QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doNextInstruction();
+    void doStepInstruction();
     void doCall();
     void doStep();
     void doContinue();

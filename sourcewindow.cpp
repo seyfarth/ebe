@@ -20,6 +20,7 @@ extern GDB *gdb;
 extern QStringList cppExts;
 extern QStringList cExts;
 extern QStringList fortranExts;
+extern QStringList halExts;
 extern QStringList asmExts;
 
 extern QStatusBar *statusBar;
@@ -564,6 +565,8 @@ void SourceWindow::open(QString name)
         textEdit->highlighter = new FortranHighlighter(textEdit->document());
     } else if ( file.language == "asm" ) {
         textEdit->highlighter = new AsmHighlighter(textEdit->document());
+    } else if ( file.language == "hal" ) {
+        textEdit->highlighter = new AsmHighlighter(textEdit->document());
     }
 
     QByteArray text = f.readAll();
@@ -613,17 +616,27 @@ void SourceWindow::open()
         selected = tr("Fortran files (*.f* *.F* *akefile)");
         patterns = tr("Fortran files (*.f* *.F* *akefile);;") +
                    tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
-                   tr("Assembly files (*.asm *.s *akefile);;");
+                   tr("Assembly files (*.asm *.s *akefile);;") +
+                   tr("HAL files (*.hal *akefile);;");
     } else if ( ebe["language"].toString() == "asm" ) {
         //qDebug() << "asm";
         selected = tr("Assembly files (*.asm *.s *akefile)");
         patterns = tr("Assembly files (*.asm *.s *akefile);;") +
                    tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
+                   tr("Fortran files (*.f* *.F* *akefile);;") +
+                   tr("HAL files (*.hal *akefile);;");
+    } else if ( ebe["language"].toString() == "hal" ) {
+        //qDebug() << "asm";
+        selected = tr("HAL files (*.hal *akefile)");
+        patterns = tr("HAL files (*.hal *akefile);;") +
+                   tr("Assembly files (*.asm *.s *akefile);;") +
+                   tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
                    tr("Fortran files (*.f* *.F* *akefile);;");
     } else {
         patterns = tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
                    tr("Fortran files (*.f* *.F* *akefile);;") +
-                   tr("Assembly files (*.asm *.s *akefile);;");
+                   tr("Assembly files (*.asm *.s *akefile);;") +
+                   tr("HAL files (*.hal *akefile);;");
     }
 
     //qDebug() << selected;

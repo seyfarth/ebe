@@ -1,0 +1,10 @@
+
+;    if ( par2 > 5 ) {
+        cmp     par2, 5     ; subtracts par2-5 without saving
+        jng     end_if      ; jump if not greater than
+
+;       do whatever
+
+;    }
+end_if:                     ; name the label what you want
+
