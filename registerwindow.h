@@ -260,5 +260,9 @@ public slots:
 
 };
 
+class HalRegisterWindow : public RegisterWindow
+{
+    HalRegisterWindow(QWidget *parent = 0);
+};
 #endif
 

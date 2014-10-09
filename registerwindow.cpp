@@ -373,3 +373,8 @@ QString Register::value()
         return contents;
     }
 }
+
+HalRegisterWindow::HalRegisterWindow(QWidget *parent)
+: RegisterWindow(parent)
+{
+}

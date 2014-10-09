@@ -1,3 +1,4 @@
+#include <QMenu>
 #include <QStatusBar>
 #include <QMessageBox>
 #include "sourceframe.h"

@@ -66,6 +66,7 @@ private:
 
     QDockWidget *dataDock;
     QDockWidget *registerDock;
+    QDockWidget *halRegisterDock;
     QDockWidget *floatDock;
     QDockWidget *projectDock;
     QDockWidget *terminalDock;

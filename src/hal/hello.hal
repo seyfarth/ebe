@@ -1,0 +1,16 @@
+        segment .data
+message db      "Hello world!", 0x0a, 0
+
+        segment .text
+        global  main
+        extern  printf
+main:
+        push    rfp
+        mov     rfp, rsp
+        reserve 0, 1
+        lea     par1, [message]
+        xor     retd, retd          ; Linux: number of floating params
+        call    printf
+        xor     retd, retd
+        leave
+        ret

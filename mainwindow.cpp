@@ -33,6 +33,7 @@ extern Settings *settings;
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
 RegisterWindow *registerWindow;
+HalRegisterWindow *halRegisterWindow;
 FloatWindow *floatWindow;
 ProjectWindow *projectWindow;
 TerminalWindow *terminalWindow;
@@ -146,6 +147,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     connect ( gdb, SIGNAL(sendRegs(StringHash)),
               registerWindow, SLOT(receiveRegs(StringHash)) );
+    connect ( gdb, SIGNAL(sendRegs(StringHash)),
+             halRegisterWindow, SLOT(receiveRegs(StringHash)) );
     connect ( gdb, SIGNAL(sendFpRegs(QStringList)),
               floatWindow, SLOT(receiveFpRegs(QStringList)) );
     connect ( this, SIGNAL(sendWorkingDir(QString)),
@@ -352,6 +355,7 @@ void MainWindow::setFontSize()
     dataWindow->setFontHeightAndWidth(height,width);
     floatWindow->setFontHeightAndWidth(height,width);
     registerWindow->setFontHeightAndWidth(height,width);
+    halRegisterWindow->setFontHeightAndWidth(height,width);
     toyBox->setFontHeightAndWidth(height,width);
     bitBucket->setFontHeightAndWidth(height,width);
 }
@@ -709,6 +713,15 @@ void MainWindow::createDockWindows()
     registerWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     registerDock->setWidget(registerWindow);
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
+
+    halRegisterDock = new QDockWidget(tr("HAL Registers"));
+    halRegisterDock->setObjectName("Dock 10");
+    halRegisterDock->setAllowedAreas(Qt::LeftDockWidgetArea |
+                              Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    halRegisterWindow = new HalRegisterWindow(this);    
+    halRegisterWindow->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    halRegisterDock->setWidget(registerWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, halRegisterDock);
 
     floatDock = new QDockWidget(tr("Floating Point Registers"));
     floatDock->setObjectName("Dock 3");
