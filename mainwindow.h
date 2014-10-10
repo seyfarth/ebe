@@ -32,6 +32,7 @@ class MainWindow: public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     void saveSettings();
+    bool toolExists(QString t);
     void open(QString name);
 
 public slots:
@@ -59,7 +60,6 @@ private:
         const char *slot, bool checked);
     bool eventFilter(QObject *object, QEvent *event);
     void checkTools();
-    bool toolExists(QString t);
 
     bool tooltipsVisible;
 

@@ -1,3 +1,4 @@
+#include <QMenu>
 #include <QStatusBar>
 #include <QMessageBox>
 #include "sourceframe.h"
@@ -488,7 +489,8 @@ void SourceFrame::run()
             //qDebug() << parts;
             if (parts.length() >= 3) {
                 if (parts[1] == "T"
-                    && (parts[2] == "main" || parts[2] == "_main")) {
+                    && (parts[2] == "main" || parts[2] == "_main"
+                        || parts[2] == "_MAIN_" )) {
                     //qDebug() << "found main" << object;
                     if (file.language == "c") {
                         ldCmd = ebe["build/ccld"].toString();

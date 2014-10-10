@@ -30,7 +30,6 @@ extern int userHeight;
 extern Settings *settings;
 
 QString gdbName;
-QString fortranName;
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
 RegisterWindow *registerWindow;
@@ -201,11 +200,7 @@ void MainWindow::checkTools()
             missingCritical += "gdb";
         }
         if (!toolExists("gcc")) missingCritical += "gcc";
-        if (toolExists("gfortran")) {
-            fortranName = "gfortran";
-        } else if ( toolExists("g95")) {
-            fortranName = "g95";
-        } else {
+        if (!toolExists("gfortran") && !toolExists("g95") ) {
             missing += "gfortran";
         }
         if (!toolExists("yasm")) missing += "yasm";

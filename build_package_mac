@@ -7,7 +7,7 @@ rm -rf $exe.d
 mkdir -p $exe.d
 
 cp $exe $exe.d
-cp ebe.rcc $exe.d
+#cp ebe.rcc $exe.d
 
 cat > $exe.d/README << EOF1
             Installation instructions for $exe

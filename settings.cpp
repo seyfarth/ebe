@@ -1,5 +1,6 @@
 #define SETTINGS_CPP
 #include "settings.h"
+#include "mainwindow.h"
 #include "stylesheet.h"
 #include "language.h"
 #include <QDir>
@@ -13,7 +14,8 @@
 #include <QDebug>
 
 extern Languages languages;
-extern QString fortranName;
+QString fortranName;
+extern MainWindow *mainWin;
 
 QSet<QString> expertKeys;
 
@@ -144,6 +146,7 @@ void Settings::setDefaults()
     ebe["build/cpp"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
         "-o \"$base.o\" \"$source\"";
     ebe["build/cppld"] = "g++ -g -o \"$base\"";
+    fortranName = mainWin->toolExists("gfortran") ? "gfortran" : "g95";
     ebe["build/fortran"] = fortranName + " -g -c -Wfatal-errors -Wall -O0 "
         "-o \"$base.o\" \"$source\"";
     ebe["build/fortranld"] = fortranName + " -g -o \"$base\" ";
