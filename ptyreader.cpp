@@ -13,12 +13,11 @@ PtyReader::PtyReader(HANDLE h)
 }
 #else
 PtyReader::PtyReader(int fd)
-: QThread()
+    : QThread()
 {
     pty = fd;
 }
 #endif
-
 
 void PtyReader::run()
 {
@@ -30,11 +29,11 @@ void PtyReader::run()
 #endif
 
     //printf("ready\n");
-    while ( 1 ) {
+    while (1) {
 #ifdef Q_WS_WIN
         ReadFile ( pty, data, 256, &n, NULL );
 #else
-        n=read(pty,data,256);
+        n = read(pty, data, 256);
 #endif
         data[n] = 0;
         QString s(data);

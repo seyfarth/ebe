@@ -7,10 +7,10 @@ StringSet instructions;
 void readInstructions()
 {
     QFile file(QString(":/src/assembly/instructions"));
-    if ( file.open(QFile::ReadOnly) ) {
+    if (file.open(QFile::ReadOnly)) {
         QString t;
         t = file.readLine();
-        while ( t != "" ) {
+        while (t != "") {
             t = t.trimmed();
             instructions.insert(t);
             t = file.readLine();

@@ -2,8 +2,8 @@
 #define TOYBOX_H
 
 /*
-    ToyBox class
-*/
+ ToyBox class
+ */
 
 #include <QtGui>
 #include <QLineEdit>
@@ -45,7 +45,7 @@ class VariableTable: public QTableWidget
 
 public:
     VariableTable(ToyBox *p);
-    void setFontHeightAndWidth ( int height, int width );
+    void setFontHeightAndWidth(int height, int width);
     ToyBox *box;
     int fontHeight;
     int fontWidth;
@@ -68,7 +68,7 @@ public:
     QLineEdit *value;
     ExpressionTable *table;
     int row;
-    void setValue( QString t, QStringList v);
+    void setValue(QString t, QStringList v);
     void setValue();
     QStringList hex;
 };
@@ -79,13 +79,13 @@ class ExpressionTable: public QTableWidget
 
 public:
     ExpressionTable(ToyBox *p);
-    void setFontHeightAndWidth ( int height, int width );
+    void setFontHeightAndWidth(int height, int width);
     ToyBox *box;
     int fontHeight;
     int fontWidth;
 };
 
-class ToyBox : public QFrame
+class ToyBox: public QFrame
 {
     Q_OBJECT
 
@@ -95,7 +95,7 @@ public:
     VariableTable *variableTable;
     ExpressionTable *expressionTable;
 
-    void setFontHeightAndWidth ( int height, int width );
+    void setFontHeightAndWidth(int height, int width);
     QVector<ToyVariable *> variables;
     QVector<ToyExpression *> expressions;
     QString code;
@@ -112,7 +112,6 @@ private:
 
     int fontWidth;          //< The width of a fixed width character
     int fontHeight;         //< The height of a fixed width character
-
 };
 
 #endif

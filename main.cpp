@@ -9,8 +9,8 @@
 #include "language.h"
 
 bool userSetGeometry = false;
-int  userWidth;
-int  userHeight;
+int userWidth;
+int userHeight;
 
 Languages languages;
 
@@ -27,13 +27,13 @@ int main(int argc, char *argv[])
     app = new QApplication(argc, argv);
     //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
 
-    if ( argc >= 3 ) {
-        if ( strcmp(argv[1],"-g") == 0 ) {
-            char *p = strchr(argv[2],'x');
-            if ( p ) {
+    if (argc >= 3) {
+        if (strcmp(argv[1], "-g") == 0) {
+            char *p = strchr(argv[2], 'x');
+            if (p) {
                 userSetGeometry = true;
                 userWidth = atoi(argv[2]);
-                userHeight = atoi(p+1);
+                userHeight = atoi(p + 1);
                 argc -= 2;
                 argv += 2;
             }
@@ -47,6 +47,6 @@ int main(int argc, char *argv[])
 
     mainWin = new MainWindow;
     mainWin->show();
-    if ( argc > 1 ) mainWin->open(argv[1]);
+    if (argc > 1) mainWin->open(argv[1]);
     return app->exec();
 }

@@ -12,12 +12,12 @@
 #include <QPushButton>
 class PtyReader;
 
-class TerminalEdit : public QPlainTextEdit
+class TerminalEdit: public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    TerminalEdit(int fd, QWidget *parent=0);
+    TerminalEdit(int fd, QWidget *parent = 0);
 
 private slots:
 
@@ -26,9 +26,9 @@ private:
 
 };
 
-class InputEdit : public QLineEdit
+class InputEdit: public QLineEdit
 {
-    Q_OBJECT 
+    Q_OBJECT
 
 public:
     InputEdit();
@@ -43,19 +43,19 @@ public slots:
     void endFlash();
     void updateFlash();
 
-signals:
+    signals:
     void sendEOF();
 
 };
 
-class TerminalWindow : public QFrame
+class TerminalWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    TerminalWindow(QWidget *parent=0);
+    TerminalWindow(QWidget *parent = 0);
     QString ptyName;
-    
+
 private slots:
     void dataReady(QString data);
     void lineEditReady();

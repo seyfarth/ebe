@@ -25,16 +25,17 @@ extern QStringList asmExts;
 
 extern QStatusBar *statusBar;
 
-SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
+SourceEdit::SourceEdit(QWidget *parent)
+    : QPlainTextEdit(parent)
 {
     setWordWrapMode(QTextOption::NoWrap);
     //QTimer *timer = new QTimer(this);
     //connect(timer,SIGNAL(timeout()),this,SLOT(printScroll()));
     //timer->start(1000);
     setToolTip(tr("Right click to popup a menu.\n"
-                  "Mark a variable and right click to define\n"
-                  "a user-defined variable. This is most\n"
-                  "useful for assembly language."));
+        "Mark a variable and right click to define\n"
+        "a user-defined variable. This is most\n"
+        "useful for assembly language."));
     top = -1;
     scrollBar = verticalScrollBar();
     tab_width = ebe["edit/tab_width"].toInt();
@@ -42,47 +43,38 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
     c = 0;
     QCompleter *completer = new QCompleter(this);
     setCompleter(completer);
-    c->setModel ( &model );
+    c->setModel(&model);
     QStringList list;
     complete_minimum = ebe["complete/minimum"].toInt();
-    list << "include" << "using" << "namespace" << "class"
-         << "struct" << "union" << "double" << "extern" 
-         << "static" << "volatile" << "parameter" << "variable"
-         << "allocate" << "assert" << "asynchronous" << "average"
-         << "binary" << "break" << "catch" << "const"
-         << "close" << "const_cast" << "critical" << "continue"
-         << "cout" << "bool" << "dynamic_cast" << "decimal"
-         << "define" << "dimension" << "delete" << "default"
-         << "error" << "extern" << "external" << "fclose"
-         << "first" << "float" << "flush" << "fflush"
-         << "fopen" << "format" << "fprintf" << "fscanf"
-         << "fstream" << "false" << "generic" << "goto"
-         << "height" << "hello world!" << "Hello world!" << "hexadecimal"
-         << "ifdef" << "ifndef" << "implicit" << "import"
-         << "index" << "inline" << "INT_MIN" << "INT_MAX"
-         << "integer" << "intrinsic" << "iostream" << "iomanip"
-         << "iterator" << "last" << "length" << "lock" 
-         << "long" << "lowercase" << "macro" << "MAX_RAND"
-         << "memory" << "middle" << "module" << "main" 
-         << "negative" << "npos" << "NULL" << "only" 
-         << "open" << "operator" << "optional" << "people"
-         << "person" << "pointer" << "polynomial" << "positive"
-         << "precision" << "prefix" << "print" << "printf"
-         << "private" << "protected" << "public" << "pure"
-         << "push_back" << "queue" << "random" << "read"
-         << "recursive" << "register" << "reinterpret_cast" << "result"
-         << "reverse" << "rewind" << "return" << "real" 
-         << "save" << "scanf" << "section" << "segment"
-         << "select" << "sequence" << "short" << "signed"
-         << "square" << "static_cast" << "string" << "strlen"
-         << "student" << "substr" << "suffix" << "switch"
-         << "sync" << "static" << "sizeof" << "typeid"
-         << "target" << "text" << "this" << "throw"
-         << "total" << "true" << "typedef" << "undef" 
-         << "unlock" << "unsigned" << "uppercase" << "value"
-         << "virtual" << "vector" << "void" << "wait"
-         << "wchar_t" << "weight" << "write" << "while"
-         << "stdio.h" << "stdlib.h" << "cstdio" << "math.h";
+    list << "include" << "using" << "namespace" << "class" << "struct"
+        << "union" << "double" << "extern" << "static" << "volatile"
+        << "parameter" << "variable" << "allocate" << "assert" << "asynchronous"
+        << "average" << "binary" << "break" << "catch" << "const" << "close"
+        << "const_cast" << "critical" << "continue" << "cout" << "bool"
+        << "dynamic_cast" << "decimal" << "define" << "dimension" << "delete"
+        << "default" << "error" << "extern" << "external" << "fclose" << "first"
+        << "float" << "flush" << "fflush" << "fopen" << "format" << "fprintf"
+        << "fscanf" << "fstream" << "false" << "generic" << "goto" << "height"
+        << "hello world!" << "Hello world!" << "hexadecimal" << "ifdef"
+        << "ifndef" << "implicit" << "import" << "index" << "inline"
+        << "INT_MIN" << "INT_MAX" << "integer" << "intrinsic" << "iostream"
+        << "iomanip" << "iterator" << "last" << "length" << "lock" << "long"
+        << "lowercase" << "macro" << "MAX_RAND" << "memory" << "middle"
+        << "module" << "main" << "negative" << "npos" << "NULL" << "only"
+        << "open" << "operator" << "optional" << "people" << "person"
+        << "pointer" << "polynomial" << "positive" << "precision" << "prefix"
+        << "print" << "printf" << "private" << "protected" << "public" << "pure"
+        << "push_back" << "queue" << "random" << "read" << "recursive"
+        << "register" << "reinterpret_cast" << "result" << "reverse" << "rewind"
+        << "return" << "real" << "save" << "scanf" << "section" << "segment"
+        << "select" << "sequence" << "short" << "signed" << "square"
+        << "static_cast" << "string" << "strlen" << "student" << "substr"
+        << "suffix" << "switch" << "sync" << "static" << "sizeof" << "typeid"
+        << "target" << "text" << "this" << "throw" << "total" << "true"
+        << "typedef" << "undef" << "unlock" << "unsigned" << "uppercase"
+        << "value" << "virtual" << "vector" << "void" << "wait" << "wchar_t"
+        << "weight" << "write" << "while" << "stdio.h" << "stdlib.h" << "cstdio"
+        << "math.h";
     list.sort();
 
     list = list.filter(QRegExp(QString(".{%1,}").arg(complete_minimum)));
@@ -93,23 +85,23 @@ SourceEdit::SourceEdit(QWidget *parent) : QPlainTextEdit(parent)
 
     highlighter = new CppHighlighter(document());
 
-    connect ( this, SIGNAL(cursorPositionChanged()), 
-              sourceFrame, SLOT(updateCursorPosition()) );
+    connect(this, SIGNAL(cursorPositionChanged()), sourceFrame,
+        SLOT(updateCursorPosition()));
 }
 
 void SourceEdit::setCompleter(QCompleter *completer)
 {
-    if ( c ) disconnect ( c, 0, this, 0 );
+    if (c) disconnect(c, 0, this, 0);
 
     c = completer;
 
-    if ( !c ) return;
+    if (!c) return;
 
     c->setWidget(this);
     c->setCompletionMode(QCompleter::PopupCompletion);
     c->setCaseSensitivity(Qt::CaseSensitive);
-    QObject::connect(c, SIGNAL(activated(QString)),
-            this, SLOT(insertCompletion(QString)));
+    QObject::connect(c, SIGNAL(activated(QString)), this,
+        SLOT(insertCompletion(QString)));
 }
 
 QCompleter *SourceEdit::completer() const
@@ -119,8 +111,7 @@ QCompleter *SourceEdit::completer() const
 
 void SourceEdit::insertCompletion(const QString& completion)
 {
-    if (c->widget() != this)
-        return;
+    if (c->widget() != this) return;
     QTextCursor tc = textCursor();
     int extra = completion.length() - c->completionPrefix().length();
     tc.movePosition(QTextCursor::Left);
@@ -147,14 +138,14 @@ void SourceEdit::addWords(QString t)
     QRegExp rx(QString("([a-zA-Z][a-zA-Z0-9_]{%1,})").arg(complete_minimum));
     QString word;
 
-    int i=0;
-    while ( true ) {
-        i = rx.indexIn(t,i);
-        if ( i < 0 ) break;
+    int i = 0;
+    while (true) {
+        i = rx.indexIn(t, i);
+        if (i < 0) break;
         word = rx.cap(1);
-        if ( ! wordsInList.contains(word) ) {
+        if (!wordsInList.contains(word)) {
             model.insertRow(0);
-            model.setData(model.index(0),word);
+            model.setData(model.index(0), word);
             wordsInList.insert(word);
         }
         i += word.length();
@@ -162,48 +153,48 @@ void SourceEdit::addWords(QString t)
     model.sort(0);
 }
 
-QString lastPrefix="";
+QString lastPrefix = "";
 
 void SourceEdit::keyPressEvent(QKeyEvent *e)
 {
     static QString eow("\r ~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
 
-    static int lastKey=0;
+    static int lastKey = 0;
     int key = e->key();
-    if ( c && c->popup()->isVisible() ) {
-        switch ( key ) {
-            case Qt::Key_Enter:
-            case Qt::Key_Return:
-            case Qt::Key_Escape:
+    if (c && c->popup()->isVisible()) {
+        switch (key) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Escape:
             //case Qt::Key_Tab:
-            case Qt::Key_Backtab:
-                e->ignore();
-                return; // let the completer do default behavior
-            default:
-                break;
+        case Qt::Key_Backtab:
+            e->ignore();
+            return; // let the completer do default behavior
+        default:
+            break;
         }
     }
 
     int mod = e->modifiers();
     //qDebug() << "key" << key << mod << e->text() << int(e->text()[0].toAscii());
-    if ( key == Qt::Key_BraceLeft && mod == Qt::ShiftModifier ) {
+    if (key == Qt::Key_BraceLeft && mod == Qt::ShiftModifier) {
         //qDebug() << "BraceLeft";
         lastKey = key;
         QTextCursor cursor = textCursor();
         cursor.insertText("{");
-    } else if ( key == Qt::Key_BraceRight && mod == Qt::ShiftModifier ) {
+    } else if (key == Qt::Key_BraceRight && mod == Qt::ShiftModifier) {
         //qDebug() << "BraceRight";
         lastKey = key;
         QTextCursor cursor = textCursor();
-        if ( autoIndent ) {
+        if (autoIndent) {
             QTextBlock block = cursor.block();
             int col = cursor.position() - block.position();
             QString t = block.text();
-            int prev = (col-1)/tab_width*tab_width;
+            int prev = (col - 1) / tab_width * tab_width;
             //qDebug() << "prev" << prev << col;
-            for ( int i = col-1; i >= prev; i-- ) {
+            for (int i = col - 1; i >= prev; i--) {
                 //qDebug() << "i" << i << t[i];
-                if ( t[i] == ' ' ) {
+                if (t[i] == ' ') {
                     cursor.deletePreviousChar();
                 } else {
                     break;
@@ -211,56 +202,59 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
             }
         }
         cursor.insertText("}");
-    } else if ( key == Qt::Key_Return ) {
-        if ( lastPrefix.length() >= complete_minimum &&
-             ! wordsInList.contains(lastPrefix) ) {
+    } else if (key == Qt::Key_Return) {
+        if (lastPrefix.length() >= complete_minimum
+            && !wordsInList.contains(lastPrefix)) {
             model.insertRow(0);
-            model.setData(model.index(0),lastPrefix);
+            model.setData(model.index(0), lastPrefix);
             wordsInList.insert(lastPrefix);
             model.sort(0);
         }
         int k = 0;
-        if ( lastKey == Qt::Key_BraceLeft ) k = 1;
-        if ( autoIndent && mod == 0 ) indentNewLine(k);
-        else newLine();
+        if (lastKey == Qt::Key_BraceLeft) k = 1;
+        if (autoIndent && mod == 0)
+            indentNewLine(k);
+        else
+            newLine();
         lastKey = 0;
-    } else if ( (key == Qt::Key_Period || key == Qt::Key_Less)
-                && mod & Qt::ControlModifier ) {
+    } else if ((key == Qt::Key_Period || key == Qt::Key_Less)
+        && (mod & Qt::ControlModifier)) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->indent();
-    } else if ( (key == Qt::Key_Comma || key == Qt::Key_Greater)
-                && mod & Qt::ControlModifier ) {
+    } else if ((key == Qt::Key_Comma || key == Qt::Key_Greater)
+        && (mod & Qt::ControlModifier)) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->unIndent();
-    } else if ( key == Qt::Key_Home && mod & Qt::ControlModifier ) {
+    } else if (key == Qt::Key_Home && (mod & Qt::ControlModifier)) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoFirstLine();
-    } else if ( key == Qt::Key_End && mod & Qt::ControlModifier ) {
+    } else if (key == Qt::Key_End && (mod & Qt::ControlModifier)) {
         lastKey = 0;
         SourceWindow *p = (SourceWindow *)parent();
         p->gotoLastLine();
-    } else if ( key == Qt::Key_Tab && mod == 0 ) {
+    } else if (key == Qt::Key_Tab && mod == 0) {
         lastKey = 0;
         QTextCursor cursor = textCursor();
         QTextBlock block = cursor.block();
         int col = cursor.position() - block.position();
-        int next = (col+tab_width)/tab_width*tab_width;
+        int next = (col + tab_width) / tab_width * tab_width;
         int n = next - col;
-        for ( int i = 0; i < n; i++ ) cursor.insertText(" ");
-    } else if ( key == Qt::Key_Tab && mod & Qt::ControlModifier ) {
+        for (int i = 0; i < n; i++)
+            cursor.insertText(" ");
+    } else if (key == Qt::Key_Tab && (mod & Qt::ControlModifier)) {
         lastKey = 0;
         QTextCursor cursor = textCursor();
         QTextBlock block = cursor.block();
         int col = cursor.position() - block.position();
         QString t = block.text();
-        int prev = (col-1)/tab_width*tab_width;
+        int prev = (col - 1) / tab_width * tab_width;
         //qDebug() << "prev" << prev << col;
-        for ( int i = col-1; i >= prev; i-- ) {
+        for (int i = col - 1; i >= prev; i--) {
             //qDebug() << "i" << i << t[i];
-            if ( t[i] == ' ' ) {
+            if (t[i] == ' ') {
                 cursor.deletePreviousChar();
             } else {
                 break;
@@ -268,20 +262,20 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
         }
     } else {
         QPlainTextEdit::keyPressEvent(e);
-        const bool ctrlOrShift = mod & (Qt::ControlModifier | Qt::ShiftModifier);
-        if (!c || (ctrlOrShift && e->text().isEmpty()))
-            return;
+        const bool ctrlOrShift = mod
+            & (Qt::ControlModifier | Qt::ShiftModifier);
+        if (!c || (ctrlOrShift && e->text().isEmpty())) return;
 
         bool hasModifier = (mod != Qt::NoModifier) && !ctrlOrShift;
         QString completionPrefix = textUnderCursor();
 
-        if (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 1
-                || eow.contains(e->text().right(1))) {
+        if (hasModifier || e->text().isEmpty() || completionPrefix.length() < 1
+            || eow.contains(e->text().right(1))) {
             c->popup()->hide();
-            if ( lastPrefix.length() >= complete_minimum &&
-                 ! wordsInList.contains(lastPrefix) ) {
+            if (lastPrefix.length() >= complete_minimum
+                && !wordsInList.contains(lastPrefix)) {
                 model.insertRow(0);
-                model.setData(model.index(0),lastPrefix);
+                model.setData(model.index(0), lastPrefix);
                 wordsInList.insert(lastPrefix);
                 model.sort(0);
             }
@@ -295,7 +289,8 @@ void SourceEdit::keyPressEvent(QKeyEvent *e)
             c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
         }
         QRect cr = cursorRect();
-        cr.setWidth(c->popup()->sizeHintForColumn(0)
+        cr.setWidth(
+            c->popup()->sizeHintForColumn(0)
                 + c->popup()->verticalScrollBar()->sizeHint().width());
         c->complete(cr); // popup it up!
     }
@@ -312,11 +307,11 @@ void SourceEdit::indentNewLine(int x)
     int k = 0;
     cursor.insertText("\n");
     cursor = textCursor();
-    while ( k < n && t[k] == ' ' ) {
+    while (k < n && t[k] == ' ') {
         k++;
     }
     k += x * tab_width;
-    for ( int i = 0; i < k; i++ ) {
+    for (int i = 0; i < k; i++) {
         cursor.insertText(" ");
     }
 }
@@ -327,9 +322,9 @@ void SourceEdit::newLine()
     textCursor().insertText("\n");
 }
 
-void SourceEdit::scrollContentsBy ( int dx, int dy )
+void SourceEdit::scrollContentsBy(int dx, int dy)
 {
-    QPlainTextEdit::scrollContentsBy(dx,dy);
+    QPlainTextEdit::scrollContentsBy(dx, dy);
     emit newHeight(heightInPixels);
 }
 
@@ -362,18 +357,18 @@ void SourceEdit::printScroll()
     //qDebug() << "blocks" << blockCount();
 }
 
-void SourceEdit::contextMenuEvent ( QContextMenuEvent * /* event */ )
+void SourceEdit::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     QMenu menu("Edit menu");
-    menu.addAction(tr("Undo"), this, SLOT(undo()) );
-    menu.addAction(tr("Redo"), this, SLOT(redo()) );
+    menu.addAction(tr("Undo"), this, SLOT(undo()));
+    menu.addAction(tr("Redo"), this, SLOT(redo()));
     menu.addSeparator();
-    menu.addAction(tr("Cut"), this, SLOT(cut()) );
-    menu.addAction(tr("Copy"), this, SLOT(copy()) );
-    menu.addAction(tr("Paste"), this, SLOT(paste()) );
-    if ( gdb->running ) {
+    menu.addAction(tr("Cut"), this, SLOT(cut()));
+    menu.addAction(tr("Copy"), this, SLOT(copy()));
+    menu.addAction(tr("Paste"), this, SLOT(paste()));
+    if (gdb->running) {
         menu.addSeparator();
-        menu.addAction(tr("Define variable"), this, SLOT(defineVariable()) );
+        menu.addAction(tr("Define variable"), this, SLOT(defineVariable()));
     }
     menu.exec(QCursor::pos());
 }
@@ -381,17 +376,17 @@ void SourceEdit::contextMenuEvent ( QContextMenuEvent * /* event */ )
 void SourceEdit::defineVariable()
 {
     QString text = textCursor().selectedText();
-    if ( text.length() == 0 ) return;
+    if (text.length() == 0) return;
     DefineVariableDialog *dialog = new DefineVariableDialog;
     dialog->nameEdit->setText(text);
-    dialog->addressEdit->setText("&"+text);
-    if ( dialog->exec() ) {
+    dialog->addressEdit->setText("&" + text);
+    if (dialog->exec()) {
         SourceWindow *p = (SourceWindow *)parent();
         dialog->result.append(p->file.source);
         int pos = textCursor().position();
         QTextBlock block;
         block = document()->findBlock(pos);
-        int line = block.blockNumber()+1;
+        int line = block.blockNumber() + 1;
         dialog->result.append(QString("%1").arg(line));
         emit sendVariableDefinition(dialog->result);
     }
@@ -407,9 +402,10 @@ void SourceEdit::resizeEvent(QResizeEvent *e)
     emit newHeight(heightInPixels);
 }
 
-SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
+SourceWindow::SourceWindow(QWidget *parent)
+    : QFrame(parent)
 {
-    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     setLineWidth(0);
 
     tab_width = ebe["edit/tab_width"].toInt();
@@ -423,10 +419,10 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setSpacing(2);
-    layout->setContentsMargins(5,5,5,5);
+    layout->setContentsMargins(5, 5, 5, 5);
 
-    layout->addWidget(lineNumberEdit,0);
-    layout->addWidget(textEdit,1);
+    layout->addWidget(lineNumberEdit, 0);
+    layout->addWidget(textEdit, 1);
 
     setLayout(layout);
 
@@ -448,8 +444,8 @@ SourceWindow::SourceWindow(QWidget *parent) : QFrame(parent)
     // text edit widget
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
     connect ( textEdit, SIGNAL(newHeight(int)), this, SLOT(newHeight(int)));
-    connect ( textEdit, SIGNAL(sendVariableDefinition(QStringList)),
-            dataWindow, SLOT(receiveVariableDefinition(QStringList)) );
+    connect(textEdit, SIGNAL(sendVariableDefinition(QStringList)), dataWindow,
+            SLOT(receiveVariableDefinition(QStringList)));
     connect ( scrollBar, SIGNAL(sliderMoved(int)),
             this, SLOT(scrollBarChanged(int)));
     connect ( scrollBar, SIGNAL(valueChanged(int)),
@@ -463,41 +459,41 @@ void SourceWindow::clear()
     textEdit->clear();
 }
 
-void SourceWindow::setFontHeightAndWidth ( int height, int width )
+void SourceWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
-    fontWidth  = width;
-    lineNumberEdit->setFixedWidth(width*4+15);
-    if ( heightInPixels > 0 ) {
-        textHeight = heightInPixels/fontHeight;
+    fontWidth = width;
+    lineNumberEdit->setFixedWidth(width * 4 + 15);
+    if (heightInPixels > 0) {
+        textHeight = heightInPixels / fontHeight;
     } else {
         textHeight = 0;
     }
     setLineNumbers(textDoc->lineCount());
 }
 
-void SourceWindow::scrollBarRangeChanged ( int min, int max )
+void SourceWindow::scrollBarRangeChanged(int min, int max)
 {
-    lineNumberEdit->scrollBar->setRange(min,max);
+    lineNumberEdit->scrollBar->setRange(min, max);
     setLineNumbers(textDoc->lineCount());
 }
 
-void SourceWindow::scrollBarChanged ( int /* value */ )
-{
-    topNumber = scrollBar->value() + 1;
-    setLineNumbers(textDoc->lineCount());
-}
-
-void SourceWindow::sliderChanged ( int /* value */ )
+void SourceWindow::scrollBarChanged(int /* value */)
 {
     topNumber = scrollBar->value() + 1;
     setLineNumbers(textDoc->lineCount());
 }
 
-void SourceWindow::newHeight ( int height )
+void SourceWindow::sliderChanged(int /* value */)
+{
+    topNumber = scrollBar->value() + 1;
+    setLineNumbers(textDoc->lineCount());
+}
+
+void SourceWindow::newHeight(int height)
 {
     heightInPixels = height;
-    if ( fontHeight > 0 ) textHeight = heightInPixels / fontHeight;
+    if (fontHeight > 0) textHeight = heightInPixels / fontHeight;
     else textHeight = 10;
     //qDebug() << "lines" << textDoc->lineCount();
     //qDebug() << "newheight" << textHeight;
@@ -509,29 +505,28 @@ void SourceWindow::doTemplate(QAction *a)
     //qDebug() << "iconText" << a->iconText();
     QString name = a->iconText();
     int n = name.indexOf(':');
-    if ( n > 0 ) name = name.left(n);
+    if (n > 0) name = name.left(n);
     //qDebug() << name << file.language << ebe.os;
 
-
-    if ( file.language == "asm" ) {
+    if (file.language == "asm") {
         QFile in(QString(":/src/%1/%2/%3").arg("assembly").arg(ebe.os).arg(name));
-        if ( in.open(QFile::ReadOnly) ) {
+        if (in.open(QFile::ReadOnly)) {
             QString data = QString(in.readAll());
             textEdit->textCursor().insertText(data);
         }
     } else {
         QFile in(QString(":/src/%1/%2").arg(file.language).arg(name));
-        if ( in.open(QFile::ReadOnly) ) {
+        if (in.open(QFile::ReadOnly)) {
             QString data = QString(in.readAll());
             textEdit->textCursor().insertText(data);
         }
     }
 }
 
-void SourceWindow::insertFile ( QString f )
+void SourceWindow::insertFile(QString f)
 {
     QFile in(f);
-    if ( in.open(QFile::ReadOnly) ) {
+    if (in.open(QFile::ReadOnly)) {
         QString data = QString(in.readAll());
         //qDebug() << data;
         textEdit->textCursor().insertText(data);
@@ -549,11 +544,10 @@ void SourceWindow::open(QString name)
     tab_width = ebe["edit/tab_width"].toInt();
     QFile f(name);
 
-    if (! f.open(QIODevice::ReadWrite))
-    {
-        if ( ! f.open(QIODevice::ReadOnly) ) {
+    if (!f.open(QIODevice::ReadWrite)) {
+        if (!f.open(QIODevice::ReadOnly)) {
             QMessageBox::critical(this, tr("Error"),
-                    tr("Failed to open file ") + name );
+                    tr("Failed to open file ") + name);
             return;
         }
     }
@@ -561,31 +555,32 @@ void SourceWindow::open(QString name)
     file.source = QDir::current().absoluteFilePath(name);
     file.setLanguage();
     ebe["language"] = file.language;
-    if ( file.language == "fortran" ) {
+    if (file.language == "fortran") {
         textEdit->highlighter = new FortranHighlighter(textEdit->document());
-    } else if ( file.language == "asm" ) {
+    } else if (file.language == "asm") {
         textEdit->highlighter = new AsmHighlighter(textEdit->document());
-    } else if ( file.language == "hal" ) {
+    } else if (file.language == "hal") {
         textEdit->highlighter = new AsmHighlighter(textEdit->document());
     }
 
     QByteArray text = f.readAll();
     int length = text.count();
-    if ( length > 0 && text[length-1] == '\n' ) text.chop(1);
+    if (length > 0 && text[length - 1] == '\n') text.chop(1);
     int i = 0;
     int column = 0;
     int next;
     int n;
     int j;
-    while ( i < text.count() ) {
-        if ( text[i] == '\t' ) {
-            next = (column + tab_width)/tab_width*tab_width;
+    while (i < text.count()) {
+        if (text[i] == '\t') {
+            next = (column + tab_width) / tab_width * tab_width;
             n = next - column;
             text[i] = ' ';
-            for ( j = 1; j < n; j++ ) text.insert(i," ");
+            for (j = 1; j < n; j++)
+                text.insert(i, " ");
             column = next;
-            i = next-1;
-        } else if ( text[i] == '\n' ) {
+            i = next - 1;
+        } else if (text[i] == '\n') {
             column = 0;
         } else {
             column++;
@@ -598,6 +593,7 @@ void SourceWindow::open(QString name)
     f.close();
 
     opened = true;
+    breakpoints->clear();
     changed = false;
     restoreCursor();
     textEdit->setFocus();
@@ -612,52 +608,48 @@ void SourceWindow::open()
 
     //qDebug() << "language" << ebe["language"];
     QString selected = tr("C/C++ files (*.c* *.h *.t *akefile)");
-    if ( ebe["language"].toString() == "fortran" ) {
+    if (ebe["language"].toString() == "fortran") {
         selected = tr("Fortran files (*.f* *.F* *akefile)");
-        patterns = tr("Fortran files (*.f* *.F* *akefile);;") +
-                   tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
-                   tr("Assembly files (*.asm *.s *akefile);;") +
-                   tr("HAL files (*.hal *akefile);;");
-    } else if ( ebe["language"].toString() == "asm" ) {
+        patterns = tr("Fortran files (*.f* *.F* *akefile);;")
+            + tr("C/C++ files (*.c* *.h* *.t *akefile);;")
+            + tr("Assembly files (*.asm *.s *akefile);;")
+            + tr("HAL files (*.hal *akefile);;");
+    } else if (ebe["language"].toString() == "asm") {
         //qDebug() << "asm";
         selected = tr("Assembly files (*.asm *.s *akefile)");
-        patterns = tr("Assembly files (*.asm *.s *akefile);;") +
-                   tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
-                   tr("Fortran files (*.f* *.F* *akefile);;") +
-                   tr("HAL files (*.hal *akefile);;");
-    } else if ( ebe["language"].toString() == "hal" ) {
+        patterns = tr("Assembly files (*.asm *.s *akefile);;")
+            + tr("C/C++ files (*.c* *.h* *.t *akefile);;")
+            + tr("Fortran files (*.f* *.F* *akefile);;")
+            + tr("HAL files (*.hal *akefile);;");
+    } else if (ebe["language"].toString() == "hal") {
         //qDebug() << "asm";
         selected = tr("HAL files (*.hal *akefile)");
-        patterns = tr("HAL files (*.hal *akefile);;") +
-                   tr("Assembly files (*.asm *.s *akefile);;") +
-                   tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
-                   tr("Fortran files (*.f* *.F* *akefile);;");
+        patterns = tr("HAL files (*.hal *akefile);;")
+            + tr("Assembly files (*.asm *.s *akefile);;")
+            + tr("C/C++ files (*.c* *.h* *.t *akefile);;")
+            + tr("Fortran files (*.f* *.F* *akefile);;");
     } else {
-        patterns = tr("C/C++ files (*.c* *.h* *.t *akefile);;") +
-                   tr("Fortran files (*.f* *.F* *akefile);;") +
-                   tr("Assembly files (*.asm *.s *akefile);;") +
-                   tr("HAL files (*.hal *akefile);;");
+        patterns = tr("C/C++ files (*.c* *.h* *.t *akefile);;")
+            + tr("Fortran files (*.f* *.F* *akefile);;")
+            + tr("Assembly files (*.asm *.s *akefile);;")
+            + tr("HAL files (*.hal *akefile);;");
     }
 
     //qDebug() << selected;
 
     QString name = QFileDialog::getOpenFileName(this, tr("Open File"), ".",
-            patterns + tr("All files (*)"),
-            &selected
-    );
+            patterns + tr("All files (*)"), &selected);
 
-    if (name == "")
-    {
+    if (name == "") {
         return;
     }
 
     QFile f(name);
 
-    if (! f.open(QIODevice::ReadWrite))
-    {
-        if ( ! f.open(QIODevice::ReadOnly) ) {
+    if (!f.open(QIODevice::ReadWrite)) {
+        if (!f.open(QIODevice::ReadOnly)) {
             QMessageBox::critical(this, tr("Error"),
-                    tr("Failed to open file ") + name );
+                    tr("Failed to open file ") + name);
             return;
         }
     }
@@ -666,21 +658,22 @@ void SourceWindow::open()
 
     QByteArray text = f.readAll();
     int length = text.count();
-    if ( text[length-1] == '\n' ) text.chop(1);
+    if (text[length - 1] == '\n') text.chop(1);
     int i = 0;
     int column = 0;
     int next;
     int n;
     int j;
-    while ( i < text.count() ) {
-        if ( text[i] == '\t' ) {
-            next = (column + tab_width)/tab_width*tab_width;
+    while (i < text.count()) {
+        if (text[i] == '\t') {
+            next = (column + tab_width) / tab_width * tab_width;
             n = next - column;
             text[i] = ' ';
-            for ( j = 1; j < n; j++ ) text.insert(i," ");
+            for (j = 1; j < n; j++)
+                text.insert(i, " ");
             column = next;
-            i = next-1;
-        } else if ( text[i] == '\n' ) {
+            i = next - 1;
+        } else if (text[i] == '\n') {
             column = 0;
         } else {
             column++;
@@ -689,18 +682,19 @@ void SourceWindow::open()
     }
     textEdit->addWords(QString(text));
     textEdit->setPlainText(text);
-    setFontHeightAndWidth(sourceFrame->fontHeight,sourceFrame->fontWidth);
+    setFontHeightAndWidth(sourceFrame->fontHeight, sourceFrame->fontWidth);
 
     f.close();
     projectWindow->addFile(file.source);
     file.setLanguage();
     ebe["language"] = file.language;
-    if ( file.language == "fortran" ) {
+    if (file.language == "fortran") {
         textEdit->highlighter = new FortranHighlighter(textEdit->document());
-    } else if ( file.language == "asm" ) {
+    } else if (file.language == "asm") {
         textEdit->highlighter = new AsmHighlighter(textEdit->document());
     }
     opened = true;
+    breakpoints->clear();
     changed = false;
     restoreCursor();
     textEdit->setFocus();
@@ -708,36 +702,34 @@ void SourceWindow::open()
 
 void SourceWindow::saveAs()
 {
-    QString name = QFileDialog::getSaveFileName(this, tr("Save file as"), "." );
+    QString name = QFileDialog::getSaveFileName(this, tr("Save file as"), ".");
     saved = false;
 
-    if (name == "")
-    {
+    if (name == "") {
         return;
     }
 
     QFile f(name);
 
-    if (! f.open(QIODevice::WriteOnly))
-    {
+    if (!f.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(this, tr("Error"),
-                tr("Failed to open file for writing") + name );
+                tr("Failed to open file for writing") + name);
         return;
     }
 
     file.source = QDir::current().absoluteFilePath(name);
 
     QTextStream stream(&f);
-    stream << textEdit->toPlainText()+"\n";
+    stream << textEdit->toPlainText() + "\n";
     stream.flush();
     f.close();
 
     // File changed variable, reset to false
     //qDebug() << "Saved it as " << file.source;
     file.setLanguage();
-    if ( file.language == "fortran" ) {
+    if (file.language == "fortran") {
         textEdit->highlighter = new FortranHighlighter(textEdit->document());
-    } else if ( file.language == "asm" ) {
+    } else if (file.language == "asm") {
         textEdit->highlighter = new AsmHighlighter(textEdit->document());
     }
     changed = false;
@@ -747,15 +739,19 @@ void SourceWindow::saveAs()
 
 void SourceWindow::save()
 {
+    if (file.source == "") {
+        saveAs();
+        return;
+    }
     QFile f(file.source);
     saved = false;
-    if (! f.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(this, tr("Error"), tr("Failed to open file ") +
-                file.source + tr(" for saving."));
+    if (!f.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Error"),
+                tr("Failed to open file ") + file.source + tr(" for saving."));
         return;
     } else {
         QTextStream stream(&f);
-        stream << textEdit->toPlainText()+"\n";
+        stream << textEdit->toPlainText() + "\n";
         stream.flush();
         f.close();
 
@@ -815,14 +811,14 @@ void SourceWindow::setLineNumbers(int nLines)
     QString s;
     QTextDocument *doc = lineNumberEdit->document();
 
-    for (int i = lastLineNumber+1; i <= nLines; i++) {
-        s.sprintf("%4d",i);
+    for (int i = lastLineNumber + 1; i <= nLines; i++) {
+        s.sprintf("%4d", i);
         lineNumberEdit->appendPlainText(s);
-        QTextCursor(doc->findBlockByNumber(i-1)).setBlockFormat(normalFormat);
+        QTextCursor(doc->findBlockByNumber(i - 1)).setBlockFormat(normalFormat);
     }
     QTextCursor cursor;
-    for (int i = nLines+1; i <= lastLineNumber; i++ ) {
-        s.sprintf("%4d",i);
+    for (int i = nLines + 1; i <= lastLineNumber; i++) {
+        s.sprintf("%4d", i);
         cursor = doc->find(s);
         cursor.select(QTextCursor::BlockUnderCursor);
         cursor.removeSelectedText();
@@ -839,9 +835,9 @@ void SourceWindow::setNextLine(int line)
     //qDebug() << "sw snl" << line;
     QTextDocument *doc = textEdit->document();
     bool saveChanged = changed;
-    QTextCursor(doc->findBlockByNumber(line-1)).setBlockFormat(breakFormat);
+    QTextCursor(doc->findBlockByNumber(line - 1)).setBlockFormat(breakFormat);
     //qDebug() << "scroll set" << line-1-textHeight/2;
-    scrollBar->setValue(line-1-textHeight/2);
+    scrollBar->setValue(line - 1 - textHeight / 2);
     setLineNumbers(textDoc->lineCount());
     changed = saveChanged;
 }
@@ -850,11 +846,11 @@ void SourceWindow::clearNextLine(int line)
 {
     bool saveChanged = changed;
     QTextDocument *doc = textEdit->document();
-    QTextCursor(doc->findBlockByNumber(line-1)).setBlockFormat(normalFormat);
+    QTextCursor(doc->findBlockByNumber(line - 1)).setBlockFormat(normalFormat);
     changed = saveChanged;
 }
 
-LineNumberEdit::LineNumberEdit(QWidget *parent)
+    LineNumberEdit::LineNumberEdit(QWidget *parent)
 : QPlainTextEdit(parent)
 {
     myParent = (SourceWindow *)parent;
@@ -867,10 +863,10 @@ LineNumberEdit::LineNumberEdit(QWidget *parent)
     breakpoints = ((SourceWindow *)parent)->breakpoints;
     breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
     breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
-    connect(this, SIGNAL(sendBreakpoint(QString,QString)),
-            gdb, SLOT(setBreakpoint(QString,QString)));
-    connect(this, SIGNAL(deleteBreakpoint(QString,QString)),
-            gdb, SLOT(deleteBreakpoint(QString,QString)));
+    connect(this, SIGNAL(sendBreakpoint(QString, QString)), gdb,
+            SLOT(setBreakpoint(QString, QString)));
+    connect(this, SIGNAL(deleteBreakpoint(QString, QString)), gdb,
+            SLOT(deleteBreakpoint(QString, QString)));
 }
 
 void SourceWindow::comment()
@@ -879,7 +875,7 @@ void SourceWindow::comment()
     QTextDocument *doc = textEdit->document();
     int start;
     int end;
-    if ( cursor.hasSelection() ) {
+    if (cursor.hasSelection()) {
         start = cursor.selectionStart();
         end = cursor.selectionEnd();
     } else {
@@ -891,24 +887,24 @@ void SourceWindow::comment()
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
     int n = file.source.lastIndexOf('.');
-    if ( n < 0 ) {
+    if (n < 0) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = file.source.mid(n+1);
+    QString ext = file.source.mid(n + 1);
     int pos;
     QString commentMark;
-    if ( cppExts.contains(ext) ) {
+    if (cppExts.contains(ext)) {
         commentMark = "//";
-    } else if ( fortranExts.contains(ext) ) {
+    } else if (fortranExts.contains(ext)) {
         commentMark = "!";
-    } else if ( asmExts.contains(ext) ) {
+    } else if (asmExts.contains(ext)) {
         commentMark = ";";
     } else {
         return;
     }
 
-    for ( int i = startBlock; i <= endBlock; i++ ) {
+    for (int i = startBlock; i <= endBlock; i++) {
         block = doc->findBlockByNumber(i);
         pos = block.position();
         cursor.setPosition(pos);
@@ -923,7 +919,7 @@ void SourceWindow::unComment()
     QTextDocument *doc = textEdit->document();
     int start;
     int end;
-    if ( cursor.hasSelection() ) {
+    if (cursor.hasSelection()) {
         start = cursor.selectionStart();
         end = cursor.selectionEnd();
     } else {
@@ -935,34 +931,34 @@ void SourceWindow::unComment()
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
     int n = file.source.lastIndexOf('.');
-    if ( n < 0 ) {
+    if (n < 0) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = file.source.mid(n+1);
+    QString ext = file.source.mid(n + 1);
     int pos;
     QString t;
     QString commentMark;
-    if ( cppExts.contains(ext) ) {
+    if (cppExts.contains(ext)) {
         commentMark = "//";
-    } else if ( fortranExts.contains(ext) ) {
+    } else if (fortranExts.contains(ext)) {
         commentMark = "!";
-    } else if ( asmExts.contains(ext) ) {
+    } else if (asmExts.contains(ext)) {
         commentMark = ";";
     } else {
         return;
     }
-    for ( int i = startBlock; i <= endBlock; i++ ) {
+    for (int i = startBlock; i <= endBlock; i++) {
         block = doc->findBlockByNumber(i);
         pos = block.position();
         cursor.setPosition(pos);
-        cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,
-                            commentMark.length());
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor,
+                commentMark.length());
         t = cursor.selectedText();
-        if ( t == commentMark ) cursor.deleteChar();
+        if (t == commentMark) cursor.deleteChar();
     }
     cursor.setPosition(start);
-    cursor.setPosition(end,QTextCursor::KeepAnchor);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
 
 }
 
@@ -973,7 +969,7 @@ void SourceWindow::indent()
     tab_width = ebe["edit/tab_width"].toInt();
     QTextCursor cursor = textEdit->textCursor();
     QTextDocument *doc = textEdit->document();
-    if ( cursor.hasSelection() ) {
+    if (cursor.hasSelection()) {
         start = cursor.selectionStart();
         end = cursor.selectionEnd();
     } else {
@@ -985,15 +981,16 @@ void SourceWindow::indent()
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
     int n = file.source.lastIndexOf('.');
-    if ( n < 0 ) {
+    if (n < 0) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = file.source.mid(n+1);
+    QString ext = file.source.mid(n + 1);
     int pos;
     QString prefix;
-    for ( int i=0; i < tab_width; i++ ) prefix += " ";
-    for ( int i = startBlock; i <= endBlock; i++ ) {
+    for (int i = 0; i < tab_width; i++)
+        prefix += " ";
+    for (int i = startBlock; i <= endBlock; i++) {
         block = doc->findBlockByNumber(i);
         pos = block.position();
         cursor.setPosition(pos);
@@ -1009,7 +1006,7 @@ void SourceWindow::unIndent()
     QTextDocument *doc = textEdit->document();
     int start;
     int end;
-    if ( cursor.hasSelection() ) {
+    if (cursor.hasSelection()) {
         start = cursor.selectionStart();
         end = cursor.selectionEnd();
     } else {
@@ -1021,25 +1018,26 @@ void SourceWindow::unIndent()
     block = doc->findBlock(end);
     int endBlock = block.blockNumber();
     int n = file.source.lastIndexOf('.');
-    if ( n < 0 ) {
+    if (n < 0) {
         qDebug() << "File does not have an extension.";
         return;
     }
-    QString ext = file.source.mid(n+1);
+    QString ext = file.source.mid(n + 1);
     int pos;
     QString t;
     QString prefix;
-    for ( int i=0; i < tab_width; i++ ) prefix += " ";
-    for ( int i = startBlock; i <= endBlock; i++ ) {
+    for (int i = 0; i < tab_width; i++)
+        prefix += " ";
+    for (int i = startBlock; i <= endBlock; i++) {
         block = doc->findBlockByNumber(i);
         pos = block.position();
         cursor.setPosition(pos);
-        cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,tab_width);
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, tab_width);
         t = cursor.selectedText();
-        if ( t == prefix ) cursor.deleteChar();
+        if (t == prefix) cursor.deleteChar();
     }
     cursor.setPosition(start);
-    cursor.setPosition(end,QTextCursor::KeepAnchor);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
 
 }
 
@@ -1058,7 +1056,7 @@ void SourceWindow::pageForward()
     QTextBlock block;
     block = doc->findBlock(pos);
     int blockNumber = block.blockNumber();
-    if ( blockNumber + textHeight >= doc->lineCount() ) {
+    if (blockNumber + textHeight >= doc->lineCount()) {
         blockNumber = doc->lineCount() - 1;
     } else {
         blockNumber += textHeight;
@@ -1078,7 +1076,7 @@ void SourceWindow::pageBackward()
     QTextBlock block;
     block = doc->findBlock(pos);
     int blockNumber = block.blockNumber();
-    if ( blockNumber - textHeight < 0 ) {
+    if (blockNumber - textHeight < 0) {
         blockNumber = 0;
     } else {
         blockNumber -= textHeight;
@@ -1099,8 +1097,8 @@ void SourceWindow::center()
     block = doc->findBlock(pos);
     int blockNumber = block.blockNumber();
     int top;
-    if ( blockNumber > textHeight/2 ) {
-        top = blockNumber - textHeight/2;
+    if (blockNumber > textHeight / 2) {
+        top = blockNumber - textHeight / 2;
     } else {
         top = 0;
     }
@@ -1120,7 +1118,7 @@ void SourceWindow::gotoLastLine()
 {
     QTextDocument *doc = textEdit->document();
     QTextCursor cursor = textEdit->textCursor();
-    int blockNumber = doc->lineCount()-1;
+    int blockNumber = doc->lineCount() - 1;
     QTextBlock block = doc->findBlockByNumber(blockNumber);
     int pos = block.position();
     cursor.setPosition(pos);
@@ -1145,7 +1143,7 @@ void SourceWindow::gotoBottom()
 {
     QTextDocument *doc = textEdit->document();
     QTextCursor cursor = textEdit->textCursor();
-    int blockNumber = scrollBar->value()+textHeight-2;
+    int blockNumber = scrollBar->value() + textHeight - 2;
     QTextBlock block;
     block = doc->findBlockByNumber(blockNumber);
     int pos = block.position();
@@ -1163,9 +1161,9 @@ void SourceWindow::gotoLine()
     int pos = cursor.position();
     QTextBlock block;
     block = doc->findBlock(pos);
-    dialog->line = block.blockNumber()+1;
+    dialog->line = block.blockNumber() + 1;
     dialog->setMax(doc->lineCount());
-    if ( dialog->exec() ) {
+    if (dialog->exec()) {
         int blockNumber = dialog->line - 1;
         block = doc->findBlockByNumber(blockNumber);
         int pos = block.position();
@@ -1182,14 +1180,14 @@ void SourceWindow::prettify()
     save();
     QProcess indent(this);
     QString cmd = ebe["prettify"].toString();
-    cmd.replace("$source",file.source);
-    cmd.replace("$tab_width",ebe["edit/tab_width"].toString());
+    cmd.replace("$source", file.source);
+    cmd.replace("$tab_width", ebe["edit/tab_width"].toString());
     indent.start(cmd);
     indent.waitForFinished();
     open(file.source);
 }
 
-void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
+void LineNumberEdit::mouseReleaseEvent(QMouseEvent *e)
 {
     QString s;
     //SourceWindow *p = (SourceWindow *)parent();
@@ -1197,14 +1195,14 @@ void LineNumberEdit::mouseReleaseEvent ( QMouseEvent *e )
     int block = cursorForPosition(e->pos()).blockNumber();
     //qDebug() << "mre" << row;
     //qDebug() << "block" << block;
-    if ( breakpoints->contains(block+1) ) {
-        breakpoints->remove(block+1);
+    if (breakpoints->contains(block + 1)) {
+        breakpoints->remove(block + 1);
         cursorForPosition(e->pos()).setBlockFormat(normalFormat);
-        emit deleteBreakpoint(myParent->file.source,s.setNum(block+1));
+        emit deleteBreakpoint(myParent->file.source, s.setNum(block + 1));
     } else {
-        breakpoints->insert(block+1);
+        breakpoints->insert(block + 1);
         cursorForPosition(e->pos()).setBlockFormat(breakFormat);
-        emit sendBreakpoint(myParent->file.source,s.setNum(block+1));
+        emit sendBreakpoint(myParent->file.source, s.setNum(block + 1));
     }
     //foreach ( int line, *breakpoints ) {
     //qDebug() << "bp at" << line;
@@ -1215,13 +1213,10 @@ void LineNumberEdit::contextMenuEvent(QContextMenuEvent *event)
 {
     eventPosition = event->pos();
     QMenu menu("Breakpoint menu");
-    menu.addAction(tr("Set breakpoint"),
-            this, SLOT(setBreakpoint()) );
-    menu.addAction(tr("Drop breakpoint"),
-            this, SLOT(dropBreakpoint()) );
-    menu.addAction(tr("Drop all breakpoints"),
-            this, SLOT(dropAllBreakpoints()) );
-    menu.addAction(tr("ignore"), this, SLOT(ignore()) );
+    menu.addAction(tr("Set breakpoint"), this, SLOT(setBreakpoint()));
+    menu.addAction(tr("Drop breakpoint"), this, SLOT(dropBreakpoint()));
+    menu.addAction(tr("Drop all breakpoints"), this, SLOT(dropAllBreakpoints()));
+    menu.addAction(tr("ignore"), this, SLOT(ignore()));
     menu.exec(QCursor::pos());
 }
 
@@ -1234,7 +1229,8 @@ void LineNumberEdit::dropAllBreakpoints()
     QString s;
     //SourceWindow *p = (SourceWindow *)parent();
     //qDebug() << "top" << p->topNumber;
-    foreach ( int line, *breakpoints ) {
+    foreach ( int line, *breakpoints )
+    {
         //qDebug() << "bp at" << line;
         breakpoints->remove(line);
         emit deleteBreakpoint(myParent->file.source,s.setNum(line));
@@ -1253,8 +1249,8 @@ void LineNumberEdit::setBreakpoint()
     int block = cursorForPosition(eventPosition).blockNumber();
     //qDebug() << "set" << row;
     //qDebug() << "block" << block;
-    breakpoints->insert(block+1);
-    emit sendBreakpoint(myParent->file.source,s.setNum(block+1));
+    breakpoints->insert(block + 1);
+    emit sendBreakpoint(myParent->file.source, s.setNum(block + 1));
     cursorForPosition(eventPosition).setBlockFormat(breakFormat);
 }
 
@@ -1267,33 +1263,33 @@ void LineNumberEdit::dropBreakpoint()
     int block = cursorForPosition(eventPosition).blockNumber();
     //qDebug() << "set" << row;
     //qDebug() << "block" << block;
-    breakpoints->remove(block+1);
-    emit deleteBreakpoint(myParent->file.source,s.setNum(block+1));
+    breakpoints->remove(block + 1);
+    emit deleteBreakpoint(myParent->file.source, s.setNum(block + 1));
     cursorForPosition(eventPosition).setBlockFormat(normalFormat);
 }
 
-void LineNumberEdit::wheelEvent ( QWheelEvent * /* e */ )
+void LineNumberEdit::wheelEvent(QWheelEvent * /* e */)
 {
 }
 
-LineNumberDialog::LineNumberDialog()
+    LineNumberDialog::LineNumberDialog()
 : QDialog()
 {
     setObjectName("Go to line");
     setWindowTitle("Go to line");
     setModal(true);
-    setWindowFlags(Qt::Dialog|Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint);
 
     move(QCursor::pos());
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(5);
-    layout->setContentsMargins(10,10,10,10);
+    layout->setContentsMargins(10, 10, 10, 10);
 
     QHBoxLayout *lineLayout = new QHBoxLayout;
-    lineLayout->addWidget ( new QLabel(tr("Line number")) );
+    lineLayout->addWidget(new QLabel(tr("Line number")));
     lineSpin = new QSpinBox;
     lineSpin->setMinimum(1);
-    lineLayout->addWidget ( lineSpin );
+    lineLayout->addWidget(lineSpin);
     layout->addLayout(lineLayout);
 
     okButton = new QPushButton("Go");
@@ -1324,29 +1320,29 @@ void LineNumberDialog::setMax(int max)
     lineSpin->setMaximum(max);
 }
 
-FindReplaceDialog::FindReplaceDialog()
+    FindReplaceDialog::FindReplaceDialog()
 : QDialog()
 {
     setObjectName("Find/Replace");
     setWindowTitle("Find/Replace");
     setModal(false);
-    setWindowFlags(Qt::Dialog|Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint);
 
     move(QCursor::pos());
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(5);
-    layout->setContentsMargins(10,10,10,10);
+    layout->setContentsMargins(10, 10, 10, 10);
 
     QHBoxLayout *findLayout = new QHBoxLayout;
-    findLayout->addWidget ( new QLabel(tr("Find")) );
+    findLayout->addWidget(new QLabel(tr("Find")));
     findEdit = new QLineEdit;
-    findLayout->addWidget ( findEdit );
+    findLayout->addWidget(findEdit);
     layout->addLayout(findLayout);
 
     QHBoxLayout *replaceLayout = new QHBoxLayout;
-    replaceLayout->addWidget ( new QLabel(tr("Replace")) );
+    replaceLayout->addWidget(new QLabel(tr("Replace")));
     replaceEdit = new QLineEdit;
-    replaceLayout->addWidget ( replaceEdit );
+    replaceLayout->addWidget(replaceEdit);
     layout->addLayout(replaceLayout);
 
     findButton = new QPushButton("Find");
@@ -1374,7 +1370,7 @@ FindReplaceDialog::FindReplaceDialog()
 
 void FindReplaceDialog::find()
 {
-    if ( !textEdit->find(findEdit->text()) ) {
+    if (!textEdit->find(findEdit->text())) {
         textEdit->moveCursor(QTextCursor::Start);
         textEdit->find(findEdit->text());
     }

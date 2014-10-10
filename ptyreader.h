@@ -8,7 +8,7 @@
 #include <windows.h>
 #endif
 
-class PtyReader : public QThread
+class PtyReader: public QThread
 {
     Q_OBJECT
 
@@ -22,7 +22,7 @@ public:
 #endif
     void run();
 
-signals:
+    signals:
     void dataReady(QString);
 
 };

@@ -15,13 +15,17 @@ File::File()
 void File::setLanguage()
 {
     int n = source.lastIndexOf('.');
-    if ( n > 0 ) {
-        ext = source.mid(n+1);
-        if ( cppExts.contains(ext) ) language = "cpp";
-        else if ( cExts.contains(ext) ) language = "c";
-        else if ( asmExts.contains(ext) ) language = "asm";
-        else if ( fortranExts.contains(ext) ) language = "fortran";
-        else if ( halExts.contains(ext) ) language = "hal";
+    if (n > 0) {
+        ext = source.mid(n + 1);
+        if (cppExts.contains(ext))
+            language = "cpp";
+        else if (cExts.contains(ext))
+            language = "c";
+        else if (asmExts.contains(ext))
+            language = "asm";
+        else if (fortranExts.contains(ext))
+            language = "fortran";
+        else if (halExts.contains(ext)) language = "hal";
         base = source.left(n);
         object = base + ".o";
     } else {
@@ -32,6 +36,9 @@ void File::setLanguage()
     }
 
     n = source.lastIndexOf('/');
-    if ( n > 0 ) simple = source.mid(n+1);
-    else simple = source;
+    if (n > 0) {
+        simple = source.mid(n + 1);
+    } else {
+        simple = source;
+    }
 }

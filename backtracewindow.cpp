@@ -15,19 +15,19 @@ extern GDB *gdb;
  *  from the \c gdb thread to its \c receiveBackTrace slot.
  */
 BackTraceWindow::BackTraceWindow(QWidget *parent)
-: QFrame(parent)
+    : QFrame(parent)
 {
     setObjectName("Back trace");
-    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     setLineWidth(4);
 
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->setContentsMargins(10,10,10,10);
+    layout->setContentsMargins(10, 10, 10, 10);
     list = new QListWidget();
     layout->addWidget(list);
     setLayout(layout);
-    connect ( gdb, SIGNAL(sendBackTrace(QStringList)),
-              this, SLOT(receiveBackTrace(QStringList)) );
+    connect(gdb, SIGNAL(sendBackTrace(QStringList)), this,
+        SLOT(receiveBackTrace(QStringList)));
 }
 
 /**
@@ -39,7 +39,7 @@ BackTraceWindow::BackTraceWindow(QWidget *parent)
  */
 QSize BackTraceWindow::sizeHint() const
 {
-    return QSize(200,10);
+    return QSize(200, 10);
 }
 
 /**

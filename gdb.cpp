@@ -4,26 +4,24 @@
 #include "gdb.h"
 #include "settings.h"
 #include "terminalwindow.h"
-#include "consolewindow.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
 
 extern TerminalWindow *terminalWindow;
 extern int wordSize;
-extern QMap<FileLine,unsigned long> fileLineToAddress;
-extern QHash<unsigned long,FileLine> addressToFileLine;
+extern QMap<FileLine, unsigned long> fileLineToAddress;
+extern QHash<unsigned long, FileLine> addressToFileLine;
 extern QString breakFile;
 extern int breakLine;
+extern QString gdbName;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
 
-extern ConsoleWindow *consoleWindow;
-
 IntHash sizeForType;
 QSet<QString> simpleTypes;
-char letterForSize[] = "bbhhwwwwg"; 
+char letterForSize[] = "bbhhwwwwg";
 
 #ifdef Q_WS_WIN
 bool needToKill;
@@ -34,25 +32,25 @@ HANDLE hThread;
 bool gdbWaiting;
 #endif
 
-unsigned int reg_masks[] = {    1,    4, 0x10, 0x40, 0x80, 0x400, 0x800 };
-QString reg_names[]      = { "CF", "PF", "AF", "ZF", "SF",  "DF",  "OF" };
+unsigned int reg_masks[] = { 1, 4, 0x10, 0x40, 0x80, 0x400, 0x800 };
+QString reg_names[] = { "CF", "PF", "AF", "ZF", "SF", "DF", "OF" };
 
 QString readLine()
 {
-    QString result="";
+    QString result = "";
     int n;
 #ifndef Q_WS_WIN
     gdbWaiting = true;
 #endif
     do {
-        while ( gdbProcess->bytesAvailable() == 0 ) {
+        while (gdbProcess->bytesAvailable() == 0) {
             gdbProcess->waitForReadyRead(0);
             //qDebug() << "waiting" << gdbProcess->bytesAvailable();
         }
         result += gdbProcess->readLine();
         n = result.length();
         //qDebug() << result;
-    } while ( n == 0 || result.at(n-1) != '\n' );
+    } while (n == 0 || result.at(n - 1) != '\n');
     result.chop(1);
 #ifndef Q_WS_WIN
     gdbWaiting = false;
@@ -61,7 +59,7 @@ QString readLine()
 }
 
 GDBThread::GDBThread()
-: QThread()
+    : QThread()
 {
 }
 
@@ -73,36 +71,31 @@ void GDBThread::run()
 }
 
 GDB::GDB()
-: QObject()
+    : QObject()
 {
 #ifdef Q_WS_WIN
     needToKill = false;
 #endif
     gdbProcess = new QProcess(this);
     //gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
-    gdbProcess->start("gdb");
+    gdbProcess->start(gdbName);
 
     //qDebug() << "gdb state" << gdbProcess->state();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
-                << "continue";
-    simpleTypes << "char" << "signed char" << "unsigned char"
-                << "short" << "signed short" << "unsigned short"
-                << "short int" << "signed short int" << "unsigned short int"
-                << "short signed int" << "short unsigned int"
-                << "int" << "signed int" << "unsigned int"
-                << "signed" << "unsigned"
-                << "long" << "signed long" << "unsigned long"
-                << "long unsigned" << "long signed"
-                << "long unsigned int" << "long signed int"
-                << "long int" << "signed long int" << "unsigned long int"
-                << "long signed int" << "long unsigned int"
-                << "long long" << "signed long long" << "unsigned long long"
-                << "bool" << "float" << "double" << "long double"
-                << "logical(kind=1)" << "logical(kind=2)"
-                << "logical(kind=4)" << "logical(kind=8)"
-                << "integer(kind=1)" << "integer(kind=2)"
-                << "integer(kind=4)" << "integer(kind=8)"
-                << "real(kind=4)" << "real(kind=8)";
+        << "continue";
+    simpleTypes << "char" << "signed char" << "unsigned char" << "short"
+        << "signed short" << "unsigned short" << "short int"
+        << "signed short int" << "unsigned short int" << "short signed int"
+        << "short unsigned int" << "int" << "signed int" << "unsigned int"
+        << "signed" << "unsigned" << "long" << "signed long" << "unsigned long"
+        << "long unsigned" << "long signed" << "long unsigned int"
+        << "long signed int" << "long int" << "signed long int"
+        << "unsigned long int" << "long signed int" << "long unsigned int"
+        << "long long" << "signed long long" << "unsigned long long" << "bool"
+        << "float" << "double" << "long double" << "logical(kind=1)"
+        << "logical(kind=2)" << "logical(kind=4)" << "logical(kind=8)"
+        << "integer(kind=1)" << "integer(kind=2)" << "integer(kind=4)"
+        << "integer(kind=8)" << "real(kind=4)" << "real(kind=8)";
     sizeForType["bool"] = sizeof(bool);
     sizeForType["char"] = sizeof(char);
     sizeForType["signed char"] = sizeof(signed char);
@@ -144,18 +137,15 @@ GDB::GDB()
     sizeForType["integer(kind=8)"] = 8;
     sizeForType["real(kind=4)"] = 4;
     sizeForType["real(kind=8)"] = 8;
-    if ( wordSize == 64 ) {
+    if (wordSize == 64) {
         numFloats = 16;
-        regs << "rax" << "rbx" << "rcx" << "rdx"
-             << "rdi" << "rsi" << "rbp" << "rsp"
-             << "r8"  << "r9"  << "r10" << "r11"
-             << "r12" << "r13" << "r14" << "r15"
-             << "rip" << "eflags";
+        regs << "rax" << "rbx" << "rcx" << "rdx" << "rdi" << "rsi" << "rbp"
+            << "rsp" << "r8" << "r9" << "r10" << "r11" << "r12" << "r13"
+            << "r14" << "r15" << "rip" << "eflags";
     } else {
         numFloats = 8;
-        regs << "eax" << "ebx" << "ecx" << "edx"
-             << "edi" << "esi" << "ebp" << "esp"
-             << "eip" << "eflags";
+        regs << "eax" << "ebx" << "ecx" << "edx" << "edi" << "esi" << "ebp"
+            << "esp" << "eip" << "eflags";
     }
     initGdb();
     NullEOF = false;
@@ -184,21 +174,21 @@ void GDB::send(QString cmd, QString /*options*/)
     result = readLine();
     emit log(result);
     //qDebug() << "result:" << result;
-    while ( result.left(5) != "(gdb)" ) {
+    while (result.left(5) != "(gdb)") {
         //qDebug() << "result" << result;
         //if ( runCommands.contains(cmd) ) {
-            //if ( rx1.indexIn(result) >= 0 ) {
-                //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
-                //emit nextInstruction(rx1.cap(1),rx1.cap(2).toInt());
-            //}
-            //if ( rx2.indexIn(result) >= 0 ) {
-                //qDebug() << rx2.cap(0) << rx2.cap(1);
-                //emit nextInstruction("",rx2.cap(1).toInt());
-            //}
+        //if ( rx1.indexIn(result) >= 0 ) {
+        //qDebug() << rx1.cap(0) << rx1.cap(1) << rx1.cap(2);
+        //emit nextInstruction(rx1.cap(1),rx1.cap(2).toInt());
+        //}
+        //if ( rx2.indexIn(result) >= 0 ) {
+        //qDebug() << rx2.cap(0) << rx2.cap(1);
+        //emit nextInstruction("",rx2.cap(1).toInt());
+        //}
         //}
         result = readLine();
         emit log(result);
-        if ( result.startsWith("Program received signal") ) emit error(result);
+        if (result.startsWith("Program received signal")) emit error(result);
         //qDebug() << "result:" << result;
     }
 }
@@ -217,20 +207,20 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
     result = readLine();
     emit log(result);
     //qDebug() << "result:" << result;
-    while ( result.right(5) != "(gdb)" ) {
+    while (result.right(5) != "(gdb)") {
         list.append(result);
         result = readLine();
         emit log(result);
         //qDebug() << "result:" << result;
     }
-    if ( result.length() > 5 ) list.append(result);
+    if (result.length() > 5) list.append(result);
     //qDebug() << list;
     return list;
 }
 
 void GDB::getClasses()
 {
-    QHash<QString,ClassDefinition> classes;
+    QHash < QString, ClassDefinition > classes;
     ClassDefinition c;
     VariableDefinition v;
     QString result;
@@ -240,36 +230,39 @@ void GDB::getClasses()
     QStringList names;
     QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
 
-    foreach ( result, classResults ) {
+    foreach(result, classResults)
+    {
         parts = result.split(QRegExp("\\s+"));
-        if ( parts.length() == 1 && parts[0].length() > 0 ) {
+        if (parts.length() == 1 && parts[0].length() > 0) {
             name = parts[0];
-            if ( name[name.length()-1] == ';' ) {
+            if (name[name.length() - 1] == ';') {
                 name.chop(1);
                 names.append(name);
             }
-        } else if ( parts.length() == 2 && parts[0] == "struct" ) {
+        } else if (parts.length() == 2 && parts[0] == "struct") {
             name = parts[1];
-            if ( name[name.length()-1] == ';' ) {
+            if (name[name.length() - 1] == ';') {
                 name.chop(1);
                 names.append(name);
             }
         }
     }
-    foreach ( name, names ) {
+    foreach(name, names)
+    {
         //qDebug() << "gc" << name;
         c.name = name;
         c.members.clear();
-        results = sendReceive("ptype "+name);
-        foreach ( result, results ) {
-            if ( result.indexOf("    ") >= 0 && result.indexOf('(') < 0 ) {
+        results = sendReceive("ptype " + name);
+        foreach(result, results)
+        {
+            if (result.indexOf("    ") >= 0 && result.indexOf('(') < 0) {
                 //qDebug() << result;
-                if ( rx.indexIn(result) >= 0 ) {
+                if (rx.indexIn(result) >= 0) {
                     //qDebug() << "match" << rx.cap(1) << rx.cap(2) << rx.cap(3) <<
-                                //rx.cap(4);
+                    //rx.cap(4);
                     v.name = rx.cap(3);
                     v.type = rx.cap(1) + " " + rx.cap(2) + rx.cap(4);
-                    if ( v.type[v.type.length()-1] == ' ' ) v.type.chop(1);
+                    if (v.type[v.type.length() - 1] == ' ') v.type.chop(1);
                     v.isSimple = simpleTypes.contains(v.type);
                     //qDebug() << v.name << v.type << v.isSimple;
                     c.members.append(v);
@@ -296,7 +289,7 @@ void GDB::doCommand(QString cmd)
 }
 
 void GDB::doRun(QString exe, QString options, QStringList files,
-          QList<StringSet> breakpoints, QStringList g)
+    QList<StringSet> breakpoints, QStringList g)
 {
     int i;
     int length = files.length();
@@ -307,12 +300,12 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     bpHash.clear();
     send("kill");
     send("nosharedlibrary");
-    send(QString("cd ")+QDir::currentPath());
+    send(QString("cd ") + QDir::currentPath());
     //qDebug() << "file" << exe;
-    send("file \""+exe+"\"");
+    send("file \"" + exe + "\"");
     classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
     send("delete breakpoints");
-    for ( i = 0; i < length; i++ ) {
+    for (i = 0; i < length; i++) {
         foreach ( QString bp, breakpoints[i] ) {
             //qDebug() << files[i] << bp;
             setBreakpoint(files[i],bp);
@@ -350,17 +343,17 @@ void GDB::doRun(QString exe, QString options, QStringList files,
         needToKill = false;
     }
     if (! CreateProcess (
-                NULL,           // Application name
-                ws,             // Command line
-                NULL,           // Process attributes
-                NULL,           // Thread attributes
-                TRUE,           // Inherit handles
-                flags,          // Creation flags
-                NULL,           // Environment
-                NULL,           // Current directory
-                &si,            // Startup info
-                &pi)            // Process information
-        ) {
+            NULL,           // Application name
+            ws,// Command line
+            NULL,// Process attributes
+            NULL,// Thread attributes
+            TRUE,// Inherit handles
+            flags,// Creation flags
+            NULL,// Environment
+            NULL,// Current directory
+            &si,// Startup info
+            &pi)// Process information
+    ) {
         qDebug() << tr("Could not create process") << exe;
         DWORD error = GetLastError();
         qDebug() << tr("error") << error;
@@ -374,24 +367,24 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("attach "+QString("%1").arg(pi.dwProcessId));
     //send("delete breakpoints");
     //for ( i = 0; i < length; i++ ) {
-        //foreach ( QString bp, breakpoints[i] ) {
-            ////qDebug() << files[i] << bp;
-            ////qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
-            //send(QString("break %1:%2").arg(files[i]).arg(bp) );
-        //}
+    //foreach ( QString bp, breakpoints[i] ) {
+    ////qDebug() << files[i] << bp;
+    ////qDebug() << QString("break %1:%2").arg(files[i]).arg(bp);
+    //send(QString("break %1:%2").arg(files[i]).arg(bp) );
+    //}
     //}
     send("continue");
     //send("set prompt (gdb)\\n");
 #else
     send("tty " + terminalWindow->ptyName);
-    send("set args "+options);
+    send("set args " + options);
     send("run");
 #endif
     running = true;
     hasAVX = testAVX();
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getLocals();
@@ -407,11 +400,11 @@ void GDB::doRun(QString exe, QString options, QStringList files,
 void GDB::doNext()
 {
     //qDebug() << "gdb next";
-    if ( !running ) return;
+    if (!running) return;
     send("next");
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getLocals();
@@ -423,11 +416,11 @@ void GDB::doNext()
 void GDB::doStep()
 {
     //qDebug() << "gdb step";
-    if ( !running ) return;
+    if (!running) return;
     send("step");
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getLocals();
@@ -439,11 +432,11 @@ void GDB::doStep()
 void GDB::doNextInstruction()
 {
     //qDebug() << "nexti";
-    if ( !running ) return;
+    if (!running) return;
     send("nexti");
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getLocals();
@@ -455,11 +448,11 @@ void GDB::doNextInstruction()
 void GDB::doStepInstruction()
 {
     //qDebug() << "stepi";
-    if ( !running ) return;
+    if (!running) return;
     send("stepi");
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getGlobals();
@@ -470,15 +463,15 @@ void GDB::doStepInstruction()
 
 void GDB::doCall()
 {
-    FileLine fl(breakFile,breakLine+1);
+    FileLine fl(breakFile, breakLine + 1);
     //qDebug() << "call from" << breakFile << breakLine;
-    if ( !running ) return;
+    if (!running) return;
     //qDebug() << "tbreak *" << fileLineToAddress[fl];
     send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
     send("continue");
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getLocals();
@@ -490,11 +483,11 @@ void GDB::doCall()
 void GDB::doContinue()
 {
     //qDebug() << "continue";
-    if ( !running ) return;
+    if (!running) return;
     send("continue");
     setNormal();
     getBackTrace();
-    if ( !running ) return;
+    if (!running) return;
     getRegs();
     getFpRegs();
     getLocals();
@@ -513,17 +506,17 @@ void GDB::setBreakpoint(QString file, QString bp)
 {
     QStringList results;
     QStringList parts;
-    FileLabel f(file,bp);
-    if ( bpHash.contains(f) ) {
+    FileLabel f(file, bp);
+    if (bpHash.contains(f)) {
         //qDebug() << "bp" << bp << "exists";
         return;
     }
-    if ( bp[0] == QChar('*') ) {
+    if (bp[0] == QChar('*')) {
         //qDebug() << "setting" << bp;
-        results = sendReceive(QString("break %1").arg(bp) );
+        results = sendReceive(QString("break %1").arg(bp));
     } else {
         //qDebug() << QString("break \"%1\":%2").arg(file).arg(bp);
-        results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp) );
+        results = sendReceive(QString("break \"%1\":%2").arg(file).arg(bp));
     }
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
@@ -537,10 +530,10 @@ void GDB::setBreakpoint(QString file, QString bp)
 
 void GDB::deleteBreakpoint(QString file, QString line)
 {
-    FileLabel f(file,line);
+    FileLabel f(file, line);
     int bp = bpHash[f];
     //qDebug() << "dbp" << file << line << bp;
-    if ( bp > 0 ) {
+    if (bp > 0) {
         send(QString("delete %1").arg(bp));
         bpHash.remove(f);
     }
@@ -551,8 +544,8 @@ void GDB::getBackTrace()
     QStringList results;
     results = sendReceive("backtrace");
     //qDebug() << "getBackTrace" << results;
-    if ( results.length() == 0 || results[0].length() == 0 ||
-         results[0][0] != '#' ) {
+    if (results.length() == 0 || results[0].length() == 0 ||
+        results[0][0] != '#') {
         running = false;
         results.clear();
         results.append(tr("Program not running"));
@@ -563,7 +556,7 @@ void GDB::getBackTrace()
     QStringList parts;
     QStringList pp;
     foreach ( QString s, results ) {
-        //qDebug() << "gbt" << s;
+    //      qDebug() << "gbt" << s;
         n = s.lastIndexOf(" at ");
         if ( n > 0 ) {
             file = s.mid(n+4);
@@ -576,11 +569,11 @@ void GDB::getBackTrace()
             break;
         } else if ( s.indexOf(" in ") >= 0 ) {
             parts = s.split(QRegExp("\\s+"));
-            //qDebug() << parts;
+            //dDebug() << parts;
             unsigned long address;
             bool ok;
             address = parts[1].toULong(&ok,16);
-            //qDebug() << "address" <<  address;
+            //dDebug() << "address" << address;
             FileLine fl;
             if ( addressToFileLine.contains(address) ) {
                 fl = addressToFileLine[address];
@@ -591,15 +584,14 @@ void GDB::getBackTrace()
             }
             break;
         }
-
     }
     n = results.length();
     int i;
-    for ( i = 0; i < n; i++ ) {
-        if ( results[i].indexOf("main.") >= 0 ) break;
+    for (i = 0; i < n; i++) {
+        if (results[i].indexOf("main.") >= 0) break;
     }
-    if ( i < n ) {
-        for ( i++; i < n; i++ ) {
+    if (i < n) {
+        for (i++; i < n; i++) {
             results.removeLast();
         }
     }
@@ -648,12 +640,12 @@ void GDB::getFpRegs()
     QStringList data;
     QString result;
     QRegExp rx1("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+).*"
-                "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
+    "(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     //qDebug() << "getFpRegs";
     bool reverse = ebe["xmm/reverse"].toBool();
-    for ( int i = 0; i < numFloats; i++ ) {
-        if ( hasAVX ) {
+    for (int i = 0; i < numFloats; i++) {
+        if (hasAVX) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
             result = "";
             foreach ( QString res, results ) {
@@ -663,10 +655,10 @@ void GDB::getFpRegs()
                     //qDebug() << "res" << rx.cap(1);
                     if ( reverse ) {
                         data.append(rx1.cap(2)+" "+rx1.cap(1)+" "
-                                   +rx1.cap(4)+" "+rx1.cap(3));
+                            +rx1.cap(4)+" "+rx1.cap(3));
                     } else {
                         data.append(rx1.cap(1)+" "+rx1.cap(2)+" "
-                                   +rx1.cap(3)+" "+rx1.cap(4));
+                            +rx1.cap(3)+" "+rx1.cap(4));
                     }
                 }
             }
@@ -687,17 +679,15 @@ void GDB::getFpRegs()
             }
         }
     }
-    //qDebug() << data;
     emit sendFpRegs(data);
 }
-
 
 void GDB::getGlobals()
 {
     QList<VariableDefinition> vars;
 
     //qDebug() << "getGlobals" << globals;
-    getVars ( globals, vars );
+    getVars(globals, vars);
     emit sendGlobals(vars);
 }
 
@@ -709,9 +699,7 @@ void GDB::getLocals()
     QList<VariableDefinition> vars;
 
     results = sendReceive(QString("info locals"));
-    //qDebug() << "getLocals" << results;
     foreach ( QString r, results ) {
-        //qDebug() << "r" << r;
         int n = r.indexOf(" =");
         if ( n > 0 && r.at(0) != ' ' && r.at(0) != '_' ) {
             locals.append(r.left(n));
@@ -719,13 +707,12 @@ void GDB::getLocals()
     }
     locals.sort();
 
-    getVars ( locals, vars );
+    getVars(locals, vars);
 
-    //qDebug() << names << types << values;
     emit sendLocals(vars);
 }
 
-void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
+void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars)
 {
     QStringList results;
     QStringList parts;
@@ -736,7 +723,6 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
     bool fortran;
     VariableDefinition var;
 
-    //qDebug() << "names" << names;
     foreach ( QString name, names ) {
         fortran = false;
         if ( &names == &globals && name == "stack" ) {
@@ -749,10 +735,10 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
             var.type = "";
             var.value = "";
             results = sendReceive(QString("whatis %1").arg(name));
-            //qDebug() << "results" << results;
-            if ( results.length() > 0 && 
-                 (results[0].indexOf("invalid") >= 0 ||
-                  results[0].indexOf("(kind") >= 0 ) ) {
+                //qDebug() << "results" << results;
+            if ( results.length() > 0 &&
+                (results[0].indexOf("invalid") >= 0 ||
+                results[0].indexOf("(kind") >= 0 ) ) {
                 send ( "set language fortran");
                 results = sendReceive(QString("whatis %1").arg(name));
                 send ( "set language c++");
@@ -807,13 +793,13 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
                 if ( n1 > 0 ) n2 = var.type.indexOf("]",n2+1);
             }
         }
-        //qDebug() << "dimensions";
+                //qDebug() << "dimensions";
 
         if ( var.type != "" ) {
             if ( simpleTypes.contains(var.type) ) {
                 char sizeLetter = letterForSize[sizeForType[var.type]];
                 QString cmd = QString("x/%1 (unsigned char *)&%2")
-                              .arg(sizeLetter).arg(name);
+                    .arg(sizeLetter).arg(name);
                 //qDebug() << cmd;
                 results = sendReceive(cmd);
                 //qDebug() << results;
@@ -837,10 +823,11 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
                     results = sendReceive(cmd);
                     foreach ( QString r, results ) {
                         parts = r.split(QRegExp("\\s+"));
-                        if ( parts.length() == 3 && parts[1] == "=" ) 
+                        if ( parts.length() == 3 && parts[1] == "=" ) {
                             n = parts[2].toInt();
                             var.type = QString("character*%1").arg(n);
                             break;
+                        }
                     }
                 }
                 if ( n <= 80 ) {
@@ -865,36 +852,37 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
                 }
                 var.value += "\"";
             } else if ( var.type == "std::string" ) {
-                var.value = "";
-                cmd = QString("p %1._M_dataplus._M_p").arg(name);
-                //qDebug() << cmd;
-                results = sendReceive(cmd);
-                //qDebug() << results;
-                if ( results.length() == 0 ) continue;
-                parts = results[0].split(QRegExp("\\s+"));
-                if ( parts.length() < 4 ) continue;
-                var.value = parts[3];
-            } else if ( var.dimensions.length() == 1 ) {
-                int n1 = var.dimensions[0].first;
-                int n2 = var.dimensions[0].last;
-                if ( n2-n1 > 10 ) n2 = n1+10;
-                var.value = "";
-                for ( int i = n1; i <= n2; i++ ) {
-                    results = sendReceive(QString("print %1[%2]").arg(name).arg(i));
-                    //qDebug() << name << results;
-                    foreach ( QString r, results ) {
-                        int j = r.indexOf("=");
-                        if ( j > 0 ) {
-                            var.value += r.mid(j+2) + " ";
-                            break;
-                        }
+            var.value = "";
+            cmd = QString("p %1._M_dataplus._M_p").arg(name);
+                    //qDebug() << cmd;
+            results = sendReceive(cmd);
+                    //qDebug() << results;
+            if ( results.length() == 0 ) continue;
+            parts = results[0].split(QRegExp("\\s+"));
+            if ( parts.length() < 4 ) continue;
+            var.value = parts[3];
+        } else if ( var.dimensions.length() == 1 ) {
+            int n1 = var.dimensions[0].first;
+            int n2 = var.dimensions[0].last;
+            if ( n2-n1 > 10 ) n2 = n1+10;
+            var.value = "";
+            for ( int i = n1; i <= n2; i++ ) {
+                results = sendReceive(QString("print %1[%2]").arg(name).arg(i));
+                //qDebug() << name << results;
+                foreach ( QString r, results ) {
+                    int j = r.indexOf("=");
+                    if ( j > 0 ) {
+                        var.value += r.mid(j+2) + " ";
+                        break;
                     }
                 }
+            }
             } else if ( var.type == "char **" ) {
                 var.value = "";
                 int i = 0;
                 while ( 1 ) {
-                    cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(name).arg(i*(wordSize == 64?8:4));
+                    cmd = QString("x/dg ((unsigned char *)%1)+%2")
+                          .arg(name).arg(i*(wordSize == 64?8:4));
                     results = sendReceive(cmd);
                     //qDebug() << results;
                     if ( results.length() == 0 ) break;
@@ -939,7 +927,7 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars )
                 }
             } else {
                 var.value = " ";
-            } 
+            }
             vars.append(var);
         }
     }
@@ -953,27 +941,22 @@ void GDB::getArgs()
     QList<VariableDefinition> vars;
 
     results = sendReceive(QString("info args"));
-    //qDebug() << "getArgs" << results;
     foreach ( QString r, results ) {
-        //qDebug() << "r" << r;
         int n = r.indexOf(" =");
         if ( n > 0 && r.at(0) != ' ' && r.at(0) != '_' ) {
             args.append(r.left(n));
         }
     }
     args.sort();
-    getVars ( args, vars);
-    //qDebug() << "end getArgs";
+    getVars(args, vars);
     emit sendParameters(vars);
 }
-
 
 bool GDB::testAVX()
 {
     QStringList results;
     QStringList parts;
     results = sendReceive("print $ymm0.v4_int64[0]");
-    //qDebug() << "testAVX" << results;
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
         if ( parts.length() == 3 && parts[1] == "=" ) return true;
@@ -981,8 +964,8 @@ bool GDB::testAVX()
     return false;
 }
 
-void GDB::requestVar(DataMap *map, QString name, QString address, QString /* type */,
-                     QString format, int size, int first, int last)
+void GDB::requestVar(DataMap *map, QString name, QString address,
+QString /* type */, QString format, int size, int first, int last)
 {
     QStringList results;
     QStringList parts;
@@ -990,94 +973,93 @@ void GDB::requestVar(DataMap *map, QString name, QString address, QString /* typ
     QString cmd;
     QString address2;
 
-    //qDebug() << name << address << format << size << first << last;
+   //qDebug() << name << address << format << size << first << last;
 
-    if ( size < 0 || size > 8 ) return;
+    if (size < 0 || size > 8) return;
     char sizeLetter = letterForSize[size];
- 
-    char formatLetter = 'd';
-    if ( format == "Hexadecimal" ) formatLetter = 'x';
-    else if ( format == "Floating point" ) formatLetter = 'f';
-    else if ( format == "Character" ) formatLetter = 'c';
 
-    if ( first < 0 || last < 0 ) return;
+    char formatLetter = 'd';
+    if (format == "Hexadecimal") formatLetter = 'x';
+    else if (format == "Floating point") formatLetter = 'f';
+    else if (format == "Character") formatLetter = 'c';
+
+    if (first < 0 || last < 0) return;
 
     //qDebug() << name << sizeLetter << formatLetter;
-    if ( format == "String array" ) {
+    if (format == "String array") {
         result = "";
         int i = 0;
-        while ( 1 ) {
-            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*(wordSize == 64?8:4));
+        while (1) {
+            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(
+                    i * (wordSize == 64 ? 8 : 4));
             //qDebug() << cmd;
             results = sendReceive(cmd);
-            //qDebug() << results;
-            if ( results.length() == 0 ) break;
+            if (results.length() == 0) break;
             parts = results[0].split(QRegExp(":\\s+"));
-            if ( parts.length() < 2 ) break;
+            if (parts.length() < 2) break;
             address2 = parts[1];
-            if ( address2 == "0" ) break;
+            if (address2 == "0") break;
             cmd = QString("x/sb %1").arg(address2);
             results = sendReceive(cmd);
-            if ( results.length() == 0 ) break;
+            if (results.length() == 0) break;
             parts = results[0].split(QRegExp(":\\s+"));
-            if ( parts.length() < 2 ) break;
+            if (parts.length() < 2) break;
             result += parts[1] + " ";
             i++;
         }
-    } else if ( format == "String" ) {
+    } else if (format == "String") {
         cmd = QString("x/s (char *)%1").arg(address);
-        //qDebug() << cmd;
         results = sendReceive(cmd);
-        //qDebug() << results;
-        if ( results.length() == 0 ) {
+        if (results.length() == 0) {
             result = "";
         } else {
             int n = results[0].indexOf("\"");
             result = results[0].mid(n);
         }
-    } else if ( format == "Pointer" ) {
+    } else if (format == "Pointer") {
         cmd = QString("printf \"0x%x\\n\",%1").arg(address);
         results = sendReceive(cmd);
-        if ( results.length() == 0 ) {
+        if (results.length() == 0) {
             result = "";
         } else {
             parts = results[0].split(QRegExp(":\\s+"));
-            result = parts[parts.length()-1];
+            result = parts[parts.length() - 1];
         }
-    } else if ( first == 0 && last == 0 ) {
+    } else if (first == 0 && last == 0) {
         cmd = QString("x/x%1 %2").arg(sizeLetter).arg(address);
-        //qDebug() << "cmd" << cmd;
+                //qDebug() << "cmd" << cmd;
         results = sendReceive(cmd);
-        //qDebug() << "results" << results;
-        if ( results.length() == 0 ) {
+                //qDebug() << "results" << results;
+        if (results.length() == 0) {
             result = "";
         } else {
             parts = results[0].split(QRegExp(":\\s+"));
             //qDebug() << parts;
-            if ( parts.length() < 2 ) {
+            if (parts.length() < 2) {
                 result = "";
-            } else if ( parts[1] == "(gdb)" ) {
-                result = "Illegal address "+parts[0];
+            } else if (parts[1] == "(gdb)") {
+                result = "Illegal address " + parts[0];
             } else {
                 result = parts[1];
             }
         }
     } else {
         result = "";
-        for ( int i = first; i <= last; i++ ) {
-            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(sizeLetter).arg(formatLetter).arg(address).arg(i*size);
+        for (int i = first; i <= last; i++) {
+            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(sizeLetter)
+                  .arg(formatLetter).arg(address).arg(i * size);
             //qDebug() << "cmd" << cmd;
             results = sendReceive(cmd);
-            //qDebug() << "results" << results;
-            if ( results.length() > 0 ) {
+                //qDebug() << "results" << results;
+            if (results.length() > 0) {
                 parts = results[0].split(QRegExp(":\\s+"));
-                if ( parts.length() >= 2 ) {
+                if (parts.length() >= 2) {
                     result += parts[1] + " ";
                 }
             }
         }
     }
-    emit sendVar ( map, name, result );
+    emit sendVar(map, name, result);
 }
 
 void GDB::getData(QStringList request)
@@ -1087,93 +1069,95 @@ void GDB::getData(QStringList request)
     QString format = request[2];
     int size = request[3].toInt();
     int first = request[4].toInt();
-    int last  = request[5].toInt();
+    int last = request[5].toInt();
     QStringList results;
     QStringList parts;
     QString result;
     QString cmd;
     QString address2;
 
-
     //qDebug() << "getData" << request;
-    if ( size < 0 || size > 8 ) return;
+    if (size < 0 || size > 8) return;
     char sizeLetter = letterForSize[size];
 
     char formatLetter = 'd';
-    if ( format == "Hexadecimal" ) formatLetter = 'x';
-    else if ( format == "Floating point" ) formatLetter = 'f';
-    else if ( format == "Character" ) formatLetter = 'c';
-    else if ( format == "String" ) formatLetter = 's';
+    if (format == "Hexadecimal") formatLetter = 'x';
+    else if (format == "Floating point") formatLetter = 'f';
+    else if (format == "Character") formatLetter = 'c';
+    else if (format == "String") formatLetter = 's';
 
-    if ( first < 0 || last < 0 ) return;
+    if (first < 0 || last < 0) return;
 
-    if ( format == "String array" ) {
+    if (format == "String array") {
         result = "";
         int i = 0;
-        while ( 1 ) {
-            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(i*(wordSize == 64?8:4));
-            //qDebug() << cmd;
+        while (1) {
+            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(
+            i * (wordSize == 64 ? 8 : 4));
+                //qDebug() << cmd;
             results = sendReceive(cmd);
-            //qDebug() << results;
-            if ( results.length() == 0 ) break;
+                //qDebug() << results;
+            if (results.length() == 0) break;
             parts = results[0].split(QRegExp(":\\s+"));
-            if ( parts.length() < 2 ) break;
+            if (parts.length() < 2) break;
             address2 = parts[1];
-            if ( address2 == "0" ) break;
+            if (address2 == "0") break;
             cmd = QString("x/sb %1").arg(address2);
             results = sendReceive(cmd);
-            if ( results.length() == 0 ) break;
+            if (results.length() == 0) break;
             parts = results[0].split(QRegExp(":\\s+"));
-            if ( parts.length() < 2 ) break;
+            if (parts.length() < 2) break;
             result += parts[1] + " ";
             i++;
         }
-    } else if ( format == "Pointer" ) {
+    } else if (format == "Pointer") {
         cmd = QString("printf \"0x%x\\n\",%1").arg(name);
         results = sendReceive(cmd);
-        if ( results.length() == 0 ) {
+        if (results.length() == 0) {
             result = "";
         } else {
             parts = results[0].split(QRegExp(":\\s+"));
-            result = parts[parts.length()-1];
+            result = parts[parts.length() - 1];
         }
-    } else if ( format == "String" ) {
+    } else if (format == "String") {
         cmd = QString("x/s (char *)%1").arg(address);
-        //qDebug() << cmd;
+                //qDebug() << cmd;
         results = sendReceive(cmd);
-        //qDebug() << results;
-        if ( results.length() == 0 ) {
+                //qDebug() << results;
+        if (results.length() == 0) {
             result = "";
         } else {
             parts = results[0].split(QRegExp(":\\s+"));
-            result = parts[parts.length()-1];
+            result = parts[parts.length() - 1];
         }
-    } else if ( first == 0 && last == 0 ) {
+    } else if (first == 0 && last == 0) {
         cmd = QString("x/x%1 %2").arg(sizeLetter).arg(address);
         results = sendReceive(cmd);
-        if ( results.length() == 0 ) {
+        if (results.length() == 0) {
             result = "";
         } else {
             parts = results[0].split(QRegExp(":\\s+"));
-            //qDebug() << "parts" << parts;
-            if ( parts.length() < 2 ) {
+                //qDebug() << "parts" << parts;
+            if (parts.length() < 2) {
                 result = "";
-            } else if ( parts[1] == "(gdb)" ) {
-                result = "Illegal address "+parts[0];
+            } else if (parts[1] == "(gdb)") {
+                result = "Illegal address " + parts[0];
             } else {
                 result = parts[1];
             }
         }
     } else {
         result = "";
-        for ( int i = first; i <= last; i++ ) {
-            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(formatLetter).arg(sizeLetter).arg(address).arg(i*size);
-            //qDebug() << cmd;
+        for (int i = first; i <= last; i++) {
+            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4")
+                          .arg(formatLetter).arg(
+                            sizeLetter).arg(address).arg(i * size);
+                //qDebug() << cmd;
             results = sendReceive(cmd);
-            //qDebug() << results;
-            if ( results.length() > 0 ) {
+                //qDebug() << results;
+            if (results.length() > 0) {
                 parts = results[0].split(QRegExp(":\\s+"));
-                if ( parts.length() >= 2 ) {
+                if (parts.length() >= 2) {
                     result += parts[1] + " ";
                 }
             }
@@ -1186,7 +1170,7 @@ void GDB::getData(QStringList request)
 void GDB::setNormal()
 {
     send("set language c++");
-    if ( NullEOF ) {
+    if (NullEOF) {
         send("call __ebeSetNormal()");
         NullEOF = false;
     }

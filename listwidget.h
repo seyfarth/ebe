@@ -4,12 +4,12 @@
 #include <QListWidget>
 #include <QWheelEvent>
 
-class ListWidget : public QListWidget
+class ListWidget: public QListWidget
 {
     Q_OBJECT
 
 public:
-    ListWidget(QWidget *parent=0);
+    ListWidget(QWidget *parent = 0);
 
 private slots:
 

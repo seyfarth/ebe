@@ -36,7 +36,7 @@ private:
     QPushButton *okButton;
     QPushButton *cancelButton;
 
-signals:
+    signals:
 };
 
 class ArrayBoundsDialog: public QDialog
@@ -62,7 +62,7 @@ public slots:
     void setArrayBounds();
     void checkChanged(int);
 
-signals:
+    signals:
 };
 
 struct Limits

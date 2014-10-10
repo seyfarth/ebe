@@ -5,7 +5,7 @@
 
 #include "validators.h"
 
-class FloatEdit : public QLineEdit
+class FloatEdit: public QLineEdit
 {
     Q_OBJECT
 

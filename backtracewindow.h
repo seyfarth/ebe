@@ -19,12 +19,12 @@
  *  The first line of output shows the next line to execute in the current
  *  function and each line below shows where a function call was made.
  */
-class BackTraceWindow : public QFrame
+class BackTraceWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    BackTraceWindow(QWidget *parent=0);
+    BackTraceWindow(QWidget *parent = 0);
     QStringList trace;      ///< A copy of the most recent \c backtrace command
     int level;              ///< The number of calls made in the \c backtrace
     QSize sizeHint() const;

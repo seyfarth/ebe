@@ -12,7 +12,7 @@
 class SourceEdit;
 class SourceWindow;
 
-class FindReplaceDialog : public QDialog
+class FindReplaceDialog: public QDialog
 {
     Q_OBJECT
 
@@ -47,13 +47,13 @@ public:
 public slots:
     void setLine();
 };
-    
-class SourceEdit : public QPlainTextEdit
+
+class SourceEdit: public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    SourceEdit(QWidget *parent=0);
+    SourceEdit(QWidget *parent = 0);
     int heightInPixels;
     int tab_width;
     void setCompleter(QCompleter *c);
@@ -65,7 +65,7 @@ public:
     Highlighter *highlighter;
     bool autoIndent;
     void newLine();
-    void indentNewLine(int k=0);
+    void indentNewLine(int k = 0);
 
 private slots:
     void printScroll();
@@ -73,18 +73,18 @@ private slots:
     void insertCompletion(const QString &completion);
     //void receiveVariableDefinition(bool,QStringList);
 
-signals:
+    signals:
     void newHeight(int height);
     void sendVariableDefinition(QStringList);
 
 private:
     void keyPressEvent(QKeyEvent *e);
-    void focusInEvent(QFocusEvent *e); 
-    void resizeEvent ( QResizeEvent *e );
+    void focusInEvent(QFocusEvent *e);
+    void resizeEvent(QResizeEvent *e);
     void scrollContentsBy(int dx, int dy);
     //bool event ( QEvent *e );
     //void wheelEvent ( QWheelEvent *e );
-    void contextMenuEvent ( QContextMenuEvent *event );
+    void contextMenuEvent(QContextMenuEvent *event);
     QString textUnderCursor() const;
 
 private:
@@ -93,24 +93,22 @@ private:
     QCompleter *c;
 };
 
-
-
 class LineNumberEdit: public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    LineNumberEdit(QWidget *parent=0);
+    LineNumberEdit(QWidget *parent = 0);
 
-    void wheelEvent ( QWheelEvent *e );
+    void wheelEvent(QWheelEvent *e);
     QScrollBar *scrollBar;
     QTextBlockFormat normalFormat;
     QTextBlockFormat breakFormat;
 
 private:
     QSet<int> *breakpoints;
-    void mouseReleaseEvent ( QMouseEvent *event );
-    void contextMenuEvent ( QContextMenuEvent *event );
+    void mouseReleaseEvent(QMouseEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event);
     QPoint eventPosition;
     SourceWindow *myParent;
 
@@ -120,20 +118,19 @@ private slots:
     void dropAllBreakpoints();
     void ignore();
 
-signals:
+    signals:
     void sendBreakpoint(QString,QString);
-    void deleteBreakpoint(QString,QString);
+    void deleteBreakpoint(QString, QString);
 };
-
 
 typedef QSet<int> IntSet;
 
-class SourceWindow : public QFrame
+class SourceWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    SourceWindow(QWidget *parent=0);
+    SourceWindow(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     void setLineNumbers(int nLines);
     void saveCursor();
@@ -198,7 +195,7 @@ private:
     LineNumberEdit *lineNumberEdit;
     QScrollBar *scrollBar;
 
-signals:
+    signals:
 };
 
 #endif

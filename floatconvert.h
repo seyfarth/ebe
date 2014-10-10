@@ -8,18 +8,30 @@
 #include "binarynumber.h"
 #include "floatedit.h"
 
-enum ToFloatState { Zero, NegativeZero, Bits, SignBit,
-                    ExponentField, ExponentValue,
-                    FractionField, FractionValue,
-                    BinaryValue, BitValue, Result,
-                    Denormalized, Infinity, NaN };
-                    
-class FloatConvert : public QFrame
+enum ToFloatState
+{
+    Zero,
+    NegativeZero,
+    Bits,
+    SignBit,
+    ExponentField,
+    ExponentValue,
+    FractionField,
+    FractionValue,
+    BinaryValue,
+    BitValue,
+    Result,
+    Denormalized,
+    Infinity,
+    NaN
+};
+
+class FloatConvert: public QFrame
 {
     Q_OBJECT
 
 public:
-    FloatConvert(QWidget *parent=0);
+    FloatConvert(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     int fontWidth;
     int fontHeight;
@@ -57,7 +69,7 @@ public slots:
 
 private:
 
-signals:
+    signals:
 };
 
 #endif

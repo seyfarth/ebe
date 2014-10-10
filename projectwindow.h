@@ -2,13 +2,13 @@
 #define PROJECTWINDOW_H
 
 /*
-    ProjectWindow class
-*/
+ ProjectWindow class
+ */
 
 #include <QtGui>
 #include <QListWidget>
 
-class ProjectWindow : public QFrame
+class ProjectWindow: public QFrame
 {
     Q_OBJECT
 
@@ -24,7 +24,7 @@ private:
 
     // Initialize, called from constructor
     void initProjectWindow();
-    void contextMenuEvent ( QContextMenuEvent *event );
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:
     void ignore();
@@ -38,7 +38,7 @@ private slots:
 private:
     QListWidget *list;
     QSize sizeHint() const;
-    
+
 };
 
 #endif

@@ -4,8 +4,8 @@
 #include <QSet>
 #include <QString>
 
-typedef QHash<QString,QString> StringHash;
-typedef QHash<QString,int> IntHash;
+typedef QHash<QString, QString> StringHash;
+typedef QHash<QString, int> IntHash;
 typedef QSet<QString> StringSet;
 typedef QSet<int> IntSet;
 
@@ -50,10 +50,10 @@ class FileLine
 public:
     QString file;
     int line;
-    FileLine(QString f="", int l=0);
+    FileLine(QString f = "", int l = 0);
 };
 
-bool operator< ( const FileLine &a, const FileLine &b );
+bool operator<(const FileLine &a, const FileLine &b);
 
 bool operator==(const FileLine &a, const FileLine &b);
 
@@ -64,11 +64,11 @@ class FileLabel
 public:
     QString file;
     QString label;
-    FileLabel(QString f="", QString l=0);
+    FileLabel(QString f = "", QString l = 0);
 };
 
 bool operator==(const FileLabel &a, const FileLabel &b);
-bool operator< ( const FileLabel &a, const FileLabel &b );
+bool operator<(const FileLabel &a, const FileLabel &b);
 
 uint qHash(const FileLabel &f);
 

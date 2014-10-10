@@ -10,18 +10,18 @@ class QLineEdit;
 class QScrollBar;
 QT_END_NAMESPACE
 
-class ConsoleWindow : public QFrame
+class ConsoleWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    ConsoleWindow(QWidget *parent=0);
+    ConsoleWindow(QWidget *parent = 0);
 
 private slots:
     void log(QString);
     void sendCommand();
 
-signals:
+    signals:
     void doCommand(QString);
 
 private:

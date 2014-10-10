@@ -25,13 +25,12 @@ class QTextEdit;
 class QDockWidget;
 QT_END_NAMESPACE
 
-
-class MainWindow : public QMainWindow
+class MainWindow: public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent=0);
+    MainWindow(QWidget *parent = 0);
     void saveSettings();
     void open(QString name);
 
@@ -45,20 +44,20 @@ public slots:
     void editSettings();
     void changeDirectory();
 
-signals:
+    signals:
     void sendWorkingDir(QString);
     void doStop();
 
 private:
-    void closeEvent ( QCloseEvent *e );
+    void closeEvent(QCloseEvent *e);
     void createMenus();
     void createStatusBar();
     void createDockWindows();
-    void helpAction ( QMenu *menu, QString s, QString file );
-    void keyPressEvent ( QKeyEvent *event );
-    QAction *addToggle ( QMenu *menu, QString text, QObject *object,
-                     const char *slot, bool checked );
-    bool eventFilter ( QObject *object, QEvent *event );
+    void helpAction(QMenu *menu, QString s, QString file);
+    void keyPressEvent(QKeyEvent *event);
+    QAction *addToggle(QMenu *menu, QString text, QObject *object,
+        const char *slot, bool checked);
+    bool eventFilter(QObject *object, QEvent *event);
     void checkTools();
     bool toolExists(QString t);
 
@@ -67,6 +66,7 @@ private:
     QDockWidget *dataDock;
     QDockWidget *registerDock;
     QDockWidget *halRegisterDock;
+    QDockWidget *halNamesDock;
     QDockWidget *floatDock;
     QDockWidget *projectDock;
     QDockWidget *terminalDock;

@@ -12,7 +12,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 
-class Settings : public QObject
+class Settings: public QObject
 {
     Q_OBJECT
 
@@ -53,12 +53,12 @@ class SettingsFrame: public QFrame
     Q_OBJECT
 
 public:
-    SettingsFrame(QString);
-    void addColorSetter(QString,QString);
-    Spinner *addSpinner(QString,QString);
-    void addCheckBox(QString,QString);
-    void addLineEdit(QString,QString);
-    ComboBox *addComboBox(QString,QString);
+    SettingsFrame (QString);
+    void addColorSetter(QString, QString);
+    Spinner *addSpinner(QString, QString);
+    void addCheckBox(QString, QString);
+    void addLineEdit(QString, QString);
+    ComboBox *addComboBox(QString, QString);
     QGridLayout *grid;
     QVBoxLayout *layout;
     void addStretch();
@@ -70,7 +70,7 @@ class ColorButton: public QPushButton
     Q_OBJECT
 
 public:
-    ColorButton(QString);
+    ColorButton (QString);
     QString var;
     QPixmap *pm;
 
@@ -83,7 +83,7 @@ class Spinner: public QSpinBox
     Q_OBJECT
 
 public:
-    Spinner(QString);
+    Spinner (QString);
     QString var;
 
 private slots:
@@ -95,7 +95,7 @@ class ComboBox: public QComboBox
     Q_OBJECT
 
 public:
-    ComboBox(QString);
+    ComboBox (QString);
     QString var;
     void setChoices(QStringList);
 
@@ -108,7 +108,7 @@ class LineEdit: public QLineEdit
     Q_OBJECT
 
 public:
-    LineEdit(QString);
+    LineEdit (QString);
     QString var;
 
 private slots:
@@ -120,7 +120,7 @@ class CheckBox: public QCheckBox
     Q_OBJECT
 
 public:
-    CheckBox(QString);
+    CheckBox (QString);
     QString var;
 
 private slots:
@@ -129,7 +129,7 @@ private slots:
 
 class SettingsHash: public QVariantHash
 {
-    public:
+public:
     QString os;
 
 };

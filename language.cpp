@@ -4,7 +4,6 @@
 #include "settings.h"
 #include "types.h"
 
-
 extern QApplication *app;
 QTranslator translator;
 
@@ -56,7 +55,8 @@ void Languages::initLanguages()
     languageCodes << "sv";
     codeToName["sv"] = tr("Swedish");
 
-    foreach ( QString code, languageCodes ) {
+    foreach ( QString code, languageCodes )
+    {
         nameToCode[codeToName[code]] = code;
     }
 }
@@ -67,7 +67,7 @@ void Languages::setLanguage()
     languageCode = ebe["language_code"].toString();
     ebe["language_name"] = codeToName[languageCode];
 
-    if ( languageCode != "en" && languageCodes.contains(languageCode) ) {
+    if (languageCode != "en" && languageCodes.contains(languageCode)) {
         translator.load("ebe_" + languageCode);
         app->installTranslator(&translator);
     } else {

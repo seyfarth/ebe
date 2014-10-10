@@ -9,14 +9,14 @@
 #include "variable.h"
 #include "datawindow.h"
 
-class GDBThread : public QThread
+class GDBThread: public QThread
 {
 public:
     GDBThread();
     void run();
 };
 
-class GDB : public QObject
+class GDB: public QObject
 {
     Q_OBJECT
 
@@ -24,15 +24,15 @@ public:
     GDB();
     void initGdb();
     bool running;
-    QHash<FileLabel,int> bpHash;
+    QHash<FileLabel, int> bpHash;
     int numFloats;
     bool NullEOF;
     QString asmFile;
     int asmLine;
 
 private:
-    void send(QString cmd, QString options="");
-    QStringList sendReceive(QString cmd, QString options="");
+    void send(QString cmd, QString options = "");
+    QStringList sendReceive(QString cmd, QString options = "");
     QStringList globals;
     QSet<QString> runCommands;
     QSet<QString> regs;
@@ -42,7 +42,7 @@ private:
     void getGlobals();
     void getLocals();
     void getClasses();
-    void getVars(QStringList &names, QList<VariableDefinition> &vars );
+    void getVars(QStringList &names, QList<VariableDefinition> &vars);
     void getArgs();
     bool hasAVX;
     bool testAVX();
@@ -51,7 +51,7 @@ private:
 
 public slots:
     void doRun(QString exe, QString options, QStringList files,
-               QList<StringSet> breakpoints, QStringList globals);
+        QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doNextInstruction();
     void doStepInstruction();
@@ -62,21 +62,21 @@ public slots:
     void doCommand(QString);
     void getData(QStringList request);
     void requestVar(DataMap *map, QString name, QString address, QString type,
-                    QString format, int size, int first, int last);
-    void setBreakpoint(QString,QString);
-    void deleteBreakpoint(QString,QString);
+        QString format, int size, int first, int last);
+    void setBreakpoint(QString, QString);
+    void deleteBreakpoint(QString, QString);
     void receiveWorkingDir(QString);
     void setEOF();
 
-signals:
+    signals:
     void nextInstruction(QString,int);
     void sendRegs(StringHash);
     void sendFpRegs(QStringList);
-    void sendData(QString,QString); 
+    void sendData(QString, QString);
     void sendGlobals(QList<VariableDefinition>);
     void sendLocals(QList<VariableDefinition>);
     void sendParameters(QList<VariableDefinition>);
-    void sendClasses(QHash<QString,ClassDefinition> classes);
+    void sendClasses(QHash<QString, ClassDefinition> classes);
     void sendVar(DataMap *map, QString name, QString value);
     void dataReady(QStringList);
     void sendBackTrace(QStringList);

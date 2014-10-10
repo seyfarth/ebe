@@ -10,12 +10,12 @@ class QPlainTextEdit;
 class QPushButton;
 QT_END_NAMESPACE
 
-class ErrorWindow : public QFrame
+class ErrorWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    ErrorWindow(QWidget *parent=0);
+    ErrorWindow(QWidget *parent = 0);
     QSize sizeHint() const;
     QPlainTextEdit *textEdit;
 

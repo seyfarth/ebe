@@ -10,7 +10,7 @@ QT_BEGIN_NAMESPACE
 class QTextDocument;
 QT_END_NAMESPACE
 
-class Highlighter : public QSyntaxHighlighter
+class Highlighter: public QSyntaxHighlighter
 {
 public:
     Highlighter(QTextDocument *parent = 0);
@@ -30,7 +30,7 @@ protected:
     QTextCharFormat preprocessorFormat;
 };
 
-class AsmHighlighter : public Highlighter
+class AsmHighlighter: public Highlighter
 {
 public:
     AsmHighlighter(QTextDocument *parent = 0);
@@ -39,7 +39,7 @@ protected:
 
 };
 
-class CppHighlighter : public Highlighter
+class CppHighlighter: public Highlighter
 {
 public:
     CppHighlighter(QTextDocument *parent = 0);
@@ -48,7 +48,7 @@ protected:
 
 };
 
-class FortranHighlighter : public Highlighter
+class FortranHighlighter: public Highlighter
 {
 public:
     FortranHighlighter(QTextDocument *parent = 0);

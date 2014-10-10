@@ -18,12 +18,12 @@ class QLineEdit;
  *  It has a public function, text, which is used to get the current text
  *  of the \c QLineEdit.
  */
-class CommandLine : public QFrame
+class CommandLine: public QFrame
 {
     Q_OBJECT
 
 public:
-    CommandLine(QWidget *parent=0); 
+    CommandLine(QWidget *parent = 0);
     QString text();
 
 private:

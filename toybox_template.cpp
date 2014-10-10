@@ -60,14 +60,14 @@ void print_type(bool x)
     printf("bool\n");
 }
 
-template <class T>
-void dump ( T v )
+template<class T>
+void dump(T v)
 {
     T x = v;
     int i;
     print_type(x);
-    for ( i = 0; i < sizeof(T); i++ ) {
-        printf("%02x ",((unsigned char *)&x)[i]);
+    for (i = 0; i < sizeof(T); i++) {
+        printf("%02x ", ((unsigned char *)&x)[i]);
     }
     printf("\n");
 }

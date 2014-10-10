@@ -8,12 +8,12 @@
 #include "binarynumber.h"
 #include "integeredit.h"
 
-class IntMath : public QFrame
+class IntMath: public QFrame
 {
     Q_OBJECT
 
 public:
-    IntMath(QWidget *parent=0);
+    IntMath(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     int fontWidth;
     int fontHeight;
@@ -46,7 +46,7 @@ public slots:
 
 private:
 
-signals:
+    signals:
 };
 
 #endif

@@ -3,20 +3,19 @@
 #include "types.h"
 #include <cstdio>
 
-
 FloatWindow::FloatWindow(QWidget *parent)
-: QFrame(parent)
+    : QFrame(parent)
 {
     setObjectName("Float");
-    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     setLineWidth(4);
 
     count = wordSize == 64 ? 16 : 8;
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->setContentsMargins(10,10,10,10);
+    layout->setContentsMargins(10, 10, 10, 10);
 
     table = new QTableWidget(this);
-    table->setRowCount(count/2);
+    table->setRowCount(count / 2);
     table->setColumnCount(4);
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
@@ -24,14 +23,15 @@ FloatWindow::FloatWindow(QWidget *parent)
 
     QTableWidgetItem *name;
     QTableWidgetItem *value;
-    for ( int r = 0; r < count/2; r++ ) {
-        for ( int c = 0; c < 2; c++ ) {
-            name = new QTableWidgetItem(QString("xmm%1 ").arg(c*(count/2)+r));
+    for (int r = 0; r < count / 2; r++) {
+        for (int c = 0; c < 2; c++) {
+            name = new QTableWidgetItem(
+                QString("xmm%1 ").arg(c * (count / 2) + r));
             name->setTextAlignment(Qt::AlignRight);
             value = new QTableWidgetItem("0.0");
-            regs[c*(count/2)+r] = value;
-            table->setItem(r,c*2,name);
-            table->setItem(r,c*2+1,value);
+            regs[c * (count / 2) + r] = value;
+            table->setItem(r, c * 2, name);
+            table->setItem(r, c * 2 + 1, value);
         }
     }
     layout->addWidget(table);
@@ -40,73 +40,73 @@ FloatWindow::FloatWindow(QWidget *parent)
     table->resizeRowsToContents();
     table->resizeColumnsToContents();
 
-    setLayout ( layout );
+    setLayout(layout);
 }
 
 QSize FloatWindow::sizeHint() const
 {
-    return QSize(200,10);
+    return QSize(200, 10);
 }
 
-void FloatWindow::setFontHeightAndWidth ( int height, int width )
+void FloatWindow::setFontHeightAndWidth(int height, int width)
 {
     int max, length;
     fontHeight = height;
-    fontWidth  = width;
-    for ( int r = 0; r < count/2; r++ ) {
-        table->setRowHeight(r,height+3);
+    fontWidth = width;
+    for (int r = 0; r < count / 2; r++) {
+        table->setRowHeight(r, height + 3);
     }
-    for ( int c = 0; c < 4; c++ ) {
+    for (int c = 0; c < 4; c++) {
         max = 1;
-        for ( int r = 0; r < count/2; r++ ) {
-            length = table->item(r,c)->text().length();
-            if ( length > max ) max = length;
+        for (int r = 0; r < count / 2; r++) {
+            length = table->item(r, c)->text().length();
+            if (length > max) max = length;
         }
-        table->setColumnWidth(c,(max+1)*width+3);
+        table->setColumnWidth(c, (max + 1) * width + 3);
     }
 
 }
 
-void FloatWindow::setRegister ( int n, QString value )
+void FloatWindow::setRegister(int n, QString value)
 {
-    if ( n >= 0 && n < count ) regs[n]->setText(value);
+    if (n >= 0 && n < count) regs[n]->setText(value);
 }
 
-void FloatWindow::receiveFpRegs ( QStringList data )
+void FloatWindow::receiveFpRegs(QStringList data)
 {
     QStringList parts;
     bool ok;
 #ifdef Q_WS_WIN
-    unsigned long long x[4]={0,0,0,0};
+    unsigned long long x[4]= {0,0,0,0};
 #else
-    unsigned long x[4]={0,0,0,0};
+    unsigned long x[4] = { 0, 0, 0, 0 };
 #endif
     //qDebug() << "fp receive" << data;
-    if ( data.length() < count ) {
+    if (data.length() < count) {
         qDebug() << "fpreg error";
         return;
     }
-    for (int i = 0; i < count; i++ ) {
+    for (int i = 0; i < count; i++) {
         parts = data[i].split(QRegExp("\\s+"));
         //qDebug() << parts;
-        for ( int j = 0; j < parts.length(); j++ ) {
-            x[j] = parts[j].toULongLong(&ok,16);
+        for (int j = 0; j < parts.length(); j++) {
+            x[j] = parts[j].toULongLong(&ok, 16);
         }
         //qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
         regValues[i].setValue(x);
-        setRegister(i,regValues[i].value());
+        setRegister(i, regValues[i].value());
     }
-    setFontHeightAndWidth(fontHeight,fontWidth);
+    setFontHeightAndWidth(fontHeight, fontWidth);
 }
 
-void FloatWindow::contextMenuEvent ( QContextMenuEvent * /* event */ )
+void FloatWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     QMenu *menu;
     QMenu *single;
     QMenu *all;
-    menu   = new QMenu(tr("Float format"));
+    menu = new QMenu(tr("Float format"));
     single = menu->addMenu(tr("Format for 1 register"));
-    all    = menu->addMenu(tr("Format for all registers"));
+    all = menu->addMenu(tr("Format for all registers"));
     single->addAction("float");
     single->addAction("float hex");
     single->addAction("float binary fp");
@@ -150,9 +150,9 @@ void FloatWindow::contextMenuEvent ( QContextMenuEvent * /* event */ )
     all->addAction("4 longs");
     all->addAction("2 int128s");
     connect ( single, SIGNAL(triggered(QAction*)),
-              this, SLOT(formatRegister(QAction*)) );
+        this, SLOT(formatRegister(QAction*)) );
     connect ( all, SIGNAL(triggered(QAction*)),
-              this, SLOT(formatAllRegisters(QAction*)) );
+        this, SLOT(formatAllRegisters(QAction*)) );
     menu->exec(QCursor::pos());
     delete menu;
 }
@@ -161,27 +161,28 @@ void FloatWindow::formatRegister(QAction *action)
 {
     int n;
 
-    n = (table->currentColumn()/2) * (count/2) + table->currentRow();
+    n = (table->currentColumn() / 2) * (count / 2) + table->currentRow();
     //qDebug() << n << action->text();
     regValues[n].setFormat(action->text());
-    setRegister(n,regValues[n].value());
-    setFontHeightAndWidth(fontHeight,fontWidth);
+    setRegister(n, regValues[n].value());
+    setFontHeightAndWidth(fontHeight, fontWidth);
 }
 
 void FloatWindow::formatAllRegisters(QAction *action)
 {
-    for ( int n = 0; n < count; n++ ) {
+    for (int n = 0; n < count; n++) {
         //qDebug() << n << action->text();
         regValues[n].setFormat(action->text());
-        setRegister(n,regValues[n].value());
+        setRegister(n, regValues[n].value());
     }
-    setFontHeightAndWidth(fontHeight,fontWidth);
+    setFontHeightAndWidth(fontHeight, fontWidth);
 }
 
 FpRegister::FpRegister()
 {
     format = "double";
-    for ( int i = 0; i < 4; i++ ) i8[i] = 0;
+    for (int i = 0; i < 4; i++)
+        i8[i] = 0;
 }
 
 #ifdef Q_WS_WIN
@@ -190,87 +191,88 @@ void FpRegister::setValue(unsigned long long *x)
 void FpRegister::setValue(unsigned long *x)
 #endif
 {
-    for ( int i = 0; i < 4; i++ ) u8[i] = x[i];
+    for (int i = 0; i < 4; i++)
+        u8[i] = x[i];
 }
 
 QString FpRegister::value()
 {
     QString s;
     QString t;
-    s.sprintf("%12g",f8[0]);
+    s.sprintf("%12g", f8[0]);
     AllTypes a;
 
     a.u8 = u8[0];
-    if ( format == "float") {
-        s.sprintf("%g",f4[0]);
-    } else if ( format == "float hex") {
+    if (format == "float") {
+        s.sprintf("%g", f4[0]);
+    } else if (format == "float hex") {
         s = hexFloat(a);
-    } else if ( format == "float binary fp") {
+    } else if (format == "float binary fp") {
         s = binaryFloat(a);
-    } else if ( format == "float fields") {
+    } else if (format == "float fields") {
         s = fieldsFloat(a);
-    } else if ( format == "double") {
-        s.sprintf("%g",f8[0]);
-    } else if ( format == "double hex") {
+    } else if (format == "double") {
+        s.sprintf("%g", f8[0]);
+    } else if (format == "double hex") {
         s = hexDouble(a);
-    } else if ( format == "double binary fp") {
+    } else if (format == "double binary fp") {
         s = binaryDouble(a);
-    } else if ( format == "double fields") {
+    } else if (format == "double fields") {
         s = fieldsDouble(a);
-    } else if ( format == "4 floats") {
-        s.sprintf("%g %g %g %g",f4[0],f4[1],f4[2],f4[3]);
-    } else if ( format == "2 doubles") {
-        s.sprintf("%g %g",f8[0],f8[1]);
-    } else if ( format == "16 bytes") {
+    } else if (format == "4 floats") {
+        s.sprintf("%g %g %g %g", f4[0], f4[1], f4[2], f4[3]);
+    } else if (format == "2 doubles") {
+        s.sprintf("%g %g", f8[0], f8[1]);
+    } else if (format == "16 bytes") {
         s = "";
-        for ( int i = 0; i < 16; i++ ) {
-            t.sprintf("%02x ",u1[i]);
+        for (int i = 0; i < 16; i++) {
+            t.sprintf("%02x ", u1[i]);
             s += t;
         }
-    } else if ( format == "8 shorts") {
+    } else if (format == "8 shorts") {
         s = "";
-        for ( int i = 0; i < 8; i++ ) {
-            t.sprintf("%d ",i2[i]);
+        for (int i = 0; i < 8; i++) {
+            t.sprintf("%d ", i2[i]);
             s += t;
         }
-    } else if ( format == "4 ints") {
-        s.sprintf("%d %d %d %d",i4[0],i4[1],i4[2],i4[3]);
-    } else if ( format == "2 longs") {
-        s.sprintf("%ld %ld",i8[0],i8[1]);
-    } else if ( format == "8 floats") {
+    } else if (format == "4 ints") {
+        s.sprintf("%d %d %d %d", i4[0], i4[1], i4[2], i4[3]);
+    } else if (format == "2 longs") {
+        s.sprintf("%ld %ld", i8[0], i8[1]);
+    } else if (format == "8 floats") {
         s = "";
-        for ( int i = 0; i < 8; i++ ) {
-            t.sprintf("%g ",f4[i]);
+        for (int i = 0; i < 8; i++) {
+            t.sprintf("%g ", f4[i]);
             s += t;
         }
-    } else if ( format == "4 doubles") {
+    } else if (format == "4 doubles") {
         s = "";
-        for ( int i = 0; i < 4; i++ ) {
-            t.sprintf("%g ",f8[i]);
+        for (int i = 0; i < 4; i++) {
+            t.sprintf("%g ", f8[i]);
             s += t;
         }
-    } else if ( format == "32 bytes") {
+    } else if (format == "32 bytes") {
         s = "";
-        for ( int i = 0; i < 32; i++ ) {
-            t.sprintf("%02x ",u1[i]);
+        for (int i = 0; i < 32; i++) {
+            t.sprintf("%02x ", u1[i]);
             s += t;
         }
-    } else if ( format == "16 shorts") {
+    } else if (format == "16 shorts") {
         s = "";
-        for ( int i = 0; i < 16; i++ ) {
-            t.sprintf("%d ",i2[i]);
+        for (int i = 0; i < 16; i++) {
+            t.sprintf("%d ", i2[i]);
             s += t;
         }
-    } else if ( format == "8 ints") {
+    } else if (format == "8 ints") {
         s = "";
-        for ( int i = 0; i < 8; i++ ) {
-            t.sprintf("%d ",i4[i]);
+        for (int i = 0; i < 8; i++) {
+            t.sprintf("%d ", i4[i]);
             s += t;
         }
-    } else if ( format == "4 longs") {
-        s.sprintf("%ld %ld %ld %ld",i8[0],i8[1],i8[2],i8[3]);
-    } else if ( format == "2 int128s") {
-        s.sprintf("%016lx%016lx %016lx%016lx",i8[0],i8[1],i8[2],i8[3]);
+    } else if (format == "4 longs") {
+        s.sprintf("%ld %ld %ld %ld", i8[0], i8[1], i8[2], i8[3]);
+    } else if (format == "2 int128s") {
+        s.sprintf("%016lx%016lx %016lx%016lx", i8[0], i8[1], i8[2], i8[3]);
     } else {
         qDebug() << "Unknown format" << format;
     }

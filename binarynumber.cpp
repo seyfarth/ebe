@@ -1,9 +1,8 @@
 #include "binarynumber.h"
 #include "settings.h"
 
-
 BinaryNumber::BinaryNumber()
-: QWidget()
+    : QWidget()
 {
     width = 16;
     charSize = ebe["font_size"].toInt();
@@ -16,7 +15,7 @@ BinaryNumber::BinaryNumber()
 
 void BinaryNumber::clear()
 {
-    for ( int i = 0; i < 80; i++ ) chars[i] = ' ';
+    for (int i = 0; i < 80; i++) chars[i] = ' ';
 }
 
 void BinaryNumber::setUnderline()
@@ -29,45 +28,49 @@ void BinaryNumber::setOverline()
     overline = true;
 }
 
-void BinaryNumber::setBits( int x, int w, int s )
+void BinaryNumber::setBits(int x, int w, int s)
 {
     width = w;
     show = s >= 0 ? s : w;
-    for ( int bit = 0; bit <= w; bit++ ) {
-        if ( bit >= show ) chars[bit] = ' ';
-        else chars[bit] = (x >> bit) & 1 ? '1' : '0';
-    }
-}
-
-void BinaryNumber::setBit ( int x, int bit )
-{
-    chars[bit] = x & 1 ? '1' : '0';
-}
-
-void BinaryNumber::setNibbles( int x, int w, int s )
-{
-    int nibble;
-    width = w;
-    show = s >= 0 ? s : w;
-    for ( int bit = 0; bit <= w; bit++ ) {
-        if ( bit >= show ) chars[bit] = ' ';
-        else {
-            nibble = (x >> (bit*4)) & 0xf;
-            chars[bit] = nibble > 9 ? 'A'+nibble-10 : '0'+nibble;
+    for (int bit = 0; bit <= w; bit++) {
+        if (bit >= show) {
+            chars[bit] = ' ';
+        } else {
+            chars[bit] = (x >> bit) & 1 ? '1' : '0';
         }
     }
 }
 
-void BinaryNumber::setText(QString s, int /* w */ )
+void BinaryNumber::setBit(int x, int bit)
+{
+    chars[bit] = x & 1 ? '1' : '0';
+}
+
+void BinaryNumber::setNibbles(int x, int w, int s)
+{
+    int nibble;
+    width = w;
+    show = s >= 0 ? s : w;
+    for (int bit = 0; bit <= w; bit++) {
+        if (bit >= show) {
+            chars[bit] = ' ';
+        } else {
+            nibble = (x >> (bit * 4)) & 0xf;
+            chars[bit] = nibble > 9 ? 'A' + nibble - 10 : '0' + nibble;
+        }
+    }
+}
+
+void BinaryNumber::setText(QString s, int /* w */)
 {
     int n = s.length();
 
     clear();
-    for ( int i = 0; i < n; i++ ) {
+    for (int i = 0; i < n; i++) {
 #if QT_VERSION >= 0x050000
         chars[n-i-1] = s[i].toLatin1();
 #else
-        chars[n-i-1] = s[i].toAscii();
+        chars[n - i - 1] = s[i].toAscii();
 #endif
     }
 }
@@ -75,7 +78,7 @@ void BinaryNumber::setText(QString s, int /* w */ )
 QSize BinaryNumber::sizeHint() const
 {
     int charSize = ebe["font_size"].toInt();
-    return ( QSize(charSize*width,underline?charSize+8:charSize+4) );
+    return (QSize(charSize * width, underline ? charSize + 8 : charSize + 4));
 }
 
 void BinaryNumber::setHighlight(int l, int h)
@@ -84,7 +87,7 @@ void BinaryNumber::setHighlight(int l, int h)
     highlightHigh = h >= 0 ? h : l;
 }
 
-void BinaryNumber::paintEvent ( QPaintEvent * /* event */ )
+void BinaryNumber::paintEvent(QPaintEvent * /* event */)
 {
     QString t;
     int x;
@@ -96,36 +99,36 @@ void BinaryNumber::paintEvent ( QPaintEvent * /* event */ )
     //painter.setRenderHint(QPainter::AntiAliasing,true);
     QFont font("courier");
     charSize = ebe["font_size"].toInt();
-    font.setPixelSize(charSize+3);
+    font.setPixelSize(charSize + 3);
     font.setBold(true);
     painter.setFont(font);
 
     int height;
     height = underline ? charSize + 8 : charSize + 4;
-    if ( overline ) height += 4;
-    setFixedSize(charSize*width, height );
-    y = 2+charSize;
-    if ( overline ) y = 5+charSize;
-    for ( int i = 0; i <= width; i++ ) {
+    if (overline) height += 4;
+    setFixedSize(charSize * width, height);
+    y = 2 + charSize;
+    if (overline) y = 5 + charSize;
+    for (int i = 0; i <= width; i++) {
         t = QChar(chars[i]);
-        x = charSize/4 + charSize*(width-i-1);
-        if ( i >= highlightLow && i <= highlightHigh ) {
+        x = charSize / 4 + charSize * (width - i - 1);
+        if (i >= highlightLow && i <= highlightHigh) {
             painter.setPen(QColor("red"));
-            painter.drawText(x,y,t);
+            painter.drawText(x, y, t);
             painter.setPen(QColor("black"));
         } else {
-            painter.drawText(x,y,t);
+            painter.drawText(x, y, t);
         }
     }
     QPen pen(QColor("black"));
     pen.setWidth(2);
     painter.setPen(pen);
-    if ( underline ) {
+    if (underline) {
         y = charSize + 7;
-        painter.drawLine((width-show)*charSize,y,width*charSize,y);
+        painter.drawLine((width - show) * charSize, y, width * charSize, y);
     }
-    if ( overline ) {
+    if (overline) {
         y = 3;
-        painter.drawLine((width-show)*charSize,y,width*charSize,y);
+        painter.drawLine((width - show) * charSize, y, width * charSize, y);
     }
 }

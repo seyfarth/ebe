@@ -17,39 +17,40 @@ public:
     void setValue(unsigned long *x);
 #endif
     void setFormat(QString f);
-    
+
 private:
-    union {
+    union
+    {
         double f8[4];
-        float  f4[8];
+        float f4[8];
 #ifdef Q_WS_WIN
         unsigned long long u8[4];
 #else
         unsigned long u8[4];
 #endif
 #ifdef Q_WS_WIN
-        long long   i8[4];
+        long long i8[4];
 #else
-        long   i8[4];
+        long i8[4];
 #endif
-        unsigned int  u4[8];
-        int    i4[8];
+        unsigned int u4[8];
+        int i4[8];
         unsigned short u2[16];
-        signed short   i2[16];
-        unsigned char  u1[32];
-        signed char    i1[32];
+        signed short i2[16];
+        unsigned char u1[32];
+        signed char i1[32];
     };
     QString format;
 };
 
-class FloatWindow : public QFrame
+class FloatWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    FloatWindow(QWidget *parent=0);
-    void setFontHeightAndWidth ( int height, int width );
-    void setRegister ( int n, QString value );
+    FloatWindow(QWidget *parent = 0);
+    void setFontHeightAndWidth(int height, int width);
+    void setRegister(int n, QString value);
     int count;
 
 public slots:
@@ -66,7 +67,7 @@ private:
     int fontWidth;
     int currentColumn;
     int currentRow;
-    void contextMenuEvent ( QContextMenuEvent *event );
+    void contextMenuEvent(QContextMenuEvent *event);
 };
 
 #endif

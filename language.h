@@ -8,9 +8,7 @@
 #include "settings.h"
 #include "types.h"
 
-
-
-class Languages:public QObject
+class Languages: public QObject
 {
     Q_OBJECT
 

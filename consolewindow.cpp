@@ -14,20 +14,20 @@
 
 extern GDB *gdb;
 
-ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
+ConsoleWindow::ConsoleWindow(QWidget *parent)
+    : QFrame(parent)
 {
     setObjectName("Console");
-    setFrameStyle ( QFrame::Panel | QFrame::Raised );
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
     setLineWidth(4);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(5);
-    layout->setContentsMargins(10,10,10,10);
+    layout->setContentsMargins(10, 10, 10, 10);
 
     QHBoxLayout *commandLayout = new QHBoxLayout;
     QLabel *label = new QLabel(tr("gdb command"));
-    label->setStyleSheet ( "font-family: " +
-                            ebe["variable_font"].toString() );
+    label->setStyleSheet("font-family: " + ebe["variable_font"].toString());
     commandLayout->addWidget(label);
     commandLine = new QLineEdit(this);
     commandLayout->addWidget(commandLine);
@@ -39,15 +39,15 @@ ConsoleWindow::ConsoleWindow(QWidget *parent) : QFrame(parent)
 
     scrollBar = textEdit->verticalScrollBar();
 
-    connect(gdb,SIGNAL(log(QString)),this,SLOT(log(QString)));
-    connect(commandLine,SIGNAL(returnPressed()),this,SLOT(sendCommand()));
-    connect(this,SIGNAL(doCommand(QString)),gdb,SLOT(doCommand(QString)));
+    connect(gdb, SIGNAL(log(QString)), this, SLOT(log(QString)));
+    connect(commandLine, SIGNAL(returnPressed()), this, SLOT(sendCommand()));
+    connect(this, SIGNAL(doCommand(QString)), gdb, SLOT(doCommand(QString)));
 }
 
-void ConsoleWindow::log ( QString s )
+void ConsoleWindow::log(QString s)
 {
-    textEdit->textCursor().insertText(s+'\n');
-    scrollBar->setValue(textEdit->document()->lineCount()-1);
+    textEdit->textCursor().insertText(s + '\n');
+    scrollBar->setValue(textEdit->document()->lineCount() - 1);
 }
 
 void ConsoleWindow::sendCommand()

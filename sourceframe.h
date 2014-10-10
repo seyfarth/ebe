@@ -10,25 +10,25 @@
 class CommandLine;
 class TabWidget;
 
-class SourceFrame : public QFrame
+class SourceFrame: public QFrame
 {
     Q_OBJECT
 
 public:
-    SourceFrame(QWidget *parent=0);
+    SourceFrame(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     void setLineNumbers(int nLines);
     bool fileChanged();
     void saveBeforeQuit();
-    void open(QString name, int index=-1);
+    void open(QString name, int index = -1);
     void openInNewTab(QString name);
     void closeTabs();
     void saveIfChanged(QString file);
-    void setNextLine(QString &file,int &line);
-    void clearNextLine(QString file,int line);
+    void setNextLine(QString &file, int &line);
+    void clearNextLine(QString file, int line);
     QString buildDebugAsm(QString file);
-    int  fontHeight;
-    int  fontWidth;
+    int fontHeight;
+    int fontWidth;
     bool filesSaved();
     QLabel *cursorPosition;
     void close(QString);
@@ -38,7 +38,7 @@ public:
 
 public slots:
     void tabContextMenu(const QPoint & pos );
-    void nextInstruction(QString file,int line);
+    void nextInstruction(QString file, int line);
     void setCommandLineVisible(bool);
     void changedTab(int index);
     void open(bool);
@@ -83,9 +83,9 @@ public slots:
     void insertFile(QString f);
     void error(QString s);
 
-signals:
+    signals:
     void doRun(QString exe, QString options, QStringList files,
-               QList<StringSet> breakpoints, QStringList globals);
+        QList<StringSet> breakpoints, QStringList globals);
     void doNext();
     void doNextInstruction();
     void doStepInstruction();
@@ -109,7 +109,7 @@ private:
     CommandLine *commandLine;
 };
 
-class TabWidget : public QTabWidget
+class TabWidget: public QTabWidget
 {
 public:
     QTabBar *bar();

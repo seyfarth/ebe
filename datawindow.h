@@ -17,7 +17,7 @@ class DataItem;
  *  the data window.  Maps of this type allow updating a \c DataItem
  *  rapidly starting with the name of the \c DataItem.
  */
-typedef QHash<QString,DataItem*> DataMap;
+typedef QHash<QString, DataItem*> DataMap;
 
 /**
  *  \class DataItem
@@ -53,7 +53,7 @@ typedef QHash<QString,DataItem*> DataMap;
  *  associated DataMap and item \c DataItem contains a pointer to its
  *  \c DataMap.
  */
-class DataItem : public QTreeWidgetItem
+class DataItem: public QTreeWidgetItem
 {
 public:
     DataItem();
@@ -76,7 +76,7 @@ public:
     void removeSubTree();
     QString valueFromGdb();
     DataMap *map;       ///< Map containing this \c DataItem
-    QString stringValue;///< Value printed by \c gdb
+    QString stringValue;       ///< Value printed by \c gdb
 
     AllTypes a;         ///< Union of all basic types
 };
@@ -104,7 +104,7 @@ public:
  *
  *  Parameters are the data items enclosed in parentheses 
  */
-class DataTree : public QTreeWidget
+class DataTree: public QTreeWidget
 {
     Q_OBJECT
 
@@ -120,10 +120,8 @@ public:
     DataMap *localMap;
     DataMap *parameterMap;
     DataMap *userDefinedMap;
-    DataItem *addDataItem(DataMap *map, QString n,
-                          QString t, QString v);
+    DataItem *addDataItem(DataMap *map, QString n, QString t, QString v);
     QList<Limits> dimensions;
-
 
 public slots:
     void expandDataItem(QTreeWidgetItem*);
@@ -142,15 +140,15 @@ public slots:
 
 private:
 
-signals:
+    signals:
 };
 
-class DataWindow : public QFrame
+class DataWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    DataWindow(QWidget *parent=0);
+    DataWindow(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     void request(DataItem *item);
     int level;
@@ -159,7 +157,7 @@ public:
 private slots:
     void receiveVariableDefinition(QStringList);
     void resetData();
-    void receiveClasses(QHash<QString,ClassDefinition> c);
+    void receiveClasses(QHash<QString, ClassDefinition> c);
     void receiveVar(DataMap *group, QString name, QString value);
     void receiveGlobals(QList<VariableDefinition>);
     void receiveLocals(QList<VariableDefinition>);
@@ -170,7 +168,7 @@ private:
     int fontHeight;
     int fontWidth;
 
-signals:
+    signals:
     void requestVar(DataMap*,QString,QString,QString,QString,int,int,int);
 };
 

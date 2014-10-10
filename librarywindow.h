@@ -14,12 +14,12 @@ class QWebView;
 class QClipboard;
 QT_END_NAMESPACE
 
-class LibraryWindow : public QFrame
+class LibraryWindow: public QFrame
 {
     Q_OBJECT
 
 public:
-    LibraryWindow(QWidget *parent=0);
+    LibraryWindow(QWidget *parent = 0);
     QSize sizeHint() const;
     QListWidget *list;
     QString libraryPath;
@@ -33,7 +33,7 @@ private slots:
     void copy();
 
 private:
-    void cd ( QString dir );
+    void cd(QString dir);
 };
 
 #ifdef LIBRARYWINDOW_CPP

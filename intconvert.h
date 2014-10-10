@@ -9,12 +9,12 @@
 #include "binarynumber.h"
 #include "integeredit.h"
 
-class IntConvert : public QFrame
+class IntConvert: public QFrame
 {
     Q_OBJECT
 
 public:
-    IntConvert(QWidget *parent=0);
+    IntConvert(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     int fontWidth;
     int fontHeight;
@@ -52,7 +52,7 @@ public slots:
 
 private:
 
-signals:
+    signals:
 };
 
 #endif

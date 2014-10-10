@@ -576,12 +576,12 @@
 <file>src/hal/main</file>
 <file>src/hal/class</file>
 <file>src/hal/switch</file>
+<file>src/hal/hal.inc</file>
 <file>src/hal/cin</file>
 <file>src/hal/double</file>
 <file>src/hal/struct</file>
 <file>src/hal/if</file>
 <file>src/hal/function</file>
-<file>src/hal/hello.c</file>
 <file>src/hal/cout</file>
 <file>src/hal/for</file>
 <file>src/hal/if-else</file>
