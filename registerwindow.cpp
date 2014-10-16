@@ -24,7 +24,7 @@ static QString names[5][4] = {
 
 #ifdef Q_WS_WIN
 static QString halNames[6][4] = {
-    {   "retq", "par1", "sav1",  "sav5"},
+    {   "acc",  "par1", "sav1",  "sav5"},
     {   "scr1", "par2", "sav2",  "sav6"},
     {   "scr2", "par3", "sav3",  "sav7"},
     {   "rfp", "par4",  "sav4",  ""},
@@ -32,7 +32,7 @@ static QString halNames[6][4] = {
 };
 #else
 static QString halNames[6][4] = {
-    { "retq", "par1", "par4",   "sav1" },
+    { "acc",  "par1", "par4",   "sav1" },
     { "scr1", "par2", "par5",   "sav2" },
     { "scr2", "par3", "par6",   "sav3" },
     { "rfp",  "",     "",       "sav4" },
@@ -308,11 +308,12 @@ void GenericRegisterWindow::defineVariableByAddress()
 void GenericRegisterWindow::setDecimal()
 {
     QString reg = table->currentItem()->text();
+    reg = reg.trimmed();
     //qDebug() << "reg" << reg;
-    if (reg.at(reg.length() - 1) == ' ') reg.chop(1);
+    //qDebug() << "regs" << regs;
     if (regs.contains(reg)) {
         regs[reg]->setFormat("decimal");
-        setRegister(reg, regs[reg]->value());
+        setRegister(regs[reg]->name, regs[reg]->value());
     }
 }
 
@@ -324,10 +325,10 @@ void GenericRegisterWindow::setHex()
     //qDebug() << table->currentItem();
     QString reg = table->currentItem()->text();
     //qDebug() << reg;
-    if (reg.at(reg.length() - 1) == ' ') reg.chop(1);
+    reg = reg.trimmed();
     if (regs.contains(reg)) {
         regs[reg]->setFormat("hexadecimal");
-        setRegister(reg, regs[reg]->value());
+        setRegister(regs[reg]->name, regs[reg]->value());
     }
 }
 
@@ -413,10 +414,10 @@ void HalRegisterWindow::buildTable()
 {
     halToIntel["rip"] = "rip";
     halToIntel["eflags"] = "eflags";
-    halToIntel["retq"] = "rax";
+    halToIntel["acc"] = "rax";
     halToIntel["rfp"] = "rbp";
     halToIntel["rsp"] = "rsp";
-    halToIntel["retd"] = "rax";
+    halToIntel["acc"] = "rax";
     halToIntel["sav1"] = "r12";
     halToIntel["sav2"] = "r13";
     halToIntel["sav3"] = "r14";
@@ -549,6 +550,7 @@ void HalRegisterWindow::buildTable()
  */
     foreach ( QString name, namesList ) {
         regs[name] = new Register(name);
+        regs[IntelToHal[name]] = regs[name];
     }
 
     connect(this, SIGNAL(sendVariableDefinition(QStringList)), dataWindow,

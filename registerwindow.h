@@ -71,7 +71,6 @@ public:
      */
     void setFormat(QString format);
 
-private:
     QString contents;   ///< The current value of the Register
     QString format;     ///< The format for displaying the Register
     QString name;       ///< The Register's name

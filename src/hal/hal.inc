@@ -15,13 +15,46 @@
 %assign SAVE_REGS 5
 %endif
 
+%define raxd eax
+%define raxw ax
+%define raxb al
+%define raxh ah
+
+%define rbxd ebx
+%define rbxw bx
+%define rbxb bl
+%define rbxh bh
+
+%define rcxd ecx
+%define rcxw cx
+%define rcxb cl
+%define rcxh ch
+
+%define rdxd edx
+%define rdxw dx
+%define rdxb dl
+%define rdxh dh
+
+%define rdid edi
+%define rdiw di
+%define rdib dil
+
+%define rsid esi
+%define rsiw si
+%define rsib sil
+
+%define rbpd ebp
+%define rbpw bp
+%define rbpb bpl
+
 ;                           ; Windows and Linux
-%define rfp    rbp    
-%define retq  rax
-%define retd  eax
-%define retw  ax
-%define retb  al
-%define reth  ah
+%define rfp   rbp    
+%define acc   rax
+%define accq  rax
+%define accd  eax
+%define accw  ax
+%define accb  al
+%define acch  ah
 
 ;                           ; Windows and Linux
 %define sav1  r12
@@ -62,7 +95,7 @@
 %define scr1q r10
 %define scr1d r10d
 %define scr1w r10w
-%define scr1g r10b
+%define scr1b r10b
 ;                           ; Windows and Linux
 %define scr2  r11
 %define scr2q r11
@@ -130,6 +163,9 @@
 %assign n (4+locals+xp+1)/2*16
         sub rsp, n
 %endmacro
+%undef n
+%undef xp
+%undef locals
 
 ;   Windows
 ;   First 4 local variables are in the stack frame
@@ -155,38 +191,39 @@ local%1 equ   -8*(%1-4)
      local i
      %assign i i+1
 %endrep
-   
+%undef i   
 ;   Windows
 ;   Where to place extra parameters when you call a function with
 ;   more than 4 parameters.
 ;
-;   newpar5 will be 32
-;   newpar6 will be 40
+;   newPar5 will be 32
+;   newPar6 will be 40
 ;   ...
-;   newpar100 will be 99*8 = 792
-;   [rsp+newparX]
+;   newPar100 will be 99*8 = 792
+;   [rsp+newParX]
 
 %macro newpar 1
-newpar%1  equ   8*(i-1)
+newPar%1  equ   8*(i-1)
 %endmacro
 %assign i 5
 %rep 96
         newpar i
         %assign i i+1
 %endrep
+%undef i   
 
 ;   Windows
 ;   Where to find additional parameters to current function
 ;   past parameter 4
 ;
-;   currpar5 will be 48
-;   currpar6 will be 56
+;   currPar5 will be 48
+;   currPar6 will be 56
 ;   ...
-;   currpar100 will be 808
-;   [rfp+currparX]
+;   currPar100 will be 808
+;   [rfp+currParX]
 
 %macro parequ 1
-currpar%1  equ 16+8*(%1+1)
+currPar%1  equ 16+8*(%1+1)
 %endmacro
 
 %assign i 5
@@ -194,6 +231,7 @@ currpar%1  equ 16+8*(%1+1)
         parequ i
         %assign i i+1
 %endrep
+%undef i   
 
 %else                       ; Linux
 %define par1  rdi
@@ -250,6 +288,8 @@ currpar%1  equ 16+8*(%1+1)
         sub rsp, n
 %endif
 %endmacro
+%undef n
+%undef xp
 
 ;   Linux
 ;   Local variables accessed relative to rfp with negative offsets
@@ -268,38 +308,40 @@ local%1 equ   -8*%1
      local i
      %assign i i+1
 %endrep
+%undef i
    
 ;   Linux
 ;   Where to place extra parameters when you call a function with
 ;   more than 6 parameters.
 ;
-;   newpar7 will be 0
-;   newpar8 will be 8
+;   newPar7 will be 0
+;   newPar8 will be 8
 ;   ...
-;   newpar100 will be 93*8 = 744
-;   [rsp+newparX]
+;   newPar100 will be 93*8 = 744
+;   [rsp+newParX]
 
 %macro newpar 1
-newpar%1  equ   8*(i-7)
+newPar%1  equ   8*(i-7)
 %endmacro
 %assign i 7
 %rep 94
         newpar i
         %assign i i+1
 %endrep
+%undef i
 
 ;   Linux
 ;   Where to find additional parameters to current function
 ;   past parameter 6
 ;
-;   currpar7 will be 16
-;   currpar8 will be 24
+;   currPar7 will be 16
+;   currPar8 will be 24
 ;   ...
-;   currpar100 will be 760
-;   [rfp+currparX]
+;   currPar100 will be 760
+;   [rfp+currParX]
 
 %macro parequ 1
-currpar%1  equ 16+8*(%1-7)
+currPar%1  equ 16+8*(%1-7)
 %endmacro
 
 %assign i 7
@@ -307,5 +349,52 @@ currpar%1  equ 16+8*(%1-7)
         parequ i
         %assign i i+1
 %endrep
+%undef i
 
 %endif
+
+%macro  multipush 2-*
+%rep %0
+        push %1
+%rotate 1
+%endrep
+%endmacro
+
+%macro  multipop 2-*
+%rep %0
+        pop %1
+%rotate 1
+%endrep
+%endmacro
+
+%macro alias 2
+%define q%1 %2
+%define d%1 %2d
+%define w%1 %2w
+%define b%1 %2b
+%define h%1 %2h
+%endmacro
+
+%macro unalias 1-*
+%rep %0
+%undef q%1
+%undef d%1
+%undef w%1
+%undef b%1
+%undef h%1
+%rotate 1
+%endrep
+%endmacro
+
+%macro fpalias 2
+%define y%1 ymm%2
+%define x%1 xmm%2
+%endmacro
+
+%macro fpunalias 1-*
+%rep %0
+%undef y%1
+%undef x%1
+%rotate 1
+%endrep
+%endmacro
