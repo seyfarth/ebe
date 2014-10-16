@@ -2,10 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ebe"
-#define MyAppVersion "2.1.0"
+#define MyAppVersion "2.4.7"
 #define MyAppPublisher "Ray Seyfarth"
 #define MyAppURL "http://www.rayseyfarth.com/ebe"
-#define MyAppExeName "qtebe.exe"
+#define MyAppExeName "ebe.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -34,10 +34,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\cygwin\home\seyfarth\qtebe\release\{#MyAppExeName}"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
-Source: "C:\cygwin\home\seyfarth\qtebe\ebe.ico"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
-Source: "C:\cygwin\home\seyfarth\qtebe\ebe.rcc"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
-Source: "C:\mgcc\*"; DestDir: "{app}\gcc"; Flags: ignoreversion recursesubdirs
+Source: "C:\cygwin\home\seyfarth\ebe\release\{#MyAppExeName}"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
+Source: "C:\cygwin\home\seyfarth\ebe\*.qm"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
+Source: "C:\cygwin\home\seyfarth\ebe\ebe.ico"; DestDir: "{app}\gcc\bin"; Flags: ignoreversion
+Source: "C:\gcc32\*"; DestDir: "{app}\gcc"; Flags: ignoreversion recursesubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files   
 
 [Icons]

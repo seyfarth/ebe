@@ -67,14 +67,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 #ifdef Q_WS_WIN
     QProcess where(this);
-    where.start("where objdump");
+    where.start("where objdump.exe");
     where.waitForFinished();
-    QByteArray data = where.readAllStandardOutput();
+    QByteArray data = where.readLine();
     QString fileName;
     fileName = QString(data.trimmed());
-    where.start(QString("objdump -f \"%1\"").arg(fileName));
+    //qDebug() << "file" << fileName;
+    where.start(QString("objdump.exe -f \"%1\"").arg(fileName));
     where.waitForFinished();
     data = where.readAllStandardOutput();
+    //qDebug() << data;
     if ( QString(data).indexOf("x86-64") >= 0 ) {
         wordSize = 64;
     } else {
@@ -85,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent)
     QProcess which(this);
     which.start("which objdump");
     which.waitForFinished();
-    QByteArray data = which.readAllStandardOutput();
+    QByteArray data = which.readLine();
     QString fileName;
     fileName = QString(data.trimmed());
     which.start(QString("objdump -f \"%1\"").arg(fileName));
@@ -101,7 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
     QProcess which(this);
     which.start("which nm");
     which.waitForFinished();
-    QByteArray data = which.readAllStandardOutput();
+    QByteArray data = which.readLine();
     QString fileName;
     fileName = QString(data.trimmed());
     which.start(QString("file \"%1\"").arg(fileName));
