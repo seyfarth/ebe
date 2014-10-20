@@ -10,6 +10,7 @@
 #include "instructions.h"
 #include "gdb.h"
 #include "settings.h"
+#include "framewindow.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
@@ -32,6 +33,7 @@ StringSet textLabels;
 QHash<QString, Range> labelRange;
 QHash<unsigned long, FileLine> addressToFileLine;
 QMap<FileLine, unsigned long> fileLineToAddress;
+QMap<FileLine,FrameLimit*> frameLimits;
 StringHash textToFile;
 StringHash objectToSource;
 
@@ -46,6 +48,7 @@ extern ProjectWindow *projectWindow;
 extern GDB *gdb;
 extern QStatusBar *statusBar;
 extern SourceFrame *sourceFrame;
+extern FrameWindow *frameWindow;
 
 typedef QPair<QString, QString> StringPair;
 
@@ -785,6 +788,55 @@ void SourceFrame::run()
 #endif
 
 //
+//  Find and record data about frames
+//
+    frameLimits.clear();
+    foreach ( file, files ) {
+        //qDebug() << "nm loop" << file.source << file.language << file.object;
+        if ( file.language == "asm" || file.language == "hal" ) {
+            QString text;
+            QString cap;
+            QRegExp rex("^frame(.*)");
+            int pos;
+            int currPars, locals, newPars;
+            FrameLimit *frameLimit=0;
+            FileLine fileLine;
+            fileLine.file = file.source;
+            QFile asmFile(file.source);
+            if ( asmFile.open(QFile::ReadOnly) ) {
+                fileLine.line = 1;
+                text = asmFile.readLine();
+                while ( text != "" ) {
+                    text = text.trimmed();
+                    //qDebug() << fileLine.line << text;
+                    pos = 0;
+                    pos = rex.indexIn(text,pos);
+                    if ( pos >= 0 ) {
+                        cap = rex.cap(1).trimmed();
+                        cap.replace(" ","");
+                        cap.replace("\t","");
+                        parts = cap.split(";");
+                        if ( parts.length() > 1 ) cap = parts[0];
+                        parts = cap.split(",");
+                        currPars = locals = newPars = 0;
+                        if ( parts.length() >= 1 ) currPars = parts[0].toInt();
+                        if ( parts.length() >= 2 ) locals = parts[1].toInt();
+                        if ( parts.length() >= 3 ) newPars = parts[2].toInt();
+                        frameLimit = new FrameLimit(currPars,locals,newPars);
+                    }
+                    if ( frameLimit ) frameLimits[fileLine] = frameLimit;
+                    text = asmFile.readLine();
+                    fileLine.line++;
+                }
+            }
+            asmFile.close();
+        }
+    }
+    //foreach ( FileLine fl, frameLimits.keys() ) {
+        //FrameLimit *f = frameLimits[fl];
+        //qDebug() << fl.file << fl.line << f->currPars << f->locals << f->newPars;
+    //}
+//
 //  Start debugging
 //
 
@@ -997,6 +1049,7 @@ void SourceFrame::nextInstruction(QString file, int line)
     breakFile = file;
     breakLine = line;
     setNextLine(breakFile, breakLine);
+    frameWindow->nextLine(breakFile,breakLine);
 }
 
 void SourceFrame::setFontHeightAndWidth(int height, int width)

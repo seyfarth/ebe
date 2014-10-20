@@ -1187,3 +1187,10 @@ void GDB::receiveWorkingDir(QString dir)
 {
     QDir::current().cd(dir);
 }
+
+void GDB::requestStack(int n)
+{
+    QStringList results;
+    results = sendReceive(QString("x/%1xg $rsp").arg(n));
+    emit receiveStack(results);
+}

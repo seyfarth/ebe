@@ -8,6 +8,7 @@
 #include "datawindow.h"
 #include "sourceframe.h"
 #include "registerwindow.h"
+#include "framewindow.h"
 #include "floatwindow.h"
 #include "terminalwindow.h"
 #include "consolewindow.h"
@@ -65,6 +66,7 @@ private:
 
     QDockWidget *dataDock;
     QDockWidget *registerDock;
+    QDockWidget *frameDock;
     QDockWidget *halRegisterDock;
     QDockWidget *halNamesDock;
     QDockWidget *floatDock;
@@ -77,6 +79,9 @@ private:
 
     QAction *dataVisible;
     QAction *registerVisible;
+    QAction *halRegisterVisible;
+    QAction *halNameVisible;
+    QAction *frameVisible;
     QAction *floatVisible;
     QAction *projectVisible;
     QAction *terminalVisible;

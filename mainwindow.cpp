@@ -33,6 +33,7 @@ QString gdbName;
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
 RegisterWindow *registerWindow;
+FrameWindow *frameWindow;
 HalRegisterWindow *halRegisterWindow;
 HalNamesWindow *halNamesWindow;
 FloatWindow *floatWindow;
@@ -296,6 +297,9 @@ void MainWindow::restoreMainWindow()
     //dDebug() << "add ss";
     dataDock->setFloating(ebe["data/floating"].toBool());
     registerDock->setFloating(ebe["register/floating"].toBool());
+    halRegisterDock->setFloating(ebe["halregister/floating"].toBool());
+    halNamesDock->setFloating(ebe["halnames/floating"].toBool());
+    frameDock->setFloating(ebe["frame/floating"].toBool());
     floatDock->setFloating(ebe["float/floating"].toBool());
     projectDock->setFloating(ebe["project/floating"].toBool());
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
@@ -357,6 +361,9 @@ void MainWindow::saveSettings()
     ebe["ebe/state"] = saveState();
     ebe["data/floating"] = dataDock->isFloating();
     ebe["register/floating"] = registerDock->isFloating();
+    ebe["halregister/floating"] = halRegisterDock->isFloating();
+    ebe["halnames/floating"] = halNamesDock->isFloating();
+    ebe["frame/floating"] = frameDock->isFloating();
     ebe["float/floating"] = floatDock->isFloating();
     ebe["project/floating"] = projectDock->isFloating();
     ebe["terminal/floating"] = terminalDock->isFloating();
@@ -365,6 +372,9 @@ void MainWindow::saveSettings()
     ebe["console/floating"] = consoleDock->isFloating();
     ebe["data/visible"] = dataDock->isVisible();
     ebe["register/visible"] = registerDock->isVisible();
+    ebe["halregister/visible"] = halRegisterDock->isVisible();
+    ebe["halnames/visible"] = halNamesDock->isVisible();
+    ebe["frame/visible"] = frameDock->isVisible();
     ebe["float/visible"] = floatDock->isVisible();
     ebe["project/visible"] = projectDock->isVisible();
     ebe["terminal/visible"] = terminalDock->isVisible();
@@ -395,9 +405,10 @@ void MainWindow::setFontSize()
     floatWindow->setFontHeightAndWidth(height, width);
     //dDebug() << "regw";
     registerWindow->setFontHeightAndWidth(height, width);
-    //dDebug() << "hregw";
     halRegisterWindow->setFontHeightAndWidth(height, width);
     halNamesWindow->setFontHeightAndWidth(height, width);
+    frameWindow->setFontHeightAndWidth(height, width);
+    //dDebug() << "hregw";
     toyBox->setFontHeightAndWidth(height, width);
     bitBucket->setFontHeightAndWidth(height, width);
     //dDebug() << "done sfs";
@@ -609,6 +620,7 @@ void MainWindow::createMenus()
     viewMenu->addAction(registerDock->toggleViewAction());
     viewMenu->addAction(halRegisterDock->toggleViewAction());
     viewMenu->addAction(halNamesDock->toggleViewAction());
+    viewMenu->addAction(frameDock->toggleViewAction());
     viewMenu->addAction(floatDock->toggleViewAction());
     viewMenu->addAction(backTraceDock->toggleViewAction());
     viewMenu->addAction(consoleDock->toggleViewAction());
@@ -812,6 +824,17 @@ void MainWindow::createDockWindows()
         QSizePolicy::Preferred);
     halNamesDock->setWidget(halNamesWindow);
     addDockWidget(Qt::LeftDockWidgetArea, halNamesDock);
+
+    frameDock = new QDockWidget(tr("Stack Frame"));
+    frameDock->setObjectName("Dock 12");
+    frameDock->setAllowedAreas(
+        Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
+            | Qt::BottomDockWidgetArea);
+    frameWindow = new FrameWindow(this);
+    frameWindow->setSizePolicy(QSizePolicy::Preferred,
+        QSizePolicy::Preferred);
+    frameDock->setWidget(frameWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, frameDock);
 
     floatDock = new QDockWidget(tr("Floating Point Registers"));
     floatDock->setObjectName("Dock 3");

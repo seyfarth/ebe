@@ -67,8 +67,10 @@ public slots:
     void deleteBreakpoint(QString, QString);
     void receiveWorkingDir(QString);
     void setEOF();
+    void requestStack(int n);
 
     signals:
+    void receiveStack(QStringList results);
     void nextInstruction(QString,int);
     void sendRegs(StringHash);
     void sendFpRegs(QStringList);

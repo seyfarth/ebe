@@ -210,8 +210,9 @@ public:
      */
     void contextMenuEvent(QContextMenuEvent *event);
 
-    signals:
-    void sendVariableDefinition(QStringList);public slots:
+signals:
+    void sendVariableDefinition(QStringList);
+public slots:
 
     void defineVariableByAddress();
 

@@ -27,7 +27,7 @@ static QString halNames[6][4] = {
     {   "acc",  "par1", "sav1",  "sav5"},
     {   "scr1", "par2", "sav2",  "sav6"},
     {   "scr2", "par3", "sav3",  "sav7"},
-    {   "rfp", "par4",  "sav4",  ""},
+    {   "rbp", "par4",  "sav4",  ""},
     {   "rsp", "rip",   "eflags", ""}
 };
 #else
@@ -35,7 +35,7 @@ static QString halNames[6][4] = {
     { "acc",  "par1", "par4",   "sav1" },
     { "scr1", "par2", "par5",   "sav2" },
     { "scr2", "par3", "par6",   "sav3" },
-    { "rfp",  "",     "",       "sav4" },
+    { "rbp",  "",     "",       "sav4" },
     { "rsp",  "rip",  "eflags", "sav5" }
 };
 #endif
@@ -157,8 +157,8 @@ void RegisterWindow::buildTable()
     /*
      *  Resizing based on size hints which is not too accurate
      */
-    table->resizeRowsToContents();
     table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 
     /*
      *  Don't show a grid
@@ -194,8 +194,7 @@ void RegisterWindow::buildTable()
      *  For each register name, create a Register object and save the
      *  pointer in the regs map.
      */
-    foreach ( QString name, namesList )
-    {
+    foreach ( QString name, namesList ) {
         regs[name] = new Register(name);
     }
 
@@ -221,16 +220,16 @@ void RegisterWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeRowsToContents();
     table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 }
 
 void HalRegisterWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeRowsToContents();
     table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 }
 
 /*
@@ -251,8 +250,7 @@ void GenericRegisterWindow::setRegister(QString name, QString val)
  */
 void GenericRegisterWindow::receiveRegs(StringHash map)
 {
-    foreach ( QString key, map.keys() )
-    {
+    foreach ( QString key, map.keys() ) {
         regs[key]->setValue(map[key]);
         setRegister(key,regs[key]->value());
     }
@@ -415,7 +413,7 @@ void HalRegisterWindow::buildTable()
     halToIntel["rip"] = "rip";
     halToIntel["eflags"] = "eflags";
     halToIntel["acc"] = "rax";
-    halToIntel["rfp"] = "rbp";
+    halToIntel["rbp"] = "rbp";
     halToIntel["rsp"] = "rsp";
     halToIntel["acc"] = "rax";
     halToIntel["sav1"] = "r12";
@@ -515,8 +513,8 @@ void HalRegisterWindow::buildTable()
 /*
  *  Resizing based on size hints which is not too accurate
  */
-    table->resizeRowsToContents();
     table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 
 /*
  *  Don't show a grid
@@ -583,8 +581,8 @@ HalNamesWindow::HalNamesWindow(QWidget *parent)
             table->setItem(r, c, name);
         }
     }
-    table->resizeRowsToContents();
     table->resizeColumnsToContents();
+    table->resizeRowsToContents();
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 /*
@@ -603,6 +601,6 @@ void HalNamesWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeRowsToContents();
     table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 }

@@ -35,6 +35,7 @@ void PtyReader::run()
 #else
         n = read(pty, data, 256);
 #endif
+        if ( n < 1 ) break;
         data[n] = 0;
         QString s(data);
         //qDebug() << s;

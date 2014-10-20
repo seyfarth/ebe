@@ -34,7 +34,7 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            types.h bitbucket.h unarybitpanel.h validators.h \
            binarynumber.h binarybitpanel.h integeredit.h \
            intconvert.h intmath.h floatedit.h floatconvert.h file.h \
-           language.h
+           language.h framewindow.h
 
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
@@ -45,6 +45,6 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            types.cpp bitbucket.cpp unarybitpanel.cpp validators.cpp \
            binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
            intconvert.cpp intmath.cpp floatedit.cpp floatconvert.cpp file.cpp \
-           language.cpp
+           language.cpp framewindow.cpp
 
 RESOURCES += ebe.qrc
