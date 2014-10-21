@@ -9,17 +9,19 @@ typedef QHash<QString, int> IntHash;
 typedef QSet<QString> StringSet;
 typedef QSet<int> IntSet;
 
+#ifdef Q_WS_WIN
+    typedef unsigned long long uLong;
+    typedef long long sLong;
+#else
+    typedef unsigned long uLong;
+    typedef long sLong;
+#endif
 union AllTypes
 {
     double f8;
     float f4;
-#ifdef Q_WS_WIN
-    unsigned long long u8;
-    long long i8;
-#else
-    unsigned long u8;
-    long i8;
-#endif
+    uLong u8;
+    sLong i8;
     unsigned int u4;
     int i4;
     unsigned short u2;
