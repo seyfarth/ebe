@@ -44,7 +44,7 @@ void FrameWindow::rebuildTable()
     QTableWidgetItem *name;
     FrameItem *item;
 #ifdef Q_WS_WIN
-    int local5row;
+    int local5Row;
     rows = 6;
     if ( limit->currPars > 4 ) {
         rows += limit->currPars - 4;
@@ -52,17 +52,25 @@ void FrameWindow::rebuildTable()
     }
     returnRow = rows - 2;
     local1Row = rows - 3;
-    local5Row = rows;
+    local5Row = rows+1;
 
     if ( limit->locals > 4 ) {
         rows += limit->locals - 4;
     }
-    rows += limit->newPars;
+    if ( limit->newPars > 4 ) {
+        rows += limit->newPars;
+    } else {
+        rows += 4;
+    }
     if ( rows & 1 ) rows++;
     
     int oldRows = table->rowCount();
+    for ( int r=0; r < oldRows; r++ ) {
+        table->item(r,0)->setText("");
+        table->item(r,2)->setText("");
+    }
+
     table->setRowCount(rows);
-    
     for (int r = oldRows; r < rows; r++) {
         frameItems[r] = new FrameItem();
         name = new QTableWidgetItem(QString(""));
@@ -76,10 +84,10 @@ void FrameWindow::rebuildTable()
     if ( limit->currPars > 4 ) {
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-4; i++ ) {
-            table->item(returnRow-i-1,0)->
+            table->item(returnRow-i-5,0)->
                    setText(QString("currPar%1").arg(i+5));
-            table->item(returnRow-i-1,2)->
-                   setText(QString("rbp+%1").arg((i+2)*8));
+            table->item(returnRow-i-5,2)->
+                   setText(QString("rbp+%1").arg((i+6)*8));
         }
     }
 
@@ -87,7 +95,6 @@ void FrameWindow::rebuildTable()
     table->item(returnRow,0)->setText("retAddr");
     table->item(returnRow,2)->setText("");
     table->item(returnRow+1,0)->setText("prevRbp");
-    if ( rows > returnRow+2) table->item(returnRow+2,0)->setText("");
 
     int num=limit->locals;
     if ( num > 4 ) num = 4;
@@ -97,8 +104,8 @@ void FrameWindow::rebuildTable()
         table->item(local1Row-i,2)->setText(QString("rbp+%1").arg((i+2)*8));
     }
     for ( int i = 4; i <  limit->locals; i++ ) {
-        table->item(local5Row-i,0)->setText(QString("local%1").arg(i+1));
-        table->item(local5Row-i,2)->setText(QString("rbp-%1").arg((i+1)*8));
+        table->item(local5Row+i-5,0)->setText(QString("local%1").arg(i+1));
+        table->item(local5Row+i-5,2)->setText(QString("rbp-%1").arg((i-3)*8));
     }
 
     if ( limit->locals > 4 && rows > local5Row+limit->locals-4) {
@@ -121,8 +128,12 @@ void FrameWindow::rebuildTable()
     if ( limit->newPars > 6 ) rows += limit->newPars - 6;
     if ( rows & 1 ) rows++;
     int oldRows = table->rowCount();
-    table->setRowCount(rows);
+    for ( int r=0; r < oldRows; r++ ) {
+        table->item(r,0)->setText("");
+        table->item(r,2)->setText("");
+    }
     
+    table->setRowCount(rows);
     for (int r = oldRows; r < rows; r++) {
         frameItems[r] = new FrameItem();
         name = new QTableWidgetItem(QString(""));
@@ -147,13 +158,9 @@ void FrameWindow::rebuildTable()
     table->item(returnRow,0)->setText("retAddr");
     table->item(returnRow,2)->setText("");
     table->item(returnRow+1,0)->setText("prevRbp");
-    if ( rows > returnRow+2) table->item(returnRow+2,0)->setText("");
     for ( int i = 0; i < limit->locals; i++ ) {
         table->item(local1Row+i,0)->setText(QString("local%1").arg(i+1));
         table->item(local1Row+i,2)->setText(QString("rbp-%1").arg((i+1)*8));
-    }
-    if ( rows > local1Row+limit->locals) {
-        table->item(local1Row+limit->locals,0)->setText("");
     }
     for ( int i = 7; i <= limit->newPars; i++ ) {
         table->item(rows-i+6,0)->setText(QString("newPar%1").arg(i));

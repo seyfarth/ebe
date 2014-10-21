@@ -130,9 +130,9 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "windows";
     ebe["windows"] = true;
-    ebe["build/asm"] = "yasm -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P $ebe_inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/hal"] =
-        "yasm -P hal.inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
+        "yasm -P $ebe_inc -P hal.inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe["build/halld"] = "ld -o \"$base\"";
     ebe.os = "windows";

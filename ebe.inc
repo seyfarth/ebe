@@ -1,3 +1,6 @@
+%ifidni __OUTPUT_FORMAT__, win64
+%define WINDOWS
+%endif
 %ifidni __OUTPUT_FORMAT__,macho64
 %macro defaultrel  0.nolist
         default  rel
@@ -389,7 +392,7 @@
 ;   frame  [parameters] [locals] [new_parameters]
 ;   parameters > 4 on stack
 ;
-%macro frame 0-2 0,0,0   ; %1, %2 & %3 default to 0 
+%macro frame 0-3 0,0,0   ; %1, %2 & %3 default to 0 
 %if %3 <= 4
 %assign xp 0
 %else
