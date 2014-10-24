@@ -16,13 +16,15 @@
 #include <QScrollArea>
 #include <QSize>
 
-class FrameLimit
+class FrameData
 {
 public:
-    FrameLimit ( int _currPars=0, int _locals=0, int _newPars=0 );
+    FrameData ( int _currPars=0, int _locals=0, int _newPars=0 );
     int currPars;
     int locals;
     int newPars;
+    StringHash *names;
+    QString unalias;
 };
 
 /**
@@ -146,7 +148,7 @@ public:
      */
     FrameWindow(QWidget *parent = 0);
 
-    FrameLimit *limit;
+    FrameData *limit;
     int rows;
     QVBoxLayout *layout;
     int returnRow;
@@ -183,7 +185,7 @@ public:
      *  QHash which provides a register pointer based on a register
      *  name as key.
      */
-    QHash<QString, FrameItem *> items;
+    //QHash<QString, FrameItem *> items;
 
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.

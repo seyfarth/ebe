@@ -9,7 +9,7 @@ len:   equ     $-msg                   ; String length
 main:
        push    rbp
        mov     rbp, rsp
-       frame   2, 2, 1
+       frame   2, 2, 9
        sub     rsp, frame_size
        mov     rax, 7
        mov     [rbp+local1], rax

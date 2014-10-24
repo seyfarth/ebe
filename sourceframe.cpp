@@ -33,7 +33,7 @@ StringSet textLabels;
 QHash<QString, Range> labelRange;
 QHash<unsigned long, FileLine> addressToFileLine;
 QMap<FileLine, unsigned long> fileLineToAddress;
-QMap<FileLine,FrameLimit*> frameLimits;
+QMap<FileLine,FrameData*> frameData;
 StringHash textToFile;
 StringHash objectToSource;
 
@@ -49,6 +49,8 @@ extern GDB *gdb;
 extern QStatusBar *statusBar;
 extern SourceFrame *sourceFrame;
 extern FrameWindow *frameWindow;
+extern StringHash *itemNames;
+extern QHash<QString,QTableWidgetItem*> items;
 
 typedef QPair<QString, QString> StringPair;
 
@@ -267,6 +269,8 @@ void SourceFrame::run()
     QString name;
     QString cmd;
 
+    if ( itemNames ) itemNames->clear();
+    else itemNames = new StringHash;
     addressToFileLine.clear();
     fileLineToAddress.clear();
     textToAddress.clear();
@@ -790,16 +794,20 @@ void SourceFrame::run()
 //
 //  Find and record data about frames
 //
-    frameLimits.clear();
+    frameData.clear();
     foreach ( file, files ) {
         //qDebug() << "nm loop" << file.source << file.language << file.object;
         if ( file.language == "asm" || file.language == "hal" ) {
             QString text;
             QString cap;
             QRegExp rex("^frame(.*)");
+            QRegExp space("\\s+");
+            QRegExp localExp("local[0-9]+");
+            QRegExp currParExp("currPar[0-9]+");
+            QRegExp newParExp("newPar[0-9]+");
             int pos;
-            int currPars, locals, newPars;
-            FrameLimit *frameLimit=0;
+            int currPars=0, locals=0, newPars=0;
+            FrameData *data=0;
             FileLine fileLine;
             fileLine.file = file.source;
             QFile asmFile(file.source);
@@ -809,6 +817,7 @@ void SourceFrame::run()
                 while ( text != "" ) {
                     text = text.trimmed();
                     //qDebug() << fileLine.line << text;
+
                     pos = 0;
                     pos = rex.indexIn(text,pos);
                     if ( pos >= 0 ) {
@@ -822,9 +831,50 @@ void SourceFrame::run()
                         if ( parts.length() >= 1 ) currPars = parts[0].toInt();
                         if ( parts.length() >= 2 ) locals = parts[1].toInt();
                         if ( parts.length() >= 3 ) newPars = parts[2].toInt();
-                        frameLimit = new FrameLimit(currPars,locals,newPars);
+                        data = new FrameData(currPars,locals,newPars);
+                        data->names = itemNames;
+                    } else {
+                        text.replace(",","");
+                        parts = text.split(space);
+                        //qDebug() << parts;
+                        if ( parts.length() == 3 ) {
+                            if ( parts[1].toLower() == "equ" ) {
+                                if ( localExp.exactMatch(parts[2]) ||
+                                     currParExp.exactMatch(parts[2]) ||
+                                     newParExp.exactMatch(parts[2]) ) {
+                                    data = new FrameData(currPars,locals,newPars);
+                                    StringHash *newitemNames;
+                                    newitemNames = new StringHash;
+                                    *newitemNames = *itemNames;
+                                    itemNames = newitemNames;
+                                    data->names = itemNames;
+                                    itemNames->insert(parts[2],parts[0]);
+                                }
+                            } else if ( parts[0] == "alias" ||
+                                        parts[0] == "fpalias" ) {
+                                data = new FrameData(currPars,locals,newPars);
+                                StringHash *newitemNames;
+                                newitemNames = new StringHash;
+                                *newitemNames = *itemNames;
+                                itemNames = newitemNames;
+                                data->names = itemNames;
+                                itemNames->insert(parts[2],parts[1]);
+                            }
+                        } else if ( parts.length() == 2 ) {
+                            if ( parts[0] == "unalias" ||
+                                 parts[0] == "fpunalias" ) {
+                                //qDebug() << "unalias" << parts[1];
+                                data = new FrameData(currPars,locals,newPars);
+                                StringHash *newitemNames;
+                                newitemNames = new StringHash;
+                                *newitemNames = *itemNames;
+                                itemNames = newitemNames;
+                                data->names = itemNames;
+                                data->unalias = parts[1];
+                            }
+                        }
                     }
-                    if ( frameLimit ) frameLimits[fileLine] = frameLimit;
+                    if ( data ) frameData[fileLine] = data;
                     text = asmFile.readLine();
                     fileLine.line++;
                 }
@@ -832,8 +882,8 @@ void SourceFrame::run()
             asmFile.close();
         }
     }
-    //foreach ( FileLine fl, frameLimits.keys() ) {
-        //FrameLimit *f = frameLimits[fl];
+    //foreach ( FileLine fl, frameData.keys() ) {
+        //FrameData *f = frameData[fl];
         //qDebug() << fl.file << fl.line << f->currPars << f->locals << f->newPars;
     //}
 //

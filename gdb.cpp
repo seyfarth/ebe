@@ -467,7 +467,11 @@ void GDB::doCall()
     //qDebug() << "call from" << breakFile << breakLine;
     if (!running) return;
     //qDebug() << "tbreak *" << fileLineToAddress[fl];
+#if defined(Q_WS_WIN) || defined(Q_OS_MAC)
     send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+#else
+    send(QString("tbreak \"%1\":%2").arg(breakFile).arg(breakLine+1));
+#endif
     send("continue");
     setNormal();
     getBackTrace();

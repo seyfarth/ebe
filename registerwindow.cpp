@@ -11,6 +11,8 @@
 
 extern DataWindow *dataWindow;
 
+extern QHash<QString,QTableWidgetItem*> items;
+
 /**
  * Static matrix of register names matching the pattern in the table
  */
@@ -122,6 +124,7 @@ void RegisterWindow::buildTable()
                     name = new QTableWidgetItem("  " + names[r][c] + " ");
                 else
                     name = new QTableWidgetItem(names[r][c] + " ");
+                items[names[r][c]] = name;
                 name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (r == 4 && c > 1) {
                     val = new QTableWidgetItem("");
@@ -141,6 +144,7 @@ void RegisterWindow::buildTable()
                         "  " + names32[r][c] + QString(" "));
                 else
                     name = new QTableWidgetItem(names32[r][c] + QString(" "));
+                items[names[r][c]] = name;
                 name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (r == 2 && c > 1) {
                     val = new QTableWidgetItem("");
@@ -496,6 +500,7 @@ void HalRegisterWindow::buildTable()
             } else {
                 name = new QTableWidgetItem(halNames[r][c] + QString(" "));
             }
+            items[halNames[r][c]] = name;
             name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
             if (halNames[r][c] == "") {
                 val = new QTableWidgetItem("");

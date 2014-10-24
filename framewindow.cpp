@@ -10,13 +10,17 @@
 #include <cstdio>
 
 extern DataWindow *dataWindow;
-extern QMap<FileLine,FrameLimit*> frameLimits;
+extern QMap<FileLine,FrameData*> frameData;
 QMap<int,FrameItem*> frameItems;
+StringHash *itemNames=0;
 extern GDB *gdb;
+QHash<QString,QTableWidgetItem*> items;
 
-FrameLimit::FrameLimit(int _currPars, int _locals, int _newPars )
+FrameData::FrameData(int _currPars, int _locals, int _newPars )
     : currPars(_currPars), locals(_locals), newPars(_newPars)
 {
+    names = 0;
+    unalias = "";
 }
 
 /*
@@ -41,8 +45,10 @@ FrameWindow::FrameWindow(QWidget *parent)
 
 void FrameWindow::rebuildTable()
 {
+    QString s;
     QTableWidgetItem *name;
     FrameItem *item;
+    //items.clear();
 #ifdef Q_WS_WIN
     int local5Row;
     rows = 6;
@@ -84,8 +90,10 @@ void FrameWindow::rebuildTable()
     if ( limit->currPars > 4 ) {
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-4; i++ ) {
-            table->item(returnRow-i-5,0)->
-                   setText(QString("currPar%1").arg(i+5));
+            s = QString("currPar%1").arg(i+5);
+            items[s] = (QTableWidgetItem *)table->item(returnRow-i-5,0);
+            if ( limit->names->contains(s) ) s = limit->names->value(s);
+            table->item(returnRow-i-5,0)->setText(s);
             table->item(returnRow-i-5,2)->
                    setText(QString("rbp+%1").arg((i+6)*8));
         }
@@ -100,11 +108,17 @@ void FrameWindow::rebuildTable()
     if ( num > 4 ) num = 4;
 
     for ( int i = 0; i <  num; i++ ) {
-        table->item(local1Row-i,0)->setText(QString("local%1").arg(i+1));
+        s = QString("local%1").arg(i+1);
+        items[s] = (QTableWidgetItem *)table->item(local1Row-i,0);
+        if ( limit->names->contains(s) ) s = limit->names->value(s);
+        table->item(local1Row-i,0)->setText(s);
         table->item(local1Row-i,2)->setText(QString("rbp+%1").arg((i+2)*8));
     }
     for ( int i = 4; i <  limit->locals; i++ ) {
-        table->item(local5Row+i-5,0)->setText(QString("local%1").arg(i+1));
+        s = QString("local%1").arg(i+1);
+        items[s] = (QTableWidgetItem *)table->item(local5Row+i-5,0);
+        if ( limit->names->contains(s) ) s = limit->names->value(s);
+        table->item(local5Row+i-5,0)->setText(s);
         table->item(local5Row+i-5,2)->setText(QString("rbp-%1").arg((i-3)*8));
     }
 
@@ -112,7 +126,10 @@ void FrameWindow::rebuildTable()
         table->item(local5Row+limit->locals-4,0)->setText("");
     }
     for ( int i = 5; i <= limit->newPars; i++ ) {
-        table->item(rows-i,0)->setText(QString("newPar%1").arg(i));
+        s = QString("newPar%1").arg(i);
+        items[s] = (QTableWidgetItem *)table->item(rows-i,0);
+        if ( limit->names->contains(s) ) s = limit->names->value(s);
+        table->item(rows-i,0)->setText(s);
         table->item(rows-i,2)->setText(QString("rsp+%1").arg((i-1)*8));
     }
     table->item(rows-1,2)->setText("rsp");
@@ -147,8 +164,10 @@ void FrameWindow::rebuildTable()
     if ( limit->currPars > 6 ) {
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-6; i++ ) {
-            table->item(returnRow-i-1,0)->
-                   setText(QString("currPar%1").arg(i+7));
+            s = QString("currPar%1").arg(i+7);
+            items[s] = (QTableWidgetItem *)table->item(returnRow-i-1,0);
+            if ( limit->names->contains(s) ) s = limit->names->value(s);
+            table->item(returnRow-i-1,0)->setText(s);
             table->item(returnRow-i-1,2)->
                    setText(QString("rbp+%1").arg((i+2)*8));
         }
@@ -158,12 +177,21 @@ void FrameWindow::rebuildTable()
     table->item(returnRow,0)->setText("retAddr");
     table->item(returnRow,2)->setText("");
     table->item(returnRow+1,0)->setText("prevRbp");
+    StringHash d;
+    d = *(limit->names);
     for ( int i = 0; i < limit->locals; i++ ) {
-        table->item(local1Row+i,0)->setText(QString("local%1").arg(i+1));
+        s = QString("local%1").arg(i+1);
+        items[s] = (QTableWidgetItem *)table->item(local1Row+i,0);
+        //qDebug() << s << d;
+        if ( limit->names->contains(s) ) s = limit->names->value(s);
+        table->item(local1Row+i,0)->setText(s);
         table->item(local1Row+i,2)->setText(QString("rbp-%1").arg((i+1)*8));
     }
     for ( int i = 7; i <= limit->newPars; i++ ) {
-        table->item(rows-i+6,0)->setText(QString("newPar%1").arg(i));
+        s = QString("newPar%1").arg(i);
+        items[s] = (QTableWidgetItem *)table->item(rows-i+6,0);
+        if ( limit->names->contains(s) ) s = limit->names->value(s);
+        table->item(rows-i+6,0)->setText(s);
         table->item(rows-i+6,2)->setText(QString("rsp+%1").arg((i-7)*8));
     }
     if ( limit->locals == 0 && limit->newPars <= 6 ) {
@@ -187,6 +215,31 @@ void FrameWindow::receiveStack(QStringList results)
     FrameItem *item;
     bool ok;
     int row = rows-1;
+    //qDebug() << "rs" << limit->unalias << items.keys();
+    //qDebug() << "rs names" << *(limit->names);
+    if ( limit->unalias != "" ) {
+        StringHash::iterator it = limit->names->begin();
+        while ( it != limit->names->end() ) {
+            //qDebug() << it.key() << it.value() << limit->unalias;
+            if ( it.value() == limit->unalias ) {
+                QString name=it.key();
+                items[name]->setText(name+" ");
+                limit->names->erase(it);
+                break;
+            }
+            it++;
+        }
+        limit->unalias = "";
+    }
+    //qDebug() << "rs names" << *(limit->names);
+    foreach (QString name, limit->names->keys()) {
+        //qDebug() << "rs" << name;
+        if ( items.contains(name) ) {
+            //qDebug() << "rs" << name;
+            items[name]->setText(limit->names->value(name)+" ");
+        }
+    }
+
     for ( int i=0; i < results.length(); i++ ) {
         parts = results[i].split(QRegExp("\\s+"));
         x = parts[1].toULongLong(&ok,16);
@@ -443,7 +496,7 @@ void FrameWindow::nextLine ( QString file, int line )
     FileLine fl;
     fl.file = file;
     fl.line = line;
-    FrameLimit *lim = frameLimits[fl];
+    FrameData *lim = frameData[fl];
 
     if ( lim ) {
         if ( lim  != limit ) {
