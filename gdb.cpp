@@ -1198,3 +1198,10 @@ void GDB::requestStack(int n)
     results = sendReceive(QString("x/%1xg $rsp").arg(n));
     emit receiveStack(results);
 }
+
+void GDB::requestAsmVariable(int i, uLong address, int n)
+{
+    QStringList results;
+    results = sendReceive(QString("x/%1xb %2").arg(n).arg(address));
+    emit sendAsmVariable(i,results);
+}

@@ -68,8 +68,10 @@ public slots:
     void receiveWorkingDir(QString);
     void setEOF();
     void requestStack(int n);
+    void requestAsmVariable(int i, uLong address, int n);
 
     signals:
+    void sendAsmVariable(int i, QStringList results);
     void receiveStack(QStringList results);
     void nextInstruction(QString,int);
     void sendRegs(StringHash);

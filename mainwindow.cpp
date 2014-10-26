@@ -34,6 +34,7 @@ DataWindow *dataWindow;
 SourceFrame *sourceFrame;
 RegisterWindow *registerWindow;
 FrameWindow *frameWindow;
+AsmDataWindow *asmDataWindow;
 HalRegisterWindow *halRegisterWindow;
 HalNamesWindow *halNamesWindow;
 FloatWindow *floatWindow;
@@ -300,6 +301,7 @@ void MainWindow::restoreMainWindow()
     halRegisterDock->setFloating(ebe["halregister/floating"].toBool());
     halNamesDock->setFloating(ebe["halnames/floating"].toBool());
     frameDock->setFloating(ebe["frame/floating"].toBool());
+    asmDataDock->setFloating(ebe["asmdata/floating"].toBool());
     floatDock->setFloating(ebe["float/floating"].toBool());
     projectDock->setFloating(ebe["project/floating"].toBool());
     terminalDock->setFloating(ebe["terminal/floating"].toBool());
@@ -364,6 +366,7 @@ void MainWindow::saveSettings()
     ebe["halregister/floating"] = halRegisterDock->isFloating();
     ebe["halnames/floating"] = halNamesDock->isFloating();
     ebe["frame/floating"] = frameDock->isFloating();
+    ebe["asmdata/floating"] = asmDataDock->isFloating();
     ebe["float/floating"] = floatDock->isFloating();
     ebe["project/floating"] = projectDock->isFloating();
     ebe["terminal/floating"] = terminalDock->isFloating();
@@ -375,6 +378,7 @@ void MainWindow::saveSettings()
     ebe["halregister/visible"] = halRegisterDock->isVisible();
     ebe["halnames/visible"] = halNamesDock->isVisible();
     ebe["frame/visible"] = frameDock->isVisible();
+    ebe["asmdata/visible"] = asmDataDock->isVisible();
     ebe["float/visible"] = floatDock->isVisible();
     ebe["project/visible"] = projectDock->isVisible();
     ebe["terminal/visible"] = terminalDock->isVisible();
@@ -408,6 +412,7 @@ void MainWindow::setFontSize()
     halRegisterWindow->setFontHeightAndWidth(height, width);
     halNamesWindow->setFontHeightAndWidth(height, width);
     frameWindow->setFontHeightAndWidth(height, width);
+    asmDataWindow->setFontHeightAndWidth(height, width);
     //dDebug() << "hregw";
     toyBox->setFontHeightAndWidth(height, width);
     bitBucket->setFontHeightAndWidth(height, width);
@@ -620,6 +625,7 @@ void MainWindow::createMenus()
     viewMenu->addAction(registerDock->toggleViewAction());
     viewMenu->addAction(halRegisterDock->toggleViewAction());
     viewMenu->addAction(halNamesDock->toggleViewAction());
+    viewMenu->addAction(asmDataDock->toggleViewAction());
     viewMenu->addAction(frameDock->toggleViewAction());
     viewMenu->addAction(floatDock->toggleViewAction());
     viewMenu->addAction(backTraceDock->toggleViewAction());
@@ -835,6 +841,17 @@ void MainWindow::createDockWindows()
         QSizePolicy::Preferred);
     frameDock->setWidget(frameWindow);
     addDockWidget(Qt::LeftDockWidgetArea, frameDock);
+
+    asmDataDock = new QDockWidget(tr("Assembly Data"));
+    asmDataDock->setObjectName("Dock 13");
+    asmDataDock->setAllowedAreas(
+        Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
+            | Qt::BottomDockWidgetArea);
+    asmDataWindow = new AsmDataWindow(this);
+    asmDataWindow->setSizePolicy(QSizePolicy::Preferred,
+        QSizePolicy::Preferred);
+    asmDataDock->setWidget(asmDataWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, asmDataDock);
 
     floatDock = new QDockWidget(tr("Floating Point Registers"));
     floatDock->setObjectName("Dock 3");

@@ -11,6 +11,7 @@
 #include "gdb.h"
 #include "settings.h"
 #include "framewindow.h"
+#include "asmdatawindow.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
@@ -49,6 +50,7 @@ extern GDB *gdb;
 extern QStatusBar *statusBar;
 extern SourceFrame *sourceFrame;
 extern FrameWindow *frameWindow;
+extern AsmDataWindow *asmDataWindow;
 extern StringHash *itemNames;
 extern QHash<QString,QTableWidgetItem*> items;
 
@@ -477,9 +479,14 @@ void SourceFrame::run()
     //qDebug() << "building globals";
     QString ldCmd = "";
     textLabels.clear();
+    //qDebug() << asmDataWindow;
+    asmDataWindow->variables.clear();
+    asmDataWindow->varNames.clear();
+    //qDebug() << "building globals";
     foreach(file, files) {
         //qDebug() << "file" << file.source;
         object = file.object;
+        bool findVariables = file.language == "asm" || file.language == "hal";
         if (object == defaultDir + "ebe_unbuffer.o") continue;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
@@ -494,6 +501,16 @@ void SourceFrame::run()
             //qDebug() << data;
             parts = data.split(QRegExp("\\s+"));
             //qDebug() << parts;
+            if ( findVariables ) {
+                if ( (parts[1] == "d" && parts[2] != ".data") ||
+                     (parts[1] == "b" && parts[2] != ".bss") ) {
+                    //qDebug() << parts[2];
+                    AsmVariable var(parts[2]);
+                    asmDataWindow->varNames[parts[2]] =
+                                   asmDataWindow->variables.size();
+                    asmDataWindow->variables.append(var);
+                }
+            }
             if (parts.length() >= 3) {
                 if (parts[1] == "T"
                     && (parts[2] == "main" || parts[2] == "_main"
@@ -543,6 +560,10 @@ void SourceFrame::run()
             //qDebug() << data;
             data = nm.readLine();
         }
+        //qDebug() << "b4 loop";
+        //for ( int i=0; i < asmDataWindow->variables.size(); i++ ) {
+            //qDebug() << asmDataWindow->variables[i].name;
+        //}
         //#ifndef Q_WS_WIN
         //qDebug() << "language" << file.language;
         if (file.language == "asm" || file.language == "hal") {
@@ -706,7 +727,7 @@ void SourceFrame::run()
 //
     textToAddress.clear();
     QProcess nm(this);
-    nm.start(QString("nm -a %1").arg(exeName));
+    nm.start(QString("nm -an %1").arg(exeName));
     nm.waitForFinished();
     QString nmData = nm.readLine();
     QStringList nmParts;
@@ -716,14 +737,36 @@ void SourceFrame::run()
     QRegExp rx2("[a-zA-Z_][.a-zA-Z0-9_]*");
     //QRegExp rx3("_line_");
     FileLine fl;
+    bool definingVar = false;
+    QString varName;
+    QString nmp;
+    //qDebug() << "running nm";
+    QVector<AsmVariable> newVars;
     while (nmData != "") {
         //qDebug() << nmData;
         nmParts = nmData.split(rx1);
+        if ( definingVar ) {
+            long size = nmParts[0].toULongLong(&ok,16) -
+                        asmDataWindow->variables[index].address;
+            if ( size > 0 && size < 100000 ) {
+                asmDataWindow->variables[index].size = size;
+            }
+            definingVar = false;
+            newVars.append(asmDataWindow->variables[index]);
+        }
         if (nmParts.length() >= 3) {
-            if (nmParts[1] == "D" || nmParts[1] == "S" || nmParts[1] == "d"
-                || nmParts[1] == "s" || nmParts[1] == "B") {
+            nmp = nmParts[1].toLower();
+            if (nmp == "d" || nmp == "s" || nmp == "b" ) {
                 if (rx2.exactMatch(nmParts[2])) {
                     varToAddress[nmParts[2]] = "0x" + nmParts[0];
+                }
+                if ( asmDataWindow->varNames.count(nmParts[2]) > 0 ) {
+                    index = asmDataWindow->varNames[nmParts[2]];
+                    //qDebug() << "var" << nmData;
+                    asmDataWindow->variables[index].address =
+                                  nmParts[0].toULongLong(&ok,16);
+                    definingVar = true;
+                    varName = nmParts[2];
                 }
             } else if (nmParts[1] == "T") {
                 nmParts[0] = "0x" + nmParts[0];
@@ -734,6 +777,12 @@ void SourceFrame::run()
         }
         nmData = nm.readLine();
     }
+    asmDataWindow->variables = newVars;
+    //for ( int i=0; i < asmDataWindow->variables.size(); i++ ) {
+        //qDebug() << asmDataWindow->variables[i].name <<
+                    //asmDataWindow->variables[i].address <<
+                    //asmDataWindow->variables[i].size;
+    //}
     //qDebug() << "globals" << varToAddress.keys();
 
 //
@@ -800,12 +849,12 @@ void SourceFrame::run()
         if ( file.language == "asm" || file.language == "hal" ) {
             QString text;
             QString cap;
-            QRegExp rex("^frame(.*)");
             QRegExp space("\\s+");
             QRegExp localExp("local[0-9]+");
             QRegExp currParExp("currPar[0-9]+");
             QRegExp newParExp("newPar[0-9]+");
-            int pos;
+            QRegExp labelExp("[a-zA-Z0-9_]+");
+            QRegExp sectionExp("section|segment");
             int currPars=0, locals=0, newPars=0;
             FrameData *data=0;
             FileLine fileLine;
@@ -815,64 +864,53 @@ void SourceFrame::run()
                 fileLine.line = 1;
                 text = asmFile.readLine();
                 while ( text != "" ) {
+                    parts = text.split(";");
+                    if ( parts.length() > 1 ) text = parts[0];
                     text = text.trimmed();
+                    text.replace("\t"," ");
+                    text.replace(",","");
                     //qDebug() << fileLine.line << text;
 
-                    pos = 0;
-                    pos = rex.indexIn(text,pos);
-                    if ( pos >= 0 ) {
-                        cap = rex.cap(1).trimmed();
-                        cap.replace(" ","");
-                        cap.replace("\t","");
-                        parts = cap.split(";");
-                        if ( parts.length() > 1 ) cap = parts[0];
-                        parts = cap.split(",");
+                    parts = text.split(space);
+                    if ( parts[0] == "frame" ) {
                         currPars = locals = newPars = 0;
-                        if ( parts.length() >= 1 ) currPars = parts[0].toInt();
-                        if ( parts.length() >= 2 ) locals = parts[1].toInt();
-                        if ( parts.length() >= 3 ) newPars = parts[2].toInt();
+                        if ( parts.length() >= 2 ) currPars = parts[1].toInt();
+                        if ( parts.length() >= 3 ) locals = parts[2].toInt();
+                        if ( parts.length() >= 4 ) newPars = parts[3].toInt();
                         data = new FrameData(currPars,locals,newPars);
                         data->names = itemNames;
-                    } else {
-                        text.replace(",","");
-                        parts = text.split(space);
-                        //qDebug() << parts;
-                        if ( parts.length() == 3 ) {
-                            if ( parts[1].toLower() == "equ" ) {
-                                if ( localExp.exactMatch(parts[2]) ||
-                                     currParExp.exactMatch(parts[2]) ||
-                                     newParExp.exactMatch(parts[2]) ) {
-                                    data = new FrameData(currPars,locals,newPars);
-                                    StringHash *newitemNames;
-                                    newitemNames = new StringHash;
-                                    *newitemNames = *itemNames;
-                                    itemNames = newitemNames;
-                                    data->names = itemNames;
-                                    itemNames->insert(parts[2],parts[0]);
-                                }
-                            } else if ( parts[0] == "alias" ||
-                                        parts[0] == "fpalias" ) {
-                                data = new FrameData(currPars,locals,newPars);
-                                StringHash *newitemNames;
-                                newitemNames = new StringHash;
-                                *newitemNames = *itemNames;
-                                itemNames = newitemNames;
-                                data->names = itemNames;
-                                itemNames->insert(parts[2],parts[1]);
-                            }
-                        } else if ( parts.length() == 2 ) {
-                            if ( parts[0] == "unalias" ||
-                                 parts[0] == "fpunalias" ) {
-                                //qDebug() << "unalias" << parts[1];
-                                data = new FrameData(currPars,locals,newPars);
-                                StringHash *newitemNames;
-                                newitemNames = new StringHash;
-                                *newitemNames = *itemNames;
-                                itemNames = newitemNames;
-                                data->names = itemNames;
-                                data->unalias = parts[1];
-                            }
+                    } else if ( parts.length() == 3 &&
+                                parts[1].toLower() == "equ" ) {
+                        if ( localExp.exactMatch(parts[2]) ||
+                             currParExp.exactMatch(parts[2]) ||
+                             newParExp.exactMatch(parts[2]) ) {
+                            data = new FrameData(currPars,locals,newPars);
+                            StringHash *newitemNames;
+                            newitemNames = new StringHash;
+                            *newitemNames = *itemNames;
+                            itemNames = newitemNames;
+                            data->names = itemNames;
+                            itemNames->insert(parts[2],parts[0]);
                         }
+                    } else if ( parts.length() == 3 &&
+                           (parts[0] == "alias" || parts[0] == "fpalias") ) {
+                        data = new FrameData(currPars,locals,newPars);
+                        StringHash *newitemNames;
+                        newitemNames = new StringHash;
+                        *newitemNames = *itemNames;
+                        itemNames = newitemNames;
+                        data->names = itemNames;
+                        itemNames->insert(parts[2],parts[1]);
+                    } else if ( parts.length() == 2 &&
+                          (parts[0] == "unalias" || parts[0] == "fpunalias") ) {
+                        //qDebug() << "unalias" << parts[1];
+                        data = new FrameData(currPars,locals,newPars);
+                        StringHash *newitemNames;
+                        newitemNames = new StringHash;
+                        *newitemNames = *itemNames;
+                        itemNames = newitemNames;
+                        data->names = itemNames;
+                        data->unalias = parts[1];
                     }
                     if ( data ) frameData[fileLine] = data;
                     text = asmFile.readLine();
@@ -1100,6 +1138,7 @@ void SourceFrame::nextInstruction(QString file, int line)
     breakLine = line;
     setNextLine(breakFile, breakLine);
     frameWindow->nextLine(breakFile,breakLine);
+    asmDataWindow->rebuildTable();
 }
 
 void SourceFrame::setFontHeightAndWidth(int height, int width)
