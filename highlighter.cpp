@@ -98,7 +98,7 @@ void CppHighlighter::highlightBlock(const QString &text)
         goto StringMore;
     }
     if (t[i] != startChar) goto StringMore;
-    end = i - 1;
+    end = i;
     i++;
     setFormat(start, end - start + 1, stringFormat);
     goto More;
@@ -351,7 +351,7 @@ void AsmHighlighter::highlightBlock(const QString &text)
         goto StringMore;
     }
     if (t[i] != startChar) goto StringMore;
-    end = i - 1;
+    end = i;
     i++;
     setFormat(start, end - start + 1, stringFormat);
     goto More;
