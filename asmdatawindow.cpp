@@ -8,6 +8,7 @@
 #include <QMenu>
 #include <QTableWidgetItem>
 #include <cstdio>
+#include <ctype.h>
 
 extern GDB *gdb;
 
@@ -231,6 +232,25 @@ void AsmDataWindow::redisplay ( int v )
                 all.b[7] = values[j+7];
                 s += QString("%1 ").arg(all.f8);
             }
+        } else if ( var.format == "char" ) {
+            s = "";
+            char t[3];
+            t[1] = ' ';
+            t[2] = 0;
+            for ( int j = 0; j < parts.size(); j++ ) {
+                if ( isprint(values[j]) ) {
+                    t[0] = (char) values[j];
+                    s += t;
+                } else if ( values[j] == '\t' ) {
+                    s += "\\t ";
+                } else if ( values[j] == '\n' ) {
+                    s += "\\n ";
+                } else if ( values[j] == '\r' ) {
+                    s += "\\r ";
+                } else {
+                    s += parts[j] + " ";
+                }
+            }
         }
         table->item(var.row+i,2)->setText(s);
     }
@@ -349,6 +369,7 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
         sub->addAction("8 bytes", this, SLOT(setHex8()));
     menu.addAction(tr("Double format"), this, SLOT(setDouble()));
     menu.addAction(tr("Float format"), this, SLOT(setFloat()));
+    menu.addAction(tr("Char format"), this, SLOT(setChar()));
     menu.addAction(tr("Define a variable with this address"), this,
         SLOT(defineVariableByAddress()));
     menu.exec(QCursor::pos());
