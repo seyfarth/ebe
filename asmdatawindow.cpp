@@ -15,8 +15,10 @@ AsmVariable::AsmVariable(QString _name)
     : name(_name)
 {
     address = 0;
-    type = "unsigned char";
+    format = "hex1";
     size = 16;
+    rows = 0;
+    values.clear();
 }
 
 /*
@@ -50,12 +52,17 @@ void AsmDataWindow::rebuildTable()
     rows = 0;
     for ( int i=0; i < variables.size(); i++ ) {
         variables[i].row = rows;
-        rows += (variables[i].size+15)/16;
+        variables[i].rows = (variables[i].size+15)/16;
+        rows += variables[i].rows;
     }
-    //qDebug() << rows;
 
     oldRows = table->rowCount();
     table->setRowCount(rows);
+    for ( int r = 0; r < oldRows; r++ ) {
+        table->item(r,0)->setText("");
+        table->item(r,1)->setText("");
+    }
+
     for ( int r = oldRows; r < rows; r++ ) {
         for (int c = 0; c < 3; c++) {
             item = new QTableWidgetItem(QString("   "));
@@ -84,20 +91,25 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
 {
     QString t1, t2;
     QStringList parts;
-    //qDebug() << results;
+    variables[i].values.clear();
     int row = variables[i].row;
-    for (int i = 0; i < results.size(); i += 2 ) {
-        t1 = results[i];
+
+    for (int j = 0; j < results.size(); j++ ) {
+        t1 = results[j];
         parts = t1.split(":");
-        if ( parts.size() > 1 ) t1 = parts[1];
+        if ( parts.size() > 1 ) {
+            t1 = parts[1];
+            results[j] = t1;
+        }
+    }
+    for (int j = 0; j < results.size(); j += 2 ) {
+        t1 = results[j];
         t1.replace(",","");
         t1.replace("(","");
         t1.replace(")","");
         t1.replace("0x","");
-        if ( i+1 < results.size() ) {
-            t2 = results[i+1];
-            parts = t2.split(":");
-            if ( parts.size() > 1 ) t2 = parts[1];
+        if ( j+1 < results.size() ) {
+            t2 = results[j+1];
             t2.replace(",","");
             t2.replace("(","");
             t2.replace(")","");
@@ -106,8 +118,121 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
         }
         t1.replace("\t"," ");
         t1.replace("  "," ");
-        table->item(row,2)->setText(t1);
+        t1.remove(0,1);
+        variables[i].values.append(t1);
         row++;
+    }
+    redisplay(i);
+}
+
+void AsmDataWindow::redisplay ( int v )
+{
+    AsmVariable var = variables[v];
+    QString s;
+    int values[16];
+    QStringList parts;
+    bool ok;
+    AllTypes all;
+
+    for ( int i = 0; i < var.rows; i++ ) {
+        if ( var.values.size()-1 < i ) break;
+        s = var.values[i];
+        parts = s.split(" ");
+        for ( int j = 0; j < parts.size(); j++ ) {
+            values[j] = parts[j].toInt(&ok,16);
+        }
+        if ( var.format == "hex2" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-1; j += 2 ) {
+                s += parts[j+1];
+                s += parts[j];
+                s += " ";
+            }
+        } else if ( var.format == "hex4" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-3; j += 4 ) {
+                s += parts[j+3];
+                s += parts[j+2];
+                s += parts[j+1];
+                s += parts[j];
+                s += " ";
+            }
+        } else if ( var.format == "hex8" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-7; j += 8 ) {
+                s += parts[j+7];
+                s += parts[j+6];
+                s += parts[j+5];
+                s += parts[j+4];
+                s += parts[j+3];
+                s += parts[j+2];
+                s += parts[j+1];
+                s += parts[j];
+                s += " ";
+            }
+        } else if ( var.format == "dec1" ) {
+            s = "";
+            for ( int j = 0; j < parts.size(); j++ ) {
+                s += QString("%1 ").arg(values[j]);
+            }
+        } else if ( var.format == "dec2" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-1; j += 2 ) {
+                all.u8 = 0;
+                all.b[0] = values[j];
+                all.b[1] = values[j+1];
+                s += QString("%1 ").arg(all.i2);
+            }
+        } else if ( var.format == "dec4" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-3; j += 4 ) {
+                all.u8 = 0;
+                all.b[0] = values[j];
+                all.b[1] = values[j+1];
+                all.b[2] = values[j+2];
+                all.b[3] = values[j+3];
+                s += QString("%1 ").arg(all.i4);
+            }
+        } else if ( var.format == "dec8" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-7; j += 8 ) {
+                all.u8 = 0;
+                all.b[0] = values[j];
+                all.b[1] = values[j+1];
+                all.b[2] = values[j+2];
+                all.b[3] = values[j+3];
+                all.b[4] = values[j+4];
+                all.b[5] = values[j+5];
+                all.b[6] = values[j+6];
+                all.b[7] = values[j+7];
+                s += QString("%1 ").arg(all.i8);
+            }
+        } else if ( var.format == "float" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-3; j += 4 ) {
+                all.u8 = 0;
+                all.b[0] = values[j];
+                all.b[1] = values[j+1];
+                all.b[2] = values[j+2];
+                all.b[3] = values[j+3];
+                s += QString("%1 ").arg(all.f4);
+            }
+        } else if ( var.format == "double" ) {
+            s = "";
+            for ( int j = 0; j < parts.size()-7; j += 8 ) {
+                all.u8 = 0;
+                all.b[0] = values[j];
+                all.b[1] = values[j+1];
+                all.b[2] = values[j+2];
+                all.b[3] = values[j+3];
+                all.b[4] = values[j+4];
+                all.b[5] = values[j+5];
+                all.b[6] = values[j+6];
+                all.b[7] = values[j+7];
+                s += QString("%1 ").arg(all.f8);
+            }
+        }
+        table->item(var.row+i,2)->setText(s);
     }
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
@@ -211,29 +336,21 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     int column = table->currentColumn();
     QMenu menu(tr("Assembly data menu"));
-    if (column % 2 == 0) {
-        /*
-         *      If the column is an even number, this is a register name
-         *      and the menu needs to allow changing formats.
-         */
-        menu.addAction(tr("Decimal format"), this, SLOT(setDecimal()));
-        menu.addAction(tr("Hexadecimal format"), this, SLOT(setHex()));
-        menu.addAction(tr("Double format"), this, SLOT(setDouble()));
-        menu.addAction(tr("Float format"), this, SLOT(setFloat()));
-        menu.addSeparator();
-        menu.addAction(tr("Decimal format - all"), this, SLOT(setDecimalAll()));
-        menu.addAction(tr("Hexadecimal format - all"), this, SLOT(setHexAll()));
-        menu.addAction(tr("Double format - all"), this, SLOT(setDoubleAll()));
-        menu.addAction(tr("Float format - all"), this, SLOT(setFloatAll()));
-    } else {
-        /*
-         *      If the column is odd, then this is a register value which
-         *      can be used to create a variable with the address specified
-         *      by the register.  This is only important for assembly.
-         */
-        menu.addAction(tr("Define a variable with this address"), this,
-            SLOT(defineVariableByAddress()));
-    }
+    QMenu *sub;
+    sub = menu.addMenu(tr("Decimal format"));
+        sub->addAction("1 byte", this, SLOT(setDecimal1()));
+        sub->addAction("2 bytes", this, SLOT(setDecimal2()));
+        sub->addAction("4 bytes", this, SLOT(setDecimal4()));
+        sub->addAction("8 bytes", this, SLOT(setDecimal8()));
+    sub = menu.addMenu(tr("Hexadecimal format"));
+        sub->addAction("1 byte", this, SLOT(setHex1()));
+        sub->addAction("2 bytes", this, SLOT(setHex2()));
+        sub->addAction("4 bytes", this, SLOT(setHex4()));
+        sub->addAction("8 bytes", this, SLOT(setHex8()));
+    menu.addAction(tr("Double format"), this, SLOT(setDouble()));
+    menu.addAction(tr("Float format"), this, SLOT(setFloat()));
+    menu.addAction(tr("Define a variable with this address"), this,
+        SLOT(defineVariableByAddress()));
     menu.exec(QCursor::pos());
 }
 
@@ -250,94 +367,81 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 //    delete dialog;
 //}
 
-///*
-// *  Change the current table item's format to decimal.
-// */
-//void AsmDataWindow::setDecimal()
-//{
-//    int row = table->currentRow();
-//    FrameItem *item = (FrameItem *)table->item(row,1);
-//    item->setFormat("decimal");
-//    item->setText(item->value());
-//    table->resizeColumnsToContents();
-//}
-//
-///*
-// *  Change the current table item's format to hexadecimal.
-// */
-//void AsmDataWindow::setHex()
-//{
-//    int row = table->currentRow();
-//    FrameItem *item = (FrameItem *)table->item(row,1);
-//    item->setFormat("hexdecimal");
-//    item->setText(item->value());
-//    table->resizeColumnsToContents();
-//}
-//
-///*
-// *  Change all the register's formats to decimal.
-// */
-//void AsmDataWindow::setDecimalAll()
-//{
-//    FrameItem *item;
-//    for ( int i = 0; i < rows; i++ ) {
-//        item = (FrameItem *)table->item(i,1);
-//        item->setFormat("decimal");
-//        item->setText(item->value());
-//    }
-//    table->resizeColumnsToContents();
-//}
-//
-///*
-// *  Change all the register's formats to hexadecimal.
-// */
-//void AsmDataWindow::setHexAll()
-//{
-//    FrameItem *item;
-//    for ( int i = 0; i < rows; i++ ) {
-//        item = (FrameItem *)table->item(i,1);
-//        item->setFormat("hexadecimal");
-//        item->setText(item->value());
-//    }
-//    table->resizeColumnsToContents();
-//}
-//
-//void AsmDataWindow::setDouble()
-//{
-//    int row = table->currentRow();
-//    FrameItem *item = (FrameItem *)table->item(row,1);
-//    item->setFormat("double");
-//    item->setText(item->value());
-//    table->resizeColumnsToContents();
-//}
-//
-//void AsmDataWindow::setFloat()
-//{
-//    int row = table->currentRow();
-//    FrameItem *item = (FrameItem *)table->item(row,1);
-//    item->setFormat("float");
-//    item->setText(item->value());
-//    table->resizeColumnsToContents();
-//}
-//
-//void AsmDataWindow::setDoubleAll()
-//{
-//    FrameItem *item;
-//    for ( int i = 0; i < rows; i++ ) {
-//        item = (FrameItem *)table->item(i,1);
-//        item->setFormat("double");
-//        item->setText(item->value());
-//    }
-//    table->resizeColumnsToContents();
-//}
-//
-//void AsmDataWindow::setFloatAll()
-//{
-//    FrameItem *item;
-//    for ( int i = 0; i < rows; i++ ) {
-//        item = (FrameItem *)table->item(i,1);
-//        item->setFormat("float");
-//        item->setText(item->value());
-//    }
-//    table->resizeColumnsToContents();
-//}
+/*
+ *  Change the current table item's format to decimal.
+ */
+void AsmDataWindow::setDecimal1()
+{
+    setFormat("dec1");
+}
+
+void AsmDataWindow::setDecimal2()
+{
+    setFormat("dec2");
+}
+
+void AsmDataWindow::setDecimal4()
+{
+    setFormat("dec4");
+}
+
+void AsmDataWindow::setDecimal8()
+{
+    setFormat("dec8");
+}
+
+/*
+ *  Change the current table item's format to hexadecimal.
+ */
+void AsmDataWindow::setHex1()
+{
+    setFormat("hex1");
+}
+
+void AsmDataWindow::setHex2()
+{
+    setFormat("hex2");
+}
+
+void AsmDataWindow::setHex4()
+{
+    setFormat("hex4");
+}
+
+void AsmDataWindow::setHex8()
+{
+    setFormat("hex8");
+}
+
+void AsmDataWindow::setFormat(QString format)
+{
+    int row = table->currentRow();
+    int i;
+    for ( i = 0; i < variables.size(); i++ ) {
+        if ( row >= variables[i].row &&
+             row <= variables[i].row + variables[i].rows -1 ) {
+            break;
+        }
+    }
+    if ( i == variables.size() ) {
+        qDebug() << "Could not identify variable from row" << row;
+        return;
+    }
+    variables[i].format = format;
+    redisplay(i);
+}
+
+void AsmDataWindow::setChar()
+{
+    setFormat("char");
+}
+
+void AsmDataWindow::setDouble()
+{
+    setFormat("double");
+}
+
+void AsmDataWindow::setFloat()
+{
+    setFormat("float");
+}

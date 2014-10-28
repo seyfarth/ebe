@@ -22,9 +22,11 @@ class AsmVariable
 public:
     AsmVariable ( QString _name="" );
     QString name;
-    QString type;
+    QString format;
+    QStringList values;
     int size;
     int row;
+    int rows;
     uLong address;
 };
 
@@ -155,6 +157,8 @@ public:
      */
     void contextMenuEvent(QContextMenuEvent *event);
 
+    void setFormat ( QString format );
+    void redisplay ( int i );
 
 signals:
     void requestAsmVariable(int i, uLong address, int size);
@@ -182,7 +186,10 @@ public slots:
      *  This function is called when the popup menu action is to set the
      *  format for a single register to "decimal".
      */
-    //void setDecimal();
+    void setDecimal1();
+    void setDecimal2();
+    void setDecimal4();
+    void setDecimal8();
 
     /**
      *  \fn setHex
@@ -190,27 +197,14 @@ public slots:
      *  This function is called when the popup menu action is to set the
      *  format for a single register to "hexadecimal".
      */
-    //void setHex();
+    void setHex1();
+    void setHex2();
+    void setHex4();
+    void setHex8();
 
-    /**
-     *  \fn setDecimalAll
-     *
-     *  This function is called when the popup menu action is to set the
-     *  format for all registers to "decimal".
-     */
-    //void setDecimalAll();
-
-    /**
-     *  \fn setHexAll
-     *
-     *  This function is called when the popup menu action is to set the
-     *  format for all registers to "hexadecimal".
-     */
-    //void setHexAll();
-    //void setFloat();
-    //void setDouble();
-    //void setFloatAll();
-    //void setDoubleAll();
+    void setChar();
+    void setFloat();
+    void setDouble();
 
 };
 
