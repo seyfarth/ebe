@@ -71,14 +71,12 @@ void AsmDataWindow::rebuildTable()
         }
     } 
 
-    if ( rows != oldRows ) {
-        for ( int i=0; i < variables.size(); i++ ) {
-            int r = variables[i].row;
-            item = table->item(r,0);
-            item->setText(QString("0x%1 ").arg(variables[i].address,0,16));
-            item = table->item(r,1);
-            item->setText(variables[i].name+" ");
-        }
+    for ( int i=0; i < variables.size(); i++ ) {
+        int r = variables[i].row;
+        item = table->item(r,0);
+        item->setText(QString("0x%1 ").arg(variables[i].address,0,16));
+        item = table->item(r,1);
+        item->setText(variables[i].name+" ");
     }
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
