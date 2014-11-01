@@ -157,7 +157,7 @@ public:
      */
     void contextMenuEvent(QContextMenuEvent *event);
 
-    void setFormat ( QString format );
+    void setFormat ( QString format="" );
     void redisplay ( int i );
 
 signals:

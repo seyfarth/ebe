@@ -74,7 +74,7 @@ SourceEdit::SourceEdit(QWidget *parent)
         << "typedef" << "undef" << "unlock" << "unsigned" << "uppercase"
         << "value" << "virtual" << "vector" << "void" << "wait" << "wchar_t"
         << "weight" << "write" << "while" << "stdio.h" << "stdlib.h" << "cstdio"
-        << "math.h";
+        << "math.h" << "frame" << "frame_size" << "alias";
     list.sort();
 
     list = list.filter(QRegExp(QString(".{%1,}").arg(complete_minimum)));

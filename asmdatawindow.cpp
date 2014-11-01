@@ -50,6 +50,7 @@ void AsmDataWindow::rebuildTable()
     QTableWidgetItem *item;
     int oldRows;
 
+    //qDebug() << variables.size() << varNames;
     rows = 0;
     for ( int i=0; i < variables.size(); i++ ) {
         variables[i].row = rows;
@@ -58,12 +59,17 @@ void AsmDataWindow::rebuildTable()
     }
 
     oldRows = table->rowCount();
+    //qDebug() << "rows" << rows << ";   oldrows" << oldRows;
     table->setRowCount(rows);
+
+    if ( oldRows > rows ) oldRows = rows;
+
     for ( int r = 0; r < oldRows; r++ ) {
         table->item(r,0)->setText("");
         table->item(r,1)->setText("");
     }
 
+    //qDebug() << "Cleared old names and addresses";
     for ( int r = oldRows; r < rows; r++ ) {
         for (int c = 0; c < 3; c++) {
             item = new QTableWidgetItem(QString("   "));
@@ -71,7 +77,10 @@ void AsmDataWindow::rebuildTable()
         }
     } 
 
+    //qDebug() << "Cleared new rows";
+
     for ( int i=0; i < variables.size(); i++ ) {
+        //qDebug() << "var" << i << variables[i].name;
         int r = variables[i].row;
         item = table->item(r,0);
         item->setText(QString("0x%1 ").arg(variables[i].address,0,16));
@@ -84,6 +93,7 @@ void AsmDataWindow::rebuildTable()
     for ( int i=0; i < variables.size(); i++ ) {
         emit requestAsmVariable ( i, variables[i].address, variables[i].size );
     }
+    //qDebug() << "requested data";
 }
 
 void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
@@ -93,6 +103,7 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
     variables[i].values.clear();
     int row = variables[i].row;
 
+    //qDebug() << "rav" << i << results;
     for (int j = 0; j < results.size(); j++ ) {
         t1 = results[j];
         parts = t1.split(":");
@@ -307,9 +318,7 @@ void AsmDataWindow::buildTable()
     /*
      *  Set a tooltip to display when the cursor is over the table
      */
-    table->setToolTip(tr("Right click on quad-word names to change formats.\n"
-        "Right click on a quad-word's value to define a variable\n"
-        "with the address contained in the quad-word."));
+    table->setToolTip(tr("Right click on variable names to change formats."));
 
     /*
      *  Add the table to the layout and set the layout for the frame.
@@ -352,7 +361,6 @@ void AsmDataWindow::setFontHeightAndWidth(int height, int width)
  */
 void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
-    int column = table->currentColumn();
     QMenu menu(tr("Assembly data menu"));
     QMenu *sub;
     sub = menu.addMenu(tr("Decimal format"));
@@ -368,8 +376,8 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
     menu.addAction(tr("Double format"), this, SLOT(setDouble()));
     menu.addAction(tr("Float format"), this, SLOT(setFloat()));
     menu.addAction(tr("Char format"), this, SLOT(setChar()));
-    menu.addAction(tr("Define a variable with this address"), this,
-        SLOT(defineVariableByAddress()));
+    //menu.addAction(tr("Define a variable with this address"), this,
+        //SLOT(defineVariableByAddress()));
     menu.exec(QCursor::pos());
 }
 

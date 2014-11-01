@@ -53,6 +53,7 @@ extern FrameWindow *frameWindow;
 extern AsmDataWindow *asmDataWindow;
 extern StringHash *itemNames;
 extern QHash<QString,QTableWidgetItem*> items;
+StringHash unaliasNames;
 
 typedef QPair<QString, QString> StringPair;
 
@@ -390,12 +391,12 @@ void SourceFrame::run()
         } else if (file.language == "asm") {
             //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
             FileLine fl;
             fl.file = file.source;
             fl.line = 0;
             fileLineToAddress[fl] = 0;
-#endif
+//#endif
 
             ebeInc = file.source;
             n = ebeInc.lastIndexOf('/');
@@ -415,12 +416,12 @@ void SourceFrame::run()
             //qDebug() << cmd;
         } else if (file.language == "hal") {
             cmd = ebe["build/hal"].toString();
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
             FileLine fl;
             fl.file = file.source;
             fl.line = 0;
             fileLineToAddress[fl] = 0;
-#endif
+//#endif
             ebeInc = file.source;
             n = ebeInc.lastIndexOf('/');
             if (n < 0) ebeInc = "ebe.inc";
@@ -664,7 +665,7 @@ void SourceFrame::run()
 //
 //  On OS X and Windows locate symbols and line numbers from asm files
 //
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
     int line;
     QList<File>::iterator i;
     for ( i = files.begin(); i != files.end(); i++ ) {
@@ -676,9 +677,9 @@ void SourceFrame::run()
             QStringList parts;
             bool ok;
             bool inText = false;
+            line = 1;
             if ( listing.open(QFile::ReadOnly) ) {
                 text = listing.readLine();
-                line = 1;
                 while ( text != "" ) {
                     text = text.mid(7);
                     parts = text.split(QRegExp("\\s+"));
@@ -720,7 +721,7 @@ void SourceFrame::run()
             i->lineCount = line-1;
         }
     }
-#endif
+//#endif
 
 //
 //  Discover addresses of globals
@@ -789,7 +790,7 @@ void SourceFrame::run()
 //  Translate line numbers for asm files to actual addresses
 //  Windows and Mac
 //
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
     foreach ( file, files ) {
         //qDebug() << "nm loop" << file.source << file.language << file.object;
         if ( file.language == "asm" || file.language == "hal" ) {
@@ -838,7 +839,7 @@ void SourceFrame::run()
         }
     }
 
-#endif
+//#endif
 
 //
 //  Find and record data about frames
@@ -901,7 +902,8 @@ void SourceFrame::run()
                         itemNames = newitemNames;
                         data->names = itemNames;
                         itemNames->insert(parts[2],parts[1]);
-                    } else if ( parts.length() == 2 &&
+                        unaliasNames.insert(parts[1],parts[2]);
+                    } else if ( parts.length() >= 2 &&
                           (parts[0] == "unalias" || parts[0] == "fpunalias") ) {
                         //qDebug() << "unalias" << parts[1];
                         data = new FrameData(currPars,locals,newPars);
@@ -910,7 +912,11 @@ void SourceFrame::run()
                         *newitemNames = *itemNames;
                         itemNames = newitemNames;
                         data->names = itemNames;
-                        data->unalias = parts[1];
+                        QString kk;
+                        for ( int k=1; k < parts.length(); k++ ) {
+                            kk = unaliasNames[parts[k]];
+                            itemNames->insert(kk,kk);
+                        }
                     }
                     if ( data ) frameData[fileLine] = data;
                     text = asmFile.readLine();
@@ -933,15 +939,15 @@ void SourceFrame::run()
     for (index = 0; index < tab->count(); index++) {
         source = (SourceWindow *)tab->widget(index);
         sourceFiles.append(source->file.source);
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
         FileLine fl;
         long address;
         QMap<FileLine,unsigned long>::const_iterator it;
         fl.file = source->file.source;
-#endif
+//#endif
         bps.clear();
         foreach ( int bp, *(source->breakpoints) ) {
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
             if ( source->file.language == "asm" ||
                 source->file.language == "hal" ) {
                 fl.line = bp;
@@ -954,9 +960,9 @@ void SourceFrame::run()
             } else {
                 bps.insert(s.setNum(bp));
             }
-#else
-            bps.insert(s.setNum(bp));
-#endif
+//#else
+            //bps.insert(s.setNum(bp));
+//#endif
         }
         breakpoints.append(bps);
     }
@@ -998,7 +1004,7 @@ QString SourceFrame::buildDebugAsm(QString fileName)
     out << "ebedebug:\n";
     QStringList parts;
     while (text != "") {
-        out << QString(".%2_asm_line_%3:\n").arg(base).arg(line);
+        //out << QString(".%2_asm_line_%3:\n").arg(base).arg(line);
         out << text;
         text = in.readLine();
         line++;
@@ -1012,24 +1018,24 @@ QString SourceFrame::buildDebugAsm(QString fileName)
 void SourceFrame::next()
 {
     clearNextLine(breakFile, breakLine);
-    if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
+    //if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
         FileLine fl(breakFile, breakLine);
         //qDebug() << "file line" << breakFile << breakLine;
         if (callLines.contains(fl)) emit doCall();
         else emit doNextInstruction();
-    } else {
-        emit doNext();
-    }
+    //} else {
+        //emit doNext();
+    //}
 }
 
 void SourceFrame::step()
 {
     clearNextLine(breakFile, breakLine);
-    if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
+    //if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
         emit doStepInstruction();
-    } else {
-        emit doStep();
-    }
+    //} else {
+        //emit doStep();
+    //}
 }
 
 void SourceFrame::Continue()
@@ -1072,7 +1078,7 @@ void SourceFrame::setNextLine(QString &file, int & line)
             source->setNextLine(line);
             return;
         }
-#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_WS_WIN
         if ( file.indexOf(".") < 0 ) {
             //FileLine fl(file,line);
             //FileLine fl2(file,line+1);
@@ -1104,7 +1110,7 @@ void SourceFrame::setNextLine(QString &file, int & line)
                 return;
             }
         }
-#endif
+//#endif
     }
 }
 
@@ -1191,6 +1197,8 @@ void SourceFrame::open(QString name, int index)
         name = QDir::current().relativeFilePath(name);
         //qDebug() << "Setting name " << index << name;
         tab->setTabText(index, name);
+        asmDataWindow->variables.clear();
+        asmDataWindow->varNames.clear();
     }
 }
 
@@ -1220,6 +1228,8 @@ void SourceFrame::open(bool /* checked */)
         name = QDir::current().relativeFilePath(name);
         //qDebug() << "Setting name " << index << name;
         tab->setTabText(index, name);
+        asmDataWindow->variables.clear();
+        asmDataWindow->varNames.clear();
     }
 }
 
