@@ -9,6 +9,12 @@
 
 #include "types.h"
 #include <QFrame>
+#include <QtGui>
+#include <QDialog>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QGridLayout>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QVBoxLayout>
@@ -17,14 +23,40 @@
 #include <QSize>
 #include <QVector>
 
+class DefineAsmVariableDialog: public QDialog
+{
+    Q_OBJECT
+
+public:
+    DefineAsmVariableDialog();
+    QLineEdit *nameEdit;
+    QComboBox *addressCombo;
+    QSpinBox *sizeSpin;
+    QComboBox *formatCombo;
+    QSize sizeHint() const;
+    QGridLayout *layout;
+    QString name;
+    QString address;
+    int size;
+    QString format;
+
+public slots:
+    void defineVariable();
+
+private:
+    QPushButton *okButton;
+    QPushButton *cancelButton;
+};
+
 class AsmVariable
 {
 public:
-    AsmVariable ( QString _name="" );
+    AsmVariable ( QString _name="");
     QString name;
     QString format;
-    QStringList values;
+    AllTypesArray *values;
     int size;
+    QTableWidgetItem *item;
     int row;
     int rows;
     uLong address;
@@ -93,7 +125,10 @@ public:
     int rows;
     QVBoxLayout *layout;
     QVector<AsmVariable> variables;
+    QVector<AsmVariable> userDefinedVariables;
     IntHash varNames;
+    IntHash formatToRowCount;
+    IntHash formatToSize;
 
     void buildTable();
     void rebuildTable();
@@ -167,7 +202,8 @@ public slots:
 
     void receiveAsmVariable(int i, QStringList results);
 
-    //void defineVariableByAddress();
+    void defineVariableByAddress();
+    void deleteVariable();
 
     /**
      *  \fn receiveRegs

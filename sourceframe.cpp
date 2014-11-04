@@ -749,9 +749,10 @@ void SourceFrame::run()
         if ( definingVar ) {
             long size = nmParts[0].toULongLong(&ok,16) -
                         asmDataWindow->variables[index].address;
-            if ( size > 0 && size < 100000 ) {
-                asmDataWindow->variables[index].size = size;
-            }
+            if ( size < 1 ) size = 1;
+            if ( size > 100000 ) size = 100000;
+            asmDataWindow->variables[index].size = size;
+            asmDataWindow->variables[index].values = new AllTypesArray(size);
             definingVar = false;
             newVars.append(asmDataWindow->variables[index]);
         }
@@ -779,6 +780,9 @@ void SourceFrame::run()
         nmData = nm.readLine();
     }
     asmDataWindow->variables = newVars;
+    foreach ( AsmVariable v, asmDataWindow->userDefinedVariables ) {
+        asmDataWindow->variables.push_back(v);
+    }
     //for ( int i=0; i < asmDataWindow->variables.size(); i++ ) {
         //qDebug() << asmDataWindow->variables[i].name <<
                     //asmDataWindow->variables[i].address <<

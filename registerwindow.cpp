@@ -1,5 +1,5 @@
 #include "registerwindow.h"
-#include "datawindow.h"
+#include "asmdatawindow.h"
 #include "settings.h"
 #include <QDebug>
 #include <QHeaderView>
@@ -9,7 +9,7 @@
 #include <QTableWidgetItem>
 #include <cstdio>
 
-extern DataWindow *dataWindow;
+extern AsmDataWindow *asmDataWindow;
 
 extern QHash<QString,QTableWidgetItem*> items;
 
@@ -201,9 +201,6 @@ void RegisterWindow::buildTable()
     foreach ( QString name, namesList ) {
         regs[name] = new Register(name);
     }
-
-    connect(this, SIGNAL(sendVariableDefinition(QStringList)), dataWindow,
-        SLOT(receiveVariableDefinition(QStringList)));
 }
 
 /*
@@ -294,12 +291,17 @@ void GenericRegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 void GenericRegisterWindow::defineVariableByAddress()
 {
     QString address = table->currentItem()->text();
-    DefineVariableDialog *dialog = new DefineVariableDialog;
-    dialog->addressEdit->setText(address);
+    DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
+    dialog->addressCombo->addItem(address);
     if (dialog->exec()) {
-        dialog->result.append("");
-        dialog->result.append("");
-        emit sendVariableDefinition(dialog->result);
+        AsmVariable var(dialog->name);
+        var.size = dialog->size;
+        var.address = dialog->address.toULongLong(0,0);
+        var.format = dialog->format;
+        var.values = new AllTypesArray(var.size);
+        asmDataWindow->userDefinedVariables.append(var);
+        asmDataWindow->variables.append(var);
+        asmDataWindow->rebuildTable();
     }
     delete dialog;
 }
@@ -555,9 +557,6 @@ void HalRegisterWindow::buildTable()
         regs[name] = new Register(name);
         regs[IntelToHal[name]] = regs[name];
     }
-
-    connect(this, SIGNAL(sendVariableDefinition(QStringList)), dataWindow,
-    SLOT(receiveVariableDefinition(QStringList)));
 }
 
 HalNamesWindow::HalNamesWindow(QWidget *parent)

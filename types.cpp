@@ -1,4 +1,5 @@
 #include "types.h"
+#include <QDebug>
 
 FileLine::FileLine(QString f, int l)
     : file(f), line(l)
@@ -132,3 +133,127 @@ QString fieldsDouble(AllTypes &a)
     return s;
 }
 
+
+AllTypesArray::AllTypesArray(int size_)
+{
+    size = size_;
+    if ( size < 8 ) size = 8;
+    int n = (size+7) / 8;
+    data = new uLong[n];
+    for ( int i = 0; i < n; i++ ) data[i] = 0;
+}
+
+AllTypesArray::AllTypesArray(AllTypesArray &x)
+{
+    size = x.size;
+    int n = (size+7) / 8;
+    data = new uLong[n];
+    for ( int i = 0; i < n; i++ ) data[i] = x.data[i];
+}
+
+double & AllTypesArray::f8(int i)
+{
+    int n = (size+7) / 8;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("f8(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((double *)data)[i];
+}
+
+float & AllTypesArray::f4(int i)
+{
+    int n = (size+3) / 4;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("f4(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((float *)data)[i];
+}
+
+sLong & AllTypesArray::i8(int i)
+{
+    int n = (size+7) / 8;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("i8(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((sLong *)data)[i];
+}
+
+int & AllTypesArray::i4(int i)
+{
+    int n = (size+3) / 4;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("i4(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((int *)data)[i];
+}
+
+short & AllTypesArray::i2(int i)
+{
+    int n = (size+1) / 2;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("i2(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((short *)data)[i];
+}
+
+char & AllTypesArray::c1(int i)
+{
+    if ( i < 0 || i >= size ) {
+        qDebug() << QString("c1(%1) is out of range: 0:%2").arg(i).arg(size-1);
+        i = 0;
+    }
+    return ((char *)data)[i];
+}
+
+signed char & AllTypesArray::i1(int i)
+{
+    if ( i < 0 || i >= size ) {
+        qDebug() << QString("i1(%1) is out of range: 0:%2").arg(i).arg(size-1);
+        i = 0;
+    }
+    return ((signed char *)data)[i];
+}
+
+uLong & AllTypesArray::u8(int i)
+{
+    int n = (size+7) / 8;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("u8(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((uLong *)data)[i];
+}
+
+unsigned int & AllTypesArray::u4(int i)
+{
+    int n = (size+3) / 4;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("u4(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((unsigned int *)data)[i];
+}
+
+unsigned short & AllTypesArray::u2(int i)
+{
+    int n = (size+1) / 2;
+    if ( i < 0 || i >= n ) {
+        qDebug() << QString("u2(%1) is out of range: 0:%2").arg(i).arg(n-1);
+        i = 0;
+    }
+    return ((unsigned short *)data)[i];
+}
+
+unsigned char & AllTypesArray::u1(int i)
+{
+    if ( i < 0 || i >= size ) {
+        qDebug() << QString("u1(%1) is out of range: 0:%2").arg(i).arg(size-1);
+        i = 0;
+    }
+    return ((unsigned char *)data)[i];
+}

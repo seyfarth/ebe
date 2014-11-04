@@ -2,6 +2,7 @@
 #include "datawindow.h"
 #include "settings.h"
 #include "gdb.h"
+#include <QLabel>
 #include <QDebug>
 #include <QHeaderView>
 #include <QTableWidget>
@@ -19,7 +20,6 @@ AsmVariable::AsmVariable(QString _name)
     format = "hex1";
     size = 16;
     rows = 0;
-    values.clear();
 }
 
 /*
@@ -37,7 +37,31 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     rows = 0;
     buildTable();
     variables.clear();
+    userDefinedVariables.clear();
     varNames.clear();
+    formatToRowCount.clear();
+    formatToRowCount["char"] = 20;
+    formatToRowCount["dec1"] = 10;
+    formatToRowCount["dec2"] = 10;
+    formatToRowCount["dec4"] = 5;
+    formatToRowCount["dec8"] = 5;
+    formatToRowCount["hex1"] = 20;
+    formatToRowCount["hex2"] = 10;
+    formatToRowCount["hex4"] = 5;
+    formatToRowCount["hex8"] = 5;
+    formatToRowCount["float"] = 5;
+    formatToRowCount["double"] = 5;
+    formatToSize["char"] = 1;
+    formatToSize["dec1"] = 1;
+    formatToSize["dec2"] = 2;
+    formatToSize["dec4"] = 4;
+    formatToSize["dec8"] = 8;
+    formatToSize["hex1"] = 1;
+    formatToSize["hex2"] = 2;
+    formatToSize["hex4"] = 4;
+    formatToSize["hex8"] = 8;
+    formatToSize["float"] = 4;
+    formatToSize["double"] = 8;
     qRegisterMetaType<uLong>("uLong");
     connect ( this, SIGNAL(requestAsmVariable(int,uLong,int)),
               gdb, SLOT(requestAsmVariable(int,uLong,int)) );
@@ -49,12 +73,17 @@ void AsmDataWindow::rebuildTable()
 {
     QTableWidgetItem *item;
     int oldRows;
+    int count;
+    int num;
 
     //qDebug() << variables.size() << varNames;
     rows = 0;
     for ( int i=0; i < variables.size(); i++ ) {
         variables[i].row = rows;
-        variables[i].rows = (variables[i].size+15)/16;
+        count = formatToRowCount[variables[i].format];
+        num = variables[i].size/formatToSize[variables[i].format];
+        if ( num < 1 ) num = 1;
+        variables[i].rows = (num+count-1)/count;
         rows += variables[i].rows;
     }
 
@@ -83,6 +112,7 @@ void AsmDataWindow::rebuildTable()
         //qDebug() << "var" << i << variables[i].name;
         int r = variables[i].row;
         item = table->item(r,0);
+        variables[i].item = item;
         item->setText(QString("0x%1 ").arg(variables[i].address,0,16));
         item = table->item(r,1);
         item->setText(variables[i].name+" ");
@@ -100,8 +130,8 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
 {
     QString t1, t2;
     QStringList parts;
-    variables[i].values.clear();
-    int row = variables[i].row;
+    bool ok;
+    int k=0;
 
     //qDebug() << "rav" << i << results;
     for (int j = 0; j < results.size(); j++ ) {
@@ -129,139 +159,167 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
         t1.replace("\t"," ");
         t1.replace("  "," ");
         t1.remove(0,1);
-        variables[i].values.append(t1);
-        row++;
+        parts = t1.split(" ");
+        int n = parts.length();
+        for ( int r=0; r < n; r++ ) {
+            variables[i].values->u1(k) = parts[r].toInt(&ok,16);
+            k++;
+        }
     }
     redisplay(i);
 }
 
 void AsmDataWindow::redisplay ( int v )
 {
-    AsmVariable var = variables[v];
     QString s;
-    int values[16];
+    QString t;
     QStringList parts;
-    bool ok;
-    AllTypes all;
+    int size = variables[v].size;
+    int row = variables[v].item->row();
+    int rows = variables[v].rows;
+    int left = size;
+    int max;
+    int k = 0;
+    int count;
+    QString format = variables[v].format;
+    AllTypesArray *values = variables[v].values;
+    int num;
+    int newRows;
 
-    for ( int i = 0; i < var.rows; i++ ) {
-        if ( var.values.size()-1 < i ) break;
-        s = var.values[i];
-        parts = s.split(" ");
-        for ( int j = 0; j < parts.size(); j++ ) {
-            values[j] = parts[j].toInt(&ok,16);
+    count = formatToRowCount[format];
+    num = size/formatToSize[format];
+    if ( num < 1 ) num = 1;
+    newRows = (num + count - 1) / count;
+
+    if ( newRows > rows ) {
+        for ( int r = rows; r < newRows; r++ ) {
+            table->insertRow(row+1);
+            QTableWidgetItem *item;
+            for (int c = 0; c < 3; c++) {
+                item = new QTableWidgetItem(QString(""));
+                table->setItem(row+1,c,item);
+            }
         }
-        if ( var.format == "hex2" ) {
+        rows = variables[v].rows = newRows;
+    } else if ( newRows < rows ) {
+        for ( int r = newRows; r < rows; r++ ) {
+            table->removeRow(row+1);
+        }
+        rows = variables[v].rows = newRows;
+    }
+
+    for ( int r = row; r < row+rows; r++ ) {
+        if ( format == "char") {
             s = "";
-            for ( int j = 0; j < parts.size()-1; j += 2 ) {
-                s += parts[j+1];
-                s += parts[j];
-                s += " ";
-            }
-        } else if ( var.format == "hex4" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-3; j += 4 ) {
-                s += parts[j+3];
-                s += parts[j+2];
-                s += parts[j+1];
-                s += parts[j];
-                s += " ";
-            }
-        } else if ( var.format == "hex8" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-7; j += 8 ) {
-                s += parts[j+7];
-                s += parts[j+6];
-                s += parts[j+5];
-                s += parts[j+4];
-                s += parts[j+3];
-                s += parts[j+2];
-                s += parts[j+1];
-                s += parts[j];
-                s += " ";
-            }
-        } else if ( var.format == "dec1" ) {
-            s = "";
-            for ( int j = 0; j < parts.size(); j++ ) {
-                s += QString("%1 ").arg(values[j]);
-            }
-        } else if ( var.format == "dec2" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-1; j += 2 ) {
-                all.u8 = 0;
-                all.b[0] = values[j];
-                all.b[1] = values[j+1];
-                s += QString("%1 ").arg(all.i2);
-            }
-        } else if ( var.format == "dec4" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-3; j += 4 ) {
-                all.u8 = 0;
-                all.b[0] = values[j];
-                all.b[1] = values[j+1];
-                all.b[2] = values[j+2];
-                all.b[3] = values[j+3];
-                s += QString("%1 ").arg(all.i4);
-            }
-        } else if ( var.format == "dec8" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-7; j += 8 ) {
-                all.u8 = 0;
-                all.b[0] = values[j];
-                all.b[1] = values[j+1];
-                all.b[2] = values[j+2];
-                all.b[3] = values[j+3];
-                all.b[4] = values[j+4];
-                all.b[5] = values[j+5];
-                all.b[6] = values[j+6];
-                all.b[7] = values[j+7];
-                s += QString("%1 ").arg(all.i8);
-            }
-        } else if ( var.format == "float" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-3; j += 4 ) {
-                all.u8 = 0;
-                all.b[0] = values[j];
-                all.b[1] = values[j+1];
-                all.b[2] = values[j+2];
-                all.b[3] = values[j+3];
-                s += QString("%1 ").arg(all.f4);
-            }
-        } else if ( var.format == "double" ) {
-            s = "";
-            for ( int j = 0; j < parts.size()-7; j += 8 ) {
-                all.u8 = 0;
-                all.b[0] = values[j];
-                all.b[1] = values[j+1];
-                all.b[2] = values[j+2];
-                all.b[3] = values[j+3];
-                all.b[4] = values[j+4];
-                all.b[5] = values[j+5];
-                all.b[6] = values[j+6];
-                all.b[7] = values[j+7];
-                s += QString("%1 ").arg(all.f8);
-            }
-        } else if ( var.format == "char" ) {
-            s = "";
-            char t[3];
-            t[1] = ' ';
-            t[2] = 0;
-            for ( int j = 0; j < parts.size(); j++ ) {
-                if ( isprint(values[j]) ) {
-                    t[0] = (char) values[j];
-                    s += t;
-                } else if ( values[j] == '\t' ) {
+            max = count;
+            if ( max > left ) max = left;
+            for ( int j=0; j < max; j++ ) {
+                if ( isprint(values->c1(k)) ) {
+                    s += QString(QChar(values->c1(k))) + " ";
+                } else if ( values->c1(k) == '\t' ) {
                     s += "\\t ";
-                } else if ( values[j] == '\n' ) {
+                } else if ( values->c1(k) == '\n' ) {
                     s += "\\n ";
-                } else if ( values[j] == '\r' ) {
+                } else if ( values->c1(k) == '\r' ) {
                     s += "\\r ";
                 } else {
-                    s += parts[j] + " ";
+                    s += QString("%1 ").arg(values->u1(k),2,16,QChar('0'));
                 }
+                k++;
             }
+            left -= max;
+        } else if ( format == "hex1") {
+            s = "0x";
+            max = count;
+            if ( max > left ) max = left;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->u1(k),2,16,QChar('0'));
+                k++;
+            }
+            left -= max;
+        } else if ( format == "hex2") {
+            s = "";
+            max = count;
+            if ( max > left/2 ) max = left/2;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("0x%1 ").arg(values->u2(k),0,16);
+                k++;
+            }
+            left -= max;
+        } else if ( format == "hex4") {
+            s = "";
+            max = count;
+            if ( max > left/4 ) max = left/4;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("0x%1 ").arg(values->u4(k),0,16);
+                k++;
+            }
+            left -= max;
+        } else if ( format == "hex8") {
+            s = "";
+            max = count;
+            if ( max > left/8 ) max = left/8;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("0x%1 ").arg(values->u8(k),0,16);
+                k++;
+            }
+            left -= max;
+        } else if ( format == "dec1") {
+            s = "";
+            max = count;
+            if ( max > left ) max = left;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->i1(k));
+                k++;
+            }
+            left -= max;
+        } else if ( format == "dec2") {
+            s = "";
+            max = count;
+            if ( max > left/2 ) max = left/2;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->i2(k));
+                k++;
+            }
+            left -= max;
+        } else if ( format == "dec4") {
+            s = "";
+            max = count;
+            if ( max > left/4 ) max = left/4;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->i4(k));
+                k++;
+            }
+            left -= max;
+        } else if ( format == "dec8") {
+            s = "";
+            max = count;
+            if ( max > left/8 ) max = left/8;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->i8(k));
+                k++;
+            }
+            left -= max;
+        } else if ( format == "double") {
+            s = "";
+            max = count;
+            if ( max > left/8 ) max = left/8;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->f8(k));
+                k++;
+            }
+            left -= max;
+        } else if ( format == "float") {
+            s = "";
+            max = count;
+            if ( max > left/4 ) max = left/4;
+            for ( int j=0; j < max; j++ ) {
+                s += QString("%1 ").arg(values->f4(k));
+                k++;
+            }
+            left -= max;
         }
-        table->item(var.row+i,2)->setText(s);
+        table->item(r,2)->setText(s);
     }
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
@@ -376,23 +434,47 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
     menu.addAction(tr("Double format"), this, SLOT(setDouble()));
     menu.addAction(tr("Float format"), this, SLOT(setFloat()));
     menu.addAction(tr("Char format"), this, SLOT(setChar()));
-    //menu.addAction(tr("Define a variable with this address"), this,
-        //SLOT(defineVariableByAddress()));
+    menu.addAction(tr("Define a variable with this address"), this,
+        SLOT(defineVariableByAddress()));
+    menu.addAction(tr("Delete variable"), this, SLOT(deleteVariable()));
     menu.exec(QCursor::pos());
 }
 
-//void AsmDataWindow::defineVariableByAddress()
-//{
-//    QString address = table->currentItem()->text();
-//    DefineVariableDialog *dialog = new DefineVariableDialog;
-//    dialog->addressEdit->setText(address);
-//    if (dialog->exec()) {
-//        dialog->result.append("");
-//        dialog->result.append("");
-//        //emit sendVariableDefinition(dialog->result);
-//    }
-//    delete dialog;
-//}
+void AsmDataWindow::defineVariableByAddress()
+{
+    int row = table->currentRow();
+    QStringList parts = table->item(row,2)->text().split(" ");
+    DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
+    dialog->addressCombo->addItems(parts);
+    if (dialog->exec()) {
+        //qDebug() << "define var" << dialog->name << dialog->address
+                 //<< dialog->size << dialog->format;
+        AsmVariable var(dialog->name);
+        var.size = dialog->size;
+        var.address = dialog->address.toULongLong(0,0);
+        var.format = dialog->format;
+        var.values = new AllTypesArray(var.size);
+        userDefinedVariables.append(var);
+        variables.append(var);
+        rebuildTable();
+    }
+    delete dialog;
+}
+
+void AsmDataWindow::deleteVariable()
+{
+    int row = table->currentRow();
+
+    for ( int i=0; i < variables.size(); i++ ) {
+        if ( variables[i].item == table->item(row,0) ) {
+            for ( int r = row; r < row+variables[i].rows; r++ ) {
+                table->removeRow(row);
+            }
+            variables.remove(i);
+            break;
+        }
+    }
+}
 
 /*
  *  Change the current table item's format to decimal.
@@ -471,4 +553,69 @@ void AsmDataWindow::setDouble()
 void AsmDataWindow::setFloat()
 {
     setFormat("float");
+}
+
+DefineAsmVariableDialog::DefineAsmVariableDialog()
+    : QDialog()
+{
+    setObjectName("Define ASM Variable");
+    setWindowTitle(tr("Define ASM Variable"));
+    setModal(true);
+    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint);
+
+    move(QCursor::pos());
+
+    layout = new QGridLayout;
+    layout->setSpacing(5);
+    layout->setContentsMargins(10, 10, 10, 10);
+
+    layout->addWidget(new QLabel(tr("Name")), 0, 0);
+    nameEdit = new QLineEdit;
+    layout->addWidget(nameEdit, 0, 1);
+
+    layout->addWidget(new QLabel(tr("Address")), 1, 0);
+    addressCombo = new QComboBox;
+    layout->addWidget(addressCombo, 1, 1);
+    addressCombo->setEditable(true);
+
+    layout->addWidget(new QLabel(tr("Size")), 2, 0);
+    sizeSpin = new QSpinBox;
+    layout->addWidget(sizeSpin, 2, 1);
+    sizeSpin->setValue(8);
+    sizeSpin->setRange(1,80000);
+
+    layout->addWidget(new QLabel(tr("Format")), 3, 0);
+    formatCombo = new QComboBox;
+    layout->addWidget(formatCombo, 3, 1);
+
+    QStringList formats;
+    formats << "dec1" << "dec2" << "dec4" << "dec8"
+            << "hex1" << "hex2" << "hex4" << "hex8"
+            << "double" << "float" << "char";
+    formatCombo->addItems(formats);
+
+    okButton = new QPushButton("OK");
+    cancelButton = new QPushButton(tr("Cancel"));
+    connect ( okButton, SIGNAL(clicked()), this, SLOT(defineVariable()));
+    connect ( cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+    
+    layout->addWidget(okButton, 4, 0);
+    layout->addWidget(cancelButton, 4, 1);
+
+    setLayout(layout);
+    formatCombo->setCurrentIndex(4);
+}
+
+QSize DefineAsmVariableDialog::sizeHint() const
+{
+    return QSize(200, 300);
+}
+
+void DefineAsmVariableDialog::defineVariable()
+{
+    name = nameEdit->text();
+    address = addressCombo->currentText();
+    size = sizeSpin->value();
+    format = formatCombo->currentText();
+    accept();
 }

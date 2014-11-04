@@ -33,6 +33,41 @@ union AllTypes
     bool b1;
 };
 
+union AllTypes16
+{
+    double         f8[2];
+    float          f4[4];
+    sLong          i8[2];
+    int            i4[4];
+    short          i2[8];
+    char           c1[16];
+    signed char    i1[16];
+    uLong          u8[2];
+    unsigned int   u4[4];
+    unsigned short u2[8];
+    unsigned char  u1[16];
+};
+
+class AllTypesArray
+{
+public:
+    AllTypesArray(int size=8);
+    AllTypesArray(AllTypesArray &x);
+    int              size;  // in bytes
+    uLong           *data;
+    double         & f8(int i);
+    float          & f4(int i);
+    sLong          & i8(int i);
+    int            & i4(int i);
+    short          & i2(int i);
+    char           & c1(int i);
+    signed char    & i1(int i);
+    uLong          & u8(int i);
+    unsigned int   & u4(int i);
+    unsigned short & u2(int i);
+    unsigned char  & u1(int i);
+};
+
 struct Range
 {
     int first;
