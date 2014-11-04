@@ -133,10 +133,8 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef Q_WS_WIN
     while ( !gdb ) Sleep(1);
 #else
-    while (!gdb)
-        usleep(10);
+    while (!gdb) usleep(100);
 #endif
-    //qDebug() << "gdb" << gdb;
 
     createStatusBar();
     createDockWindows();
@@ -180,13 +178,13 @@ bool MainWindow::toolExists(QString tool)
     foreach (QString dir, pathList )
     {
         path = dir + "/" + tool;
-        //dDebug() << "Check" << path;
+        //qDebug() << "Check" << path;
         if ( QDir::current().exists(path) )
         {
-            //dDebug() << path << "found";
+            //qDebug() << path << "found";
             return true;
         }
-        //dDebug() << path << "not found";
+        //qDebug() << path << "not found";
     }
     return false;
 }
@@ -242,6 +240,11 @@ void MainWindow::checkTools()
                 QMessageBox::Ok | QMessageBox::Ignore);
             if (ret == QMessageBox::Ignore) ebe["check/tools"] = false;
         }
+    }
+    if (toolExists("gdb")) {
+        gdbName = "gdb";
+    } else {
+        gdbName = "ggdb";
     }
 }
 
