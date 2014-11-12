@@ -465,6 +465,7 @@
 <file>library/Assembly/Mac/Data_Definition/integers</file>
 <file>library/Assembly/Mac/Data_Definition/floats</file>
 <file>library/Assembly/Mac/Data_Definition/doubles</file>
+<file>library/Assembly/Flags.html</file>
 <file>library/Assembly/Macros/simple_macro</file>
 <file>library/Assembly/Macros/simple_macro_with_1_parameter</file>
 <file>library/Assembly/Macros/undefining_a_macro</file>

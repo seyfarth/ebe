@@ -468,6 +468,7 @@ void SourceFrame::run()
             return;
         }
         foreach(extraCmd, extraCmds) {
+            //qDebug() << "extracmd" << extraCmd;
             compile.start(extraCmd);
             compile.waitForFinished();
         }

@@ -14,7 +14,7 @@ extern QMap<FileLine,FrameData*> frameData;
 QMap<int,FrameItem*> frameItems;
 StringHash *itemNames=0;
 extern GDB *gdb;
-QHash<QString,QTableWidgetItem*> items;
+IntHash items;
 
 FrameData::FrameData(int _currPars, int _locals, int _newPars )
     : currPars(_currPars), locals(_locals), newPars(_newPars)
@@ -91,7 +91,7 @@ void FrameWindow::rebuildTable()
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-4; i++ ) {
             s = QString("currPar%1").arg(i+5);
-            items[s] = (QTableWidgetItem *)table->item(returnRow-i-5,0);
+            items[s] = returnRow-i-5;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
             table->item(returnRow-i-5,0)->setText(s);
             table->item(returnRow-i-5,2)->
@@ -109,14 +109,14 @@ void FrameWindow::rebuildTable()
 
     for ( int i = 0; i <  num; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = (QTableWidgetItem *)table->item(local1Row-i,0);
+        items[s] = local1Row-i;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(local1Row-i,0)->setText(s);
         table->item(local1Row-i,2)->setText(QString("rbp+%1").arg((i+2)*8));
     }
     for ( int i = 4; i <  limit->locals; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = (QTableWidgetItem *)table->item(local5Row+i-5,0);
+        items[s] = local5Row+i-5;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(local5Row+i-5,0)->setText(s);
         table->item(local5Row+i-5,2)->setText(QString("rbp-%1").arg((i-3)*8));
@@ -127,7 +127,7 @@ void FrameWindow::rebuildTable()
     }
     for ( int i = 5; i <= limit->newPars; i++ ) {
         s = QString("newPar%1").arg(i);
-        items[s] = (QTableWidgetItem *)table->item(rows-i,0);
+        items[s] = rows-i;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(rows-i,0)->setText(s);
         table->item(rows-i,2)->setText(QString("rsp+%1").arg((i-1)*8));
@@ -145,6 +145,7 @@ void FrameWindow::rebuildTable()
     if ( limit->newPars > 6 ) rows += limit->newPars - 6;
     if ( rows & 1 ) rows++;
     int oldRows = table->rowCount();
+    //qDebug() << "rows:" << rows << "   oldrows:" << oldRows;
     for ( int r=0; r < oldRows; r++ ) {
         table->item(r,0)->setText("");
         table->item(r,2)->setText("");
@@ -165,7 +166,7 @@ void FrameWindow::rebuildTable()
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-6; i++ ) {
             s = QString("currPar%1").arg(i+7);
-            items[s] = (QTableWidgetItem *)table->item(returnRow-i-1,0);
+            items[s] = returnRow-i-1;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
             table->item(returnRow-i-1,0)->setText(s);
             table->item(returnRow-i-1,2)->
@@ -181,7 +182,7 @@ void FrameWindow::rebuildTable()
     d = *(limit->names);
     for ( int i = 0; i < limit->locals; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = (QTableWidgetItem *)table->item(local1Row+i,0);
+        items[s] = local1Row+i;
         //qDebug() << s << d;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(local1Row+i,0)->setText(s);
@@ -189,7 +190,7 @@ void FrameWindow::rebuildTable()
     }
     for ( int i = 7; i <= limit->newPars; i++ ) {
         s = QString("newPar%1").arg(i);
-        items[s] = (QTableWidgetItem *)table->item(rows-i+6,0);
+        items[s] = rows-i+6;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(rows-i+6,0)->setText(s);
         table->item(rows-i+6,2)->setText(QString("rsp+%1").arg((i-7)*8));
@@ -223,7 +224,9 @@ void FrameWindow::receiveStack(QStringList results)
             //qDebug() << it.key() << it.value() << limit->unalias;
             if ( it.value() == limit->unalias ) {
                 QString name=it.key();
-                items[name]->setText(name+" ");
+                if ( items[name] < rows ) {
+                    table->item(items[name],0)->setText(name+" ");
+                }
                 limit->names->erase(it);
                 break;
             }
@@ -236,12 +239,17 @@ void FrameWindow::receiveStack(QStringList results)
         //qDebug() << "rs" << name;
         if ( items.contains(name) ) {
             //qDebug() << "rs" << name;
-            items[name]->setText(limit->names->value(name)+" ");
+            if ( items[name] < rows ) {
+                table->item(items[name],0)->
+                       setText(limit->names->value(name)+" ");
+            }
         }
     }
 
+    //qDebug() << "res" << results;
     for ( int i=0; i < results.length(); i++ ) {
         parts = results[i].split(QRegExp("\\s+"));
+        //qDebug() << parts;
         x = parts[1].toULongLong(&ok,16);
         item = (FrameItem *)table->item(row,1);
         item->setValue(x);

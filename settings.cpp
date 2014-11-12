@@ -108,8 +108,8 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "linux";
     ebe["windows"] = false;
-    ebe["build/asm"] = "yasm -P $ebe_inc -f elf64 -o $base.o -g dwarf2 -l \"$base.lst\" \"$source\"";
-    ebe["build/hal"] = "yasm -P $ebe_inc -P hal.inc -f elf64 -o $base.o -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
+    ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64 -o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe["build/halld"] = "ld -o \"$base\"";
     ebe.os = "linux";
@@ -119,8 +119,8 @@ void Settings::setDefaults()
     ebe["mac"] = true;
     ebe["os"] = "mac";
     ebe["windows"] = false;
-    ebe["build/asm"] = "yasm -P $ebe_inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
-    ebe["build/hal"] = "yasm -P $ebe_inc -P hal.inc -f macho64 -o $base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe["build/halld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe.os = "mac";
@@ -130,9 +130,9 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "windows";
     ebe["windows"] = true;
-    ebe["build/asm"] = "yasm -P $ebe_inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/hal"] =
-        "yasm -P $ebe_inc -P hal.inc -f win64 -o $base.o -l \"$base.lst\" \"$source\"";
+        "yasm -P $ebe_inc -P \"hal.inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe["build/halld"] = "ld -o \"$base\"";
     ebe.os = "windows";

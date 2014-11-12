@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<title>CPU FLags Register</title>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+</head>
+<body>
+
+<h1> CPU Flags Register</h1>
+
+<p>
+The x86-64 CPU Flags register (rflags or eflags) contains information
+about the state of the CPU including important details of recent instructions
+and whether autoincrement or autodecrement will occur with string operations.
+Typically it is most convenient to use status information as part of
+conditional jump instructions rather than loading eflags and inspecting the
+bits.
+</p>
+<table>
+  <tbody>
+    <tr>
+      <th style="text-align: center;">&nbsp;Flag&nbsp;</th>
+      <th style="text-align: center;">&nbsp;Name&nbsp; </th>
+      <th style="text-align: center;">&nbsp;Meaning&nbsp; </th>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> CF </td>
+      <td style="text-align: center;"> Carry Flag </td>
+      <td style="padding: 8px;">
+          Set if a math op generates a carry or borrow.
+          It indicates an overflow for unsigned math.
+          It can be used to implement multiple precision math.
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> PF </td>
+      <td style="text-align: center;"> Parity Flag </td>
+      <td style="padding: 8px;">
+        Set if the least significant byte of a result
+        contains an even number of 1 bits.
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> AF </td>
+      <td style="text-align: center;"> Adjust Flag </td>
+      <td style="padding: 8px;">
+        Set if a math operation generates a carry or borrow from bit 3.
+        It is used for binary coded decimal in which each 4 bits of a
+        number stores a decimal digit.
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> ZF </td>
+      <td style="text-align: center;"> Zero Flag </td>
+      <td style="padding: 8px;">
+        Set if the result of an instruction is 0.
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> SF </td>
+      <td style="text-align: center;"> Sign Flag </td>
+      <td style="padding: 8px;">
+        Equal to the most significant bit (sign bit) of a result.
+        It SF is 1, the number is negative.
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> OF </td>
+      <td style="text-align: center;"> Overflow Flag </td>
+      <td style="padding: 8px;">
+        Set if a result is too big for a signed number.
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;"> DF </td>
+      <td style="text-align: center;"> Direction Flag </td>
+      <td style="padding: 8px;">
+        Controls the direction of RDI and RSI adjustments with
+        string instructions.
+        1 means decrement and  0 means increment.
+        The STD instructions sets DF (makes it 1) and CLD clears DF.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body></html>
