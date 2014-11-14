@@ -11,7 +11,7 @@
 
 extern AsmDataWindow *asmDataWindow;
 
-extern QHash<QString,QTableWidgetItem*> items;
+extern IntHash items;
 
 /**
  * Static matrix of register names matching the pattern in the table
@@ -124,7 +124,7 @@ void RegisterWindow::buildTable()
                     name = new QTableWidgetItem("  " + names[r][c] + " ");
                 else
                     name = new QTableWidgetItem(names[r][c] + " ");
-                items[names[r][c]] = name;
+                items[names[r][c]] = r*10+c*2;
                 name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (r == 4 && c > 1) {
                     val = new QTableWidgetItem("");
@@ -144,7 +144,7 @@ void RegisterWindow::buildTable()
                         "  " + names32[r][c] + QString(" "));
                 else
                     name = new QTableWidgetItem(names32[r][c] + QString(" "));
-                items[names[r][c]] = name;
+                items[names[r][c]] = r*10+c*2;
                 name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (r == 2 && c > 1) {
                     val = new QTableWidgetItem("");
@@ -201,6 +201,26 @@ void RegisterWindow::buildTable()
     foreach ( QString name, namesList ) {
         regs[name] = new Register(name);
     }
+}
+
+void RegisterWindow::resetNames()
+{
+    if (wordSize == 64) {
+        for (int r = 0; r < 5; r++) {
+            for (int c = 0; c < 4; c++) {
+                table->item(r, c * 2)->setText(" " + names[r][c] + " ");
+            }
+        }
+    } else {
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 4; c++) {
+                table->item(r, c * 2)->setText(" " + names[r][c] + " ");
+            }
+        }
+    }
+
+    table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 }
 
 /*
@@ -502,7 +522,7 @@ void HalRegisterWindow::buildTable()
             } else {
                 name = new QTableWidgetItem(halNames[r][c] + QString(" "));
             }
-            items[halNames[r][c]] = name;
+            items[halNames[r][c]] = r*10+c*2;
             name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
             if (halNames[r][c] == "") {
                 val = new QTableWidgetItem("");
@@ -557,6 +577,20 @@ void HalRegisterWindow::buildTable()
         regs[name] = new Register(name);
         regs[IntelToHal[name]] = regs[name];
     }
+}
+
+void HalRegisterWindow::resetNames()
+{
+    if (wordSize == 64) {
+        for (int r = 0; r < 5; r++) {
+            for (int c = 0; c < 4; c++) {
+                table->item(r, c * 2)->setText(" " + halNames[r][c] + " ");
+            }
+        }
+    }
+
+    table->resizeColumnsToContents();
+    table->resizeRowsToContents();
 }
 
 HalNamesWindow::HalNamesWindow(QWidget *parent)

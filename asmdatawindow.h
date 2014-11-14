@@ -130,6 +130,7 @@ public:
     IntHash formatToRowCount;
     IntHash formatToSize;
 
+    void clear();
     void buildTable();
     void rebuildTable();
 

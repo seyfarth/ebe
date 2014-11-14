@@ -49,9 +49,11 @@ class FloatWindow: public QFrame
 
 public:
     FloatWindow(QWidget *parent = 0);
+    void resetNames();
     void setFontHeightAndWidth(int height, int width);
     void setRegister(int n, QString value);
     int count;
+    QTableWidget *table;
 
 public slots:
     void receiveFpRegs(QStringList);
@@ -60,7 +62,6 @@ public slots:
 
 private:
     QTableWidgetItem *regs[16];
-    QTableWidget *table;
     QSize sizeHint() const;
     FpRegister regValues[16];
     int fontHeight;

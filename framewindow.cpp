@@ -1,5 +1,7 @@
 #include "framewindow.h"
 #include "datawindow.h"
+#include "registerwindow.h"
+#include "floatwindow.h"
 #include "settings.h"
 #include "gdb.h"
 #include <QDebug>
@@ -9,10 +11,16 @@
 #include <QTableWidgetItem>
 #include <cstdio>
 
+extern FloatWindow *floatWindow;
+extern RegisterWindow *registerWindow;
+extern HalRegisterWindow *halRegisterWindow;
 extern DataWindow *dataWindow;
 extern QMap<FileLine,FrameData*> frameData;
 QMap<int,FrameItem*> frameItems;
 StringHash *itemNames=0;
+StringHash *aliasNames=0;
+StringHash *fpaliasNames=0;
+extern StringHash halToIntel;
 extern GDB *gdb;
 IntHash items;
 
@@ -20,7 +28,10 @@ FrameData::FrameData(int _currPars, int _locals, int _newPars )
     : currPars(_currPars), locals(_locals), newPars(_newPars)
 {
     names = 0;
+    aliasNames = 0;
+    fpaliasNames = 0;
     unalias = "";
+    fpunalias = "";
 }
 
 /*
@@ -91,7 +102,7 @@ void FrameWindow::rebuildTable()
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-4; i++ ) {
             s = QString("currPar%1").arg(i+5);
-            items[s] = returnRow-i-5;
+            items[s] = (returnRow-i-5)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
             table->item(returnRow-i-5,0)->setText(s);
             table->item(returnRow-i-5,2)->
@@ -109,14 +120,14 @@ void FrameWindow::rebuildTable()
 
     for ( int i = 0; i <  num; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = local1Row-i;
+        items[s] = (local1Row-i)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(local1Row-i,0)->setText(s);
         table->item(local1Row-i,2)->setText(QString("rbp+%1").arg((i+2)*8));
     }
     for ( int i = 4; i <  limit->locals; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = local5Row+i-5;
+        items[s] = (local5Row+i-5)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(local5Row+i-5,0)->setText(s);
         table->item(local5Row+i-5,2)->setText(QString("rbp-%1").arg((i-3)*8));
@@ -127,7 +138,7 @@ void FrameWindow::rebuildTable()
     }
     for ( int i = 5; i <= limit->newPars; i++ ) {
         s = QString("newPar%1").arg(i);
-        items[s] = rows-i;
+        items[s] = (rows-i)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(rows-i,0)->setText(s);
         table->item(rows-i,2)->setText(QString("rsp+%1").arg((i-1)*8));
@@ -166,7 +177,7 @@ void FrameWindow::rebuildTable()
         table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars-6; i++ ) {
             s = QString("currPar%1").arg(i+7);
-            items[s] = returnRow-i-1;
+            items[s] = (returnRow-i-1)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
             table->item(returnRow-i-1,0)->setText(s);
             table->item(returnRow-i-1,2)->
@@ -182,7 +193,7 @@ void FrameWindow::rebuildTable()
     d = *(limit->names);
     for ( int i = 0; i < limit->locals; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = local1Row+i;
+        items[s] = (local1Row+i)*10;
         //qDebug() << s << d;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(local1Row+i,0)->setText(s);
@@ -190,7 +201,7 @@ void FrameWindow::rebuildTable()
     }
     for ( int i = 7; i <= limit->newPars; i++ ) {
         s = QString("newPar%1").arg(i);
-        items[s] = rows-i+6;
+        items[s] = (rows-i+6)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->item(rows-i+6,0)->setText(s);
         table->item(rows-i+6,2)->setText(QString("rsp+%1").arg((i-7)*8));
@@ -218,14 +229,48 @@ void FrameWindow::receiveStack(QStringList results)
     int row = rows-1;
     //qDebug() << "rs" << limit->unalias << items.keys();
     //qDebug() << "rs names" << *(limit->names);
-    if ( limit->unalias != "" ) {
-        StringHash::iterator it = limit->names->begin();
-        while ( it != limit->names->end() ) {
+    if ( limit->unalias != "" && halToIntel.count(limit->unalias) > 0 ) {
+        StringHash::iterator it = limit->aliasNames->begin();
+        while ( it != limit->aliasNames->end() ) {
             //qDebug() << it.key() << it.value() << limit->unalias;
             if ( it.value() == limit->unalias ) {
                 QString name=it.key();
-                if ( items[name] < rows ) {
-                    table->item(items[name],0)->setText(name+" ");
+                int irow = items[name];
+                if ( irow/10 < rows ) {
+                    registerWindow->table->item(irow/10,irow%10)->setText(name+" ");
+                }
+                limit->names->erase(it);
+                break;
+            }
+            it++;
+        }
+        limit->unalias = "";
+    } else if ( limit->unalias != "" ) {
+        StringHash::iterator it = limit->aliasNames->begin();
+        while ( it != limit->aliasNames->end() ) {
+            //qDebug() << it.key() << it.value() << limit->unalias;
+            if ( it.value() == limit->unalias ) {
+                QString name=it.key();
+                int irow = items[name];
+                if ( irow/10 < rows ) {
+                    registerWindow->table->item(irow/10,irow%10)->setText(name+" ");
+                }
+                limit->names->erase(it);
+                break;
+            }
+            it++;
+        }
+        limit->unalias = "";
+    }
+    if ( limit->fpunalias != "" ) {
+        StringHash::iterator it = limit->fpaliasNames->begin();
+        while ( it != limit->fpaliasNames->end() ) {
+            //qDebug() << it.key() << it.value() << limit->fpunalias;
+            if ( it.value() == limit->fpunalias ) {
+                QString name=it.key();
+                int irow = items[name];
+                if ( irow/10 < rows ) {
+                    floatWindow->table->item(irow/10,irow%10)->setText(name+" ");
                 }
                 limit->names->erase(it);
                 break;
@@ -239,9 +284,39 @@ void FrameWindow::receiveStack(QStringList results)
         //qDebug() << "rs" << name;
         if ( items.contains(name) ) {
             //qDebug() << "rs" << name;
-            if ( items[name] < rows ) {
-                table->item(items[name],0)->
+            int irow = items[name];
+            if ( irow/10 < rows ) {
+                table->item(irow/10,irow%10)->
                        setText(limit->names->value(name)+" ");
+            }
+        }
+    }
+    foreach (QString name, limit->aliasNames->keys()) {
+        //qDebug() << "rs" << name;
+        if ( items.contains(name) ) {
+            //qDebug() << "rs" << name;
+            int irow = items[name];
+            if ( halToIntel.count(name) > 0 ) {
+                if ( irow/10 < halRegisterWindow->table->rowCount() ) {
+                    halRegisterWindow->table->item(irow/10,irow%10)->
+                           setText(limit->aliasNames->value(name)+" ");
+                }
+            } else {
+                if ( irow/10 < registerWindow->table->rowCount() ) {
+                    registerWindow->table->item(irow/10,irow%10)->
+                           setText(limit->aliasNames->value(name)+" ");
+                }
+            }
+        }
+    }
+    foreach (QString name, limit->fpaliasNames->keys()) {
+        //qDebug() << "rs" << name;
+        if ( items.contains(name) ) {
+            //qDebug() << "rs" << name;
+            int irow = items[name];
+            if ( irow/10 < floatWindow->table->rowCount() ) {
+                floatWindow->table->item(irow/10,irow%10)->
+                       setText(limit->fpaliasNames->value(name)+" ");
             }
         }
     }

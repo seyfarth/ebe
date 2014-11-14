@@ -3,6 +3,8 @@
 #include "types.h"
 #include <cstdio>
 
+extern IntHash items;
+
 FloatWindow::FloatWindow(QWidget *parent)
     : QFrame(parent)
 {
@@ -23,15 +25,17 @@ FloatWindow::FloatWindow(QWidget *parent)
 
     QTableWidgetItem *name;
     QTableWidgetItem *value;
+    QString regName;
     for (int r = 0; r < count / 2; r++) {
         for (int c = 0; c < 2; c++) {
-            name = new QTableWidgetItem(
-                QString("xmm%1 ").arg(c * (count / 2) + r));
+            regName = QString("xmm%1 ").arg(c * (count / 2) + r);
+            name = new QTableWidgetItem(regName);
             name->setTextAlignment(Qt::AlignRight);
             value = new QTableWidgetItem("0.0");
             regs[c * (count / 2) + r] = value;
             table->setItem(r, c * 2, name);
             table->setItem(r, c * 2 + 1, value);
+            items[regName] = r*10 + c*2;
         }
     }
     layout->addWidget(table);
@@ -41,6 +45,17 @@ FloatWindow::FloatWindow(QWidget *parent)
     table->resizeColumnsToContents();
 
     setLayout(layout);
+}
+
+void FloatWindow::resetNames()
+{
+    QString regName;
+    for (int r = 0; r < count / 2; r++) {
+        for (int c = 0; c < 2; c++) {
+            regName = QString("xmm%1 ").arg(c * (count / 2) + r);
+            table->item(r, c * 2 + 1)->setText(regName);
+        }
+    }
 }
 
 QSize FloatWindow::sizeHint() const

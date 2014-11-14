@@ -69,6 +69,12 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
               this, SLOT(receiveAsmVariable(int,QStringList)) );
 }
 
+void AsmDataWindow::clear()
+{
+    variables.clear();
+    userDefinedVariables.clear();
+}
+
 void AsmDataWindow::rebuildTable()
 {
     QTableWidgetItem *item;
@@ -538,6 +544,9 @@ void AsmDataWindow::setFormat(QString format)
     }
     variables[i].format = format;
     redisplay(i);
+    for ( i = 0; i < variables.size(); i++ ) {
+        variables[i].row = variables[i].item->row();
+    }
 }
 
 void AsmDataWindow::setChar()

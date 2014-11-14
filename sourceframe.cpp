@@ -12,6 +12,7 @@
 #include "settings.h"
 #include "framewindow.h"
 #include "asmdatawindow.h"
+#include "registerwindow.h"
 #ifdef Q_WS_WIN
 #include <windows.h>
 #endif
@@ -45,6 +46,8 @@ StringHash varToAddress;
 QHash<QString, unsigned long> textToAddress;
 QSet<FileLine> callLines;
 
+extern RegisterWindow *registerWindow;
+extern HalRegisterWindow *halRegisterWindow;
 extern ProjectWindow *projectWindow;
 extern GDB *gdb;
 extern QStatusBar *statusBar;
@@ -52,8 +55,11 @@ extern SourceFrame *sourceFrame;
 extern FrameWindow *frameWindow;
 extern AsmDataWindow *asmDataWindow;
 extern StringHash *itemNames;
+extern StringHash *aliasNames;
+extern StringHash *fpaliasNames;
 extern QHash<QString,QTableWidgetItem*> items;
 StringHash unaliasNames;
+StringHash fpunaliasNames;
 
 typedef QPair<QString, QString> StringPair;
 
@@ -274,6 +280,12 @@ void SourceFrame::run()
 
     if ( itemNames ) itemNames->clear();
     else itemNames = new StringHash;
+    if ( aliasNames ) aliasNames->clear();
+    else aliasNames = new StringHash;
+    if ( fpaliasNames ) fpaliasNames->clear();
+    else fpaliasNames = new StringHash;
+    registerWindow->resetNames();
+    halRegisterWindow->resetNames();
     addressToFileLine.clear();
     fileLineToAddress.clear();
     textToAddress.clear();
@@ -885,6 +897,8 @@ void SourceFrame::run()
                         if ( parts.length() >= 4 ) newPars = parts[3].toInt();
                         data = new FrameData(currPars,locals,newPars);
                         data->names = itemNames;
+                        data->aliasNames = aliasNames;
+                        data->fpaliasNames = fpaliasNames;
                     } else if ( parts.length() == 3 &&
                                 parts[1].toLower() == "equ" ) {
                         if ( localExp.exactMatch(parts[2]) ||
@@ -896,31 +910,62 @@ void SourceFrame::run()
                             *newitemNames = *itemNames;
                             itemNames = newitemNames;
                             data->names = itemNames;
+                            data->aliasNames = aliasNames;
+                            data->fpaliasNames = fpaliasNames;
                             itemNames->insert(parts[2],parts[0]);
                         }
-                    } else if ( parts.length() == 3 &&
-                           (parts[0] == "alias" || parts[0] == "fpalias") ) {
+                    } else if ( parts.length() == 3 && parts[0] == "alias" ) {
                         data = new FrameData(currPars,locals,newPars);
                         StringHash *newitemNames;
                         newitemNames = new StringHash;
-                        *newitemNames = *itemNames;
-                        itemNames = newitemNames;
+                        *newitemNames = *aliasNames;
+                        aliasNames = newitemNames;
                         data->names = itemNames;
-                        itemNames->insert(parts[2],parts[1]);
+                        data->aliasNames = aliasNames;
+                        data->fpaliasNames = fpaliasNames;
+                        aliasNames->insert(parts[2],parts[1]);
                         unaliasNames.insert(parts[1],parts[2]);
-                    } else if ( parts.length() >= 2 &&
-                          (parts[0] == "unalias" || parts[0] == "fpunalias") ) {
+                    } else if ( parts.length() == 3 && parts[0] == "fpalias") {
+                        data = new FrameData(currPars,locals,newPars);
+                        StringHash *newitemNames;
+                        newitemNames = new StringHash;
+                        *newitemNames = *fpaliasNames;
+                        fpaliasNames = newitemNames;
+                        data->names = itemNames;
+                        data->aliasNames = aliasNames;
+                        data->fpaliasNames = fpaliasNames;
+                        fpaliasNames->insert(parts[2],parts[1]);
+                        unaliasNames.insert(parts[1],parts[2]);
+                    } else if ( parts.length() >= 2 && parts[0] == "unalias") {
                         //qDebug() << "unalias" << parts[1];
                         data = new FrameData(currPars,locals,newPars);
                         StringHash *newitemNames;
                         newitemNames = new StringHash;
-                        *newitemNames = *itemNames;
-                        itemNames = newitemNames;
+                        *newitemNames = *aliasNames;
+                        aliasNames = newitemNames;
                         data->names = itemNames;
+                        data->aliasNames = aliasNames;
+                        data->fpaliasNames = fpaliasNames;
                         QString kk;
                         for ( int k=1; k < parts.length(); k++ ) {
                             kk = unaliasNames[parts[k]];
-                            itemNames->insert(kk,kk);
+                            aliasNames->insert(kk,kk);
+                        }
+                    } else if ( parts.length() >= 2 &&
+                                parts[0] == "fpunalias" ) {
+                        //qDebug() << "fpunalias" << parts[1];
+                        data = new FrameData(currPars,locals,newPars);
+                        StringHash *newitemNames;
+                        newitemNames = new StringHash;
+                        *newitemNames = *fpaliasNames;
+                        fpaliasNames = newitemNames;
+                        data->names = itemNames;
+                        data->aliasNames = aliasNames;
+                        data->fpaliasNames = fpaliasNames;
+                        QString kk;
+                        for ( int k=1; k < parts.length(); k++ ) {
+                            kk = unaliasNames[parts[k]];
+                            fpaliasNames->insert(kk,kk);
                         }
                     }
                     if ( data ) frameData[fileLine] = data;

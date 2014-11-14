@@ -1,6 +1,7 @@
 #include "sourcewindow.h"
 #include "sourceframe.h"
 #include "datawindow.h"
+#include "asmdatawindow.h"
 #include "projectwindow.h"
 #include "gdb.h"
 #include "stylesheet.h"
@@ -12,6 +13,7 @@
 #include <QMenu>
 #include <QFileDialog>
 
+extern AsmDataWindow *asmDataWindow;
 extern DataWindow *dataWindow;
 extern ProjectWindow *projectWindow;
 extern SourceFrame *sourceFrame;
@@ -521,6 +523,7 @@ void SourceWindow::doTemplate(QAction *a)
             textEdit->textCursor().insertText(data);
         }
     }
+    asmDataWindow->clear();
 }
 
 void SourceWindow::insertFile(QString f)
@@ -530,6 +533,7 @@ void SourceWindow::insertFile(QString f)
         QString data = QString(in.readAll());
         //qDebug() << data;
         textEdit->textCursor().insertText(data);
+        asmDataWindow->clear();
     }
 }
 
@@ -551,6 +555,8 @@ void SourceWindow::open(QString name)
             return;
         }
     }
+
+    asmDataWindow->clear();
 
     file.source = QDir::current().absoluteFilePath(name);
     file.setLanguage();
@@ -653,6 +659,8 @@ void SourceWindow::open()
             return;
         }
     }
+
+    asmDataWindow->clear();
 
     file.source = QDir::current().absoluteFilePath(name);
 

@@ -31,6 +31,7 @@ public:
     int asmLine;
 
 private:
+    void sync();
     void send(QString cmd, QString options = "");
     QStringList sendReceive(QString cmd, QString options = "");
     QStringList globals;

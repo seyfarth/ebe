@@ -265,6 +265,7 @@ class RegisterWindow: public GenericRegisterWindow
 {
 public:
     RegisterWindow(QWidget *parent = 0);
+    void resetNames();
     void buildTable();
     void setFontHeightAndWidth(int height, int width);
 };
@@ -273,6 +274,7 @@ class HalRegisterWindow: public GenericRegisterWindow
 {
 public:
     HalRegisterWindow(QWidget *parent = 0);
+    void resetNames();
     void buildTable();
     void setFontHeightAndWidth(int height, int width);
 };

@@ -1,3 +1,4 @@
+parse %ifdef and %ifndef WINDOWS
 handle "Other Colors" & "Highlight Colors"
 Bengali
 add graph capability

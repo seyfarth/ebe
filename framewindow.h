@@ -24,7 +24,10 @@ public:
     int locals;
     int newPars;
     StringHash *names;
+    StringHash *aliasNames;
+    StringHash *fpaliasNames;
     QString unalias;
+    QString fpunalias;
 };
 
 /**
@@ -180,12 +183,6 @@ public:
      *  \param value The new value for the register
      */
     void setValue(QString name, QString value);
-
-    /**
-     *  QHash which provides a register pointer based on a register
-     *  name as key.
-     */
-    //QHash<QString, FrameItem *> items;
 
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.

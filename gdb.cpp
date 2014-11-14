@@ -77,7 +77,7 @@ GDB::GDB()
     needToKill = false;
 #endif
     gdbProcess = new QProcess(this);
-    //gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
+    gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
     gdbProcess->start(gdbName);
 
     //qDebug() << "gdb state" << gdbProcess->state();
@@ -151,6 +151,34 @@ GDB::GDB()
     NullEOF = false;
 }
 
+void GDB::sync()
+{
+    QString cmd="print \"sync\"\n";
+    //qDebug() << cmd;
+#if QT_VERSION >= 0x050000
+    gdbProcess->write(cmd.toLocal8Bit().constData());
+#else
+    gdbProcess->write(cmd.toAscii());
+#endif
+    //emit log(cmd);
+    QString result;
+    result = readLine();
+    //qDebug() << result;
+    //emit log(result);
+    while ( result.indexOf("sync") < 0 ) {
+        result = readLine();
+        //qDebug() << result;
+        //emit log(result);
+    }
+    while ( result.left(5) != "(gdb)" ) {
+        result = readLine();
+        //qDebug() << result;
+        //emit log(result);
+    }
+}
+
+
+
 void GDB::send(QString cmd, QString /*options*/)
 {
     QRegExp rx1("at ([^:]*):([0-9]*)$");
@@ -163,18 +191,23 @@ void GDB::send(QString cmd, QString /*options*/)
         needToWake = false;
     }
 #endif
+    sync();
     cmd += '\n';
 #if QT_VERSION >= 0x050000
     gdbProcess->write(cmd.toLocal8Bit().constData());
 #else
     gdbProcess->write(cmd.toAscii());
 #endif
+    emit log(cmd);
     cmd.chop(1);
     QString result;
     result = readLine();
     emit log(result);
     //qDebug() << "result:" << result;
-    while (result.left(5) != "(gdb)") {
+    if ( result.indexOf("Inferior") >= 0 && result.indexOf("exited") >= 0 ) {
+        running = false;
+    }
+    while (result.left(5) != "(gdb)" && result.left(6) != "Contin") {
         //qDebug() << "result" << result;
         //if ( runCommands.contains(cmd) ) {
         //if ( rx1.indexIn(result) >= 0 ) {
@@ -188,6 +221,9 @@ void GDB::send(QString cmd, QString /*options*/)
         //}
         result = readLine();
         emit log(result);
+        if ( result.indexOf("Inferior") >= 0 && result.indexOf("exited") >= 0 ) {
+            running = false;
+        }
         if (result.startsWith("Program received signal")) emit error(result);
         //qDebug() << "result:" << result;
     }
@@ -198,19 +234,28 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
     QStringList list;
     //qDebug() << cmd;
     cmd += '\n';
+    sync();
 #if QT_VERSION >= 0x050000
     gdbProcess->write(cmd.toLocal8Bit().constData());
 #else
     gdbProcess->write(cmd.toAscii());
 #endif
+    emit log(cmd);
     QString result;
     result = readLine();
     emit log(result);
+    if ( result.indexOf("Inferior") >= 0 && result.indexOf("exited") >= 0 ) {
+        running = false;
+    }
     //qDebug() << "result:" << result;
-    while (result.right(5) != "(gdb)") {
+    while (result.right(5) != "(gdb)" && result.right(6) != "Contin") {
         list.append(result);
         result = readLine();
         emit log(result);
+        if ( result.indexOf("Inferior") >= 0 &&
+             result.indexOf("exited") >= 0 ) {
+            running = false;
+        }
         //qDebug() << "result:" << result;
     }
     if (result.length() > 5) list.append(result);
@@ -381,8 +426,11 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("run");
 #endif
     running = true;
+    if (!running) return;
     hasAVX = testAVX();
+    if (!running) return;
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -391,7 +439,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     getGlobals();
     getArgs();
     //qDebug() << "run";
-    emit resetData();
+    if ( running ) emit resetData();
     //qDebug() << "run";
     getClasses();
     //qDebug() << "Done run";
@@ -403,6 +451,7 @@ void GDB::doNext()
     if (!running) return;
     send("next");
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -410,7 +459,7 @@ void GDB::doNext()
     getLocals();
     getGlobals();
     getArgs();
-    emit resetData();
+    if ( running ) emit resetData();
 }
 
 void GDB::doStep()
@@ -419,6 +468,7 @@ void GDB::doStep()
     if (!running) return;
     send("step");
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -426,7 +476,7 @@ void GDB::doStep()
     getLocals();
     getGlobals();
     getArgs();
-    emit resetData();
+    if ( running ) emit resetData();
 }
 
 void GDB::doNextInstruction()
@@ -435,6 +485,7 @@ void GDB::doNextInstruction()
     if (!running) return;
     send("nexti");
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -442,7 +493,7 @@ void GDB::doNextInstruction()
     getLocals();
     getGlobals();
     getArgs();
-    emit resetData();
+    if ( running ) emit resetData();
 }
 
 void GDB::doStepInstruction()
@@ -451,6 +502,7 @@ void GDB::doStepInstruction()
     if (!running) return;
     send("stepi");
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -458,7 +510,7 @@ void GDB::doStepInstruction()
     getGlobals();
     getLocals();
     getArgs();
-    emit resetData();
+    if ( running ) emit resetData();
 }
 
 void GDB::doCall()
@@ -474,6 +526,7 @@ void GDB::doCall()
 //#endif
     send("continue");
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -481,7 +534,7 @@ void GDB::doCall()
     getLocals();
     getGlobals();
     getArgs();
-    emit resetData();
+    if ( running ) emit resetData();
 }
 
 void GDB::doContinue()
@@ -490,6 +543,7 @@ void GDB::doContinue()
     if (!running) return;
     send("continue");
     setNormal();
+    if (!running) return;
     getBackTrace();
     if (!running) return;
     getRegs();
@@ -497,7 +551,7 @@ void GDB::doContinue()
     getLocals();
     getGlobals();
     getArgs();
-    emit resetData();
+    if ( running ) emit resetData();
 }
 
 void GDB::doStop()
@@ -546,7 +600,9 @@ void GDB::deleteBreakpoint(QString file, QString line)
 void GDB::getBackTrace()
 {
     QStringList results;
+    if (!running) return;
     results = sendReceive("backtrace");
+    if ( results.length() == 0 ) results = sendReceive("backtrace");
     //qDebug() << "getBackTrace" << results;
     if (results.length() == 0 || results[0].length() == 0 ||
         results[0][0] != '#') {
@@ -560,7 +616,7 @@ void GDB::getBackTrace()
     QStringList parts;
     QStringList pp;
     foreach ( QString s, results ) {
-    //      qDebug() << "gbt" << s;
+        //qDebug() << "gbt" << s;
         n = s.lastIndexOf(" at ");
         if ( n > 0 ) {
             file = s.mid(n+4);
@@ -608,6 +664,7 @@ void GDB::getRegs()
     QStringList parts;
     StringHash map;
     int index1, index2;
+    if (!running) return;
     results = sendReceive("info registers");
     //qDebug() << "getRegs" << results;
 
@@ -648,6 +705,7 @@ void GDB::getFpRegs()
     QRegExp rx2("(0x[0-9A-Fa-f]+).*(0x[0-9A-Fa-f]+)");
     //qDebug() << "getFpRegs";
     bool reverse = ebe["xmm/reverse"].toBool();
+    if (!running) return;
     for (int i = 0; i < numFloats; i++) {
         if (hasAVX) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
@@ -691,6 +749,7 @@ void GDB::getGlobals()
     QList<VariableDefinition> vars;
 
     //qDebug() << "getGlobals" << globals;
+    if (!running) return;
     getVars(globals, vars);
     emit sendGlobals(vars);
 }
@@ -702,6 +761,7 @@ void GDB::getLocals()
     QStringList parts;
     QList<VariableDefinition> vars;
 
+    if (!running) return;
     results = sendReceive(QString("info locals"));
     foreach ( QString r, results ) {
         int n = r.indexOf(" =");
@@ -727,6 +787,7 @@ void GDB::getVars(QStringList &names, QList<VariableDefinition> &vars)
     bool fortran;
     VariableDefinition var;
 
+    if (!running) return;
     foreach ( QString name, names ) {
         fortran = false;
         if ( &names == &globals && name == "stack" ) {
@@ -944,6 +1005,7 @@ void GDB::getArgs()
     QStringList parts;
     QList<VariableDefinition> vars;
 
+    if (!running) return;
     results = sendReceive(QString("info args"));
     foreach ( QString r, results ) {
         int n = r.indexOf(" =");
@@ -960,6 +1022,7 @@ bool GDB::testAVX()
 {
     QStringList results;
     QStringList parts;
+    if (!running) return false;
     results = sendReceive("print $ymm0.v4_int64[0]");
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
@@ -979,6 +1042,7 @@ QString /* type */, QString format, int size, int first, int last)
 
    //qDebug() << name << address << format << size << first << last;
 
+    if (!running) return;
     if (size < 0 || size > 8) return;
     char sizeLetter = letterForSize[size];
 
@@ -1080,6 +1144,7 @@ void GDB::getData(QStringList request)
     QString cmd;
     QString address2;
 
+    if (!running) return;
     //qDebug() << "getData" << request;
     if (size < 0 || size > 8) return;
     char sizeLetter = letterForSize[size];
@@ -1173,6 +1238,7 @@ void GDB::getData(QStringList request)
 
 void GDB::setNormal()
 {
+    if (!running) return;
     send("set language c++");
     if (NullEOF) {
         send("call __ebeSetNormal()");
@@ -1183,6 +1249,7 @@ void GDB::setNormal()
 
 void GDB::setEOF()
 {
+    if (!running) return;
     send("call __ebeSetNULL()");
     NullEOF = true;
 }
@@ -1196,6 +1263,7 @@ void GDB::requestStack(int n)
 {
     QStringList results;
     //qDebug() << QString("x/%1xg $rsp").arg(n);
+    if (!running) return;
     results = sendReceive(QString("x/%1xg $rsp").arg(n));
     //qDebug() << results;
     emit receiveStack(results);
@@ -1204,6 +1272,7 @@ void GDB::requestStack(int n)
 void GDB::requestAsmVariable(int i, uLong address, int n)
 {
     QStringList results;
+    if (!running) return;
     results = sendReceive(QString("x/%1xb %2").arg(n).arg(address));
     emit sendAsmVariable(i,results);
 }
