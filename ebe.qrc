@@ -465,6 +465,16 @@
 <file>library/Assembly/Mac/Data_Definition/integers</file>
 <file>library/Assembly/Mac/Data_Definition/floats</file>
 <file>library/Assembly/Mac/Data_Definition/doubles</file>
+<file>library/Assembly/Instructions/Integer_instructions/clc_-_clear_carry_flag.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/cmc_-_complement_carry_flag.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/adc_-_add_with_carry.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/sbb_-_subtract_with_borrow.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/div_-_unsigned_divide.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/stc_-_set_carry_flag.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/idiv_-_signed_divide.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/sub_-_subtract.html</file>
+<file>library/Assembly/Instructions/Integer_instructions/add.html</file>
+<file>library/Assembly/Instructions/instructions</file>
 <file>library/Assembly/Flags.html</file>
 <file>library/Assembly/Macros/simple_macro</file>
 <file>library/Assembly/Macros/simple_macro_with_1_parameter</file>

@@ -1,0 +1,31 @@
+<h2> adc - add with carry </h2>
+<pre>
+dest = dest + source + CF
+</pre>
+<p>
+The adc instruction adds the source value (second operand)
+to the destination (either a register or a memory location) plus
+the carry flag..
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.  You can not use 2
+memory addresses.  You can add either 8, 16 or 32 bit immediate values
+to larger registers and the immediate value will be sign extended.
+</p>
+<p>
+adc is designed to simplify adding large integers.
+In the code below a 256 bit sum is produced.
+</p>
+<pre>
+        mov     rax, [b]    ; get the low quadword of b, b[0]
+        add     [a], rax    ; add b[0] to a[0]
+        mov     rax, [b+8]  ; get the next quadword, b[1]
+        adc     [a+8], rax  ; add the 2 quadwords + CF
+        mov     rax, [b+16] ; get the next quadword, b[2]
+        adc     [a+16], rax ; add the 2 quadwords + CF
+        mov     rax, [b+24] ; get the next quadword, b[3]
+        adc     [a+24], rax ; add the 2 quadwords + CF
+</pre>
+<h3>
+flags: OF SF ZF AF CF PF
+</h3>

@@ -251,7 +251,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("0x%1 ").arg(values->u2(k),0,16);
                 k++;
             }
-            left -= max;
+            left -= max*2;
         } else if ( format == "hex4") {
             s = "";
             max = count;
@@ -260,7 +260,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("0x%1 ").arg(values->u4(k),0,16);
                 k++;
             }
-            left -= max;
+            left -= max*4;
         } else if ( format == "hex8") {
             s = "";
             max = count;
@@ -269,7 +269,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("0x%1 ").arg(values->u8(k),0,16);
                 k++;
             }
-            left -= max;
+            left -= max*8;
         } else if ( format == "dec1") {
             s = "";
             max = count;
@@ -287,7 +287,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("%1 ").arg(values->i2(k));
                 k++;
             }
-            left -= max;
+            left -= max*2;
         } else if ( format == "dec4") {
             s = "";
             max = count;
@@ -296,7 +296,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("%1 ").arg(values->i4(k));
                 k++;
             }
-            left -= max;
+            left -= max*4;
         } else if ( format == "dec8") {
             s = "";
             max = count;
@@ -305,7 +305,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("%1 ").arg(values->i8(k));
                 k++;
             }
-            left -= max;
+            left -= max*8;
         } else if ( format == "double") {
             s = "";
             max = count;
@@ -314,7 +314,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("%1 ").arg(values->f8(k));
                 k++;
             }
-            left -= max;
+            left -= max*8;
         } else if ( format == "float") {
             s = "";
             max = count;
@@ -323,7 +323,7 @@ void AsmDataWindow::redisplay ( int v )
                 s += QString("%1 ").arg(values->f4(k));
                 k++;
             }
-            left -= max;
+            left -= max*4;
         }
         table->item(r,2)->setText(s);
     }

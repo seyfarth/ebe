@@ -1,0 +1,27 @@
+<h2> sub - subtract </h2>
+<pre>
+dest = dest - source
+</pre>
+<p>
+The sub instruction subtracts the source value (second operand)
+from the destination (either a register or a memory location).
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.  You can not use 2
+memory addresses.  You can subtract either 8, 16 or 32 bit immediate values
+to larger registers and the immediate value will be sign extended.
+</p>
+<pre>
+        sub     rax, 5          ; subtract 5 from rax
+        sub     eax, r9d        ; subtract r9d from eax
+                                ; the top half of rax is set to 0
+        sub     ax, dx          ; subtract dx from ax
+                                ; to top 3/4 of rax is left as is
+        sub     [x], rcx        ; subtract rcx from 64 variable x
+        sub     [x], eax        ; subtract eax from 32 variable x
+        sub     dword [x], 10   ; subtract 10 from 32 bit variable x
+                                ; must specify qword, dword, word or byte
+</pre>
+<h3>
+flags: OF SF ZF AF CF PF
+</h3>

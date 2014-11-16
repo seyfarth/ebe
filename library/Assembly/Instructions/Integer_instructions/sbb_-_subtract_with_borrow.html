@@ -1,0 +1,31 @@
+<h2> sbb - subtract with borrow </h2>
+<pre>
+dest = dest - (source + CF)
+</pre>
+<p>
+The sbb instruction subtracts the source value (second operand) plus the
+carry frag
+from the destination (either a register or a memory location).
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.  You can not use 2
+memory addresses.  You can subtract either 8, 16 or 32 bit immediate values
+to larger registers and the immediate value will be sign extended.
+</p>
+<p>
+sbb is designed to simplify subtracting large integers.
+In the code below a 256 bit difference is produced.
+</p>
+<pre>
+        mov     rax, [b]    ; get the low quadword of b, b[0]
+        sub     [a], rax    ; subtract b[0] from a[0]
+        mov     rax, [b+8]  ; get the next quadword, b[1]
+        sbb     [a+8], rax  ; subtract the 2 quadwords + CF
+        mov     rax, [b+16] ; get the next quadword, b[2]
+        sbb     [a+16], rax ; subtract the 2 quadwords + CF
+        mov     rax, [b+24] ; get the next quadword, b[3]
+        sbb     [a+24], rax ; subtract the 2 quadwords + CF
+</pre>
+<h3>
+flags: OF SF ZF AF CF PF
+</h3>

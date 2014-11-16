@@ -1,0 +1,48 @@
+<h2> div - unsigned divide </h2>
+<pre>
+rax = rdx:rax / source
+rdx = rdx:rax % source or
+eax = edx:eax / source
+edx = edx:eax % source or
+ax = dx:ax / source
+dx = dx:ax % source or
+al = ax / source
+ah = ax % source
+</pre>
+<p>
+The div instruction for 64, 32 and 16 bit divisor
+sizes uses a pair of registers for
+the dividend (number to be divided).
+For 8 bit divides the dividend is stored in ax.
+For the larger sizes the low half of the dividend is stored in rax, eax, or ax
+and the larger half is stored in rdx, edx or dx.
+div produces 2 results: the quotient and remainder.  For 64, 32 and 16 bit
+sizes the quotient is stored in rax, eax or ax while the remainder is stored
+in rdx, edx or dx.
+For 8 bit divides the quotient is stored in al and the remainder is stored in
+ah.
+The single operand is the divisor and can be either a register or a memory
+address.
+</p>
+<p>
+div can result in a division exception (divide by 0).
+</p>
+<p>
+The div instruction is relatively slow - perhaps 25 to 50 times as slow as an
+add instruction.  The 64 bit divide is the worst and the other sizes are
+roughly the same speed.  So when speed is critical try to avoid using div and,
+if you must use div,
+try to use the 32 bit version rather than the 64 bit version.
+</p>
+<pre>
+        xor     edx, edx        ; prepare to divide with the dividend in rax
+        div     r9              ; divide rdx:rax by r9
+        xor     edx, edx
+        div     dword 10        ; divide edx:eax by 10
+        xor     edx, edx
+        div     dword [x]       ; divide edx:eax by 32 bit variable x
+        shr     rax, 4          ; shift right 4 (quick divide by 16)
+</pre>
+<h3>
+flags: OF SF ZF AF CF PF: all undefined
+</h3>
