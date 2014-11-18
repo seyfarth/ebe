@@ -1,0 +1,40 @@
+<h2> and </h2>
+<pre>
+dest = dest &amp; source
+</pre>
+<p>
+The and instruction ands the source value (second operand)
+to the destination (either a register or a memory location).
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.
+You can not use 2 memory addresses.
+</p>
+<p>
+The operation performs a bitwise and of the 2 operands.
+In my description and is a bit selector - the second operand is a mask
+selecting certain bits of the first operand.
+Here is an example of a bitwise and.
+</p>
+<pre>
+     1010010010101011
+   & 1010101010100111
+     ----------------
+     1010000010100011
+</pre>
+<p>
+Some examples of using and:
+</p>
+<pre>
+        and     rax, 0xffff     ; and rax with 0xffff
+                                ; selects the lowest 16 bits of rax
+        and     eax, 0xff00     ; and eax with 0xff00
+                                ; fills upper half of rax with 0
+        and     dx, ax          ; ands dx and ax, result in dx
+                                ; leaves the rest of rdx alone
+        and     rax, [y]        ; ands rax with 64 bit variable y
+        and     [x], eax        ; ands 32 bit varaible x with eax
+</pre>
+<h3>
+flags: OF CF SF ZF PF
+</h3>

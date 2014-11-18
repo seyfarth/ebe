@@ -1,0 +1,36 @@
+<h2> ret -return </h2>
+<pre>
+rip = *rsp
+rip = rip + 8
+</pre>
+<p>
+The ret instruction is used to return from a function.
+It pops the current top of the stack and uses this for the
+instruction pointer (rip).
+</p>
+<p>
+With a stack frame established using
+</p>
+<pre>
+my_function:
+        push    rbp             ; save previous rbp
+        mov     rbp, rsp        ; establish frame pointer
+                                ; rbp will be used to access local variables
+                                ; and non-register parameters to my_function
+        sub     rsp, N          ; N is some multiple of 16
+                                ; leaving space for local variables and
+                                ; non-register parameters for called functions
+<p>
+Use ret to return using
+</p>
+<pre>
+        leave                   ; restores rbp and rsp
+        ret                     ; returns to the calling function
+</pre>
+<p>
+For a function which does not require a stack frame, simply restore rsp and
+rbp if modified and use "ret" to return.
+</p>
+<h3>
+flags: none
+</h3>

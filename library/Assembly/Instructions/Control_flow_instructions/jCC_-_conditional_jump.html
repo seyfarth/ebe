@@ -1,0 +1,50 @@
+<h2> jCC - conditional jump </h2>
+<pre>
+if ( CC ) rip = dest
+        jz      ; jump if zero              ; ZF=1
+        je      ; jump if equal             ; ZF=1
+        jl      ; jump if less              ; SF=1
+        js      ; jump if sign bit set      ; SF=1
+        jle     ; jump if less or equal     ; SF=1 or ZF=1
+        jg      ; jump if greater           ; SF=0 and ZF=0
+        jge     ; jump if greater or equal  ; SF=0
+        jp      ; jump if parity            ; PF=1
+        jpe     ; jump if parity even       ; PF=1
+        jpo     ; jump if parity odd        ; PF=0
+        jo      ; jump if overflow          ; OF=1
+        jc      ; jump if carry             ; CF=1
+</pre>
+<p>
+The next jumps would typically be used after a floating point comparison.
+</p>
+<pre>
+        je      ; jump if equal             ; ZF=1
+        ja      ; jump if above             ; CF=0 and ZF=0
+        jae     ; jump if above or equal    ; CF=0
+        jb      ; jump if below             ; CF=1
+        jbe     ; jump if below or equal    ; CF=1 or ZF=1
+</pre>
+<p>
+The jCC instruction transfers control (modifies rip) to the
+location specified by its single operand if the specified condition is true.
+The destination can be a 64 bit register, a memory location or
+an immediate value.
+In your code you typically jump to a label.
+The assembler then translates this label into an immediate value
+which is an offset relative to rip.
+Sometimes this is an 8 bit offset and other times 32 bits.
+</p>
+<p>
+The other type so of destination listed under jmp are also possible,
+but not likely to be useful.
+There are always exceptions.
+Maybe you want to conditionally jmp using a jump table.
+</p>
+<pre>
+        je      top             ; jump to top if result was equal
+        jge     best            ; jump to best if result was greater or equal
+        ja      first           ; jump to first if XMM result was above
+</pre>
+<h3>
+flags: none
+</h3>

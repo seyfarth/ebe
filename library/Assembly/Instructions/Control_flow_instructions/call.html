@@ -1,0 +1,37 @@
+<h2> call </h2>
+<pre>
+push address after call instruction
+rip = dest
+</pre>
+<p>
+The call instruction transfers control (modifies rip) to the
+location specified by its single operand and pushes the address
+of the instruction after the call (the return address).
+The destination can be a 64 bit register, a memory location or
+an immediate value.
+In your code you typically call using a label.
+The assembler then translates this label into an immediate value
+which is an offset relative to rip.
+Sometimes this is an 8 bit offset and other times 32 bits.
+</p>
+<p>
+Only the first form below is likely to be needed.
+The others are possible, but not exactly needed.
+The last example can be used to prepare a "virtual function table"
+which is an array of functions which could be roughly how C++
+handles virtual functions.
+</p>
+<pre>
+        call    printf          ; call the printf function
+        call    rax             ; call the function with address in rax
+                                ; rax will have an address, not an offset
+        call    [save]          ; save is a 64 bit variable
+                                ; save contains a function address in it
+                                ; call the function addressed by save
+        call    [actions+8*rax] ; array named actions contains addresses
+                                ; of some functions
+                                ; rax is an index into the array
+</pre>
+<h3>
+flags: none
+</h3>

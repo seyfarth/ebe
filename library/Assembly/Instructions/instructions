@@ -1,3 +1,21 @@
+popcnt
+addss sd ps pd vaddps pd
+sub
+div
+mul
+sqrt
+min
+max
+round
+punpcklbw
+pand
+pandn
+por
+pxor
+pch
+ucomisd
+ucimiss
+
 add
         <h2> add </h2>
         <pre>

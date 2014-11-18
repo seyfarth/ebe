@@ -1,0 +1,40 @@
+<h2> or </h2>
+<pre>
+dest = dest | source
+</pre>
+<p>
+The or instruction ors the source value (second operand)
+to the destination (either a register or a memory location).
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.
+You can not use 2 memory addresses.
+</p>
+<p>
+The operation performs a bitwise or of the 2 operands.
+In my description or is a bit setter - the 1 bits from the second
+operand are used to set the same bits in the first operand.
+Here is an example of a bitwise or.
+</p>
+<pre>
+     1010010010101011
+   | 1010101010100111
+     ----------------
+     1010111010101111
+</pre>
+<p>
+Some examples of using and:
+</p>
+<pre>
+        or      rax, 0x1000     ; or rax with 0x1000
+                                ; sets bit 12 of rax
+        or      eax, 0xff00     ; or eax with 0xff00
+                                ; fills upper half of rax with 0
+        or      dx, ax          ; or dx and ax, result in dx
+                                ; leaves the rest of rdx alone
+        or      rax, [y]        ; or rax with 64 bit variable y
+        or      [x], eax        ; or 32 bit varaible x with eax
+</pre>
+<h3>
+flags: OF CF SF ZF PF
+</h3>

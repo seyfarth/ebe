@@ -1,0 +1,24 @@
+<h2> pop </h2>
+<pre>
+dest = *rsp
+rsp = rsp + 8       ; normal case
+</pre>
+<p>
+The pop instruction decrements the stack pointer (rsp) and then places
+the operand at the memory address contained in rsp.
+The destination can be a 64, 32, or 16 bit register or memory location.
+While it is possible to pop quantities less than 64 bits, I suggest
+exercising care when popping smaller quantities.
+In general it is important to maintain the stack on 16 byte boundaries,
+so if you wish to pop something and then call a function which you
+did not write (like printf), then pop an even number of quadwords.
+It is possible to write efficient code without pop.
+</p>
+<pre>
+        pop    rbp              ; pop register rbp onto the stack
+        pop    qword [x]        ; pop 64 bit variable x
+        pop    eax              ; pop 32 bit register
+</pre>
+<h3>
+flags: none
+</h3>

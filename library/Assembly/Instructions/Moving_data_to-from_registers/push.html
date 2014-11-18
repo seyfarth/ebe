@@ -1,0 +1,26 @@
+<h2> push </h2>
+<pre>
+rsp = rsp - 8       ; normal case
+*rsp = dest
+</pre>
+<p>
+The push instruction decrements the stack pointer (rsp) and then places
+the operand at the memory address contained in rsp.
+The destination can be a 64, 32, or 16 bit register or memory location
+or a 32, 16 or 8 bit immediate value.
+While it is possible to push quantities less than 64 bits, I suggest
+exercising care when pushing smaller quantities.
+In general it is important to maintain the stack 16 byte boundaries,
+so if you wish to push something and then call a function which you
+did not write (like printf), then push an even number of quadwords.
+It is possible to limit the use of push to the first instruction in
+the beginning of a function as part of establishing a stack frame.
+</p>
+<pre>
+        push    rbp             ; push register rbp onto the stack
+        push    qword [x]       ; push 64 bit variable x
+        push    eax             ; push 32 bit register
+</pre>
+<h3>
+flags: none
+</h3>

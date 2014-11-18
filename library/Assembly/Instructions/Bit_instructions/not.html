@@ -1,0 +1,33 @@
+<h2> not </h2>
+<pre>
+dest = ~dest
+</pre>
+<p>
+The not instruction nots the destination
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.
+</p>
+<p>
+The operation performs a bitwise not of the 2 operands.
+Not flips all the bits of its operand.
+Here is an example of a bitwise not.
+</p>
+<pre>
+    ~1010010010101011
+     ----------------
+     0101101101010100
+</pre>
+<p>
+Some examples of using not:
+</p>
+<pre>
+        not     rax             ; not rax
+        not     eax             ; not eax
+                                ; fills upper half of rax with 0
+        not     dx              ; not dx
+                                ; leaves the rest of rdx alone
+        not     dword [x]       ; not 32 bit varaible x
+</pre>
+<h3>
+flags: OF CF SF ZF PF
+</h3>

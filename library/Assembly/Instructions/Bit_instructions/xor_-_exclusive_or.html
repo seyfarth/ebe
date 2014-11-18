@@ -1,0 +1,42 @@
+<h2> xor - exclusive or </h2>
+<pre>
+dest = dest ^ source
+</pre>
+<p>
+The xor instruction ors the source value (second operand)
+to the destination (either a register or a memory location).
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.
+You can not use 2 memory addresses.
+</p>
+<p>
+The operation performs a bitwise xor of the 2 operands.
+Exclusive or means one of the other but not both.
+In my description xor is a bit flipper - the 1 bits from the second
+operand are used to flip the same bits in the first operand.
+Another easy way to describe xor is "not-equal".
+Here is an example of a bitwise xor.
+</p>
+<pre>
+     1010010010101011
+   ^ 1010101010100111
+     ----------------
+     0000111000001100
+</pre>
+<p>
+Some examples of using and:
+</p>
+<pre>
+        xor      rax, 0x1000    ; xor rax with 0x1000
+                                ; flips bit 12 of rax
+        xor      eax, 0xff00    ; xor eax with 0xff00
+                                ; fills upper half of rax with 0
+        xor      dx, ax         ; xor dx and ax, result in dx
+                                ; leaves the rest of rdx alone
+        xor      rax, [y]       ; xor rax with 64 bit variable y
+        xor      [x], eax       ; xor 32 bit varaible x with eax
+</pre>
+<h3>
+flags: OF CF SF ZF PF
+</h3>

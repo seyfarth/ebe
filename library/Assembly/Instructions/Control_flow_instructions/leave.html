@@ -1,0 +1,31 @@
+<h2> leave </h2>
+<pre>
+rsp = rbp
+pop rbp
+</pre>
+<p>
+The leave instruction is a convenient way to restore rbp and rsp before
+returning from a function with a normal stack frame.
+</p>
+<p>
+With a stack frame established using
+</p>
+<pre>
+my_function:
+        push    rbp             ; save previous rbp
+        mov     rbp, rsp        ; establish frame pointer
+                                ; rbp will be used to access local variables
+                                ; and non-register parameters to my_function
+        sub     rsp, N          ; N is some multiple of 16
+                                ; leaving space for local variables and
+                                ; non-register parameters for called functions
+<p>
+Use leave to return using
+</p>
+<pre>
+        leave                   ; restores rbp and rsp
+        ret                     ; returns to the calling function
+</pre>
+<h3>
+flags: none
+</h3>

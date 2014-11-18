@@ -1,0 +1,31 @@
+<h2> xchg - exhange register with register or register with memory </h2>
+<pre>
+temp = source
+source = dest
+dest = temp
+</pre>
+<p>
+The xchg instruction exchanges the source (second operand)
+to the destination.
+The destination and can be a 64, 32, 16 or 8 bit register or
+memory location.  
+You can not use 2 memory addresses.
+</p>
+<p>
+If either or both of the operands is a 32 bit register, the upper
+half of the register(s) will be zeroed.
+</p>
+<pre>
+        xchg    rax, r9         ; exchange rax and r9
+        xchg    eax, edx        ; exchange eax and edx
+                                ; places 0 into upper half of rax and rdx
+        xchg    dx, ax          ; moves ax into dx
+                                ; leaves upper 3/4 of rax and rdx alone
+        xchg     rax, [y]       ; exchanges rax and 64 bit variable y
+        xchg     [x], eax       ; exchange eax and 32 bit variable x
+                                ; places 0 into upper half of rax
+                                ; does not modify memory after x+3
+</pre>
+<h3>
+flags: none
+</h3>

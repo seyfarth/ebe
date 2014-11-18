@@ -1,0 +1,43 @@
+<h2> sal-shl - shift left </h2>
+<pre>
+dest = dest << source
+</pre>
+<p>
+These two instructions are actually the same instruction.
+sal means shift arithmetic left and shl means shift left,
+but the result is the same for both.
+The shl instruction shifts the destination left the number of times
+indicated by the source.
+Shifting left by 1 position is equal to multiplying by 2, so the
+effect equals multiplying by the appropriate power of 2.
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.
+The source can be either an immediate value or the cl register.
+</p>
+<p>
+Here is an example of a shift left:
+</p>
+<pre>
+     1010010010101011
+                <<  3
+     ----------------
+     0010010101011000
+</pre>
+<p>
+Some examples of using shl:
+</p>
+<pre>
+        shl     rax, 15         ; shift rax 15 bits
+        shl     eax, 10         ; shift eax 10 bits
+                                ; fills upper half of rax with 0
+        shl     dx, cl          ; shifts dx the cl bits left
+                                ; leaves the rest of rdx alone
+        shl     [x], 2          ; shift 32 bit variable x 2 bits
+</pre>
+<h3>
+flags: OF CF SF ZF PF
+</h3>
+<p>
+CF contains the last bit shifted out. OF is changed only for single bit
+shifts. Using CF can be efficient in processing each bit of a register.
+</p>

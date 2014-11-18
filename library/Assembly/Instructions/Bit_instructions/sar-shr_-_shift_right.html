@@ -1,0 +1,49 @@
+<h2> sar-shr - shift right </h2>
+<pre>
+dest = dest >> source
+</pre>
+<p>
+These two instructions are not the same.
+With shl 0 bits are always introduced on the left hand side of the
+value, while sar propagates the sign bit.
+sar means shift arithmetic right and shr means shift right.
+The shl instruction shifts the destination right the number of times
+indicated by the source.
+Shifting right by 1 position is equal to dividing by 2, so the
+effect equals dividing by the appropriate power of 2.
+C/C++ uses sar for signed numbers and shr for unsigned numbers.
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.
+The source can be either an immediate value or the cl register.
+</p>
+<p>
+Here is an example of a shift right:
+</p>
+<pre>
+     1010010010101011
+                >>  3
+     ----------------
+     0001010010010101  ; assuming shl, with shr top 3 bits would be 1
+</pre>
+<p>
+Some examples of using shr and sar:
+</p>
+<pre>
+        shr     rax, 15         ; shift rax 15 bits
+                                ; bits 49:63 will be 0
+        sar     eax, 10         ; shift eax 10 bits
+                                ; introduces 10 copies of the sign bit
+                                ; fills upper half of rax with 0
+        shr     dx, cl          ; shifts dx the cl bits right
+                                ; introduces cl 0 bits starting at bit 15
+                                ; leaves the rest of rdx alone
+        sar     [x], 2          ; shift 32 bit variable x 2 bits
+                                ; introduces 2 copies of the sign bit
+</pre>
+<h3>
+flags: OF CF SF ZF PF
+</h3>
+<p>
+CF contains the last bit shifted out. OF is changed only for single bit
+shifts. Using CF can be efficient in processing each bit of a register.
+</p>

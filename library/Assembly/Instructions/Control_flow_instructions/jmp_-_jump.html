@@ -1,0 +1,34 @@
+<h2> jmp - jump </h2>
+<pre>
+rip = dest
+</pre>
+<p>
+The jmp instruction transfers control (modifies rip) to the
+location specified by its single operand.
+The destination can be a 64 bit register, a memory location or
+an immediate value.
+In your code you typically jump to a label.
+The assembler then translates this label into an immediate value
+which is an offset relative to rip.
+Sometimes this is an 8 bit offset and other times 32 bits.
+</p>
+<p>
+Only the first form below is likely to be needed.
+The others are possible, but not exactly needed.
+The last example can be used to prepare a "jump table" which is an array
+of addresses which can be used to make a very fast switch statement.
+</p>
+<pre>
+        jmp     top             ; jump to the label top
+                                ; yasm picks 8 or 32 bit offset from rip
+        jmp     rax             ; jump to the location in rax
+                                ; rax will have an address, not an offset
+        jmp     [save]          ; save is a 64 bit variable
+                                ; save contains an address in it
+                                ; jump to the contents stored in save
+        jmp     [switch+8*rax]  ; array named switch contains some addresses
+                                ; rax is an index into the array
+</pre>
+<h3>
+flags: none
+</h3>
