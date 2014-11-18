@@ -1,0 +1,27 @@
+<h2> movd - move doubleword </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movd instruction moves the source value (second operand)
+to the destination.
+The purpose of this instruction is to move a data between memory, general
+purpose registers and floating point registers.
+Thus the destination must be one of those categories and the source must be
+a different category with one exception: movd can be used to move a value from
+one floating point register to another.
+The 32 bits are moved without conversion.
+</p>
+<pre>
+        movd    eax, xmm0       ; move 32 bits of xmm0 to eax
+                                ; places 0 in top half of rax
+        movd    [x], xmm0       ; move 32 bits of xmm0 to 32 bit variable x
+        movd    xmm0, [y]       ; move 32 bit variable y to xmm0
+                                ; places 0 in upper 3/4 of xmm0
+        movd    xmm2, xmm1      ; move 32 bits of xmm1 to xmm2
+                                ; places 0 in upper 3/4 of xmm2
+        movd    [x], eax        ; move eax to 32 bit variable x
+</pre>
+<h3>
+flags: none
+</h3>

@@ -1,0 +1,48 @@
+<h2> cmovCC - conditional move </h2>
+<pre>
+if ( CC ) dest = source
+</pre>
+<p>
+The cmovCC instruction moves the source value (second operand)
+to the destination register if the specified condition is true.
+The source can be either a register or memory location.
+This can be very efficient by avoiding branching for simple conditional
+operations.
+</p>
+<pre>
+        cmovc       ; carry                  CF=1
+        cmove       ; equal                  ZF=1
+        cmovg       ; greater then           ZF=0 and SF=OF
+        cmovge      ; greater than or equal  SF=OF
+        cmovl       ; less than              SF!=OF
+        cmovle      ; less than or equal     ZF=1 or SF!=OF
+        cmovo       ; overflow               OF=1
+        cmovp       ; parity                 PF=1
+        cmovpe      ; parity even            PF=1
+        cmovpo      ; parity odd             PF=0
+        cmovs       ; sign                   SF=1
+        cmovz       ; zero                   ZF=1
+</pre>
+<p>
+The patterns below are used after a floating point comparison.
+</p>
+<pre>
+        cmova       ; above                  CF=0 and ZF=0
+        cmovae      ; above or equal         CF=0
+        cmovb       ; below                  CF=1
+        cmovbe      ; below or equal         CF=1 or ZF=1
+
+</pre>
+<p>
+In addition to the previous patterns you can place an "n" after "cmov" to get
+an instruction where the condition must be false.  An example is "cmovng"
+which means "conditional move if not greater than".
+</p>
+<pre>
+        cmovg       rax, r9         ; mov r9 to rax if result was greater
+        cmovl       rax, r9         ; mov r9 to rax if result was less than
+        cmovz       ax, [x]         ; mov variable x to ax if result was 0
+</pre>
+<h3>
+flags: none
+</h3>

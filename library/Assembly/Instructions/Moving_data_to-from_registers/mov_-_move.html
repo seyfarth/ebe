@@ -1,0 +1,32 @@
+<h2> mov - move </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The mov instruction moves the source value (second operand)
+to the destination (either a register or a memory location).
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.  The source can be either
+a register, memory location or an immediate value.  You can not use 2
+memory addresses.
+You also can't move an immediate value into a memory
+address.
+</p>
+<p>
+Moving a 32 bit quantity into a register will clear out the upper half
+of the destination register.
+Moving a 16 or 8 quantity into a register will leave the rest of the
+register alone.
+</p>
+<pre>
+        mov     rax, 0xfedcba9876543210     ; move a 64 bit number into rax
+        mov     eax, 12                     ; moves 12 into rax
+                                            ; places 0 into upper half of rax
+        mov     dx, ax                      ; moves ax into dx
+                                            ; leaves upper 3/4 of rdx alone
+        mov     rax, [y]                    ; moves 64 bit variable y into rax
+        mov     [x], eax                    ; move eax into 32 bit variable x
+</pre>
+<h3>
+flags: none
+</h3>

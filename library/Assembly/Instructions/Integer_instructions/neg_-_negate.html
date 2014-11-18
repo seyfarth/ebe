@@ -1,0 +1,22 @@
+<h2> neg - negate </h2>
+<pre>
+dest = -dest
+</pre>
+<p>
+The neg instruction performs the 2's complement negation of its operand.
+The operand can be a register or a memory address.
+</p>
+<pre>
+        neg     r9              ; negate r9
+        neg     eax             ; negate eax
+                                ; upper half of rax will be 0
+        neg     r8b             ; negate r8b
+                                ; leave the rest of r8 as is
+        neg     dword [x]       ; negate the 32 bit variable x
+</pre>
+<h3>
+flags: OF CF SF ZF AF PF
+</h3>
+<p>
+CF is set to 0 if the result is 0 and 1 otherwise.
+</p>

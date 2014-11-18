@@ -1,0 +1,36 @@
+<h2> movzx - move zero extend </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movzx instruction moves the source value (second operand)
+to the destination register.
+The source can be a 64, 32, 16 or 8 bit register or
+memory location.
+The source must be a smaller size than the destination.
+If the destination is a 32 bit register, the top half is zeroed out as if
+a 64 bit register were used.
+</p>
+<p>
+movzx differs from mov in that it places 0's into all the higher order bits of
+the destination register.
+</p>
+<pre>
+        movzx   rax, dx         ; moves dx to ax
+                                ; zeroes out the rest of rax
+        movzx   eax, dx         ; moves dx to ax
+                                ; zeroes out the rest of rax
+                                ; same as movzx rax, dx
+        movzx   ax, dl          ; moves dl to al and 0 to ah
+                                ; leaves the rest of rax alone
+        movzx   eax, word [x]   ; moves 16 bit variable x to eax
+                                ; zeroes out the rest of rax
+        movzx   rax, dword [x]  ; moves 32 bit variable x to eax
+                                ; zeroes out the rest of rax
+                                ; same as mov eax, dword [x]
+        movzx   rax, byte [x]   ; moves 8 bit variable x to al
+                                ; zeroes out the rest of rax
+</pre>
+<h3>
+flags: none
+</h3>

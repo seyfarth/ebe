@@ -1,0 +1,33 @@
+<h2> movupd - move aligned packed singles </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movupd instruction moves 2 double precision floating point values
+(64 bits each) from the source value (second operand)
+to the destination.
+The source and the destination can be an XMM register or a memory location.
+You can not use 2 memory addresses.
+</p>
+<p>
+This version does not require memory alignment.
+In the original designs movapd was faster than than movupd (move unaligned).
+When in doubt use movupd instead.
+<p>
+movupd moves the values without inspection or conversion.
+</p>
+<p>
+An XMM register is 128 bits total, while CPUs supporting AVX instructions
+have an additional 128 bits in each register accessible as YMM registers.
+</p>
+<pre>
+        movupd   xmm1, xmm2     ; moves 2 doubles from xmm2 to xmm1
+                                ; leaves the rest of xmm1 unchanged
+        movupd   xmm2, [x]      ; moves 2 doubles from variable x to xmm2
+                                ; leaves the rest of xmm2 alone
+        movupd   [y], xmm0      ; moves 2 doubles from xmm0 to variable y
+                                ; moves precisely 128 bits
+</pre>
+<h3>
+flags: none
+</h3>

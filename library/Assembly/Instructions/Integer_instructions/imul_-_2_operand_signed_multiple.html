@@ -1,0 +1,26 @@
+<h2> imul - 2 operand signed multiply </h2>
+<pre>
+dest = dest * source
+</pre>
+<p>
+The 2 operand imul instruction has a destination register as its first operand
+and a register, memory location or an immediate value as the second operand
+(source).
+The destination register value is multiplied by the source operand and the
+product is placed in the destination register.
+The product may be truncated.
+</p>
+<pre>
+        imul    r10, 13         ; multiply r10 by 13
+        imul    r8d, 12         ; multiply r8d by 12
+                                ; top half of r8 will be 0
+        imul    rdx, rax        ; multiply rdx by rax
+        imul    rdx, [x]        ; multiply rdx by 64 bit variable x
+        shl     rax, 4          ; shift right 4 (quick multiply by 16)
+</pre>
+<h3>
+flags: OF CF
+</h3>
+<p>
+OF and CF are set to 0 if the upper half of the product is 0 and 1 otherwise.
+</p>

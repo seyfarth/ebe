@@ -1,0 +1,33 @@
+<h2> movss - move scalar single </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movss instruction moves a single precision floating point value (32 bits)
+from the source value (second operand)
+to the destination.
+The source and the destination can be an XMM register or a memory location.
+You can not use 2 memory addresses.
+</p>
+<p>
+movss moves the value without inspection or conversion.
+</p>
+<p>
+Generally you can just act like movss moves a float from one place to
+another, but when you move a float from memory to an XMM register 3
+floats in the register are set to 0.  
+An XMM register is 128 bits total, while CPUs supporting AVX instructions
+have an additional 128 bits in each register accessible as YMM registers.
+</p>
+<pre>
+        movss   xmm1, xmm2      ; move a float from xmm2 to xmm1
+                                ; leaves the rest of xmm1 unchanged
+        movss   xmm2, [x]       ; moves a float from variable x to xmm2
+                                ; places 3 zero floats in xmm2 bits 32:127
+                                ; leaves the rest of xmm2 alone
+        movss   [y], xmm0       ; moves a float from xmm0 to variable y
+                                ; moves precisely 32 bits
+</pre>
+<h3>
+flags: none
+</h3>

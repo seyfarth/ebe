@@ -12,16 +12,16 @@ memory addresses.  You can add either 8, 16 or 32 bit immediate values
 to larger registers and the immediate value will be sign extended.
 </p>
 <pre>
-add     rax, rdx        ; add rdx to rax
-add     r8, 10          ; add 10 to r8
-add     r8, [x]         ; add 64 bit value of x to r8
-add     r8d, [x]        ; add 32 bit value of x to r8d
-                        ; top half of r8 will be set to 0
-add     r8w, [x]        ; add 16 bit value of x to r8w
-                        ; top 3/4 of r8 will be unchanged
-add     [x], rax        ; add rax to 64 bit variable x
-add     dword [x], 2    ; add 2 to 32 bit variable x
-                        ; must specify qword, dword, word or byte
+        add     rax, rdx        ; add rdx to rax
+        add     r8, 10          ; add 10 to r8
+        add     r8, [x]         ; add 64 bit value of x to r8
+        add     r8d, [x]        ; add 32 bit value of x to r8d
+                                ; top half of r8 will be set to 0
+        add     r8w, [x]        ; add 16 bit value of x to r8w
+                                ; top 3/4 of r8 will be unchanged
+        add     [x], rax        ; add rax to 64 bit variable x
+        add     dword [x], 2    ; add 2 to 32 bit variable x
+                                ; must specify qword, dword, word or byte
 </pre>
 <h3>
 flags: OF SF ZF AF CF PF

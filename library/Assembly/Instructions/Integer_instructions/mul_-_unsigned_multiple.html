@@ -1,0 +1,30 @@
+<h2> mul - unsigned multiply </h2>
+<pre>
+rdx:rax = rax * source
+edx:eax = eax * source
+dx:ax = ax * source
+al = al = rax * source
+</pre>
+<p>
+The mul instruction for 64, 32 and 16 bit source operand
+sizes uses a pair of registers for the product.
+For 8 bit operands the product is stored in ax.
+For 64, 32 and 16 bit the single operand is one multiplier and the other is
+rdx, eax or ax.
+For 8 bit operands the second multiplier is al and the product is stored in
+ax.
+The single operand is one multiplier and can be either a register or a memory
+address.
+</p>
+<pre>
+        mul     r9              ; multiply rax by r9
+        mul     dword 10        ; multiply eax by 10
+        mul     dword [x]       ; multiply eax by 32 bit variable x
+        shl     rax, 4          ; shift right 4 (quick multiply by 16)
+</pre>
+<h3>
+flags: OF CF
+</h3>
+<p>
+OF and CF are set to 0 if the upper half of the product is 0 and 1 otherwise.
+</p>

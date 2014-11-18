@@ -1,0 +1,35 @@
+<h2> movaps - move aligned packed singles </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movaps instruction moves 4 single precision floating point values
+(32 bits each) from the source value (second operand)
+to the destination.
+The source and the destination can be an XMM register or a memory location.
+You can not use 2 memory addresses.
+</p>
+<p>
+This version requires that any memory address used be aligned on a 16 byte
+boundary (bits 0:3 all 0).
+Using an unaligned address generates a general protection fault.
+In the original designs movaps was faster than than movups (move unaligned).
+When in doubt use movups instead.
+<p>
+movaps moves the values without inspection or conversion.
+</p>
+<p>
+An XMM register is 128 bits total, while CPUs supporting AVX instructions
+have an additional 128 bits in each register accessible as YMM registers.
+</p>
+<pre>
+        movaps   xmm1, xmm2     ; moves 4 floats from xmm2 to xmm1
+                                ; leaves the rest of xmm1 unchanged
+        movaps   xmm2, [x]      ; moves 4 floats from variable x to xmm2
+                                ; leaves the rest of xmm2 alone
+        movaps   [y], xmm0      ; moves 4 floats from xmm0 to variable y
+                                ; moves precisely 128 bits
+</pre>
+<h3>
+flags: none
+</h3>

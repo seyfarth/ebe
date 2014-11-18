@@ -1,0 +1,26 @@
+<h2> movq - move quadword </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movq instruction moves the source value (second operand)
+to the destination.
+The purpose of this instruction is to move a data between memory, general
+purpose registers and floating point registers.
+Thus the destination must be one of those categories and the source must be
+a different category with one exception: movq can be used to move a value from
+one floating point register to another.
+The 64 bits are moved without conversion.
+</p>
+<pre>
+        movq    rax, xmm0       ; move xmm0 to rax
+        movq    [x], xmm0       ; move xmm0 to 64 bit variable x
+        movq    xmm0, [y]       ; move 64 bit variable y to xmm0
+                                ; places 0 in second half of xmm0
+        movq    xmm2, xmm1      ; move xmm1 to xmm2
+                                ; places 0 in second half of xmm2
+        movq    [x], rax        ; move rax to 64 bit variable x
+</pre>
+<h3>
+flags: none
+</h3>

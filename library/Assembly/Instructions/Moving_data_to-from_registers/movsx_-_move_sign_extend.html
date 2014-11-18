@@ -1,0 +1,41 @@
+<h2> movsx - move sign extend </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The movsx instruction moves the source value (second operand)
+to the destination register and propagates the high order bit 
+of the source through the rest of the destination.
+The source can be a 64, 32, 16 or 8 bit register or
+memory location.
+The source must be a smaller size than the destination.
+The purpose of the instruction is to move a signed integer into
+a larger register and use it as a signed integer.
+</p>
+<p>
+If the source is 32 bits, the instruction mnemonic is "movsxd" rather
+than "movsx".
+Technically it is a different bit pattern, but it would have been handier to
+allow "movsx" to work for all cases.
+Most programmers are unconcerned about the actual bits used for the
+instruction.
+</p>
+<pre>
+        movsx   rax, dx         ; moves dx to ax
+                                ; fills the rest of rax with dx bit 15
+        movsx   eax, dx         ; moves dx to ax
+                                ; fills the rest of eax with dx bit 15
+                                ; zeroes out the rest of rax
+        movsx   ax, dl          ; moves dl to al
+                                ; fills bits ah with dl bit 7
+                                ; leaves the rest of rax alone
+        movsx   rax, word [x]   ; moves 16 bit variable x to ax
+                                ; fills the rest of rax with x sign bit
+        movsxd  rax, dword [x]  ; moves 32 bit variable x to eax
+                                ; fills the rest of rax with x bit 31
+        movsx   rax, byte [x]   ; moves 8 bit variable x to al
+                                ; files the rest of rax with x bit 7
+</pre>
+<h3>
+flags: none
+</h3>
