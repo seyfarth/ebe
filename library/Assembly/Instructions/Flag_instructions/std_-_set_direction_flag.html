@@ -1,0 +1,18 @@
+<h2> std - set direction flag </h2>
+<pre>
+CF = 1
+</pre>
+<p>
+The std instruction sets the direction flag (DF) to 1.
+The direction flag is used in the various string instructions
+to determine whether to decrement or increment rdi or rsi or both.
+If DF is 0 the string instructions decrement and if DF is 1 they increment.
+If you use std, you are supposed to clear DF before you return from your
+function using cld.
+</p>
+<pre>
+        std             ; set DF to 1
+</pre>
+<h3>
+flags: DF
+</h3>

@@ -480,6 +480,11 @@
 <file>library/Assembly/Instructions/Moving_data_to-from_registers/movzx_-_move_zero_extend.html</file>
 <file>library/Assembly/Instructions/Moving_data_to-from_registers/movss_-_move_scalar_single.html</file>
 <file>library/Assembly/Instructions/Moving_data_to-from_registers/movd_-_move_doubleword.html</file>
+<file>library/Assembly/Instructions/Flag_instructions/clc_-_clear_carry_flag.html</file>
+<file>library/Assembly/Instructions/Flag_instructions/setCC_-_Set_byte_on_condition.html</file>
+<file>library/Assembly/Instructions/Flag_instructions/std_-_set_direction_flag.html</file>
+<file>library/Assembly/Instructions/Flag_instructions/stc_-_set_carry_flag.html</file>
+<file>library/Assembly/Instructions/Flag_instructions/cld_-_clear_direction_flag.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/btc_-_bit_test_and_complement.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/not.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/ror_-_rotate_right.html</file>
@@ -490,6 +495,7 @@
 <file>library/Assembly/Instructions/Bit_instructions/bt_-_bit_test.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/xor_-_exclusive_or.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/or.html</file>
+<file>library/Assembly/Instructions/Bit_instructions/popcnt_-_population_count.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/sar-shr_-_shift_right.html</file>
 <file>library/Assembly/Instructions/Bit_instructions/bts_-_bit_test_and_set.html</file>
 <file>library/Assembly/Instructions/Integer_instructions/imul_-_1_operand_signed_multiple.html</file>
@@ -512,6 +518,14 @@
 <file>library/Assembly/Instructions/Control_flow_instructions/call.html</file>
 <file>library/Assembly/Instructions/Control_flow_instructions/leave.html</file>
 <file>library/Assembly/Instructions/instructions</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/addsd_-_add_scalar_double.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/subss_-_subtract_scalar_single.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/subps_-_subtract_packed_singles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/addpd_-_add_packed_doubles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/subsd_-_subtract_scalar_double.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/subpd_-_subtract_packed_doubles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/addps_-_add_packed_singles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/addss_-_add_scalar_single.html</file>
 <file>library/Assembly/Flags.html</file>
 <file>library/Assembly/Macros/simple_macro</file>
 <file>library/Assembly/Macros/simple_macro_with_1_parameter</file>

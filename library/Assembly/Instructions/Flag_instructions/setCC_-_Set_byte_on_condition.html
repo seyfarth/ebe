@@ -1,0 +1,53 @@
+<h2> setCC - set byte on condition </h2>
+<pre>
+dest = selected condition
+</pre>
+<p>
+The setCC instruction sets an 8 bit register or memory location
+with the value of the specified condition.
+The byte will be 1 if the condition is true and 0 if it is false.
+</p>
+<pre>
+        seta    ; set above             ; CF=0 and ZF=0
+        setae   ; set above or equal    ; CF=0
+        setb    ; set below             ; CF=1
+        setbe   ; set below or equal    ; CF=1 or ZF=1
+        setc    ; set carry             ; CF=1
+        sete    ; set equal             ; ZF=1
+        setg    ; set greater           ; ZF=0 and SF=OF
+        setge   ; set greater or equal  ; SF=OF
+        setl    ; set less              ; SF!=OF
+        setle   ; set less or equal     ; SF!=OF or ZF=1 
+        seto    ; set overflow          ; SF=1
+        setp    ; set parity            ; PF=1
+        setpe   ; set parity even       ; PF=1
+        setpo   ; set parity odd        ; PF=1
+        sets    ; set sign              ; SF=1
+        setz    ; set zero              ; ZF=1
+</pre>
+<p>
+These instructions let you save the state of a comparison for later use.
+Perhaps a test requires 2 or more conditions which involve several instructions
+each and it is easier to save several conditions and later use and to see
+all of them are true.
+You can also use negated conditions by inserting "n" between the "set" and the
+condition code.
+</p>
+<p>
+In the examples below the comments mention setting the destination to 1 if
+the condition is true.
+If the condition is false the destination will be set to 0, but there is
+no comment about the 0.
+</p>
+<pre>
+        setz    al          ; set al to 1 if the result was 0
+        setge   byte [x]    ; set 8 bit variable x to 1 if greater or equal
+        setnc   r8b         ; set r8b to 1 if there was no carry
+                            ; this also can be used after a bit test or shift
+        setae   byte [x]    ; set 8 bit variable x to 1 if above or equal
+                            ; above and below are used after performing
+                            ; floating point tests with perhaps ucomisd
+</pre>
+<h3>
+flags: none
+</h3>

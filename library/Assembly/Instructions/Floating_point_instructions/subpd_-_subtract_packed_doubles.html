@@ -1,0 +1,32 @@
+<h2> subpd - 64 packed doubles (64 bit floating point) </h2>
+<pre>
+dest[0] = dest[0] - source[0]
+dest[1] = dest[1] - source[1]
+</pre>
+<p>
+The subpd instruction subtracts the 2 source values (second operand)
+to the 2 values of the destination (an XMM register).
+The source can be an XMM register or a 64 bit memory location.
+There is also vsubpd on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding and which subtracts 4 pairs of values.
+</p>
+<pre>
+        subpd   xmm0, xmm1          ; subtract 2 pairs from xmm1 and xmm0
+                                    ; 2 differences go in xmm0
+                                    ; leave the rest of ymm0 as is
+        subpd   xmm0, [x]           ; subtract 2 pairs from x and xmm0
+                                    ; x is an array of doubles
+                                    ; leave the rest of ymm0 as is
+        vsubpd  xmm3, xmm0, xmm15   ; subtract 4 pairs from xmm0 & xmm15
+                                    ; store results in xmm3
+        vsubpd  xmm3, xmm0, [x]     ; subtract 4 pairs values from xmm0 & x
+                                    ; x is a double array
+                                    ; store results in xmm3
+        vsubpd  xmm3, xmm0, [rsi]   ; subtract 4 pairs values from xmm0 & [rsi]
+                                    ; rsi contains the address of a double array
+                                    ; store results in xmm3
+</pre>
+<h3>
+flags: none
+</h3>

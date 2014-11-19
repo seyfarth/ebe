@@ -1,0 +1,30 @@
+<h2> subsd - add scalar double (64 bit floating point) </h2>
+<pre>
+dest = dest - source
+</pre>
+<p>
+The subsd instruction subtracts the source value (second operand)
+from the destination (an XMM register).
+The source can be an XMM register or a 64 bit memory location.
+There is also vsubsd on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding.
+</p>
+<pre>
+        subsd   xmm0, xmm1          ; subtract xmm1 from xmm0
+                                    ; leave the rest of xmm0 as is
+        subsd   xmm0, [x]           ; subtract 64 bit variable x from xmm0
+                                    ; leave the rest of xmm0 as is
+        vsubsd  xmm3, xmm0, xmm15   ; xmm3 = xmm0 - xmm15
+
+            ; Note: operates by copying 128 bits from xmm0 to xmm3
+            ; before adding.  This might occasionally be useful.
+            ; The rest of ymm0 is left as is
+            ; using addss would change either xmm0 or xmm15
+            ; possibly requiring an additional instruction
+
+        vsubsd  xmm3, xmm0, [x]     ; xmm3 = xmm0 - x
+</pre>
+<h3>
+flags: none
+</h3>

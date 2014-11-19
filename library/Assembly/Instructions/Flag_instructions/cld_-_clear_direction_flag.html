@@ -1,0 +1,18 @@
+<h2> cld - clear direction flag </h2>
+<pre>
+CF = 1
+</pre>
+<p>
+The cld instruction sets the direction flag (DF) to 0.
+The direction flag is used in the various string instructions
+to determine whether to decrement or increment rdi or rsi or both.
+If DF is 0 the string instructions decrement and if DF is 1 they increment.
+If you use std, you are supposed to clear DF before you return from your
+function using cld.
+</p>
+<pre>
+        cld             ; set DF to 0
+</pre>
+<h3>
+flags: DF
+</h3>

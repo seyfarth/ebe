@@ -1,0 +1,30 @@
+<h2> popcnt - population count </h2>
+<pre>
+dest = number of 1 bits in the source
+</pre>
+<p>
+popcnt is a fairly new instruction introduced as part of the SSE4 instructions.
+For AMD it started showing up in the Barcelona processors, while it originated
+with the Intel Core 2 series.
+</p>
+<p>
+The popcnt instruction counts the 1 bits in the source
+and sets the destination to this count.
+The destination can be a 64, 32 or 16 bit register.
+The source can be register or memory location of the same
+size as the destination.
+</p>
+<p>
+Some examples of using popnt:
+</p>
+<pre>
+        popcnt rax, rcx       ; rax gets the count of 1s in rcx
+        popcnt eax, r8d       ; eax gets the count of 1s in r8b
+                              ; top half of rax will be 0
+        popcnt dx, cx         ; dx gets the count of 1s in cx
+                              ; the rest of rx is left alone
+        popcnt [x], rdx       ; rdx contains bit number of x to test
+</pre>
+<h3>
+flags: CF
+</h3>
