@@ -1,0 +1,32 @@
+<h2> mulps - multiply packed singles (32 bit floating point) </h2>
+<pre>
+dest[0] = dest[0] * source[0]
+dest[1] = dest[1] * source[1]
+dest[2] = dest[2] * source[2]
+dest[3] = dest[3] * source[3]
+</pre>
+<p>
+The mulps instruction multiplies the 4 source values (second operand)
+to the 4 values of the destination (an XMM register).
+The source can be an XMM register or a 32 bit memory location.
+There is also vmumul on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding and which multiplies 8 pairs of values.
+</p>
+<pre>
+        mulps   xmm0, xmm1          ; multiply 4 pairs of values of xmm1 & xmm0
+                                    ; leave the rest of ymm0 as is
+        mulps   xmm0, [x]           ; multiply 4 pairs of values of x & xmm0
+                                    ; x is an array of floats
+                                    ; leave the rest of ymm0 as is
+        vmulps  xmm3, xmm0, xmm15   ; multiply 8 pairs of values of xmm0 & xmm15
+                                    ; store results in xmm3
+        vmulps  xmm3, xmm0, [x]     ; multiply 8 pairs of values of xmm0 & x
+                                    ; store results in xmm3
+        vmulps  xmm3, xmm0, [rsi]   ; multiply 8 pairs of values of xmm0 & [rsi]
+                                    ; rsi contains the address of an array
+                                    ; store results in xmm3
+</pre>
+<h3>
+flags: none
+</h3>

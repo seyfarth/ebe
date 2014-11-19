@@ -5,7 +5,7 @@ dest[1] = dest[1] - source[1]
 </pre>
 <p>
 The subpd instruction subtracts the 2 source values (second operand)
-to the 2 values of the destination (an XMM register).
+from the 2 values of the destination (an XMM register).
 The source can be an XMM register or a 64 bit memory location.
 There is also vsubpd on CPUs with AVX instructions which allows using
 3 XMM registers or 2 XMM registers and a memory location
@@ -17,6 +17,10 @@ which can simplify coding and which subtracts 4 pairs of values.
                                     ; leave the rest of ymm0 as is
         subpd   xmm0, [x]           ; subtract 2 pairs from x and xmm0
                                     ; x is an array of doubles
+                                    ; leave the rest of ymm0 as is
+        subpd   xmm0, [x+8*rax]     ; subtract 2 pairs from x and xmm0
+                                    ; x is an array of doubles
+                                    ; rax holds the index of the first element
                                     ; leave the rest of ymm0 as is
         vsubpd  xmm3, xmm0, xmm15   ; subtract 4 pairs from xmm0 & xmm15
                                     ; store results in xmm3

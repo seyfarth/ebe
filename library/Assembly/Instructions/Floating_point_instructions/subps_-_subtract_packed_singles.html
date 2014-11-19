@@ -6,8 +6,8 @@ dest[2] = dest[2] - source[2]
 dest[3] = dest[3] - source[3]
 </pre>
 <p>
-The subps instruction adds the 4 source values (second operand)
-to the 4 values of the destination (an XMM register).
+The subps instruction subtracts the 4 source values (second operand)
+from the 4 values of the destination (an XMM register).
 The source can be an XMM register or a 32 bit memory location.
 There is also vsubps on CPUs with AVX instructions which allows using
 3 XMM registers or 2 XMM registers and a memory location
@@ -18,6 +18,10 @@ which can simplify coding and which subtracts 8 pairs of values.
                                   ; leave the rest of ymm0 as is
         subps   xmm0, [x]         ; subtract 4 pairs of values of x from xmm0
                                   ; x is an array of floats
+                                  ; leave the rest of ymm0 as is
+        subps   xmm0, [x+4*rax]   ; subtract 4 pairs of values of x from xmm0
+                                  ; x is an array of floats
+                                  ; rax holds the index of the first element
                                   ; leave the rest of ymm0 as is
         vsubps  xmm3, xmm0, xmm15 ; subtract 8 pairs of values from xmm0 & xmm15
                                   ; store results in xmm3

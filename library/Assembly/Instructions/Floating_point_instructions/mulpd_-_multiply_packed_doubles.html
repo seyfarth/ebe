@@ -1,0 +1,34 @@
+<h2> mulpd - multiply packed doubles (64 bit floating point) </h2>
+<pre>
+dest[0] = dest[0] * source[0]
+dest[1] = dest[1] * source[1]
+</pre>
+<p>
+The mulpd instruction multiplies the 2 source values (second operand)
+to the 2 values of the destination (an XMM register).
+The source can be an XMM register or a 64 bit memory location.
+There is also vmulpd on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding and which multiplies 4 pairs of values.
+</p>
+<pre>
+        mulpd   xmm0, xmm1          ; multiply 2 pairs of values of xmm1 & xmm0
+                                    ; leave the rest of ymm0 as is
+        mulpd   xmm0, [x]           ; multiply 2 pairs of values of x & xmm0
+                                    ; x is an array of doubles
+                                    ; leave the rest of ymm0 as is
+        mulpd   xmm0, [x+8*r9]      ; multiply 2 pairs from xmm0 & the array x
+                                    ; r9 contains the first index of x to use
+                                    ; leave the rest of ymm0 as is
+        vmulpd  xmm3, xmm0, xmm15   ; multiply 4 pairs of values of xmm0 & xmm15
+                                    ; store results in xmm3
+        vmulpd  xmm3, xmm0, [x]     ; multiply 4 pairs of values of xmm0 & x
+                                    ; x is a double array
+                                    ; store results in xmm3
+        vmulpd  xmm3, xmm0, [rsi]   ; multiply 4 pairs of values of xmm0 & [rsi]
+                                    ; rsi contains the address of a double array
+                                    ; store results in xmm3
+</pre>
+<h3>
+flags: none
+</h3>

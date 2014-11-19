@@ -1,0 +1,38 @@
+<h2> mulsd - multiply scalar double (64 bit floating point) </h2>
+<pre>
+dest = dest * source
+</pre>
+<p>
+The mulsd instruction multiplies the source value (second operand)
+to the destination (an XMM register).
+The source can be an XMM register or a 64 bit memory location.
+There is also vmulsd on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding.
+</p>
+<pre>
+        mulsd   xmm0, xmm1          ; multiply xmm0 by xmm1
+                                    ; leave the rest of xmm0 as is
+        mulsd   xmm0, [x]           ; multiply xmm0 by 64 bit variable x
+                                    ; leave the rest of xmm0 as is
+        mulsd   xmm0, [x+8*rcx]     ; multiply xmm0 by element of array x
+                                    ; rcx holds the index of the element
+                                    ; leave the rest of xmm0 as is
+        mulsd   xmm0, [rdx]         ; multiply xmm0 by [rdx]
+                                    ; rdx holds be address of a 64 bit value
+                                    ; leave the rest of xmm0 as is
+        vmulsd  xmm3, xmm0, xmm15   ; xmm3 = xmm0 * xmm15
+                                    ; leave the rest of xmm3 as is
+
+            ; Note: operates by copying 128 bits from xmm0 to xmm3
+            ; before multiplying.  This might occasionally be useful.
+            ; The rest of ymm0 is left as is
+            ; using mulss would change either xmm0 or xmm15
+            ; possibly requiring an additional instruction
+
+        vmulsd  xmm3, xmm0, [x]     ; xmm3 = xmm0 * x
+                                    ; leave the rest of xmm3 as is
+</pre>
+<h3>
+flags: none
+</h3>

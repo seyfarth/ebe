@@ -519,10 +519,17 @@
 <file>library/Assembly/Instructions/Control_flow_instructions/leave.html</file>
 <file>library/Assembly/Instructions/instructions</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addsd_-_add_scalar_double.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/divps_-_divide_packed_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/subss_-_subtract_scalar_single.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/subps_-_subtract_packed_singles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/mulpd_-_multiply_packed_doubles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/mulss_-_multiply_scalar_single.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addpd_-_add_packed_doubles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/divss_-_divide_scalar_single.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/subsd_-_subtract_scalar_double.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/mulsd_-_multiply_scalar_double.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/mulps_-_multiply_packed_singles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/divpd_-_divide_packed_doubles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/subpd_-_subtract_packed_doubles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addps_-_add_packed_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addss_-_add_scalar_single.html</file>

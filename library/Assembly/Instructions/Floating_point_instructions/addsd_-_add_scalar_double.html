@@ -15,12 +15,15 @@ which can simplify coding.
                                     ; leave the rest of xmm0 as is
         addsd   xmm0, [x]           ; add 64 bit variable x to xmm0
                                     ; leave the rest of xmm0 as is
+        addsd   xmm0, [rsi]         ; add 64 bit value [rsi] to xmm0
+                                    ; rsi holds the address of a double
+                                    ; leave the rest of xmm0 as is
         vaddsd  xmm3, xmm0, xmm15   ; xmm3 = xmm0 + xmm15
 
             ; Note: operates by copying 128 bits from xmm0 to xmm3
             ; before adding.  This might occasionally be useful.
             ; The rest of ymm0 is left as is
-            ; using addss would change either xmm0 or xmm15
+            ; using addsd would change either xmm0 or xmm15
             ; possibly requiring an additional instruction
 
         vaddsd  xmm3, xmm0, [x]     ; xmm3 = xmm0 + x
