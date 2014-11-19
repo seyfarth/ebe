@@ -1,0 +1,37 @@
+<h2> bts - bit test and set </h2>
+<pre>
+CF = bit(dest, source)  ; extract & set bit numbered by source from dest
+bit(dest,source) = 1
+</pre>
+<p>
+The btc instruction uses the source value as the bit number of the
+destination to test and set.
+The destination can be a 64, 32 or 16 bit register or
+memory location.
+The source can be either an immediate value or a register of the same
+size as the destination.
+</p>
+<p>
+When testing and setting 
+based on a memory address using a register as source operand, the register can
+hold a larger integer which defines a doubleword in memory to test
+and a bit within the doubleword.
+So you can access an array of bits.
+</p>
+<p>
+Probably the most likely use of bts is simply to set a particular bit.
+It just happens that testing can be done in the same instruction and
+you can ignore the CF.
+</p>
+<p>
+Some examples of using bts:
+</p>
+<pre>
+        bts     rax, 15         ; test and set bit 15 of rax
+        bts     eax, 10         ; test and set bit 10 of eax
+        bts     dx, cx          ; cx contains bit number of dx to test & set
+        bts     [x], rdx        ; rdx contains bit number of x to test & set
+</pre>
+<h3>
+flags: CF
+</h3>

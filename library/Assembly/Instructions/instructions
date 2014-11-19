@@ -1,4 +1,3 @@
-popcnt
 addss sd ps pd vaddps pd
 sub
 div

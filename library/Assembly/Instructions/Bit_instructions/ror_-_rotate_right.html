@@ -1,0 +1,44 @@
+<h2> ror - rotate right </h2>
+<pre>
+dest = dest @>> source      ; made up notation for rotate
+</pre>
+<p>
+The ror instruction rotates the destination right the number of times
+indicated by the source.
+Rotating right by is like shifting right, but the bits shifted out
+the right end are entered onto the left end.
+The destination can be a 64, 32, 16 or 8 bit register or
+memory location.
+The source can be either an immediate value or the cl register.
+</p>
+<p>
+There is also a rcr instruction which adds the carry flag as an additional
+bit in the rotation.
+</p>
+<p>
+Here is an example of a rotate right:
+</p>
+<pre>
+     1010010010101011
+               @>>  3
+     ----------------
+     0010010101011101
+</pre>
+<p>
+Some examples of using ror:
+</p>
+<pre>
+        ror     rax, 15         ; rotate rax 15 bits
+        ror     eax, 10         ; rotate eax 10 bits
+                                ; fills upper half of rax with 0
+        ror     dx, cl          ; rotate dx the cl bits right
+                                ; leaves the rest of rdx alone
+        ror     [x], 2          ; rotate 32 bit variable x 2 bits
+</pre>
+<h3>
+flags: OF CF
+</h3>
+<p>
+CF contains the last bit shifted out. OF is changed only for single bit
+shifts.
+</p>
