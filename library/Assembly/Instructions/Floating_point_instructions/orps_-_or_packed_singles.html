@@ -1,0 +1,37 @@
+<h2> orps - or packed singles </h2>
+<pre>
+dest[0] = dest[0] | source[0]
+dest[1] = dest[1] | source[1]
+dest[2] = dest[2] | source[2]
+dest[3] = dest[3] | source[3]
+</pre>
+<p>
+The orps instruction ors the 4 source values (second operand)
+to the 4 values of the destination (an XMM register).
+The source can be an XMM register or a 32 bit memory location.
+There is also vorps on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding and which ors 8 pairs of values
+if you use YMM registers.
+</p>
+<p>
+There is also orpd which ors packed doubles.  The result is the same so pick
+your favorite.
+</p>
+<pre>
+        orps   xmm0, xmm1          ; or 4 pairs of values from xmm0 & xmm1
+                                   ; leave the rest of ymm0 as is
+        orps   xmm0, [x]           ; or 4 pairs of values from xmm0 & x
+                                   ; x is an array of floats
+                                   ; leave the rest of ymm0 as is
+        vorps  xmm3, xmm0, xmm15   ; or 4 pairs of values from xmm0 & xmm15
+                                   ; store results in xmm3
+        vorps  ymm3, ymm0, [x]     ; or 8 pairs of values from ymm0 & x
+                                   ; store results in ymm3
+        vorps  ymm3, ymm0, [rsi]   ; or 8 pairs of values from ymm0 & [rsi]
+                                   ; rsi contains the address of an array
+                                   ; store results in ymm3
+</pre>
+<h3>
+flags: none
+</h3>

@@ -1,0 +1,59 @@
+<h2> ptest - and packed singles </h2>
+<pre>
+SF = (dest & source) == 0
+CF = (~dest & source) == 0
+</pre>
+<p>
+The ptest instruction tests the 128 bit source value (second operand)
+versus the 128 bit destination value (an XMM register).
+The source can be an XMM register or a 128 bit memory location.
+There is also vptest on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding and which tests 256 bits versus 256 bits
+if you use YMM registers.
+</p>
+<p>
+Assuming that you wish to test an XMM or YMM register to see if it is 0
+in one instruction, you must be sure that the entire register was 0
+before you use did the work with the register.
+For example if you load a non-zero double and then start using the register
+as a float it may have some extra non-zero bits and the test may fail to
+detect that the first 32 bits are 0.
+So use vzeroall originally and use the same size values in the registers and
+it will be a safe test.
+</p>
+<pre>
+        ptest   xmm0, xmm0      ; xmm0 & xmm0 == 0 if xmm0 == 0
+                                ; check ZF for equality
+                                ; use jz or jnz
+</pre>
+<p>
+Here are a few examples
+</p>
+<pre>
+        ptest   xmm0, xmm1      ; test 128 bits from xmm0 & xmm1
+        ptest   xmm0, [x]       ; test 128 bits from xmm0 & x
+                                ; x is an array of floats
+        vptest  xmm0, xmm15     ; test 128 bits from xmm0 & xmm15
+        vptest  ymm0, [x]       ; test 256 bits from ymm0 & x
+        vptest  ymm0, [rsi]     ; test 256 bits from ymm0 & [rsi]
+                                ; rsi contains the address of an array
+</pre>
+<h3>
+flags: ZF CF
+</h3>
+<p>
+ZF is set to 0 if the and of the 2 operands yields 0.
+This means that they have no 1 bits in the same positions.
+This can happen when they are both 0.
+</p>
+<p>
+CF is set to 0 if the and of the destination inverted and the source
+yields 0.
+This means that wherever the destination has 0's the source also has 0's.
+Inverting the destination would convert all its 0's to 1's, so any 1 in the
+result comes from a 0 in the destination and a 1 in the source.
+If the result is 0, then 1's in the destination line up with 0's in the
+source.
+I can't suggest why this is useful.
+</p>

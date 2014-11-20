@@ -16,8 +16,8 @@ This was what gcc generated, so it's probably a good choice.
 There is no corresponding ucomips packed singles.
 </p>
 <p>
-It looks like you will need to use orps on an XMM register to set it
-to 0 and then use ucomiss if you want to test for a register being 0.
+You can use ptest to determine whether an XMM or YMM register is 0
+in 1 instruction.
 </p>
 <pre>
         ucomiss   xmm0, xmm1        ; compare xmm0 and xmm1
