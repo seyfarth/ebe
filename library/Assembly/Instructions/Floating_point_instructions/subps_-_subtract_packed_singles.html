@@ -23,13 +23,13 @@ which can simplify coding and which subtracts 8 pairs of values.
                                   ; x is an array of floats
                                   ; rax holds the index of the first element
                                   ; leave the rest of ymm0 as is
-        vsubps  xmm3, xmm0, xmm15 ; subtract 8 pairs of values from xmm0 & xmm15
+        vsubps  xmm3, xmm0, xmm15 ; subtract 4 pairs of values from xmm0 & xmm15
                                   ; store results in xmm3
-        vsubps  xmm3, xmm0, [x]   ; subtract 8 pairs of values from xmm0 & x
-                                  ; store results in xmm3
-        vsubps  xmm3, xmm0, [rsi] ; subtract 8 pairs of values from xmm0 & [rsi]
+        vsubps  ymm3, ymm0, [x]   ; subtract 8 pairs of values from ymm0 & x
+                                  ; store results in ymm3
+        vsubps  ymm3, ymm0, [rsi] ; subtract 8 pairs of values from ymm0 & [rsi]
                                   ; rsi contains the address of an array
-                                  ; store results in xmm3
+                                  ; store results in ymm3
 </pre>
 <h3>
 flags: none

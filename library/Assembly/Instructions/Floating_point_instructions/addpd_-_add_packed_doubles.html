@@ -9,7 +9,8 @@ to the 2 values of the destination (an XMM register).
 The source can be an XMM register or a 64 bit memory location.
 There is also vaddpd on CPUs with AVX instructions which allows using
 3 XMM registers or 2 XMM registers and a memory location
-which can simplify coding and which adds 4 pairs of values.
+which can simplify coding and which adds 4 pairs of values iy you use
+YMM registers.
 </p>
 <pre>
         addpd   xmm0, xmm1          ; add 2 pairs of values from xmm1 to xmm0
@@ -20,14 +21,14 @@ which can simplify coding and which adds 4 pairs of values.
         addpd   xmm0, [x+8*r9]      ; add 2 pairs from xmm0 and the array x
                                     ; r9 contains the first index of x to use
                                     ; leave the rest of ymm0 as is
-        vaddpd  xmm3, xmm0, xmm15   ; add 4 pairs of values from xmm0 & xmm15
+        vaddpd  xmm3, xmm0, xmm15   ; add 2 pairs of values from xmm0 & xmm15
                                     ; store results in xmm3
-        vaddpd  xmm3, xmm0, [x]     ; add 4 pairs of values from xmm0 & x
+        vaddpd  ymm3, ymm0, [x]     ; add 4 pairs of values from ymm0 & x
                                     ; x is a double array
-                                    ; store results in xmm3
-        vaddpd  xmm3, xmm0, [rsi]   ; add 4 pairs of values from xmm0 & [rsi]
+                                    ; store results in ymm3
+        vaddpd  ymm3, ymm0, [rsi]   ; add 4 pairs of values from ymm0 & [rsi]
                                     ; rsi contains the address of a double array
-                                    ; store results in xmm3
+                                    ; store results in ymm3
 </pre>
 <h3>
 flags: none

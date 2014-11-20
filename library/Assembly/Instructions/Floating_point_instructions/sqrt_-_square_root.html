@@ -1,0 +1,24 @@
+<h2> sqrtss, sqrtsd, sqrtps, sqrtpd - square root </h2>
+<pre>
+dest = sqrt(source)
+</pre>
+<p>
+The sqrtss, sqrtsd, sqrtps, and sqrtpd instructions computer
+the square root of the source value (second operand) and
+store the result(s) in the destination operand.
+There are also vsqrtss, vsqrtsd, vsqrtps, and vsqrtpd
+on CPUs with AVX instructions which can compute multiple values at once.
+Behaviorally these instructions are similar to the various add instructions
+should you wish to see more details.
+</p>
+<pre>
+        sqrtss   xmm0, xmm1          ; xmm0 gets 32 bit sqrt of xmm1
+        sqrtsd   xmm0, [x]           ; xmm0 gets 64 bit sqrt of x
+        sqrtps   xmm0, [rdi]         ; xmm0 gets 4 32 bit sqrts of [rdi]
+        sqrtpd   xmm0, [x+4*rcx]     ; xmm0 gets 2 64 bit sqrts of array x
+        vsqrtps  ymm3, ymm15         ; ymm3 gets 8 32 bit sqrts of ymm15
+        vsqrtpd  ymm3, [x]           ; ymm3 gets 4 64 bit sqrts of array x
+</pre>
+<h3>
+flags: none
+</h3>

@@ -9,7 +9,8 @@ from the 2 values of the destination (an XMM register).
 The source can be an XMM register or a 64 bit memory location.
 There is also vsubpd on CPUs with AVX instructions which allows using
 3 XMM registers or 2 XMM registers and a memory location
-which can simplify coding and which subtracts 4 pairs of values.
+which can simplify coding and which subtracts 4 pairs of values
+if you use YMM registers.
 </p>
 <pre>
         subpd   xmm0, xmm1          ; subtract 2 pairs from xmm1 and xmm0
@@ -22,14 +23,14 @@ which can simplify coding and which subtracts 4 pairs of values.
                                     ; x is an array of doubles
                                     ; rax holds the index of the first element
                                     ; leave the rest of ymm0 as is
-        vsubpd  xmm3, xmm0, xmm15   ; subtract 4 pairs from xmm0 & xmm15
+        vsubpd  xmm3, xmm0, xmm15   ; subtract 2 pairs from xmm0 & xmm15
                                     ; store results in xmm3
-        vsubpd  xmm3, xmm0, [x]     ; subtract 4 pairs values from xmm0 & x
+        vsubpd  ymm3, ymm0, [x]     ; subtract 4 pairs values from ymm0 & x
                                     ; x is a double array
-                                    ; store results in xmm3
-        vsubpd  xmm3, xmm0, [rsi]   ; subtract 4 pairs values from xmm0 & [rsi]
+                                    ; store results in ymm3
+        vsubpd  ymm3, ymm0, [rsi]   ; subtract 4 pairs values from ymm0 & [rsi]
                                     ; rsi contains the address of a double array
-                                    ; store results in xmm3
+                                    ; store results in ymm3
 </pre>
 <h3>
 flags: none

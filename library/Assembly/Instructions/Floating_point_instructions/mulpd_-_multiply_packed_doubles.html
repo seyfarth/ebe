@@ -9,7 +9,8 @@ to the 2 values of the destination (an XMM register).
 The source can be an XMM register or a 64 bit memory location.
 There is also vmulpd on CPUs with AVX instructions which allows using
 3 XMM registers or 2 XMM registers and a memory location
-which can simplify coding and which multiplies 4 pairs of values.
+which can simplify coding and which multiplies 4 pairs of values
+if you use YMM registers.
 </p>
 <pre>
         mulpd   xmm0, xmm1          ; multiply 2 pairs of values of xmm1 & xmm0
@@ -20,14 +21,14 @@ which can simplify coding and which multiplies 4 pairs of values.
         mulpd   xmm0, [x+8*r9]      ; multiply 2 pairs from xmm0 & the array x
                                     ; r9 contains the first index of x to use
                                     ; leave the rest of ymm0 as is
-        vmulpd  xmm3, xmm0, xmm15   ; multiply 4 pairs of values of xmm0 & xmm15
+        vmulpd  xmm3, xmm0, xmm15   ; multiply 2 pairs of values of xmm0 & xmm15
                                     ; store results in xmm3
-        vmulpd  xmm3, xmm0, [x]     ; multiply 4 pairs of values of xmm0 & x
+        vmulpd  ymm3, ymm0, [x]     ; multiply 4 pairs of values of ymm0 & x
                                     ; x is a double array
-                                    ; store results in xmm3
-        vmulpd  xmm3, xmm0, [rsi]   ; multiply 4 pairs of values of xmm0 & [rsi]
+                                    ; store results in ymm3
+        vmulpd  ymm3, ymm0, [rsi]   ; multiply 4 pairs of values of ymm0 & [rsi]
                                     ; rsi contains the address of a double array
-                                    ; store results in xmm3
+                                    ; store results in ymm3
 </pre>
 <h3>
 flags: none

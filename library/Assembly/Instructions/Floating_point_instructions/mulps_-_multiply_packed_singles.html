@@ -11,7 +11,8 @@ to the 4 values of the destination (an XMM register).
 The source can be an XMM register or a 32 bit memory location.
 There is also vmumul on CPUs with AVX instructions which allows using
 3 XMM registers or 2 XMM registers and a memory location
-which can simplify coding and which multiplies 8 pairs of values.
+which can simplify coding and which multiplies 8 pairs of values
+if you use YMM registers.
 </p>
 <pre>
         mulps   xmm0, xmm1          ; multiply 4 pairs of values of xmm1 & xmm0
@@ -19,13 +20,13 @@ which can simplify coding and which multiplies 8 pairs of values.
         mulps   xmm0, [x]           ; multiply 4 pairs of values of x & xmm0
                                     ; x is an array of floats
                                     ; leave the rest of ymm0 as is
-        vmulps  xmm3, xmm0, xmm15   ; multiply 8 pairs of values of xmm0 & xmm15
+        vmulps  xmm3, xmm0, xmm15   ; multiply 4 pairs of values of xmm0 & xmm15
                                     ; store results in xmm3
-        vmulps  xmm3, xmm0, [x]     ; multiply 8 pairs of values of xmm0 & x
-                                    ; store results in xmm3
-        vmulps  xmm3, xmm0, [rsi]   ; multiply 8 pairs of values of xmm0 & [rsi]
+        vmulps  ymm3, ymm0, [x]     ; multiply 8 pairs of values of ymm0 & x
+                                    ; store results in ymm3
+        vmulps  ymm3, ymm0, [rsi]   ; multiply 8 pairs of values of ymm0 & [rsi]
                                     ; rsi contains the address of an array
-                                    ; store results in xmm3
+                                    ; store results in ymm3
 </pre>
 <h3>
 flags: none

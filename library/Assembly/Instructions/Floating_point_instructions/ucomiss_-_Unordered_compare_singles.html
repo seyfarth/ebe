@@ -1,0 +1,57 @@
+<h2> ucomiss - unordered compare scalar singles (32 bit floating point) </h2>
+<pre>
+set eflags based on 2 floats
+</pre>
+<p>
+The ucomiss instruction compares the source value (second operand)
+to the destination (an XMM register).
+The source can be an XMM register or a 32 bit memory location.
+An unordered comparison differs from an ordered comparison in not
+generating an exception for QNaN (Quiet Not a Number).
+It can still generate an exception cwif either operand is a
+SNaN (Signaling NaN).
+This was what gcc generated, so it's probably a good choice.
+</p>
+<p>
+There is no corresponding ucomips packed singles.
+</p>
+<p>
+It looks like you will need to use orps on an XMM register to set it
+to 0 and then use ucomiss if you want to test for a register being 0.
+</p>
+<pre>
+        ucomiss   xmm0, xmm1        ; compare xmm0 and xmm1
+        ucomiss   xmm0, [x]         ; compare xmm0 and 32 bit variable x
+        ucomiss   xmm7, [rdi]       ; compare xmm7 and 32 bit value [rdi]
+                                    ; rdi holds the address of a float
+        ucomiss   xmm9, [x+4*rcx]   ; compare xmm9 and 32 bit element of x
+                                    ; rcx contains the array index
+</pre>
+<p>
+Most of the time after a ucomiss instruction you will use a conditional
+jump from one of these
+</p>
+<pre>
+        ja      ; jump if above          ; means greater than
+        jae     ; jump if above or equal ; means greater than or equal
+        jb      ; jump if below          ; means less than
+        jbe     ; jump if below or equal ; means less than or equal
+        je      ; jump if equal
+        jne     ; jump if not equal
+        jna     ; jump if not above            ; jbe
+        jnae    ; jump if not above or equal   ; jb
+        jnb     ; jump if not below            ; jae
+        jnbe    ; jump if not below or equal   ; ja
+</pre>
+<h3>
+flags: ZF PF CF OF SF AF
+</h3>
+<p>
+ZF is set if the operands were equal.
+CF is set if the first operand is less than the second.
+PF is set if one of the operands is NaN and then all three are set to 1.
+OF, SF and AF are all set to 0.
+I can't yet guess why they chose to use CF rather than SF.
+Had they used SF the mnemonics for integer and floating point conditions
+would be the same.
+</p>
