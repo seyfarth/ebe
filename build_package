@@ -3,6 +3,8 @@
 exe=${1:-ebe}
 
 mkdir -p $exe.d
+rm -f $exe.d/*
+mkdir -p $exe.d/plugins
 name=$(uname)
 if [[ $name = Darwin ]]
 then
@@ -18,6 +20,8 @@ do
         cp $3 $exe.d
     fi
 done
+
+cp /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/* ebe.d/plugins
 
 cp $exe $exe.d/$exe.exe
 cp *.qm $exe.d

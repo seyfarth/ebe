@@ -1,0 +1,73 @@
+<html>
+<head>
+<title> scas </title>
+</head><body>
+<h2> scas - scan string instructions </h2>
+<pre>
+repeat *rdi++ = *rsi++
+</pre>
+<p>
+There are 4 varieties of scas instructions: scasb, scasw, scasd and scasq
+which are for byte, word, doubleword and quadword arrays.
+They all operate using rcx to define the number of iterations to use with repe
+or repne.
+The scas instructions all use rdi as the address to start the scan,
+The direction flag determines whether the address ir incremented (DF=0) or
+decremented (DF=1).
+Used with repe the scas instructions keep scanning as long as the array
+elements match the proper part of rax.
+Used with repne the scas instructions keep scanning until an array element
+matches rax.
+Thus scas can be used to look for a specific value like a 0 byte at the end of
+a string or to find the first non-zero quadword in an array.
+</p>
+<pre>
+        lea     rdi, [data]         ; get the address of the array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, 1000           ; count = 1000
+        xor     eax, eax
+        repe    scasq               ; move 1000 quadwords from source to dest
+                                    ; rdi increments by 8 each time
+        ; 1000 - ecx - 1 is the index of the first 0 in the array.
+        ; If ecx == 0, check data[999] to see if it equals 0.
+        ; If the first quadword is 0, then repe executes 1 time
+        ; and ecx decrements to 999.  1000 - ecx - 1 = 0.
+        ; Suppose the second quadword is the first 0.
+        ; Then ecx decrements twice and 1000 - ecx - 1 = 1.
+
+        lea     rdi, [data+7992]    ; get the address of the array
+                                    ; 7992 = 999 * 8, the offset of element 999
+        std                         ; set the direction flag to decrement
+        mov     ecx, 1000           ; count = 1000
+        mov     eax, 100
+        repe    scasq               ; move 1000 quadwords from source to dest
+                                    ; rdi increments by 8 each time
+        cld                         ; to leave it cleared
+        ; This searched backwards looking for 100.
+        ; If element data[999] == 100, ecx decrements once and ecx = 999.
+        ; So ecx is the index of the rightmost 100 in the data array.
+        ; You need to check data[0] if ecx == 0.
+
+        lea     rdi, [data]         ; get the address of the array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, -1             ; count is pretty big
+                                    ; Your program might die if it can't
+                                    ; find a 0.
+        xor     al, al              ; will scan for 0 byte
+        repne   scasb               ; scan forward at most a lot
+                                    ; rdi increments by 1 each time
+                                    ; repeats while the byte scanned is != al
+        mov     eax, -2             ; we start at -1 end up 1 past the end
+        sub     eax, ecx            ; yields the length of a C string
+        ; Consider a string of length 0.
+        ; The first iteration of the repeat finds the 0 byte.
+        ; This means ecx == -2 and subtracting -2 - -2 = 0
+
+        ; Consider a string of length 1.
+        ; The second iteration of the repeat finds the 0 byte.
+        ; This means ecx == -3 and -2 - -3 = 1.
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

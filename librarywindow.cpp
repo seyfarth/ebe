@@ -39,7 +39,7 @@ LibraryWindow::LibraryWindow(QWidget *parent)
 
 QSize LibraryWindow::sizeHint() const
 {
-    return QSize(300, 300);
+    return QSize(400, 350);
 }
 
 void LibraryWindow::cd(QString d)
@@ -126,7 +126,12 @@ void LibraryWindow::handleClick(QListWidgetItem * /* it */)
     if (info.isDir()) {
         cd(file);
     } else if (info.isFile()) {
+        QPoint p;
         if (view.isNull()) view = new QWebView;
+        p = pos();
+        p.setX(p.x()+420);
+        view->move(p);
+        view->resize(800,900);
         view->load(QUrl("qrc" + file));
         view->setZoomFactor(ebe["font_size"].toInt() / 14.0);
         view->show();

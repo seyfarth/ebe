@@ -1,0 +1,23 @@
+<html>
+<head>
+<title> loop </title>
+</head><body>
+<h2> loop </h2>
+<pre>
+rip = dest if rcx is not 0
+</pre>
+<p>
+The loop instruction decrements rcx and transfers control (modifies rip) to the
+location specified by its single operand if rcx is not 0 after the decrement.
+The only choice is for the destination to be an 8 bit rip-relative offset.
+For this reason it can only be used for moderate sized loops.
+</p>
+        mov     ecx, 100            ; set rcx to 100
+loop_top:
+        ...
+        loop loop_top               ; loop executes 100 times
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

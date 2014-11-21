@@ -1,0 +1,38 @@
+<html>
+<head>
+<title> loopCC </title>
+</head><body>
+<h2> loopCC - loop if CC </h2>
+<pre>
+rip = dest if rcx is not 0 or CC is true
+</pre>
+<p>
+There are 2 versions of loopCC: loope and loopne.
+Both instructions decrement rcx and the loop will end if rcs == 0;
+In addition an operation within the loop can affect the zero flag
+and if ZF matches the condition control will transfer to the destination.
+The only choice is for the destination to be an 8 bit rip-relative offset.
+For this reason it can only be used for moderate sized loops.
+</p>
+        mov     ecx, 100            ; set rcx to 100
+loop_top:
+        ...
+        cmp     rax, rdx
+        loope   loop_top            ; loop executes 100 times
+                                    ; or until rax is not equal to rdx
+</pre>
+<p>
+And now an example with loopne
+</p>
+<pre>
+        mov     ecx, 100            ; set rcx to 100
+loop_top:
+        ...
+        cmp     al, 0x0a           ; compare against new-line
+        loopne  loop_top           ; loop executes 100 times
+                                   ; or until al equals '\n'
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

@@ -1,0 +1,38 @@
+<html>
+<head>
+<title> lods </title>
+</head><body>
+<h2> lods - load string instructions </h2>
+<pre>
+mov the selected size to rax and increment/decrement rsi
+</pre>
+<p>
+There are 4 varieties of lods: lodsb, lodsw, lodsd and lodsq which load
+byte, word, doubleword and quadword values into al, ax, eax and rax.
+After each load rsi is incremented (if DF=0) or decremented (if DF=1).
+It is possible to use this with rep, but I can't imagine that I will ever wish
+to repeatedly load values into rax.
+Instead lods can be used within a loop to selectively load values and inspect
+them.
+In the example lodsb and stosb will be used to copy data until a 0 byte is
+reached and carriage-return bytes (0x0d) will not be copied.
+</p>
+<pre>
+        lea     rdi, [dest]         ; get the address of the destination array
+        lea     rsi, [source]       ; get the address of the source array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, -1             ; count is pretty big
+top:    lodsb                       ; get the next byte and increment rsi by 1
+        cmp     al, 0x13
+        je      top                 ; if the byte is \r skip it
+        stos                        ; if it is not \r copy it
+                                    ; this will increment rdi
+        cmp     al, 0
+        je      done                ; 0 byte means end of string
+        loop    top                 ; rinse and repeat
+done:
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

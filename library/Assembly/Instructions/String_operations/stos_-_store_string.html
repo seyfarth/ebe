@@ -1,0 +1,56 @@
+<html>
+<head>
+<title> stos </title>
+</head><body>
+<h2> stos - store string instructions </h2>
+<pre>
+*rdi = rax, eax, ax or al
+increment or decrement rdi by 8, 4, 2 or 1
+</pre>
+<p>
+There are 4 varieties of stos: stosb, stosw, stosd and stosq which store
+byte, word, doubleword and quadword values into the array pointed at by rdi.
+After each store rdi is incremented (if DF=0) or decremented (if DF=1).
+Using lods with rep will fill an array with a single value.
+lods can also be used within a loop to selectively load values and inspect
+them.
+</p>
+<p>
+These examples fill arrays with a single value.
+</p>
+<pre>
+        lea     rdi, [dest]         ; get the address of the destination array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, 1000000        ; the number of times to repeat
+        xor     al, al              ; prepare to fill with 0's
+        rep     stosb               ; place 1000000 0 bytes into the array
+
+        lea     rdi, [dest]         ; get the address of the destination array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, 1000000        ; the number of times to repeat
+        mov     rax, 0xbaadf00ddeadbeef
+        rep     stosq               ; place 1000000 quadwords into the array
+</pre>
+<p>
+In this example lodsb and stosb will be used to copy data until a 0 byte is
+reached and carriage-return bytes (0x0d) will not be copied.
+</p>
+<pre>
+        lea     rdi, [dest]         ; get the address of the destination array
+        lea     rsi, [source]       ; get the address of the source array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, -1             ; count is pretty big
+top:    lodsb                       ; get the next byte and increment rsi by 1
+        cmp     al, 0x13
+        je      top                 ; if the byte is \r skip it
+        stos                        ; if it is not \r copy it
+                                    ; this will increment rdi
+        cmp     al, 0
+        je      done                ; 0 byte means end of string
+        loop    top                 ; rinse and repeat
+done:
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

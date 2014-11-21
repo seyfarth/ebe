@@ -1,0 +1,42 @@
+<html>
+<head>
+<title> movs </title>
+</head><body>
+<h2> movs - move string instructions </h2>
+<pre>
+repeat *rdi++ = *rsi++
+</pre>
+<p>
+There are 4 varieties of movs instructions: movsb, movsw, movsd and movsq
+which are for byte, word, doubleword and quadword arrays.
+They all operate using rcx to define the number of iterations to use with rep
+and there is no testing of the data as it is copied.
+The source array address is stored in rsi and the destination in rdi.
+The direction flag determines whether the addresses are incremented (DF=0) or
+decremented (DF=1).
+It is more efficient to copy memory using increasing addresses, though you may
+need to copy from a higher address to a lower address in the same array which
+can be done with decreasing addresses.
+</p>
+<p>
+Note that movsd is "move scalar double" if not preceded by rep.
+</p>
+<pre>
+        lea     rdi, [dest]         ; get the address of the destination array
+        lea     rsi, [source]       ; get the address of the source array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, 1000           ; count = 1000
+        rep     movsq               ; move 1000 quadwords from source to dest
+                                    ; rdi and rsi increment by 8 each time
+
+        lea     rsi, [source]       ; get the address of the source array
+        cld                         ; clear the direction flag to increment
+        mov     ecx, -1             ; count is pretty big
+        xor     al, al              ; will scan for 0 byte
+        repne   movsb               ; move 1000 bytes from source to dest
+                                    ; rsi increments by 1 each time
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

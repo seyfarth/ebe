@@ -465,6 +465,12 @@
 <file>library/Assembly/Mac/Data_Definition/integers</file>
 <file>library/Assembly/Mac/Data_Definition/floats</file>
 <file>library/Assembly/Mac/Data_Definition/doubles</file>
+<file>library/Assembly/Instructions/String_operations/rep_-_repeat_string_operations.html</file>
+<file>library/Assembly/Instructions/String_operations/cmps_-_compare_strings.html</file>
+<file>library/Assembly/Instructions/String_operations/lods_-_load_string.html</file>
+<file>library/Assembly/Instructions/String_operations/movs_-_move_string.html</file>
+<file>library/Assembly/Instructions/String_operations/scas_-_scan_string.html</file>
+<file>library/Assembly/Instructions/String_operations/stos_-_store_string.html</file>
 <file>library/Assembly/Instructions/Moving_data_to-from_registers/movaps_-_move_aligned_packed_singles.html</file>
 <file>library/Assembly/Instructions/Moving_data_to-from_registers/movapd_-_move_aligned_packed_doubles.html</file>
 <file>library/Assembly/Instructions/Moving_data_to-from_registers/movupd_-_move_unaligned_packed_soubles.html</file>
@@ -513,10 +519,13 @@
 <file>library/Assembly/Instructions/Integer_instructions/add.html</file>
 <file>library/Assembly/Instructions/Integer_instructions/imul_-_3_operand_signed_multiple.html</file>
 <file>library/Assembly/Instructions/Control_flow_instructions/jmp_-_jump.html</file>
+<file>library/Assembly/Instructions/Control_flow_instructions/loop.html</file>
 <file>library/Assembly/Instructions/Control_flow_instructions/jCC_-_conditional_jump.html</file>
+<file>library/Assembly/Instructions/Control_flow_instructions/loopCC_-_loop_if_CC.html</file>
 <file>library/Assembly/Instructions/Control_flow_instructions/ret_-_return.html</file>
 <file>library/Assembly/Instructions/Control_flow_instructions/call.html</file>
 <file>library/Assembly/Instructions/Control_flow_instructions/leave.html</file>
+<file>library/Assembly/Instructions/instructions</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/sqrt_-_square_root.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addsd_-_add_scalar_double.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/divps_-_divide_packed_singles.html</file>
