@@ -28,24 +28,25 @@ new_tree:
 
 ;       insert ( t, n );
 insert:
-.n      equ     0
-.t      equ     8
+.n      equ     local1
+.t      equ     local2
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        mov     [rsp+.t], rdi
-        mov     [rsp+.n], rsi
+        frame   2, 2, 2
+        sub     rsp, frame_size
+        mov     [rbp+.t], rdi
+        mov     [rbp+.n], rsi
         call    find
         cmp     rax, 0
         jne     .done 
         mov     rdi, node_size
         call    malloc
-        mov     rsi, [rsp+.n]
+        mov     rsi, [rbp+.n]
         mov     [rax+n_value], rsi
         xor     edi, edi
         mov     [rax+n_left], rdi
         mov     [rax+n_right], rdi
-        mov     rdx, [rsp+.t]
+        mov     rdx, [rbp+.t]
         mov     rdi, [rdx+t_count]
         cmp     rdi, 0
         jne     .findparent
@@ -97,16 +98,17 @@ find:
         ret
 
 rec_print:
-.t      equ     0
+.t      equ     local1
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   1, 1, 1
+        sub     rsp, frame_size
         cmp     rdi, 0
         je      .done
-        mov     [rsp+.t], rdi
+        mov     [rbp+.t], rdi
         mov     rdi, [rdi+n_left]
         call    rec_print
-        mov     rdi, [rsp+.t]
+        mov     rdi, [rbp+.t]
         mov     rsi, [rdi+n_value]
         segment .data
 .print  db      "%ld ",0
@@ -114,7 +116,7 @@ rec_print:
         lea     rdi, [.print]
         xor     eax, eax
         call    printf
-        mov     rdi, [rsp+.t]
+        mov     rdi, [rbp+.t]
         mov     rdi, [rdi+n_right]
         call    rec_print
 .done   leave
@@ -136,27 +138,28 @@ print:
         ret
 
 main:
-.k      equ     0
-.t      equ     8
+.k      equ     local1
+.t      equ     local2
         segment .data
 .scanf_fmt:
         db      "%ld",0
         segment .text
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 2, 2
+        sub     rsp, frame_size
         call    new_tree
-        mov     [rsp+.t], rax
+        mov     [rbp+.t], rax
 .more   lea     rdi, [.scanf_fmt]
-        lea     rsi, [rsp+.k]
+        lea     rsi, [rbp+.k]
         xor     eax, eax
         call    scanf
         cmp     rax, 1
         jne     .done
-        mov     rdi, [rsp+.t]
-        mov     rsi, [rsp+.k]
+        mov     rdi, [rbp+.t]
+        mov     rsi, [rbp+.k]
         call    insert
-        mov     rdi, [rsp+.t]
+        mov     rdi, [rbp+.t]
         call    print
         jmp     .more
 .done   leave

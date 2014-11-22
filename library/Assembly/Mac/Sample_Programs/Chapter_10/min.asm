@@ -13,53 +13,55 @@ create:
 
 ;       fill ( array, size );
 fill:
-.array  equ     0
-.size   equ     8
-.i      equ     16
+.array  equ     local1
+.size   equ     local2
+.i      equ     local3
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 32
-        mov     [rsp+.array], rdi
-        mov     [rsp+.size], rsi
+        frame   2, 3, 0
+        sub     rsp, frame_size
+        mov     [rbp+.array], rdi
+        mov     [rbp+.size], rsi
         xor     ecx, ecx
-.more   mov     [rsp+.i], rcx
+.more   mov     [rbp+.i], rcx
         call    random
-        mov     rcx, [rsp+.i]
-        mov     rdi, [rsp+.array]
+        mov     rcx, [rbp+.i]
+        mov     rdi, [rbp+.array]
         mov     [rdi+rcx*4], eax
         inc     rcx
-        cmp     rcx, [rsp+.size]
+        cmp     rcx, [rbp+.size]
         jl      .more
         leave
         ret
 
 ;       print ( array, size );
 print:
-.array  equ     0
-.size   equ     8
-.i      equ     16
+.array  equ     local1
+.size   equ     local2
+.i      equ     local3
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 32
-        mov     [rsp+.array], rdi
-        mov     [rsp+.size], rsi
+        frame   2, 3, 2
+        sub     rsp, frame_size
+        mov     [rbp+.array], rdi
+        mov     [rbp+.size], rsi
         xor     ecx, ecx
-        mov     [rsp+.i], rcx
+        mov     [rbp+.i], rcx
         segment .data
 .format:
         db      "%10d",0x0a,0
         segment .text
 .more   lea     rdi, [.format]
-        mov     rdx, [rsp+.array]
-        mov     rcx, [rsp+.i]
+        mov     rdx, [rbp+.array]
+        mov     rcx, [rbp+.i]
         mov     esi, [rdx+rcx*4]
-        mov     [rsp+.i], rcx
+        mov     [rbp+.i], rcx
         xor     eax, eax
         call    printf
         mov     rcx, [rsp+.i]
         inc     rcx
-        mov     [rsp+.i], rcx
-        cmp     rcx, [rsp+.size]
+        mov     [rbp+.i], rcx
+        cmp     rcx, [rbp+.size]
         jl      .more
         leave
         ret
@@ -77,39 +79,40 @@ min:
         ret
 
 main:
-.array  equ     0
-.size   equ     8
+.array  equ     local1
+.size   equ     local2
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 2, 2
+        sub     rsp, frame_size
 
 ;       set default size
         mov     ecx, 10
-        mov     [rsp+.size], rcx
+        mov     [rbp+.size], rcx
 
 ;       check for argv[1] providing a size
         cmp     edi, 2
         jl      .nosize
         mov     rdi, [rsi+8]
         call    atoi
-        mov     [rsp+.size], rax
+        mov     [rbp+.size], rax
 .nosize:
 
 ;       create the array
-        mov     rdi, [rsp+.size]
+        mov     rdi, [rbp+.size]
         call    create
-        mov     [rsp+.array], rax
+        mov     [rbp+.array], rax
 
 ;       fill the array with random numbers
         mov     rdi, rax
-        mov     rsi, [rsp+.size]
+        mov     rsi, [rbp+.size]
         call    fill
 
 ;       if size <= 20 print the array
-        mov     rsi, [rsp+.size]
+        mov     rsi, [rbp+.size]
         cmp     rsi, 20
         jg      .toobig
-        mov     rdi, [rsp+.array]
+        mov     rdi, [rbp+.array]
         call    print
 .toobig:
 
@@ -118,8 +121,8 @@ main:
 .format:
         db      "min: %ld",0xa,0
         segment .text
-        mov     rdi, [rsp+.array]
-        mov     rsi, [rsp+.size]
+        mov     rdi, [rbp+.array]
+        mov     rsi, [rbp+.size]
         call    min
         lea     rdi, [.format]
         mov     rsi, rax

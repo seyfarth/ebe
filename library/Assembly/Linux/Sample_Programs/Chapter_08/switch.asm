@@ -7,15 +7,16 @@ switch: dq      main.case0
 i:      dq      2
 
         segment .text
-        global  main                ; let the linker know about main
-        extern  scanf               ; resolve write and exit from libc
+        global  main
+        extern  scanf, scanf
         extern  printf
 main:
         push    rbp
         mov     rbp, rsp
         sub     rsp, 16
         mov     rax, [i]
-        jmp     [switch+rax*8]
+        lea     rdx, [switch]
+        jmp     [rdx+rax*8]
 .case0:
         mov     rbx, 100
         jmp     .end

@@ -1,10 +1,11 @@
         segment .text
+        cname  corr
         global corr
 
 ; rdi, rsi, rdx, rcx, r8, r9
 ;
 ;       rdi:  x array
-;       rdi:  y array
+;       rsi:  y array
 ;       rcx:  loop counter
 ;       rdx:  n
 ;       ymm0: 4 parts of sum_x

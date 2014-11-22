@@ -10,11 +10,14 @@ main:
         mov     rbp, rsp
         mov     rdx, [n]
         xor     ecx, ecx
+        lea     r8, [a]
+        lea     r9, [b]
+        lea     r10, [c]
 for:    cmp     rcx, rdx
         je      end_for
-        mov     rax, [a+rcx*8]
-        add     rax, [b+rcx*8]
-        mov     [c+rcx*8], rax
+        mov     rax, [r8+rcx*8]
+        add     rax, [r9+rcx*8]
+        mov     [r10+rcx*8], rax
         inc     rcx
         jmp for
 end_for:

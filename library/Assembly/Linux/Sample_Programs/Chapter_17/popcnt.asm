@@ -1,8 +1,7 @@
-        SECTION .text
+        segment .text
+        cname   popcnt_array
         global  popcnt_array           ; let the linker know about popcnt_array
 
-        ; integer and address parameters are in rdi, rsi, rdx, rcx, r8, r9
-        ; floating point parameters are in xmm0-7
 popcnt_array:
         push    rbx
         push    rbp

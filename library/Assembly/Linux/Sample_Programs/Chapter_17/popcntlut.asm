@@ -1,4 +1,4 @@
-        section .data
+        segment .data
 ;             0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111
 count   db       0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4  ; 0000
         db       1,   2,   2,   3,   2,   3,   3,   4,   2,   3,   3,   4,   3,   4,   4,   5  ; 0001
@@ -16,11 +16,10 @@ count   db       0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2, 
         db       3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ; 1101
         db       3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7  ; 1110
         db       4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8  ; 1111
-        SECTION .text
+        segment .text
+        cname popcnt_array
         global  popcnt_array           ; let the linker know about popcnt_array
 
-        ; integer and address parameters are in rdi, rsi, rdx, rcx, r8, r9
-        ; floating point parameters are in xmm0-7
 popcnt_array:
         push    rbx
         push    rbp

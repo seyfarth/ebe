@@ -15,18 +15,19 @@ newlist:
 
 ;       list = insert ( list, k );
 insert:
-.list   equ     0
-.k      equ     8
+.list   equ     local1
+.k      equ     local1
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        mov     [rsp+.list], rdi  ; save list pointer
-        mov     [rsp+.k], rsi     ; and k on stack
+        frame   2, 2, 1
+        sub     rsp, frame_size
+        mov     [rbp+.list], rdi  ; save list pointer
+        mov     [rbp+.k], rsi     ; and k on stack
         mov     edi, node_size
         call    malloc            ; rax will be node pointer
-        mov     r8, [rsp+.list]   ; get list pointer
+        mov     r8, [rbp+.list]   ; get list pointer
         mov     [rax+n_next], r8  ; save pointer in node
-        mov     r9, [rsp+.k]      ; get k
+        mov     r9, [rbp+.k]      ; get k
         mov     [rax+n_value], r9 ; save k in node
         leave
         ret
@@ -39,11 +40,12 @@ print:
 .newline:
         db      0x0a,0
         segment .text
-.rbx    equ     0
+.rbx    equ     local1
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16           ; subtract multiples of 16
-        mov     [rsp+.rbx], rbx   ; save old value of rbx
+        frame   1, 1, 2
+        sub     rsp, frame_size   ; subtract multiples of 16
+        mov     [rbp+.rbx], rbx   ; save old value of rbx
         cmp     rdi, 0
         je      .done
         mov     rbx, rdi
@@ -57,32 +59,33 @@ print:
 .done   lea     rdi, [.newline]
         xor     eax, eax
         call    printf
-        mov     rbx, [rsp+.rbx]   ; restore rbx
+        mov     rbx, [rbp+.rbx]   ; restore rbx
         leave
         ret
 
 main:
-.list   equ     0
-.k      equ     8
+.list   equ     local1
+.k      equ     local2
         segment .data
 .scanf_fmt:
         db      "%ld",0
         segment .text
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 2, 2
+        sub     rsp, frame_size
         call    newlist
-        mov     [rsp+.list], rax
+        mov     [rbp+.list], rax
 .more   lea     rdi, [.scanf_fmt]
-        lea     rsi, [rsp+.k]
+        lea     rsi, [rbp+.k]
         xor     eax, eax
         call    scanf
         cmp     rax, 1
         jne     .done
-        mov     rdi, [rsp+.list]
-        mov     rsi, [rsp+.k]
+        mov     rdi, [rbp+.list]
+        mov     rsi, [rbp+.k]
         call    insert
-        mov     [rsp+.list], rax
+        mov     [rbp+.list], rax
         mov     rdi, rax
         call    print
         jmp     .more

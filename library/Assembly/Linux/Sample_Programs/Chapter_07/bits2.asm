@@ -15,10 +15,12 @@ main:
         mov     rcx, rax           ; copy bit number to rcx
         and     rcx, 0x3f          ; extract rightmost 6 bits
         xor     edx, edx           ; set rdx to 0
-        bt      [set+8*rbx], rcx   ; test bit
+        lea     rsi, [set]         ; OS X: must have address in reg
+        bt      [rsi+8*rbx], rcx   ; test bit
+;       bt      [set+8*rbx], rcx   ; works on Linux
         setc    dl                 ; edx equals the tested bit
-        bts     [set+8*rbx], rcx   ; set the bit, insert into set
-        btr     [set+8*rbx], rcx   ; clear the bit, remove
+        bts     [rsi+8*rbx], rcx   ; set the bit, insert into set
+        btr     [rsi+8*rbx], rcx   ; clear the bit, remove
         xor     rax, rax
         leave
         ret

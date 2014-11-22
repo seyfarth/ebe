@@ -17,40 +17,44 @@ hash    mov     rax, rdi
 
 ;       insert ( n );
 insert:
-.n      equ     0
-.h      equ     8
+.n      equ     local1
+.h      equ     local2
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        mov     [rsp+.n], rdi
+        frame   1, 2, 1
+        sub     rsp, frame_size
+        mov     [rbp+.n], rdi
         call    find
         cmp     rax, 0
         jne     .found
-        mov     rdi, [rsp+.n]
+        mov     rdi, [rbp+.n]
         call    hash
-        mov     [rsp+.h], rax
+        mov     [rbp+.h], rax
         mov     rdi, node_size
         call    malloc
-        mov     r9, [rsp+.h]
-        mov     r8, [table+r9*8]
+        mov     r9, [rbp+.h]
+        lea     rsi, [table]
+        mov     r8, [rsi+r9*8]
         mov     [rax+n_next], r8
-        mov     r8, [rsp+.n]
+        mov     r8, [rbp+.n]
         mov     [rax+n_value], r8
-        mov     [table+r9*8], rax
+        mov     [rsi+r9*8], rax
 .found  leave
         ret
 
 ;       p = find ( n );
 ;       p = 0 if not found
 find:
-.n      equ     0
+.n      equ     local1
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        mov     [rsp+.n], rdi
+        frame   1, 1, 1
+        sub     rsp, frame_size
+        mov     [rbp+.n], rdi
         call    hash
-        mov     rax, [table+rax*8]
-        mov     rdi, [rsp+.n]
+        lea     rsi, [table]
+        mov     rax, [rsi+rax*8]
+        mov     rdi, [rbp+.n]
         cmp     rax, 0
         je      .done
 .more   cmp     rdi, [rax+n_value]
@@ -63,14 +67,19 @@ find:
 
 ;       print();
 print:
+.r12    equ     local1
+.r13    equ     local2
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        push    r12         ; i: integer counter for table
-        push    r13         ; p: pointer for list at table[i]
+        frame   0, 2, 2
+        ; preserve r12 and r13 which will survive function calls
+        sub     rsp, frame_size
+        mov     [rbp+.r12], r12 ; r12 is i: integer counter for table
+        mov     [rbp+.r13], r13 ; r13 is p: pointer for list at table[i]
         xor     r12, r12
 .more_table:
-        mov     r13, [table+r12*8]
+        lea     rsi, [table]
+        mov     r13, [rsi+r12*8]
         cmp     r13, 0
         je      .empty
         segment .data
@@ -100,27 +109,28 @@ print:
 .empty  inc     r12
         cmp     r12, 256
         jl      .more_table
-        pop     r13
-        pop     r12
+        mov     r12, [rbp+.r12]
+        mov     r13, [rbp+.r13]
         leave
         ret
 
 main:
-.k      equ     0
+.k      equ     local1
         segment .data
 .scanf_fmt:
         db      "%ld",0
         segment .text
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 1, 2
+        sub     rsp, frame_size
 .more   lea     rdi, [.scanf_fmt]
-        lea     rsi, [rsp+.k]
+        lea     rsi, [rbp+.k]
         xor     eax, eax
         call    scanf
         cmp     rax, 1
         jne     .done
-        mov     rdi, [rsp+.k]
+        mov     rdi, [rbp+.k]
         call    insert
         call    print
         jmp     .more

@@ -7,8 +7,10 @@ len:    equ     $-msg                   ; Length of the string
         global  main                    ; Announce main to the linker
         extern  write, exit
 main:
+        push    rbp
+        mov     rbp, rsp
         mov     edx, len                ; Argument 3 is the length to write
-        mov     rsi, msg                ; Argument 2 for the write call
+        lea     rsi, [msg]              ; Argument 2 for the write call
         mov     edi, 1                  ; Argument 1 for the write
         call    write
 

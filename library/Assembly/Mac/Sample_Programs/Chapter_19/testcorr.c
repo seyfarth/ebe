@@ -17,7 +17,7 @@ int main ( int argc, char **argv )
     int size, count;
     int i;
     double start, end;
-    double instrs, instrs_per_sec;
+    double instrs;
     double *a, *b, c;
 
     size = argc > 1 ? atoi(argv[1]) : 100000;

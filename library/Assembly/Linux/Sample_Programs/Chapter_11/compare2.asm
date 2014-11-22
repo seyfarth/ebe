@@ -1,12 +1,13 @@
         segment .text
         global  main
         extern  printf, scanf
-a       equ     0
-b       equ     8
+a       equ     local1
+b       equ     local2
 main:
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 2, 3
+        sub     rsp, frame_size
         segment .data
 .scanf  db      "%lf %lf",0
 .prompt db      "Enter 2 floating point numbers: ",0
@@ -15,33 +16,33 @@ main:
         xor     eax, eax
         call    printf
         lea     rdi, [.scanf]
-        lea     rsi, [rsp+a]
-        lea     rdx, [rsp+b]
+        lea     rsi, [rbp+a]
+        lea     rdx, [rbp+b]
         xor     eax, eax
         call    scanf
         cmp     ax, 2
         jne     .done
-        movsd   xmm0, [rsp+a]
-        movsd   xmm1, [rsp+b]
+        movsd   xmm0, [rbp+a]
+        movsd   xmm1, [rbp+b]
         ucomisd xmm0, xmm1
         jb      .b
-.bret   movsd   xmm0, [rsp+a]
+.bret   movsd   xmm0, [rbp+a]
         ucomisd xmm0, xmm1
         jbe     .be
-.beret  movsd   xmm0, [rsp+a]
-        movsd   xmm1, [rsp+b]
+.beret  movsd   xmm0, [rbp+a]
+        movsd   xmm1, [rbp+b]
         ucomisd xmm0, xmm1
         jg      .a
-.aret   movsd   xmm0, [rsp+a]
-        movsd   xmm1, [rsp+b]
+.aret   movsd   xmm0, [rbp+a]
+        movsd   xmm1, [rbp+b]
         ucomisd xmm0, xmm1
         jae     .ae
-.aeret  movsd   xmm0, [rsp+a]
-        movsd   xmm1, [rsp+b]
+.aeret  movsd   xmm0, [rbp+a]
+        movsd   xmm1, [rbp+b]
         ucomisd xmm0, xmm1
         je      .e
-.eret   movsd   xmm0, [rsp+a]
-        movsd   xmm1, [rsp+b]
+.eret   movsd   xmm0, [rbp+a]
+        movsd   xmm1, [rbp+b]
         ucomisd xmm0, xmm1
         jne     .ne
 .neret  jmp     .loop
