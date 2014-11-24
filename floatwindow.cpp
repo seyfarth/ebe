@@ -98,7 +98,7 @@ void FloatWindow::receiveFpRegs(QStringList data)
 #endif
     //qDebug() << "fp receive" << data;
     if (data.length() < count) {
-        qDebug() << "fpreg error";
+        qDebug() << count << "fpreg error";
         return;
     }
     for (int i = 0; i < count; i++) {

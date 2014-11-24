@@ -706,13 +706,14 @@ void GDB::getFpRegs()
     //qDebug() << "getFpRegs";
     bool reverse = ebe["xmm/reverse"].toBool();
     if (!running) return;
+    send("set width 0");
     for (int i = 0; i < numFloats; i++) {
         if (hasAVX) {
             results = sendReceive(QString("print/x $ymm%1.v4_int64").arg(i));
             result = "";
             foreach ( QString res, results ) {
                 //qDebug() << res;
-                //qDebug() << "index" << rx.indexIn(res);
+                //qDebug() << "index" << rx1.indexIn(res);
                 if ( rx1.indexIn(res) >= 0 ) {
                     //qDebug() << "res" << rx.cap(1);
                     if ( reverse ) {
@@ -741,6 +742,7 @@ void GDB::getFpRegs()
             }
         }
     }
+    send("set width 80");
     emit sendFpRegs(data);
 }
 
