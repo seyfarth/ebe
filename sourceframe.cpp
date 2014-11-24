@@ -934,8 +934,8 @@ void SourceFrame::run()
                         data->names = itemNames;
                         data->aliasNames = aliasNames;
                         data->fpaliasNames = fpaliasNames;
-                        fpaliasNames->insert(parts[2],parts[1]);
-                        unaliasNames.insert(parts[1],parts[2]);
+                        fpaliasNames->insert("xmm"+parts[2],parts[1]);
+                        unaliasNames.insert(parts[1],"xmm"+parts[2]);
                     } else if ( parts.length() >= 2 && parts[0] == "unalias") {
                         //qDebug() << "unalias" << parts[1];
                         data = new FrameData(currPars,locals,newPars);

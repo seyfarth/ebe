@@ -35,7 +35,7 @@ FloatWindow::FloatWindow(QWidget *parent)
             regs[c * (count / 2) + r] = value;
             table->setItem(r, c * 2, name);
             table->setItem(r, c * 2 + 1, value);
-            items[regName] = r*10 + c*2;
+            items[QString("xmm%1").arg(c*(count/2)+r)] = r*10 + c*2;
         }
     }
     layout->addWidget(table);

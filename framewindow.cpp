@@ -312,7 +312,7 @@ void FrameWindow::receiveStack(QStringList results)
     foreach (QString name, limit->fpaliasNames->keys()) {
         //qDebug() << "rs" << name;
         if ( items.contains(name) ) {
-            //qDebug() << "rs" << name;
+            //qDebug() << "rs" << name << limit->fpaliasNames->value(name);
             int irow = items[name];
             if ( irow/10 < floatWindow->table->rowCount() ) {
                 floatWindow->table->item(irow/10,irow%10)->
