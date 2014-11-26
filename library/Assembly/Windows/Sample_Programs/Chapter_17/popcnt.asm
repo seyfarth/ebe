@@ -1,18 +1,17 @@
-        ;   Program not yet converted!!!!
-
-
-        SECTION .text
+        segment .text
         global  popcnt_array           ; let the linker know about popcnt_array
 
-        ; integer and address parameters are in rdi, rsi, rdx, rcx, r8, r9
-        ; floating point parameters are in xmm0-7
 popcnt_array:
+        push    rdi
+        push    rsi
         push    rbx
         push    rbp
         push    r12
         push    r13
         push    r14
         push    r15
+        mov     rdi, rcx
+        mov     rsi, rdx
         xor     eax, eax
         xor     ebx, ebx
         xor     ecx, ecx
@@ -77,4 +76,6 @@ popcnt_array:
         pop     r12
         pop     rbp
         pop     rbx
+        pop     rsi
+        pop     rdi
         ret

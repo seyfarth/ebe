@@ -1,40 +1,37 @@
-    ;   Program not yet converted!!!!
-
-
     segment .text
     global  main
     extern  printf
 
 ; void print_max ( long a, long b )
 ; {
-a   equ  0
-b   equ  8
+a   equ  local1
+b   equ  local2
+max equ  local3
 print_max:
-    push rbp;         ; normal stack frame
+    push rbp          ; normal stack frame
     mov  rbp, rsp
-;   leave space for a, b and max
-    sub  rsp, 32
+    frame   2, 3, 4
+;   leave space for a, b and max and shadow
+    sub  rsp, frame_size
 ;   int max;
-max equ  16
-    mov  [rsp+a], rdi ; save a
-    mov  [rsp+b], rsi ; save b
+    mov  [rbp+a], rcx ; save a
+    mov  [rbp+b], rdx ; save b
 ;   max = a;
-    mov  [rsp+max], rdi
+    mov  [rbp+max], rcx
 ;   if ( b > max ) max = b;
-    cmp  rsi, rdi
+    cmp  rdx, rcx
     jng  skip
-    mov  [rsp+max], rsi
+    mov  [rbp+max], rdx
 skip:
 ;   printf ( "max(%ld,%ld) = %ld\n",
 ;            a, b, max );
     segment .data
 fmt db   'max(%ld,%ld) = %ld',0xa,0
     segment .text
-    lea  rdi, [fmt]
-    mov  rsi, [rsp+a]
-    mov  rdx, [rsp+b]
-    mov  rcx, [rsp+max]
-    xor  eax, eax
+    lea  rcx, [fmt]
+    mov  rdx, [rbp+a]
+    mov  r8, [rbp+b]
+    mov  r9, [rbp+max]
     call printf
 ; }
     leave
@@ -43,9 +40,10 @@ fmt db   'max(%ld,%ld) = %ld',0xa,0
 main:
     push rbp
     mov  rbp, rsp
+    sub  rsp, 32     ; shadow space for register parameters
 ;   print_max ( 100, 200 );
-    mov  rdi, 100    ; first parameter
-    mov  rsi, 200    ; second parameter
+    mov  rcx, 200    ; first parameter
+    mov  rdx, 200    ; second parameter
     call print_max
     xor  eax, eax    ; to return 0
     leave

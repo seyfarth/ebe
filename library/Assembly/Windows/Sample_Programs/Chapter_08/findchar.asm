@@ -1,25 +1,22 @@
-        ;   Program not yet converted!!!!
-
-
-        SECTION .data
+        segment .data
 data    db      "hello world", 0
 n       dq      0
 needle  db      'w'
 
-        SECTION .text
+        segment .text
         global  main
 main:
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        sub     rsp, 32
 
 ;       Register usage
 ;
 ;       rax: c, byte of data array
-;       bl:  x, byte to search for
+;       dl:  x, byte to search for
 ;       rcx: i, loop counter, 0-63
 ;
-        mov     bl, [needle]
+        mov     dl, [needle]
 ;       i = 0;
         xor     ecx, ecx
 ;       c = data[i];
@@ -30,7 +27,7 @@ main:
 ;           do {
 do_while:
 ;               if ( c == x ) break;
-                cmp     al, bl
+                cmp     al, dl
                 je      found
 ;               i++;
                 inc     rcx

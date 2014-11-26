@@ -1,14 +1,12 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 s       db      "Hello world!",0
 
         segment .text
         global  main
-        global  strlen
-strlen:
+        global  strlenx
+strlenx:
         cld                 ; prepare to increment rdi in scasb
+        mov     rdi, rcx  
         mov     rcx, -1     ; maximum number of iterations for repne
         xor     al, al      ; will scan for 0
         repne   scasb       ; repeatedly scan for 0
@@ -19,8 +17,9 @@ strlen:
 main:
         push    rbp
         mov     rbp, rsp
-        lea     rdi, [s]
-        call    strlen
+        sub     rsp, 32
+        lea     rcx, [s]
+        call    strlenx
         xor     eax, eax
         leave
         ret

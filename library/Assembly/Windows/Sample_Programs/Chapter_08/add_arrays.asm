@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 n       dq      5
 a       dq      1, 2, 3, 4, 5
@@ -11,6 +8,7 @@ c       dq      0, 0, 0, 0, 0
 main:
         push    rbp
         mov     rbp, rsp
+        sub     rsp, 32
         mov     rdx, [n]
         xor     ecx, ecx
 for:    cmp     rcx, rdx
@@ -19,8 +17,8 @@ for:    cmp     rcx, rdx
         add     rax, [b+rcx*8]
         mov     [c+rcx*8], rax
         inc     rcx
-        jmp for
+        jmp 	for
 end_for:
-        xor eax, eax
+        xor 	eax, eax
         leave
         ret

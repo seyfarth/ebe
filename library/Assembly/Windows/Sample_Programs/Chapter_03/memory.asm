@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 a       dd      4
 b       dd      4.4
@@ -19,8 +16,7 @@ i       resb    100
 main:
         push    rbp         ; set up a strack frame for main
         mov     rbp, rsp    ; let rbp point to the previous ssp
-        sub     rsp, 16     ; leave some room for local variables
-                            ; and align stack to 16 byte boundary
+        sub     rsp, 32     ; leave room for shadow parameters
         xor     eax, eax    ; set rax to 0 for return value
         leave               ; undo the stack manipulations
         ret

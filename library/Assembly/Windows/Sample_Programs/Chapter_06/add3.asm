@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 a       dq      151
 b       dq      310
@@ -10,7 +7,7 @@ sum     dq      0
 main:
         push    rbp         ; establish a stack frame
         mov     rbp, rsp
-        sub     rsp, 16
+        sub     rsp, 32     ; shadow register space
         mov     rax, 9      ; set rax to 9
         add     [a], rax    ; add rax to a
         mov     rax, [b]    ; get b into rax

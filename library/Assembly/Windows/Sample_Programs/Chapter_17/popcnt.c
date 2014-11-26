@@ -1,7 +1,7 @@
-long popcnt_array ( long *a, int size )
+long popcnt_array ( long long *a, int size )
 {
     int w, b;
-    long word;
+    long long word;
     long n;
 
     n = 0;

@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .text
         global main
 

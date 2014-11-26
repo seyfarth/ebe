@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 a       dq      100
 b       dq      200
@@ -10,7 +7,7 @@ diff    dq      0
 main:
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        sub     rsp, 32
         mov     rax, 10
         sub     [a], rax    ; subtract 10 from a
         sub     [b], rax    ; subtract 10 from b

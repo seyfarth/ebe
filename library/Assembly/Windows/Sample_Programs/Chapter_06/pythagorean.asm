@@ -1,6 +1,3 @@
-;   Program not yet converted!!!!
-
-
 ;   This program tests the numbers a, b and c to
 ;   see if they can be the legs and hypotenuse of
 ;   a right triangle: a^2 + b^2 = c^2

@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 switch: dq      main.case0
         dq      main.case1
@@ -11,12 +8,10 @@ i:      dq      2
 
         segment .text
         global  main                ; let the linker know about main
-        extern  scanf               ; resolve write and exit from libc
-        extern  printf
 main:
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        sub     rsp, 32
         mov     rax, [i]
         jmp     [switch+rax*8]
 .case0:

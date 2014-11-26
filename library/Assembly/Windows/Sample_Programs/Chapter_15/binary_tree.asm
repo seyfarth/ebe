@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
         struc   node
 n_value resq    1
@@ -21,56 +18,59 @@ t_root  resq    1
 new_tree:
         push    rbp
         mov     rbp, rsp
-        mov     rdi, tree_size
+        frame   0, 0, 1
+        sub     rsp, frame_size
+        mov     rcx, tree_size
         call    malloc
-        xor     edi, edi
-        mov     [rax+t_root], rdi
-        mov     [rax+t_count], rdi
+        xor     edx, edx
+        mov     [rax+t_root], rdx
+        mov     [rax+t_count], rdx
         leave
         ret
 
 ;       insert ( t, n );
 insert:
-.n      equ     0
-.t      equ     8
+.n      equ     local1
+.t      equ     local2
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        mov     [rsp+.t], rdi
-        mov     [rsp+.n], rsi
+        frame   2, 2, 2
+        sub     rsp, frame_size
+        mov     [rbp+.t], rcx
+        mov     [rbp+.n], rdx
         call    find
         cmp     rax, 0
         jne     .done 
-        mov     rdi, node_size
+        mov     rcx, node_size
         call    malloc
-        mov     rsi, [rsp+.n]
-        mov     [rax+n_value], rsi
-        xor     edi, edi
-        mov     [rax+n_left], rdi
-        mov     [rax+n_right], rdi
-        mov     rdx, [rsp+.t]
-        mov     rdi, [rdx+t_count]
-        cmp     rdi, 0
+        mov     rdx, [rbp+.n]
+        mov     [rax+n_value], rdx
+        xor     r8d, r8d
+        mov     [rax+n_left], r8
+        mov     [rax+n_right], r8
+        mov     r9, [rbp+.t]
+        mov     rcx, [r9+t_count]
+        cmp     rcx, 0
         jne     .findparent
-        inc     qword [rdx+t_count]
-        mov     [rdx+t_root], rax
+        inc     qword [r9+t_count]
+        mov     [r9+t_root], rax
         jmp     .done
 .findparent:
-        inc     qword [rdx+t_count]
-        mov     rdx, [rdx+t_root]
+        inc     qword [r9+t_count]
+        mov     r9, [r9+t_root]
 .repeatfind:
-        cmp     rsi, [rdx+n_value]
+        cmp     rdx, [r9+n_value]
         jl      .goleft
-        mov     r8, rdx
-        mov     rdx, [r8+n_right]
-        cmp     rdx, 0
+        mov     r8, r9
+        mov     r9, [r8+n_right]
+        cmp     r9, 0
         jne     .repeatfind
         mov     [r8+n_right], rax
         jmp     .done
 .goleft:
-        mov     r8, rdx
-        mov     rdx, [r8+n_left]
-        cmp     rdx, 0
+        mov     r8, r9
+        mov     r9, [r8+n_left]
+        cmp     r9, 0
         jne     .repeatfind
         mov     [r8+n_left], rax
 .done   leave
@@ -81,44 +81,46 @@ insert:
 find:
         push    rbp
         mov     rbp, rsp
-        mov     rdi, [rdi+t_root]
+        frame   2, 0, 0
+        sub     rsp, frame_size
+        mov     rcx, [rcx+t_root]
         xor     eax, eax
-.more   cmp     rdi, 0
+.more   cmp     rcx, 0
         je      .done
-        cmp     rsi, [rdi+n_value]
+        cmp     rdx, [rcx+n_value]
         jl      .goleft
         jg      .goright
-        mov     rax, rsi
+        mov     rax, rcx
         jmp     .done
 .goleft:
-        mov     rdi, [rdi+n_left]
+        mov     rcx, [rcx+n_left]
         jmp     .more
 .goright:
-        mov     rdi, [rdi+n_right]
+        mov     rcx, [rcx+n_right]
         jmp     .more
 .done   leave
         ret
 
 rec_print:
-.t      equ     0
+.t      equ     local1
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
-        cmp     rdi, 0
+        frame   1, 1, 2
+        sub     rsp, frame_size
+        cmp     rcx, 0
         je      .done
-        mov     [rsp+.t], rdi
-        mov     rdi, [rdi+n_left]
+        mov     [rbp+.t], rcx
+        mov     rcx, [rcx+n_left]
         call    rec_print
-        mov     rdi, [rsp+.t]
-        mov     rsi, [rdi+n_value]
+        mov     rcx, [rbp+.t]
+        mov     rdx, [rcx+n_value]
         segment .data
 .print  db      "%ld ",0
         segment .text
-        lea     rdi, [.print]
-        xor     eax, eax
+        lea     rcx, [.print]
         call    printf
-        mov     rdi, [rsp+.t]
-        mov     rdi, [rdi+n_right]
+        mov     rcx, [rbp+.t]
+        mov     rcx, [rcx+n_right]
         call    rec_print
 .done   leave
         ret
@@ -127,39 +129,39 @@ rec_print:
 print:
         push    rbp
         mov     rbp, rsp
-        mov     rdi, [rdi+t_root]
+        frame   1, 0, 1
+        mov     rcx, [rcx+t_root]
         call    rec_print
         segment .data
 .print  db      0x0a, 0
         segment .text
-        lea     rdi, [.print]
-        xor     eax, eax
+        lea     rcx, [.print]
         call    printf
         leave
         ret
 
 main:
-.k      equ     0
-.t      equ     8
+.k      equ     local1
+.t      equ     local2
         segment .data
 .scanf_fmt:
         db      "%ld",0
         segment .text
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 2, 2
+        sub     rsp, frame_size
         call    new_tree
-        mov     [rsp+.t], rax
-.more   lea     rdi, [.scanf_fmt]
-        lea     rsi, [rsp+.k]
-        xor     eax, eax
+        mov     [rbp+.t], rax
+.more   lea     rcx, [.scanf_fmt]
+        lea     rdx, [rbp+.k]
         call    scanf
         cmp     rax, 1
         jne     .done
-        mov     rdi, [rsp+.t]
-        mov     rsi, [rsp+.k]
+        mov     rcx, [rbp+.t]
+        mov     rdx, [rbp+.k]
         call    insert
-        mov     rdi, [rsp+.t]
+        mov     rcx, [rbp+.t]
         call    print
         jmp     .more
 .done   leave

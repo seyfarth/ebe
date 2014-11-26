@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 fd:     dd      0
 name:   db      "sample",0
@@ -10,9 +7,10 @@ name:   db      "sample",0
 main:
         push    rbp
         mov     rbp, rsp
-        lea     rdi, [name] ; pathname
-        mov     esi, 0x42   ; read-write | create
-        mov     rdx, 600o   ; read-write for me
+        sub     rsp, 32
+        lea     rcx, [name] ; pathname
+        mov     edx, 0x102   ; read-write | create
+        mov     r8d, 600o   ; read-write for me
         call    open
         cmp     eax, 0
         jl      error       ; failed to open

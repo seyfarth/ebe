@@ -1,18 +1,20 @@
-;   Program not yet converted!!!!
-
-
 ;   Program: exit
 ;
-;   Executes the exit system call
+;   Calls the exit function
 ;
 ;   No input
 ;
-;   Output: only the exit status ($? in the shell)
+;   Output: only the exit status 
+;           %errorlevel%    
+;           $? in the the Cygwin shell
 ;
-segment .text
-global  _start
+    segment .text
+    global  main
+    extern  exit
 
-_start:
-    mov  eax,1       ; 1 is the exit syscall number
-    mov  ebx,5       ; the status value to return
-    int  0x80        ; execute a system call
+main:
+    push    rbp
+    mov     rbp, rsp
+    sub     rsp, 32 ; shadow parameter space
+    mov     ecx,5   ; parameter for exit
+    call    exit

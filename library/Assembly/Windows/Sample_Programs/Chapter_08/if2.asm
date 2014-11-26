@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 a       dq      100
 b       dq      200
@@ -10,6 +7,7 @@ max     dq      0
 main:
         push    rbp
         mov     rbp, rsp
+        sub     rsp, 32
         mov     rax, [a]
         mov     rbx, [b]
         cmp     rax, rbx

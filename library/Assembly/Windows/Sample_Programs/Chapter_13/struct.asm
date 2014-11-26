@@ -1,10 +1,8 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 name    db      "Calvin", 0
 address db      "12 Mockingbird Lane",0
 balance dd      12500
+
         struc   Customer
 c_id      resd    1
 c_name    resb    64
@@ -14,13 +12,16 @@ c_balance resd    1
 c_j       resb    1
           align   4
         endstruc
+
 m       istruc  Customer
         at c_id, dd 8
         at c_name, db "Calvin"
         at c_address, db "junk"
         at c_balance, dd 12500
         iend
+
 c       dq      0
+
         segment .text
         global  main
         extern  malloc, strcpy

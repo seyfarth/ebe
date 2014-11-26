@@ -1,31 +1,27 @@
-        ;   Program not yet converted!!!!
-
-
         segment .text
         global  main
         extern  printf, scanf
-a       equ     0
-b       equ     8
 main:
+a       equ     local1
+b       equ     local2
         push    rbp
         mov     rbp, rsp
-        sub     rsp, 16
+        frame   2, 2, 3
+        sub     rsp, frame_size
         segment .data
 .scanf  db      "%lf %lf",0
 .prompt db      "Enter 2 floating point numbers: ",0
         segment .text
-.loop   lea     rdi, [.prompt]
-        xor     eax, eax
+.loop   lea     rcx, [.prompt]
         call    printf
-        lea     rdi, [.scanf]
-        lea     rsi, [rsp+a]
-        lea     rdx, [rsp+b]
-        xor     eax, eax
+        lea     rcx, [.scanf]
+        lea     rdx, [rsp+a]
+        lea     r8, [rsp+b]
         call    scanf
         cmp     ax, 2
         jne     .done
-        movsd   xmm0, [rsp+a]
-        movsd   xmm1, [rsp+b]
+        movsd   xmm0, [rbp+a]
+        movsd   xmm1, [rbp+b]
         ucomisd xmm0, xmm1
         jb      .b
 .bret   movsd   xmm0, [rsp+a]
@@ -53,8 +49,11 @@ main:
 .printb db      "%f < %f",0x0a,0
         segment .text
 .b:
-        lea     rdi, [.printb]
-        mov     eax, 2
+        lea     rcx, [.printb]
+        movsd   xmm2, xmm1
+        movq    r8, xmm2
+        movsd   xmm1, xmm0
+        movq    rdx, xmm1
         call    printf
         jmp     .bret
 
@@ -62,8 +61,11 @@ main:
 .printbe db      "%f <= %f",0x0a,0
         segment .text
 .be:
-        lea     rdi, [.printbe]
-        mov     eax, 2
+        lea     rcx, [.printbe]
+        movsd   xmm2, xmm1
+        movq    r8, xmm2
+        movsd   xmm1, xmm0
+        movq    rdx, xmm1
         call    printf
         jmp     .beret
 
@@ -71,8 +73,11 @@ main:
 .printa db      "%f > %f",0x0a,0
         segment .text
 .a:
-        lea     rdi, [.printa]
-        mov     eax, 2
+        lea     rcx, [.printa]
+        movsd   xmm2, xmm1
+        movq    r8, xmm2
+        movsd   xmm1, xmm0
+        movq    rdx, xmm1
         call    printf
         jmp     .aret
 
@@ -80,8 +85,11 @@ main:
 .printae db      "%f >= %f",0x0a,0
         segment .text
 .ae:
-        lea     rdi, [.printae]
-        mov     eax, 2
+        lea     rcx, [.printae]
+        movsd   xmm2, xmm1
+        movq    r8, xmm2
+        movsd   xmm1, xmm0
+        movq    rdx, xmm1
         call    printf
         jmp     .aeret
 
@@ -89,8 +97,11 @@ main:
 .printe db      "%f == %f",0x0a,0
         segment .text
 .e:
-        lea     rdi, [.printe]
-        mov     eax, 2
+        lea     rcx, [.printe]
+        movsd   xmm2, xmm1
+        movq    r8, xmm2
+        movsd   xmm1, xmm0
+        movq    rdx, xmm1
         call    printf
         jmp     .eret
 
@@ -98,8 +109,11 @@ main:
 .printne db      "%f != %f",0x0a,0
         segment .text
 .ne:
-        lea     rdi, [.printne]
-        mov     eax, 2
+        lea     rcx, [.printne]
+        movsd   xmm2, xmm1
+        movq    r8, xmm2
+        movsd   xmm1, xmm0
+        movq    rdx, xmm1
         call    printf
         jmp     .neret
 

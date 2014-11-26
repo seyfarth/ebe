@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .bss
 set     resq    10
         segment .text
@@ -8,6 +5,7 @@ set     resq    10
 main:
         push    rbp
         mov     rbp, rsp
+        sub     rsp, 32            ; shadow registers
         bts     qword [set], 4     ; set bit 4 of set
         bts     qword [set], 7     ; set bit 7 of set
         bts     qword [set], 8     ; set bit 8 of set

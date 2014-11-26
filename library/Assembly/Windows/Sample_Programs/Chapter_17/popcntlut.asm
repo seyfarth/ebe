@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         section .data
 ;             0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111
 count   db       0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2,   3,   3,   4  ; 0000
@@ -25,12 +22,14 @@ count   db       0,   1,   1,   2,   1,   2,   2,   3,   1,   2,   2,   3,   2, 
         ; integer and address parameters are in rdi, rsi, rdx, rcx, r8, r9
         ; floating point parameters are in xmm0-7
 popcnt_array:
+        push    rdi
         push    rbx
         push    rbp
         push    r12
         push    r13
         push    r14
         push    r15
+        mov     rdi, rcx
         xor     eax, eax
         xor     ebx, ebx
         xor     ecx, ecx
@@ -85,4 +84,5 @@ popcnt_array:
         pop     r12
         pop     rbp
         pop     rbx
+        pop     rdi
         ret

@@ -1,15 +1,11 @@
-        ;   Program not yet converted!!!!
-
-
         segment .text
         global corr
 
-; rdi, rsi, rdx, rcx, r8, r9
 ;
-;       rdi:  x array
-;       rdi:  y array
-;       rcx:  loop counter
-;       rdx:  n
+;       rcx:  x array
+;       rdx:  y array
+;       r10:  loop counter
+;       r8:  n
 ;       xmm0: 2 parts of sum_x
 ;       xmm1: 2 parts of sum_y
 ;       xmm2: 2 parts of sum_xx
@@ -19,68 +15,96 @@
 ;       xmm6: 2 y values - later squared
 ;       xmm7: 2 xy values
 corr:
-        xor     r8, r8
-        mov     rcx, rdx
-        subpd   xmm0, xmm0
-        movapd   xmm1, xmm0
-        movapd   xmm2, xmm0
-        movapd   xmm3, xmm0
-        movapd   xmm4, xmm0
-        movapd   xmm8, xmm0
-        movapd   xmm9, xmm0
-        movapd   xmm10, xmm0
-        movapd   xmm11, xmm0
-        movapd   xmm12, xmm0
+        alias   X, rcx
+        alias   Y, rdx
+        alias   I, r10
+        alias   N, r8
+
+        fpalias Sum_x, 0
+        fpalias Sum_y, 1
+        fpalias Sum_xx, 2
+        fpalias Sum_yy, 3
+        fpalias Sum_xy, 4
+        fpalias Xvals, 5
+        fpalias Yvals, 6
+        fpalias XYvals, 7
+        fpalias Sum_x2, 8
+        fpalias Sum_y2, 9
+        fpalias Sum_xx2, 10
+        fpalias Sum_yy2, 11
+        fpalias Sum_xy2, 12
+        fpalias Xvals2, 13
+        fpalias Yvals2, 14
+        fpalias XYvals2, 15
+
+        xor     r9d, r9d
+        mov     qI, qN
+        subpd   xSum_x, xSum_x
+        movapd   xSum_y, xSum_x
+        movapd   xSum_xx, xSum_x
+        movapd   xSum_yy, xSum_x
+        movapd   xSum_xy, xSum_x
+        movapd   xSum_x2, xSum_x
+        movapd   xSum_y2, xSum_x
+        movapd   xSum_xx2, xSum_x
+        movapd   xSum_yy2, xSum_x
+        movapd   xSum_xy2, xSum_x
 .more:   
-        movapd  xmm5, [rdi+r8]  ; mov x
-        movapd  xmm6, [rsi+r8]  ; mov y
-        movapd  xmm7, xmm5      ; mov x
-        mulpd   xmm7, xmm6      ; xy
-        addpd   xmm0, xmm5      ; sum_x
-        addpd   xmm1, xmm6      ; sum_y
-        mulpd   xmm5, xmm5      ; xx
-        mulpd   xmm6, xmm6      ; yy
-        addpd   xmm2, xmm5      ; sum_xx
-        addpd   xmm3, xmm6      ; sum_yy
-        addpd   xmm4, xmm7      ; sum_xy
-        movapd  xmm13, [rdi+r8+16]  ; mov x
-        movapd  xmm14, [rsi+r8+16]  ; mov y
-        movapd  xmm15, xmm13    ; mov x
-        mulpd   xmm15, xmm14    ; xy
-        addpd   xmm8, xmm13     ; sum_x
-        addpd   xmm9, xmm14     ; sum_y
-        mulpd   xmm13, xmm13    ; xx
-        mulpd   xmm14, xmm14    ; yy
-        addpd   xmm10, xmm13    ; sum_xx
-        addpd   xmm11, xmm14    ; sum_yy
-        addpd   xmm12, xmm15    ; sum_xy
-        add     r8, 32
-        sub     rcx, 4
+        movapd  xXvals, [qX+r9]     ; mov x
+        movapd  xYvals, [qY+r9]     ; mov y
+        movapd  xXYvals, xXvals     ; mov x
+        mulpd   xXYvals, xYvals     ; xy
+        addpd   xSum_x, xXvals      ; sum_x
+        addpd   xSum_y, xYvals      ; sum_y
+        mulpd   xXvals, xXvals      ; xx
+        mulpd   xYvals, xYvals      ; yy
+        addpd   xmm2, xXvals        ; sum_xx
+        addpd   xmm3, xYvals        ; sum_yy
+        addpd   xmm4, xXYvals       ; sum_xy
+        movapd  xXvals2, [qX+r9+16] ; mov x
+        movapd  xYvals2, [qY+r9+16] ; mov y
+        movapd  xXYvals, xXvals2    ; mov x
+        mulpd   xXYvals, xYvals2    ; xy
+        addpd   xSum_x2, xXvals2    ; sum_x
+        addpd   xSum_y2, xYvals2    ; sum_y
+        mulpd   xXvals2, xXvals2    ; xx
+        mulpd   xYvals2, xYvals2    ; yy
+        addpd   xSum_xx2, xXvals2   ; sum_xx
+        addpd   xSum_yy2, xYvals2   ; sum_yy
+        addpd   xSum_xy2, xXYvals   ; sum_xy
+        add     r9, 32
+        sub     qI, 4
         jnz     .more
-        addpd   xmm0, xmm8
-        addpd   xmm1, xmm9
-        addpd   xmm2, xmm10
-        addpd   xmm3, xmm11
-        addpd   xmm4, xmm12
-        haddpd  xmm0, xmm0      ; sum_x
-        haddpd  xmm1, xmm1      ; sum_y
-        haddpd  xmm2, xmm2      ; sum_xx
-        haddpd  xmm3, xmm3      ; sum_yy
-        haddpd  xmm4, xmm4      ; sum_xy
-        movsd   xmm6, xmm0      ; sum_x
-        movsd   xmm7, xmm1      ; sum_y
-        cvtsi2sd xmm8, rdx      ; n
-        mulsd   xmm6, xmm6      ; sum_x*sum_x
-        mulsd   xmm7, xmm7      ; sum_y*sum_y
-        mulsd   xmm2, xmm8      ; n*sum_xx
-        mulsd   xmm3, xmm8      ; n*sum_yy
-        subsd   xmm2, xmm6      ; n*sum_xx-sum_x*sum_x
-        subsd   xmm3, xmm7      ; n*sum_yy-sum_y*sum_y
-        mulsd   xmm2, xmm3      ; denom*denom
-        sqrtsd  xmm2, xmm2      ; denom
-        mulsd   xmm4, xmm8      ; n*sum_xy
-        mulsd   xmm0, xmm1      ; sum_x*sum_y
-        subsd   xmm4, xmm0      ; n*sum_xy-sum_x*sum_y
-        divsd   xmm4, xmm2      ; correlation
-        movsd   xmm0, xmm4      ; need in xmm0
+        addpd   xSum_x, xSum_x2
+        addpd   xSum_y, xSum_y2
+        addpd   xSum_xx, xSum_xx2
+        addpd   xSum_yy, xSum_yy2
+        addpd   xSum_xy, xSum_xy2
+        haddpd  xSum_x, xSum_x      ; sum_x
+        haddpd  xSum_y, xSum_y      ; sum_y
+        haddpd  xSum_xx, xSum_xx    ; sum_xx
+        haddpd  xSum_yy, xSum_yy    ; sum_yy
+        haddpd  xSum_xy, xSum_xy    ; sum_xy
+        movsd   xYvals, xSum_x      ; sum_x
+        movsd   xXYvals, xSum_y     ; sum_y
+        fpalias N, 15
+        cvtsi2sd xN, qN       ; n
+
+        mulsd   xYvals, xYvals      ; sum_x*sum_x
+        mulsd   xXYvals, xXYvals    ; sum_y*sum_y
+        fpalias NSum_xx, 2
+        fpalias NSum_yy, 3
+        mulsd   xNSum_xx, xN       ; n*sum_xx
+        mulsd   xNSum_yy, xN       ; n*sum_yy
+        subsd   xNSum_xx, xYvals   ; n*sum_xx-sum_x*sum_x
+        subsd   xNSum_yy, xXYvals  ; n*sum_yy-sum_y*sum_y
+        fpalias Denom, 2
+        mulsd   xDenom, xNSum_yy   ; denom1*denom2
+        sqrtsd  xDenom, xDenom     ; denom
+        fpalias NSum_xy, 4
+        mulsd   xNSum_xy, xN       ; n*sum_xy
+        mulsd   xSum_x, xSum_y     ; sum_x*sum_y
+        subsd   xNSum_xy, xSum_x   ; n*sum_xy-sum_x*sum_y
+        divsd   xNSum_xy, xDenom   ; correlation
+        movsd   xmm0, xNSum_xy     ; need in xmm0
         ret

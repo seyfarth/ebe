@@ -1,15 +1,37 @@
-        ;   Program not yet converted!!!!
-
-
         segment .text
-        global corr
+        global  corr
 
-; rdi, rsi, rdx, rcx, r8, r9
+        alias   X, rcx
+        alias   Y, rdx
+        alias   N, r8
+        alias   I, r9
+        alias   Left, r10
 ;
-;       rdi:  x array
-;       rdi:  y array
-;       rcx:  loop counter
-;       rdx:  n
+;       rcx:  x array
+;       rdx:  y array
+;       r8:   n
+;       r9:   loop counter
+
+        fpalias Sum_x, 0
+        fpalias Sum_y, 1
+        fpalias Sum_xx, 2
+        fpalias Sum_yy, 3
+        fpalias Sum_xy, 4
+
+        fpalias Xvalues, 5
+        fpalias Yvalues, 6
+        fpalias XYvalues, 7
+
+        fpalias Sum_x2, 8
+        fpalias Sum_y2, 9
+        fpalias Sum_xx2, 10
+        fpalias Sum_yy2, 11
+        fpalias Sum_xy2, 12
+
+        fpalias Xvalues2, 13
+        fpalias Yvalues2, 14
+        fpalias XYvalues2, 15
+
 ;       ymm0: 4 parts of sum_x
 ;       ymm1: 4 parts of sum_y
 ;       ymm2: 4 parts of sum_xx
@@ -19,64 +41,71 @@
 ;       ymm6: 4 y values - later squared
 ;       ymm7: 4 xy values
 corr:
-        xor      r8, r8
-        mov      rcx, rdx
+        xor      dI, dI
+        mov      qLeft, qN
         vzeroall
 .more:   
-        vmovupd  ymm5, [rdi+r8]  ; mov x
-        vmovupd  ymm6, [rsi+r8]  ; mov y
-        vmulpd   ymm7, ymm5, ymm6      ; xy
-        vaddpd   ymm0, ymm0, ymm5      ; sum_x
-        vaddpd   ymm1, ymm1, ymm6      ; sum_y
-        vmulpd   ymm5, ymm5, ymm5      ; xx
-        vmulpd   ymm6, ymm6, ymm6      ; yy
-        vaddpd   ymm2, ymm2, ymm5      ; sum_xx
-        vaddpd   ymm3, ymm3, ymm6      ; sum_yy
-        vaddpd   ymm4, ymm4, ymm7      ; sum_xy
-        vmovupd  ymm13, [rdi+r8+32]  ; mov x
-        vmovupd  ymm14, [rsi+r8+32]  ; mov y
-        vmulpd   ymm15, ymm13, ymm14    ; xy
-        vaddpd   ymm8, ymm8, ymm13     ; sum_x
-        vaddpd   ymm9, ymm9, ymm14     ; sum_y
-        vmulpd   ymm13, ymm13, ymm13    ; xx
-        vmulpd   ymm14, ymm14, ymm14    ; yy
-        vaddpd   ymm10, ymm10, ymm13    ; sum_xx
-        vaddpd   ymm11, ymm11, ymm14    ; sum_yy
-        vaddpd   ymm12, ymm12, ymm15    ; sum_xy
-        add     r8, 64
-        sub     rcx, 8
-        jnz     .more
-        vaddpd   ymm0, ymm0, ymm8
-        vaddpd   ymm1, ymm1, ymm9
-        vaddpd   ymm2, ymm2, ymm10
-        vaddpd   ymm3, ymm3, ymm11
-        vaddpd   ymm4, ymm4, ymm12
-        vhaddpd  ymm0, ymm0, ymm0      ; sum_x
-        vhaddpd  ymm1, ymm1, ymm1      ; sum_y
-        vhaddpd  ymm2, ymm2, ymm2      ; sum_xx
-        vhaddpd  ymm3, ymm3, ymm3      ; sum_yy
-        vhaddpd  ymm4, ymm4, ymm4      ; sum_xy
-        vextractf128 xmm5, ymm0, 1
-        vaddsd   xmm0, xmm0, xmm5
-        vextractf128 xmm6, ymm1, 1
-        vaddsd   xmm1, xmm1, xmm6
-        vmulsd   xmm6, xmm0, xmm0      ; sum_x*sum_x
-        vmulsd   xmm7, xmm1, xmm1      ; sum_y*sum_y
-        vextractf128  xmm8, ymm2, 1
-        vaddsd   xmm2, xmm2, xmm8
-        vextractf128  xmm9, ymm3, 1
-        vaddsd   xmm3, xmm3, xmm9
-        cvtsi2sd xmm8, rdx      ; n
-        vmulsd   xmm2, xmm2, xmm8      ; n*sum_xx
-        vmulsd   xmm3, xmm3, xmm8      ; n*sum_yy
-        vsubsd   xmm2, xmm2, xmm6      ; n*sum_xx-sum_x*sum_x
-        vsubsd   xmm3, xmm3, xmm7      ; n*sum_yy-sum_y*sum_y
-        vmulsd   xmm2, xmm2, xmm3      ; denom*denom
-        vsqrtsd  xmm2, xmm2, xmm2      ; denom
-        vextractf128  xmm6, ymm4, 1
-        vaddsd   xmm4, xmm4, xmm6
-        vmulsd   xmm4, xmm4, xmm8      ; n*sum_xy
-        vmulsd   xmm0, xmm0, xmm1      ; sum_x*sum_y
-        vsubsd   xmm4, xmm4, xmm0      ; n*sum_xy-sum_x*sum_y
-        vdivsd   xmm0, xmm4, xmm2      ; correlation
+        vmovupd  yXvalues, [qX+qI]               ; mov x    5
+        vmovupd  yYvalues, [qY+qI]               ; mov y    6
+        vmulpd   yXYvalues, yXvalues, yYvalues   ; xy       7 5 6
+        vaddpd   ySum_x, ySum_x, yXvalues        ; sum_x    0 0 5
+        vaddpd   ySum_y, ySum_y, yYvalues        ; sum_y    1 1 6
+        vmulpd   yXvalues, yXvalues, yXvalues    ; xx       5 5 5
+        vmulpd   yYvalues, yYvalues, yYvalues    ; yy       6 6 6
+        vaddpd   ySum_xx, ySum_xx, yXvalues      ; sum_xx   2 2 5
+        vaddpd   ySum_yy, ySum_yy, yYvalues      ; sum_yy   3 3 5
+        vaddpd   ySum_xy, ySum_xy, yXYvalues     ; sum_xy   4 4 7
+        vmovupd  yXvalues2, [qX+qI+32]  ; mov x            13
+        vmovupd  yYvalues2, [qY+qI+32]  ; mov y            14
+        vmulpd   yXYvalues2, yXvalues2, yYvalues2 ; xy     15 13 14
+        vaddpd   ySum_x2, ySum_x2, yXvalues2     ; sum_x   8  8  13
+        vaddpd   ySum_y2, ySum_y2, yYvalues2     ; sum_y   9  9  14
+        vmulpd   yXvalues2, yXvalues2, yXvalues2 ; xx      13 13 13
+        vmulpd   yYvalues2, yYvalues2, yYvalues2 ; yy      14 14 14
+        vaddpd   ySum_xx2, ySum_xx2, yXvalues2   ; sum_xx  10 10 13
+        vaddpd   ySum_yy2, ySum_yy2, yYvalues2   ; sum_yy  11 11 14
+        vaddpd   ySum_xy2, ySum_xy2, yXYvalues2  ; sum_xy  12 12 15
+        add      qI, 64
+        sub      qLeft, 8
+        jg       .more
+        vaddpd   ySum_x, ySum_x, ySum_x2                  ; 0 0 8
+        vaddpd   ySum_y, ySum_y, ySum_y2                  ; 1 1 9
+        vaddpd   ySum_xx, ySum_xx, ySum_xx2               ; 2 2 10
+        vaddpd   ySum_yy, ySum_yy, ySum_yy2               ; 3 3 11
+        vaddpd   ySum_xy, ySum_xy, ySum_xy2               ; 4 4 12
+        vhaddpd  ySum_x, ySum_x, ySum_x          ; sum_x    0 0 0
+        vhaddpd  ySum_y, ySum_y, ySum_y          ; sum_y    1 1 1
+        vhaddpd  ySum_xx, ySum_xx, ySum_xx       ; sum_xx   2 2 2
+        vhaddpd  ySum_yy, ySum_yy, ySum_yy       ; sum_yy   3 3 3
+        vhaddpd  ySum_xy, ySum_xy, ySum_xy       ; sum_xy   4 4 4
+        vextractf128 xXvalues, ySum_x, 1                  ; 5 0
+        vaddsd   xSum_x, xSum_x, xXvalues                 ; 0 0 5
+        vextractf128 xYvalues, ySum_y, 1                  ; 6 1
+        vaddsd   xSum_y, xSum_y, xYvalues                 ; 1 1 6
+
+        fpalias  SumxSumx, 6
+        vmulsd   xSumxSumx, xSum_x, xSum_x  ; sum_x*sum_x   6 0 0
+        fpalias  SumySumy, 7                    
+        vmulsd   xSumySumy, xSum_y, xSum_y  ; sum_y*sum_y   7 1 1
+        vextractf128  xSum_x2, ySum_xx, 1                 ; 8 2
+        vaddsd   xSum_xx, xSum_xx, xSum_x2                ; 2 2 8
+        vextractf128  xSum_y2, ySum_yy, 1                 ; 9 3
+        vaddsd   xSum_yy, xSum_yy, xSum_y2                ; 3 3 9
+        fpalias  N, 8
+        cvtsi2sd xN, qN      ; n                            8
+        vmulsd   xSum_xx, xSum_xx, xN      ; n*sum_xx       2 2 8
+        vmulsd   xSum_yy, xSum_yy, xN      ; n*sum_yy       3 3 8
+        vsubsd   xSum_xx, xSum_xx, xSumxSumx      ; n*sum_xx-sum_x*sum_x  2 2 6
+        vsubsd   xSum_yy, xSum_yy, xSumySumy      ; n*sum_yy-sum_y*sum_y  3 3 7
+        fpalias  Denom, 2
+        vmulsd   xDenom, xSum_xx, xSum_yy      ; denom*denom   2 2 3
+        vsqrtsd  xDenom, xDenom, xDenom      ; denom           2
+        vextractf128  xSumxSumx, ySum_xy, 1                  ; 6 4
+        vaddsd   xSum_xy, xSum_xy, xSumxSumx                 ; 4 4 6
+        vmulsd   xSum_xy, xSum_xy, xN      ; n*sum_xy          4 4 8
+        fpalias  SumxSumy, 0
+        vmulsd   xSumxSumy, xSum_x, xSum_y      ; sum_x*sum_y  0 0 1
+        fpalias  Num, 4
+        vsubsd   xNum, xSum_xy, xSumxSumy      ; n*sum_xy-sum_x*sum_y 4 4 0
+        vdivsd   xSumxSumy, xNum, xDenom      ; correlation     0 3 2
         ret

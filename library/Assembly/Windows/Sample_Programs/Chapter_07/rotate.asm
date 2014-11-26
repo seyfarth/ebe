@@ -1,12 +1,10 @@
-        ;   Program not yet converted!!!!
-
-
         segment .text
         global  main
 main:
         push    rbp
         mov     rbp, rsp
-        mov     rax, 0x12345678; Initial value for rax
+        sub     rsp, 32        ; shaow register space
+        mov     rax, 0x12345678; Inditial value for rax
         ror     rax, 8         ; Preserve bits 7-0
         shr     rax, 4         ; Shift out original 11-8
         shl     rax, 4         ; Bits 3-0 are 0's

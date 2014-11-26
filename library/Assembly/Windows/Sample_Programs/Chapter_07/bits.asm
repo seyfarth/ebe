@@ -1,11 +1,9 @@
-        ;   Program not yet converted!!!!
-
-
         segment .text
         global  main
 main:
         push    rbp
         mov     rbp, rsp
+        sub     rsp, 32         ; shadow register space
         mov     rax, 0x12345678
         shr     rax, 8          ; I want bits 8-15
         and     rax, 0xff       ; rax now holds 0x56

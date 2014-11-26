@@ -1,20 +1,19 @@
-        ;   Program not yet converted!!!!
+       segment .data
+msg:   db      'Hello World!',0x0a     ; String to print
+len:   equ     $-msg                   ; String length
 
-
-        segment .data
-msg:    db      "Hello World",0x0a      ; String to print
-len:    equ     $-msg                   ; Length of the string
-
-        segment .text
-        global  _start                  ; Announce _start to the linker
-_start:
-        mov     edx, len                ; Argument 3 of a function or
-                                        ; system call is placed in rdx
-        mov     rsi, msg                ; Argument 2 for the write call
-        mov     edi, 1                  ; Argument 1 for the write
-        mov     eax, 1                  ; Syscall 1 is write
-        syscall
-
-        xor     edi, edi                ; 0 return status = success
-        mov     eax, 60                 ; 60 is the exit syscall
-        syscall
+       segment .text
+       global  main                    ; Tell linker about main
+       extern  write, exit
+main:
+       push    rbp
+       mov     rbp, rsp
+       sub     rsp, 32                 ; Must leave room for 4 register params
+                                       ; Up to 4 register parameters
+                                       ; in rcx, rdx, r8, r9
+       mov     r8, len                 ; Parameter 3 for write
+       lea     rdx, [msg]              ; Parameter 2 for write
+       mov     ecx, 1                  ; Parameter 1 (fd)
+       call    write
+       xor     ecx, ecx                ; 0 return = success
+       call    exit

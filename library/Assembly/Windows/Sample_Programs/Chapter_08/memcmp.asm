@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 a:      db      "This is fun"
 b:      db      "This is not"
@@ -8,23 +5,32 @@ b:      db      "This is not"
         global  main
         global  memcmp
 memcmp:
-        mov     rcx, rdx
+        push    rdi
+        push    rsi
+        mov     rdi, rcx
+        mov     rsi, rdx
+        mov     rcx, r8
         repe    cmpsb
         cmp     rcx, 0
         jz      equal
         movzx   eax, byte [rdi-1]
         movzx   ecx, byte [rsi-1]
         sub     rax, rcx
+        pop     rsi
+        pop     rdi
         ret
 equal:  xor     eax, eax
+        pop     rsi
+        pop     rdi
         ret
 
 main:
         push    rbp
         mov     rbp, rsp
-        lea     rdi, [a]
-        lea     rsi, [b]
-        mov     edx, 11
+        sub     rsp, 32
+        lea     rcx, [a]   ; first parameter to memcmp     
+        lea     rdx, [b]   ; second parameter
+        mov     r8, 11     ; third parameter, count
         call    memcmp
         xor     eax, eax
         leave

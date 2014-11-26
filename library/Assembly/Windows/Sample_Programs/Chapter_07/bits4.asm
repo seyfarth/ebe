@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 sample  dq      0x0a0a0a0a0a0a0a0a
 field   dq      0x12abcdef
@@ -9,6 +6,7 @@ field   dq      0x12abcdef
 main:
         push    rbp
         mov     rbp, rsp
+        sub     rsp, 32            ; shadow register space
         mov     rax, [sample]      ; move quad-word into rax
         ror     rax, 23            ; shift to align bit 23 at 0
         shr     rax, 29            ; wipe out 29 bits

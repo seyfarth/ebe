@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 sample  dq      0x0123456789abcdef
 field   dq      0
@@ -9,6 +6,7 @@ field   dq      0
 main:
         push    rbp
         mov     rbp, rsp
+        sub     rsp, 32            ; sgaodw register space
         mov     rax, [sample]      ; move quad-word into rax
         shr     rax, 23            ; shift to align bit 23 at 0
         and     rax, 0x1fffffff    ; select the 29 low bits

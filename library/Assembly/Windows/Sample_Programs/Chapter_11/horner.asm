@@ -1,6 +1,3 @@
-        ;   Program not yet converted!!!!
-
-
         segment .data
 coeff   dq      1.0, 2.0, 3.0, 4.0
 x       dq      2.0
@@ -10,6 +7,7 @@ x       dq      2.0
 main:
         push    rbp
         mov     rbp, rsp
+	sub	rsp, 32
         lea     rdi, [coeff]
         movsd   xmm0, [x]
         mov     esi, 3
