@@ -12,6 +12,8 @@ The movaps instruction moves 4 single precision floating point values
 to the destination.
 The source and the destination can be an XMM register or a memory location.
 You can not use 2 memory addresses.
+The vmovaps instruction allows moving 8 floats between YMM registers and 
+memory.
 </p>
 <p>
 This version requires that any memory address used be aligned on a 16 byte
@@ -33,6 +35,11 @@ have an additional 128 bits in each register accessible as YMM registers.
                                 ; leaves the rest of xmm2 alone
         movaps   [y], xmm0      ; moves 4 floats from xmm0 to variable y
                                 ; moves precisely 128 bits
+        vmovaps   xmm1, xmm2    ; moves 4 floats from xmm2 to xmm1
+                                ; leaves the rest of xmm1 unchanged
+        vmovaps   ymm1, ymm2    ; moves 8 floats from ymm2 to ymm1
+        vmovaps   ymm2, [x]     ; moves 8 floats from variable x to ymm2
+        vmovaps   [y], ymm0     ; moves 8 floats from ymm0 to variable y
 </pre>
 <h3>
 flags: none

@@ -1,0 +1,37 @@
+<html>
+<head>
+<title> convert integer to float </title>
+</head><body>
+<h2> cvtsi2ss - convert integer to single (32 bit floating point) </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The cvtsi2ss instruction adds the source value (second operand)
+to the destination (an XMM register).
+The source can be a 32 or 64 bit general purpose register
+or a 64 bit memory location.
+</p>
+<p>
+If the integer can't be stored exactly as a float, it will be rounded
+according to the MXCSR register.
+For example the number 123456789 easily fits in a doubleword integer
+but a float is only accurate for a little over 7 decimal digits.
+It will probably be rounded to about 1234568xx, though the 8 may be a 7
+and the last 2 digits may vary depending on the specific number.
+</p>
+<pre>
+        cvtsi2ss   xmm0, edx         ; convert edx to float in xmm0
+                                     ; leave the rest of xmm0 as is
+        cvtsi2ss   xmm0, r8          ; convert r8 to float in xmm0
+                                     ; leave the rest of xmm0 as is
+        cvtsi2ss   xmm0, qword [x]   ; convert 64 bit variable x to xmm0
+                                     ; leave the rest of xmm0 as is
+        cvtsi2ss   xmm0, dword [rsi] ; convert 64 bit value [rsi] to xmm0
+                                     ; rsi holds the address of an int
+                                     ; leave the rest of xmm0 as is
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

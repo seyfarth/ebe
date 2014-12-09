@@ -12,6 +12,8 @@ The movapd instruction moves 2 double precision floating point values
 to the destination.
 The source and the destination can be an XMM register or a memory location.
 You can not use 2 memory addresses.
+The vmovapd instruction allows moving 4 doubles between YMM registers and
+memory.
 </p>
 <p>
 This version requires that any memory address used be aligned on a 16 byte
@@ -33,6 +35,11 @@ have an additional 128 bits in each register accessible as YMM registers.
                                 ; leaves the rest of xmm2 alone
         movapd   [y], xmm0      ; moves 2 doubles from xmm0 to variable y
                                 ; moves precisely 128 bits
+        vmovapd   xmm1, xmm2    ; moves 2 doubles from xmm2 to xmm1
+                                ; leaves the rest of xmm1 unchanged
+        vmovapd   ymm1, ymm2    ; moves 4 doubles from ymm2 to ymm1
+        vmovapd   ymm2, [x]     ; moves 4 doubles from variable x to ymm2
+        vmovapd   [y], ymm0     ; moves 4 doubles from ymm0 to variable y
 </pre>
 <h3>
 flags: none

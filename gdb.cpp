@@ -80,6 +80,7 @@ GDB::GDB()
     gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
     gdbProcess->start(gdbName);
 
+    wordSize = ebe["word_size"].toInt();
     //qDebug() << "gdb state" << gdbProcess->state();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
         << "continue";
@@ -518,11 +519,14 @@ void GDB::doCall()
     FileLine fl(breakFile, breakLine + 1);
     //qDebug() << "call from" << breakFile << breakLine;
     if (!running) return;
+    if ( ebe["assembler"].toString() == "yasm" ) {
     //qDebug() << "tbreak *" << fileLineToAddress[fl];
 //#if defined(Q_WS_WIN) || defined(Q_OS_MAC)
-    send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+        send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
 ////#else
-    //send(QString("tbreak \"%1\":%2").arg(breakFile).arg(breakLine+1));
+    } else {
+        send(QString("tbreak \"%1\":%2").arg(breakFile).arg(breakLine+1));
+    }
 //#endif
     send("continue");
     setNormal();

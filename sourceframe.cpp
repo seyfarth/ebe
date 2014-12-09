@@ -285,7 +285,7 @@ void SourceFrame::run()
     if ( fpaliasNames ) fpaliasNames->clear();
     else fpaliasNames = new StringHash;
     registerWindow->resetNames();
-    halRegisterWindow->resetNames();
+    if ( wordSize == 64 ) halRegisterWindow->resetNames();
     addressToFileLine.clear();
     fileLineToAddress.clear();
     textToAddress.clear();
@@ -998,8 +998,9 @@ void SourceFrame::run()
         bps.clear();
         foreach ( int bp, *(source->breakpoints) ) {
 //#if defined Q_OS_MAC || defined Q_WS_WIN
-            if ( source->file.language == "asm" ||
-                source->file.language == "hal" ) {
+            if ( (source->file.language == "asm" ||
+                source->file.language == "hal") &&
+                ebe["build/assembler"] == "yasm" ) {
                 fl.line = bp;
                 //qDebug() << "fl2a" << fileLineToAddress[fl];
                 it = fileLineToAddress.lowerBound(fl);
@@ -1068,13 +1069,13 @@ QString SourceFrame::buildDebugAsm(QString fileName)
 void SourceFrame::next()
 {
     clearNextLine(breakFile, breakLine);
-    //if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
+    //if (inAssembly && ebe["build/assembler"] == "yasm" ) {
         FileLine fl(breakFile, breakLine);
         //qDebug() << "file line" << breakFile << breakLine;
         if (callLines.contains(fl)) emit doCall();
         else emit doNextInstruction();
     //} else {
-        //emit doNext();
+     //   emit doNext();
     //}
 }
 
@@ -1082,10 +1083,11 @@ void SourceFrame::step()
 {
     clearNextLine(breakFile, breakLine);
     //if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
+    if (inAssembly && ebe["build/assembler"] == "yasm" ) {
         emit doStepInstruction();
-    //} else {
-        //emit doStep();
-    //}
+    } else {
+        emit doStep();
+    }
 }
 
 void SourceFrame::Continue()

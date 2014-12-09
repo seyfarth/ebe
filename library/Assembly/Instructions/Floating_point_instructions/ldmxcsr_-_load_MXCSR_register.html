@@ -1,0 +1,122 @@
+<html>
+<head>
+<title> load MXCSR register </title>
+</head><body>
+<h2> ldmxcsr - load MXCSR register </h2>
+<pre>
+MXCSR = operand
+</pre>
+<p>
+The ldmxcsr instruction loads the MXCSR register from
+a 32 bit memory address.
+The default value os 0x1f80.
+</p>
+<center>
+<h3> MXCSR Register </h3>
+<table>
+<tr>
+    <td> Bit(s) </td>
+    <td> Purpose </td>
+</tr>
+<tr>
+    <td> 0 </td>
+    <td> Invalid operation flag </td>
+</tr>
+<tr>
+    <td> 1 </td>
+    <td> Denormal flag </td>
+</tr>
+<tr>
+    <td> 2 </td>
+    <td> Divide by 0 flag </td>
+</tr>
+<tr>
+    <td> 3 </td>
+    <td> Overflow flag </td>
+</tr>
+<tr>
+    <td> 4 </td>
+    <td> Underflow flag </td>
+</tr>
+<tr>
+    <td> 5 </td>
+    <td> Precision flag </td>
+</tr>
+<tr>
+    <td> 6 </td>
+    <td> Denormals are zeros </td>
+</tr>
+<tr>
+    <td> 7 </td>
+    <td> Invalid operand mask </td>
+</tr>
+<tr>
+    <td> 8 </td>
+    <td> Denormalized operand mask </td>
+</tr>
+<tr>
+    <td> 9 </td>
+    <td> Divide-by-zero mask </td>
+</tr>
+<tr>
+    <td> 10 </td>
+    <td> Overflow mask </td>
+</tr>
+<tr>
+    <td> 11 </td>
+    <td> Underflow mask </td>
+</tr>
+<tr>
+    <td> 12 </td>
+    <td> Precision mask </td>
+</tr>
+<tr>
+    <td> 13-14 </td>
+    <td> Rounding control </td>
+</tr>
+<tr>
+    <td> 15 </td>
+    <td> Flush to 0 </td>
+</tr>
+<tr>
+    <td> 16-32 </td>
+    <td> Leave these as 0 </td>
+</tr>
+</table>
+<p>
+The lowest 6 bits of the MXCSR register are flags indicating the status
+of the latest operation.
+You could possibly wish to examine the status after an instruction
+to determine whether an underflow or overflow occurred.
+</p>
+<p>
+Bits 6 through 15 of the MXCSR register control various aspects of the 
+floating point instructions.
+Of particular interest in the 2 bit field in bits 13-14 which control
+rounding.
+Using 00 for this field rounds the result to the closest value.
+01 means to round down and 10 means round up.
+Finally 11 means round toward 0.
+The default value 0x1f80 sets the precision mask, sets rounding to round to
+the closest value, and enables a variety of floating point exceptions.
+I suggest leaving bits 7-12 set and modifying the rounding control bits
+only, while leaving the register set to 0x1f80 when you exit from code which
+needs to modify it.
+</p>
+
+</center>
+<pre>
+closest: dd     0x1f80
+down:    dd     0x3f80
+up:      dd     0x5f80
+to_zero: dd     0x7f80
+ 
+         ldmxcsr [down]            ; prepare to round down
+         ldmxcsr [up]              ; prepare to round up
+         ldmxcsr [to_zero]         ; prepare to round towards zero
+         ldmxcsr [closest]         ; restore to the default
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

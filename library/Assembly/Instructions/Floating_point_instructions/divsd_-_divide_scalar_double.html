@@ -1,0 +1,41 @@
+<html>
+<head>
+<title> divide scalar double </title>
+</head><body>
+<h2> divss - divide scalar double (64 bit floating point) </h2>
+<pre>
+dest = dest / source
+</pre>
+<p>
+The divsd instruction divides the source value (second operand)
+into the destination (an XMM register).
+The source can be an XMM register or a 64 bit memory location.
+There is also vdivsd on CPUs with AVX instructions which allows using
+3 XMM registers or 2 XMM registers and a memory location
+which can simplify coding.
+</p>
+<pre>
+        divsd   xmm0, xmm1          ; divide xmm0 by xmm1
+                                    ; leave the rest of xmm0 as is
+        divsd   xmm0, [x]           ; divide xmm0 by 32 bit variable x
+                                    ; leave the rest of xmm0 as is
+        divsd   xmm0, [rdi]         ; divide xmm0 by 32 bit value [rdi]
+                                    ; rdi holds the address of a float
+                                    ; leave the rest of xmm0 as is
+        divsd   xmm0, [x+4*rcx]     ; divide xmm0 by 32 bit element of array x
+                                    ; rcx contains the array index
+                                    ; leave the rest of xmm0 as is
+        vdivsd  xmm3, xmm0, xmm15   ; xmm3 = xmm0 / xmm15
+
+            ; Note: operates by copying 128 bits from xmm0 to xmm3
+            ; before dividing.  This might occasionally be useful.
+            ; The rest of ymm0 is left as is
+            ; using divsd would change either xmm0 or xmm15
+            ; possibly requiring an additional instruction
+
+        vdivsd  xmm3, xmm0, [x]     ; xmm3 = xmm0 / x
+</pre>
+<h3>
+flags: none
+</h3>
+</body>

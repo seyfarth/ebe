@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    MainWindow::setWordSize();
     settings = new Settings;
     settings->read();
     languages.initLanguages();

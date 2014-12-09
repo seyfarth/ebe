@@ -214,7 +214,7 @@ void RegisterWindow::resetNames()
     } else {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 4; c++) {
-                table->item(r, c * 2)->setText(" " + names[r][c] + " ");
+                table->item(r, c * 2)->setText(" " + names32[r][c] + " ");
             }
         }
     }
@@ -271,6 +271,7 @@ void GenericRegisterWindow::setRegister(QString name, QString val)
  */
 void GenericRegisterWindow::receiveRegs(StringHash map)
 {
+    //qDebug() << "receiveRegs" << map;
     foreach ( QString key, map.keys() ) {
         regs[key]->setValue(map[key]);
         setRegister(key,regs[key]->value());

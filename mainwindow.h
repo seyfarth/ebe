@@ -36,6 +36,7 @@ public:
     void saveSettings();
     bool toolExists(QString t);
     void open(QString name);
+    static void setWordSize();
 
 public slots:
     void restoreMainWindow();

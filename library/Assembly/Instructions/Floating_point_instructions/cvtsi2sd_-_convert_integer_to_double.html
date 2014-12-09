@@ -1,0 +1,37 @@
+<html>
+<head>
+<title> convert integer to double </title>
+</head><body>
+<h2> cvtsi2sd - convert integer to double (64 bit floating point) </h2>
+<pre>
+dest = source
+</pre>
+<p>
+The cvtsi2sd instruction adds the source value (second operand)
+to the destination (an XMM register).
+The source can be a 32 or 64 bit general purpose register
+or a 64 bit memory location.
+</p>
+<p>
+If the integer can't be stored exactly as a double, it will be rounded
+according to the MXCSR register.
+For example the number 123456789123456789 fits in a quadword integer
+but a double is only accurate for about 16 decimal digits.
+It will probably be rounded up to about 1234567891234568xx though the final
+8 may be a 7 and the last 2 digits will vary depending on the specific number.
+</p>
+<pre>
+        cvtsi2sd   xmm0, edx         ; convert edx to double in xmm0
+                                     ; leave the rest of xmm0 as is
+        cvtsi2sd   xmm0, r8          ; convert r8 to double in xmm0
+                                     ; leave the rest of xmm0 as is
+        cvtsi2sd   xmm0, qword [x]   ; convert 64 bit variable x to xmm0
+                                     ; leave the rest of xmm0 as is
+        cvtsi2sd   xmm0, dword [rsi] ; convert 32 bit value [rsi] to xmm0
+                                     ; rsi holds the address of an int
+                                     ; leave the rest of xmm0 as is
+</pre>
+<h3>
+flags: none
+</h3>
+</body>
