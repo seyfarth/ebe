@@ -884,6 +884,8 @@ void SourceFrame::run()
                 while ( text != "" ) {
                     parts = text.split(";");
                     if ( parts.length() > 1 ) text = parts[0];
+                    parts = text.split("##");
+                    if ( parts.length() > 1 ) text = parts[0];
                     text = text.trimmed();
                     text.replace("\t"," ");
                     text.replace(",","");
@@ -899,6 +901,21 @@ void SourceFrame::run()
                         data->names = itemNames;
                         data->aliasNames = aliasNames;
                         data->fpaliasNames = fpaliasNames;
+                    } else if ( parts.length() == 3 &&
+                                parts[0] == ".equ" ) {
+                        if ( localExp.exactMatch(parts[2]) ||
+                             currParExp.exactMatch(parts[2]) ||
+                             newParExp.exactMatch(parts[2]) ) {
+                            data = new FrameData(currPars,locals,newPars);
+                            StringHash *newitemNames;
+                            newitemNames = new StringHash;
+                            *newitemNames = *itemNames;
+                            itemNames = newitemNames;
+                            data->names = itemNames;
+                            data->aliasNames = aliasNames;
+                            data->fpaliasNames = fpaliasNames;
+                            itemNames->insert(parts[2],parts[1]);
+                        }
                     } else if ( parts.length() == 3 &&
                                 parts[1].toLower() == "equ" ) {
                         if ( localExp.exactMatch(parts[2]) ||

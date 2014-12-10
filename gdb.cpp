@@ -1270,7 +1270,11 @@ void GDB::requestStack(int n)
     QStringList results;
     //qDebug() << QString("x/%1xg $rsp").arg(n);
     if (!running) return;
-    results = sendReceive(QString("x/%1xg $rsp").arg(n));
+    if ( wordSize == 64 ) {
+        results = sendReceive(QString("x/%1xg $rsp").arg(n));
+    } else {
+        results = sendReceive(QString("x/%1xw $esp").arg(n));
+    }
     //qDebug() << results;
     emit receiveStack(results);
 }

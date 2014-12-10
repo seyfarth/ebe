@@ -224,6 +224,9 @@ void Settings::setDefaults()
         ebe["build/asm_as_64"] = "as --64 -g -o \"$base.o\" "
             "-ahlms=\"$base.lst\" \"$source\"";
         ebe["build/asmld_32"] = "ld -melf_i386 -o \"$base\"";
+        ebe["build/cpp_32"] = "g++ -m32 -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
+        ebe["build/cppld_32"] = "g++ -m32 -g -o \"$base\"";
     } else {
         ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\""
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
