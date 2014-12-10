@@ -25,6 +25,7 @@ extern HANDLE hProcess;
 extern bool needToKill;
 #endif
 
+QString assembler;
 QStringList halExts;
 QStringList fortranExts;
 QStringList cExts;
@@ -278,6 +279,7 @@ void SourceFrame::run()
     QString name;
     QString cmd;
 
+    assembler = ebe["build/assembler"].toString();
     if ( itemNames ) itemNames->clear();
     else itemNames = new StringHash;
     if ( aliasNames ) aliasNames->clear();
@@ -411,16 +413,37 @@ void SourceFrame::run()
 //#endif
 
             ebeInc = file.source;
-            n = ebeInc.lastIndexOf('/');
-            if (n < 0)
-                ebeInc = "ebe.inc";
-            else
-                ebeInc = ebeInc.left(n) + "/ebe.inc";
-            //qDebug() << "ebeInc" << ebeInc;
-            QFile::remove(ebeInc);
-            QFile::copy(":/src/assembly/ebe.inc", ebeInc);
-            QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
-
+            if ( assembler == "yasm" && wordSize == 64 ) {
+                n = ebeInc.lastIndexOf('/');
+                if (n < 0)
+                    ebeInc = "ebe.inc";
+                else
+                    ebeInc = ebeInc.left(n) + "/ebe.inc";
+                //qDebug() << "ebeInc" << ebeInc;
+                QFile::remove(ebeInc);
+                QFile::copy(":/src/assembly/ebe.inc", ebeInc);
+                QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
+            } else if ( assembler == "yasm" && wordSize == 32 ) {
+                n = ebeInc.lastIndexOf('/');
+                if (n < 0)
+                    ebeInc = "ebe_32.inc";
+                else
+                    ebeInc = ebeInc.left(n) + "/ebe_32.inc";
+                //qDebug() << "ebeInc" << ebeInc;
+                QFile::remove(ebeInc);
+                QFile::copy(":/src/assembly/ebe_32.inc", ebeInc);
+                QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
+            } else {
+                n = ebeInc.lastIndexOf('/');
+                if (n < 0)
+                    ebeInc = "ebe_as_32.inc";
+                else
+                    ebeInc = ebeInc.left(n) + "/ebe_as_32.inc";
+                //qDebug() << "ebeInc" << ebeInc;
+                QFile::remove(ebeInc);
+                QFile::copy(":/src/assembly/ebe_as_32.inc", ebeInc);
+                QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
+            }
             cmd.replace("$ebe_inc", ebeInc);
             //qDebug() << cmd;
             cmd.replace("$base", file.base);
@@ -1017,7 +1040,7 @@ void SourceFrame::run()
 //#if defined Q_OS_MAC || defined Q_WS_WIN
             if ( (source->file.language == "asm" ||
                 source->file.language == "hal") &&
-                ebe["build/assembler"] == "yasm" ) {
+                assembler == "yasm" ) {
                 fl.line = bp;
                 //qDebug() << "fl2a" << fileLineToAddress[fl];
                 it = fileLineToAddress.lowerBound(fl);
@@ -1100,7 +1123,7 @@ void SourceFrame::step()
 {
     clearNextLine(breakFile, breakLine);
     //if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
-    if (inAssembly && ebe["build/assembler"] == "yasm" ) {
+    if (inAssembly && assembler == "yasm" ) {
         emit doStepInstruction();
     } else {
         emit doStep();

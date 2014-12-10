@@ -614,7 +614,9 @@
 <file>library/Assembly/Instructions/Floating_point_instructions/ucomisd_-_Unordered_compare_doubles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/max_-_maximum.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/subps_-_subtract_packed_singles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/divsd_-_divide_scalar_double.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/mulpd_-_multiply_packed_doubles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/cvtsi2ss_-_convert_integer_to_single.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/andps_-_and_packed_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/ucomiss_-_Unordered_compare_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/vzeroall_-_zero_all_ymm_registers.html</file>
@@ -626,10 +628,12 @@
 <file>library/Assembly/Instructions/Floating_point_instructions/subsd_-_subtract_scalar_double.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/mulsd_-_multiply_scalar_double.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/xorps_-_exclusive_or_packed_singles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/cvtsi2sd_-_convert_integer_to_double.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/mulps_-_multiply_packed_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/divpd_-_divide_packed_doubles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/andnps_-_and_not_packed_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/subpd_-_subtract_packed_doubles.html</file>
+<file>library/Assembly/Instructions/Floating_point_instructions/ldmxcsr_-_load_MXCSR_register.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addps_-_add_packed_singles.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/addss_-_add_scalar_single.html</file>
 <file>library/Assembly/Instructions/Floating_point_instructions/orps_-_or_packed_singles.html</file>
@@ -687,6 +691,7 @@
 <file>src/cpp/hello.cpp</file>
 <file>src/cpp/while</file>
 <file>src/toybox_template.f</file>
+<file>src/assembly/ebe_as_32.inc</file>
 <file>src/assembly/linux/string</file>
 <file>src/assembly/linux/do-while</file>
 <file>src/assembly/linux/int</file>
@@ -721,6 +726,7 @@
 <file>src/assembly/windows/while</file>
 <file>src/assembly/ebe.inc</file>
 <file>src/assembly/instructions</file>
+<file>src/assembly/ebe_32.inc</file>
 <file>src/assembly/mac/string</file>
 <file>src/assembly/mac/do-while</file>
 <file>src/assembly/mac/int</file>
