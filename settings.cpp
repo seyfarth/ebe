@@ -199,19 +199,37 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "linux";
     ebe["windows"] = false;
+    ebe["build/assembler"] = "yasm";
     if ( wordSize == 64 ) {
         ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\""
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\""
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_yasm_32"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\""
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64"
             "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
+        ebe["build/asmld_64"] = "ld -o \"$base\"";
         ebe["build/halld"] = "ld -o \"$base\"";
         ebe["build/cc_64"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
             "-o \"$base.o\" \"$source\"";
+        ebe["build/cc_32"] = "gcc -m32 -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
         ebe["build/ccld_64"] = "gcc -g -o \"$base\" ";
+        ebe["build/ccld_32"] = "gcc -m32 -g -o \"$base\" ";
         ebe["build/word_size"] = 64;
+        ebe["build/asm_as_32"] = "as --32 -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$source\"";
+        ebe["build/asm_as_64"] = "as --64 -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$source\"";
+        ebe["build/asmld_32"] = "ld -melf_i386 -o \"$base\"";
     } else {
         ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\""
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$source\"";
+        ebe["build/asm_yasm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\""
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/word_size"] = 32;
