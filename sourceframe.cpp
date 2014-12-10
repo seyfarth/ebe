@@ -433,6 +433,16 @@ void SourceFrame::run()
                 QFile::remove(ebeInc);
                 QFile::copy(":/src/assembly/ebe_32.inc", ebeInc);
                 QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
+            } else if ( assembler == "as" && wordSize == 64 ) {
+                n = ebeInc.lastIndexOf('/');
+                if (n < 0)
+                    ebeInc = "ebe_as_64.inc";
+                else
+                    ebeInc = ebeInc.left(n) + "/ebe_as_64.inc";
+                //qDebug() << "ebeInc" << ebeInc;
+                QFile::remove(ebeInc);
+                QFile::copy(":/src/assembly/ebe_as_64.inc", ebeInc);
+                QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
             } else {
                 n = ebeInc.lastIndexOf('/');
                 if (n < 0)

@@ -1,0 +1,30 @@
+%define raxd eax
+%define raxw ax
+%define raxb al
+%define raxh ah
+
+%define rbxd ebx
+%define rbxw bx
+%define rbxb bl
+%define rbxh bh
+
+%define rcxd ecx
+%define rcxw cx
+%define rcxb cl
+%define rcxh ch
+
+%define rdxd edx
+%define rdxw dx
+%define rdxb dl
+%define rdxh dh
+
+%define rdid edi
+%define rdiw di
+%define rdib dil
+
+%define rsid six
+%define rsiw si
+%define rsib sil
+
+%define rbpd ebp
+%define rbpw bp

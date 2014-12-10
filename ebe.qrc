@@ -692,6 +692,7 @@
 <file>src/cpp/while</file>
 <file>src/toybox_template.f</file>
 <file>src/assembly/ebe_as_32.inc</file>
+<file>src/assembly/ebe_as_64.inc</file>
 <file>src/assembly/linux/string</file>
 <file>src/assembly/linux/do-while</file>
 <file>src/assembly/linux/int</file>
@@ -709,6 +710,7 @@
 <file>src/assembly/linux/if-else</file>
 <file>src/assembly/linux/hello.asm</file>
 <file>src/assembly/linux/while</file>
+<file>src/assembly/t</file>
 <file>src/assembly/windows/string</file>
 <file>src/assembly/windows/do-while</file>
 <file>src/assembly/windows/int</file>
