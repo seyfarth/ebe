@@ -1,0 +1,10 @@
+        .section .text
+        .globl  main
+main:
+        push    %ebp
+        mov     %esp, %ebp # setup stack frame
+        frame   2, 3    # stack frame with 2 4-byte parameters to main and
+                        # 3 4-byte local variables
+        sub     $frame_size, %esp
+        leave
+        ret

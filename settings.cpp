@@ -461,14 +461,17 @@ SettingsDialog::SettingsDialog()
     //columnLayout = new QVBoxLayout;
     frame = new SettingsFrame(tr("External commands"));
     frame->addLineEdit(tr("Prettify"), "prettify");
-    frame->addLineEdit(tr("Assemble"), "build/asm");
-    frame->addLineEdit(tr("Link asm"), "build/asmld");
-    frame->addLineEdit(tr("C Compile"), "build/cc");
-    frame->addLineEdit(tr("Link C"), "build/ccld");
-    frame->addLineEdit(tr("Compile C++"), "build/cpp");
-    frame->addLineEdit(tr("Link C"), "build/cppld");
-    frame->addLineEdit(tr("Compile Fortran"), "build/fortran");
-    frame->addLineEdit(tr("Link Fortran"), "build/fortranld");
+    frame->addCheckBox(tr("Expert mode"), "build/expert");
+#if __linux__
+    box = frame->addComboBox(tr("Assembler"), "build/assembler");
+    strings.clear();
+    strings << "yasm" << "as";
+    box->setChoices(strings);
+    box = frame->addComboBox(tr("Word size"), "build/word_size");
+    strings.clear();
+    strings << "64" << "32";
+    box->setChoices(strings);
+#endif
     frame->addStretch();
     columnLayout->addWidget(frame);
     mainLayout->addLayout(columnLayout);
@@ -484,6 +487,43 @@ void SettingsDialog::save()
     ebe["language_code"] =
         languages.nameToCode[ebe["language_name"].toString()];
     languages.setLanguage();
+#if __linux__
+    if ( ebe["build/expert"].toBool() ) {
+        if ( ebe["build/assembler"].toString() == "yasm" ) {
+            if ( ebe["build/word_size"].toInt() == 64 ) {
+                ebe["build/asm"] = ebe["build/asm_yasm_64"];
+                ebe["build/asmld"] = ebe["build/asmld_64"];
+                ebe["build/cpp"] = ebe["build/cpp_64"];
+                ebe["build/cppld"] = ebe["build/cppld_64"];
+                ebe["build/cc"] = ebe["build/cc_64"];
+                ebe["build/ccld"] = ebe["build/ccld_64"];
+            } else {
+                ebe["build/asm"] = ebe["build/asm_yasm_32"];
+                ebe["build/asmld"] = ebe["build/asmld_32"];
+                ebe["build/cpp"] = ebe["build/cpp_32"];
+                ebe["build/cppld"] = ebe["build/cppld_32"];
+                ebe["build/cc"] = ebe["build/cc_32"];
+                ebe["build/ccld"] = ebe["build/ccld_32"];
+            }
+        } else {
+            if ( ebe["build/word_size"].toInt() == 64 ) {
+                ebe["build/asm"] = ebe["build/asm_as_64"];
+                ebe["build/asmld"] = ebe["build/asmld_64"];
+                ebe["build/cpp"] = ebe["build/cpp_64"];
+                ebe["build/cppld"] = ebe["build/cppld_64"];
+                ebe["build/cc"] = ebe["build/cc_64"];
+                ebe["build/ccld"] = ebe["build/ccld_64"];
+            } else {
+                ebe["build/asm"] = ebe["build/asm_as_32"];
+                ebe["build/asmld"] = ebe["build/asmld_32"];
+                ebe["build/cpp"] = ebe["build/cpp_32"];
+                ebe["build/cppld"] = ebe["build/cppld_32"];
+                ebe["build/cc"] = ebe["build/cc_32"];
+                ebe["build/ccld"] = ebe["build/ccld_32"];
+            }
+        }
+    }
+#endif
     accept();
 }
 

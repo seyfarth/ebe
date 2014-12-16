@@ -559,8 +559,8 @@ void SourceFrame::run()
                 }
             }
             if (parts.length() >= 3) {
-                if (parts[1] == "T"
-                    && (parts[2] == "main" || parts[2] == "_main"
+                if ( (parts[1] == "T" || parts[1] == "N") &&
+                     (parts[2] == "main" || parts[2] == "_main"
                         || parts[2] == "_MAIN_" )) {
                     //qDebug() << "found main" << object;
                     if (file.language == "c") {
@@ -1046,6 +1046,7 @@ void SourceFrame::run()
         fl.file = source->file.source;
 //#endif
         bps.clear();
+        //qDebug() << source->file.base << source->file.language << *(source->breakpoints);
         foreach ( int bp, *(source->breakpoints) ) {
 //#if defined Q_OS_MAC || defined Q_WS_WIN
             if ( (source->file.language == "asm" ||
