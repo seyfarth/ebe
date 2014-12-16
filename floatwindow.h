@@ -1,6 +1,7 @@
 #ifndef FLOATWINDOW_H
 #define FLOATWINDOW_H
 
+#include "ebetable.h"
 #include <QtGui>
 #include <QTableWidget>
 #include <QHeaderView>
@@ -53,7 +54,7 @@ public:
     void setFontHeightAndWidth(int height, int width);
     void setRegister(int n, QString value);
     int count;
-    QTableWidget *table;
+    EbeTable *table;
 
 public slots:
     void receiveFpRegs(QStringList);
@@ -61,7 +62,7 @@ public slots:
     void formatAllRegisters(QAction *action);
 
 private:
-    QTableWidgetItem *regs[16];
+    EbeTableItem *regs[16];
     QSize sizeHint() const;
     FpRegister regValues[16];
     int fontHeight;

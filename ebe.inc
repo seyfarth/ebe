@@ -567,6 +567,37 @@ currPar%1  equ 16+8*(%1-7)
 %endrep
 %endmacro
 
+%define raxd eax
+%define raxw ax
+%define raxb al
+%define raxh ah
+
+%define rbxd ebx
+%define rbxw bx
+%define rbxb bl
+%define rbxh bh
+
+%define rcxd ecx
+%define rcxw cx
+%define rcxb cl
+%define rcxh ch
+
+%define rdxd edx
+%define rdxw dx
+%define rdxb dl
+%define rdxh dh
+
+%define rdid edi
+%define rdiw di
+%define rdib dil
+
+%define rsid six
+%define rsiw si
+%define rsib sil
+
+%define rbpd ebp
+%define rbpw bp
+
 %macro alias 2
 %define q%1 %2
 %define d%1 %2d

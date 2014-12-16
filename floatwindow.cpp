@@ -16,7 +16,7 @@ FloatWindow::FloatWindow(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(10, 10, 10, 10);
 
-    table = new QTableWidget(this);
+    table = new EbeTable(this);
     table->setRowCount(count / 2);
     table->setColumnCount(4);
     table->verticalHeader()->hide();
@@ -24,14 +24,14 @@ FloatWindow::FloatWindow(QWidget *parent)
     table->setToolTip(tr("Right click to change register formats."));
 
     QTableWidgetItem *name;
-    QTableWidgetItem *value;
+    EbeTableItem *value;
     QString regName;
     for (int r = 0; r < count / 2; r++) {
         for (int c = 0; c < 2; c++) {
             regName = QString("xmm%1 ").arg(c * (count / 2) + r);
             name = new QTableWidgetItem(regName);
             name->setTextAlignment(Qt::AlignRight);
-            value = new QTableWidgetItem("0.0");
+            value = new EbeTableItem("0.0");
             regs[c * (count / 2) + r] = value;
             table->setItem(r, c * 2, name);
             table->setItem(r, c * 2 + 1, value);
@@ -53,7 +53,7 @@ void FloatWindow::resetNames()
     for (int r = 0; r < count / 2; r++) {
         for (int c = 0; c < 2; c++) {
             regName = QString("xmm%1 ").arg(c * (count / 2) + r);
-            table->item(r, c * 2 + 1)->setText(regName);
+            table->setText(r,c*2,regName);
         }
     }
 }
@@ -84,7 +84,7 @@ void FloatWindow::setFontHeightAndWidth(int height, int width)
 
 void FloatWindow::setRegister(int n, QString value)
 {
-    if (n >= 0 && n < count) regs[n]->setText(value);
+    if (n >= 0 && n < count) regs[n]->updateText(value);
 }
 
 void FloatWindow::receiveFpRegs(QStringList data)

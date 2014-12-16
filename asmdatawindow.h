@@ -8,6 +8,7 @@
  */
 
 #include "types.h"
+#include "ebetable.h"
 #include <QFrame>
 #include <QtGui>
 #include <QDialog>
@@ -161,7 +162,7 @@ public:
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.
      */
-    QTableWidget *table;
+    EbeTable *table;
 
     /**
      *  \fn sizeHint

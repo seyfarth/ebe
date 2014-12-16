@@ -8,6 +8,7 @@
  */
 
 #include "types.h"
+#include "ebetable.h"
 #include <QFrame>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -48,7 +49,7 @@ public:
  *  It contains functions to set the value, set the format, and retrieve the
  *  value formatted for display.
  */
-class FrameItem: public QTableWidgetItem
+class FrameItem: public EbeTableItem
 {
 public:
     /**
@@ -187,7 +188,7 @@ public:
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.
      */
-    QTableWidget *table;
+    EbeTable *table;
 
     /**
      *  \fn sizeHint

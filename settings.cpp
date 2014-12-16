@@ -40,7 +40,7 @@ bool Settings::read()
         //qDebug() << keys[i] << ebe[keys[i]].toString();
     }
     delete settings;
-    wordSize = ebe["word_size"].toInt();
+    wordSize = ebe["build/word_size"].toInt();
     return true;
 }
 
@@ -201,13 +201,13 @@ void Settings::setDefaults()
     ebe["windows"] = false;
     ebe["build/assembler"] = "yasm";
     if ( wordSize == 64 ) {
-        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\""
+        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\""
+        ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_yasm_32"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\""
+        ebe["build/asm_yasm_32"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64"
+        ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64 "
             "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/asmld_64"] = "ld -o \"$base\"";
@@ -228,11 +228,11 @@ void Settings::setDefaults()
             "-o \"$base.o\" \"$source\"";
         ebe["build/cppld_32"] = "g++ -m32 -g -o \"$base\"";
     } else {
-        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\""
+        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
             "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
-        ebe["build/asm_yasm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\""
+        ebe["build/asm_yasm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/word_size"] = 32;

@@ -325,7 +325,7 @@ void AsmDataWindow::redisplay ( int v )
             }
             left -= max*4;
         }
-        table->item(r,2)->setText(s);
+        table->setText(r,2,s);
     }
     table->resizeColumnsToContents();
     table->resizeRowsToContents();
@@ -342,7 +342,7 @@ void AsmDataWindow::buildTable()
     /*
      *  Create a table to display the registers
      */
-    table = new QTableWidget(this);
+    table = new EbeTable(this);
 
     /*
      *  We need a layout for the table widget

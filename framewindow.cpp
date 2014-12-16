@@ -308,7 +308,7 @@ void FrameWindow::receiveStack(QStringList results)
                 QString name=it.key();
                 int irow = items[name];
                 if ( irow/10 < rows ) {
-                    registerWindow->table->item(irow/10,irow%10)->setText(name+" ");
+                    registerWindow->table->setText(irow/10,irow%10,name+" ");
                 }
                 limit->names->erase(it);
                 break;
@@ -324,7 +324,7 @@ void FrameWindow::receiveStack(QStringList results)
                 QString name=it.key();
                 int irow = items[name];
                 if ( irow/10 < rows ) {
-                    registerWindow->table->item(irow/10,irow%10)->setText(name+" ");
+                    registerWindow->table->setText(irow/10,irow%10,name+" ");
                 }
                 limit->names->erase(it);
                 break;
@@ -341,7 +341,7 @@ void FrameWindow::receiveStack(QStringList results)
                 QString name=it.key();
                 int irow = items[name];
                 if ( irow/10 < rows ) {
-                    floatWindow->table->item(irow/10,irow%10)->setText(name+" ");
+                    floatWindow->table->setText(irow/20,irow%10,name+" ");
                 }
                 limit->names->erase(it);
                 break;
@@ -357,8 +357,7 @@ void FrameWindow::receiveStack(QStringList results)
             //qDebug() << "rs" << name;
             int irow = items[name];
             if ( irow/10 < rows ) {
-                table->item(irow/10,irow%10)->
-                       setText(limit->names->value(name)+" ");
+                table->setText(irow/10,irow%10,limit->names->value(name)+" ");
             }
         }
     }
@@ -369,13 +368,13 @@ void FrameWindow::receiveStack(QStringList results)
             int irow = items[name];
             if ( halToIntel.count(name) > 0 ) {
                 if ( irow/10 < halRegisterWindow->table->rowCount() ) {
-                    halRegisterWindow->table->item(irow/10,irow%10)->
-                           setText(limit->aliasNames->value(name)+" ");
+                    halRegisterWindow->table-> setText(
+                          irow/10,irow%10,limit->aliasNames->value(name)+" ");
                 }
             } else {
                 if ( irow/10 < registerWindow->table->rowCount() ) {
-                    registerWindow->table->item(irow/10,irow%10)->
-                           setText(limit->aliasNames->value(name)+" ");
+                    registerWindow->table-> setText(
+                          irow/10,irow%10,limit->aliasNames->value(name)+" ");
                 }
             }
         }
@@ -386,8 +385,8 @@ void FrameWindow::receiveStack(QStringList results)
             //qDebug() << "rs" << name << limit->fpaliasNames->value(name);
             int irow = items[name];
             if ( irow/10 < floatWindow->table->rowCount() ) {
-                floatWindow->table->item(irow/10,irow%10)->
-                       setText(limit->fpaliasNames->value(name)+" ");
+                floatWindow->table->setText(
+                    irow/10,irow%10,limit->fpaliasNames->value(name)+" ");
             }
         }
     }
@@ -400,7 +399,7 @@ void FrameWindow::receiveStack(QStringList results)
             x = parts[j].toULongLong(&ok,16);
             item = (FrameItem *)table->item(row,1);
             item->setValue(x);
-            item->setText(item->value());
+            item->updateText(item->value());
             item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
             row--;
         }
@@ -420,7 +419,7 @@ void FrameWindow::buildTable()
     /*
      *  Create a table to display the registers
      */
-    table = new QTableWidget(this);
+    table = new EbeTable(this);
 
     /*
      *  We need a layout for the table widget
@@ -667,7 +666,7 @@ void FrameWindow::nextLine ( QString file, int line )
  *  The parameter is the register's name.
  */
 FrameItem::FrameItem()
-    : QTableWidgetItem("")
+    : EbeTableItem("")
 {
     format = "hexadecimal";
     _value.u8 = 0;

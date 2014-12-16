@@ -82,7 +82,7 @@ void RegisterWindow::buildTable()
     /*
      *  Create a table to display the registers
      */
-    table = new QTableWidget(this);
+    table = new EbeTable(this);
 
     /*
      *  We need a layout for the table widget
@@ -114,22 +114,19 @@ void RegisterWindow::buildTable()
      *  in registerMap.
      */
     QTableWidgetItem *name;
-    QTableWidgetItem *val;
+    EbeTableItem *val;
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
     if (wordSize == 64) {
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 4; c++) {
-                if (c > 0)
-                    name = new QTableWidgetItem("  " + names[r][c] + " ");
-                else
-                    name = new QTableWidgetItem(names[r][c] + " ");
+                name = new QTableWidgetItem(" " + names[r][c] + " ");
                 items[names[r][c]] = r*10+c*2;
                 name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (r == 4 && c > 1) {
-                    val = new QTableWidgetItem("");
+                    val = new EbeTableItem("");
                 } else {
-                    val = new QTableWidgetItem("0");
+                    val = new EbeTableItem("0");
                 }
                 registerMap[names[r][c]] = val;
                 table->setItem(r, c * 2, name);
@@ -139,17 +136,14 @@ void RegisterWindow::buildTable()
     } else {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 4; c++) {
-                if (c > 0)
-                    name = new QTableWidgetItem(
-                        "  " + names32[r][c] + QString(" "));
-                else
-                    name = new QTableWidgetItem(names32[r][c] + QString(" "));
+                name = new QTableWidgetItem(
+                           " " + names32[r][c] + QString(" "));
                 items[names[r][c]] = r*10+c*2;
                 name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (r == 2 && c > 1) {
-                    val = new QTableWidgetItem("");
+                    val = new EbeTableItem("");
                 } else {
-                    val = new QTableWidgetItem("0");
+                    val = new EbeTableItem("0");
                 }
                 registerMap[names32[r][c]] = val;
                 table->setItem(r, c * 2, name);
@@ -208,13 +202,13 @@ void RegisterWindow::resetNames()
     if (wordSize == 64) {
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 4; c++) {
-                table->item(r, c * 2)->setText(" " + names[r][c] + " ");
+                table->setText(r,c*2," " + names[r][c] + " ");
             }
         }
     } else {
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 4; c++) {
-                table->item(r, c * 2)->setText(" " + names32[r][c] + " ");
+                table->setText(r,c*2," " + names32[r][c] + " ");
             }
         }
     }
@@ -259,7 +253,7 @@ void HalRegisterWindow::setFontHeightAndWidth(int height, int width)
 void GenericRegisterWindow::setRegister(QString name, QString val)
 {
     if (registerMap.contains(name)) {
-        registerMap[name]->setText(val);
+        registerMap[name]->updateText(val);
     } else {
         qDebug() << "tried to set register " << name << endl;
     }
@@ -485,7 +479,7 @@ void HalRegisterWindow::buildTable()
 /*
  *  Create a table to display the registers
  */
-    table = new QTableWidget(this);
+    table = new EbeTable(this);
 /*
  *  We need a layout for the table widget
  */
@@ -512,23 +506,18 @@ void HalRegisterWindow::buildTable()
  *  in registerMap.
  */
     QTableWidgetItem *name;
-    QTableWidgetItem *val;
+    EbeTableItem *val;
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
     for (int r = 0; r < 5; r++) {
         for (int c = 0; c < 4; c++) {
-            if (c > 0) {
-                name = new QTableWidgetItem("  " + halNames[r][c] +
-                           QString(" "));
-            } else {
-                name = new QTableWidgetItem(halNames[r][c] + QString(" "));
-            }
+            name = new QTableWidgetItem(" " + halNames[r][c] + QString(" "));
             items[halNames[r][c]] = r*10+c*2;
             name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
             if (halNames[r][c] == "") {
-                val = new QTableWidgetItem("");
+                val = new EbeTableItem("");
             } else {
-                val = new QTableWidgetItem("0");
+                val = new EbeTableItem("0");
             }
             if (halNames[r][c] != "") {
                 registerMap[halToIntel[halNames[r][c]]] = val;
@@ -585,7 +574,7 @@ void HalRegisterWindow::resetNames()
     if (wordSize == 64) {
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 4; c++) {
-                table->item(r, c * 2)->setText(" " + halNames[r][c] + " ");
+                table->setText(r,c*2," " + halNames[r][c] + " ");
             }
         }
     }
@@ -598,7 +587,7 @@ HalNamesWindow::HalNamesWindow(QWidget *parent)
     : QFrame(parent)
 {
     QTableWidgetItem *name;
-    table = new QTableWidget(this);
+    table = new EbeTable(this);
 /*
  *  We need a layout for the table widget
  */

@@ -8,6 +8,7 @@
  */
 
 #include "types.h"
+#include "ebetable.h"
 #include <QFrame>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -172,12 +173,12 @@ public:
      *  on a register name as key.  The QTableWidgetItem is where
      *  the value for a particular register is stored in the table.
      */
-    QHash<QString, QTableWidgetItem *> registerMap;
+    QHash<QString, EbeTableItem *> registerMap;
 
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.
      */
-    QTableWidget *table;
+    EbeTable *table;
 
     /**
      *  \fn sizeHint
@@ -283,7 +284,7 @@ class HalNamesWindow: public QFrame
 {
 public:
     HalNamesWindow(QWidget *parent = 0);
-    QTableWidget *table;
+    EbeTable *table;
     void setFontHeightAndWidth(int height, int width);
     int fontHeight;
     int fontWidth;
