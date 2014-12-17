@@ -224,10 +224,10 @@ void FrameWindow::rebuildTable()
         rows += limit->newPars;
         int oldRows = table->rowCount();
         //qDebug() << "rows:" << rows << "   oldrows:" << oldRows;
-        for ( int r=0; r < oldRows; r++ ) {
-            table->item(r,0)->setText("");
-            table->item(r,2)->setText("");
-        }
+        //for ( int r=0; r < oldRows; r++ ) {
+            //table->setText(r,0,"");
+            //table->setText(r,2,"");
+        //}
         
         table->setRowCount(rows);
         for (int r = oldRows; r < rows; r++) {
@@ -246,16 +246,15 @@ void FrameWindow::rebuildTable()
             s = QString("currPar%1").arg(i+1);
             items[s] = (returnRow-i-1)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->item(returnRow-i-1,0)->setText(s);
-            table->item(returnRow-i-1,2)->
-                   setText(QString("ebp+%1").arg((i+2)*4));
+            table->setText(returnRow-i-1,0,s);
+            table->setText(returnRow-i-1,2,QString("ebp+%1").arg((i+2)*4));
         }
 
         //qDebug() << "labeled currpars";
-        table->item(returnRow+1,2)->setText("ebp");
-        table->item(returnRow,0)->setText("retAddr");
-        table->item(returnRow,2)->setText("");
-        table->item(returnRow+1,0)->setText("prevEbp");
+        table->setText(returnRow+1,2,"ebp");
+        table->setText(returnRow,0,"retAddr");
+        table->setText(returnRow,2,"");
+        table->setText(returnRow+1,0,"prevEbp");
         StringHash d;
         d = *(limit->names);
         for ( int i = 0; i < limit->locals; i++ ) {
@@ -263,25 +262,27 @@ void FrameWindow::rebuildTable()
             items[s] = (local1Row+i)*10;
             //qDebug() << s << d;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->item(local1Row+i,0)->setText(s);
-            table->item(local1Row+i,2)->setText(QString("ebp-%1").arg((i+1)*4));
+            table->setText(local1Row+i,0,s);
+            table->setText(local1Row+i,2,QString("ebp-%1").arg((i+1)*4));
         }
         //qDebug() << "labeled locals";
         for ( int i = 0; i < limit->newPars; i++ ) {
             s = QString("newPar%1").arg(i+1);
             items[s] = (rows-i-1)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->item(rows-i-1,0)->setText(s);
-            table->item(rows-i-1,2)->setText(QString("esp+%1").arg((i)*4));
+            table->setText(rows-i-1,0,s);
+            if ( i > 0 ) {
+                table->setText(rows-i-1,2,QString("esp+%1").arg((i)*4));
+            }
         }
         //qDebug() << "labeled newpars";
         if ( limit->locals == 0 && limit->newPars == 0 ) {
-            table->item(rows-1,2)->setText("ebp, esp");
+            table->setText(rows-1,2,"ebp, esp");
         } else if ( (limit->locals > 0) == 0 && limit->newPars == 0 ){
-            table->item(rows-1,2)->
-                       setText(QString("ebp-%1, esp").arg(limit->locals*4));
+            table->setText(
+                rows-1,2,QString("ebp-%1, esp").arg(limit->locals*4));
         } else {
-            table->item(rows-1,2)->setText("esp");
+            table->setText(rows-1,2,"esp");
         }
         //qDebug() << "labeled last row";
     }
@@ -647,16 +648,27 @@ void FrameWindow::nextLine ( QString file, int line )
     fl.line = line;
     FrameData *lim = frameData[fl];
 
-    if ( lim ) {
-        if ( lim  != limit ) {
-            limit = lim;
-            rebuildTable();
-        }
+    if ( lim && wordSize == 32 ) {
+        limit = lim;
+        uLong esp, ebp;
+        esp = registerWindow->regs["esp"]->toULong();
+        ebp = registerWindow->regs["ebp"]->toULong();
+        if ( ebp < esp ) return;
+        limit->newPars = (ebp-esp)/4;
+        rebuildTable();        
         emit requestStack(rows);
     } else {
-        limit = 0;
-        rows = 0;
-        table->setRowCount(0);
+        if ( lim ) {
+            if ( lim  != limit ) {
+                limit = lim;
+                rebuildTable();
+            }
+            emit requestStack(rows);
+        } else {
+            limit = 0;
+            rows = 0;
+            table->setRowCount(0);
+        }
     }
 }
 

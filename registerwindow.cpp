@@ -393,6 +393,12 @@ void Register::setValue(QString v)
     contents = v;
 }
 
+uLong Register::toULong()
+{
+    bool ok;
+    return contents.toULongLong(&ok, 16);
+}
+
 /*
  *  Set the format of this Register
  */
@@ -406,7 +412,7 @@ void Register::setFormat(QString f)
  */
 QString Register::value()
 {
-    long dec;
+    uLong dec;
     bool ok;
      //qDebug() << name << format << contents;
     if (name == "rip" || name == "eflags" || name == "eip") {

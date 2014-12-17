@@ -432,9 +432,9 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     if (!running) return;
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getLocals();
     getGlobals();
@@ -453,9 +453,9 @@ void GDB::doNext()
     send("next");
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getLocals();
     getGlobals();
@@ -470,9 +470,9 @@ void GDB::doStep()
     send("step");
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getLocals();
     getGlobals();
@@ -487,9 +487,9 @@ void GDB::doNextInstruction()
     send("nexti");
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getLocals();
     getGlobals();
@@ -504,9 +504,9 @@ void GDB::doStepInstruction()
     send("stepi");
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getGlobals();
     getLocals();
@@ -531,9 +531,9 @@ void GDB::doCall()
     send("continue");
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getLocals();
     getGlobals();
@@ -548,9 +548,9 @@ void GDB::doContinue()
     send("continue");
     setNormal();
     if (!running) return;
+    getRegs();
     getBackTrace();
     if (!running) return;
-    getRegs();
     getFpRegs();
     getLocals();
     getGlobals();

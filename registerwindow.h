@@ -54,6 +54,8 @@ public:
      */
     QString value();
 
+    uLong toULong();
+
     /**
      *  \fn setValue
      *

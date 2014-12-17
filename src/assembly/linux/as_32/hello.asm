@@ -11,7 +11,7 @@ main:
         sub     $frame_size, %esp
         push    $hello
         call    printf
-        sub     $4, %esp
+        add     $4, %esp
         xor     %eax, %eax
         leave
         ret
