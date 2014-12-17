@@ -325,7 +325,7 @@ void Settings::setDefaults()
 
     ebe["tooltips/visible"] = true;
 
-    ebe["complete/minimum"] = 4;
+    ebe["complete/minimum"] = 7;
 
     ebe["xmm/reverse"] = false;
 
