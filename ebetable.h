@@ -15,14 +15,14 @@ class EbeTable: public QTableWidget
 
 public:
     EbeTable(QWidget *parent = 0);
-    void setText ( int r, int c, QString t );
+    void setText ( int r, int c, QString t, bool highlight=false );
 };
 
 class EbeTableItem: public QTableWidgetItem
 {
 public:
     EbeTableItem(QString t);
-    void updateText(QString t);
+    void updateText(QString t, bool highlight=false);
 };
 #endif
 

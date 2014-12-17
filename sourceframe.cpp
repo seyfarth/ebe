@@ -355,7 +355,6 @@ void SourceFrame::run()
     } else {
         QStringList sourceFiles;
         sourceFiles = projectWindow->fileNames;
-        //sourceFiles << "ebe_unbuffer.cpp";
         exeName = projectWindow->projectFileName;
         index = exeName.lastIndexOf('.');
         if (index == -1) {

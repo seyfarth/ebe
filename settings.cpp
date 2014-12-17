@@ -3,6 +3,8 @@
 #include "mainwindow.h"
 #include "stylesheet.h"
 #include "language.h"
+#include "registerwindow.h"
+#include "floatwindow.h"
 #include <QDir>
 #include <QFile>
 #include <QLocale>
@@ -17,6 +19,8 @@ extern int wordSize;
 extern Languages languages;
 QString fortranName;
 extern MainWindow *mainWin;
+extern FloatWindow *floatWindow;
+extern RegisterWindow *registerWindow;
 
 Settings::Settings()
 {
@@ -227,6 +231,9 @@ void Settings::setDefaults()
         ebe["build/cpp_32"] = "g++ -m32 -g -c -Wfatal-errors -Wall -O0 "
             "-o \"$base.o\" \"$source\"";
         ebe["build/cppld_32"] = "g++ -m32 -g -o \"$base\"";
+        ebe["build/cpp_64"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
+        ebe["build/cppld_64"] = "g++ -g -o \"$base\"";
     } else {
         ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
@@ -523,6 +530,9 @@ void SettingsDialog::save()
             }
         }
     }
+    wordSize = ebe["build/word_size"].toInt();
+    registerWindow->resetNames();
+    floatWindow->resetNames();
 #endif
     accept();
 }

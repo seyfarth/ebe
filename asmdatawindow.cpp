@@ -325,7 +325,7 @@ void AsmDataWindow::redisplay ( int v )
             }
             left -= max*4;
         }
-        table->setText(r,2,s);
+        table->setText(r,2,s,true);
     }
     table->resizeColumnsToContents();
     table->resizeRowsToContents();

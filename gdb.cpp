@@ -667,6 +667,7 @@ void GDB::getRegs()
     QStringList results;
     QStringList parts;
     StringHash map;
+    QString s;
     int index1, index2;
     if (!running) return;
     results = sendReceive("info registers");
@@ -680,14 +681,17 @@ void GDB::getRegs()
                 index1 = result.indexOf('[');
                 index2 = result.indexOf(']');
                 if ( index1 < 0 || index2 < 0 ) {
-                    QString s="";
+                    s = "";
                     int regdata = parts[2].toInt();
                     for ( int i= 0; i < 7; i++ ) {
                         if ( regdata & reg_masks[i] ) s += reg_names[i] + " ";
                     }
                     map["eflags"] = s;
                 } else {
-                    map[parts[0]] = result.mid(index1+2,index2-index1-3);
+                    s = result.mid(index1+2,index2-index1-3);
+                    index1 = s.indexOf("IF");
+                    if ( index1 >= 0 ) s.remove(index1,3);
+                    map["eflags"] = s;
                 }
             } else {
                 map[parts[0]] = parts[1];

@@ -34,10 +34,10 @@ SourceEdit::SourceEdit(QWidget *parent)
     //QTimer *timer = new QTimer(this);
     //connect(timer,SIGNAL(timeout()),this,SLOT(printScroll()));
     //timer->start(1000);
-    setToolTip(tr("Right click to popup a menu.\n"
-        "Mark a variable and right click to define\n"
-        "a user-defined variable. This is most\n"
-        "useful for assembly language."));
+    //setToolTip(tr("Right click to popup a menu.\n"
+        //"Mark a variable and right click to define\n"
+        //"a user-defined variable. This is most\n"
+        //"useful for assembly language."));
     top = -1;
     scrollBar = verticalScrollBar();
     tab_width = ebe["edit/tab_width"].toInt();

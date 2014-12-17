@@ -50,8 +50,14 @@ FloatWindow::FloatWindow(QWidget *parent)
 void FloatWindow::resetNames()
 {
     QString regName;
+    count = wordSize == 64 ? 16 : 8;
+    table->setRowCount(count / 2);
     for (int r = 0; r < count / 2; r++) {
         for (int c = 0; c < 2; c++) {
+            if ( table->item(r,c*2) == 0 ) {
+                table->setItem(r,c*2,new EbeTableItem(""));
+                table->setItem(r,c*2+1,new EbeTableItem("0"));
+            }
             regName = QString("xmm%1 ").arg(c * (count / 2) + r);
             table->setText(r,c*2,regName);
         }
@@ -84,7 +90,7 @@ void FloatWindow::setFontHeightAndWidth(int height, int width)
 
 void FloatWindow::setRegister(int n, QString value)
 {
-    if (n >= 0 && n < count) regs[n]->updateText(value);
+    if (n >= 0 && n < count) regs[n]->updateText(value,true);
 }
 
 void FloatWindow::receiveFpRegs(QStringList data)

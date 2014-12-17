@@ -200,8 +200,17 @@ void RegisterWindow::buildTable()
 void RegisterWindow::resetNames()
 {
     if (wordSize == 64) {
+        table->setRowCount(5);
+    } else {
+        table->setRowCount(3);
+    }
+    if (wordSize == 64) {
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 4; c++) {
+                if ( table->item(r,c*2) == 0 ) {
+                    table->setItem(r,c*2,new EbeTableItem(""));
+                    table->setItem(r,c*2+1,new EbeTableItem("0"));
+                }
                 table->setText(r,c*2," " + names[r][c] + " ");
             }
         }
@@ -253,7 +262,7 @@ void HalRegisterWindow::setFontHeightAndWidth(int height, int width)
 void GenericRegisterWindow::setRegister(QString name, QString val)
 {
     if (registerMap.contains(name)) {
-        registerMap[name]->updateText(val);
+        registerMap[name]->updateText(val,true);
     } else {
         qDebug() << "tried to set register " << name << endl;
     }
@@ -279,33 +288,25 @@ void GenericRegisterWindow::receiveRegs(StringHash map)
  */
 void GenericRegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
-    int column = table->currentColumn();
     QMenu menu(tr("Register menu"));
-    if (column % 2 == 0) {
-        /*
-         *      If the column is an even number, this is a register name
-         *      and the menu needs to allow changing formats.
-         */
-        menu.addAction(tr("Decimal format"), this, SLOT(setDecimal()));
-        menu.addAction(tr("Hexadecimal format"), this, SLOT(setHex()));
-        menu.addSeparator();
-        menu.addAction(tr("Decimal format - all"), this, SLOT(setDecimalAll()));
-        menu.addAction(tr("Hexadecimal format - all"), this, SLOT(setHexAll()));
-    } else {
-        /*
-         *      If the column is odd, then this is a register value which
-         *      can be used to create a variable with the address specified
-         *      by the register.  This is only important for assembly.
-         */
-        menu.addAction(tr("Define a variable with this address"), this,
-            SLOT(defineVariableByAddress()));
-    }
+    menu.addAction(tr("Decimal format"), this, SLOT(setDecimal()));
+    menu.addAction(tr("Hexadecimal format"), this, SLOT(setHex()));
+    menu.addSeparator();
+    menu.addAction(tr("Decimal format - all"), this, SLOT(setDecimalAll()));
+    menu.addAction(tr("Hexadecimal format - all"), this, SLOT(setHexAll()));
+    menu.addAction(tr("Define a variable with this address"), this,
+        SLOT(defineVariableByAddress()));
     menu.exec(QCursor::pos());
 }
 
 void GenericRegisterWindow::defineVariableByAddress()
 {
-    QString address = table->currentItem()->text();
+    QTableWidgetItem *item;
+    item = table->currentItem();
+    int row = item->row();
+    int col = item->column();
+    col = col | 1;                      // Make it odd
+    QString address = table->item(row,col)->text();
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItem(address);
     if (dialog->exec()) {
@@ -326,7 +327,12 @@ void GenericRegisterWindow::defineVariableByAddress()
  */
 void GenericRegisterWindow::setDecimal()
 {
-    QString reg = table->currentItem()->text();
+    QTableWidgetItem *item;
+    item = table->currentItem();
+    int row = item->row();
+    int col = item->column();
+    col = col & ~1;                      // Make it even
+    QString reg = table->item(row,col)->text();
     reg = reg.trimmed();
     //qDebug() << "reg" << reg;
     //qDebug() << "regs" << regs;
@@ -577,6 +583,11 @@ void HalRegisterWindow::buildTable()
 
 void HalRegisterWindow::resetNames()
 {
+    if (wordSize == 64) {
+        table->setRowCount(5);
+    } else {
+        table->setRowCount(3);
+    }
     if (wordSize == 64) {
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 4; c++) {

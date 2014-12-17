@@ -305,10 +305,8 @@ void MainWindow::restoreMainWindow()
     //dDebug() << "add ss";
     dataDock->setFloating(ebe["data/floating"].toBool());
     registerDock->setFloating(ebe["register/floating"].toBool());
-    if ( wordSize == 64 ) {
-        halRegisterDock->setFloating(ebe["halregister/floating"].toBool());
-        halNamesDock->setFloating(ebe["halnames/floating"].toBool());
-    }
+    halRegisterDock->setFloating(ebe["halregister/floating"].toBool());
+    halNamesDock->setFloating(ebe["halnames/floating"].toBool());
     frameDock->setFloating(ebe["frame/floating"].toBool());
     asmDataDock->setFloating(ebe["asmdata/floating"].toBool());
     floatDock->setFloating(ebe["float/floating"].toBool());
@@ -372,10 +370,8 @@ void MainWindow::saveSettings()
     ebe["ebe/state"] = saveState();
     ebe["data/floating"] = dataDock->isFloating();
     ebe["register/floating"] = registerDock->isFloating();
-    if ( wordSize == 64 ) {
-        ebe["halregister/floating"] = halRegisterDock->isFloating();
-        ebe["halnames/floating"] = halNamesDock->isFloating();
-    }
+    ebe["halregister/floating"] = halRegisterDock->isFloating();
+    ebe["halnames/floating"] = halNamesDock->isFloating();
     ebe["frame/floating"] = frameDock->isFloating();
     ebe["asmdata/floating"] = asmDataDock->isFloating();
     ebe["float/floating"] = floatDock->isFloating();
@@ -389,6 +385,9 @@ void MainWindow::saveSettings()
     if ( wordSize == 64 ) {
         ebe["halregister/visible"] = halRegisterDock->isVisible();
         ebe["halnames/visible"] = halNamesDock->isVisible();
+    } else {
+        ebe["halregister/visible"] = false;
+        ebe["halnames/visible"] = false;
     }
     ebe["frame/visible"] = frameDock->isVisible();
     ebe["asmdata/visible"] = asmDataDock->isVisible();
@@ -422,10 +421,8 @@ void MainWindow::setFontSize()
     floatWindow->setFontHeightAndWidth(height, width);
     //dDebug() << "regw";
     registerWindow->setFontHeightAndWidth(height, width);
-    if ( wordSize == 64 ) {
-        halRegisterWindow->setFontHeightAndWidth(height, width);
-        halNamesWindow->setFontHeightAndWidth(height, width);
-    }
+    halRegisterWindow->setFontHeightAndWidth(height, width);
+    halNamesWindow->setFontHeightAndWidth(height, width);
     frameWindow->setFontHeightAndWidth(height, width);
     asmDataWindow->setFontHeightAndWidth(height, width);
     //dDebug() << "hregw";
@@ -827,31 +824,27 @@ void MainWindow::createDockWindows()
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
 
 
-    if ( wordSize == 64 ) {
-        halRegisterDock = new QDockWidget(tr("HAL Registers"));
-        halRegisterDock->setObjectName("Dock 10");
-        halRegisterDock->setAllowedAreas(
-            Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
-                | Qt::BottomDockWidgetArea);
-        halRegisterWindow = new HalRegisterWindow(this);
-        halRegisterWindow->setSizePolicy(QSizePolicy::Preferred,
-            QSizePolicy::Preferred);
-        halRegisterDock->setWidget(halRegisterWindow);
-        addDockWidget(Qt::LeftDockWidgetArea, halRegisterDock);
-    }
+    halRegisterDock = new QDockWidget(tr("HAL Registers"));
+    halRegisterDock->setObjectName("Dock 10");
+    halRegisterDock->setAllowedAreas(
+        Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
+            | Qt::BottomDockWidgetArea);
+    halRegisterWindow = new HalRegisterWindow(this);
+    halRegisterWindow->setSizePolicy(QSizePolicy::Preferred,
+        QSizePolicy::Preferred);
+    halRegisterDock->setWidget(halRegisterWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, halRegisterDock);
 
-    if ( wordSize == 64 ) {
-        halNamesDock = new QDockWidget(tr("HAL Names"));
-        halNamesDock->setObjectName("Dock 11");
-        halNamesDock->setAllowedAreas(
-            Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
-                | Qt::BottomDockWidgetArea);
-        halNamesWindow = new HalNamesWindow(this);
-        halNamesWindow->setSizePolicy(QSizePolicy::Preferred,
-            QSizePolicy::Preferred);
-        halNamesDock->setWidget(halNamesWindow);
+    halNamesDock = new QDockWidget(tr("HAL Names"));
+    halNamesDock->setObjectName("Dock 11");
+    halNamesDock->setAllowedAreas(
+        Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
+            | Qt::BottomDockWidgetArea);
+    halNamesWindow = new HalNamesWindow(this);
+    halNamesWindow->setSizePolicy(QSizePolicy::Preferred,
+        QSizePolicy::Preferred);
+    halNamesDock->setWidget(halNamesWindow);
         addDockWidget(Qt::LeftDockWidgetArea, halNamesDock);
-    }
 
     frameDock = new QDockWidget(tr("Stack Frame"));
     frameDock->setObjectName("Dock 12");
@@ -943,6 +936,8 @@ void MainWindow::createDockWindows()
     consoleDock->setWidget(consoleWindow);
     addDockWidget(Qt::LeftDockWidgetArea, consoleDock);
 
+    halNamesDock->setVisible(ebe["halnames/visible"].toBool());
+    halRegisterDock->setVisible(ebe["halregister/visible"].toBool());
     dataDock->setVisible(ebe["data/visible"].toBool());
     registerDock->setVisible(ebe["register/visible"].toBool());
     floatDock->setVisible(ebe["float/visible"].toBool());
