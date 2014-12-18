@@ -52,7 +52,8 @@ public:
     FloatWindow(QWidget *parent = 0);
     void resetNames();
     void setFontHeightAndWidth(int height, int width);
-    void setRegister(int n, QString value);
+    void setRegister(int n, QString value,
+           EbeTable::Color h=EbeTable::Normal);
     int count;
     EbeTable *table;
 

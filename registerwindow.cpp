@@ -259,10 +259,11 @@ void HalRegisterWindow::setFontHeightAndWidth(int height, int width)
 /*
  *  Set the content of a Register based on its name
  */
-void GenericRegisterWindow::setRegister(QString name, QString val)
+void GenericRegisterWindow::setRegister(QString name, QString val,
+                                        EbeTable::Color highlight)
 {
     if (registerMap.contains(name)) {
-        registerMap[name]->updateText(val,true);
+        registerMap[name]->updateText(val,highlight);
     } else {
         qDebug() << "tried to set register " << name << endl;
     }
@@ -277,7 +278,7 @@ void GenericRegisterWindow::receiveRegs(StringHash map)
     //qDebug() << "receiveRegs" << map;
     foreach ( QString key, map.keys() ) {
         regs[key]->setValue(map[key]);
-        setRegister(key,regs[key]->value());
+        setRegister(key,regs[key]->value(),EbeTable::Highlight);
     }
     setFontHeightAndWidth(fontHeight, fontWidth);
 }

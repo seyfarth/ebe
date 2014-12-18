@@ -195,7 +195,7 @@ public:
     void contextMenuEvent(QContextMenuEvent *event);
 
     void setFormat ( QString format="" );
-    void redisplay ( int i );
+    void redisplay ( int i, EbeTable::Color h=EbeTable::Normal );
 
 signals:
     void requestAsmVariable(int i, uLong address, int size);

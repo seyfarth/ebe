@@ -5,15 +5,24 @@ EbeTable::EbeTable(QWidget *parent)
 {
 }
 
-void EbeTable::setText ( int r, int c, QString t, bool highlight )
+void EbeTable::setText ( int r, int c, QString t, Color highlight )
 {
     QTableWidgetItem *it = item(r,c);
     QString old = it->text();
-    //qDebug() << old << t;
-    if ( highlight && old!= "" && old != t ) {
-        it->setForeground(QBrush(QColor(ebe["next_fg"].toString())));
-    } else {
+
+    switch ( highlight ) {
+    case Default:
         it->setForeground(QBrush(QColor("black")));
+        break;
+    case Highlight:
+        if ( old != "" && old != t ) {
+            it->setForeground(QBrush(QColor(ebe["next_fg"].toString())));
+        } else {
+            it->setForeground(QBrush(QColor("black")));
+        }
+        break;
+    case Normal:
+        break;
     }
     it->setText(t);
 }
@@ -23,15 +32,24 @@ EbeTableItem::EbeTableItem ( QString t )
 {
 }
 
-void EbeTableItem::updateText ( QString t, bool highlight )
+void EbeTableItem::updateText ( QString t, EbeTable::Color highlight )
 {
     QString old = text();
     //qDebug() << old << t;
     //if ( old != "" && old != t ) {
-    if ( highlight && old != t ) {
-        setForeground(QBrush(QColor(ebe["next_fg"].toString())));
-    } else {
+    switch ( highlight ) {
+    case EbeTable::Default:
         setForeground(QBrush(QColor("black")));
+        break;
+    case EbeTable::Highlight:
+        if ( old != t ) {
+            setForeground(QBrush(QColor(ebe["next_fg"].toString())));
+        } else {
+            setForeground(QBrush(QColor("black")));
+        }
+        break;
+    case EbeTable::Normal:
+        break;
     }
     setText(t);
 }

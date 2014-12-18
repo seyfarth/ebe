@@ -14,15 +14,16 @@ class EbeTable: public QTableWidget
     Q_OBJECT
 
 public:
+    enum Color { Default, Normal, Highlight };
     EbeTable(QWidget *parent = 0);
-    void setText ( int r, int c, QString t, bool highlight=false );
+    void setText ( int r, int c, QString t, Color highlight=Default );
 };
 
 class EbeTableItem: public QTableWidgetItem
 {
 public:
     EbeTableItem(QString t);
-    void updateText(QString t, bool highlight=false);
+    void updateText(QString t, EbeTable::Color highlight=EbeTable::Default);
 };
 #endif
 

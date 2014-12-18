@@ -398,7 +398,7 @@ void FrameWindow::receiveStack(QStringList results)
             x = parts[j].toULongLong(&ok,16);
             item = (FrameItem *)table->item(row,1);
             item->setValue(x);
-            item->updateText(item->value(),true);
+            item->updateText(item->value(),EbeTable::Highlight);
             item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
             row--;
         }

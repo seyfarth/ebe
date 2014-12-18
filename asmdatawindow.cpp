@@ -172,10 +172,10 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
             k++;
         }
     }
-    redisplay(i);
+    redisplay(i,EbeTable::Highlight);
 }
 
-void AsmDataWindow::redisplay ( int v )
+void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
 {
     QString s;
     QString t;
@@ -325,7 +325,7 @@ void AsmDataWindow::redisplay ( int v )
             }
             left -= max*4;
         }
-        table->setText(r,2,s,true);
+        table->setText(r,2,s,highlight);
     }
     table->resizeColumnsToContents();
     table->resizeRowsToContents();

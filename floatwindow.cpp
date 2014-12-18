@@ -88,9 +88,9 @@ void FloatWindow::setFontHeightAndWidth(int height, int width)
 
 }
 
-void FloatWindow::setRegister(int n, QString value)
+void FloatWindow::setRegister(int n, QString value, EbeTable::Color highlight)
 {
-    if (n >= 0 && n < count) regs[n]->updateText(value,true);
+    if (n >= 0 && n < count) regs[n]->updateText(value,highlight);
 }
 
 void FloatWindow::receiveFpRegs(QStringList data)
@@ -115,7 +115,7 @@ void FloatWindow::receiveFpRegs(QStringList data)
         }
         //qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
         regValues[i].setValue(x);
-        setRegister(i, regValues[i].value());
+        setRegister(i, regValues[i].value(),EbeTable::Highlight);
     }
     setFontHeightAndWidth(fontHeight, fontWidth);
 }

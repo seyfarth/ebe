@@ -7,6 +7,7 @@
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
+#include <QAbstractItemView>
 #include <QStatusBar>
 #include <QScrollBar>
 #include <QMessageBox>
@@ -83,7 +84,7 @@ SourceEdit::SourceEdit(QWidget *parent)
     model.setStringList(list);
     c->setModelSorting(QCompleter::CaseSensitivelySortedModel);
     c->setCaseSensitivity(Qt::CaseSensitive);
-    c->setWrapAround(false);
+    c->setWrapAround(true);
 
     highlighter = new CppHighlighter(document());
 
@@ -102,6 +103,7 @@ void SourceEdit::setCompleter(QCompleter *completer)
     c->setWidget(this);
     c->setCompletionMode(QCompleter::PopupCompletion);
     c->setCaseSensitivity(Qt::CaseSensitive);
+    c->setMaxVisibleItems(3);
     QObject::connect(c, SIGNAL(activated(QString)), this,
         SLOT(insertCompletion(QString)));
 }

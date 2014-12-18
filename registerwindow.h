@@ -162,7 +162,8 @@ public:
      *  \param name The name of the register to set
      *  \param value The new value for the register
      */
-    void setRegister(QString name, QString value);
+    void setRegister(QString name, QString value,
+         EbeTable::Color h=EbeTable::Normal);
 
     /**
      *  QHash which provides a register pointer based on a register
