@@ -3,7 +3,7 @@
 #include "types.h"
 #include <cstdio>
 
-extern IntHash items;
+IntHash floatItems;
 
 FloatWindow::FloatWindow(QWidget *parent)
     : QFrame(parent)
@@ -35,7 +35,7 @@ FloatWindow::FloatWindow(QWidget *parent)
             regs[c * (count / 2) + r] = value;
             table->setItem(r, c * 2, name);
             table->setItem(r, c * 2 + 1, value);
-            items[QString("xmm%1").arg(c*(count/2)+r)] = r*10 + c*2;
+            floatItems[QString("xmm%1").arg(c*(count/2)+r)] = r*10 + c*2;
         }
     }
     layout->addWidget(table);

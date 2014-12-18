@@ -23,6 +23,9 @@ StringHash *fpaliasNames=0;
 extern StringHash halToIntel;
 extern GDB *gdb;
 IntHash items;
+extern IntHash registerItems;
+extern IntHash halItems;
+extern IntHash floatItems;
 
 FrameData::FrameData(int _currPars, int _locals, int _newPars )
     : currPars(_currPars), locals(_locals), newPars(_newPars)
@@ -59,7 +62,7 @@ void FrameWindow::rebuildTable()
     QString s;
     QTableWidgetItem *name;
     FrameItem *item;
-    //items.clear();
+    items.clear();
 #ifdef Q_WS_WIN
     int local5Row;
     rows = 6;
@@ -305,24 +308,28 @@ void FrameWindow::receiveStack(QStringList results)
             //qDebug() << it.key() << it.value() << limit->unalias;
             if ( it.value() == limit->unalias ) {
                 QString name=it.key();
-                int irow = items[name];
-                if ( irow/10 < rows ) {
-                    registerWindow->table->setText(irow/10,irow%10,name+" ");
+                int irow = halItems[name];
+                if ( irow/10 < halRegisterWindow->table->rowCount() ) {
+                    halRegisterWindow->table->setText(irow/10,irow%10,name+" ");
                 }
-                limit->names->erase(it);
+                if ( !(name == "rip" || name == "eflags" ||
+                       name == "rsp" || name == "rbp") ) {
+                    limit->names->erase(it);
+                }
                 break;
             }
             it++;
         }
         limit->unalias = "";
-    } else if ( limit->unalias != "" ) {
+    } 
+    if ( limit->unalias != "" ) {
         StringHash::iterator it = limit->aliasNames->begin();
         while ( it != limit->aliasNames->end() ) {
             //qDebug() << it.key() << it.value() << limit->unalias;
             if ( it.value() == limit->unalias ) {
                 QString name=it.key();
-                int irow = items[name];
-                if ( irow/10 < rows ) {
+                int irow = registerItems[name];
+                if ( irow/10 < registerWindow->table->rowCount() ) {
                     registerWindow->table->setText(irow/10,irow%10,name+" ");
                 }
                 limit->names->erase(it);
@@ -338,9 +345,9 @@ void FrameWindow::receiveStack(QStringList results)
             //qDebug() << it.key() << it.value() << limit->fpunalias;
             if ( it.value() == limit->fpunalias ) {
                 QString name=it.key();
-                int irow = items[name];
-                if ( irow/10 < rows ) {
-                    floatWindow->table->setText(irow/20,irow%10,name+" ");
+                int irow = floatItems[name];
+                if ( irow/10 < floatWindow->table->rowCount() ) {
+                    floatWindow->table->setText(irow/10,irow%10,name+" ");
                 }
                 limit->names->erase(it);
                 break;
@@ -362,19 +369,19 @@ void FrameWindow::receiveStack(QStringList results)
     }
     foreach (QString name, limit->aliasNames->keys()) {
         //qDebug() << "rs" << name;
-        if ( items.contains(name) ) {
+        if ( halItems.contains(name) ) {
             //qDebug() << "rs" << name;
-            int irow = items[name];
-            if ( halToIntel.count(name) > 0 ) {
-                if ( irow/10 < halRegisterWindow->table->rowCount() ) {
-                    halRegisterWindow->table-> setText(
-                          irow/10,irow%10,limit->aliasNames->value(name)+" ");
-                }
-            } else {
-                if ( irow/10 < registerWindow->table->rowCount() ) {
-                    registerWindow->table-> setText(
-                          irow/10,irow%10,limit->aliasNames->value(name)+" ");
-                }
+            int irow = halItems[name];
+            if ( irow/10 < halRegisterWindow->table->rowCount() ) {
+                halRegisterWindow->table-> setText(
+                      irow/10,irow%10,limit->aliasNames->value(name)+" ");
+            }
+        }
+        if ( registerItems.contains(name) ) {
+            int irow = registerItems[name];
+            if ( irow/10 < registerWindow->table->rowCount() ) {
+                registerWindow->table-> setText(
+                      irow/10,irow%10,limit->aliasNames->value(name)+" ");
             }
         }
     }

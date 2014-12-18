@@ -197,6 +197,10 @@ public:
     QStringList namesList;  ///< A list of all the register names
     int fontWidth;          ///< The width of a fixed width character
     int fontHeight;         ///< The height of a fixed width character
+    int columns;
+    int rows;
+
+    virtual void resetNames() = 0;
 
     /**
      *  \fn contextMenuEvent
@@ -291,6 +295,8 @@ public:
     void setFontHeightAndWidth(int height, int width);
     int fontHeight;
     int fontWidth;
+    int rows;
+    int columns;
 };
 #endif
 

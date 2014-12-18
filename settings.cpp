@@ -305,6 +305,7 @@ void Settings::setDefaults()
 
     ebe["data/visible"] = true;
 
+    ebe["register/columns"] = 4;
     ebe["register/fg"] = "#c09000";
     ebe["register/visible"] = false;
 
@@ -455,6 +456,10 @@ SettingsDialog::SettingsDialog()
     strings << "16" << "24" << "32" << "48";
     box->setChoices(strings);
     box = frame->addComboBox(tr("Debug button icon size"), "buttons/icon_size");
+    box->setChoices(strings);
+    box = frame->addComboBox(tr("Register window columns"), "register/columns");
+    strings.clear();
+    strings << "4" << "2";
     box->setChoices(strings);
     frame->addCheckBox(tr("Auto-indent"), "edit/auto_indent");
     frame->addCheckBox(tr("Auto-open project files"), "edit/auto_indent");

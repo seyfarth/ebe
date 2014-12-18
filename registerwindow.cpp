@@ -11,7 +11,8 @@
 
 extern AsmDataWindow *asmDataWindow;
 
-extern IntHash items;
+IntHash registerItems;
+IntHash halItems;
 
 /**
  * Static matrix of register names matching the pattern in the table
@@ -24,21 +25,57 @@ static QString names[5][4] = {
     { "rip", "eflags", "", "" }
 };
 
+static QString names_2[9][2] = {
+    { "rax", "rsi" },
+    { "rbx", "rdi" },
+    { "rcx", "rbp" },
+    { "rdx", "rsp" },
+    { "r8",  "r12" },
+    { "r9",  "r13" },
+    { "r10", "r14" },
+    { "r11", "r15" },
+    { "rip", "eflags" }
+};
+
 #ifdef Q_WS_WIN
 static QString halNames[6][4] = {
-    {   "acc",  "par1", "sav1",  "sav5"},
-    {   "scr1", "par2", "sav2",  "sav6"},
-    {   "scr2", "par3", "sav3",  "sav7"},
-    {   "rbp", "par4",  "sav4",  ""},
-    {   "rsp", "rip",   "eflags", ""}
+    { "acc",  "par1", "sav1",  "sav5"},
+    { "scr1", "par2", "sav2",  "sav6"},
+    { "scr2", "par3", "sav3",  "sav7"},
+    { "rbp", "par4",  "sav4",  ""},
+    { "rsp", "rip",   "eflags", ""}
+};
+static QString halNames_2[10][2] = {
+    { "acc", ""      }
+    { "par1", "par3" },
+    { "par2", "par4" },
+    { "scr1", "scr2" },
+    { "sav1", "sav5" },
+    { "sav2", "sav6" },
+    { "sav3", "sav7" },
+    { "sav4", ""     },
+    { "rbp",  "rsp"  },
+    { "rip", "eflags" }
 };
 #else
-static QString halNames[6][4] = {
+static QString halNames[5][4] = {
     { "acc",  "par1", "par4",   "sav1" },
     { "scr1", "par2", "par5",   "sav2" },
     { "scr2", "par3", "par6",   "sav3" },
     { "rbp",  "",     "",       "sav4" },
     { "rsp",  "rip",  "eflags", "sav5" }
+};
+static QString halNames_2[10][2] = {
+    { "acc", ""      },
+    { "par1", "par4" },
+    { "par2", "par5" },
+    { "par3", "par6" },
+    { "scr1", "scr2" },
+    { "sav1", "sav4" },
+    { "sav2", "sav5" },
+    { "sav3", ""     },
+    { "rbp",  "rsp"  },
+    { "rip", "eflags" }
 };
 #endif
 
@@ -49,6 +86,14 @@ static QString names32[3][4] = {
     { "eax", "ebx", "ecx", "edx" },
     { "esi", "edi", "ebp", "esp" },
     { "eip", "eflags", "", "" }
+};
+
+static QString names32_2[5][2] = {
+    { "eax", "ebx" },
+    { "ecx", "edx" },
+    { "esi", "edi" },
+    { "ebp", "esp" },
+    { "eip", "eflags" }
 };
 
 GenericRegisterWindow::GenericRegisterWindow(QWidget *parent)
@@ -95,18 +140,20 @@ void RegisterWindow::buildTable()
     layout->setContentsMargins(10, 10, 10, 10);
 
     /*
-     *  There are 16 general purpose registers in 4 rows.  Each register
-     *  has a name and a value making 8 columns.
+     *  There are 16 general purpose registers in 4 (or 8) rows.  Each register
+     *  has a name and a value making 8 columns (or 4).
      *
-     *  The fifth row is for rip and eflags
+     *  The fifth (or ninth) row is for rip and eflags
      */
+    columns = ebe["register/columns"].toInt();
 
     if (wordSize == 64) {
-        table->setRowCount(5);
+        rows = columns == 4 ? 5 : 9;
     } else {
-        table->setRowCount(3);
+        rows = columns == 4 ? 3 : 5;
     }
-    table->setColumnCount(8);
+    table->setRowCount(rows);
+    table->setColumnCount(columns*2);
 
     /*
      *  Fill the table with register names and initial values ("0").
@@ -118,34 +165,47 @@ void RegisterWindow::buildTable()
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
     if (wordSize == 64) {
-        for (int r = 0; r < 5; r++) {
-            for (int c = 0; c < 4; c++) {
-                name = new QTableWidgetItem(" " + names[r][c] + " ");
-                items[names[r][c]] = r*10+c*2;
-                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                if (r == 4 && c > 1) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                if (r == rows-1 && c > 1) {
                     val = new EbeTableItem("");
                 } else {
                     val = new EbeTableItem("0");
                 }
-                registerMap[names[r][c]] = val;
+                if ( columns == 4 ) {
+                    name = new QTableWidgetItem(" " + names[r][c] + " ");
+                    registerItems[names[r][c]] = r*10+c*2;
+                    registerMap[names[r][c]] = val;
+                } else {
+                    name = new QTableWidgetItem(" " + names_2[r][c] + " ");
+                    registerItems[names_2[r][c]] = r*10+c*2;
+                    registerMap[names_2[r][c]] = val;
+                }
+                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 table->setItem(r, c * 2, name);
                 table->setItem(r, c * 2 + 1, val);
             }
         }
     } else {
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 4; c++) {
-                name = new QTableWidgetItem(
-                           " " + names32[r][c] + QString(" "));
-                items[names[r][c]] = r*10+c*2;
-                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
                 if (r == 2 && c > 1) {
                     val = new EbeTableItem("");
                 } else {
                     val = new EbeTableItem("0");
                 }
-                registerMap[names32[r][c]] = val;
+                if ( columns == 4 ) {
+                    name = new QTableWidgetItem(
+                               " " + names32[r][c] + QString(" "));
+                    registerItems[names32[r][c]] = r*10+c*2;
+                    registerMap[names32[r][c]] = val;
+                } else {
+                    name = new QTableWidgetItem(
+                               " " + names32_2[r][c] + QString(" "));
+                    registerItems[names32_2[r][c]] = r*10+c*2;
+                    registerMap[names32_2[r][c]] = val;
+                }
+                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 table->setItem(r, c * 2, name);
                 table->setItem(r, c * 2 + 1, val);
             }
@@ -199,25 +259,56 @@ void RegisterWindow::buildTable()
 
 void RegisterWindow::resetNames()
 {
+    columns = ebe["register/columns"].toInt();
     if (wordSize == 64) {
-        table->setRowCount(5);
+        rows = columns == 4 ? 5 : 9;
     } else {
-        table->setRowCount(3);
+        rows = columns == 4 ? 3 : 5;
     }
+    table->setRowCount(rows);
+    table->setColumnCount(columns*2);
     if (wordSize == 64) {
-        for (int r = 0; r < 5; r++) {
-            for (int c = 0; c < 4; c++) {
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
                 if ( table->item(r,c*2) == 0 ) {
                     table->setItem(r,c*2,new EbeTableItem(""));
                     table->setItem(r,c*2+1,new EbeTableItem("0"));
+                    table->item(r,c*2)->
+                           setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 }
-                table->setText(r,c*2," " + names[r][c] + " ");
+                if ( columns == 4 ) {
+                    table->setText(r,c*2," " + names[r][c] + " ");
+                    registerItems[names[r][c]] = r*10+c*2;
+                    registerMap[names[r][c]] =
+                           (EbeTableItem *)(table->item(r,c*2+1));
+                } else {
+                    table->setText(r,c*2," " + names_2[r][c] + " ");
+                    registerItems[names_2[r][c]] = r*10+c*2;
+                    registerMap[names_2[r][c]] =
+                           (EbeTableItem *)(table->item(r,c*2+1));
+                }
             }
         }
     } else {
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 4; c++) {
-                table->setText(r,c*2," " + names32[r][c] + " ");
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                if ( table->item(r,c*2) == 0 ) {
+                    table->setItem(r,c*2,new EbeTableItem(""));
+                    table->setItem(r,c*2+1,new EbeTableItem("0"));
+                    table->item(r,c*2)->
+                           setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+                }
+                if ( columns == 4 ) {
+                    table->setText(r,c*2," " + names32[r][c] + " ");
+                    registerItems[names32[r][c]] = r*10+c*2;
+                    registerMap[names[r][c]] =
+                           (EbeTableItem *)(table->item(r,c*2+1));
+                } else {
+                    table->setText(r,c*2," " + names32_2[r][c] + " ");
+                    registerItems[names32_2[r][c]] = r*10+c*2;
+                    registerMap[names_2[r][c]] =
+                           (EbeTableItem *)(table->item(r,c*2+1));
+                }
             }
         }
     }
@@ -275,7 +366,7 @@ void GenericRegisterWindow::setRegister(QString name, QString val,
  */
 void GenericRegisterWindow::receiveRegs(StringHash map)
 {
-    //qDebug() << "receiveRegs" << map;
+    resetNames();
     foreach ( QString key, map.keys() ) {
         regs[key]->setValue(map[key]);
         setRegister(key,regs[key]->value(),EbeTable::Highlight);
@@ -510,8 +601,14 @@ void HalRegisterWindow::buildTable()
  *  The sixth row is for rip and eflags
  */
 
-    table->setRowCount(5);
-    table->setColumnCount(8);
+    columns = ebe["register/columns"].toInt();
+    if ( columns == 4 ) {
+        rows = 5;
+    } else {
+        rows = 10;
+    }
+    table->setRowCount(rows);
+    table->setColumnCount(columns*2);
 
 /*
  *  Fill the table with register names and initial values ("0").
@@ -522,18 +619,32 @@ void HalRegisterWindow::buildTable()
     EbeTableItem *val;
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
-    for (int r = 0; r < 5; r++) {
-        for (int c = 0; c < 4; c++) {
-            name = new QTableWidgetItem(" " + halNames[r][c] + QString(" "));
-            items[halNames[r][c]] = r*10+c*2;
-            name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-            if (halNames[r][c] == "") {
-                val = new EbeTableItem("");
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
+            if ( columns == 4 ) {
+                if (halNames[r][c] == "") {
+                    val = new EbeTableItem("");
+                } else {
+                    val = new EbeTableItem("0");
+                }
+                name = new QTableWidgetItem(" " + halNames[r][c] + QString(" "));
+                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+                if (halNames[r][c] != "") {
+                    halItems[halNames[r][c]] = r*10+c*2;
+                    registerMap[halToIntel[halNames[r][c]]] = val;
+                }
             } else {
-                val = new EbeTableItem("0");
-            }
-            if (halNames[r][c] != "") {
-                registerMap[halToIntel[halNames[r][c]]] = val;
+                if (halNames_2[r][c] == "") {
+                    val = new EbeTableItem("");
+                } else {
+                    val = new EbeTableItem("0");
+                }
+                name = new QTableWidgetItem(" " + halNames_2[r][c] + QString(" "));
+                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+                if (halNames_2[r][c] != "") {
+                    halItems[halNames_2[r][c]] = r*10+c*2;
+                    registerMap[halToIntel[halNames_2[r][c]]] = val;
+                }
             }
             table->setItem(r, c * 2, name);
             table->setItem(r, c * 2 + 1, val);
@@ -584,15 +695,38 @@ void HalRegisterWindow::buildTable()
 
 void HalRegisterWindow::resetNames()
 {
+    columns = ebe["register/columns"].toInt();
+    rows = columns == 4 ? 5 : 10;
+    table->setRowCount(rows);
+    table->setColumnCount(columns*2);
     if (wordSize == 64) {
-        table->setRowCount(5);
-    } else {
-        table->setRowCount(3);
-    }
-    if (wordSize == 64) {
-        for (int r = 0; r < 5; r++) {
-            for (int c = 0; c < 4; c++) {
-                table->setText(r,c*2," " + halNames[r][c] + " ");
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < columns; c++) {
+                if ( table->item(r,c*2) == 0 ) {
+                    table->setItem(r,c*2,new EbeTableItem(""));
+                    table->setItem(r,c*2+1,new EbeTableItem("0"));
+                    table->item(r,c*2)->
+                           setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+                }
+                if ( columns == 4 ) {
+                    table->setText(r,c*2," " + halNames[r][c] + " ");
+                    if (halNames[r][c] != "") {
+                        halItems[halNames[r][c]] = r*10+c*2;
+                        registerMap[halToIntel[halNames[r][c]]] = 
+                            (EbeTableItem *)(table->item(r,c*2+1));
+                    } else {
+                        table->setText(r,c*2+1,"");
+                    }
+                } else {
+                    table->setText(r,c*2," " + halNames_2[r][c] + " ");
+                    if (halNames_2[r][c] != "") {
+                        halItems[halNames_2[r][c]] = r*10+c*2;
+                        registerMap[halToIntel[halNames_2[r][c]]] = 
+                            (EbeTableItem *)(table->item(r,c*2+1));
+                    } else {
+                        table->setText(r,c*2+1,"");
+                    }
+                }
             }
         }
     }
@@ -615,12 +749,18 @@ HalNamesWindow::HalNamesWindow(QWidget *parent)
  *  Leave 10 pixels all around the table
  */
     layout->setContentsMargins(10, 10, 10, 10);
-    table->setRowCount(4);
-    table->setColumnCount(4);
+    columns = ebe["register/columns"].toInt();
+    if ( columns == 4 ) {
+        rows = 4;
+    } else {
+        rows = 8;
+    }
+    table->setRowCount(rows);
+    table->setColumnCount(columns);
     table->verticalHeader()->hide();
     table->horizontalHeader()->hide();
-    for (int r = 0; r < 4; r++) {
-        for (int c = 0; c < 4; c++) {
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns; c++) {
             name = new QTableWidgetItem(
                 " " + names[r][c] + "=" + IntelToHal[names[r][c]] + " ");
             name->setTextAlignment(Qt::AlignHCenter);
