@@ -4,6 +4,7 @@
 #include "stylesheet.h"
 #include "language.h"
 #include "registerwindow.h"
+#include "asmdatawindow.h"
 #include "floatwindow.h"
 #include <QDir>
 #include <QFile>
@@ -21,6 +22,8 @@ QString fortranName;
 extern MainWindow *mainWin;
 extern FloatWindow *floatWindow;
 extern RegisterWindow *registerWindow;
+extern HalRegisterWindow *halRegisterWindow;
+extern AsmDataWindow *asmDataWindow;
 
 Settings::Settings()
 {
@@ -304,6 +307,8 @@ void Settings::setDefaults()
     ebe["console/visible"] = false;
 
     ebe["data/visible"] = true;
+    ebe["asmdata/visible"] = false;
+    ebe["asmdata/columns"] = 16;
 
     ebe["register/columns"] = 4;
     ebe["register/fg"] = "#c09000";
@@ -461,6 +466,10 @@ SettingsDialog::SettingsDialog()
     strings.clear();
     strings << "4" << "2";
     box->setChoices(strings);
+    box = frame->addComboBox(tr("Assembly data window columns"), "asmdata/columns");
+    strings.clear();
+    strings << "4" << "8" << "16";
+    box->setChoices(strings);
     frame->addCheckBox(tr("Auto-indent"), "edit/auto_indent");
     frame->addCheckBox(tr("Auto-open project files"), "edit/auto_indent");
     frame->addCheckBox(tr("Display debug buttons"), "buttons/visible");
@@ -535,10 +544,12 @@ void SettingsDialog::save()
             }
         }
     }
+#endif
     wordSize = ebe["build/word_size"].toInt();
     registerWindow->resetNames();
+    halRegisterWindow->resetNames();
     floatWindow->resetNames();
-#endif
+    asmDataWindow->rebuildTable();
     accept();
 }
 

@@ -177,6 +177,7 @@ public:
 
     int fontWidth;          ///< The width of a fixed width character
     int fontHeight;         ///< The height of a fixed width character
+    int columns;
 
     /**
      *  \fn contextMenuEvent
