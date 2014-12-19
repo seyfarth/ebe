@@ -1,6 +1,6 @@
-
-        segment .data
-_       dd     0   ; 4 byte integer/float in .data
-        segment .bss
-_       resd   10  ; Array of ten 4 byte integer/float in .bss
-
+        .section  .data
+        .align    4
+x:      .int      1    # int in .data
+        .section  .bss
+        .align    4    # may be faster
+y:      .space    4    # int in ,bss

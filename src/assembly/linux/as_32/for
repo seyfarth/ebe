@@ -1,14 +1,14 @@
 
 ;   for ( int i=0; i < 10; i++ ) {
-;   using eax for i
-        xor     eax, eax    ; i=0
+;   using %eax for i
+        xor     %eax, %eax    # i=0
 top_of_for:
-        cmp     eax, 10     ; test the first and every iteration
-        jnl     end_of_for
+        cmp     $10, %eax     # test the first and every iteration
+        jnl     end_of_for    # end the loop if %eax !< 10
 ;
 ;       Do whatever
 ;
-        inc     eax         ; i++
+        inc     %eax          # i++
         jmp     top_of_for
 ;    }
 end_of_for:

@@ -1,23 +1,17 @@
+#       Using equates to work with a customer class
+#       Probably not worth it trying to really cope with classes
 
-        struc   Customer
-c_id    resq    1       ; reserve 1 quadword
-c_name  resb    16      ; reserver 16 bytes
-c_date  resd    1       ; perhaps for a Julian date
-        align   8
-        endstruc
+c_id    .equ    0          # offset for id (4 byte int)
+c_name  .equ    c_id+4     # offset for name (16 byte array)
+c_date  .equ    c_name+16  # offset for a data (8 byte array)
+c_size  .equ    c_data+8   # size of the struct
 
-;       Customer_size is defined as the size of 1 struct
-;       This is useful for allocating an array of structs
-;
-;       Use c_name as an equate for the offset of c_name
-;
-;       A class can have data about the class and also functions.
-;       Static functions might be easier to just call, but there
-;       could be a global collection which could also be pointed
-;       to by a pointer in each Customer object.
+#       You need to make sure that c_size == sizeof(customer) in C++.
+#       Also you need to make sure that all the alignments match.
 
-        struc   Customer_globals
-c_read  resq    1       ; a function pointer
-c_count reqd    1       ; a global counter for Customers
-        align   8
-        endstruc
+        mov     currPar1(%ebp), %eax  # Assume a call with an object
+                                      # pointer as the first parameter
+        mov     id, %ecx              # assuming id is ready
+        mov     %ecx, c_id(%eax)      # place id in class object
+
+#       use memcpy for the rest

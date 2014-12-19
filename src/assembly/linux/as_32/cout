@@ -1,10 +1,8 @@
-#   cout << "i is " << i << endl;
         .section .data
-format: db      "i is %d". 0x0a, 0  ; Have to add new-line and 0
+i:      .int     1
+format: .asciz   "i is %d\n"
         .section .text
-        lea     format, %eax        ; parameter 1 to printf
-        mov     %eax, newPar1(%esp) ; assuming use of frame macro
-        mov     i, %eax             ; get value of i for parameter 2
-        mov     %eax, newPar2(%esp)
-        call    printf
-
+        push    i           # push value of i
+        push    $format     # push address of format
+        call    printf 
+        add     $8, %esp    # restore stack

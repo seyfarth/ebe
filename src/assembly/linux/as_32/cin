@@ -1,13 +1,9 @@
-
-;   cin >> i;
-        segment .data
-format: db      "%d", 0     ; add ending 0 byte to strings
-        segment .text
-        lea     rdi, [format] ; parameter 1 for scanf
-        lea     rsi, [i]      ; parameter 2 for scanf
-        xor     eax, eax      ; 0 floating point parameters for scanf
+        .section .data
+i:      .int     1
+format: .asciz   "%d"
+        .section .text
+        push    $i          # push address of i
+                            # must have address to read
+        push    $format     # push address of format
         call    scanf
-
-;       Test rax vs 1 after scanf to see if it worked.
-;       scanf returns the number of items it has read
-
+        add     $8, %esp    # restore stack

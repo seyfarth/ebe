@@ -3,8 +3,13 @@
 main:
         push    %ebp
         mov     %esp, %ebp # setup stack frame
-        frame   2, 3    # stack frame with 2 4-byte parameters to main and
-                        # 3 4-byte local variables
-        sub     $frame_size, %esp
-        leave
+        frame   2, 3       # stack frame with 2 4-byte parameters to main
+                           # and 3 4-byte local variables
+        sub     $frame_size, %esp       # subtract space for locals
+
+        mov     currPar1(%ebp), %eax    # get parameter 1 (argc)
+        mov     %eax, local1(%ebp)      # move argc to local1
+
+        xor     %eax, %eax              # return 0 in %eax
+        leave                           # restore %ebp and %esp
         ret

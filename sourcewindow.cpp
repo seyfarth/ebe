@@ -513,7 +513,10 @@ void SourceWindow::doTemplate(QAction *a)
     //qDebug() << name << file.language << ebe.os;
 
     if (file.language == "asm") {
-        QFile in(QString(":/src/%1/%2/%3").arg("assembly").arg(ebe.os).arg(name));
+        QString dir;
+        dir = ebe["build/assembler"].toString()+"_"+ebe["build/word_size"].toString();
+        QFile in(QString(":/src/%1/%2/%3/%4").arg("assembly").arg(ebe.os).
+                         arg(dir).arg(name));
         if (in.open(QFile::ReadOnly)) {
             QString data = QString(in.readAll());
             textEdit->textCursor().insertText(data);
