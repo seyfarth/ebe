@@ -659,7 +659,7 @@ void FrameWindow::nextLine ( QString file, int line )
         esp = registerWindow->regs["esp"]->toULong();
         ebp = registerWindow->regs["ebp"]->toULong();
         if ( ebp < esp ) return;
-        limit->newPars = (ebp-esp)/4;
+        limit->newPars = (ebp-esp)/4-limit->locals;
         rebuildTable();        
         emit requestStack(rows);
     } else {
