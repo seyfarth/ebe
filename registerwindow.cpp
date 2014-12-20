@@ -89,10 +89,10 @@ static QString names32[3][4] = {
 };
 
 static QString names32_2[5][2] = {
-    { "eax", "ebx" },
-    { "ecx", "edx" },
-    { "esi", "edi" },
-    { "ebp", "esp" },
+    { "eax", "edi" },
+    { "ebx", "esi" },
+    { "ecx", "ebp" },
+    { "edx", "esp" },
     { "eip", "eflags" }
 };
 
