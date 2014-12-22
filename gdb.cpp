@@ -675,6 +675,7 @@ void GDB::getRegs()
 
     foreach ( QString result, results ) {
         parts = result.split(QRegExp("\\s+"));
+        //qDebug() << parts;
         if ( regs.contains(parts[0]) ) {
             if ( parts[0] == "eflags" ) {
                 //qDebug() << "eflags" << parts;

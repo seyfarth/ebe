@@ -8,6 +8,7 @@
 #include "floatwindow.h"
 #include <QDir>
 #include <QFile>
+#include <QMessageBox>
 #include <QLocale>
 #include <QStringList>
 #include <QFileDialog>
@@ -503,7 +504,6 @@ SettingsDialog::SettingsDialog()
 
 void SettingsDialog::save()
 {
-    //qDebug() << "Saving";
     ebe = newSettings;
     ebe["language_code"] =
         languages.nameToCode[ebe["language_name"].toString()];
@@ -545,11 +545,14 @@ void SettingsDialog::save()
         }
     }
 #endif
+    int oldWordSize = wordSize;
     wordSize = ebe["build/word_size"].toInt();
-    registerWindow->resetNames();
-    halRegisterWindow->resetNames();
-    floatWindow->resetNames();
-    asmDataWindow->rebuildTable();
+    if ( wordSize != oldWordSize ) {
+        QMessageBox::information(this, tr("Word size changed"),
+            tr("Changing the word size requires restarting ebe.\n"
+               "Trying to run ebe with a changed word size is\n"
+               "likely to cause ebe to crash."));
+    }
     accept();
 }
 

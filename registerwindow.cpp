@@ -267,6 +267,7 @@ void RegisterWindow::resetNames()
     }
     table->setRowCount(rows);
     table->setColumnCount(columns*2);
+
     if (wordSize == 64) {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
@@ -301,12 +302,12 @@ void RegisterWindow::resetNames()
                 if ( columns == 4 ) {
                     table->setText(r,c*2," " + names32[r][c] + " ");
                     registerItems[names32[r][c]] = r*10+c*2;
-                    registerMap[names[r][c]] =
+                    registerMap[names32[r][c]] =
                            (EbeTableItem *)(table->item(r,c*2+1));
                 } else {
                     table->setText(r,c*2," " + names32_2[r][c] + " ");
                     registerItems[names32_2[r][c]] = r*10+c*2;
-                    registerMap[names_2[r][c]] =
+                    registerMap[names32_2[r][c]] =
                            (EbeTableItem *)(table->item(r,c*2+1));
                 }
             }
@@ -366,7 +367,6 @@ void GenericRegisterWindow::setRegister(QString name, QString val,
  */
 void GenericRegisterWindow::receiveRegs(StringHash map)
 {
-    resetNames();
     foreach ( QString key, map.keys() ) {
         regs[key]->setValue(map[key]);
         setRegister(key,regs[key]->value(),EbeTable::Highlight);
@@ -696,7 +696,7 @@ void HalRegisterWindow::buildTable()
 void HalRegisterWindow::resetNames()
 {
     columns = ebe["register/columns"].toInt();
-    rows = columns == 4 ? 5 : 10;
+    rows = columns == 4 ? 5 : 9;
     table->setRowCount(rows);
     table->setColumnCount(columns*2);
     if (wordSize == 64) {

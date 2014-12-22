@@ -1,5 +1,5 @@
 #include "framewindow.h"
-#include "datawindow.h"
+#include "asmdatawindow.h"
 #include "registerwindow.h"
 #include "floatwindow.h"
 #include "settings.h"
@@ -14,7 +14,7 @@
 extern FloatWindow *floatWindow;
 extern RegisterWindow *registerWindow;
 extern HalRegisterWindow *halRegisterWindow;
-extern DataWindow *dataWindow;
+extern AsmDataWindow *asmDataWindow;
 extern QMap<FileLine,FrameData*> frameData;
 QMap<int,FrameItem*> frameItems;
 StringHash *itemNames=0;
@@ -263,8 +263,10 @@ void FrameWindow::rebuildTable()
             items[s] = (local1Row+i)*10;
             //qDebug() << s << d;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->setText(local1Row+i,0,s);
-            table->setText(local1Row+i,2,QString("ebp-%1").arg((i+1)*4));
+            if ( local1Row+i < rows ) {
+                table->setText(local1Row+i,0,s);
+                table->setText(local1Row+i,2,QString("ebp-%1").arg((i+1)*4));
+            }
         }
         //qDebug() << "labeled locals";
         for ( int i = 0; i < limit->newPars; i++ ) {
@@ -544,12 +546,17 @@ void FrameWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 void FrameWindow::defineVariableByAddress()
 {
     QString address = table->currentItem()->text();
-    DefineVariableDialog *dialog = new DefineVariableDialog;
-    dialog->addressEdit->setText(address);
+    DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
+    dialog->addressCombo->addItem(address);
     if (dialog->exec()) {
-        dialog->result.append("");
-        dialog->result.append("");
-        //emit sendVariableDefinition(dialog->result);
+        AsmVariable var(dialog->name);
+        var.size = dialog->size;
+        var.address = dialog->address.toULongLong(0,0);
+        var.format = dialog->format;
+        var.values = new AllTypesArray(var.size);
+        asmDataWindow->userDefinedVariables.append(var);
+        asmDataWindow->variables.append(var);
+        asmDataWindow->rebuildTable();
     }
     delete dialog;
 }

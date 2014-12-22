@@ -88,7 +88,7 @@ void AsmDataWindow::rebuildTable()
     rows = 0;
     for ( int i=0; i < variables.size(); i++ ) {
         variables[i].row = rows;
-        count = formatToRowCount[variables[i].format];
+        count = formatToRowCount[variables[i].format]*columns/16;
         num = variables[i].size/formatToSize[variables[i].format];
         if ( num < 1 ) num = 1;
         variables[i].rows = (num+count-1)/count;
@@ -150,7 +150,6 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
     bool ok;
     int k=0;
 
-    //qDebug() << "rav" << i << results;
     for (int j = 0; j < results.size(); j++ ) {
         t1 = results[j];
         parts = t1.split(":");
@@ -159,7 +158,6 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
             results[j] = t1;
         }
     }
-    //qDebug() << "rav" << i << results;
     for (int j = 0; j < results.size(); j += 2 ) {
         t1 = results[j];
         t1.replace(",","");
@@ -179,6 +177,7 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
         t1.remove(0,1);
         parts = t1.split(" ");
         int n = parts.length();
+        if ( n > variables[i].size ) n = variables[i].size;
         for ( int r=0; r < n; r++ ) {
             variables[i].values->u1(k) = parts[r].toInt(&ok,16);
             k++;
@@ -211,7 +210,6 @@ void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
     } else {
         span = columns/count*2;
     }
-    //qDebug() << variables[v].name << span;
     num = size/formatToSize[format];
     if ( num < 1 ) num = 1;
     newRows = (num + count - 1) / count;
@@ -257,7 +255,7 @@ void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
                 if ( j == max-1 ) {
                     table->setSpan(r,j*span+2,1,2*columns-j*span);
                 } else {
-                    table->setSpan(r,j*span+2,1,span*span);
+                    table->setSpan(r,j*span+2,1,span);
                 }
                 k++;
             }
@@ -271,12 +269,13 @@ void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
                 } else {
                     s = QString("%1").arg(values->u1(k),2,16,QChar('0'));
                 }
-                table->setText(r,j*span+2,s,highlight);
                 if ( j == max-1 ) {
                     table->setSpan(r,j*span+2,1,2*columns-j*span);
                 } else {
                     table->setSpan(r,j*span+2,1,span);
+                    //qDebug() << "setSpan" << r << j*span+2 << 1 << span;
                 }
+                table->setText(r,j*span+2,s,highlight);
                 k++;
             }
             left -= max;

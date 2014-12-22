@@ -141,6 +141,12 @@ public:
     virtual void buildTable() = 0;
 
     /**
+     *  QHash which provides a register pointer based on a register
+     *  name as key.
+     */
+    QHash<QString, Register *> regs;
+
+    /**
      *  \fn setFontHeightAndWidth
      *
      *  This function sets the height of each row in the table to the
@@ -164,12 +170,6 @@ public:
      */
     void setRegister(QString name, QString value,
          EbeTable::Color h=EbeTable::Normal);
-
-    /**
-     *  QHash which provides a register pointer based on a register
-     *  name as key.
-     */
-    QHash<QString, Register *> regs;
 
     /**
      *  QHash which provides a pointer to a QTableWidgetItem based
