@@ -10,12 +10,13 @@ void EbeTable::setText ( int r, int c, QString t, Color highlight )
     QTableWidgetItem *it = item(r,c);
     QString old = it->text();
 
+    //qDebug() << "setText" << r << c << old << t;
     switch ( highlight ) {
     case Default:
         it->setForeground(QBrush(QColor("black")));
         break;
     case Highlight:
-        if ( old != "" && old != t ) {
+        if ( old != t ) {
             it->setForeground(QBrush(QColor(ebe["next_fg"].toString())));
         } else {
             it->setForeground(QBrush(QColor("black")));

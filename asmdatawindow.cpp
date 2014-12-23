@@ -107,7 +107,7 @@ void AsmDataWindow::rebuildTable()
         table->item(r,1)->setText("");
         for ( int c = 2; c < 2*columns+2; c++ ) {
             if ( table->item(r,c) == 0 ) {
-                item = new QTableWidgetItem(QString(""));
+                item = new EbeTableItem(QString(""));
                 table->setItem(r,c,item);
                 table->item(r,c)->setText("");
             }
@@ -117,7 +117,7 @@ void AsmDataWindow::rebuildTable()
     //qDebug() << "Cleared old names and addresses";
     for ( int r = oldRows; r < rows; r++ ) {
         for (int c = 0; c < 2*columns+2; c++) {
-            item = new QTableWidgetItem(QString(""));
+            item = new EbeTableItem(QString(""));
             table->setItem(r,c,item);
         }
     } 
@@ -232,9 +232,11 @@ void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
     }
 
     for ( int r = row; r < row+rows; r++ ) {
-        for ( int c = 0; c < 2*columns; c += 2 ) {
-            //table->setText(r,c+2,"");
-            table->setSpan(r,c+2,1,2);
+        for ( int c = 0; c < columns; c++ ) {
+            table->setSpan(r,2*c+2,1,2);
+            if ( span > 2 && c % (span/2) ) {
+                table->setText(r,c*2+2,"");
+            }
         }
         if ( format == "char") {
             max = count;
@@ -252,13 +254,14 @@ void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
                     s = QString("%1").arg(values->u1(k),2,16,QChar('0'));
                 }
                 table->setText(r,j*span+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,j*span+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,j*span+2,1,span);
-                }
+                table->setSpan(r,j*span+2,1,span);
                 k++;
             }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
+            }
+
             left -= max;
         } else if ( format == "hex1") {
             max = count;
@@ -269,148 +272,152 @@ void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
                 } else {
                     s = QString("%1").arg(values->u1(k),2,16,QChar('0'));
                 }
-                if ( j == max-1 ) {
-                    table->setSpan(r,j*span+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,j*span+2,1,span);
-                    //qDebug() << "setSpan" << r << j*span+2 << 1 << span;
-                }
+                table->setSpan(r,j*span+2,1,span);
                 table->setText(r,j*span+2,s,highlight);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max;
         } else if ( format == "hex2") {
             max = count;
             if ( max > left/2 ) max = left/2;
             for ( int j=0; j < max; j++ ) {
-                s = QString("0x%1 ").arg(values->u2(k),0,16);
-                table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
+                if ( j == 0 ) {
+                    s = QString("0x%1").arg(values->u2(k),2,16,QChar('0'));
                 } else {
-                    table->setSpan(r,span*j+2,1,span);
+                    s = QString("%1").arg(values->u2(k),2,16,QChar('0'));
                 }
+                table->setSpan(r,span*j+2,1,span);
+                table->setText(r,span*j+2,s,highlight);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*2;
         } else if ( format == "hex4") {
             max = count;
             if ( max > left/4 ) max = left/4;
             for ( int j=0; j < max; j++ ) {
-                s = QString("0x%1 ").arg(values->u4(k),0,16);
+                s = QString("0x%1").arg(values->u4(k),0,16);
+                table->setSpan(r,span*j+2,1,span);
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*4;
         } else if ( format == "hex8") {
             max = count;
             if ( max > left/8 ) max = left/8;
             for ( int j=0; j < max; j++ ) {
-                s = QString("0x%1 ").arg(values->u8(k),0,16);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                s = QString("0x%1").arg(values->u8(k),0,16);
+                table->setSpan(r,span*j+2,1,span);
                 table->setText(r,span*j+2,s,highlight);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*8;
         } else if ( format == "dec1") {
             max = count;
             if ( max > left ) max = left;
             for ( int j=0; j < max; j++ ) {
-                s = QString("%1 ").arg(values->i1(k));
+                s = QString("%1").arg(values->i1(k));
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                table->setSpan(r,span*j+2,1,span);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max;
         } else if ( format == "dec2") {
             max = count;
             if ( max > left/2 ) max = left/2;
             for ( int j=0; j < max; j++ ) {
-                s = QString("%1 ").arg(values->i2(k));
+                s = QString("%1").arg(values->i2(k));
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                table->setSpan(r,span*j+2,1,span);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*2;
         } else if ( format == "dec4") {
             max = count;
             if ( max > left/4 ) max = left/4;
             for ( int j=0; j < max; j++ ) {
-                s = QString("%1 ").arg(values->i4(k));
+                s = QString("%1").arg(values->i4(k));
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                table->setSpan(r,span*j+2,1,span);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*4;
         } else if ( format == "dec8") {
             max = count;
             if ( max > left/8 ) max = left/8;
             for ( int j=0; j < max; j++ ) {
-                s = QString("%1 ").arg(values->i8(k));
+                s = QString("%1").arg(values->i8(k));
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                table->setSpan(r,span*j+2,1,span);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*8;
         } else if ( format == "double") {
             max = count;
             if ( max > left/8 ) max = left/8;
             for ( int j=0; j < max; j++ ) {
-                s = QString("%1 ").arg(values->f8(k));
+                s = QString("%1").arg(values->f8(k));
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                table->setSpan(r,span*j+2,1,span);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*8;
         } else if ( format == "float") {
+            max = count;
             if ( max > left/4 ) max = left/4;
             for ( int j=0; j < max; j++ ) {
-                s = QString("%1 ").arg(values->f4(k));
+                s = QString("%1").arg(values->f4(k));
                 table->setText(r,span*j+2,s,highlight);
-                if ( j == max-1 ) {
-                    table->setSpan(r,span*j+2,1,2*columns-j*span);
-                } else {
-                    table->setSpan(r,span*j+2,1,span);
-                }
+                table->setSpan(r,span*j+2,1,span);
                 k++;
+            }
+            for ( int j = max; j < count; j++ ) {
+                table->setText(r,j*span+2,"");
+                table->setSpan(r,j*span+2,1,span);
             }
             left -= max*4;
         }
     }
-    table->resizeColumnToContents(0);
-    table->resizeColumnToContents(1);
+    //table->resizeColumnToContents(0);
+    //table->resizeColumnToContents(1);
     table->resizeRowsToContents();
     for ( int c = 2; c < 2*columns+2; c++ ) {
-        table->setColumnWidth(c,2.8*fontWidth);
+        table->setColumnWidth(c,2.7*fontWidth);
     }
 }
 

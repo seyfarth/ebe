@@ -1122,8 +1122,12 @@ void SourceFrame::next()
     //if (inAssembly && ebe["build/assembler"] == "yasm" ) {
         FileLine fl(breakFile, breakLine);
         //qDebug() << "file line" << breakFile << breakLine;
-        if (callLines.contains(fl)) emit doCall();
-        else emit doNextInstruction();
+        if (callLines.contains(fl)) {
+           //qDebug() << "call here";
+           emit doCall();
+        } else {
+           emit doNextInstruction();
+        }
     //} else {
      //   emit doNext();
     //}

@@ -202,6 +202,9 @@ void Settings::setDefaults()
     ebe["build/_44"] =
         "";
 
+    ebe["build/word_size"] = wordSize;
+    ebe["build/assembler"] = "yasm";
+
 #if __linux__
     ebe["linux"] = true;
     ebe["mac"] = false;

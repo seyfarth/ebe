@@ -77,7 +77,7 @@ void MainWindow::setWordSize()
     where.start(QString("objdump.exe -f \"%1\"").arg(fileName));
     where.waitForFinished();
     data = where.readAllStandardOutput();
-    //qDebug() << data;
+    qDebug() << data;
     if ( QString(data).indexOf("x86-64") >= 0 ) {
         wordSize = 64;
     } else {

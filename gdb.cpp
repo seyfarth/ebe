@@ -519,11 +519,12 @@ void GDB::doCall()
     FileLine fl(breakFile, breakLine + 1);
     //qDebug() << "call from" << breakFile << breakLine;
     if (!running) return;
-    if ( ebe["assembler"].toString() == "yasm" ) {
-    //qDebug() << "tbreak *" << fileLineToAddress[fl];
-//#if defined(Q_WS_WIN) || defined(Q_OS_MAC)
+    if ( ebe["build/assembler"].toString() == "yasm" ) {
+	qDebug() << "tbreak *" << fileLineToAddress[fl];
         send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
-////#else
+//#if defined(Q_WS_WIN) || defined(Q_OS_MAC)
+        //send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
+//#else
     } else {
         send(QString("tbreak \"%1\":%2").arg(breakFile).arg(breakLine+1));
     }

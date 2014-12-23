@@ -26,14 +26,14 @@ static QString names[5][4] = {
 };
 
 static QString names_2[9][2] = {
-    { "rax", "rsi" },
-    { "rbx", "rdi" },
-    { "rcx", "rbp" },
-    { "rdx", "rsp" },
-    { "r8",  "r12" },
-    { "r9",  "r13" },
-    { "r10", "r14" },
-    { "r11", "r15" },
+    { "rax", "r8" },
+    { "rbx", "r9" },
+    { "rcx", "r10" },
+    { "rdx", "r11" },
+    { "rsi", "r12" },
+    { "rdi", "r13" },
+    { "rbp", "r14" },
+    { "rsp", "r15" },
     { "rip", "eflags" }
 };
 
@@ -45,35 +45,33 @@ static QString halNames[6][4] = {
     { "rbp", "par4",  "sav4",  ""},
     { "rsp", "rip",   "eflags", ""}
 };
-static QString halNames_2[10][2] = {
-    { "acc", ""      }
-    { "par1", "par3" },
-    { "par2", "par4" },
-    { "scr1", "scr2" },
-    { "sav1", "sav5" },
-    { "sav2", "sav6" },
-    { "sav3", "sav7" },
-    { "sav4", ""     },
+static QString halNames_2[9][2] = {
+    { "acc",  "sav1" },
+    { "par1", "sav2" },
+    { "par2", "sav3" },
+    { "par3", "sav4" },
+    { "par4", "sav5" },
+    { "scr1", "sav6" },
+    { "scr2", "sav7" },
     { "rbp",  "rsp"  },
     { "rip", "eflags" }
 };
 #else
 static QString halNames[5][4] = {
-    { "acc",  "par1", "par4",   "sav1" },
-    { "scr1", "par2", "par5",   "sav2" },
-    { "scr2", "par3", "par6",   "sav3" },
-    { "rbp",  "",     "",       "sav4" },
-    { "rsp",  "rip",  "eflags", "sav5" }
+    { "acc",  "par1", "par4", "sav1" },
+    { "scr1", "par2", "par5", "sav2" },
+    { "scr2", "par3", "par6", "sav3" },
+    { "rbp",  "rsp",  "",     "sav4" },
+    { "rip",  "eflags", "",   "sav5" }
 };
-static QString halNames_2[10][2] = {
-    { "acc", ""      },
-    { "par1", "par4" },
-    { "par2", "par5" },
-    { "par3", "par6" },
-    { "scr1", "scr2" },
-    { "sav1", "sav4" },
-    { "sav2", "sav5" },
-    { "sav3", ""     },
+static QString halNames_2[9][2] = {
+    { "acc",  "scr1"      },
+    { "par1", "scr2" },
+    { "par2", "sav1" },
+    { "par3", "sav2" },
+    { "par4", "sav3" },
+    { "par5", "sav4" },
+    { "par6", "sav5" },
     { "rbp",  "rsp"  },
     { "rip", "eflags" }
 };
@@ -605,7 +603,7 @@ void HalRegisterWindow::buildTable()
     if ( columns == 4 ) {
         rows = 5;
     } else {
-        rows = 10;
+        rows = 9;
     }
     table->setRowCount(rows);
     table->setColumnCount(columns*2);
@@ -761,8 +759,13 @@ HalNamesWindow::HalNamesWindow(QWidget *parent)
     table->horizontalHeader()->hide();
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < columns; c++) {
-            name = new QTableWidgetItem(
-                " " + names[r][c] + "=" + IntelToHal[names[r][c]] + " ");
+            if ( columns == 4 ) {
+                name = new QTableWidgetItem(
+                    " " + names[r][c] + "=" + IntelToHal[names[r][c]] + " ");
+            } else {
+                name = new QTableWidgetItem(
+                    " " + names_2[r][c] + "=" + IntelToHal[names_2[r][c]] + " ");
+            }
             name->setTextAlignment(Qt::AlignHCenter);
             table->setItem(r, c, name);
         }
