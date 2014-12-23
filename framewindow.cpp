@@ -304,7 +304,8 @@ void FrameWindow::receiveStack(QStringList results)
     int row = rows-1;
     //qDebug() << "rs" << limit->unalias << items.keys();
     //qDebug() << "rs names" << *(limit->names);
-    if ( limit->unalias != "" && halToIntel.count(limit->unalias) > 0 ) {
+    if ( wordSize == 64 &&
+         limit->unalias != "" && halToIntel.count(limit->unalias) > 0 ) {
         StringHash::iterator it = limit->aliasNames->begin();
         while ( it != limit->aliasNames->end() ) {
             //qDebug() << it.key() << it.value() << limit->unalias;
@@ -371,7 +372,7 @@ void FrameWindow::receiveStack(QStringList results)
     }
     foreach (QString name, limit->aliasNames->keys()) {
         //qDebug() << "rs" << name;
-        if ( halItems.contains(name) ) {
+        if ( wordSize == 64 && halItems.contains(name) ) {
             //qDebug() << "rs" << name;
             int irow = halItems[name];
             if ( irow/10 < halRegisterWindow->table->rowCount() ) {

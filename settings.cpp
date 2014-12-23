@@ -545,9 +545,8 @@ void SettingsDialog::save()
         }
     }
 #endif
-    int oldWordSize = wordSize;
-    wordSize = ebe["build/word_size"].toInt();
-    if ( wordSize != oldWordSize ) {
+    int newWordSize = ebe["build/word_size"].toInt();
+    if ( wordSize != newWordSize ) {
         QMessageBox::information(this, tr("Word size changed"),
             tr("Changing the word size requires restarting ebe.\n"
                "Trying to run ebe with a changed word size is\n"
