@@ -472,7 +472,7 @@ SettingsDialog::SettingsDialog()
     box->setChoices(strings);
     box = frame->addComboBox(tr("Assembly data window columns"), "asmdata/columns");
     strings.clear();
-    strings << "4" << "8" << "16";
+    strings << "4" << "8" << "16" << "32";
     box->setChoices(strings);
     frame->addCheckBox(tr("Auto-indent"), "edit/auto_indent");
     frame->addCheckBox(tr("Auto-open project files"), "edit/auto_indent");
