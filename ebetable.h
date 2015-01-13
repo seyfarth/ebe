@@ -7,6 +7,7 @@
 #include <QColor>
 #include <QDebug>
 #include <QTableWidget>
+#include <QHeaderView>
 #include <QTableWidgetItem>
 
 class EbeTable: public QTableWidget

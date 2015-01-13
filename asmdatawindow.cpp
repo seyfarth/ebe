@@ -2,16 +2,17 @@
 #include "datawindow.h"
 #include "settings.h"
 #include "gdb.h"
-#include <QLabel>
 #include <QDebug>
-#include <QHeaderView>
-#include <QTableWidget>
+#include <QScrollBar>
 #include <QMenu>
-#include <QTableWidgetItem>
 #include <cstdio>
 #include <ctype.h>
 
 extern GDB *gdb;
+IntHash formatToSpan;
+IntHash formatToSize;
+QHash<QString,FormatFunction> formatToFunction;
+extern EZPlank *latestPlank;
 
 AsmVariable::AsmVariable(QString _name)
     : name(_name)
@@ -40,29 +41,90 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     variables.clear();
     userDefinedVariables.clear();
     varNames.clear();
-    formatToRowCount.clear();
-    formatToRowCount["char"] = 16;
-    formatToRowCount["dec1"] = 8;
-    formatToRowCount["dec2"] = 8;
-    formatToRowCount["dec4"] = 4;
-    formatToRowCount["dec8"] = 4;
-    formatToRowCount["hex1"] = 16;
-    formatToRowCount["hex2"] = 8;
-    formatToRowCount["hex4"] = 4;
-    formatToRowCount["hex8"] = 4;
-    formatToRowCount["float"] = 4;
-    formatToRowCount["double"] = 4;
+    formatToSpan.clear();
+    formatToSpan["char"] = 1;
+    formatToSpan["dec1"] = 2;
+    formatToSpan["dec2"] = 2;
+    formatToSpan["dec4"] = 4;
+    formatToSpan["dec8"] = 4;
+    formatToSpan["udec1"] = 2;
+    formatToSpan["udec2"] = 2;
+    formatToSpan["udec4"] = 4;
+    formatToSpan["udec8"] = 4;
+    formatToSpan["hex1"] = 1;
+    formatToSpan["hex2"] = 2;
+    formatToSpan["hex4"] = 4;
+    formatToSpan["hex8"] = 4;
+    formatToSpan["bin1"] = 2;
+    formatToSpan["bin2"] = 4;
+    formatToSpan["bin4"] = 8;
+    formatToSpan["bin8"] = 16;
+    formatToSpan["fields4"] = 8;
+    formatToSpan["fields8"] = 16;
+    formatToSpan["binaryfp4"] = 8;
+    formatToSpan["binaryfp8"] = 16;
+    formatToSpan["bool1"] = 1;
+    formatToSpan["bool2"] = 1;
+    formatToSpan["bool4"] = 1;
+    formatToSpan["bool8"] = 1;
+    formatToSpan["float"] = 4;
+    formatToSpan["double"] = 4;
+    formatToSpan["string"] = 1;
+    formatToSpan["string array"] = 1;
     formatToSize["char"] = 1;
     formatToSize["dec1"] = 1;
     formatToSize["dec2"] = 2;
     formatToSize["dec4"] = 4;
     formatToSize["dec8"] = 8;
+    formatToSize["udec1"] = 1;
+    formatToSize["udec2"] = 2;
+    formatToSize["udec4"] = 4;
+    formatToSize["udec8"] = 8;
     formatToSize["hex1"] = 1;
     formatToSize["hex2"] = 2;
     formatToSize["hex4"] = 4;
     formatToSize["hex8"] = 8;
+    formatToSize["bool1"] = 1;
+    formatToSize["bool2"] = 2;
+    formatToSize["bool4"] = 4;
+    formatToSize["bool8"] = 8;
+    formatToSize["bin1"] = 1;
+    formatToSize["bin2"] = 2;
+    formatToSize["bin4"] = 4;
+    formatToSize["bin8"] = 8;
+    formatToSize["fields4"] = 4;
+    formatToSize["fields8"] = 8;
+    formatToSize["binaryfp4"] = 4;
+    formatToSize["binaryfp8"] = 8;
+    formatToSize["string"] = 8;
+    formatToSize["string array"] = 8;
     formatToSize["float"] = 4;
     formatToSize["double"] = 8;
+    formatToFunction["string array"] = toString;
+    formatToFunction["string"] = toString;
+    formatToFunction["char"] = toChar;
+    formatToFunction["hex1"] = toHex1;
+    formatToFunction["hex2"] = toHex2;
+    formatToFunction["hex4"] = toHex4;
+    formatToFunction["hex8"] = toHex8;
+    formatToFunction["dec1"] = toDec1;
+    formatToFunction["dec2"] = toDec2;
+    formatToFunction["dec4"] = toDec4;
+    formatToFunction["dec8"] = toDec8;
+    formatToFunction["udec1"] = toUDec1;
+    formatToFunction["udec2"] = toUDec2;
+    formatToFunction["udec4"] = toUDec4;
+    formatToFunction["udec8"] = toUDec8;
+    formatToFunction["float"] = toFloat;
+    formatToFunction["double"] = toDouble;
+    formatToFunction["fields4"] = toFields4;
+    formatToFunction["fields8"] = toFields8;
+    formatToFunction["binaryfp4"] = toBinaryFP4;
+    formatToFunction["binaryfp8"] = toBinaryFP8;
+    formatToFunction["bin1"] = toBin1;
+    formatToFunction["bin2"] = toBin2;
+    formatToFunction["bin4"] = toBin4;
+    formatToFunction["bin8"] = toBin8;
     qRegisterMetaType<uLong>("uLong");
     connect ( this, SIGNAL(requestAsmVariable(int,uLong,int)),
               gdb, SLOT(requestAsmVariable(int,uLong,int)) );
@@ -78,69 +140,27 @@ void AsmDataWindow::clear()
 
 void AsmDataWindow::rebuildTable()
 {
-    QTableWidgetItem *item;
-    int oldRows;
-    int count;
-    int num;
-
     //qDebug() << variables.size() << varNames;
     columns = ebe["asmdata/columns"].toInt();
     rows = 0;
-    for ( int i=0; i < variables.size(); i++ ) {
-        variables[i].row = rows;
-        count = formatToRowCount[variables[i].format]*columns/16;
-        num = variables[i].size/formatToSize[variables[i].format];
-        if ( num < 1 ) num = 1;
-        variables[i].rows = (num+count-1)/count;
-        rows += variables[i].rows;
-    }
 
-    oldRows = table->rowCount();
     //qDebug() << "rows" << rows << ";   oldrows" << oldRows;
-    table->setRowCount(rows);
-    table->setColumnCount(2*columns+2);
-
-    if ( oldRows > rows ) oldRows = rows;
-
-    for ( int r = 0; r < oldRows; r++ ) {
-        table->item(r,0)->setText("");
-        table->item(r,1)->setText("");
-        for ( int c = 2; c < 2*columns+2; c++ ) {
-            if ( table->item(r,c) == 0 ) {
-                item = new EbeTableItem(QString(""));
-                table->setItem(r,c,item);
-                table->item(r,c)->setText("");
-            }
-        }
-   }
-
-    //qDebug() << "Cleared old names and addresses";
-    for ( int r = oldRows; r < rows; r++ ) {
-        for (int c = 0; c < 2*columns+2; c++) {
-            item = new EbeTableItem(QString(""));
-            table->setItem(r,c,item);
-        }
-    } 
-
-    //qDebug() << "Cleared new rows";
+    table->setPlankCount(variables.size());
+    table->setColumnCount(columns+2);
 
     for ( int i=0; i < variables.size(); i++ ) {
-        //qDebug() << "var" << i << variables[i].name;
-        int r = variables[i].row;
-        item = table->item(r,0);
-        variables[i].item = item;
-        item->setText(QString("0x%1 ").arg(variables[i].address,0,16));
-        item = table->item(r,1);
-        item->setText(variables[i].name+" ");
+        table->setCurrentPlank(i);
+        if ( table->rowCount() < 1 ) {
+            table->setRowCount(1);
+        }
+        variables[i].item = table->cell(0,0);
+        table->setText(0,0,QString(" 0x%1").arg(variables[i].address,0,16));
+        table->setText(0,1,variables[i].name);
     }
-    table->resizeColumnToContents(0);
-    table->resizeColumnToContents(1);
-    table->resizeRowsToContents();
 
     for ( int i=0; i < variables.size(); i++ ) {
         emit requestAsmVariable ( i, variables[i].address, variables[i].size );
     }
-    //qDebug() << "requested data";
 }
 
 void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
@@ -150,6 +170,7 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
     bool ok;
     int k=0;
 
+    table->setCurrentPlank(i);
     for (int j = 0; j < results.size(); j++ ) {
         t1 = results[j];
         parts = t1.split(":");
@@ -183,241 +204,79 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
             k++;
         }
     }
-    redisplay(i,EbeTable::Highlight);
+    redisplay(i,EZ::Highlight);
 }
 
-void AsmDataWindow::redisplay ( int v, EbeTable::Color highlight )
+void AsmDataWindow::redisplay ( int v, EZ::Color highlight )
 {
     QString s;
     QString t;
     QStringList parts;
-    int size = variables[v].size;
-    int row = variables[v].item->row();
-    int rows = variables[v].rows;
-    int left = size;
+    int size;
+    int left;
     int max=0;
     int k = 0;
     int count;
     QString format = variables[v].format;
-    AllTypesArray *values = variables[v].values;
     int num;
-    int newRows;
     int span;
 
-    count = formatToRowCount[format] * columns / 16;
-    if ( count == columns ) {
-        span = 2;
+    FormatFunction f=formatToFunction[format];
+
+    table->setCurrentPlank(v);
+    if ( format == "string" || format == "string array" ) {
+        span = columns;
+        num = variables[v].stringValues.length();
+        if ( num < 1 ) num = 1;
+        rows = num;
+        left = rows;
+        size = 1;
+        count = 1;
     } else {
-        span = columns/count*2;
+        span = formatToSpan[format];
+        num = variables[v].size/formatToSize[format];
+        left = variables[v].size;
+        if ( num < 1 ) num = 1;
+        size = formatToSize[format];
+        count = columns/span;
+        rows = (num + count - 1) / count;
     }
-    num = size/formatToSize[format];
-    if ( num < 1 ) num = 1;
-    newRows = (num + count - 1) / count;
+    //qDebug() << "format:" << format << "  span:" << span
+             //<< "  num:" << num << "  size:" << size
+             //<< "  left:" << left << "  count;" << count;
 
-    if ( newRows > rows ) {
-        for ( int r = rows; r < newRows; r++ ) {
-            table->insertRow(row+1);
-            QTableWidgetItem *item;
-            for (int c = 0; c < 2*columns+2; c++) {
-                item = new QTableWidgetItem(QString(""));
-                table->setItem(row+1,c,item);
-            }
-        }
-        rows = variables[v].rows = newRows;
-    } else if ( newRows < rows ) {
-        for ( int r = newRows; r < rows; r++ ) {
-            table->removeRow(row+1);
-        }
-        rows = variables[v].rows = newRows;
-    }
+    table->setRowCount(rows);
 
-    for ( int r = row; r < row+rows; r++ ) {
+    //qDebug() << "redisplay" << v << rows;
+    for ( int r = 0; r < rows; r++ ) {
+        //qDebug() << "working on row" << r;
+
         for ( int c = 0; c < columns; c++ ) {
-            table->setSpan(r,2*c+2,1,2);
-            if ( span > 2 && c % (span/2) ) {
-                table->setText(r,c*2+2,"");
-            }
+            table->setSpan(r,c+2,1,1);
         }
-        if ( format == "char") {
-            max = count;
-            if ( max > left ) max = left;
-            for ( int j=0; j < max; j++ ) {
-                if ( isprint(values->c1(k)) ) {
-                    s = QString(QChar(values->c1(k)));
-                } else if ( values->c1(k) == '\t' ) {
-                    s = "\\t";
-                } else if ( values->c1(k) == '\n' ) {
-                    s = "\\n";
-                } else if ( values->c1(k) == '\r' ) {
-                    s = "\\r";
-                } else {
-                    s = QString("%1").arg(values->u1(k),2,16,QChar('0'));
-                }
-                table->setText(r,j*span+2,s,highlight);
-                table->setSpan(r,j*span+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
+        if ( r > 0 ) {
+            table->setText(r,0," ");
+            table->setText(r,1," ");
+        }
 
-            left -= max;
-        } else if ( format == "hex1") {
-            max = count;
-            if ( max > left ) max = left;
-            for ( int j=0; j < max; j++ ) {
-                if ( j == 0 ) {
-                    s = QString("0x%1").arg(values->u1(k),2,16,QChar('0'));
-                } else {
-                    s = QString("%1").arg(values->u1(k),2,16,QChar('0'));
-                }
-                table->setSpan(r,j*span+2,1,span);
-                table->setText(r,j*span+2,s,highlight);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max;
-        } else if ( format == "hex2") {
-            max = count;
-            if ( max > left/2 ) max = left/2;
-            for ( int j=0; j < max; j++ ) {
-                if ( j == 0 ) {
-                    s = QString("0x%1").arg(values->u2(k),2,16,QChar('0'));
-                } else {
-                    s = QString("%1").arg(values->u2(k),2,16,QChar('0'));
-                }
-                table->setSpan(r,span*j+2,1,span);
-                table->setText(r,span*j+2,s,highlight);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*2;
-        } else if ( format == "hex4") {
-            max = count;
-            if ( max > left/4 ) max = left/4;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("0x%1").arg(values->u4(k),0,16);
-                table->setSpan(r,span*j+2,1,span);
-                table->setText(r,span*j+2,s,highlight);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*4;
-        } else if ( format == "hex8") {
-            max = count;
-            if ( max > left/8 ) max = left/8;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("0x%1").arg(values->u8(k),0,16);
-                table->setSpan(r,span*j+2,1,span);
-                table->setText(r,span*j+2,s,highlight);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*8;
-        } else if ( format == "dec1") {
-            max = count;
-            if ( max > left ) max = left;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("%1").arg(values->i1(k));
-                table->setText(r,span*j+2,s,highlight);
-                table->setSpan(r,span*j+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max;
-        } else if ( format == "dec2") {
-            max = count;
-            if ( max > left/2 ) max = left/2;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("%1").arg(values->i2(k));
-                table->setText(r,span*j+2,s,highlight);
-                table->setSpan(r,span*j+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*2;
-        } else if ( format == "dec4") {
-            max = count;
-            if ( max > left/4 ) max = left/4;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("%1").arg(values->i4(k));
-                table->setText(r,span*j+2,s,highlight);
-                table->setSpan(r,span*j+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*4;
-        } else if ( format == "dec8") {
-            max = count;
-            if ( max > left/8 ) max = left/8;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("%1").arg(values->i8(k));
-                table->setText(r,span*j+2,s,highlight);
-                table->setSpan(r,span*j+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*8;
-        } else if ( format == "double") {
-            max = count;
-            if ( max > left/8 ) max = left/8;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("%1").arg(values->f8(k));
-                table->setText(r,span*j+2,s,highlight);
-                table->setSpan(r,span*j+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*8;
-        } else if ( format == "float") {
-            max = count;
-            if ( max > left/4 ) max = left/4;
-            for ( int j=0; j < max; j++ ) {
-                s = QString("%1").arg(values->f4(k));
-                table->setText(r,span*j+2,s,highlight);
-                table->setSpan(r,span*j+2,1,span);
-                k++;
-            }
-            for ( int j = max; j < count; j++ ) {
-                table->setText(r,j*span+2,"");
-                table->setSpan(r,j*span+2,1,span);
-            }
-            left -= max*4;
+        max = count;
+        if ( max > left/size ) max = left/size;
+        for ( int j=0; j < max; j++ ) {
+            s = (*f)(variables[v].values,variables[v].stringValues,k,j);
+            table->setSpan(r,j*span+2,1,span);
+            table->setText(r,j*span+2,s,highlight);
+            k++;
         }
+        for ( int j = max; j < count; j++ ) {
+            table->setSpan(r,j*span+2,1,span);
+            table->setText(r,j*span+2,"");
+        }
+        left -= max*size;
     }
-    //table->resizeColumnToContents(0);
-    //table->resizeColumnToContents(1);
-    table->resizeRowsToContents();
-    for ( int c = 2; c < 2*columns+2; c++ ) {
-        table->setColumnWidth(c,2.7*fontWidth);
+    if ( v == table->planks - 1 ) {
+        saveScroll();
+        table->resizeToFitContents();
+        restoreScroll();
     }
 }
 
@@ -432,7 +291,7 @@ void AsmDataWindow::buildTable()
     /*
      *  Create a table to display the registers
      */
-    table = new EbeTable(this);
+    table = new EZTable(this);
 
     /*
      *  We need a layout for the table widget
@@ -446,28 +305,19 @@ void AsmDataWindow::buildTable()
     layout->setContentsMargins(10, 10, 10, 10);
 
     table->setRowCount(rows);
-    table->setColumnCount(2*columns+2);
-
-    QTableWidgetItem *item;
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < 2*columns+2; c++) {
-            item = new QTableWidgetItem(QString(""));
-            table->setItem(r,c,item);
-        }
+    table->setColumnCount(columns+2);
+    fontWidth = ebe["font_size"].toInt() * 0.8;
+    table->setColumnWidth(0,8*fontWidth);
+    table->setColumnWidth(1,15*fontWidth);
+    for ( int c = 2; c < 34; c++ ) {
+        table->setColumnWidth(c,5*fontWidth);
     }
 
-    /*
-     *  Resizing based on size hints which is not too accurate
-     */
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-
-    /*
-     *  Don't show a grid
-     */
-    table->setShowGrid(false);
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < columns+2; c++) {
+            table->setText(r,c,"");
+        }
+    }
 
     /*
      *  Set a tooltip to display when the cursor is over the table
@@ -477,7 +327,9 @@ void AsmDataWindow::buildTable()
     /*
      *  Add the table to the layout and set the layout for the frame.
      */
-    layout->addWidget(table);
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
     setLayout(layout);
 }
 
@@ -491,6 +343,26 @@ QSize AsmDataWindow::sizeHint() const
     return QSize(200, 200);
 }
 
+void AsmDataWindow::saveScroll()
+{
+    QScrollBar *b = scrollArea->horizontalScrollBar();
+    xScroll = b->value();
+    b = scrollArea->verticalScrollBar();
+    yScroll = b->value();
+    //qDebug() << "Scroll" << xScroll << yScroll;
+}
+
+void AsmDataWindow::restoreScroll()
+{
+    //qDebug() << "Setting scroll" << xScroll << yScroll;
+    QScrollBar *b = scrollArea->horizontalScrollBar();
+    b->setValue(0);
+    b->setValue(xScroll);
+    b = scrollArea->verticalScrollBar();
+    b->setValue(0);
+    b->setValue(yScroll);
+}
+
 
 /*
  *  This function sets the row heights and column widths based on
@@ -498,13 +370,12 @@ QSize AsmDataWindow::sizeHint() const
  */
 void AsmDataWindow::setFontHeightAndWidth(int height, int width)
 {
+    saveScroll();
     fontHeight = height;
     fontWidth = width;
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-    for ( int c = 2; c < 2*columns+2; c++ ) {
-        table->setColumnWidth(c,2.8*fontWidth);
-    }
+    table->setFontHeightAndWidth(height,width);
+    table->resizeToFitContents();
+    restoreScroll();
 }
 
 /*
@@ -530,8 +401,19 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
         sub->addAction("2 bytes", this, SLOT(setHex2()));
         sub->addAction("4 bytes", this, SLOT(setHex4()));
         sub->addAction("8 bytes", this, SLOT(setHex8()));
-    menu.addAction(tr("Double format"), this, SLOT(setDouble()));
-    menu.addAction(tr("Float format"), this, SLOT(setFloat()));
+    sub = menu.addMenu(tr("Binary format"));
+        sub->addAction("1 byte", this, SLOT(setBin1()));
+        sub->addAction("2 bytes", this, SLOT(setBin2()));
+        sub->addAction("4 bytes", this, SLOT(setBin4()));
+        sub->addAction("8 bytes", this, SLOT(setBin8()));
+    sub = menu.addMenu(tr("Double format"));
+        sub->addAction(tr("Double"), this, SLOT(setDouble()));
+        sub->addAction(tr("Binary fp"), this, SLOT(setBinaryFP8()));
+        sub->addAction(tr("Double fields"), this, SLOT(setFields8()));
+    sub = menu.addMenu(tr("Float format"));
+        sub->addAction(tr("Float"), this, SLOT(setFloat()));
+        sub->addAction(tr("Binary fp"), this, SLOT(setBinaryFP4()));
+        sub->addAction(tr("Float fields"), this, SLOT(setFields4()));
     menu.addAction(tr("Char format"), this, SLOT(setChar()));
     menu.addAction(tr("Define a variable with this address"), this,
         SLOT(defineVariableByAddress()));
@@ -541,8 +423,8 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void AsmDataWindow::defineVariableByAddress()
 {
-    int row = table->currentRow();
-    QStringList parts = table->item(row,2)->text().split(" ");
+    int row = 0; // table->currentRow();
+    QStringList parts = table->getText(row,2).split(" ");
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItems(parts);
     if (dialog->exec()) {
@@ -562,17 +444,16 @@ void AsmDataWindow::defineVariableByAddress()
 
 void AsmDataWindow::deleteVariable()
 {
-    int row = table->currentRow();
+    int row = 0; // table->currentRow();
 
     for ( int i=0; i < variables.size(); i++ ) {
-        if ( variables[i].item == table->item(row,0) ) {
-            for ( int r = row; r < row+variables[i].rows; r++ ) {
-                table->removeRow(row);
-            }
+        if ( variables[i].item == table->cell(row,0) ) {
+            table->setRowCount(table->rowCount()-variables[i].rows);
             variables.remove(i);
             break;
         }
     }
+    rebuildTable();
 }
 
 /*
@@ -621,25 +502,62 @@ void AsmDataWindow::setHex8()
     setFormat("hex8");
 }
 
+void AsmDataWindow::setBin1()
+{
+    setFormat("bin1");
+}
+
+void AsmDataWindow::setBin2()
+{
+    setFormat("bin2");
+}
+
+void AsmDataWindow::setBin4()
+{
+    setFormat("bin4");
+}
+
+void AsmDataWindow::setBin8()
+{
+    setFormat("bin8");
+}
+
+void AsmDataWindow::setFields4()
+{
+    setFormat("fields4");
+}
+
+void AsmDataWindow::setFields8()
+{
+    setFormat("fields8");
+}
+
+void AsmDataWindow::setBinaryFP4()
+{
+    setFormat("binaryfp4");
+}
+
+void AsmDataWindow::setBinaryFP8()
+{
+    setFormat("binaryfp8");
+}
+
 void AsmDataWindow::setFormat(QString format)
 {
-    int row = table->currentRow();
-    int i;
-    for ( i = 0; i < variables.size(); i++ ) {
-        if ( row >= variables[i].row &&
-             row <= variables[i].row + variables[i].rows -1 ) {
+    //qDebug() << "setFormat" << latestPlank;
+    int v;
+    if ( latestPlank == 0 ) return;
+    saveScroll();
+    //qDebug() << "setFormat" << variables[latestPlank].name << format;
+    for ( v = 0; v < table->table.length(); v++ ) {
+        if ( table->table[v] == latestPlank ) {
+            variables[v].format = format;
+            redisplay(v);
+            table->resizeToFitContents();
             break;
         }
     }
-    if ( i == variables.size() ) {
-        qDebug() << "Could not identify variable from row" << row;
-        return;
-    }
-    variables[i].format = format;
-    redisplay(i);
-    for ( i = 0; i < variables.size(); i++ ) {
-        variables[i].row = variables[i].item->row();
-    }
+    restoreScroll();
 }
 
 void AsmDataWindow::setChar()

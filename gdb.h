@@ -43,7 +43,7 @@ private:
     void getGlobals();
     void getLocals();
     void getClasses();
-    void getVars(QStringList &names, QList<VariableDefinition> &vars);
+    void getVars(QStringList &names, VariableDefinitionMap &vars);
     void getArgs();
     bool hasAVX;
     bool testAVX();
@@ -63,7 +63,7 @@ public slots:
     void doCommand(QString);
     void getData(QStringList request);
     void requestVar(DataMap *map, QString name, QString address, QString type,
-        QString format, int size, int first, int last);
+        QString format, int size);
     void setBreakpoint(QString, QString);
     void deleteBreakpoint(QString, QString);
     void receiveWorkingDir(QString);
@@ -78,9 +78,9 @@ public slots:
     void sendRegs(StringHash);
     void sendFpRegs(QStringList);
     void sendData(QString, QString);
-    void sendGlobals(QList<VariableDefinition>);
-    void sendLocals(QList<VariableDefinition>);
-    void sendParameters(QList<VariableDefinition>);
+    void sendGlobals(VariableDefinitionMap);
+    void sendLocals(VariableDefinitionMap);
+    void sendParameters(VariableDefinitionMap);
     void sendClasses(QHash<QString, ClassDefinition> classes);
     void sendVar(DataMap *map, QString name, QString value);
     void dataReady(QStringList);

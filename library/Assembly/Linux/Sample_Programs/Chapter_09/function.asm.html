@@ -1,0 +1,18 @@
+<html>
+<head>
+<title> function.asm </title>
+</head>
+<body>
+<pre>
+        segment .text
+        global main
+
+doit:   mov  eax, 1
+        ret
+
+main:   call doit
+        xor  eax, eax
+        ret
+</pre>
+</body>
+</html>

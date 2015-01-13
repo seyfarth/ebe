@@ -55,6 +55,7 @@ public:
     AllTypesArray(AllTypesArray &x);
     int              size;  // in bytes
     uLong           *data;
+    void             resize(int size);
     double         & f8(int i);
     float          & f4(int i);
     sLong          & i8(int i);
@@ -81,7 +82,39 @@ QString binaryFloat(AllTypes &a);
 QString binaryDouble(AllTypes &a);
 QString fieldsFloat(AllTypes &a);
 QString fieldsDouble(AllTypes &a);
+QString hexFloat(float f);
+QString hexDouble(double d);
+QString binaryFloat(float f);
+QString binaryDouble(double d);
+QString fieldsFloat(float f);
+QString fieldsDouble(double d);
 
+QString toString(AllTypesArray *a, QStringList &v, int k, int j);
+QString toChar(AllTypesArray *a, QStringList &v, int k, int j);
+QString toHex1(AllTypesArray *a, QStringList &v, int k, int j);
+QString toHex2(AllTypesArray *a, QStringList &v, int k, int j);
+QString toHex4(AllTypesArray *a, QStringList &v, int k, int j);
+QString toHex8(AllTypesArray *a, QStringList &v, int k, int j);
+QString toDec1(AllTypesArray *a, QStringList &v, int k, int j);
+QString toDec2(AllTypesArray *a, QStringList &v, int k, int j);
+QString toDec4(AllTypesArray *a, QStringList &v, int k, int j);
+QString toDec8(AllTypesArray *a, QStringList &v, int k, int j);
+QString toUDec1(AllTypesArray *a, QStringList &v, int k, int j);
+QString toUDec2(AllTypesArray *a, QStringList &v, int k, int j);
+QString toUDec4(AllTypesArray *a, QStringList &v, int k, int j);
+QString toUDec8(AllTypesArray *a, QStringList &v, int k, int j);
+QString toFloat(AllTypesArray *a, QStringList &v, int k, int j);
+QString toDouble(AllTypesArray *a, QStringList &v, int k, int j);
+QString toBinaryFP4(AllTypesArray *a, QStringList &v, int k, int j);
+QString toBinaryFP8(AllTypesArray *a, QStringList &v, int k, int j);
+QString toFields4(AllTypesArray *a, QStringList &v, int k, int j);
+QString toFields8(AllTypesArray *a, QStringList &v, int k, int j);
+QString toBin1(AllTypesArray *a, QStringList &v, int k, int j);
+QString toBin2(AllTypesArray *a, QStringList &v, int k, int j);
+QString toBin4(AllTypesArray *a, QStringList &v, int k, int j);
+QString toBin8(AllTypesArray *a, QStringList &v, int k, int j);
+
+typedef QString (*FormatFunction)(AllTypesArray*,QStringList&,int,int);
 class FileLine
 {
 public:

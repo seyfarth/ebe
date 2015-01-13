@@ -1,0 +1,48 @@
+<html>
+<head>
+<title> cin </title>
+</head>
+<body>
+<pre>
+//  Cin makes use of the stream extraction operator, >>, to accept
+//  input from the input stream buffer, placing it into a memory 
+//  location that is referenced by the identifier (variable name) 
+//  placed after the stream extraction operator. The basic format 
+//  looks like this in your code:
+
+int a;
+double x;
+char ch;
+string str;
+
+cin >> a;
+
+cin >> x;
+
+cin >> ch;
+
+cin >> str;
+
+//  A cout is always used to prompt users of your program to enter 
+//  the appropriate data. Thus, every cin above should be preceded 
+//  by a cout, like this:
+
+cout << "Enter an integer here:  " << endl;
+cin >> a;
+
+//  More than one input can be accomplished by a cin statement. In 
+//  such a case, the user prompt should include explicit instructions 
+//  as to the type and order of the inputs. For instance, in the 
+//  following code,
+
+cout << "Enter an integer value, followed by a space," 
+	<< "then a double value. Be sure to press <ENTER>.  ";
+cin >> a >> x;
+
+//  Without explicit instructions, your user might enter the values 
+//  with no space between. this would result in values like, perhaps, 
+//  46 and 57.9 to become 4,657 and 0.9 as placed into a and x 
+//  respectively, instead of the intended values. 
+</pre>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<html>
+<head>
+<title> peek </title>
+</head>
+<body>
+<pre>
+//  The peek function is predefined in iostream. Its 
+//  purpose is to read one character at a time 
+//  from the input buffer, without removing the content
+//  of the buffer. Your code will look like this:
+
+	ch = cin.peek();
+
+//  Note the lack of parameters within the parentheses as 
+//  compared to other cin functions like get or ignore.
+
+//  After its execution, the only change will be that ch 
+//  now contains the first character from the input buffer. 
+//  Thde buffer itself is unaffected, containing exactly the 
+//  sequence of characters it held before the peek was 
+//  executed. This can be useful for tasks like making input 
+//  based decisions during execution. Peek might be used in 
+//  the following code to handle input appropriately and 
+//  avoid stream error conditions brought about by improper 
+//  assignment of stream inputs.
+
+	int num;
+	char ch, ch1;
+
+	ch = cin.peek;
+	if ('0' <= ch && ch <= '9')
+	  cin >> num;
+	else cin(ch1);
+
+//  In this case, we are unsure of the type of the next input 
+//  in the buffer, so we use peek to test it and read it into 
+//  memory according to the test, 
+//  	if ('0' <= ch && ch <= '9') 
+//  which tests to determine if the next character is a digit 
+//  or a character. Aftedr this test, the appropriate cin 
+//  statement is called.
+</pre>
+</body>
+</html>

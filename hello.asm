@@ -1,4 +1,5 @@
        segment .data
+abc:   dd      1.5, 2.85, 3.75
 first_name_prompt:
        db      "your first name: ", 0
 last_name_prompt:
@@ -14,6 +15,7 @@ feet   dq      6
 inches dq      0
 age    dq      61
 iq     dq      75
+nums   dq      1,2,3,4,5,6,7,8,9,10,11,12
 
       
        
@@ -30,13 +32,15 @@ height:
 main:
        push    rbp
        mov     rbp, rsp
-       frame   2, 3, 7
+       frame   8, 3, 7
        sub     rsp, frame_size
    ; Up to 6 integer register parameters
    ; in rdi, rsi, rdx, rcx, r8, r9
    ; Up to 8 float register parameters
    ; in xmm0-xmm7
 
+       mov      al, 'T'
+       mov      [first_name_prompt],al
        lea      rdi, [first_name_prompt]
        lea      rsi, [first_name]
        call     read_string

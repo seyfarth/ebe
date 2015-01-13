@@ -1,0 +1,11 @@
+<html>
+<head>
+<title> simple macro - 1 parameter </title>
+</head>
+<body>
+<pre>
+The %+ operator concatenates tokens, so mangle(fun) becomes _Z1fun
+%define mangle(a) _Z1 %+ a
+</pre>
+</body>
+</html>

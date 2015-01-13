@@ -125,7 +125,7 @@ void RegisterWindow::buildTable()
     /*
      *  Create a table to display the registers
      */
-    table = new EbeTable(this);
+    table = new EZTable(this);
 
     /*
      *  We need a layout for the table widget
@@ -158,68 +158,37 @@ void RegisterWindow::buildTable()
      *  Save the QTableWidgetItem pointers for the register values
      *  in registerMap.
      */
-    QTableWidgetItem *name;
-    EbeTableItem *val;
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
     if (wordSize == 64) {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if (r == rows-1 && c > 1) {
-                    val = new EbeTableItem("");
-                } else {
-                    val = new EbeTableItem("0");
-                }
+                table->setText(r, c * 2 + 1, "0");
                 if ( columns == 4 ) {
-                    name = new QTableWidgetItem(" " + names[r][c] + " ");
+                    table->setText(r, c * 2, " " + names[r][c]);
                     registerItems[names[r][c]] = r*10+c*2;
-                    registerMap[names[r][c]] = val;
+                    registerMap[names[r][c]] = table->cell(r,c*2+1);
                 } else {
-                    name = new QTableWidgetItem(" " + names_2[r][c] + " ");
+                    table->setText(r, c * 2, " " + names_2[r][c]);
                     registerItems[names_2[r][c]] = r*10+c*2;
-                    registerMap[names_2[r][c]] = val;
+                    registerMap[names_2[r][c]] = table->cell(r,c*2+1);
                 }
-                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                table->setItem(r, c * 2, name);
-                table->setItem(r, c * 2 + 1, val);
             }
         }
     } else {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if (r == 2 && c > 1) {
-                    val = new EbeTableItem("");
-                } else {
-                    val = new EbeTableItem("0");
-                }
+                table->setText(r, c * 2 + 1, "0");
                 if ( columns == 4 ) {
-                    name = new QTableWidgetItem(
-                               " " + names32[r][c] + QString(" "));
+                    table->setText(r, c * 2, " " + names32[r][c]);
                     registerItems[names32[r][c]] = r*10+c*2;
-                    registerMap[names32[r][c]] = val;
+                    registerMap[names32[r][c]] = table->cell(r,c*2+1);
                 } else {
-                    name = new QTableWidgetItem(
-                               " " + names32_2[r][c] + QString(" "));
+                    table->setText(r, c * 2, " " + names32_2[r][c]);
                     registerItems[names32_2[r][c]] = r*10+c*2;
-                    registerMap[names32_2[r][c]] = val;
+                    registerMap[names32_2[r][c]] = table->cell(r,c*2+1);
                 }
-                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                table->setItem(r, c * 2, name);
-                table->setItem(r, c * 2 + 1, val);
             }
         }
     }
-
-    /*
-     *  Resizing based on size hints which is not too accurate
-     */
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-
-    /*
-     *  Don't show a grid
-     */
-    table->setShowGrid(false);
 
     /*
      *  Set a tooltip to display when the cursor is over the table
@@ -231,7 +200,9 @@ void RegisterWindow::buildTable()
     /*
      *  Add the table to the layout and set the layout for the frame.
      */
-    layout->addWidget(table);
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
     setLayout(layout);
 
     /*
@@ -257,63 +228,54 @@ void RegisterWindow::buildTable()
 
 void RegisterWindow::resetNames()
 {
-    columns = ebe["register/columns"].toInt();
-    if (wordSize == 64) {
-        rows = columns == 4 ? 5 : 9;
-    } else {
-        rows = columns == 4 ? 3 : 5;
+    bool columnChange;
+    int new_columns;
+    new_columns = ebe["register/columns"].toInt();
+    columnChange = new_columns != columns;
+    if ( columnChange ) {
+        columns = new_columns;
+        if (wordSize == 64) {
+            rows = columns == 4 ? 5 : 9;
+        } else {
+            rows = columns == 4 ? 3 : 5;
+        }
+        table->setRowCount(rows);
+        table->setColumnCount(columns*2);
     }
-    table->setRowCount(rows);
-    table->setColumnCount(columns*2);
 
     if (wordSize == 64) {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if ( table->item(r,c*2) == 0 ) {
-                    table->setItem(r,c*2,new EbeTableItem(""));
-                    table->setItem(r,c*2+1,new EbeTableItem("0"));
-                    table->item(r,c*2)->
-                           setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                }
+                if ( columnChange) table->setText(r, c * 2 + 1, "0");
                 if ( columns == 4 ) {
-                    table->setText(r,c*2," " + names[r][c] + " ");
+                    table->setText(r,c*2," " + names[r][c]);
                     registerItems[names[r][c]] = r*10+c*2;
-                    registerMap[names[r][c]] =
-                           (EbeTableItem *)(table->item(r,c*2+1));
+                    registerMap[names[r][c]] = table->cell(r,c*2+1);
                 } else {
-                    table->setText(r,c*2," " + names_2[r][c] + " ");
+                    table->setText(r,c*2," " + names_2[r][c]);
                     registerItems[names_2[r][c]] = r*10+c*2;
-                    registerMap[names_2[r][c]] =
-                           (EbeTableItem *)(table->item(r,c*2+1));
+                    registerMap[names_2[r][c]] = table->cell(r,c*2+1);
                 }
             }
         }
     } else {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if ( table->item(r,c*2) == 0 ) {
-                    table->setItem(r,c*2,new EbeTableItem(""));
-                    table->setItem(r,c*2+1,new EbeTableItem("0"));
-                    table->item(r,c*2)->
-                           setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                }
+                if ( columnChange) table->setText(r, c * 2 + 1, "0");
                 if ( columns == 4 ) {
-                    table->setText(r,c*2," " + names32[r][c] + " ");
+                    table->setText(r,c*2," " + names32[r][c]);
                     registerItems[names32[r][c]] = r*10+c*2;
-                    registerMap[names32[r][c]] =
-                           (EbeTableItem *)(table->item(r,c*2+1));
+                    registerMap[names32[r][c]] = table->cell(r,c*2+1);
                 } else {
-                    table->setText(r,c*2," " + names32_2[r][c] + " ");
+                    table->setText(r,c*2," " + names32_2[r][c]);
                     registerItems[names32_2[r][c]] = r*10+c*2;
-                    registerMap[names32_2[r][c]] =
-                           (EbeTableItem *)(table->item(r,c*2+1));
+                    registerMap[names32_2[r][c]] = table->cell(r,c*2+1);
                 }
             }
         }
     }
 
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->resizeToFitContents();
 }
 
 /*
@@ -334,26 +296,26 @@ void RegisterWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->setFontHeightAndWidth(height,width);
+    table->resizeToFitContents();
 }
 
 void HalRegisterWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->setFontHeightAndWidth(height,width);
+    table->resizeToFitContents();
 }
 
 /*
  *  Set the content of a Register based on its name
  */
 void GenericRegisterWindow::setRegister(QString name, QString val,
-                                        EbeTable::Color highlight)
+                                        EZ::Color highlight)
 {
     if (registerMap.contains(name)) {
-        registerMap[name]->updateText(val,highlight);
+        registerMap[name]->setText(val,highlight);
     } else {
         qDebug() << "tried to set register " << name << endl;
     }
@@ -367,9 +329,9 @@ void GenericRegisterWindow::receiveRegs(StringHash map)
 {
     foreach ( QString key, map.keys() ) {
         regs[key]->setValue(map[key]);
-        setRegister(key,regs[key]->value(),EbeTable::Highlight);
+        setRegister(key,regs[key]->value(),EZ::Highlight);
     }
-    setFontHeightAndWidth(fontHeight, fontWidth);
+    table->resizeToFitContents();
 }
 
 /*
@@ -391,12 +353,11 @@ void GenericRegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void GenericRegisterWindow::defineVariableByAddress()
 {
-    QTableWidgetItem *item;
-    item = table->currentItem();
-    int row = item->row();
-    int col = item->column();
+    //item = 0; // table->currentItem();
+    int row = 0; //item->row();
+    int col = 0; //item->column();
     col = col | 1;                      // Make it odd
-    QString address = table->item(row,col)->text();
+    QString address = table->text(row,col);
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItem(address);
     if (dialog->exec()) {
@@ -417,12 +378,11 @@ void GenericRegisterWindow::defineVariableByAddress()
  */
 void GenericRegisterWindow::setDecimal()
 {
-    QTableWidgetItem *item;
-    item = table->currentItem();
-    int row = item->row();
-    int col = item->column();
+    //item = table->currentItem();
+    int row = 0; //item->row();
+    int col = 0; //item->column();
     col = col & ~1;                      // Make it even
-    QString reg = table->item(row,col)->text();
+    QString reg = table->text(row,col);
     reg = reg.trimmed();
     //qDebug() << "reg" << reg;
     //qDebug() << "regs" << regs;
@@ -438,7 +398,7 @@ void GenericRegisterWindow::setDecimal()
 void GenericRegisterWindow::setHex()
 {
     //qDebug() << table->currentItem();
-    QString reg = table->currentItem()->text();
+    QString reg = table->text(0,0);
     //qDebug() << reg;
     reg = reg.trimmed();
     if (regs.contains(reg)) {
@@ -581,7 +541,7 @@ void HalRegisterWindow::buildTable()
 /*
  *  Create a table to display the registers
  */
-    table = new EbeTable(this);
+    table = new EZTable(this);
 /*
  *  We need a layout for the table widget
  */
@@ -613,52 +573,29 @@ void HalRegisterWindow::buildTable()
  *  Save the QTableWidgetItem pointers for the register values
  *  in registerMap.
  */
-    QTableWidgetItem *name;
-    EbeTableItem *val;
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < columns; c++) {
+            table->setText(r, c * 2 + 1, "0");
             if ( columns == 4 ) {
-                if (halNames[r][c] == "") {
-                    val = new EbeTableItem("");
-                } else {
-                    val = new EbeTableItem("0");
-                }
-                name = new QTableWidgetItem(" " + halNames[r][c] + QString(" "));
-                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (halNames[r][c] != "") {
+                    table->setText(r, c * 2, " " + halNames[r][c]);
                     halItems[halNames[r][c]] = r*10+c*2;
-                    registerMap[halToIntel[halNames[r][c]]] = val;
+                    registerMap[halToIntel[halNames[r][c]]] = 
+                        table->cell(r,c);
                 }
             } else {
-                if (halNames_2[r][c] == "") {
-                    val = new EbeTableItem("");
-                } else {
-                    val = new EbeTableItem("0");
-                }
-                name = new QTableWidgetItem(" " + halNames_2[r][c] + QString(" "));
-                name->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                 if (halNames_2[r][c] != "") {
+                    table->setText(r, c * 2, " " + halNames_2[r][c]);
                     halItems[halNames_2[r][c]] = r*10+c*2;
-                    registerMap[halToIntel[halNames_2[r][c]]] = val;
+                    registerMap[halToIntel[halNames_2[r][c]]] = 
+                        table->cell(r,c);
                 }
             }
-            table->setItem(r, c * 2, name);
-            table->setItem(r, c * 2 + 1, val);
         }
     }
 
-/*
- *  Resizing based on size hints which is not too accurate
- */
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-
-/*
- *  Don't show a grid
- */
-    table->setShowGrid(false);
+    table->resizeToFitContents();
+    table->show();
 
 /*
  *  Set a tooltip to display when the cursor is over the table
@@ -670,7 +607,9 @@ void HalRegisterWindow::buildTable()
 /*
  *  Add the table to the layout and set the layout for the frame.
  */
-    layout->addWidget(table);
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
 
     setLayout(layout);
 
@@ -700,27 +639,23 @@ void HalRegisterWindow::resetNames()
     if (wordSize == 64) {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                if ( table->item(r,c*2) == 0 ) {
-                    table->setItem(r,c*2,new EbeTableItem(""));
-                    table->setItem(r,c*2+1,new EbeTableItem("0"));
-                    table->item(r,c*2)->
-                           setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-                }
                 if ( columns == 4 ) {
-                    table->setText(r,c*2," " + halNames[r][c] + " ");
+                    table->setText(r,c*2," " + halNames[r][c]);
                     if (halNames[r][c] != "") {
+                        table->setText(r,c*2+1,"0");
                         halItems[halNames[r][c]] = r*10+c*2;
                         registerMap[halToIntel[halNames[r][c]]] = 
-                            (EbeTableItem *)(table->item(r,c*2+1));
+                            table->cell(r,c*2+1);
                     } else {
                         table->setText(r,c*2+1,"");
                     }
                 } else {
-                    table->setText(r,c*2," " + halNames_2[r][c] + " ");
+                    table->setText(r,c*2," " + halNames_2[r][c]);
                     if (halNames_2[r][c] != "") {
+                        table->setText(r,c*2+1,"0");
                         halItems[halNames_2[r][c]] = r*10+c*2;
                         registerMap[halToIntel[halNames_2[r][c]]] = 
-                            (EbeTableItem *)(table->item(r,c*2+1));
+                            table->cell(r,c*2+1);
                     } else {
                         table->setText(r,c*2+1,"");
                     }
@@ -729,15 +664,13 @@ void HalRegisterWindow::resetNames()
         }
     }
 
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->resizeToFitContents();
 }
 
 HalNamesWindow::HalNamesWindow(QWidget *parent)
     : QFrame(parent)
 {
-    QTableWidgetItem *name;
-    table = new EbeTable(this);
+    table = new EZTable(this);
 /*
  *  We need a layout for the table widget
  */
@@ -755,33 +688,31 @@ HalNamesWindow::HalNamesWindow(QWidget *parent)
     }
     table->setRowCount(rows);
     table->setColumnCount(columns);
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
+    QString name;
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < columns; c++) {
             if ( columns == 4 ) {
-                name = new QTableWidgetItem(
-                    " " + names[r][c] + "=" + IntelToHal[names[r][c]] + " ");
+                name = names[r][c];
+                if ( name.length() == 2 ) name = " " + name;
+                table->setText(r, c,
+                     " " + name + "=" + IntelToHal[names[r][c]]);
             } else {
-                name = new QTableWidgetItem(
-                    " " + names_2[r][c] + "=" + IntelToHal[names_2[r][c]] + " ");
+                name = names_2[r][c];
+                if ( name.length() == 2 ) name = " " + name;
+                table->setText(r, c,
+                     " " + name + "=" + IntelToHal[names_2[r][c]]);
             }
-            name->setTextAlignment(Qt::AlignHCenter);
-            table->setItem(r, c, name);
         }
     }
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-    table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->resizeToFitContents();
+    table->show();
 
-/*
- *  Don't show a grid
- */
-    table->setShowGrid(false);
 /*
  *  Add the table to the layout and set the layout for the frame.
  */
-    layout->addWidget(table);
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
 
     setLayout(layout);
 }
@@ -790,6 +721,6 @@ void HalNamesWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->setFontHeightAndWidth(height,width);
+    table->resizeToFitContents();
 }

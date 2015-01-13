@@ -311,6 +311,7 @@ void Settings::setDefaults()
     ebe["console/visible"] = false;
 
     ebe["data/visible"] = true;
+    ebe["data/columns"] = 16;
     ebe["asmdata/visible"] = false;
     ebe["asmdata/columns"] = 16;
 
@@ -470,9 +471,11 @@ SettingsDialog::SettingsDialog()
     strings.clear();
     strings << "4" << "2";
     box->setChoices(strings);
-    box = frame->addComboBox(tr("Assembly data window columns"), "asmdata/columns");
+    box = frame->addComboBox(tr("Data window columns"), "data/columns");
     strings.clear();
     strings << "4" << "8" << "16" << "32";
+    box->setChoices(strings);
+    box = frame->addComboBox(tr("Assembly data window columns"), "asmdata/columns");
     box->setChoices(strings);
     frame->addCheckBox(tr("Auto-indent"), "edit/auto_indent");
     frame->addCheckBox(tr("Auto-open project files"), "edit/auto_indent");

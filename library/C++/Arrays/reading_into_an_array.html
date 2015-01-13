@@ -1,0 +1,29 @@
+<html>
+<head>
+<title> read an array </title>
+</head>
+<body>
+<pre>
+//
+//  You frequently need to read into an array using cin and you can't be
+//  sure how many values will be entered.  This means that you need to
+//  quit reading when all the data is read and you need to know how many
+//  values were read.  You also must avoid reading past the end of the
+//  array.  Generally the C++ compiler will allow you to use illegal
+//  array elements (index less than 0 or too big).  You will get a
+//  "segmentation violation" if your request is way off.  Minor indexing
+//  errors will just screw things up with no complaint from the 
+//  computer.
+//
+    int i;
+    for ( i = 0; i < N; i++ ) {
+        cin >> data[i];
+        if ( cin.fail() ) break;
+    }
+//
+//  After this loop the number of array elements read will be i.
+//  You could use cin.clear() after a failure to keep reading.
+//
+</pre>
+</body>
+</html>

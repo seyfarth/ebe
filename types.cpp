@@ -63,9 +63,23 @@ QString hexFloat(AllTypes &a)
     return QString::number(a.u4, 16);
 }
 
+QString hexFloat(float f)
+{
+    AllTypes a;
+    a.f4 = f;
+    return hexFloat(a);
+}
+
 QString hexDouble(AllTypes &a)
 {
     return QString::number(a.u8, 16);
+}
+
+QString hexDouble(double d)
+{
+    AllTypes a;
+    a.f8 = d;
+    return hexDouble(a);
 }
 
 QString binaryFloat(AllTypes &a)
@@ -82,6 +96,13 @@ QString binaryFloat(AllTypes &a)
     }
     s += QString(" * 2**%1").arg(exp);
     return s;
+}
+
+QString binaryFloat(float f)
+{
+    AllTypes a;
+    a.f4 = f;
+    return binaryFloat(a);
 }
 
 QString binaryDouble(AllTypes &a)
@@ -103,6 +124,13 @@ QString binaryDouble(AllTypes &a)
     return s;
 }
 
+QString binaryDouble(double d)
+{
+    AllTypes a;
+    a.f8 = d;
+    return binaryDouble(a);
+}
+
 QString fieldsFloat(AllTypes &a)
 {
     QString s = "";
@@ -116,6 +144,13 @@ QString fieldsFloat(AllTypes &a)
         s += (a.u4 & (1 << b)) != 0 ? "1" : "0";
     }
     return s;
+}
+
+QString fieldsFloat(float f)
+{
+    AllTypes a;
+    a.f4 = f;
+    return fieldsFloat(a);
 }
 
 QString fieldsDouble(AllTypes &a)
@@ -133,6 +168,12 @@ QString fieldsDouble(AllTypes &a)
     return s;
 }
 
+QString fieldsDouble(double d)
+{
+    AllTypes a;
+    a.f8 = d;
+    return fieldsDouble(a);
+}
 
 AllTypesArray::AllTypesArray(int size_)
 {
@@ -149,6 +190,22 @@ AllTypesArray::AllTypesArray(AllTypesArray &x)
     int n = (size+7) / 8;
     data = new uLong[n];
     for ( int i = 0; i < n; i++ ) data[i] = x.data[i];
+}
+
+void AllTypesArray::resize(int n)
+{
+    int oldSize = size;
+    size = n;
+    if ( size < 8 ) size = 8;
+    if ( size != oldSize ) {
+        int n = (size+7) / 8;
+        uLong *newData = new uLong[n];
+        n = (oldSize+7) / 8;
+        for ( int i=0; i < n; i++ ) newData[i] = data[i];
+        delete [] data;
+        data = newData;
+        newData = 0;
+    }
 }
 
 double & AllTypesArray::f8(int i)
@@ -256,4 +313,143 @@ unsigned char & AllTypesArray::u1(int i)
         i = 0;
     }
     return ((unsigned char *)data)[i];
+}
+
+QString toString(AllTypesArray *, QStringList &v, int k, int)
+{
+    if ( k >= v.length() ) return "";
+    return v[k];
+}
+
+QString toChar(AllTypesArray *a, QStringList&, int k, int)
+{
+    int n=a->c1(k);
+    if ( isprint(n) ) return QString(QChar(n));
+    else if ( n == '\t' ) return "\\t";
+    else if ( n == '\r' ) return "\\r";
+    else if ( n == '\n' ) return "\\n";
+    else return QString("%1").arg(a->u1(k),2,16,QChar('0'));
+}
+
+QString toHex1(AllTypesArray *a, QStringList&, int k, int j)
+{
+    if ( j == 0 ) return QString("0x%1").arg(a->u1(k),2,16,QChar('0'));
+    else return QString("%1").arg(a->u1(k),2,16,QChar('0'));
+}
+
+QString toHex2(AllTypesArray *a, QStringList&, int k, int j)
+{
+    if ( j == 0 ) return QString("0x%1").arg(a->u2(k),2,16,QChar('0'));
+    else return QString("%1").arg(a->u2(k),2,16,QChar('0'));
+}
+
+QString toHex4(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u4(k),2,16,QChar('0'));
+}
+
+QString toHex8(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u8(k),2,16,QChar('0'));
+}
+
+QString toDec1(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->i1(k));
+}
+
+QString toDec2(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->i2(k));
+}
+
+QString toDec4(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->i4(k));
+}
+
+QString toDec8(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->i8(k));
+}
+
+QString toUDec1(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u1(k));
+}
+
+QString toUDec2(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u2(k));
+}
+
+QString toUDec4(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u4(k));
+}
+
+QString toUDec8(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u8(k));
+}
+
+QString toFloat(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->f4(k),0,'g',7);
+}
+
+QString toDouble(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->f8(k),0,'g',9);
+}
+
+QString toBinaryFP4(AllTypesArray *a, QStringList&, int k, int)
+{
+    return binaryFloat(a->f4(k));
+}
+
+QString toBinaryFP8(AllTypesArray *a, QStringList&, int k, int)
+{
+    return binaryFloat(a->f8(k));
+}
+
+QString toFields4(AllTypesArray *a, QStringList&, int k, int)
+{
+    return fieldsFloat(a->f4(k));
+}
+
+QString toFields8(AllTypesArray *a, QStringList&, int k, int)
+{
+    return fieldsDouble(a->f8(k));
+}
+
+QString toBin1(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u1(k),8,2,QChar('0'));
+}
+
+QString toBin2(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u1(k),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+1),8,2,QChar('0'));
+}
+
+QString toBin4(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u1(k),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+1),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+2),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+3),8,2,QChar('0'));
+}
+
+QString toBin8(AllTypesArray *a, QStringList&, int k, int)
+{
+    return QString("%1").arg(a->u1(k),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+1),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+2),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+3),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+4),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+5),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+6),8,2,QChar('0')) + " " +
+           QString("%1").arg(a->u1(k+7),8,2,QChar('0'));
 }

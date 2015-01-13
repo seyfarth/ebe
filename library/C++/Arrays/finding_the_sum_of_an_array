@@ -1,7 +1,0 @@
-//
-//  Assuming the array has N elements or N that you want to sum
-//
-    sum = 0;
-    for ( int i = 0; i < N; i++ ) {
-        sum += data[i];
-    }

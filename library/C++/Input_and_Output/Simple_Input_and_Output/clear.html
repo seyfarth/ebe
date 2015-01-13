@@ -1,0 +1,44 @@
+<html>
+<head>
+<title> clear </title>
+</head>
+<body>
+<pre>
+//  When things go wrong at program execution, often 
+//  the cause is improper input to a stream, causing 
+//  input failure. Reading a letter, or other character, 
+//  into an int or double is an example of this type 
+//  of error, and will result in the input stream being 
+//  in an unusable or fail state. Once this happens, 
+//  further input from this stream is ignored. To 
+//  correct this state and bring the stream back online, 
+//  cin.clear() is used. Your code will look like this:
+
+	cin.clear();
+
+//  Since cin.clear() is not very useful on its own, an 
+//  exampke is shown of clearing input after a line of 
+//  input is read and processed, but before the next, so
+//  any extraneous characters are cleared from the buffer 
+//  routinely.
+
+	cin >> age >> weight >> height;
+
+	bmi = calculate_bmi(age, weight, height);
+	print_bmi_info(age, weight, height, bmi);
+
+	cin.clear();
+
+	cin.ignore(100, '\n');
+
+//  Now, assuming your user is fallible, every so often
+//  he or she will enter a character in place of a number, 
+//  or perhaps an extra number during program execution. 
+//  Assumking that the above code segment is contained in 
+//  a repetitive structure, the next set of inputs will not 
+//  suffer from the retained problems of the invalid set 
+//  because the buffer will be flushed and reinitialized 
+//  by the clear and ignore functions.
+</pre>
+</body>
+</html>

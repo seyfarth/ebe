@@ -3,11 +3,17 @@
 EbeTable::EbeTable(QWidget *parent)
     : QTableWidget(parent)
 {
+    verticalHeader()->hide();
+    horizontalHeader()->hide();
 }
 
 void EbeTable::setText ( int r, int c, QString t, Color highlight )
 {
     QTableWidgetItem *it = item(r,c);
+    if ( it == 0 ) {
+        it = new EbeTableItem("");
+        setItem(r,c,it);
+    }
     QString old = it->text();
 
     //qDebug() << "setText" << r << c << old << t;

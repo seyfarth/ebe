@@ -1,3 +1,0 @@
-;       int results up to 64 bits in rax
-;       floats, doubles, and 128 bit results in xmm0
-;       larger items are passed via pointer in rax

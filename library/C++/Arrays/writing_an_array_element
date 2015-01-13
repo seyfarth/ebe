@@ -1,9 +1,0 @@
-//
-//  Write 1 element of array data.
-//  This version has no endl and might not immediately print.
-    cout << data[i];
-
-//
-//  Write 1 element and use endl to force output
-//
-    cout << data[i] << endl;

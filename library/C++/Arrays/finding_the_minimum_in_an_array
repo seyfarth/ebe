@@ -1,7 +1,0 @@
-//
-//  Assuming that the array has N elements with N greater than 0
-//
-    min = data[0];
-    for ( int i = 1; i < N; i++ ) {
-        if ( data[i] < min ) min = data[i];
-    }

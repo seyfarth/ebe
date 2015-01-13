@@ -1,8 +1,0 @@
-//
-//  The easiest way to read until there is no more valid data is to
-//  let the while loop convert the result of cin into a boolean.  It
-//  will be false when cin fails.
-//
-    while ( cin >> x ) {
-        _;
-    }

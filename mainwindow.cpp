@@ -77,7 +77,7 @@ void MainWindow::setWordSize()
     where.start(QString("objdump.exe -f \"%1\"").arg(fileName));
     where.waitForFinished();
     data = where.readAllStandardOutput();
-    qDebug() << data;
+    //qDebug() << data;
     if ( QString(data).indexOf("x86-64") >= 0 ) {
         wordSize = 64;
     } else {
@@ -416,10 +416,12 @@ void MainWindow::setFontSize()
     //addStyleSheet("table-font-size", "QTableView {font-size: " + QString("%1").arg(fontSize) + "px}");
     QFont f("courier");
     f.setPixelSize(fontSize);
+    f.setBold(true);
     QFontMetrics fm(f);
-    width = fm.width("x");
+    width = fm.width(QChar('m'));
     height = fm.height();
-    //dDebug() << "fs" << fontSize;
+    if ( width < height/2.0 ) width++;
+    //qDebug() << "fs" << fontSize << width << height;
     sourceFrame->setFontHeightAndWidth(height, width);
     dataWindow->setFontHeightAndWidth(height, width);
     floatWindow->setFontHeightAndWidth(height, width);
@@ -808,6 +810,8 @@ void MainWindow::createStatusBar()
 
 void MainWindow::createDockWindows()
 {
+    asmDataWindow = new AsmDataWindow(this);
+
     dataDock = new QDockWidget(tr("Data"));
     dataDock->setObjectName("Dock 1");
     dataDock->setAllowedAreas(
@@ -869,7 +873,6 @@ void MainWindow::createDockWindows()
     asmDataDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
             | Qt::BottomDockWidgetArea);
-    asmDataWindow = new AsmDataWindow(this);
     asmDataWindow->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Preferred);
     asmDataDock->setWidget(asmDataWindow);

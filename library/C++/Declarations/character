@@ -1,5 +1,0 @@
-//
-//  3 variables in 1 declaration
-//  Each can hold 1 character
-// 
-    char a, b, c;

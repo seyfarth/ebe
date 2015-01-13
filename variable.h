@@ -1,6 +1,7 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
 
+#include <QHash>
 #include <QtGui>
 #include <QDialog>
 #include <QLineEdit>
@@ -76,10 +77,14 @@ struct VariableDefinition
     QString name;
     QString type;
     QString value;
+    int size;
+    QStringList values;
     QList<Limits> dimensions;
     bool isSimple;
     bool isFortran;
 };
+
+typedef QHash<QString, VariableDefinition> VariableDefinitionMap;
 
 struct ClassDefinition
 {

@@ -1,6 +1,0 @@
-//showpoint forces the display of a decimal 
-//point and trailing zeroes for numeric values 
-//displayed by an ostream variable. It is often 
-//used with fixed.
-//Be sure to include iostream
-cout << fixed << showpoint;

@@ -1,5 +1,0 @@
-//setfill() fills leftover space from the use of setw() with an 
-//alternative to the default of spaces. Any printable ASCII
-//character can be used.
-//Be sure to include iomanip.
-cout << setfill('&') << setw(15) << x << endl;

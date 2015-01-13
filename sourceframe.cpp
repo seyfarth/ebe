@@ -725,10 +725,11 @@ void SourceFrame::run()
             line = 1;
             if ( listing.open(QFile::ReadOnly) ) {
                 text = listing.readLine();
+                //qDebug() << text;
                 while ( text != "" ) {
                     text = text.mid(7);
                     parts = text.split(QRegExp("\\s+"));
-                    //dDebug() << parts;
+                    //qDebug() << parts;
                     if ( text[0] != QChar(' ') ) {
                         if ( inText && parts.length() > 1 )
                         {
@@ -754,7 +755,12 @@ void SourceFrame::run()
                     if ( text[36] != QChar('<') || text[38] != QChar('>') ) {
                         if ( parts.length() > 1 ) {
                             int n = parts[1].length();
-                            if ( parts[1][n-1] != QChar('-') ) line++;
+                            //qDebug() << "line =" << line << ",  n =" << n;
+                            if ( n == 0 ) {
+                                line++;
+                            } else {
+                                if ( parts[1][n-1] != QChar('-') ) line++;
+                            }
                         } else {
                                 line++;
                         }
@@ -1119,7 +1125,7 @@ QString SourceFrame::buildDebugAsm(QString fileName)
 void SourceFrame::next()
 {
     clearNextLine(breakFile, breakLine);
-    //if (inAssembly && ebe["build/assembler"] == "yasm" ) {
+    if (inAssembly ) {
         FileLine fl(breakFile, breakLine);
         //qDebug() << "file line" << breakFile << breakLine;
         if (callLines.contains(fl)) {
@@ -1128,9 +1134,9 @@ void SourceFrame::next()
         } else {
            emit doNextInstruction();
         }
-    //} else {
-     //   emit doNext();
-    //}
+    } else {
+        emit doNext();
+    }
 }
 
 void SourceFrame::step()

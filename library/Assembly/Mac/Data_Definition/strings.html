@@ -1,0 +1,12 @@
+<html>
+<head>
+<title> strings </title>
+</head>
+<body>
+<pre>
+hello:  db      "Hello there"
+format: db      "Hello", 0x0a, 0    ; Adding new-line and null
+bad:    db      "Hello\n\0"         ; appends '\', 'n', '\' and '0'
+</pre>
+</body>
+</html>

@@ -1,8 +1,0 @@
-//setprecision() sets the maximum number of decimal places 
-//displayed by an ostream variable when representing an 
-//expression. Used with fixed and shpwpoint, it works well 
-//for displaying dollar values.
-//Be sure to include iomanip and iostream.
-cout << fixed << showpoint;
-cout << setprecision(2);
-cout << '$' << setw(7) << amount << endl;

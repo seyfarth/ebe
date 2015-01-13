@@ -8,7 +8,7 @@
  */
 
 #include "types.h"
-#include "ebetable.h"
+#include "eztable.h"
 #include <QFrame>
 #include <QtGui>
 #include <QDialog>
@@ -16,8 +16,6 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QGridLayout>
-#include <QTableWidget>
-#include <QTableWidgetItem>
 #include <QVBoxLayout>
 #include <QStringList>
 #include <QScrollArea>
@@ -55,9 +53,10 @@ public:
     AsmVariable ( QString _name="");
     QString name;
     QString format;
+    QStringList stringValues;
     AllTypesArray *values;
     int size;
-    QTableWidgetItem *item;
+    EZCell *item;
     int row;
     int rows;
     uLong address;
@@ -71,7 +70,7 @@ public:
  *
  *  The RegisterWindow class is a derived class of QFrame which is a
  *  displayable widget of the Qt collection.  The register window in ebe
- *  displays the general purpose register in a QTableWidget and allows the
+ *  displays the general purpose register in an EZTable and allows the
  *  user to select the format for either a single register or all the
  *  registers using a popup menu.
  *
@@ -128,8 +127,11 @@ public:
     QVector<AsmVariable> variables;
     QVector<AsmVariable> userDefinedVariables;
     IntHash varNames;
-    IntHash formatToRowCount;
-    IntHash formatToSize;
+    int xScroll;
+    int yScroll;
+    QScrollArea *scrollArea;
+    void saveScroll();
+    void restoreScroll();
 
     void clear();
     void buildTable();
@@ -162,7 +164,7 @@ public:
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.
      */
-    EbeTable *table;
+    EZTable *table;
 
     /**
      *  \fn sizeHint
@@ -196,7 +198,7 @@ public:
     void contextMenuEvent(QContextMenuEvent *event);
 
     void setFormat ( QString format="" );
-    void redisplay ( int i, EbeTable::Color h=EbeTable::Normal );
+    void redisplay ( int i, EZ::Color h=EZ::NoChange );
 
 signals:
     void requestAsmVariable(int i, uLong address, int size);
@@ -241,9 +243,18 @@ public slots:
     void setHex4();
     void setHex8();
 
+    void setBin1();
+    void setBin2();
+    void setBin4();
+    void setBin8();
+
     void setChar();
     void setFloat();
     void setDouble();
+    void setBinaryFP4();
+    void setBinaryFP8();
+    void setFields4();
+    void setFields8();
 
 };
 

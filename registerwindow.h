@@ -7,14 +7,10 @@
  for set and get registers just yet
  */
 
-#include "types.h"
-#include "ebetable.h"
+#include "eztable.h"
 #include <QFrame>
-#include <QTableWidget>
-#include <QTableWidgetItem>
 #include <QStringList>
 #include <QScrollArea>
-#include <QSize>
 
 /**
  *  \class Register
@@ -169,20 +165,21 @@ public:
      *  \param value The new value for the register
      */
     void setRegister(QString name, QString value,
-         EbeTable::Color h=EbeTable::Normal);
+         EZ::Color h=EZ::NoChange);
 
     /**
      *  QHash which provides a pointer to a QTableWidgetItem based
      *  on a register name as key.  The QTableWidgetItem is where
      *  the value for a particular register is stored in the table.
      */
-    QHash<QString, EbeTableItem *> registerMap;
+    QHash<QString, EZCell *> registerMap;
 
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.
      */
-    EbeTable *table;
+    EZTable *table;
 
+    QScrollArea *scrollArea;
     /**
      *  \fn sizeHint
      *
@@ -291,12 +288,13 @@ class HalNamesWindow: public QFrame
 {
 public:
     HalNamesWindow(QWidget *parent = 0);
-    EbeTable *table;
+    EZTable *table;
     void setFontHeightAndWidth(int height, int width);
     int fontHeight;
     int fontWidth;
     int rows;
     int columns;
+    QScrollArea *scrollArea;
 };
 #endif
 

@@ -1,9 +1,0 @@
-//
-//  The following code includes windows.h on Windows systems and unistd.h
-//  on other systems.
-//
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <unistd.h>
-#endif

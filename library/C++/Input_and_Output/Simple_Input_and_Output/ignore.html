@@ -1,0 +1,47 @@
+<html>
+<head>
+<title> ignore </title>
+</head>
+<body>
+<pre>
+//  The ignore function is predefined in iostream. Its 
+//  purpose is simply to ignore, one character at 
+//  a time, any input defined in its call statement 
+//  defined as ignorable by position or type.from the 
+//  input buffer. This means your program can ignore 
+//  white space one character at a time, or perhaps all
+//  white space besides new line characters, just tabs, 
+//  or any other useful combination. Your program might 
+//  also ignore all numeric or nun numeric input, or 
+//  perhaps accept only input within predefined ranges.
+//  Given an input buffer that looks like this:
+
+	25 67 48 19
+	13 579 10 38
+
+//  Your code might look like this:
+
+	cin >> a;
+	cin.ignore(100, '\n');
+	cin >> b;
+
+//  This code reads the first input from each line of
+//  input, discarding the remainder from each line of
+//  buffer input. Another sequence might be:
+
+	25 67 48 19     //  comments here
+	13 579 10 38    //  comments here
+
+	while(cin.ignore(100, '/')){
+	  cin.ignore(100, '/');
+	  while(cin.get(ch))
+	    cout << ch;
+	  cout << endl;
+	}
+
+//  This code will output only the comments from the 
+//  input, displaying them on the monitor. Ignore() 
+//  is used to bypass delimiters and other content.
+</pre>
+</body>
+</html>
