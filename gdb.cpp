@@ -822,6 +822,7 @@ void GDB::getVars(QStringList &names, VariableDefinitionMap &vars)
     if (!running) return;
     foreach ( QString name, names ) {
         fortran = false;
+        var.size = 0;
         if ( &names == &globals && name == "stack" ) {
             var.name = name;
             var.type = "unsigned long *";
@@ -981,12 +982,12 @@ void GDB::getVars(QStringList &names, VariableDefinitionMap &vars)
                     cmd = QString("x/s %1[%2]")
                         .arg(name).arg(i);
                     results = sendReceive(cmd);
-                    //qDebug() << results;
                     if ( results.length() == 0 ) break;
+                    if ( results[0].indexOf("out of bounds") > 0 ) break;
                     parts = results[0].split(QRegExp(":\\s+"));
                     if ( parts.length() < 2 ) break;
                     if ( parts[0] == "0x0" ) break;
-                    var.values += parts[1];
+                        var.values += parts[1];
                     i++;
                 }
             } else if ( &names == &globals && var.name == "stack" ) {

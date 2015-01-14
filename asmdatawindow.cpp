@@ -549,7 +549,7 @@ void AsmDataWindow::setFormat(QString format)
     if ( latestPlank == 0 ) return;
     saveScroll();
     //qDebug() << "setFormat" << variables[latestPlank].name << format;
-    for ( v = 0; v < table->table.length(); v++ ) {
+    for ( v = 0; v < table->table.size(); v++ ) {
         if ( table->table[v] == latestPlank ) {
             variables[v].format = format;
             redisplay(v);

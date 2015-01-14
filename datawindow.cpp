@@ -17,7 +17,7 @@ extern IntHash formatToSpan;
 extern IntHash formatToSize;
 extern QHash<QString,FormatFunction> formatToFunction;
 
-extern DataPlank *latestPlank;
+extern EZPlank *latestPlank;
 
 DataTree *dataTree;
 DataPlank *globals;
@@ -164,7 +164,7 @@ void DataWindow::resetData()
 {
     QString s;
     dataWindow->saveScroll();
-    int n = userDefined->kids.length();
+    int n = userDefined->kids.size();
     //qDebug() << "reset" << n;
     dataTree->buildTree(dataTree->all);
     dataTree->table.clear();
@@ -497,7 +497,7 @@ int DataPlank::maxLevel()
     int kidMax;
     if ( state == EZ::Expanded ) {
         DataPlank *kid;
-        for ( int i=0; i < kids.length(); i++ ) {
+        for ( int i=0; i < kids.size(); i++ ) {
             kid = (DataPlank *)kids[i];
             kidMax = kid->maxLevel();
             if ( kidMax > max ) max = kidMax;
@@ -643,14 +643,14 @@ void DataTree::editUserVariable()
 void DataTree::deleteUserVariable()
 {
     DataPlank *plank = (DataPlank *)latestPlank;
-    for ( int i=0; i < kids.length(); i++ ) {
+    for ( int i=0; i < kids.size(); i++ ) {
         {
             kids[i]->removeSubTree();
             delete kids[i];
         }
-        for ( int i=0; i < plank->parent->kids.length(); i++ ) {
+        for ( int i=0; i < plank->parent->kids.size(); i++ ) {
             if ( (DataPlank*)(plank->parent->kids[i]) == plank ) {
-                plank->parent->kids.removeAt(i);
+                plank->parent->kids.remove(i);
                 break;
             }
         }
@@ -827,7 +827,7 @@ DataTree::DataTree(QWidget *parent)
 void DataTree::reorder(DataPlank *p)
 {
     table.append(p);
-    for ( int j=0; j < p->kids.length(); j++ ) {
+    for ( int j=0; j < p->kids.size(); j++ ) {
         reorder(p->kids[j]);
     }
 }
@@ -837,7 +837,7 @@ void DataTree::buildTree(DataPlank *p)
     //qDebug() << "buildTree" << p << p->name << p->format;
     setCurrentPlank(p);
     redisplay(p, EZ::Highlight);
-    for ( int j=0; j < p->kids.length(); j++ ) {
+    for ( int j=0; j < p->kids.size(); j++ ) {
         buildTree(p->kids[j]);
     }
 }
@@ -935,7 +935,7 @@ void DataTree::expandDataPlank(DataPlank *plank)
 
     c = classes[it->type];
     DataPlank *t;
-    for ( int i=0; i < plank->kids.length(); i++ ) {
+    for ( int i=0; i < plank->kids.size(); i++ ) {
         t = (DataPlank *)plank->kids[i];
         //if ( plank == globals ) qDebug() << "globals delete child";
         if (plank != globals) {
@@ -1110,7 +1110,7 @@ void DataWindow::receiveVar(DataMap *map, QString name, QString value)
         return;
     }
     plank->setValue(value);
-    int n2 = plank->kids.length();
+    int n2 = plank->kids.size();
     for (int j = 0; j < n2; j++) {
         request(plank->kids[j]);
     }
@@ -1135,6 +1135,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         if ( !vars.contains(k) ) {
             //qDebug() << "vars missing" << k;
             group->value(k)->deactivate();
+            group->remove(k);
         }
     }
 
@@ -1157,7 +1158,6 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
             p = dataTree->addDataPlank(parent,2, group, v->name,"");
             p->address = QString("&(::%1").arg(v->name);
             p->setName(v->name);
-            //parent->addChild(p);
             p->values = new AllTypesArray(v->size);
             i++;
         }
@@ -1167,6 +1167,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
          */
         p->setType(v->type);
         p->size = v->size;
+        //qDebug() << v->name << v->size;
         p->values->resize(p->size);
         p->isFortran = v->isFortran;
         p->dimensions.clear();
@@ -1185,12 +1186,13 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         /*
          *      Update the data for the plank.
          */
+        //qDebug() << v->name << "about to set values";
         p->setValues(v->values);
 
         /*
          *      Update recursively any kids.
          */
-        int n = p->kids.length();
+        int n = p->kids.size();
         //qDebug() << "child count" << n;
         for ( int j = 0; j < n; j++ ) {
             request(p->kids[j]);
@@ -1221,7 +1223,7 @@ void DataPlank::removeChild(DataPlank *p)
 {
     int i;
     //qDebug() << "removeChild" << this << name << p << p->name;
-    for ( i = 0; i < kids.length(); i++ ) {
+    for ( i = 0; i < kids.size(); i++ ) {
         //qDebug() << "kid" << i << kids[i] << kids[i]->name;
         if ( kids[i] == p ) {
             //qDebug() << "found" << p << i;
@@ -1249,7 +1251,7 @@ void DataPlank::reactivate()
 void DataPlank::removeSubTree()
 {
     int i;
-    int n = kids.length();
+    int n = kids.size();
     DataPlank *plank;
 
     for (i = 0; i < n; i++) {

@@ -3,6 +3,7 @@
 #include <QHash>
 #include <QSet>
 #include <QString>
+#include <QStringList>
 
 typedef QHash<QString, QString> StringHash;
 typedef QHash<QString, int> IntHash;
