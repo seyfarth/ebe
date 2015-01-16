@@ -138,17 +138,11 @@ ArrayBoundsDialog::ArrayBoundsDialog()
     checkLayout->addWidget(arrayCheck);
     layout->addLayout(checkLayout);
 
-    QHBoxLayout *firstLayout = new QHBoxLayout;
-    firstLayout->addWidget(new QLabel(tr("First index")));
-    firstSpin = new QSpinBox;
-    firstLayout->addWidget(firstSpin);
-    layout->addLayout(firstLayout);
-
-    QHBoxLayout *lastLayout = new QHBoxLayout;
-    lastLayout->addWidget(new QLabel(tr("Last index")));
-    lastSpin = new QSpinBox;
-    lastLayout->addWidget(lastSpin);
-    layout->addLayout(lastLayout);
+    QHBoxLayout *nLayout = new QHBoxLayout;
+    nLayout->addWidget(new QLabel(tr("Number of elements")));
+    nSpin = new QSpinBox;
+    nLayout->addWidget(nSpin);
+    layout->addLayout(nLayout);
 
     okButton = new QPushButton("OK");
     cancelButton = new QPushButton(tr("Cancel"));
@@ -175,36 +169,25 @@ ArrayBoundsDialog::ArrayBoundsDialog()
 
 void ArrayBoundsDialog::checkChanged(int state)
 {
-    firstSpin->setEnabled(state ? true : false);
-    lastSpin->setEnabled(state ? true : false);
+    nSpin->setEnabled(state ? true : false);
     if (state == 0) {
-        firstSpin->setValue(0);
-        lastSpin->setValue(0);
+        nSpin->setValue(0);
     }
 }
 
 void ArrayBoundsDialog::setMax(int max)
 {
-    firstSpin->setMaximum(max);
-    lastSpin->setMaximum(max);
+    nSpin->setMaximum(max);
 }
 
 void ArrayBoundsDialog::setMin(int min)
 {
-    firstSpin->setMinimum(min);
-    lastSpin->setMinimum(min);
+    nSpin->setMinimum(min);
 }
 
 void ArrayBoundsDialog::setArrayBounds()
 {
-    min = firstSpin->value();
-    max = lastSpin->value();
-    if (min > max) {
-        QMessageBox::warning(this, tr("Error"),
-            tr("The first index can't be\n greater than the last."),
-            QMessageBox::Ok, QMessageBox::Ok);
-        return;
-    }
+    n = nSpin->value();
     accept();
 }
 

@@ -451,11 +451,9 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     getBackTrace();
     if (!running) return;
     getFpRegs();
-    getLocals();
     getGlobals();
-    getArgs();
     //qDebug() << "run";
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
     //qDebug() << "run";
     getClasses();
     //qDebug() << "Done run";
@@ -472,10 +470,8 @@ void GDB::doNext()
     getBackTrace();
     if (!running) return;
     getFpRegs();
-    getLocals();
     getGlobals();
-    getArgs();
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
 }
 
 void GDB::doStep()
@@ -489,10 +485,8 @@ void GDB::doStep()
     getBackTrace();
     if (!running) return;
     getFpRegs();
-    getLocals();
     getGlobals();
-    getArgs();
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
 }
 
 void GDB::doNextInstruction()
@@ -506,10 +500,8 @@ void GDB::doNextInstruction()
     getBackTrace();
     if (!running) return;
     getFpRegs();
-    getLocals();
     getGlobals();
-    getArgs();
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
 }
 
 void GDB::doStepInstruction()
@@ -524,9 +516,7 @@ void GDB::doStepInstruction()
     if (!running) return;
     getFpRegs();
     getGlobals();
-    getLocals();
-    getArgs();
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
 }
 
 void GDB::doCall()
@@ -555,10 +545,8 @@ void GDB::doCall()
     getBackTrace();
     if (!running) return;
     getFpRegs();
-    getLocals();
     getGlobals();
-    getArgs();
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
 }
 
 void GDB::doContinue()
@@ -572,10 +560,8 @@ void GDB::doContinue()
     getBackTrace();
     if (!running) return;
     getFpRegs();
-    getLocals();
     getGlobals();
-    getArgs();
-    if ( running ) emit resetData();
+    //if ( running ) emit resetData();
 }
 
 void GDB::doStop()
@@ -804,7 +790,7 @@ void GDB::getLocals()
 
     getVars(locals, vars);
 
-    emit sendLocals(vars);
+    emit sendLocals(0,vars);
 }
 
 void GDB::getVars(QStringList &names, VariableDefinitionMap &vars)
@@ -1007,16 +993,11 @@ void GDB::getVars(QStringList &names, VariableDefinitionMap &vars)
                 //}
                 //}
             } else if ( var.type.indexOf(" *") >= 0 ) {
-                QString cmd = QString("printf \"0x%x\\n\",%1").arg(name);
-                results = sendReceive(cmd);
-                if ( results.length() == 0 ) {
-                    var.value = "";
-                } else {
-                    parts = results[0].split(QRegExp(":\\s+"));
-                    var.value = parts[parts.length()-1];
-                }
+                var.size = wordSize/8;
+                QString cmd = QString("x/%1xb &%2").arg(var.size).arg(name);
+                var.values = sendReceive(cmd);
             } else {
-                var.value = " ";
+                var.value = "";
             }
             vars[var.name] = var;
         }
@@ -1040,7 +1021,7 @@ void GDB::getArgs()
     }
     args.sort();
     getVars(args, vars);
-    emit sendParameters(vars);
+    emit sendParameters(0,vars);
 }
 
 bool GDB::testAVX()
@@ -1056,8 +1037,56 @@ bool GDB::testAVX()
     return false;
 }
 
-void GDB::requestVar(DataMap *map, QString name, QString address,
-        QString /* type */, QString format, int size)
+void GDB::requestParameters(DataPlank *p, int frame)
+{
+    QStringList args;
+    QStringList results;
+    QStringList parts;
+    VariableDefinitionMap vars;
+
+    if (!running) return;
+    send(QString("frame %1").arg(frame));
+    //qDebug() << "requestParameters" << QString("frame %1").arg(frame);
+    results = sendReceive(QString("info args"));
+    //qDebug() << results;
+    foreach ( QString r, results ) {
+        int n = r.indexOf(" =");
+        if ( n > 0 && r.at(0) != ' ' && r.at(0) != '_' ) {
+            args.append(r.left(n));
+        }
+    }
+    //args.sort();
+    getVars(args, vars);
+    emit sendParameters(p,vars);
+
+    send("frame 0");
+}
+
+void GDB::requestLocals(DataPlank *p, int frame)
+{
+    QStringList locals;
+    QStringList results;
+    QStringList parts;
+    VariableDefinitionMap vars;
+
+    if (!running) return;
+    send(QString("frame %1").arg(frame));
+    results = sendReceive(QString("info locals"));
+    foreach ( QString r, results ) {
+        int n = r.indexOf(" =");
+        if ( n > 0 && r.at(0) != ' ' && r.at(0) != '_' ) {
+            locals.append(r.left(n));
+        }
+    }
+    //locals.sort();
+    getVars(locals, vars);
+    emit sendLocals(p,vars);
+
+    send("frame 0");
+}
+
+void GDB::requestVar(DataPlank *p, QString name, QString address,
+        QString type, QString format, int size, int frame)
 {
     QStringList results;
     QStringList parts;
@@ -1067,20 +1096,11 @@ void GDB::requestVar(DataMap *map, QString name, QString address,
     int first = 0;
     int last = 0;
 
-    //qDebug() << name << address << format << size << first << last;
-
+    //qDebug() << "gdb requestVar" << name << address << type << format
+             //<< size << frame;
     if (!running) return;
-    if (size < 0 || size > 8) return;
-    char sizeLetter = letterForSize[size];
 
-    char formatLetter = 'd';
-    if (format == "Hexadecimal") formatLetter = 'x';
-    else if (format == "Floating point") formatLetter = 'f';
-    else if (format == "Character") formatLetter = 'c';
-
-    //if (first < 0 || last < 0) return;
-
-    //qDebug() << name << sizeLetter << formatLetter;
+    send(QString("frame %1").arg(frame));
     if (format == "String array") {
         result = "";
         int i = 0;
@@ -1120,41 +1140,14 @@ void GDB::requestVar(DataMap *map, QString name, QString address,
             parts = results[0].split(QRegExp(":\\s+"));
             result = parts[parts.length() - 1];
         }
-    } else if (first == 0 && last == 0) {
-        cmd = QString("x/x%1 %2").arg(sizeLetter).arg(address);
-        //qDebug() << "cmd" << cmd;
-        results = sendReceive(cmd);
-        //qDebug() << "results" << results;
-        if (results.length() == 0) {
-            result = "";
-        } else {
-            parts = results[0].split(QRegExp(":\\s+"));
-            //qDebug() << parts;
-            if (parts.length() < 2) {
-                result = "";
-            } else if (parts[1] == "(gdb)") {
-                result = "Illegal address " + parts[0];
-            } else {
-                result = parts[1];
-            }
-        }
     } else {
-        result = "";
-        for (int i = first; i <= last; i++) {
-            cmd = QString("x/%1%2 ((unsigned char *)%3)+%4").arg(sizeLetter)
-                .arg(formatLetter).arg(address).arg(i * size);
-            //qDebug() << "cmd" << cmd;
-            results = sendReceive(cmd);
-            //qDebug() << "results" << results;
-            if (results.length() > 0) {
-                parts = results[0].split(QRegExp(":\\s+"));
-                if (parts.length() >= 2) {
-                    result += parts[1] + " ";
-                }
-            }
-        }
+        cmd = QString("x/%1xb %2").arg(size).arg(address);
+        //qDebug() << "cmd" << cmd;
+        //qDebug() << results;
+        results = sendReceive(cmd);
     }
-    emit sendVar(map, name, result);
+    send("frame 0");
+    emit sendVar(p, name, results);
 }
 
 void GDB::getData(QStringList request)

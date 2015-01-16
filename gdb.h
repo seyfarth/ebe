@@ -62,14 +62,16 @@ public slots:
     void doStop();
     void doCommand(QString);
     void getData(QStringList request);
-    void requestVar(DataMap *map, QString name, QString address, QString type,
-        QString format, int size);
+    void requestVar(DataPlank *p, QString name, QString address, QString type,
+        QString format, int size, int frame );
     void setBreakpoint(QString, QString);
     void deleteBreakpoint(QString, QString);
     void receiveWorkingDir(QString);
     void setEOF();
     void requestStack(int n);
     void requestAsmVariable(int i, uLong address, int n);
+    void requestParameters(DataPlank *p, int frame);
+    void requestLocals(DataPlank *p, int frame);
 
     signals:
     void sendAsmVariable(int i, QStringList results);
@@ -79,10 +81,10 @@ public slots:
     void sendFpRegs(QStringList);
     void sendData(QString, QString);
     void sendGlobals(VariableDefinitionMap);
-    void sendLocals(VariableDefinitionMap);
-    void sendParameters(VariableDefinitionMap);
+    void sendLocals(DataPlank *p, VariableDefinitionMap);
+    void sendParameters(DataPlank *p, VariableDefinitionMap);
     void sendClasses(QHash<QString, ClassDefinition> classes);
-    void sendVar(DataMap *map, QString name, QString value);
+    void sendVar(DataPlank *p, QString name, QStringList values);
     void dataReady(QStringList);
     void sendBackTrace(QStringList);
     void resetData();

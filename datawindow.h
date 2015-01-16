@@ -55,6 +55,15 @@ typedef QHash<QString, DataPlank*> DataMap;
  */
 class DataTree;
 
+class IndicatorButton: public QPushButton
+{
+public:
+    IndicatorButton(QWidget *parent=0);
+    EZ::State *state;
+    void paintEvent(QPaintEvent *ev);
+    void mouseReleaseEvent(QMouseEvent *ev);
+};
+
 class DataPlank : public EZPlank
 {
 public:
@@ -68,20 +77,21 @@ public:
     QVector<Limits> dimensions;  ///< Array limits
     bool isSimple;      ///< Is the data simple, like char or int
     bool isFortran;     ///< Was this a fortran variable
+    bool isFinal;
     int size;           ///< Number of bytes of data
-    int first;
-    int last;
     int root;
     int treeLevel;
     int kidCount;
+    int frame;
+    IndicatorButton *indicator;
     DataTree *tree;
     DataPlank *parent;
     QVector<DataPlank *> kids;
     void collapse();
     DataPlank *addPlank(QString name);
+    DataMap parameterMap;
+    DataMap localMap;
     EZ::State state;
-    bool userDefined;   ///< Is this defined by the user during debugging
-    void setRange(int f, int l);
     void removeSubTree();
     QString valueFromGdb();
     DataMap *map;       ///< Map containing this \c DataPlank
@@ -142,13 +152,6 @@ public:
     void contextMenuEvent(QContextMenuEvent *event);
     DataPlank *all;
     DataPlank *globals;
-    DataPlank *locals;
-    DataPlank *parameters;
-    DataPlank *userDefined;
-    DataMap *globalMap;
-    DataMap *localMap;
-    DataMap *parameterMap;
-    DataMap *userDefinedMap;
     int rows;
     int columns;
     int levels;
@@ -164,10 +167,11 @@ public:
     QList<DataPlank*> kids;
     void buildTree(DataPlank *plank);
     void setPlankCount(int n);
-
-public slots:
     void expandDataPlank(DataPlank*);
     void collapseDataPlank(DataPlank*);
+
+public slots:
+    void receiveBackTrace(QStringList);
     void editUserVariable();
     void deleteUserVariable();
     void setDecimal();
@@ -182,7 +186,9 @@ public slots:
 
 private:
 
-    signals:
+signals:
+    void requestParameters ( DataPlank *p, int frame );
+    void requestLocals ( DataPlank *p, int frame );
 };
 
 class DataWindow: public QFrame
@@ -204,20 +210,20 @@ public:
     void saveScroll();
     void restoreScroll();
 
-private slots:
+public slots:
     void receiveVariableDefinition(QStringList);
     void resetData();
     void receiveClasses(QHash<QString, ClassDefinition> c);
-    void receiveVar(DataMap *group, QString name, QString value);
+    void receiveVar(DataPlank *p, QString name, QStringList values);
     void receiveGlobals(VariableDefinitionMap vars);
-    void receiveLocals(VariableDefinitionMap vars);
-    void receiveParameters(VariableDefinitionMap vars);
+    void receiveLocals(DataPlank *p,VariableDefinitionMap vars);
+    void receiveParameters(DataPlank *p,VariableDefinitionMap vars);
 
 private:
     QSize sizeHint() const;
 
     signals:
-    void requestVar(DataMap*,QString,QString,QString,QString,int);
+    void requestVar(DataPlank*,QString,QString,QString,QString,int,int);
 };
 
 #endif

@@ -47,13 +47,11 @@ class ArrayBoundsDialog: public QDialog
 public:
     ArrayBoundsDialog();
     QCheckBox *arrayCheck;
-    QSpinBox *firstSpin;
-    QSpinBox *lastSpin;
+    QSpinBox *nSpin;
     QSize sizeHint() const;
     void setMax(int max);
     void setMin(int min);
-    int min;
-    int max;
+    int n;
 
 private:
     QPushButton *okButton;

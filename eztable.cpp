@@ -16,7 +16,7 @@ EZCell::EZCell(int r, int c)
     visible = true;
     widget = 0;
     label = new QLabel();
-    label->setText("Z");
+    label->setText("");
     label->show();
 }
 
@@ -44,7 +44,6 @@ void EZCell::setText ( QString t, EZ::Color highlight )
     QString old = text;
     text = t;
 
-    //qDebug() << "setText" << r << c << old << t;
     switch ( highlight ) {
     case EZ::Default:
         break;
@@ -63,7 +62,6 @@ void EZCell::setText ( QString t, EZ::Color highlight )
         break;
     }
     label->setText(t);
-    //if ( cell->widget == 0 ) label->show();
 }
 
 EZRow::EZRow()
