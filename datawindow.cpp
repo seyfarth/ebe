@@ -131,7 +131,7 @@ void DataWindow::setFontHeightAndWidth(int height, int width)
 
 void DataWindow::receiveVariableDefinition(QStringList strings)
 {
-    DataPlank *plank;
+    //DataPlank *plank;
     //qDebug() << "data rec var" << strings;
     QString name = strings[0];
     int line = strings[7].toInt();
@@ -148,23 +148,23 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
         }
     }
     //plank = userDefinedMap->value(name);
-    if (plank == 0) {
+    //if (plank == 0) {
         //plank = dataTree->addDataPlank(userDefined,userDefinedMap, name, strings[2]);
-    }
-    plank->address = strings[1];
-    if (varToAddress.contains(name)) {
-        plank->address = varToAddress[name];
-    }
-    if (plank->address == "") {
-        plank->address = QString("&(%1)").arg(name);
-    }
-    if (strings[3] == "string" && strings[5] == "0") strings[5] = "1";
-    //plank->setRange(strings[4].toInt(), strings[5].toInt());
-    plank->setType(strings[2]);
-    plank->format = strings[3];
-    //userDefined->addChild(plank);
-    //userDefined->sortChildren();
-    //request(plank);
+    //}
+    //plank->address = strings[1];
+    //if (varToAddress.contains(name)) {
+        //plank->address = varToAddress[name];
+    //}
+    //if (plank->address == "") {
+        //plank->address = QString("&(%1)").arg(name);
+    //}
+    //if (strings[3] == "string" && strings[5] == "0") strings[5] = "1";
+    ////plank->setRange(strings[4].toInt(), strings[5].toInt());
+    //plank->setType(strings[2]);
+    //plank->format = strings[3];
+    ////userDefined->addChild(plank);
+    ////userDefined->sortChildren();
+    ////request(plank);
 }
 
 void DataWindow::resetData()
@@ -1016,16 +1016,16 @@ void DataWindow::request(DataPlank *d)
                     d->frame);
 }
 
-void DataWindow::receiveVar(DataPlank *p, QString name, QStringList values)
+void DataWindow::receiveVar(DataPlank *p, QString /*name*/, QStringList values)
 {
     //qDebug() << "receiveVar" << name << p << values;
     p->setValues(values);
-    dataWindow->saveScroll();
-    dataTree->redisplay(p,EZ::Highlight);
-    dataTree->table.clear();
-    dataTree->reorder(dataTree->all);
-    dataTree->resizeToFitContents(maxLevels);
-    dataWindow->restoreScroll();
+    //dataWindow->saveScroll();
+    //dataTree->redisplay(p,EZ::Highlight);
+    //dataTree->table.clear();
+    //dataTree->reorder(dataTree->all);
+    //dataTree->resizeToFitContents(maxLevels);
+    //dataWindow->restoreScroll();
     //int n2 = plank->kids.size();
     //for (int j = 0; j < n2; j++) {
         //request(plank->kids[j]);
@@ -1164,7 +1164,7 @@ void DataPlank::deactivate()
     //qDebug() << "deactivate" << this->name;
     hide();
     hidden = true;
-    for ( int i=0; i < kids.length(); i++ ) {
+    for ( int i=0; i < kids.size(); i++ ) {
         kids[i]->deactivate();
     }
     //if ( parent ) parent->removeChild(this);
@@ -1175,7 +1175,7 @@ void DataPlank::reactivate()
     //qDebug() << "reactivate" << this->name;
     show();
     hidden = false;
-    for ( int i=0; i < kids.length(); i++ ) {
+    for ( int i=0; i < kids.size(); i++ ) {
         kids[i]->reactivate();
     }
 }
@@ -1269,7 +1269,7 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
         size = formatToSize[format];
         rows = (num + count - 1) / count;
     }
-    if ( p->name == "n" )qDebug() << "redisplay" << p->name << p->size << rows << left << size << count << num << format;
+    //qDebug() << "redisplay" << p->name << p->size << rows << left << size << count << num << format;
     setRowCount(rows);
     for ( int i=0; i < p->treeLevel - 1; i++ ) {
         setSpan(0,i,1,1);
@@ -1365,7 +1365,7 @@ void DataTree::receiveBackTrace(QStringList s)
         }
     }
     //foreach ( kid, all->kids ) {
-    int m = all->kids.length();
+    int m = all->kids.size();
     for ( int i = m-1; i >= 0; i-- ) {
         kid = all->kids[i];
         kid->deactivate();
@@ -1454,7 +1454,5 @@ void IndicatorButton::mouseReleaseEvent(QMouseEvent *)
     } else if ( *state == EZ::Expanded ) {
         *state = EZ::Collapsed;
         update();
-    } else {
-        p->hide();
     }
 }

@@ -1086,15 +1086,15 @@ void GDB::requestLocals(DataPlank *p, int frame)
 }
 
 void GDB::requestVar(DataPlank *p, QString name, QString address,
-        QString type, QString format, int size, int frame)
+        QString /*type*/, QString format, int size, int frame)
 {
     QStringList results;
     QStringList parts;
     QString result;
     QString cmd;
     QString address2;
-    int first = 0;
-    int last = 0;
+    //int first = 0;
+    //int last = 0;
 
     //qDebug() << "gdb requestVar" << name << address << type << format
              //<< size << frame;
