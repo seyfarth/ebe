@@ -9,6 +9,8 @@
 
 IntHash bytesPerType;
 
+extern QString fortranName;
+
 /*
  *  Constructor
  */
@@ -257,7 +259,7 @@ void ToyBox::computeExpression()
     if (language == "C++") {
         compile.start("g++ -O0 ebe_toybox.cpp -o ebe_toybox");
     } else {
-        compile.start("gfortran -O0 ebe_toybox.f -o ebe_toybox");
+        compile.start(QString("%1 -O0 ebe_toybox.f -o ebe_toybox").arg(fortranName));
     }
     compile.waitForFinished();
     QByteArray errors = compile.readAllStandardError();

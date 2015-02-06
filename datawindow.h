@@ -68,7 +68,6 @@ class DataPlank : public EZPlank
 {
 public:
     DataPlank(QWidget *parent=0);
-    QString value();
     QString name;       ///< Full name of the \c DataPlank
     QString type;       ///< Type as reported by \c gdb
     QString basicType;  ///< Type without [] or *
@@ -79,44 +78,36 @@ public:
     bool isFortran;     ///< Was this a fortran variable
     bool isFinal;
     int size;           ///< Number of bytes of data
-    int root;
     int treeLevel;
-    int kidCount;
     int frame;
     IndicatorButton *indicator;
     DataTree *tree;
     DataPlank *parent;
     QVector<DataPlank *> kids;
-    void collapse();
     DataPlank *addPlank(QString name);
     DataMap parameterMap;
     DataMap localMap;
     EZ::State state;
+    //QString value();
     void removeSubTree();
     QString valueFromGdb();
     DataMap *map;       ///< Map containing this \c DataPlank
     QString stringValue;       ///< Value printed by \c gdb
     QStringList stringValues;      ///< Value printed by \c gdb
-    AllTypes a;         ///< Union of all basic types
     AllTypesArray *values;         ///< Union of all basic types
     bool hidden;
-    void addChild(DataPlank *plank) {
-        plank->treeLevel = treeLevel+1;
-        kids.append(plank);
-    }
+    void addChild(DataPlank *plank);
     void removeChild(DataPlank *plank);
     int childCount() {
         return kids.size();
     }
     void deactivate();
     void reactivate();
-    void sortChildren();
     void setName(QString s);
     void setType(QString s);
-    void setValue(QString s);
     void setValues(QStringList strings);
-    int maxLevel();
-    int countPlanks();
+    //int maxLevel();
+    //void setValue(QString s);
 };
 
 /**
@@ -156,7 +147,6 @@ public:
     int columns;
     int levels;
     int endName;
-    int nextRow;
     int fontWidth;
     int fontHeight;
     void reorder(DataPlank *plank);
@@ -172,8 +162,8 @@ public:
 
 public slots:
     void receiveBackTrace(QStringList);
-    void editUserVariable();
-    void deleteUserVariable();
+    //void editUserVariable();
+    //void deleteUserVariable();
     void setDecimal();
     void setFloatingPoint();
     void setBool();
@@ -199,7 +189,6 @@ public:
     DataWindow(QWidget *parent = 0);
     void setFontHeightAndWidth(int height, int width);
     void request(DataPlank *plank);
-    int treeLevel;
     QVBoxLayout *layout;
     int fontHeight;
     int fontWidth;

@@ -8,6 +8,7 @@
 #include <windows.h>
 #endif
 
+QProcess::ProcessState runningStatus=QProcess::NotRunning;
 extern TerminalWindow *terminalWindow;
 extern int wordSize;
 extern QMap<FileLine, unsigned long> fileLineToAddress;
@@ -69,6 +70,12 @@ void GDBThread::run()
 {
     //qDebug() << "thread" << currentThreadId();
     gdb = new GDB;
+    gdb->initGdb();
+    if ( gdbProcess->state() == QProcess::Running ) {
+        runningStatus = QProcess::Running;
+    } else {
+        runningStatus = QProcess::Starting;
+    }
     exec();
 }
 
@@ -83,7 +90,7 @@ GDB::GDB()
     gdbProcess->start(gdbName);
 
     wordSize = ebe["build/word_size"].toInt();
-    //qDebug() << "gdb state" << gdbProcess->state();
+    //qDebug() << "gdb state" << gdbProcess->state() << gdbProcess->pid();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
         << "continue";
     simpleTypes << "char" << "signed char" << "unsigned char" << "short"
@@ -150,7 +157,6 @@ GDB::GDB()
         regs << "eax" << "ebx" << "ecx" << "edx" << "edi" << "esi" << "ebp"
             << "esp" << "eip" << "eflags";
     }
-    initGdb();
     NullEOF = false;
 }
 
@@ -196,6 +202,14 @@ void GDB::send(QString cmd, QString /*options*/)
 {
     QRegExp rx1("at ([^:]*):([0-9]*)$");
     QRegExp rx2("^([0-9]+).*$");
+    if ( runningStatus != QProcess::Running ) {
+        if ( gdbProcess->state() == QProcess::Running ) {
+            runningStatus = QProcess::Running;
+            send("set prompt (gdb)\\n");
+        } else {
+            return;
+        }
+    }
     //qDebug() << cmd;
 #ifdef Q_WS_WIN
     if ( needToWake && cmd == "continue" ) {
@@ -247,6 +261,14 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
 {
     QStringList list;
     //qDebug() << cmd;
+    if ( runningStatus != QProcess::Running ) {
+        if ( gdbProcess->state() == QProcess::Running ) {
+            runningStatus = QProcess::Running;
+            send("set prompt (gdb)\\n");
+        } else {
+            return list;
+        }
+    }
     cmd += '\n';
     sync();
     //qDebug() << cmd;
@@ -360,6 +382,10 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     running = false;
     bpHash.clear();
     send("kill");
+    if ( runningStatus != QProcess::Running ) {
+        emit error("gdb is not running");
+        return;
+    }
     send("nosharedlibrary");
     send(QString("cd ") + QDir::currentPath());
     //qDebug() << "file" << exe;
@@ -1096,8 +1122,7 @@ void GDB::requestVar(DataPlank *p, QString name, QString address,
     //int first = 0;
     //int last = 0;
 
-    //qDebug() << "gdb requestVar" << name << address << type << format
-             //<< size << frame;
+    //qDebug() << "gdb requestVar" << name << address << format << size << frame;
     if (!running) return;
 
     send(QString("frame %1").arg(frame));
@@ -1142,9 +1167,9 @@ void GDB::requestVar(DataPlank *p, QString name, QString address,
         }
     } else {
         cmd = QString("x/%1xb %2").arg(size).arg(address);
+        results = sendReceive(cmd);
         //qDebug() << "cmd" << cmd;
         //qDebug() << results;
-        results = sendReceive(cmd);
     }
     send("frame 0");
     emit sendVar(p, name, results);

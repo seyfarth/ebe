@@ -87,9 +87,11 @@ QString binaryFloat(AllTypes &a)
     QString s = "";
     int sign, exp;
 
+    if ( a.u4 == 0 ) return "0.0 * 2**0";
+    if ( a.u4 == 0x80000000 ) return "-0.0 * 2**0";
     sign = a.u4 >> 31;
     exp = ((a.u4 >> 23) & 0xff) - 127;
-    s = sign == 1 ? "-" : " ";
+    s = sign == 1 ? "-" : "";
     s += "1.";
     for (int i = 22; i >= 0; i--) {
         s += (a.u4 & (1 << i)) != 0 ? "1" : "0";
@@ -110,11 +112,13 @@ QString binaryDouble(AllTypes &a)
     QString s = "";
     int sign, exp;
 
+    if ( a.u8 == 0 ) return "0.0 * 2**0";
+    if ( a.u8 == 0x8000000000000000 ) return "-0.0 * 2**0";
     sign = a.u8 >> 63;
     //qDebug() << "sign" << sign;
     exp = ((a.u8 >> 52) & 0x7ff) - 1023;
     //qDebug() << "exp" << exp;
-    s = sign == 1 ? "-" : " ";
+    s = sign == 1 ? "-" : "";
     s += "1.";
     for (int i = 51; i >= 0; i--) {
         //printf("%lx %lx \n",a.u8,1UL<<i);

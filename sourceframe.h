@@ -83,7 +83,7 @@ public slots:
     void insertFile(QString f);
     void error(QString s);
 
-    signals:
+signals:
     void doRun(QString exe, QString options, QStringList files,
         QList<StringSet> breakpoints, QStringList globals);
     void doNext();

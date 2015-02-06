@@ -55,8 +55,6 @@ DataWindow::DataWindow(QWidget *parent)
     dataTree->setToolTip(tr("Left click on a > symbol to expand a variable.\n"
                 "Right click to change formats."));
 
-    treeLevel = 1;
-
     setLayout(layout);
 
     qRegisterMetaType<DataPlank*>("DataPlank*");
@@ -163,7 +161,6 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
     //plank->setType(strings[2]);
     //plank->format = strings[3];
     ////userDefined->addChild(plank);
-    ////userDefined->sortChildren();
     ////request(plank);
 }
 
@@ -191,17 +188,14 @@ DataPlank::DataPlank(QWidget *p)
     type = "";
     stringValue = "";
     values = 0;
-    a.u8 = 0;
-    kidCount = 0;
     format = "";
+    isSimple = true;
+    isFortran = false;
     isFinal = false;
     //setFlags(Qt::ItemIsSelectree | Qt::ItemIsEnabled);
 }
 
-void DataPlank::sortChildren()
-{
-}
-
+#if 0   // OUT
 QString DataPlank::value()
 {
     QString val;
@@ -311,6 +305,7 @@ QString DataPlank::value()
     //<< last;
     return val;
 }
+#endif    //  OUT
 
 QString DataPlank::valueFromGdb()
 {
@@ -373,12 +368,14 @@ void DataPlank::setType(QString t)
         basicType = t;
     }
 
+    //qDebug() << basicType << format;
     if (sizeForType.contains(t)) {
         size = sizeForType[t];
     } else {
         size = 8;
     }
 
+    //qDebug() << basicType << format << size;
     isSimple = simpleTypes.contains(t);
     if (isSimple) {
         basicType = type;
@@ -410,12 +407,13 @@ void DataPlank::setType(QString t)
         //qDebug() << "formatForType contains basic type" << name << t << basicType;
     } else if ( sizeForType.contains(basicType) ) {
         size = sizeForType[basicType];
+        if ( size == 0 ) size = 8;
         format = QString("hex%1").arg(size);
         state = EZ::Simple;
         //qDebug() << "sizeForType contains basic type" << name << t << basicType;
     } else {
         format = "hex1";
-        state = EZ::Simple;
+        state = EZ::Collapsed;
         //qDebug() << "else ?" << name << t << basicType;
     }
 
@@ -466,12 +464,13 @@ void DataPlank::setValues ( QStringList s)
     size = k;
 }
 
+#if 0   // OUT
 void DataPlank::setValue(QString v)
 {
     bool ok;
 
     stringValue = v;
-    //qDebug() << name << size << v << a.u8 << value() << v;
+    //qDebug() << name << size << v << a.u8 << v;
     if (isSimple) {
         a.u8 = 0;
         switch (size) {
@@ -492,7 +491,7 @@ void DataPlank::setValue(QString v)
 #endif
                 break;
         }
-        //qDebug() << name << size << v << a.u8 << value();
+        //qDebug() << name << size << v << a.u8;
     }
     tree->setCurrentPlank(this);
     tree->setSpan(0, maxLevels+2, 1, tree->columns );
@@ -513,6 +512,7 @@ int DataPlank::maxLevel()
     }
     return max;
 }
+#endif   // OUT
 
 void DataTree::setBinary()
 {
@@ -577,6 +577,7 @@ void DataTree::setFields()
     dataWindow->resetData();
 }
 
+#if 0       // OUT
 void DataTree::editUserVariable()
 {
     DataPlank *d = (DataPlank *)latestPlank;
@@ -618,6 +619,7 @@ void DataTree::deleteUserVariable()
     }
     delete plank;
 }
+#endif      // OUT
 
 void DataTree::contextMenuEvent(QContextMenuEvent * /*event*/)
 {
@@ -741,6 +743,7 @@ DataTree::DataTree(QWidget *parent)
     plankForMap[&globalMap] = globals;
 
     globals->state = EZ::Expanded;
+    globals->format = "string";
     globals->parent = 0;
     for ( int c=0; c < columns+2; c++ ) {
         setColumnWidth(c, fontWidth*0.8);
@@ -764,7 +767,7 @@ void DataTree::buildTree(DataPlank *p)
     //qDebug() << "buildTree" << p << p->name << p->format << p->state
              //<< p->kids.length();
     //if ( p->treeLevel > 2 ) dataWindow->request(p);
-    setCurrentPlank(p);
+    //setCurrentPlank(p);
     redisplay(p, EZ::Highlight);
     if ( p->state == EZ::Expanded ) {
         for ( int j=0; j < p->kids.size(); j++ ) {
@@ -772,66 +775,6 @@ void DataTree::buildTree(DataPlank *p)
         }
     }
 }
-/*
-   setRowCount(1);
-   setText(0,0,k->name,EZ::Default);
-   setText(0,1,k->type,EZ::Default);
-   if ( k->treeLevel == 0 ) {
-   setSpan(0,2,1,columns);
-   setText ( 0, 2, "", EZ::Default );
-   } else {
-   if ( simpleTypes.contains(k->type) ||
-   k->format == "string" ||
-   k->type.indexOf("character*") >= 0 ) {
-   setSpan ( nextRow, 2, 1, columns );
-   setText ( nextRow, 2, k->value(), EZ::Highlight );
-   } else if ( k->format == "String array" ) {
-   QString s = k->stringValue;
-   QStringList parts;
-   int len = s.length();
-   s.remove(len-2,2);
-   s.remove(0,1);
-   parts = s.split("\" \"");
-   setRowCount(parts.length());
-   nextRow=0;
-   foreach ( QString t, parts ) {
-   setSpan ( nextRow, 2, 1, columns );
-   setText ( nextRow, 2, t, EZ::Highlight );
-   nextRow++;
-   setText ( nextRow, 0, "", EZ::Default );
-   setText ( nextRow, 1, "", EZ::Default );
-   }
-   } else if ( k->dimensions.size() == 1 &&
-   formatToSpan[k->basicType] > 0 ) {
-   int span = formatToSpan[k->basicType];
-   int count = columns/span;
-   QStringList parts = k->stringValue.split(" ");
-   int n = parts.length();
-   int numRows = (n+count-1)/count;
-   int k = 0;
-   int m;
-   int left = n;
-   setRowCount(numRows);
-   for ( int r = 0; r < numRows; r++ ) {
-   if ( r > 0 ) {
-   setText ( r, 0, "", EZ::Default );
-   setText ( r, 1, "", EZ::Default );
-   }
-   m = left;
-   if ( m > count ) m = count;
-   qDebug() << span << count << numRows << r << left << n;
-   for ( k = 0; k < m; k++ ) {
-   if ( r == numRows - 1 && k == n-1 ) {
-   setSpan ( r, k+2, 1, columns-k);
-   } else {
-   setSpan ( r, k+2, 1, span );
-   }
-   setText ( r, k+2, parts[k+r*count], EZ::Highlight );
-   }
-   left -= m;
-   }
-   } else if ( 
-   */
 
 DataTree::~DataTree()
 {
@@ -839,11 +782,14 @@ DataTree::~DataTree()
     delete globals;
 }
 
-void DataTree::collapseDataPlank(DataPlank *plank)
+void DataTree::collapseDataPlank(DataPlank *p)
 {
-    DataPlank *it = (DataPlank *)plank;
-    if ( plank->root >= 0) return;
-    it->state = EZ::Collapsed;
+    p->state = EZ::Collapsed;
+    foreach ( DataPlank *k, p->kids ) {
+        k->deactivate();
+    }
+    redisplay(p,EZ::NoChange);
+    dataWindow->resetData();
 }
 
 void DataTree::expandDataPlank(DataPlank *p)
@@ -854,33 +800,37 @@ void DataTree::expandDataPlank(DataPlank *p)
     int n;
 
     c = classes[p->type];
-    DataPlank *t;
-    //qDebug() << "expandDataPlank" << p->name << p->kids.length();
-
-    for ( int i=0; i < p->kids.size(); i++ ) {
-        t = (DataPlank *)p->kids[i];
-        if (p != globals) {
-            t->removeSubTree();
-            delete t;
-        }
-    }
-    //qDebug() << "class for type" << p->type << c.name;
 
     if (c.name != "") {
-        foreach ( VariableDefinition v, c.members ) {
+        p->state = EZ::Expanded;
+        n = c.members.size();
+        VariableDefinition v;
+        for ( int i = 0; i < n; i++ ) {
+            v = c.members[i];
             fullName = p->name + "." + v.name;
-            //if ( plank == globals ) qDebug() << "globals adding child" << fullName;
-            d = addDataPlank(p,p->treeLevel+1,p->map,fullName,
-                    v.type);
+            //qDebug() << "adding class child" << fullName << v.type;
+            d = addDataPlank(p,p->treeLevel+1,&expansionMap,v.name,v.type);
+            d->frame = p->frame;
+            d->values = new AllTypesArray(d->size);
+            //redisplay(d,EZ::Highlight);
             if ( p->map == &globalMap ) {
                 d->address="&(::"+fullName+")";
             } else {
                 d->address="&("+fullName+")";
             }
-            p->addChild(d);
+            d->isFinal = i == n-1;
             dataWindow->request(d);
         }
+        //qDebug() << "Done with expand";
+    } else if ( p->format == "string" || p->format == "string array" ) {
+        p->state = EZ::Expanded;
+        foreach ( DataPlank *k, p->kids ) {
+            k->reactivate();
+        }
+        redisplay(p,EZ::NoChange);
+        dataWindow->resetData();
     } else if ((n = p->type.indexOf(" *")) > 0) {
+        p->state = EZ::Expanded;
         //qDebug() << "expand pointer";
         ArrayBoundsDialog *dialog = new ArrayBoundsDialog();
         if (dialog->exec()) {
@@ -904,6 +854,12 @@ void DataTree::expandDataPlank(DataPlank *p)
             dataWindow->request(d);
         }
         delete dialog;
+    } else {
+        p->state = EZ::Expanded;
+        foreach ( DataPlank *k, p->kids ) {
+            k->reactivate();
+        }
+        dataWindow->resetData();
     }
 #if 0
     } else if ((n = it->type.indexOf('[')) >= 0) {
@@ -1011,7 +967,7 @@ void DataTree::expandDataPlank(DataPlank *p)
 
 void DataWindow::request(DataPlank *d)
 {
-    //qDebug() << "request" << d->name << d->type << d->size;
+    //qDebug() << "request" << d->name << d->type << d->format << d->size << d->frame;
     emit requestVar(d, d->name, d->address, d->type, d->format, d->size,
                     d->frame);
 }
@@ -1020,8 +976,8 @@ void DataWindow::receiveVar(DataPlank *p, QString /*name*/, QStringList values)
 {
     //qDebug() << "receiveVar" << name << p << values;
     p->setValues(values);
+    dataTree->redisplay(p,EZ::Highlight);
     //dataWindow->saveScroll();
-    //dataTree->redisplay(p,EZ::Highlight);
     //dataTree->table.clear();
     //dataTree->reorder(dataTree->all);
     //dataTree->resizeToFitContents(maxLevels);
@@ -1030,7 +986,7 @@ void DataWindow::receiveVar(DataPlank *p, QString /*name*/, QStringList values)
     //for (int j = 0; j < n2; j++) {
         //request(plank->kids[j]);
     //}
-    resetData();
+    if ( p->isFinal ) resetData();
 }
 
 void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
@@ -1100,7 +1056,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         /*
          *      Reactivate any hidden plank.
          */
-        if ( p->hidden ) {
+        if ( p->hidden && parent->state == EZ::Expanded ) {
             //qDebug() << "reactivate" << p;
             p->reactivate();
             parent->addChild(p);
@@ -1134,7 +1090,7 @@ void DataWindow::receiveGlobals(VariableDefinitionMap vars)
 
 void DataWindow::receiveLocals(DataPlank *p, VariableDefinitionMap vars)
 {
-    //qDebug() << "receiveLocals";
+    //qDebug() << "receiveLocals" << p << p->isFinal;
     receiveVars ( &(p->localMap), vars );
     if ( p->isFinal ) resetData();
 }
@@ -1159,13 +1115,24 @@ void DataPlank::removeChild(DataPlank *p)
     }
 }
 
+void DataPlank::addChild(DataPlank *p)
+{
+    int i;
+    for ( i = 0; i < kids.size(); i++ ) {
+        if ( kids[i] == p ) return;
+    }
+    kids.append(p);
+}
+
 void DataPlank::deactivate()
 {
     //qDebug() << "deactivate" << this->name;
     hide();
     hidden = true;
-    for ( int i=0; i < kids.size(); i++ ) {
-        kids[i]->deactivate();
+    if ( state == EZ::Expanded ) {
+        for ( int i=0; i < kids.size(); i++ ) {
+            kids[i]->deactivate();
+        }
     }
     //if ( parent ) parent->removeChild(this);
 }
@@ -1175,8 +1142,10 @@ void DataPlank::reactivate()
     //qDebug() << "reactivate" << this->name;
     show();
     hidden = false;
-    for ( int i=0; i < kids.size(); i++ ) {
-        kids[i]->reactivate();
+    if ( state == EZ::Expanded ) {
+        for ( int i=0; i < kids.size(); i++ ) {
+            kids[i]->reactivate();
+        }
     }
 }
 
@@ -1201,7 +1170,7 @@ DataPlank *DataTree::addDataPlank(DataPlank *parent, int theLevel, DataMap *map,
         QString n, QString t)
 {
 
-    //qDebug() << "addDataPlank" << i << theLevel << n << t << v << planks;
+    //qDebug() << "addDataPlank" << theLevel << n << t;
     DataPlank *d = new DataPlank(this);     
     d->treeLevel = theLevel;
     d->show();
@@ -1217,12 +1186,9 @@ DataPlank *DataTree::addDataPlank(DataPlank *parent, int theLevel, DataMap *map,
     }
     d->tree = this;
     d->parent = parent;
-    if ( parent ) parent->kids.append(d);
+    if ( parent ) parent->addChild(d);
     d->setName(n);
     d->setType(t);
-    //d->setValue(v);
-    d->format = "string";
-    d->size = 0;
     //d->userDefined = (map == userDefinedMap);
     if (map == &globalMap) {
         d->address = QString("&(::%1)").arg(n);
@@ -1253,6 +1219,7 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
 
     FormatFunction f=formatToFunction[format];
     setCurrentPlank(p);
+    //qDebug() << p->name << p->format;
     if ( format == "string" || format == "string array" ) {
         span = columns;
         num = p->stringValues.length();
@@ -1263,13 +1230,24 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
         count = 1;
     } else {
         span = formatToSpan[format];
-        count = columns/span;
-        num = size/formatToSize[format];
+        if ( span == 0 ) {
+            count = 1;
+        } else {
+            count = columns/span;
+        }
+        if ( formatToSize.contains(format) ) {
+            num = size/formatToSize[format];
+            size = formatToSize[format];
+        } else {
+            num = 0;
+            size = 0;
+        }
         if ( num < 1 ) num = 1;
-        size = formatToSize[format];
         rows = (num + count - 1) / count;
     }
     //qDebug() << "redisplay" << p->name << p->size << rows << left << size << count << num << format;
+    if ( p->state == EZ::Collapsed ) rows = 1;
+    if ( rows > 1 ) p->state = EZ::Expanded;
     setRowCount(rows);
     for ( int i=0; i < p->treeLevel - 1; i++ ) {
         setSpan(0,i,1,1);
@@ -1277,21 +1255,24 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
     }
     setSpan(0,p->treeLevel,1,1);
     setText(0,p->treeLevel," ");
+    //if ( p->name == "tms_utime" ) qDebug() << "span" << p->treeLevel+1 << maxLevels-p->treeLevel-1;
     setSpan(0,p->treeLevel+1,1,maxLevels-p->treeLevel-1);
     setText(0,p->treeLevel+1,p->name);
     setSpan(0,maxLevels+1,1,1);
     setText(0,maxLevels+1,p->type);
-
+    if ( num < 1 || size < 1 ) return;
 
     for ( int r = 0; r < rows; r++ ) {
-        for ( int c = 0; c < columns; c++ ) {
-            setSpan(r,c+maxLevels+2,1,1);
-        }
+        //for ( int c = 0; c < columns; c++ ) {
+            //setSpan(r,c+maxLevels+2,1,1);
+        //}
         if ( r > 0 ) {
-            setSpan(r,0,1,maxLevels+1);
-            setText(r,0," ");
+            setSpan(r,0,1,1);
+            setText(r,0,"");
+            setSpan(r,1,1,maxLevels);
+            setText(r,1,"");
             setSpan(r,maxLevels+1,1,1);
-            setText(r,maxLevels+1," ");
+            setText(r,maxLevels+1,"");
         }
         max = count;
         if ( max > left/size ) max = left/size;
@@ -1307,31 +1288,18 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
         }
         left -= max*size;
     }
-    //if ( v == planks - 1 ) {
-    //resizeToFitContents(maxLevels);
-    //}
 }
 
 void DataTree::receiveBackTrace(QStringList s)
 {
-//
-//  Each function in the back trace will be represented as a child of
-//  all.  For recursive functions the earliest instance will be given
-//  the function name like "fact", the next will be "fact:1", then
-//  "fact:2", etc.
-//
-
-//
-//  Start with the last entry in s and match up with the last child of
-//  all.
-//
-    int n = s.length();
     int frame;
     QStringList parts;
     QString name;
     IntHash highest;
     DataPlank *p;
     DataPlank *kid;
+    int n = s.length();
+    if ( s[n-1][0] != QChar('#') ) n--;
     for ( int i=0; i < n; i++ ) {
         if ( s[i][0] != QChar('#') ) continue;
         //qDebug() << s[i];
@@ -1352,19 +1320,21 @@ void DataTree::receiveBackTrace(QStringList s)
         //qDebug() << "name" << name;
         if ( !functionMap.contains(name) ) {
             p = addDataPlank(all,1,0, name, "");
+            p->format = "string";
             p->state = EZ::Expanded;
             functionMap[name] = p;
             kid = addDataPlank(p,2,0, "parameters", "");
+            kid->format = "string";
             plankForMap[&(kid->parameterMap)] = kid;
             //qDebug() << "plank" << kid << "par map" << &(kid->parameterMap);
             kid->state = EZ::Expanded;
             kid = addDataPlank(p,2,0, "locals", "");
+            kid->format = "string";
             plankForMap[&(kid->localMap)] = kid;
             //qDebug() << "plank" << kid << "localmap" << &(kid->localMap);
             kid->state = EZ::Expanded;
         }
     }
-    //foreach ( kid, all->kids ) {
     int m = all->kids.size();
     for ( int i = m-1; i >= 0; i-- ) {
         kid = all->kids[i];
@@ -1398,11 +1368,13 @@ void DataTree::receiveBackTrace(QStringList s)
         p->kids[0]->isFinal = false;
         //p->kids[0]->kids.clear();
         p->kids[1]->frame = frame;
-        p->kids[1]->isFinal = i == n-1;
+        p->kids[1]->isFinal = (i == n-1);
+        //qDebug() << "rbt" << p->kids[1] << p->kids[1]->isFinal;
         //p->kids[1]->kids.clear();
         emit requestParameters ( p->kids[0], frame );
         emit requestLocals ( p->kids[1], frame );
     }
+    //dataWindow->resetData();
 }
 
 IndicatorButton::IndicatorButton(QWidget *parent)
@@ -1420,9 +1392,9 @@ void IndicatorButton::paintEvent(QPaintEvent *)
     painter.fillRect(0,0,w,h,bgColor);
     if ( *state == EZ::Collapsed ) {
         QPoint pts[3] = {
-            QPoint(w*.1,h*.4),
-            QPoint(w*.5,h*.65),
-            QPoint(w*.9,h*.4)
+            QPoint(w*.1,h*.1),
+            QPoint(w*.5,h*.8),
+            QPoint(w*.9,h*.1)
         };
         //qDebug() << "pts" << pts[0] << pts[1] << pts[2];
         painter.setPen(QPen(highlightColor));
@@ -1430,9 +1402,9 @@ void IndicatorButton::paintEvent(QPaintEvent *)
         painter.drawConvexPolygon(pts,3);
     } else if ( *state == EZ::Expanded ) {
         QPoint pts[3] = {
-            QPoint(w*.5,h*.4),
-            QPoint(w*.1,h*.65),
-            QPoint(w*.9,h*.65)
+            QPoint(w*.5,h*.1),
+            QPoint(w*.1,h*.8),
+            QPoint(w*.9,h*.8)
         };
         //qDebug() << "pts" << pts[0] << pts[1] << pts[2];
         painter.setPen(QPen(highlightColor));
@@ -1453,6 +1425,7 @@ void IndicatorButton::mouseReleaseEvent(QMouseEvent *)
         update();
     } else if ( *state == EZ::Expanded ) {
         *state = EZ::Collapsed;
+        tree->collapseDataPlank(p);
         update();
     }
 }

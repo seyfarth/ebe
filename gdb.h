@@ -73,7 +73,7 @@ public slots:
     void requestParameters(DataPlank *p, int frame);
     void requestLocals(DataPlank *p, int frame);
 
-    signals:
+signals:
     void sendAsmVariable(int i, QStringList results);
     void receiveStack(QStringList results);
     void nextInstruction(QString,int);

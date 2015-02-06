@@ -151,6 +151,7 @@ void EZTable::setSpan ( int r, int c, int numRows, int numCols )
 
     if ( numRows < 1 ) numRows = 1;
     if ( numCols < 1 ) numCols = 1;
+    //if ( columns > 20 ) qDebug() << "setSpan" << r << c << numCols << numRows;
     EZCell *cell2;
     if ( cell->spanning ) {
         for ( int row=r; row < r+cell->spannedRows; row++ ) {
@@ -226,6 +227,8 @@ void EZTable::resizeToFitContents(int f)
     int n;
     int x;
     int totalRows=0;
+    int maxLevel = 0;
+    int adjust;
 
     //if (f) qDebug() << "resizeToFitContents" << ezrowHeight << planks << table.size() << f;
 
@@ -240,13 +243,28 @@ void EZTable::resizeToFitContents(int f)
     //if (f) qDebug() << "maxWidth b4" << maxWidth;
 
     foreach ( EZPlank *p, table ) {
+        for ( int c = 0; c < f; c++ ) {
+            cell = p->ezrows[0]->ezcells[c];
+            if ( cell->widget ) {
+                maxWidth[c] = ezrowHeight;
+                maxLevel = c;
+                break;
+            }
+        }
+    }
+    foreach ( EZPlank *p, table ) {
         //if (f) qDebug() << p->rows;
         for ( int r=0; r < p->rows; r++ ) {
             for ( int c = 0; c < f; c++ ) {
                 cell = p->ezrows[r]->ezcells[c];
                 if ( cell->spanning ) {
+                    if ( c <= maxLevel ) {
+                        adjust = (maxLevel-c+1)*(ezrowHeight-fontWidth);
+                    } else {
+                        adjust = 0;
+                    }
                     n = (cell->text.size() - cell->spannedColumns)*fontWidth
-                        + fontWidth;
+                        + fontWidth - adjust;
                     if ( n > maxWidth[f] ) {
                         maxWidth[f] = n;
                     }
@@ -285,8 +303,13 @@ void EZTable::resizeToFitContents(int f)
                 cell->pos_x = x;
                 cell->pos_y = r * ezrowHeight;
                 if ( cell->spanning ) {
+                    if ( c <= maxLevel ) {
+                        adjust = (maxLevel-c+1)*(ezrowHeight-fontWidth);
+                    } else {
+                        adjust = 0;
+                    }
                     cell->cellWidth = (maxWidth[f] +
-                         (f-c)*fontWidth) + fontWidth;
+                         (f-c-1)*fontWidth) + fontWidth + adjust;
                     x += cell->cellWidth;
                     break;
                 } else {
@@ -318,7 +341,7 @@ void EZTable::resizeToFitContents(int f)
                 cell = p->ezrows[r]->ezcells[c];
                 if ( cell->spanning ) {
                     cell->spanWidth = (maxWidth[f] +
-                            (f-c)*fontWidth) + fontWidth;
+                            (f-c)*ezrowHeight) + ezrowHeight;
                     if ( cell->widget ) {
                         cell->widget->move(cell->pos_x,cell->pos_y);
                         cell->widget->resize ( cell->spanWidth, cell->spanHeight );

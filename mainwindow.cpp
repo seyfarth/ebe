@@ -132,10 +132,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     gdbThread = new GDBThread();
     gdbThread->start();
+
 #ifdef Q_WS_WIN
-    while ( !gdb ) Sleep(1);
+    int sleepTime = 1;
+    while ( !gdb ) {
+        Sleep(sleepTime);
+        if ( sleepTime > 1 ) qDebug() << "gdb is taking too long";
+        sleepTime++;
+    }
 #else
-    while (!gdb) usleep(100);
+    int sleepTime = 10000;
+    while (!gdb) {
+        usleep(sleepTime);
+        if ( sleepTime > 1000000 ) qDebug() << "gdb is taking too long";
+        sleepTime += 1000000;
+    }
 #endif
 
     createStatusBar();
@@ -152,6 +163,7 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(false);
 
     QTimer::singleShot(0, this, SLOT(restoreMainWindow()));
+
     connect(gdb, SIGNAL(sendRegs(StringHash)), registerWindow,
         SLOT(receiveRegs(StringHash)));
     if ( wordSize == 64 ) {
