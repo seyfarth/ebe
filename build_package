@@ -1,5 +1,14 @@
 #!/bin/bash
 
+version=$(grep -i 'ebe - version' html/about.html | cut -d ' ' -f 5)
+file=~/sf/qtebe/Linux/ubuntu-14.10.ebe.${version}.tgz
+
+if [ -e $file ]
+then
+    echo "Version $version has already been used.  Bump it?"
+    exit 1
+fi
+
 exe=${1:-ebe}
 
 mkdir -p $exe.d
@@ -67,4 +76,5 @@ EOF3
 
 chmod a+rx $exe.d/install
 
-tar cvzf $exe.tgz $exe.d
+tar cvzf $file $exe.d
+

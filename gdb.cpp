@@ -87,7 +87,7 @@ GDB::GDB()
 #endif
     gdbProcess = new QProcess(this);
     gdbProcess->setProcessChannelMode(QProcess::MergedChannels);
-    gdbProcess->start(gdbName);
+    gdbProcess->start(gdbName + " -nh" );
 
     wordSize = ebe["build/word_size"].toInt();
     //qDebug() << "gdb state" << gdbProcess->state() << gdbProcess->pid();
