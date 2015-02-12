@@ -7,6 +7,7 @@ TEMPLATE = app
 DEPENDPATH += .
 INCLUDEPATH += .
 INCLUDEPATH += /usr/local/include
+LIBS += /usr/local/lib/qt4
 
 lessThan(QT_MAJOR_VERSION,5) {
     QT += webkit
