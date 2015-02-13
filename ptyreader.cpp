@@ -1,5 +1,7 @@
 #include "ptyreader.h"
-#ifndef Q_WS_WIN
+#ifdef Q_WS_WIN
+#include <windows.h>
+#else
 #include <unistd.h>
 #endif
 #include <stdio.h>
@@ -35,10 +37,18 @@ void PtyReader::run()
 #else
         n = read(pty, data, 256);
 #endif
-        if ( n < 1 ) break;
+	    //qDebug() << "PtyReader n:" << n;
+        if ( n < 1 ) {
+#ifdef Q_WS_WIN
+            Sleep(1);
+#else
+            usleep(500000);
+#endif
+            continue;
+        }
         data[n] = 0;
         QString s(data);
-        //qDebug() << s;
+        //qDebug() << "PtyReader data ready" << s;
         emit dataReady(s);
     }
 }

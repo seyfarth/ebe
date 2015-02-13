@@ -463,6 +463,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send("continue");
     //send("set prompt (gdb)\\n");
 #else
+    //qDebug() << "tty " << terminalWindow->ptyName;
     send("tty " + terminalWindow->ptyName);
     send("set args " + options);
     send("run");
@@ -1285,6 +1286,7 @@ void GDB::setNormal()
 {
     if (!running) return;
     send("set language c++");
+        send("call __ebeSetNormal()");
     if (NullEOF) {
         send("call __ebeSetNormal()");
         NullEOF = false;

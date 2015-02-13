@@ -205,7 +205,16 @@ void Settings::setDefaults()
     ebe["build/word_size"] = wordSize;
     ebe["build/assembler"] = "yasm";
 
+    ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
+        "-o \"$base.o\" \"$source\"";
+    ebe["build/libs"] = "-lstdc++";
+    ebe["build/ccld"] = "gcc -g -o \"$base\" ";
+    ebe["build/cpp"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
+        "-o \"$base.o\" \"$source\"";
+    ebe["build/cppld"] = "g++ -g -o \"$base\"";
+
 #if __linux__
+    ebe["bsd"] = false;
     ebe["linux"] = true;
     ebe["mac"] = false;
     ebe["os"] = "linux";
@@ -253,7 +262,64 @@ void Settings::setDefaults()
     }
     ebe.os = "linux";
     ebe["xmm/reverse"] = false;
+#elif defined(Q_OS_BSD4)
+    //qDebug() << "BSD";
+    ebe["bsd"] = true;
+    ebe["linux"] = false;
+    ebe["mac"] = false;
+    ebe["os"] = "bsd";
+    ebe["windows"] = false;
+    ebe["build/cc"] = "cc -g -c -Wfatal-errors -Wall -O0 "
+        "-o \"$base.o\" \"$source\"";
+    ebe["build/libs"] = "-lstdc++";
+    ebe["build/ccld"] = "c++ -g -o \"$base\" ";
+    ebe["build/cpp"] = "c++ -g -c -Wfatal-errors -Wall -O0 "
+        "-o \"$base.o\" \"$source\"";
+    ebe["build/cppld"] = "c++ -g -o \"$base\"";
+    if ( wordSize == 64 ) {
+        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_yasm_32"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64 "
+            "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asmld"] = "ld -o \"$base\"";
+        ebe["build/asmld_64"] = "ld -o \"$base\"";
+        ebe["build/halld"] = "ld -o \"$base\"";
+        ebe["build/cc_64"] = "cc -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
+        ebe["build/cc_32"] = "cc -m32 -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
+        ebe["build/ccld_64"] = "cc -g -o \"$base\" ";
+        ebe["build/ccld_32"] = "cc -m32 -g -o \"$base\" ";
+        ebe["build/word_size"] = 64;
+        ebe["build/asm_as_32"] = "as --32 -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
+        ebe["build/asm_as_64"] = "as --64 -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
+        ebe["build/asmld_32"] = "ld -melf_i386 -o \"$base\"";
+        ebe["build/cpp_32"] = "c++ -m32 -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
+        ebe["build/cppld_32"] = "c++ -m32 -g -o \"$base\"";
+        ebe["build/cpp_64"] = "c++ -g -c -Wfatal-errors -Wall -O0 "
+            "-o \"$base.o\" \"$source\"";
+        ebe["build/cppld_64"] = "c++ -g -o \"$base\"";
+    } else {
+        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
+        ebe["build/asm_yasm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asmld"] = "ld -o \"$base\"";
+        ebe["build/word_size"] = 32;
+    }
+    ebe.os = "linux";
+    ebe["xmm/reverse"] = false;
 #elif __APPLE__
+    ebe["bsd"] = false;
     ebe["linux"] = false;
     ebe["mac"] = true;
     ebe["os"] = "mac";
@@ -265,6 +331,7 @@ void Settings::setDefaults()
     ebe.os = "mac";
     ebe["xmm/reverse"] = true;
 #else
+    ebe["bsd"] = false;
     ebe["linux"] = false;
     ebe["mac"] = false;
     ebe["os"] = "windows";
@@ -278,13 +345,6 @@ void Settings::setDefaults()
     ebe["xmm/reverse"] = false;
 #endif
     ebe["prettify"] = "astyle -A3 -s$tab_width -t$tab_width \"$source\"";
-    ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
-        "-o \"$base.o\" \"$source\"";
-    ebe["build/libs"] = "-lstdc++";
-    ebe["build/ccld"] = "gcc -g -o \"$base\" ";
-    ebe["build/cpp"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
-        "-o \"$base.o\" \"$source\"";
-    ebe["build/cppld"] = "g++ -g -o \"$base\"";
     fortranName = mainWin->toolExists("gfortran") ? "gfortran" : "g95";
     ebe["build/fortran"] = fortranName + " -g -c -Wfatal-errors -Wall -O0 "
         "-o \"$base.o\" \"$source\"";

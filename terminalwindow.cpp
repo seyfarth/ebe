@@ -14,6 +14,7 @@
 #include <unistd.h>
 #endif
 
+
 extern GDB *gdb;
 
 TerminalWindow::TerminalWindow(QWidget *parent)

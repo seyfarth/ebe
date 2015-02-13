@@ -100,6 +100,22 @@ void MainWindow::setWordSize()
         wordSize = 32;
     }
 #endif
+#ifdef Q_OS_BSD4
+    QProcess which(app);
+    which.start("which objdump");
+    which.waitForFinished();
+    QByteArray data = which.readLine();
+    QString fileName;
+    fileName = QString(data.trimmed());
+    which.start(QString("objdump -f \"%1\"").arg(fileName));
+    which.waitForFinished();
+    data = which.readAllStandardOutput();
+    if ( QString(data).indexOf("x86-64") >= 0 ) {
+        wordSize = 64;
+    } else {
+        wordSize = 32;
+    }
+#endif
 #ifdef Q_OS_MAC
     QProcess which(app);
     which.start("which nm");
@@ -217,10 +233,14 @@ void MainWindow::checkTools()
         } else {
             missingCritical += "gdb";
         }
+#if defined(Q_OS_BSD4)
+        if (!toolExists("cc")) missingCritical += "cc";
+#else
         if (!toolExists("gcc")) missingCritical += "gcc";
         if (!toolExists("gfortran") && !toolExists("g95") ) {
             missing += "gfortran";
         }
+#endif
         if (!toolExists("yasm")) missing += "yasm";
         if (!toolExists("astyle")) missing += "astyle";
         if (missing.length() > 0 || missingCritical.length() > 0) {

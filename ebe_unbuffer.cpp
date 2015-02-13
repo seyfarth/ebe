@@ -6,13 +6,16 @@ using namespace std;
 
 #ifdef __linux__
 ifstream __ebeNull("/dev/null");
-FILE *__ebe_stdin;
+FILE *__ebe_stdin = stdin;
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+ifstream __ebeNull("/dev/null");
+FILE *__ebe_stdin = stdin;
 #elif __APPLE__
 ifstream __ebeNull("/dev/null");
-FILE *__ebe_stdin;
+FILE *__ebe_stdin = stdin;
 #else
 ifstream __ebeNull("nul");
-FILE __ebe_stdin;
+FILE __ebe_stdin = *stdin;
 #endif
 streambuf *__ebe_cin;
 FILE *__ebe_NULL_fp;
@@ -22,6 +25,9 @@ void __ebeSetNULL()
     __ebe_cin = cin.rdbuf();
     cin.rdbuf(__ebeNull.rdbuf());
 #ifdef __linux__
+    __ebe_stdin = stdin;
+    stdin = __ebe_NULL_fp;
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
     __ebe_stdin = stdin;
     stdin = __ebe_NULL_fp;
 #elif __APPLE__
@@ -37,6 +43,8 @@ void __ebeSetNormal()
 {
     cin.rdbuf(__ebe_cin);
 #ifdef __linux__
+    stdin = __ebe_stdin;
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
     stdin = __ebe_stdin;
 #elif __APPLE__
     stdin = __ebe_stdin;
@@ -56,6 +64,8 @@ __EbeUnBuffer::__EbeUnBuffer()
     setbuf(stdout,NULL);
     setbuf(stderr,NULL);
 #ifdef __linux__
+    __ebe_NULL_fp = fopen("/dev/null","r");
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
     __ebe_NULL_fp = fopen("/dev/null","r");
 #elif __APPLE__
     __ebe_NULL_fp = fopen("/dev/null","r");
