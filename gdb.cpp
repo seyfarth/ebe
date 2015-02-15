@@ -1286,7 +1286,6 @@ void GDB::setNormal()
 {
     if (!running) return;
     send("set language c++");
-        send("call __ebeSetNormal()");
     if (NullEOF) {
         send("call __ebeSetNormal()");
         NullEOF = false;
