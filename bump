@@ -1,0 +1,36 @@
+#!/bin/bash
+
+cd ~/ebe
+
+if [ $# != 1 ]
+then
+    set -- $(cat ebe_version | sed 's/\./ /g')
+    major=$1
+    middle=$2
+    minor=$3
+    minor=$((minor + 1))
+    version="${major}.${middle}.${minor}"
+    echo "The next version number is $version"
+    printf "Is this OK? (Y/n) "
+    read ans
+    if [ x$ans = "xN" -o x$ans = "xn" ]
+    then
+        exit 1
+    fi
+else
+    version=$1
+fi
+
+echo $version > ebe_version
+
+sed s/VERSION/$version/ < about.html > html/about.html
+
+echo git commit -a
+echo git branch $version
+echo git push origin $version
+
+cd ~/sf/ebe-web/
+vi content/changelog.rst
+make html
+
+echo sfpublish w
