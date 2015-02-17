@@ -4,8 +4,11 @@
 #include "gdb.h"
 #include "settings.h"
 #include "terminalwindow.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #include <windows.h>
+#endif
+#ifdef Q_OS_CYGWIN
+#include <unistd.h>
 #endif
 
 QProcess::ProcessState runningStatus=QProcess::NotRunning;
@@ -24,7 +27,7 @@ IntHash sizeForType;
 QSet<QString> simpleTypes;
 char letterForSize[] = "bbhhwwwwg";
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN)
 bool needToKill;
 bool needToWake;
 HANDLE hProcess;
@@ -42,7 +45,7 @@ QString readLine()
 {
     QString result = "";
     int n;
-#ifndef Q_WS_WIN
+#if !defined(Q_OS_WIN)
     gdbWaiting = true;
 #endif
     do {
@@ -55,7 +58,7 @@ QString readLine()
         //qDebug() << result;
     } while (n == 0 || result.at(n - 1) != '\n');
     result.chop(1);
-#ifndef Q_WS_WIN
+#if !defined(Q_OS_WIN)
     gdbWaiting = false;
 #endif
     return result;
@@ -82,7 +85,7 @@ void GDBThread::run()
 GDB::GDB()
     : QObject()
 {
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN)
     needToKill = false;
 #endif
     gdbProcess = new QProcess(this);
@@ -211,7 +214,7 @@ void GDB::send(QString cmd, QString /*options*/)
         }
     }
     //qDebug() << cmd;
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN)
     if ( needToWake && cmd == "continue" ) {
         //qDebug() << "ResumeThread" << hThread;
         ResumeThread(hThread);
@@ -399,7 +402,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
         }
     }
 
-#ifdef Q_WS_WIN
+#if defined(Q_OS_WIN)
     needToWake = true;
     //char dir[1025];
     //DWORD len = 1024;
@@ -518,7 +521,6 @@ void GDB::doStep()
 
 void GDB::doNextInstruction()
 {
-    //qDebug() << "nexti";
     if (!running) return;
     send("nexti");
     setNormal();
@@ -558,7 +560,7 @@ void GDB::doCall()
     if ( ebe["build/assembler"].toString() == "yasm" ) {
         //qDebug() << "tbreak *" << fileLineToAddress[fl] << "OK";
         send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
-//#if defined(Q_WS_WIN) || defined(Q_OS_MAC)
+//#if defined(Q_OS_WIN) || defined(Q_OS_MAC)
         //send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
 //#else
     } else {

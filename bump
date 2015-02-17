@@ -25,12 +25,12 @@ echo $version > ebe_version
 
 sed s/VERSION/$version/ < about.html > html/about.html
 
-echo git commit -a
-echo git branch $version
-echo git push origin $version
+git commit -a
+git branch $version
+git push origin $version
 
 cd ~/sf/ebe-web/
 vi content/changelog.rst
 make html
 
-echo sfpublish w
+sfpublish w
