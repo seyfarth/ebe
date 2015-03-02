@@ -464,7 +464,7 @@ void EZTable::setColumnWidth ( int col, int wid )
     }
 }
 
-QSize EZTable::sizeHint()
+QSize EZTable::sizeHint() const
 {
     return QSize(200,50);
 }

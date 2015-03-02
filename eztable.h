@@ -106,7 +106,7 @@ public:
     void setSpan ( int r, int c, int numRows, int numCols );
     void setFontHeightAndWidth(int h, int w);
     void resizeToFitContents(int fixedLevels=0);
-    QSize sizeHint();
+    QSize sizeHint() const;
     void hideColumn(int c);
     QString text(int r, int c);
 };
