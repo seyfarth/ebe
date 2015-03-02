@@ -262,7 +262,7 @@ void Settings::setDefaults()
     }
     ebe.os = "linux";
     ebe["xmm/reverse"] = false;
-#elif defined(Q_OS_BSD4)
+#elif defined(Q_OS_BSD4) && !defined(Q_OS_MAC)
     //qDebug() << "BSD";
     ebe["bsd"] = true;
     ebe["linux"] = false;
