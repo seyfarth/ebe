@@ -100,7 +100,7 @@ void MainWindow::setWordSize()
         wordSize = 32;
     }
 #endif
-#ifdef defined(Q_OS_BSD4) && !defined(Q_OS_MAC)
+#if defined(Q_OS_BSD4) && !defined(Q_OS_MAC)
     QProcess which(app);
     which.start("which objdump");
     which.waitForFinished();
