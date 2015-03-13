@@ -315,9 +315,12 @@ void GDB::getClasses()
     QStringList names;
     QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
 
+    //classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
+    classResults = sendReceive("info types ^node$");
     foreach(result, classResults)
     {
         parts = result.split(QRegExp("\\s+"));
+        //qDebug() << "parts" << parts;
         if (parts.length() == 1 && parts[0].length() > 0) {
             name = parts[0];
             if (name[name.length() - 1] == ';') {
@@ -326,6 +329,12 @@ void GDB::getClasses()
             }
         } else if (parts.length() == 2 && parts[0] == "struct") {
             name = parts[1];
+            if (name[name.length() - 1] == ';') {
+                name.chop(1);
+                names.append(name);
+            }
+        } else if (parts.length() == 4 && parts[1] == "struct") {
+            name = parts[3];
             if (name[name.length() - 1] == ';') {
                 name.chop(1);
                 names.append(name);
@@ -343,8 +352,7 @@ void GDB::getClasses()
             if (result.indexOf("    ") >= 0 && result.indexOf('(') < 0) {
                 //qDebug() << result;
                 if (rx.indexIn(result) >= 0) {
-                    //qDebug() << "match" << rx.cap(1) << rx.cap(2) << rx.cap(3) <<
-                    //rx.cap(4);
+                    //qDebug() << "match" << rx.cap(1) << rx.cap(2) << rx.cap(3) << rx.cap(4);
                     v.name = rx.cap(3);
                     v.type = rx.cap(1) + " " + rx.cap(2) + rx.cap(4);
                     if (v.type[v.type.length() - 1] == ' ') v.type.chop(1);
@@ -393,7 +401,6 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     send(QString("cd ") + QDir::currentPath());
     //qDebug() << "file" << exe;
     send("file \"" + exe + "\"");
-    classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
     send("delete breakpoints");
     for (i = 0; i < length; i++) {
         foreach ( QString bp, breakpoints[i] ) {

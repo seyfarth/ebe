@@ -2,6 +2,8 @@
 #include <QLabel>
 #include <QMessageBox>
 
+static bool arrayCheckedLastTime=true;
+
 DefineVariableDialog::DefineVariableDialog()
     : QDialog()
 {
@@ -135,6 +137,7 @@ ArrayBoundsDialog::ArrayBoundsDialog()
     QHBoxLayout *checkLayout = new QHBoxLayout;
     checkLayout->addWidget(new QLabel(tr("array variable")));
     arrayCheck = new QCheckBox;
+    arrayCheck->setChecked(arrayCheckedLastTime);
     checkLayout->addWidget(arrayCheck);
     layout->addLayout(checkLayout);
 
@@ -164,12 +167,12 @@ ArrayBoundsDialog::ArrayBoundsDialog()
         tr("A pointer can point to an object or an array.\n")
             + tr("To point to an object set first and last to 0."));
     setLayout(layout);
-    arrayCheck->setChecked(true);
 }
 
 void ArrayBoundsDialog::checkChanged(int state)
 {
     nSpin->setEnabled(state ? true : false);
+    arrayCheckedLastTime = state;
     if (state == 0) {
         nSpin->setValue(0);
     }

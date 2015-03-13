@@ -69,6 +69,7 @@ class DataPlank : public EZPlank
 public:
     DataPlank(QWidget *parent=0);
     QString name;       ///< Full name of the \c DataPlank
+    QString fullName;   ///< Full name of the \c DataPlank
     QString type;       ///< Type as reported by \c gdb
     QString basicType;  ///< Type without [] or *
     QString address;    ///< For user-defined variables
@@ -77,6 +78,7 @@ public:
     bool isSimple;      ///< Is the data simple, like char or int
     bool isFortran;     ///< Was this a fortran variable
     bool isFinal;
+    bool needsRequest;
     int size;           ///< Number of bytes of data
     int treeLevel;
     int frame;
@@ -156,6 +158,7 @@ public:
     QList<Limits> dimensions;
     QList<DataPlank*> kids;
     void buildTree(DataPlank *plank);
+    DataPlank * finalPlank(DataPlank *plank);
     void setPlankCount(int n);
     void expandDataPlank(DataPlank*);
     void collapseDataPlank(DataPlank*);
@@ -202,6 +205,7 @@ public:
 public slots:
     void receiveVariableDefinition(QStringList);
     void resetData();
+    void rebuildData();
     void receiveClasses(QHash<QString, ClassDefinition> c);
     void receiveVar(DataPlank *p, QString name, QStringList values);
     void receiveGlobals(VariableDefinitionMap vars);

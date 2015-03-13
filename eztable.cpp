@@ -92,7 +92,7 @@ EZTable::EZTable(QWidget *parent)
     setPlankCount(1);
     thePlank = currentPlank = table[0];
     fontWidth = ebe["font_size"].toInt() * 2 / 3;
-    fontHeight = 2*fontHeight;
+    fontHeight = 2*fontWidth;
     ezrowHeight = 1.1 * fontHeight;
     setStyleSheet( QString("font-weight:bold;"
                            "font-family: %1;"
@@ -234,8 +234,10 @@ void EZTable::resizeToFitContents(int f)
 
     maxWidth.resize(columns);
 
-    for ( int c = 0; c < f; c++ ) {
-        maxWidth[c] = fontWidth;
+    maxWidth[0] = fontWidth;
+    maxWidth[1] = fontHeight;
+    for ( int c = 2; c < f; c++ ) {
+        maxWidth[c] = fontWidth*1.5;
     }
     for ( int c= f; c < columns; c++ ) {
         maxWidth[c] = 0;
