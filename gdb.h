@@ -69,6 +69,7 @@ public slots:
     void receiveWorkingDir(QString);
     void setEOF();
     void requestStack(int n);
+    void requestReset();
     void requestAsmVariable(int i, uLong address, int n);
     void requestParameters(DataPlank *p, int frame);
     void requestLocals(DataPlank *p, int frame);

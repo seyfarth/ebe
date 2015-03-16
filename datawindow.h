@@ -182,6 +182,7 @@ private:
 signals:
     void requestParameters ( DataPlank *p, int frame );
     void requestLocals ( DataPlank *p, int frame );
+    void requestReset();
 };
 
 class DataWindow: public QFrame

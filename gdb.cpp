@@ -485,14 +485,13 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
-    if (!running) return;
     getFpRegs();
     getGlobals();
     //qDebug() << "run";
     //if ( running ) emit resetData();
     //qDebug() << "run";
     getClasses();
+    getBackTrace();
     //qDebug() << "Done run";
 }
 
@@ -630,6 +629,11 @@ void GDB::setBreakpoint(QString file, QString bp)
             break;
         }
     }
+}
+
+void GDB::requestReset()
+{
+    if ( running ) emit resetData();
 }
 
 void GDB::deleteBreakpoint(QString file, QString line)

@@ -83,6 +83,7 @@ DataWindow::DataWindow(QWidget *parent)
             this, SLOT(receiveVar(DataPlank*,QString,QStringList)) );
     //connect ( gdb, SIGNAL(dataReady(QStringList)),
     //this, SLOT(setData(QStringList)) );
+    connect(dataTree, SIGNAL(requestReset()), gdb, SLOT(requestReset()));
     connect(gdb, SIGNAL(resetData()), this, SLOT(resetData()));
     connect(gdb, SIGNAL(sendClasses(QHash<QString, ClassDefinition>)), this,
             SLOT(receiveClasses(QHash<QString, ClassDefinition>)));
@@ -168,6 +169,7 @@ void DataWindow::receiveVariableDefinition(QStringList strings)
 void DataWindow::resetData()
 {
     QString s;
+    //qDebug() << "resetData";
     saveScroll();
     dataTree->finalPlank(dataTree->all)->isFinal = true;
     dataTree->buildTree(dataTree->all);
@@ -279,8 +281,8 @@ void DataPlank::setType(QString t)
         size = 8;
     }
 
-    //qDebug() << basicType << format << size;
     isSimple = simpleTypes.contains(t);
+    //qDebug() << basicType << format << size << isSimple;
     if (isSimple) {
         basicType = type;
         state = EZ::Simple;
@@ -680,8 +682,9 @@ void DataTree::expandDataPlank(DataPlank *p)
                     d->format = formatForType[type];
                 }
                 //p->addChild(d);
+                d->isFinal = true;
                 dataWindow->request(d);
-                dataWindow->resetData();
+                //dataWindow->resetData();
             } else {
                 p->state = EZ::Expanded;
                 QString type = p->type;
@@ -796,7 +799,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
             if ( group == &globalMap ) {
                 p->frame = 0;
                 if ( v->name == "stack" ) {
-                    p->address = QString("$rsp").arg(v->name);
+                    p->address = QString("$rsp");
                     p->setName(v->name);
                     p->values = new AllTypesArray(v->size);
                 } else {
@@ -1024,7 +1027,7 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
     }
     //qDebug() << "redisplay" << p->name << p->size << rows << left << size << count << num << format;
     if ( p->state == EZ::Collapsed ) rows = 1;
-    if ( rows > 1 ) p->state = EZ::Expanded;
+    //if ( rows > 1 ) p->state = EZ::Expanded;
     setRowCount(rows);
     for ( int i=0; i < p->treeLevel - 1; i++ ) {
         setSpan(0,i,1,1);
@@ -1154,7 +1157,7 @@ void DataTree::receiveBackTrace(QStringList s)
         emit requestParameters ( p->kids[0], frame );
         emit requestLocals ( p->kids[1], frame );
     }
-    dataWindow->resetData();
+    emit requestReset();
 }
 
 IndicatorButton::IndicatorButton(QWidget *parent)
