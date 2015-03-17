@@ -1190,6 +1190,7 @@ void SourceWindow::gotoLine()
 
 void SourceWindow::prettify()
 {
+    if ( !(file.language == "c" || file.language == "cpp") ) return;
     save();
     QProcess indent(this);
     QString cmd = ebe["prettify"].toString();
