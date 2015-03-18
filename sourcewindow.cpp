@@ -610,6 +610,76 @@ void SourceWindow::open(QString name)
     textEdit->setFocus();
 }
 
+void SourceWindow::openReplace(QString name)
+{
+    tab_width = ebe["edit/tab_width"].toInt();
+    QFile f(name);
+
+    if (!f.open(QIODevice::ReadWrite)) {
+        if (!f.open(QIODevice::ReadOnly)) {
+            QMessageBox::critical(this, tr("Error"),
+                    tr("Failed to open file ") + name);
+            return;
+        }
+    }
+
+    asmDataWindow->clear();
+
+    file.source = QDir::current().absoluteFilePath(name);
+    file.setLanguage();
+    ebe["language"] = file.language;
+    if (file.language == "fortran") {
+        textEdit->highlighter = new FortranHighlighter(textEdit->document());
+    } else if (file.language == "asm") {
+        textEdit->highlighter = new AsmHighlighter(textEdit->document());
+    } else if (file.language == "hal") {
+        textEdit->highlighter = new AsmHighlighter(textEdit->document());
+    }
+
+    QByteArray text = f.readAll();
+    int length = text.count();
+    if (length > 0 && text[length - 1] == '\n') text.chop(1);
+    int i = 0;
+    int column = 0;
+    int next;
+    int n;
+    int j;
+    while (i < text.count()) {
+        if (text[i] == '\t') {
+            next = (column + tab_width) / tab_width * tab_width;
+            n = next - column;
+            text[i] = ' ';
+            for (j = 1; j < n; j++)
+                text.insert(i, " ");
+            column = next;
+            i = next - 1;
+        } else if (text[i] == '\n') {
+            column = 0;
+        } else {
+            column++;
+        }
+        i++;
+    }
+    textEdit->selectAll();
+    QTextCursor cursor = textEdit->textCursor();
+    int pos = cursor.position();
+    cursor.beginEditBlock();
+    cursor.removeSelectedText();
+    cursor.setPosition(0);
+    cursor.insertText(text);
+    cursor.endEditBlock();
+
+    f.close();
+
+    opened = true;
+    breakpoints->clear();
+    changed = false;
+
+    cursor.setPosition(pos);
+    textEdit->setTextCursor(cursor);
+    textEdit->setFocus();
+}
+
 void SourceWindow::open()
 {
     // How shall we set status bar text here?
@@ -1188,17 +1258,119 @@ void SourceWindow::gotoLine()
     center();
 }
 
+void SourceWindow::prettifyAsm()
+{
+    QString text = textEdit->toPlainText();
+    QStringList lines = text.split("\n");
+    int longest = 0;
+    int length;
+    int pos;
+    QTextCursor cursor = textEdit->textCursor();
+    int cursorPosition = cursor.position();
+    QRegExp rx("([^;^ ][^ ]*) ");
+    foreach ( QString line, lines ) {
+        pos = 0;
+        pos = rx.indexIn(line,pos);
+        if ( pos == 0 ) {
+            length = rx.cap(1).length();
+            if ( length > longest ) longest = length;
+        }
+    }
+    longest = (longest + 4) & 0xfffc;
+
+    QRegExp rx2("[ ]*([^ ].*)");
+    for ( int n = 0; n < lines.count(); n++ ) {
+        QString line = lines[n];
+        pos = 0;
+        pos = rx.indexIn(line,pos);
+        if ( pos == 0 ) {
+            QString first = rx.cap(1);
+            pos += rx.matchedLength();
+            length = rx.cap(1).length();
+            pos = rx2.indexIn(line,pos);
+            if ( pos > 0 ) {
+                line = first;
+                QString rest = rx2.cap(1);
+                for ( int i=length; i < longest; i++ ) {
+                    line += " ";
+                }
+                line += rest;
+            }
+            lines[n] = line;
+        } else if ( line[0] == QChar(' ') ) {
+            pos = rx2.indexIn(line,0);
+            if ( pos >= 0 ) {
+                line = "";
+                QString rest = rx2.cap(1);
+                for ( int i=0; i < longest; i++ ) {
+                    line += " ";
+                }
+                line += rest;
+            }
+            lines[n] = line;
+        }
+    }
+
+    longest = 0;
+    foreach ( QString line, lines ) {
+        pos = line.indexOf(";");
+        if ( pos > 0 ) {
+            length = pos;
+            QString rest = line.left(length);
+            while ( length > 0 && rest[length-1] == QChar(' ') ) {
+                length--;
+            }
+            rest = rest.left(length);
+            if ( length > longest ) longest = length;
+        }
+    }
+    longest = (longest + 4) & 0xfffc;
+
+    for ( int n = 0; n < lines.count(); n++ ) {
+        QString line = lines[n];
+        pos = line.indexOf(";");
+        if ( pos > 0 ) {
+            length = pos;
+            QString first = line.left(length);
+            QString rest = line.mid(pos);
+            while ( length > 0 && first[length-1] == QChar(' ') ) {
+                length--;
+            }
+            first = first.left(length);
+            line = first;
+            for ( int i=length; i < longest; i++ ) {
+                line += " ";
+            }
+            line += rest;
+            lines[n] = line;
+        }
+    }
+
+    textEdit->selectAll();
+    cursor = textEdit->textCursor();
+    cursor.beginEditBlock();
+    cursor.removeSelectedText();
+    cursor.setPosition(0);
+    cursor.insertText(lines.join("\n"));
+    cursor.endEditBlock();
+    cursor.setPosition(cursorPosition);
+    textEdit->setTextCursor(cursor);
+}
+
 void SourceWindow::prettify()
 {
-    if ( !(file.language == "c" || file.language == "cpp") ) return;
-    save();
-    QProcess indent(this);
-    QString cmd = ebe["prettify"].toString();
-    cmd.replace("$source", file.source);
-    cmd.replace("$tab_width", ebe["edit/tab_width"].toString());
-    indent.start(cmd);
-    indent.waitForFinished();
-    open(file.source);
+    if ( file.language == "asm" || file.language == "hal" ) {
+        prettifyAsm();
+    } else if ( file.language == "c" || file.language == "cpp" ) {
+        save();
+        QProcess indent(this);
+        QString cmd = ebe["prettify"].toString();
+        cmd.replace("$source", file.source);
+        cmd.replace("$tab_width", ebe["edit/tab_width"].toString());
+        indent.start(cmd);
+        indent.waitForFinished();
+        openReplace(file.source);
+    }
 }
 
 void LineNumberEdit::mouseReleaseEvent(QMouseEvent *e)

@@ -142,6 +142,7 @@ public:
     bool saved;
     bool opened;
     void open(QString name);
+    void openReplace(QString name);
     SourceEdit *textEdit;
     QTextDocument *textDoc;
     int numLines;
@@ -172,6 +173,7 @@ public:
     void gotoBottom();
     void gotoLine();
     void prettify();
+    void prettifyAsm();
     void doTemplate(QAction *a);
     void insertFile(QString f);
     void clear();
