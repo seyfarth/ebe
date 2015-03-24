@@ -202,6 +202,8 @@ public:
     void receiveVars(DataMap *group, VariableDefinitionMap &vars);
     void saveScroll();
     void restoreScroll();
+    void getTypedef(QString name, QString &type);
+    void getClass(QString name, ClassDefinition &c);
 
 public slots:
     void receiveVariableDefinition(QStringList);
@@ -218,6 +220,8 @@ private:
 
     signals:
     void requestVar(DataPlank*,QString,QString,QString,QString,int,int);
+    void requestTypedef(QString type, QString &name);
+    void requestClass(QString name, ClassDefinition &c);
 };
 
 #endif

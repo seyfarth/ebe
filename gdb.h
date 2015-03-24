@@ -51,6 +51,8 @@ private:
     void setNormal();
 
 public slots:
+    void processTypedefRequest(QString,QString&);
+    void processClassRequest(QString,ClassDefinition&);
     void doRun(QString exe, QString options, QStringList files,
         QList<StringSet> breakpoints, QStringList globals);
     void doNext();

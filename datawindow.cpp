@@ -75,6 +75,12 @@ DataWindow::DataWindow(QWidget *parent)
             SLOT(receiveLocals(DataPlank*,VariableDefinitionMap)));
     connect(gdb, SIGNAL(sendParameters(DataPlank*,VariableDefinitionMap)), this,
             SLOT(receiveParameters(DataPlank*,VariableDefinitionMap)));
+    connect ( this, SIGNAL(requestTypedef(QString,QString&)),
+              gdb, SLOT(processTypedefRequest(QString,QString&)),
+              Qt::BlockingQueuedConnection );
+    connect ( this, SIGNAL(requestClass(QString,ClassDefinition&)),
+              gdb, SLOT(processClassRequest(QString,ClassDefinition&)),
+              Qt::BlockingQueuedConnection );
     connect ( this,
         SIGNAL(requestVar(DataPlank*,QString,QString,QString,QString,int,int)),
         gdb,
@@ -209,6 +215,7 @@ DataPlank::DataPlank(QWidget *p)
     indicator = 0;
     needsRequest = true;
     frame = 0;
+    state = EZ::Unknown;
     //setFlags(Qt::ItemIsSelectree | Qt::ItemIsEnabled);
 }
 
@@ -261,6 +268,8 @@ void DataPlank::setName(QString n)
 void DataPlank::setType(QString t)
 {
     //qDebug() << "setType" << name << t << type << basicType << format;
+    ClassDefinition c;
+    QString newType;
     if ( t == type ) return;
 
     //qDebug() << "new type for" << name;
@@ -272,6 +281,20 @@ void DataPlank::setType(QString t)
         basicType = t.left(n).trimmed();
     } else {
         basicType = t;
+    }
+
+    if ( !classes.contains(basicType) && !simpleTypes.contains(basicType) ) {
+        //qDebug() << "typedef ?"  << basicType;
+        if ( dataWindow != 0 ) dataWindow->getTypedef(basicType,newType);
+        //qDebug() << "after getTypedef" << newType;
+        if ( newType != "" ) {
+            type.replace(basicType,newType);
+            basicType = newType;
+        }
+        if ( !classes.contains(basicType) && !simpleTypes.contains(basicType) ) {
+            if ( dataWindow != 0 ) dataWindow->getClass(basicType,c);
+            classes[basicType] = c;
+        }
     }
 
     //qDebug() << basicType << format;
@@ -302,7 +325,8 @@ void DataPlank::setType(QString t)
         state = EZ::Expanded;
     } else if (t.indexOf(" *") >= 0) {
         format = QString("hex%1").arg(size);
-        state = EZ::Collapsed;
+        //qDebug() << "setType" << name << t << "collapse";
+        if ( state == EZ::Unknown ) state = EZ::Collapsed;
     } else if ( formatForType.contains(t) ) {
         format = formatForType[t];
         state = EZ::Simple;
@@ -319,7 +343,8 @@ void DataPlank::setType(QString t)
         //qDebug() << "sizeForType contains basic type" << name << t << basicType;
     } else {
         format = "hex1";
-        state = EZ::Collapsed;
+        //qDebug() << "setType" << name << t << "collapse";
+        if ( state == EZ::Unknown ) state = EZ::Collapsed;
         //qDebug() << "else ?" << name << t << basicType;
     }
 
@@ -611,6 +636,7 @@ DataTree::~DataTree()
 void DataTree::collapseDataPlank(DataPlank *p)
 {
     p->state = EZ::Collapsed;
+    //qDebug() << "collapseDataPlank" << p->name;
     foreach ( DataPlank *k, p->kids ) {
         k->deactivate();
     }
@@ -720,12 +746,23 @@ void DataTree::expandDataPlank(DataPlank *p)
         }
         delete dialog;
     } else {
+        //qDebug() << "expanding type" << p->type;
         p->state = EZ::Expanded;
         foreach ( DataPlank *k, p->kids ) {
             k->reactivate();
         }
         dataWindow->resetData();
     }
+}
+
+void DataWindow::getTypedef(QString type, QString &newType)
+{
+    emit requestTypedef(type, newType);
+}
+
+void DataWindow::getClass(QString type, ClassDefinition &c)
+{
+    emit requestClass(type, c);
 }
 
 void DataWindow::request(DataPlank *d)

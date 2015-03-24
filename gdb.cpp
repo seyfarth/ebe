@@ -20,6 +20,8 @@ extern QString breakFile;
 extern int breakLine;
 extern QString gdbName;
 
+ClassDefinition latestClass;
+
 extern GDB *gdb;
 QProcess *gdbProcess;
 
@@ -303,6 +305,52 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
     return list;
 }
 
+void GDB::processTypedefRequest(QString name, QString &type)
+{
+    VariableDefinition v;
+    QString result;
+    QStringList results;
+    QStringList parts;
+    QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
+    //qDebug() << "processTypedefRequest" << name;
+    latestClass.name = name;
+    latestClass.members.clear();
+    results = sendReceive("whatis " + name);
+    foreach(result, results)
+    {
+        parts = result.split(" = ");
+        //qDebug() << result;
+        //qDebug() << parts;
+        if ( parts.length() == 2 ) type = parts[1];
+    }
+}
+
+void GDB::processClassRequest(QString name, ClassDefinition &c)
+{
+    QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
+    QString result;
+    QStringList results;
+    VariableDefinition v;
+    c.name = name;
+    c.members.clear();
+    results = sendReceive("ptype " + name);
+    foreach(result, results)
+    {
+        if (result.indexOf("    ") >= 0 && result.indexOf('(') < 0) {
+            //qDebug() << result;
+            if (rx.indexIn(result) >= 0) {
+                //qDebug() << "match" << rx.cap(1) << rx.cap(2) << rx.cap(3) << rx.cap(4);
+                v.name = rx.cap(3);
+                v.type = rx.cap(1) + " " + rx.cap(2) + rx.cap(4);
+                if (v.type[v.type.length() - 1] == ' ') v.type.chop(1);
+                v.isSimple = simpleTypes.contains(v.type);
+                //qDebug() << v.name << v.type << v.isSimple;
+                c.members.append(v);
+            }
+        }
+    }
+}
+
 void GDB::getClasses()
 {
     QHash < QString, ClassDefinition > classes;
@@ -316,7 +364,7 @@ void GDB::getClasses()
     QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
 
     //classResults = sendReceive("info types ^[[:alpha:]][[:alnum:]_]*$");
-    classResults = sendReceive("info types ^node$");
+    classResults = sendReceive("info types");
     foreach(result, classResults)
     {
         parts = result.split(QRegExp("\\s+"));
@@ -328,13 +376,13 @@ void GDB::getClasses()
                 names.append(name);
             }
         } else if (parts.length() == 2 && parts[0] == "struct") {
-            name = parts[1];
+            name = "struct " + parts[1];
             if (name[name.length() - 1] == ';') {
                 name.chop(1);
                 names.append(name);
             }
         } else if (parts.length() == 4 && parts[1] == "struct") {
-            name = parts[3];
+            name = "struct " + parts[3];
             if (name[name.length() - 1] == ';') {
                 name.chop(1);
                 names.append(name);
@@ -490,7 +538,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     //qDebug() << "run";
     //if ( running ) emit resetData();
     //qDebug() << "run";
-    getClasses();
+    //getClasses();
     getBackTrace();
     //qDebug() << "Done run";
 }
@@ -689,8 +737,8 @@ void GDB::getBackTrace()
                 fl = addressToFileLine[address];
                 //qDebug() << "ok" << ok << address << fl.file << fl.line;
                 emit nextInstruction(fl.file,fl.line);
-            } else {
-                qDebug() << tr("Could not interpret address:") << address;
+            //} else {
+                //qDebug() << tr("Could not interpret address:") << address;
             }
             break;
         }

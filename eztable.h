@@ -13,7 +13,7 @@
 class EZ {
 public:
     enum Color { Default, Bold, NoChange, Highlight };
-    enum State { Simple, Expanded, Collapsed };
+    enum State { Unknown, Simple, Expanded, Collapsed };
 };
 
 class EZPlank;

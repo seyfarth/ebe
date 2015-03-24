@@ -59,6 +59,7 @@ extern StringHash *itemNames;
 extern StringHash *aliasNames;
 extern StringHash *fpaliasNames;
 extern QHash<QString,QTableWidgetItem*> items;
+extern QHash<QString,ClassDefinition> classes;
 StringHash unaliasNames;
 StringHash fpunaliasNames;
 
@@ -279,6 +280,7 @@ void SourceFrame::run()
     QString name;
     QString cmd;
 
+    classes.clear();
     assembler = ebe["build/assembler"].toString();
     if ( itemNames ) itemNames->clear();
     else itemNames = new StringHash;
