@@ -90,15 +90,15 @@ void DefineVariableDialog::typeChanged(QString type)
 {
     QStringList formats;
     if (type.indexOf("char") >= 0) {
-        formats << "Character" << "Hexadecimal" << "Decimal" << "Binary"
-            << "String";
+        formats << "character" << "hexadecimal" << "decimal" << "binary"
+            << "string";
     } else if (type == "bool") {
-        formats << "Boolean" << "Hexadecimal" << "Binary";
+        formats << "boolean" << "hexadecimal" << "binary";
     } else if (type == "float" || type == "double") {
-        formats << "Floating point" << "Hexadecimal" << "Binary" << "Binary fp"
-            << "Fields";
+        formats << "floating point" << "hexadecimal" << "binary" << "binary fp"
+            << "fields";
     } else {
-        formats << "Hexadecimal" << "Decimal" << "Binary";
+        formats << "hexadecimal" << "decimal" << "binary";
     }
     formatCombo->clear();
     formatCombo->addItems(formats);

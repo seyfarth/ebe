@@ -42,7 +42,7 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     userDefinedVariables.clear();
     varNames.clear();
     formatToSpan.clear();
-    formatToSpan["char"] = 1;
+    formatToSpan["character"] = 1;
     formatToSpan["dec1"] = 2;
     formatToSpan["dec2"] = 2;
     formatToSpan["dec4"] = 4;
@@ -71,7 +71,7 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     formatToSpan["double"] = 4;
     formatToSpan["string"] = 1;
     formatToSpan["string array"] = 1;
-    formatToSize["char"] = 1;
+    formatToSize["character"] = 1;
     formatToSize["dec1"] = 1;
     formatToSize["dec2"] = 2;
     formatToSize["dec4"] = 4;
@@ -102,7 +102,7 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     formatToSize["double"] = 8;
     formatToFunction["string array"] = toString;
     formatToFunction["string"] = toString;
-    formatToFunction["char"] = toChar;
+    formatToFunction["character"] = toChar;
     formatToFunction["hex1"] = toHex1;
     formatToFunction["hex2"] = toHex2;
     formatToFunction["hex4"] = toHex4;
@@ -562,7 +562,7 @@ void AsmDataWindow::setFormat(QString format)
 
 void AsmDataWindow::setChar()
 {
-    setFormat("char");
+    setFormat("character");
 }
 
 void AsmDataWindow::setDouble()
@@ -611,7 +611,7 @@ DefineAsmVariableDialog::DefineAsmVariableDialog()
     QStringList formats;
     formats << "dec1" << "dec2" << "dec4" << "dec8"
             << "hex1" << "hex2" << "hex4" << "hex8"
-            << "double" << "float" << "char";
+            << "double" << "float" << "character";
     formatCombo->addItems(formats);
 
     okButton = new QPushButton("OK");

@@ -306,13 +306,13 @@ void ToyExpression::setValue(QString t, QStringList values)
         format->clear();
         type->setText(t);
         if (t == "char") {
-            formats << "char" << "decimal" << "hexadecimal" << "binary";
+            formats << "character" << "decimal" << "hexadecimal" << "binary";
             format->addItems(formats);
         } else if (t == "unsigned char") {
-            formats << "hexadecimal" << "char" << "decimal" << "binary";
+            formats << "hexadecimal" << "character" << "decimal" << "binary";
             format->addItems(formats);
         } else if (t == "signed char") {
-            formats << "decimal" << "char" << "hexadecimal" << "binary";
+            formats << "decimal" << "character" << "hexadecimal" << "binary";
             format->addItems(formats);
         } else if (t == "bool" || t.indexOf("logical") >= 0) {
             formats << "bool" << "binary";

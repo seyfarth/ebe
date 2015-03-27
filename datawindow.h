@@ -108,6 +108,7 @@ public:
     void setName(QString s);
     void setType(QString s);
     void setValues(QStringList strings);
+    void updateFrame(int frame);
     //int maxLevel();
     //void setValue(QString s);
 };

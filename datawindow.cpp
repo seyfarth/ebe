@@ -267,7 +267,6 @@ void DataPlank::setName(QString n)
 
 void DataPlank::setType(QString t)
 {
-    //qDebug() << "setType" << name << t << type << basicType << format;
     ClassDefinition c;
     QString newType;
     if ( t == type ) return;
@@ -282,6 +281,10 @@ void DataPlank::setType(QString t)
     } else {
         basicType = t;
     }
+    //qDebug() << "setType" << name << type << basicType;
+    //foreach ( Limits limits, dimensions ) {
+        //qDebug() << "limits" <<  limits.first << limits.last;
+    //}
 
     if ( !classes.contains(basicType) && !simpleTypes.contains(basicType) ) {
         //qDebug() << "typedef ?"  << basicType;
@@ -327,6 +330,15 @@ void DataPlank::setType(QString t)
         format = QString("hex%1").arg(size);
         //qDebug() << "setType" << name << t << "collapse";
         if ( state == EZ::Unknown ) state = EZ::Collapsed;
+    } else if ( dimensions.size() >= 2 ) {
+        if ( state == EZ::Unknown ) {
+            if ( formatForType.contains(basicType) ) {
+                format = formatForType[basicType];
+            } else {
+                format = QString("hex%1").arg(size);
+            }
+            state = EZ::Collapsed;
+        }
     } else if ( formatForType.contains(t) ) {
         format = formatForType[t];
         state = EZ::Simple;
@@ -433,7 +445,7 @@ void DataTree::setHexadecimal()
 void DataTree::setCharacter()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = "char";
+    d->format = "character";
     dataWindow->resetData();
 }
 
@@ -501,20 +513,21 @@ void DataTree::contextMenuEvent(QContextMenuEvent * /*event*/)
 void DataTree::setPlankCount(int n )
 {
     //qDebug() << "setPlankCount" << planks << n;
-    for ( int p=0; p < planks; p++ ) {
-        if ( table[p] ) {
-            table[p]->hide();
-            delete table[p];
-        }
-    }
+    //for ( int p=0; p < planks; p++ ) {
+        //if ( table[p] ) {
+            //table[p]->hide();
+            //delete table[p];
+        //}
+    //}
 
-    table.resize(n);
-    DataPlank *plank;
-    for ( int p=0; p < n; p++ ) {
-        table[p] = plank = new DataPlank(this);
-        plank->show();
-    }
-    planks = n;
+    EZTable::setPlankCount(n);
+    //table.resize(n);
+    //DataPlank *plank;
+    //for ( int p=0; p < n; p++ ) {
+        //table[p] = plank = 
+        //plank->show();
+    //}
+    //planks = n;
 }
 
 
@@ -702,7 +715,7 @@ void DataTree::expandDataPlank(DataPlank *p)
                 d->frame = p->frame;
                 if (p->address == "$rsp") {
                     d->address = "$rsp";
-                    d->format = "Hexadecimal";
+                    d->format = "hexadecimal";
                 } else {
                     d->address = p->name;
                     d->format = formatForType[type];
@@ -745,6 +758,46 @@ void DataTree::expandDataPlank(DataPlank *p)
             }
         }
         delete dialog;
+    } else if ( p->dimensions.size() >= 2 ) {
+        QString kidName;
+        int n1 = p->type.indexOf("[");
+        int n2;
+        bool isC = n1 >= 0;
+        QString kidType;
+        if ( isC ) {
+            n2 = p->type.indexOf("]");
+        } else {
+            n1 = p->type.indexOf("(");
+            n2 = p->type.indexOf(")");
+        }
+        kidType = p->type.left(n1) + p->type.mid(n2+1);
+        for ( int i=p->dimensions[0].first; i <= p->dimensions[0].last; i++ ) {
+            if ( isC ) {
+                kidName = p->name+QString("[%1]").arg(i);
+            } else {
+                kidName = p->name+QString("(%1)").arg(i);
+            }
+            d = addDataPlank(p,p->treeLevel+1,&expansionMap,kidName,kidType);
+            for ( int j=1; j < p->dimensions.size(); j++ ) {
+                d->dimensions.append(p->dimensions[j]);
+            }
+            d->frame = p->frame;
+            d->address = kidName;
+            d->fullName = kidName;
+            d->format = p->format;
+            if ( d->dimensions.size() == 1 ) {
+                d->size = d->dimensions[0].last - d->dimensions[0].first + 1;
+                if ( sizeForType.contains(d->basicType) ) {
+                    d->size *= sizeForType[d->basicType];
+                } else {
+                    d->size *= 8;
+                }
+            } else {
+                d->size = 8;
+            }
+            d->values = new AllTypesArray(d->size);
+        }
+        dataWindow->resetData();
     } else {
         //qDebug() << "expanding type" << p->type;
         p->state = EZ::Expanded;
@@ -767,7 +820,8 @@ void DataWindow::getClass(QString type, ClassDefinition &c)
 
 void DataWindow::request(DataPlank *d)
 {
-    //qDebug() << "request" << d->name << d->address << d->format << d->size << d->frame;
+    //qDebug() << "request" << d->name << d->address << d->format <<
+        //d->size << d->frame;
     emit requestVar(d, d->name, d->address, d->type, d->format, d->size,
                     d->frame);
 }
@@ -850,12 +904,14 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
                 p->values = new AllTypesArray(v->size);
             }
             p->setValues(v->values);
+            foreach ( Limits limits, v->dimensions ) {
+                p->dimensions.append(limits);
+            }
             dataTree->redisplay(p,EZ::NoChange);
             i++;
         }
 
         //qDebug() << "var" << p->name << k << p;
-        p->frame = parent->frame;
         /*
          *      Update info about the variable
          */
@@ -886,16 +942,9 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         //dataTree->redisplay(p,EZ::NoChange);
 
         /*
-         *      Update recursively any kids.
+         *      Update recursively this and any kid's frame.
          */
-        //int n = p->kids.size();
-        //qDebug() << "child count" << n;
-        //if ( p->state == EZ::Expanded ) {
-            //for ( int j = 0; j < n; j++ ) {
-                //p->kids[j]->frame = p->frame;
-                //request(p->kids[j]);
-            //}
-        //}
+        p->updateFrame(parent->frame);
     }
 }
 
@@ -939,6 +988,16 @@ void DataPlank::addChild(DataPlank *p)
         if ( kids[i] == p ) return;
     }
     kids.append(p);
+}
+
+void DataPlank::updateFrame(int f)
+{
+    frame = f;
+    if ( state == EZ::Expanded ) {
+        for ( int i=0; i < kids.size(); i++ ) {
+            kids[i]->updateFrame(f);
+        }
+    }
 }
 
 void DataPlank::deactivate()
@@ -1062,6 +1121,7 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
         if ( num < 1 ) num = 1;
         rows = (num + count - 1) / count;
     }
+    //qDebug() << "redisplay" << p->name << p->format << rows;
     //qDebug() << "redisplay" << p->name << p->size << rows << left << size << count << num << format;
     if ( p->state == EZ::Collapsed ) rows = 1;
     //if ( rows > 1 ) p->state = EZ::Expanded;

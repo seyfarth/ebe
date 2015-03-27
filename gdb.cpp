@@ -1177,6 +1177,7 @@ void GDB::requestVar(DataPlank *p, QString name, QString address,
         QString /*type*/, QString format, int size, int frame)
 {
     QStringList results;
+    QStringList temp;
     QStringList parts;
     QString result;
     QString cmd;
@@ -1188,28 +1189,22 @@ void GDB::requestVar(DataPlank *p, QString name, QString address,
     if (!running) return;
 
     send(QString("frame %1").arg(frame));
-    if (format == "String array") {
-        result = "";
+    if (format == "string array") {
         int i = 0;
         while (1) {
-            cmd = QString("x/dg ((unsigned char *)%1)+%2").arg(address).arg(
-                    i * (wordSize == 64 ? 8 : 4));
+            cmd = QString("x/s ((char **)%1)[%2]").arg(name).arg(i);
             //qDebug() << cmd;
-            results = sendReceive(cmd);
-            if (results.length() == 0) break;
-            parts = results[0].split(QRegExp(":\\s+"));
+            temp = sendReceive(cmd);
+            //qDebug() << temp;
+            if (temp.length() == 0) break;
+            parts = temp[0].split(QRegExp(":\\s+"));
             if (parts.length() < 2) break;
-            address2 = parts[1];
-            if (address2 == "0") break;
-            cmd = QString("x/sb %1").arg(address2);
-            results = sendReceive(cmd);
-            if (results.length() == 0) break;
-            parts = results[0].split(QRegExp(":\\s+"));
-            if (parts.length() < 2) break;
-            result += parts[1] + " ";
+            if ( parts[0] == "0x0" ) break;
+            results += parts[1];
             i++;
         }
-    } else if (format == "String") {
+        //qDebug() << "string array" << results;
+    } else if (format == "string") {
         cmd = QString("x/s (char *)%1").arg(address);
         results = sendReceive(cmd);
         if (results.length() == 0) {
@@ -1218,7 +1213,7 @@ void GDB::requestVar(DataPlank *p, QString name, QString address,
             int n = results[0].indexOf("\"");
             result = results[0].mid(n);
         }
-    } else if (format == "Pointer") {
+    } else if (format == "pointer") {
         cmd = QString("printf \"0x%x\\n\",%1").arg(address);
         results = sendReceive(cmd);
         if (results.length() == 0) {
@@ -1257,14 +1252,14 @@ void GDB::getData(QStringList request)
     char sizeLetter = letterForSize[size];
 
     char formatLetter = 'd';
-    if (format == "Hexadecimal") formatLetter = 'x';
-    else if (format == "Floating point") formatLetter = 'f';
-    else if (format == "Character") formatLetter = 'c';
-    else if (format == "String") formatLetter = 's';
+    if (format == "hexadecimal") formatLetter = 'x';
+    else if (format == "floating point") formatLetter = 'f';
+    else if (format == "character") formatLetter = 'c';
+    else if (format == "string") formatLetter = 's';
 
     if (first < 0 || last < 0) return;
 
-    if (format == "String array") {
+    if (format == "string array") {
         result = "";
         int i = 0;
         while (1) {
@@ -1286,7 +1281,7 @@ void GDB::getData(QStringList request)
             result += parts[1] + " ";
             i++;
         }
-    } else if (format == "Pointer") {
+    } else if (format == "pointer") {
         cmd = QString("printf \"0x%x\\n\",%1").arg(name);
         results = sendReceive(cmd);
         if (results.length() == 0) {
@@ -1295,7 +1290,7 @@ void GDB::getData(QStringList request)
             parts = results[0].split(QRegExp(":\\s+"));
             result = parts[parts.length() - 1];
         }
-    } else if (format == "String") {
+    } else if (format == "string") {
         cmd = QString("x/s (char *)%1").arg(address);
         //qDebug() << cmd;
         results = sendReceive(cmd);

@@ -1,27 +1,11 @@
 #include "eztable.h"
 
-EZPlank *latestPlank;
-EZPlank *thePlank;
+EZPlank *latestPlank=0;
+EZPlank *thePlank=0;
+EZCell *latestCell=0;
 
-EZCell::EZCell(int r, int c)
-    : QWidget()
-{
-    row = r;
-    column = c;
-    cellWidth = 0;
-    spanning = false;
-    spanned = false;
-    text = "";
-    color = EZ::Default;
-    visible = true;
-    widget = 0;
-    label = new QLabel();
-    label->setText("");
-    label->show();
-}
-
-EZCell::EZCell()
-    : QWidget()
+EZCell::EZCell(QWidget *parent)
+    : QWidget(parent)
 {
     row = -1;
     column = -1;
@@ -34,9 +18,25 @@ EZCell::EZCell()
     color = EZ::Default;
     visible = true;
     widget = 0;
+    plank = thePlank;
     label = new QLabel(thePlank);
     label->setText("");
     label->show();
+}
+
+void EZCell::enterEvent ( QEvent *e )
+{
+    //qDebug() << "enter cell" << row << column << geometry();
+    latestCell = this;
+    latestPlank = plank;
+    e->accept();
+    QWidget::enterEvent(e);
+}
+
+void EZCell::leaveEvent ( QEvent *e )
+{
+    e->accept();
+    QWidget::leaveEvent(e);
 }
 
 void EZCell::setText ( QString t, EZ::Color highlight )
@@ -75,14 +75,20 @@ EZPlank::EZPlank(QWidget *parent)
     columns = 0;
 }
 
-void EZPlank::enterEvent ( QEvent * /* e */)
+#if 0
+void EZPlank::enterEvent ( QEvent *e)
 {
+    qDebug() << "enter plank";
     latestPlank = this;
+    e->accept();
+    QWidget::enterEvent(e);
 }
 
-void EZPlank::leaveEvent ( QEvent * /* e */)
+void EZPlank::leaveEvent ( QEvent *e)
 {
+    QWidget::leaveEvent(e);
 }
+#endif
 
 EZTable::EZTable(QWidget *parent)
     : QWidget(parent)
@@ -229,6 +235,7 @@ void EZTable::resizeToFitContents(int f)
     int totalRows=0;
     int maxLevel = 0;
     int adjust;
+    int allRows = 0;
 
     //if (f) qDebug() << "resizeToFitContents" << ezrowHeight << planks << table.size() << f;
 
@@ -303,7 +310,7 @@ void EZTable::resizeToFitContents(int f)
                 cell->cellHeight = ezrowHeight;
                 cell->spanHeight = cell->spannedRows*ezrowHeight;
                 cell->pos_x = x;
-                cell->pos_y = r * ezrowHeight;
+                cell->pos_y = allRows * ezrowHeight;
                 if ( cell->spanning ) {
                     if ( c <= maxLevel ) {
                         adjust = (maxLevel-c+1)*(ezrowHeight-fontWidth);
@@ -327,15 +334,20 @@ void EZTable::resizeToFitContents(int f)
                 cell->cellHeight = ezrowHeight;
                 cell->spanHeight = cell->spannedRows*ezrowHeight;
                 cell->pos_x = x;
-                cell->pos_y = r * ezrowHeight;
+                cell->pos_y = allRows * ezrowHeight;
                 x += cell->cellWidth;
             }
+            allRows++;
         }
     }
+    setGeometry ( QRect(0,0,x,totalRows*ezrowHeight) );
+    show();
 
     int y = 0;
     foreach ( EZPlank *p, table ) {
         p->setGeometry( QRect(0,y,x,p->rows*ezrowHeight) );
+        p->show();
+        //if ( !f ) qDebug() << "p" << p->geometry();
         y += p->rows * ezrowHeight;
         //if (f) qDebug() << p->rows << p->geometry();
         for ( int r = 0; r < p->rows; r++ ) {
@@ -345,23 +357,31 @@ void EZTable::resizeToFitContents(int f)
                     cell->spanWidth = (maxWidth[f] +
                             (f-c)*ezrowHeight) + ezrowHeight;
                     if ( cell->widget ) {
-                        cell->widget->move(cell->pos_x,cell->pos_y);
+                        cell->widget->move(cell->pos_x,r*ezrowHeight);
                         cell->widget->resize ( cell->spanWidth, cell->spanHeight );
+                        cell->hide();
                     } else {
-                        cell->label->move(cell->pos_x,cell->pos_y);
+                        cell->label->move(cell->pos_x,r*ezrowHeight);
                         cell->label->resize ( cell->spanWidth, cell->spanHeight );
+                        cell->show();
                         //if ( f ) qDebug() << r << c //<< cell->label->geometry();
                     }
+                    cell->move(cell->pos_x,cell->pos_y);
+                    cell->resize ( cell->spanWidth, cell->spanHeight );
                     break;
                 } else {
                     if ( cell->widget ) {
-                        cell->widget->move(cell->pos_x,cell->pos_y);
+                        cell->widget->move(cell->pos_x,r*ezrowHeight);
                         cell->widget->resize ( cell->cellWidth, cell->cellHeight );
+                        cell->hide();
                     } else {
-                        cell->label->move(cell->pos_x,cell->pos_y);
+                        cell->label->move(cell->pos_x,r*ezrowHeight);
                         cell->label->resize ( cell->cellWidth, cell->cellHeight );
+                        cell->show();
                         //if ( f ) qDebug() << r << c << cell->label->geometry();
                     }
+                    cell->move(cell->pos_x,cell->pos_y);
+                    cell->resize ( cell->cellWidth, cell->cellHeight );
                 }
             }
             int first = 0;
@@ -376,22 +396,31 @@ void EZTable::resizeToFitContents(int f)
                         cell->spanWidth += maxWidth[c2];
                     }
                     if ( cell->widget ) {
-                        cell->widget->move(cell->pos_x,cell->pos_y);
+                        cell->widget->move(cell->pos_x,r*ezrowHeight);
                         cell->widget->resize ( cell->spanWidth, cell->spanHeight );
+                        cell->hide();
                     } else {
-                        cell->label->move(cell->pos_x,cell->pos_y);
+                        cell->label->move(cell->pos_x,r*ezrowHeight);
                         cell->label->resize ( cell->spanWidth, cell->spanHeight );
+                        cell->show();
                     }
+                    cell->move(cell->pos_x,cell->pos_y);
+                    cell->resize ( cell->spanWidth, cell->spanHeight );
                     //if ( f ) qDebug() << r << c << "span" << cell->spanWidth << cell->text << cell->label->geometry();
                 } else {
                     if ( cell->widget ) {
-                        cell->widget->move(cell->pos_x,cell->pos_y);
+                        cell->widget->move(cell->pos_x,r*ezrowHeight);
                         cell->widget->resize ( cell->cellWidth, cell->cellHeight );
+                        cell->hide();
                     } else {
-                        cell->label->move(cell->pos_x,cell->pos_y);
+                        cell->label->move(cell->pos_x,r*ezrowHeight);
                         cell->label->resize ( cell->cellWidth, cell->cellHeight );
+                        cell->show();
                     }
+                    cell->move(cell->pos_x,cell->pos_y);
+                    cell->resize ( cell->cellWidth, cell->cellHeight );
                 }
+                //if ( f ) qDebug() << cell->geometry();
             }
         }
     }
@@ -422,7 +451,6 @@ void EZTable::resizeToFitContents(int f)
     //}
     //foreach ( EZPlank *p, table ) layout->removeWidget(p);
     //foreach ( EZPlank *p, table ) layout->addWidget(p);
-    setGeometry ( QRect(0,0,x,totalRows*ezrowHeight) );
     //int y = 0;
     //foreach ( EZPlank *p, table ) {
         //p->setGeometry( QRect(0,y,x,p->rows*ezrowHeight) );
@@ -518,12 +546,11 @@ void EZTable::setRowCount(int rows_)
         x = 0;
         for ( int c = 0; c < columns; c++ ) {
             //qDebug() << "cell" << c;
-            cell = new EZCell;
+            cell = new EZCell(this);
             p->ezrows[r]->ezcells[c] = cell;
             cell->table = this;
             cell->text = "";
             cell->label->setText("");
-            cell->parent = p;
             cell->row = r;
             cell->column = c;
             cell->pos_x = x;
@@ -564,11 +591,9 @@ void EZTable::setColumnCount(int cols)
                 if ( columns > 0 ) x = p->ezrows[0]->ezcells[columns-1]->pos_x;
                 for ( int c = p->columns; c < cols; c++ ) {
                     columnWidths[c] = 2.7*fontWidth;
-                    cell = new EZCell;
-                    //cell->setParent(p);
+                    cell = new EZCell(this);
                     p->ezrows[r]->ezcells[c] = cell;
                     cell->table = this;
-                    cell->parent = p;
                     cell->row = r;
                     cell->column = c;
                     cell->cellHeight = ezrowHeight;

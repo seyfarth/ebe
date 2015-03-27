@@ -13,6 +13,7 @@ extern AsmDataWindow *asmDataWindow;
 
 IntHash registerItems;
 IntHash halItems;
+extern EZCell *latestCell;
 
 /**
  * Static matrix of register names matching the pattern in the table
@@ -378,9 +379,15 @@ void GenericRegisterWindow::defineVariableByAddress()
  */
 void GenericRegisterWindow::setDecimal()
 {
-    //item = table->currentItem();
-    int row = 0; //item->row();
-    int col = 0; //item->column();
+    int row;
+    int col;
+    if ( latestCell ) {
+        row = latestCell->row;
+        col = latestCell->column;
+        qDebug() << "setDecimal" << row << col;
+    } else {
+        qDebug() << "latestCell" << (long)latestCell;
+    }
     col = col & ~1;                      // Make it even
     QString reg = table->text(row,col);
     reg = reg.trimmed();

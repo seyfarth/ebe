@@ -19,13 +19,12 @@ public:
 class EZPlank;
 class EZTable;
 
-class EZCell: QWidget
+class EZCell: public QWidget
 {
     Q_OBJECT
 
 public:
-    EZCell(int r, int c);
-    EZCell();
+    EZCell(QWidget *parent=0);
     int row;
     int column;
     int pos_x;
@@ -38,16 +37,16 @@ public:
     int spannedRows;
     int spannedColumns;
     bool spanned;
-    EZPlank *parent;
+    bool visible;
+    EZPlank *plank;
     EZTable *table;
     QString text;
     EZ::Color color; 
     QLabel *label;
     QWidget *widget;
-    bool visible;
-    void hide();
-    void show();
     void setText(QString t, EZ::Color highlight=EZ::Default);
+    virtual void enterEvent(QEvent *e);
+    virtual void leaveEvent(QEvent *e);
 };
 
 class EZRow
@@ -66,8 +65,8 @@ public:
     QVector<EZRow*> ezrows;
     int rows;
     int columns;
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    //virtual void enterEvent(QEvent *e);
+    //virtual void leaveEvent(QEvent *e);
 };
 
 class EZTable: public QWidget
