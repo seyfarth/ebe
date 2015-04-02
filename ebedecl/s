@@ -1,0 +1,13 @@
+
+struct label {
+    string name;
+    int loc;
+    int size;
+    string format;
+};
+
+struct struc {
+    string name;
+    list<label> parts;
+    int loc;
+};

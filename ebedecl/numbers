@@ -1,0 +1,7 @@
+123     ; dec
+0a2h    ; hex
+$0a2    ; hex, 0 required
+0xa2    ; hex
+777q    ; octal
+777o    ; octal
+1010b   ; binary

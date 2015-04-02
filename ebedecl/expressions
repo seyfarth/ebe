@@ -1,0 +1,26 @@
+$
+$$
+|       ; bitwise or
+^       ; bitwise xor
+&       ; bitwise and
+>>      ; shift right
+<<      ; shoft left
++
+-
+*
+/       ; unsigned div
+//      ; signed div
+%       ; unsigned mod
+%%      ; signed mod
++       ; unary
+-       ; unary
+~       ; complement
+seg     ; unary
+wrt     ; binary between 2 labels
+:       ; infix between labels
+()      ; arround expression
+strict  ; prefix
+
+[reg]
+[reg+offset]
+

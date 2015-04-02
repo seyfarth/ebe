@@ -1,0 +1,3 @@
+letter or _ at the start, letters, digits _ follow
+.label      ; local
+..@label    ; special, used in macros

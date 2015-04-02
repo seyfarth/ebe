@@ -1,0 +1,648 @@
+Terminals unused in grammar
+
+   BOOL
+   RESB
+   RESW
+   RESD
+   RESQ
+   REST
+   RESDQ
+   RESO
+   EQU
+   INCBIN
+   TIMES
+   BYTE
+   WORD
+   DWORD
+   QWORD
+   TWORD
+   BITS
+   USE16
+   USE32
+   USE64
+   DEFAULT
+   REL
+   ABS
+   SECT
+   ABSOLUTE
+   EXTERN
+   GLOBAL
+   COMMON
+   STRUC
+   ENDSTRUC
+   TRUE
+   FALSE
+   REG
+   FPREG
+
+
+State 0 conflicts: 11 shift/reduce
+State 14 conflicts: 11 shift/reduce, 1 reduce/reduce
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: file
+
+    2 file: file command
+    3     | '\n'
+    4     | command
+
+    5 command: instruction
+    6        | segment_selection
+    7        | data_definition
+    8        | label
+    9        | error
+
+   10 segment_selection: SEGMENT TEXT
+   11                  | SEGMENT DATA
+   12                  | SEGMENT BSS
+
+   13 data_definition: DB values
+   14                | DW values
+   15                | DD values
+   16                | DQ values
+   17                | DT values
+   18                | DO values
+   19                | DDQ values
+
+   20 values: values ',' value
+   21       | value
+
+   22 value: INT
+   23      | FLOAT
+   24      | STRING
+
+   25 label: ID ':'
+   26      | ID
+   27      | %empty
+
+   28 instruction: INST
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 3
+',' (44) 20
+':' (58) 25
+error (256) 9
+INT (258) 22
+FLOAT (259) 23
+BOOL (260)
+STRING (261) 24
+ID (262) 25 26
+DB (263) 13
+DW (264) 14
+DD (265) 15
+DQ (266) 16
+DT (267) 17
+DDQ (268) 19
+DO (269) 18
+RESB (270)
+RESW (271)
+RESD (272)
+RESQ (273)
+REST (274)
+RESDQ (275)
+RESO (276)
+EQU (277)
+INCBIN (278)
+TIMES (279)
+BYTE (280)
+WORD (281)
+DWORD (282)
+QWORD (283)
+TWORD (284)
+BITS (285)
+USE16 (286)
+USE32 (287)
+USE64 (288)
+DEFAULT (289)
+REL (290)
+ABS (291)
+SEGMENT (292) 10 11 12
+TEXT (293) 10
+DATA (294) 11
+BSS (295) 12
+SECT (296)
+ABSOLUTE (297)
+EXTERN (298)
+GLOBAL (299)
+COMMON (300)
+STRUC (301)
+ENDSTRUC (302)
+TRUE (303)
+FALSE (304)
+INST (305) 28
+REG (306)
+FPREG (307)
+
+
+Nonterminals, with rules where they appear
+
+$accept (56)
+    on left: 0
+start (57)
+    on left: 1, on right: 0
+file (58)
+    on left: 2 3 4, on right: 1 2
+command (59)
+    on left: 5 6 7 8 9, on right: 2 4
+segment_selection (60)
+    on left: 10 11 12, on right: 6
+data_definition (61)
+    on left: 13 14 15 16 17 18 19, on right: 7
+values (62)
+    on left: 20 21, on right: 13 14 15 16 17 18 19 20
+value (63)
+    on left: 22 23 24, on right: 20 21
+label (64)
+    on left: 25 26 27, on right: 8
+instruction (65)
+    on left: 28, on right: 5
+
+
+State 0
+
+    0 $accept: . start $end
+    1 start: . file
+    2 file: . file command
+    3     | . '\n'
+    4     | . command
+    5 command: . instruction
+    6        | . segment_selection
+    7        | . data_definition
+    8        | . label
+    9        | . error
+   10 segment_selection: . SEGMENT TEXT
+   11                  | . SEGMENT DATA
+   12                  | . SEGMENT BSS
+   13 data_definition: . DB values
+   14                | . DW values
+   15                | . DD values
+   16                | . DQ values
+   17                | . DT values
+   18                | . DO values
+   19                | . DDQ values
+   25 label: . ID ':'
+   26      | . ID
+   27      | . %empty  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   28 instruction: . INST
+
+    error    shift, and go to state 1
+    ID       shift, and go to state 2
+    DB       shift, and go to state 3
+    DW       shift, and go to state 4
+    DD       shift, and go to state 5
+    DQ       shift, and go to state 6
+    DT       shift, and go to state 7
+    DDQ      shift, and go to state 8
+    DO       shift, and go to state 9
+    SEGMENT  shift, and go to state 10
+    INST     shift, and go to state 11
+    '\n'     shift, and go to state 12
+
+    $end     reduce using rule 27 (label)
+    error    [reduce using rule 27 (label)]
+    ID       [reduce using rule 27 (label)]
+    DB       [reduce using rule 27 (label)]
+    DW       [reduce using rule 27 (label)]
+    DD       [reduce using rule 27 (label)]
+    DQ       [reduce using rule 27 (label)]
+    DT       [reduce using rule 27 (label)]
+    DDQ      [reduce using rule 27 (label)]
+    DO       [reduce using rule 27 (label)]
+    SEGMENT  [reduce using rule 27 (label)]
+    INST     [reduce using rule 27 (label)]
+
+    start              go to state 13
+    file               go to state 14
+    command            go to state 15
+    segment_selection  go to state 16
+    data_definition    go to state 17
+    label              go to state 18
+    instruction        go to state 19
+
+
+State 1
+
+    9 command: error .
+
+    $default  reduce using rule 9 (command)
+
+
+State 2
+
+   25 label: ID . ':'
+   26      | ID .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+
+    ':'  shift, and go to state 20
+
+    $default  reduce using rule 26 (label)
+
+
+State 3
+
+   13 data_definition: DB . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 24
+    value   go to state 25
+
+
+State 4
+
+   14 data_definition: DW . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 26
+    value   go to state 25
+
+
+State 5
+
+   15 data_definition: DD . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 27
+    value   go to state 25
+
+
+State 6
+
+   16 data_definition: DQ . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 28
+    value   go to state 25
+
+
+State 7
+
+   17 data_definition: DT . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 29
+    value   go to state 25
+
+
+State 8
+
+   19 data_definition: DDQ . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 30
+    value   go to state 25
+
+
+State 9
+
+   18 data_definition: DO . values
+   20 values: . values ',' value
+   21       | . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    values  go to state 31
+    value   go to state 25
+
+
+State 10
+
+   10 segment_selection: SEGMENT . TEXT
+   11                  | SEGMENT . DATA
+   12                  | SEGMENT . BSS
+
+    TEXT  shift, and go to state 32
+    DATA  shift, and go to state 33
+    BSS   shift, and go to state 34
+
+
+State 11
+
+   28 instruction: INST .
+
+    $default  reduce using rule 28 (instruction)
+
+
+State 12
+
+    3 file: '\n' .
+
+    $default  reduce using rule 3 (file)
+
+
+State 13
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 35
+
+
+State 14
+
+    1 start: file .  [$end]
+    2 file: file . command
+    5 command: . instruction
+    6        | . segment_selection
+    7        | . data_definition
+    8        | . label
+    9        | . error
+   10 segment_selection: . SEGMENT TEXT
+   11                  | . SEGMENT DATA
+   12                  | . SEGMENT BSS
+   13 data_definition: . DB values
+   14                | . DW values
+   15                | . DD values
+   16                | . DQ values
+   17                | . DT values
+   18                | . DO values
+   19                | . DDQ values
+   25 label: . ID ':'
+   26      | . ID
+   27      | . %empty  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   28 instruction: . INST
+
+    error    shift, and go to state 1
+    ID       shift, and go to state 2
+    DB       shift, and go to state 3
+    DW       shift, and go to state 4
+    DD       shift, and go to state 5
+    DQ       shift, and go to state 6
+    DT       shift, and go to state 7
+    DDQ      shift, and go to state 8
+    DO       shift, and go to state 9
+    SEGMENT  shift, and go to state 10
+    INST     shift, and go to state 11
+
+    $end     reduce using rule 1 (start)
+    $end     [reduce using rule 27 (label)]
+    error    [reduce using rule 27 (label)]
+    ID       [reduce using rule 27 (label)]
+    DB       [reduce using rule 27 (label)]
+    DW       [reduce using rule 27 (label)]
+    DD       [reduce using rule 27 (label)]
+    DQ       [reduce using rule 27 (label)]
+    DT       [reduce using rule 27 (label)]
+    DDQ      [reduce using rule 27 (label)]
+    DO       [reduce using rule 27 (label)]
+    SEGMENT  [reduce using rule 27 (label)]
+    INST     [reduce using rule 27 (label)]
+
+    command            go to state 36
+    segment_selection  go to state 16
+    data_definition    go to state 17
+    label              go to state 18
+    instruction        go to state 19
+
+
+State 15
+
+    4 file: command .
+
+    $default  reduce using rule 4 (file)
+
+
+State 16
+
+    6 command: segment_selection .
+
+    $default  reduce using rule 6 (command)
+
+
+State 17
+
+    7 command: data_definition .
+
+    $default  reduce using rule 7 (command)
+
+
+State 18
+
+    8 command: label .
+
+    $default  reduce using rule 8 (command)
+
+
+State 19
+
+    5 command: instruction .
+
+    $default  reduce using rule 5 (command)
+
+
+State 20
+
+   25 label: ID ':' .
+
+    $default  reduce using rule 25 (label)
+
+
+State 21
+
+   22 value: INT .
+
+    $default  reduce using rule 22 (value)
+
+
+State 22
+
+   23 value: FLOAT .
+
+    $default  reduce using rule 23 (value)
+
+
+State 23
+
+   24 value: STRING .
+
+    $default  reduce using rule 24 (value)
+
+
+State 24
+
+   13 data_definition: DB values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 13 (data_definition)
+
+
+State 25
+
+   21 values: value .
+
+    $default  reduce using rule 21 (values)
+
+
+State 26
+
+   14 data_definition: DW values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 14 (data_definition)
+
+
+State 27
+
+   15 data_definition: DD values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 15 (data_definition)
+
+
+State 28
+
+   16 data_definition: DQ values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 16 (data_definition)
+
+
+State 29
+
+   17 data_definition: DT values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 17 (data_definition)
+
+
+State 30
+
+   19 data_definition: DDQ values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 19 (data_definition)
+
+
+State 31
+
+   18 data_definition: DO values .  [$end, error, ID, DB, DW, DD, DQ, DT, DDQ, DO, SEGMENT, INST]
+   20 values: values . ',' value
+
+    ','  shift, and go to state 37
+
+    $default  reduce using rule 18 (data_definition)
+
+
+State 32
+
+   10 segment_selection: SEGMENT TEXT .
+
+    $default  reduce using rule 10 (segment_selection)
+
+
+State 33
+
+   11 segment_selection: SEGMENT DATA .
+
+    $default  reduce using rule 11 (segment_selection)
+
+
+State 34
+
+   12 segment_selection: SEGMENT BSS .
+
+    $default  reduce using rule 12 (segment_selection)
+
+
+State 35
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 36
+
+    2 file: file command .
+
+    $default  reduce using rule 2 (file)
+
+
+State 37
+
+   20 values: values ',' . value
+   22 value: . INT
+   23      | . FLOAT
+   24      | . STRING
+
+    INT     shift, and go to state 21
+    FLOAT   shift, and go to state 22
+    STRING  shift, and go to state 23
+
+    value  go to state 38
+
+
+State 38
+
+   20 values: values ',' value .
+
+    $default  reduce using rule 20 (values)

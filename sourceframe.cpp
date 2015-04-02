@@ -911,8 +911,8 @@ void SourceFrame::run()
             QRegExp localExp("local[0-9]+");
             QRegExp currParExp("currPar[0-9]+");
             QRegExp newParExp("newPar[0-9]+");
-            QRegExp labelExp("[a-zA-Z0-9_]+");
-            QRegExp sectionExp("section|segment");
+            //QRegExp labelExp("[a-zA-Z0-9_]+");
+            //QRegExp sectionExp("section|segment");
             int currPars=0, locals=0, newPars=0;
             FrameData *data=0;
             FileLine fileLine;
