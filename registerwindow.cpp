@@ -379,8 +379,8 @@ void GenericRegisterWindow::defineVariableByAddress()
  */
 void GenericRegisterWindow::setDecimal()
 {
-    int row;
-    int col;
+    int row=0;
+    int col=0;
     if ( latestCell ) {
         row = latestCell->row;
         col = latestCell->column;

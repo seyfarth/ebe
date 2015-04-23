@@ -90,6 +90,7 @@ int get_size ( string s )
     if ( label_map.count(s) > 0 ) {
         return label_map[s].size;
     }
+    return 0;
 }
 
 int get_location ( string s )
@@ -98,6 +99,7 @@ int get_location ( string s )
     if ( label_map.count(s) > 0 ) {
         return label_map[s].loc;
     }
+    return 0;
 }
 
 string get_format ( string s )
@@ -106,6 +108,7 @@ string get_format ( string s )
     if ( label_map.count(s) > 0 ) {
         return label_map[s].format;
     }
+    return "";
 }
 
 void dump_labels()

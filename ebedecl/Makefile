@@ -4,6 +4,9 @@ ebedecl: parse.o lex.o main.o tokenmap.o symbols.o
 parse.o: parse.c
 	g++ -g -c parse.c
 
+symbols.o: symbols.cpp
+	g++ -g -c symbols.cpp
+
 lex.o: lex.c
 	g++ -g -c lex.c
 
