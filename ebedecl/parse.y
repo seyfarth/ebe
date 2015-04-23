@@ -124,7 +124,7 @@ file: file command
 
 command: instruction    { times = 1; }
     | segment_selection { times = 1; }
-    | data_definition   { times = 1; }
+    | data_definition   { times = 1; format = "hex1"; }
     | start_structure   { times = 1; }
     | end_structure     { times = 1; }
     | data_reservation  { times = 1; }
@@ -327,9 +327,9 @@ values:
     ;
 
 expr:
-      INT               { if ( format != "string" ) format="dec"; }
-    | FLOAT             { if ( format != "string" ) format="float";}
-    | STRING            { format="string"; count=(strlen($1)+incr-1)/incr; }
+      INT               { if ( format != "character" ) format="dec"; }
+    | FLOAT             { if ( format != "character" ) format="float";}
+    | STRING            { format="character"; count=(strlen($1)+incr-1)/incr; }
     | ID                { $$ = get_location($1); }
     | DOLLAR            { $$ = *loc; }
     | DDOLLAR           { $$ = 0; }

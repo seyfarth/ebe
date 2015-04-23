@@ -4,11 +4,27 @@
 #include <QtGui>
 #include <QLabel>
 #include <QTabBar>
+#include <QVector>
 #include "sourcewindow.h"
 #include "types.h"
 
 class CommandLine;
 class TabWidget;
+
+struct VariableInfo
+{
+    QString name;
+    QString format;
+    int size;
+    int loc;
+};
+
+struct StrucInfo
+{
+    QString name;
+    int size;
+    QVector<VariableInfo> variables;
+};
 
 class SourceFrame: public QFrame
 {
@@ -35,6 +51,7 @@ public:
     bool inAssembly;
     bool definesStart;
     QTabBar *tabBar;
+    void readAsmDecls(QString file);
 
 public slots:
     void tabContextMenu(const QPoint & pos );

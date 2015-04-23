@@ -1433,7 +1433,7 @@ yyreduce:
 
   case 7:
 #line 127 "parse.y" /* yacc.c:1646  */
-    { times = 1; }
+    { times = 1; format = "hex1"; }
 #line 1438 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1830,19 +1830,19 @@ yyreduce:
 
   case 48:
 #line 330 "parse.y" /* yacc.c:1646  */
-    { if ( format != "string" ) format="dec"; }
+    { if ( format != "character" ) format="dec"; }
 #line 1835 "parse.c" /* yacc.c:1646  */
     break;
 
   case 49:
 #line 331 "parse.y" /* yacc.c:1646  */
-    { if ( format != "string" ) format="float";}
+    { if ( format != "character" ) format="float";}
 #line 1841 "parse.c" /* yacc.c:1646  */
     break;
 
   case 50:
 #line 332 "parse.y" /* yacc.c:1646  */
-    { format="string"; count=(strlen((yyvsp[0].sval))+incr-1)/incr; }
+    { format="character"; count=(strlen((yyvsp[0].sval))+incr-1)/incr; }
 #line 1847 "parse.c" /* yacc.c:1646  */
     break;
 

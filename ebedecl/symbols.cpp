@@ -133,7 +133,7 @@ void dump_strucs()
 
     for ( it = struc_map.begin(); it != struc_map.end(); it++ ) {
         s = it->second;
-        cout << "struc " << s.name << endl;
+        cout << "struc " << s.name << " " << s.loc << endl;
         for ( int i=0; i < s.parts.size(); i++ ) {
             l = s.parts[i];
             cout << "member " << l.name << " " << l.format

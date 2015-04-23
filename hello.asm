@@ -1,7 +1,7 @@
         segment .data
 msg:    db      'Hello World!',0x0a ; String to print
 len:    equ     $-msg               ; String length
-x:      dq      'abcdefghijklmnop'
+x:      db      1,2,3,4,5
 
         segment .text
         global  main                ; Tell linker about main

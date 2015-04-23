@@ -78,7 +78,7 @@ EZPlank::EZPlank(QWidget *parent)
 #if 0
 void EZPlank::enterEvent ( QEvent *e)
 {
-    qDebug() << "enter plank";
+    //qDebug() << "enter plank";
     latestPlank = this;
     e->accept();
     QWidget::enterEvent(e);
@@ -230,16 +230,18 @@ void EZTable::resizeToFitContents(int f)
 {
     EZCell *cell;
     QVector<int> maxWidth;
+    QVector<int> position;
     int n;
     int x;
     int totalRows=0;
-    int maxLevel = 0;
+    int maxLevel = -1;
     int adjust;
     int allRows = 0;
 
-    //if (f) qDebug() << "resizeToFitContents" << ezrowHeight << planks << table.size() << f;
+    //if (f) qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
 
     maxWidth.resize(columns);
+    position.resize(columns);
 
     maxWidth[0] = fontWidth;
     maxWidth[1] = fontHeight;
@@ -278,10 +280,13 @@ void EZTable::resizeToFitContents(int f)
                         maxWidth[f] = n;
                     }
                     break;
+                } else {
+                    n = cell->text.size()*fontWidth+fontWidth;
+                    if ( n > maxWidth[c] ) maxWidth[c] = n;
                 }
             }
             int first = 0;
-            if ( f > 0 ) first = f+1;
+            if ( f > 0 ) first = f;
             for ( int c = first; c < columns; c++ ) {
                 cell = p->ezrows[r]->ezcells[c];
                 n = cell->text.size()*fontWidth+fontWidth;
@@ -301,15 +306,19 @@ void EZTable::resizeToFitContents(int f)
     }
     //if (f) qDebug() << "maxWidth" << maxWidth;
 
+    x = 0;
+    for ( int c = 0; c < columns; c++ ) {
+        position[c] = x;
+        x += maxWidth[c];
+    }
     foreach ( EZPlank *p, table ) {
         //if (f) qDebug() << p->rows;
         for ( int r = 0; r < p->rows; r++ ) {
-            x = 0;
             for ( int c = 0; c < f; c++ ) {
                 cell = p->ezrows[r]->ezcells[c];
                 cell->cellHeight = ezrowHeight;
                 cell->spanHeight = cell->spannedRows*ezrowHeight;
-                cell->pos_x = x;
+                cell->pos_x = position[c];
                 cell->pos_y = allRows * ezrowHeight;
                 if ( cell->spanning ) {
                     if ( c <= maxLevel ) {
@@ -319,23 +328,20 @@ void EZTable::resizeToFitContents(int f)
                     }
                     cell->cellWidth = (maxWidth[f] +
                          (f-c-1)*fontWidth) + fontWidth + adjust;
-                    x += cell->cellWidth;
                     break;
                 } else {
                     cell->cellWidth = maxWidth[c];
                 }
-                x += cell->cellWidth;
             }
             int first = 0;
-            if ( f > 0 ) first = f+1;
+            if ( f > 0 ) first = f;
             for ( int c = first; c < columns; c++ ) {
                 cell = p->ezrows[r]->ezcells[c];
                 cell->cellWidth = maxWidth[c];
                 cell->cellHeight = ezrowHeight;
                 cell->spanHeight = cell->spannedRows*ezrowHeight;
-                cell->pos_x = x;
+                cell->pos_x = position[c];
                 cell->pos_y = allRows * ezrowHeight;
-                x += cell->cellWidth;
             }
             allRows++;
         }
@@ -385,7 +391,7 @@ void EZTable::resizeToFitContents(int f)
                 }
             }
             int first = 0;
-            if ( f > 0 ) first = f+1;
+            if ( f > 0 ) first = f;
             for ( int c = first; c < columns; c++ ) {
                 cell = p->ezrows[r]->ezcells[c];
 
@@ -508,6 +514,7 @@ void EZTable::setPlankCount ( int planks_ )
     table.resize(planks_);
     for ( int p=planks; p < planks_; p++ ) {
         table[p] = new EZPlank(this);
+        table[p]->plankNumber = p;
         table[p]->show();
         //layout->addWidget(table[p]);
     }

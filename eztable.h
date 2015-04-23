@@ -63,6 +63,7 @@ class EZPlank: public QWidget
 public:
     EZPlank(QWidget *parent=0);
     QVector<EZRow*> ezrows;
+    int plankNumber;
     int rows;
     int columns;
     //virtual void enterEvent(QEvent *e);

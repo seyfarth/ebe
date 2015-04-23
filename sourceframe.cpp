@@ -47,6 +47,9 @@ StringHash varToAddress;
 QHash<QString, unsigned long> textToAddress;
 QSet<FileLine> callLines;
 
+QMap<QString,VariableInfo> asmVariableDecls;
+QVector<StrucInfo> asmStrucs;
+
 extern RegisterWindow *registerWindow;
 extern HalRegisterWindow *halRegisterWindow;
 extern ProjectWindow *projectWindow;
@@ -251,6 +254,47 @@ void SourceFrame::tabContextMenu(const QPoint & pos)
     menu.exec(QCursor::pos());
 }
 
+void SourceFrame::readAsmDecls(QString file)
+{
+    QStringList parts;
+    QProcess decl(this);
+    decl.start(QString("ebedecl %1").arg(file));
+    decl.waitForFinished();
+    QString data = decl.readLine();
+    VariableInfo v;
+    StrucInfo s;
+    while ( data != "" && data != "end" ) {
+        parts = data.split(QRegExp("\\s+"));
+        //qDebug() << "readAsmDecls" << parts;
+        if ( parts.length() < 1 ) break;
+        if ( parts[0] == "global" ) {
+            v.name = parts[1];
+            v.format = parts[2];
+            v.size = parts[4].toInt();
+            //qDebug() << v.name << v.format << v.size;
+            asmVariableDecls[v.name] = v;
+        } else if ( parts[0] == "struc" ) {
+            s.name = parts[1];
+            s.size = parts[2].toInt();
+            data = decl.readLine();
+            parts = data.split(QRegExp("\\s+"));
+            //qDebug() << "struc" << parts;
+            while ( parts[0] != "endstruc" ) {
+                v.name = parts[1];
+                v.format = parts[2];
+                v.loc = parts[3].toInt();
+                v.size = parts[4].toInt();
+                s.variables.append(v);
+                data = decl.readLine();
+                //qDebug() << s.name << s.size << v.name << v.format << v.size;
+                parts = data.split(QRegExp("\\s+"));
+            }
+            asmStrucs.append(s);
+        }
+        data = decl.readLine();
+    }
+}
+
 void SourceFrame::saveIfChanged(QString file)
 {
     int index;
@@ -281,6 +325,7 @@ void SourceFrame::run()
     QString cmd;
 
     classes.clear();
+    asmStrucs.clear();
     assembler = ebe["build/assembler"].toString();
     if ( itemNames ) itemNames->clear();
     else itemNames = new StringHash;
@@ -535,6 +580,7 @@ void SourceFrame::run()
         //qDebug() << "file" << file.source;
         object = file.object;
         bool findVariables = file.language == "asm" || file.language == "hal";
+        if ( findVariables ) readAsmDecls(file.source);
         if (object == defaultDir + "ebe_unbuffer.o") continue;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
@@ -737,12 +783,12 @@ void SourceFrame::run()
                         {
                             fl.line = line;
                             fileLineToAddress[fl] = parts[0].toInt(&ok,16);
-                            //dDebug() << fl.file << fl.line << fileLineToAddress[fl];
+                            //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
                         }
                     } else if ( parts.length() > 1 && parts[1] == "%line"
                               && parts[3] == name) {
                         parts = parts[2].split(QRegExp("\\+"));
-                        //dDebug() << parts;
+                        //qDebug() << "%line" << parts ;
                         if ( parts.length() == 2 ) {
                             line = parts[0].toInt() - 1;
                         }
@@ -800,14 +846,21 @@ void SourceFrame::run()
         //qDebug() << nmData;
         nmParts = nmData.split(rx1);
         if ( definingVar ) {
-            long size = nmParts[0].toULongLong(&ok,16) -
-                        asmDataWindow->variables[index].address;
-            if ( size < 1 ) size = 1;
-            if ( size > 100000 ) size = 100000;
-            asmDataWindow->variables[index].size = size;
-            asmDataWindow->variables[index].values = new AllTypesArray(size);
-            definingVar = false;
-            newVars.append(asmDataWindow->variables[index]);
+            AsmVariable & var=asmDataWindow->variables[index];
+            long size = nmParts[0].toULongLong(&ok,16) - var.address;
+            if ( size >= 1 ) {
+                if ( size > 100000 ) size = 100000;
+                if ( asmVariableDecls.contains(var.name) ) {
+                    var.format = asmVariableDecls[var.name].format;
+                    if ( asmVariableDecls[var.name].size > 0 ) {
+                        var.size = asmVariableDecls[var.name].size;
+                    }
+                }
+                var.size = size;
+                var.values = new AllTypesArray(size);
+                definingVar = false;
+                newVars.append(asmDataWindow->variables[index]);
+            }
         }
         if (nmParts.length() >= 3) {
             nmp = nmParts[1].toLower();

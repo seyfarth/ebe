@@ -551,11 +551,11 @@ void GDB::doNext()
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
     if (!running) return;
     getFpRegs();
     getGlobals();
     //if ( running ) emit resetData();
+    getBackTrace();
 }
 
 void GDB::doStep()
@@ -566,11 +566,11 @@ void GDB::doStep()
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
     if (!running) return;
     getFpRegs();
     getGlobals();
     //if ( running ) emit resetData();
+    getBackTrace();
 }
 
 void GDB::doNextInstruction()
@@ -580,11 +580,11 @@ void GDB::doNextInstruction()
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
     if (!running) return;
     getFpRegs();
     getGlobals();
     //if ( running ) emit resetData();
+    getBackTrace();
 }
 
 void GDB::doStepInstruction()
@@ -595,11 +595,11 @@ void GDB::doStepInstruction()
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
     if (!running) return;
     getFpRegs();
     getGlobals();
     //if ( running ) emit resetData();
+    getBackTrace();
 }
 
 void GDB::doCall()
@@ -625,11 +625,11 @@ void GDB::doCall()
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
     if (!running) return;
     getFpRegs();
     getGlobals();
     //if ( running ) emit resetData();
+    getBackTrace();
 }
 
 void GDB::doContinue()
@@ -640,11 +640,11 @@ void GDB::doContinue()
     setNormal();
     if (!running) return;
     getRegs();
-    getBackTrace();
     if (!running) return;
     getFpRegs();
     getGlobals();
     //if ( running ) emit resetData();
+    getBackTrace();
 }
 
 void GDB::doStop()
@@ -1204,6 +1204,18 @@ void GDB::requestVar(DataPlank *p, QString name, QString address,
             i++;
         }
         //qDebug() << "string array" << results;
+    } else if (format == "std::string") {
+        cmd = QString("x/s %1.c_str()").arg(address);
+        //qDebug() << cmd;
+        temp = sendReceive(cmd);
+        result = "";
+        if ( temp.length() > 0 ) {
+            parts = temp[0].split(QRegExp(":\\s+"));
+            if (parts.length() >= 2 && parts[0] != "0x0" ) {
+                result = parts[1];
+                results += parts[1];
+            }
+        }
     } else if (format == "string") {
         cmd = QString("x/s (char *)%1").arg(address);
         results = sendReceive(cmd);

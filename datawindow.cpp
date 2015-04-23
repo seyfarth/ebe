@@ -6,7 +6,7 @@
 #include <QContextMenuEvent>
 #include <QScrollBar>
 
-int maxLevels = 12;
+static int maxLevels = 12;
 
 extern GDB *gdb;
 extern BackTraceWindow *backTraceWindow;
@@ -181,7 +181,7 @@ void DataWindow::resetData()
     dataTree->buildTree(dataTree->all);
     dataTree->table.clear();
     dataTree->reorder(dataTree->all);
-    dataTree->resizeToFitContents(maxLevels);
+    //dataTree->resizeToFitContents(maxLevels);
     restoreScroll();
 }
 
@@ -320,8 +320,11 @@ void DataPlank::setType(QString t)
     } else if (t == "char **") {
         state = EZ::Expanded;
         format = "string array";
-    } else if (t == "char *" || t == "std::string" ) {
+    } else if ( t == "char *" ) {
         format = "string";
+        state = EZ::Simple;
+    } else if ( t == "std::string" ) {
+        format = "std::string";
         state = EZ::Simple;
     } else if (name == "stack" && parent == tree->globals ) {
         format = QString("hex%1").arg(size);
@@ -376,11 +379,15 @@ void DataPlank::setValues ( QStringList s)
     QString t;
     QStringList parts;
     bool ok;
+    bool fault = false;
     int k = 0;
 
-    if ( format == "string" || format == "string array" )  {
+    if ( format == "string" || format == "std::string" ||
+         format == "string array" )  {
         stringValues = s;
     } else {
+        int n = (size + 7)/8;
+        for ( int j = 0; j < n; j++ ) values->u8(j) = 0;
         for ( int j = 0; j < s.size(); j++ ) {
             t = s[j];
             parts = t.split(":");
@@ -395,16 +402,19 @@ void DataPlank::setValues ( QStringList s)
             t.replace("  "," ");
             t.remove(0,1);
             parts = t.split(" ");
-            //if ( name == "*a" ) qDebug() << "setValues" << parts;
             int n = parts.length();
             if ( n > size-k ) n = size-k;
             for ( int r=0; r < n; r++ ) {
                 values->u1(k) = parts[r].toInt(&ok,16);
+                if ( !ok || fault ) {
+                    fault = true;
+                    values->u1(k) = 0;
+                }
                 k++;
             }
         }
     }
-    size = k;
+    if ( !fault ) size = k;
 }
 
 void DataTree::setBinary()
@@ -598,6 +608,7 @@ DataTree::DataTree(QWidget *parent)
     globals->state = EZ::Expanded;
     globals->format = "string";
     globals->parent = 0;
+
     for ( int c=0; c < columns+2; c++ ) {
         setColumnWidth(c, fontWidth*0.8);
     }
@@ -630,11 +641,14 @@ void DataTree::buildTree(DataPlank *p)
 
 DataPlank * DataTree::finalPlank(DataPlank *p)
 {
-    DataPlank *final = p;
+    DataPlank *final = 0;
+    if ( p->needsRequest ) final = p;
+    DataPlank *f;
     p->isFinal = false;
     if ( p->state == EZ::Expanded ) {
         for ( int j=0; j < p->kids.size(); j++ ) {
-            final = finalPlank(p->kids[j]);
+            f = finalPlank(p->kids[j]);
+            if ( f ) final = f;
         }
     }
     return final;
@@ -828,7 +842,7 @@ void DataWindow::request(DataPlank *d)
 
 void DataWindow::receiveVar(DataPlank *p, QString /*name*/, QStringList values)
 {
-    //qDebug() << "receiveVar" << name << p << values << p->isFinal;
+    //qDebug() << "receiveVar" << p->name << p << values << p->isFinal;
     p->setValues(values);
     dataTree->redisplay(p,EZ::Highlight);
     //dataWindow->saveScroll();
@@ -899,7 +913,11 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
                     p->values = new AllTypesArray(v->size);
                 }
             } else {
-                p->address = QString("&(%1)").arg(v->name);
+                if ( v->type == "std::string" ) {
+                    p->address = v->name;
+                } else {
+                    p->address = QString("&(%1)").arg(v->name);
+                }
                 p->setName(v->name);
                 p->values = new AllTypesArray(v->size);
             }
@@ -1095,8 +1113,9 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
 
     FormatFunction f=formatToFunction[format];
     setCurrentPlank(p);
-    //qDebug() << p->name << p->format;
-    if ( format == "string" || format == "string array" ) {
+    //qDebug() << p << p->name << p->format;
+    if ( format == "string" || format == "std::string" ||
+         format == "string array" ) {
         span = columns;
         num = p->stringValues.length();
         if ( num < 1 ) num = 1;
@@ -1132,7 +1151,6 @@ void DataTree::redisplay ( DataPlank *p, EZ::Color highlight )
     }
     setSpan(0,p->treeLevel,1,1);
     setText(0,p->treeLevel," ");
-    //if ( p->name == "tms_utime" ) qDebug() << "span" << p->treeLevel+1 << maxLevels-p->treeLevel-1;
     setSpan(0,p->treeLevel+1,1,maxLevels-p->treeLevel-1);
     setText(0,p->treeLevel+1,p->name);
     setSpan(0,maxLevels+1,1,1);

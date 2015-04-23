@@ -1,6 +1,7 @@
 #include "asmdatawindow.h"
 #include "datawindow.h"
 #include "settings.h"
+#include "sourceframe.h"
 #include "gdb.h"
 #include <QDebug>
 #include <QScrollBar>
@@ -14,11 +15,15 @@ IntHash formatToSize;
 QHash<QString,FormatFunction> formatToFunction;
 extern EZPlank *latestPlank;
 
+extern QMap<QString,VariableInfo> asmVariables;
+extern QVector<StrucInfo> asmStrucs;
+
 AsmVariable::AsmVariable(QString _name)
     : name(_name)
 {
     address = 0;
     format = "hex1";
+    expanded = false;
     size = 16;
     rows = 0;
 }
@@ -102,6 +107,7 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     formatToSize["double"] = 8;
     formatToFunction["string array"] = toString;
     formatToFunction["string"] = toString;
+    formatToFunction["std::string"] = toString;
     formatToFunction["character"] = toChar;
     formatToFunction["hex1"] = toHex1;
     formatToFunction["hex2"] = toHex2;
@@ -154,7 +160,10 @@ void AsmDataWindow::rebuildTable()
             table->setRowCount(1);
         }
         variables[i].item = table->cell(0,0);
-        table->setText(0,0,QString(" 0x%1").arg(variables[i].address,0,16));
+        table->setSpan(0,0,1,1);
+        table->setText(0,0,QString(" 0x%1").
+                       arg(variables[i].address,0,16));
+        table->setSpan(0,1,1,1);
         table->setText(0,1,variables[i].name);
     }
 
@@ -241,6 +250,7 @@ void AsmDataWindow::redisplay ( int v, EZ::Color highlight )
         count = columns/span;
         rows = (num + count - 1) / count;
     }
+    if ( variables[v].expanded ) rows = 1;
     //qDebug() << "format:" << format << "  span:" << span
              //<< "  num:" << num << "  size:" << size
              //<< "  left:" << left << "  count;" << count;
@@ -251,12 +261,11 @@ void AsmDataWindow::redisplay ( int v, EZ::Color highlight )
     for ( int r = 0; r < rows; r++ ) {
         //qDebug() << "working on row" << r;
 
-        for ( int c = 0; c < columns; c++ ) {
-            table->setSpan(r,c+2,1,1);
-        }
         if ( r > 0 ) {
-            table->setText(r,0," ");
-            table->setText(r,1," ");
+            table->setSpan(r,0,1,1);
+            table->setText(r,0,"");
+            table->setSpan(r,1,1,1);
+            table->setText(r,1,"");
         }
 
         max = count;
@@ -304,20 +313,15 @@ void AsmDataWindow::buildTable()
      */
     layout->setContentsMargins(10, 10, 10, 10);
 
-    table->setRowCount(rows);
+    table->setPlankCount(0);
     table->setColumnCount(columns+2);
     fontWidth = ebe["font_size"].toInt() * 0.8;
     table->setColumnWidth(0,8*fontWidth);
     table->setColumnWidth(1,15*fontWidth);
-    for ( int c = 2; c < 34; c++ ) {
-        table->setColumnWidth(c,5*fontWidth);
-    }
+    //for ( int c = 2; c < 34; c++ ) {
+        //table->setColumnWidth(c,5*fontWidth);
+    //}
 
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < columns+2; c++) {
-            table->setText(r,c,"");
-        }
-    }
 
     /*
      *  Set a tooltip to display when the cursor is over the table
@@ -391,6 +395,7 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
     QMenu menu(tr("Assembly data menu"));
     QMenu *sub;
+    QAction *action;
     sub = menu.addMenu(tr("Decimal format"));
         sub->addAction("1 byte", this, SLOT(setDecimal1()));
         sub->addAction("2 bytes", this, SLOT(setDecimal2()));
@@ -415,6 +420,26 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
         sub->addAction(tr("Binary fp"), this, SLOT(setBinaryFP4()));
         sub->addAction(tr("Float fields"), this, SLOT(setFields4()));
     menu.addAction(tr("Char format"), this, SLOT(setChar()));
+
+    int p = latestPlank->plankNumber;
+    //qDebug() << "selected" << p << variables[p].size;
+    if ( variables[p].size >= (int)sizeof(char *) &&
+         asmStrucs.size() > 0 ) {
+        sub = menu.addMenu(tr("Expand struc *"));
+        for ( int i=0; i < asmStrucs.size(); i++ ) {
+            action = sub->addAction(asmStrucs[i].name, this,
+                     SLOT(expandStruc()));
+            action->setData(i);
+        }
+    }
+    
+    if ( asmStrucs.size() > 0 ) {
+        sub = menu.addMenu(tr("Struc"));
+        for ( int i=0; i < asmStrucs.size(); i++ ) {
+            action = sub->addAction(asmStrucs[i].name, this, SLOT(setStruc()));
+            action->setData(i);
+        }
+    }
     menu.addAction(tr("Define a variable with this address"), this,
         SLOT(defineVariableByAddress()));
     menu.addAction(tr("Delete variable"), this, SLOT(deleteVariable()));
@@ -423,8 +448,13 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void AsmDataWindow::defineVariableByAddress()
 {
-    int row = 0; // table->currentRow();
-    QStringList parts = table->getText(row,2).split(" ");
+    int p = latestPlank->plankNumber;
+    //qDebug() << "defineVariableByAddress" << p;
+    QStringList parts;
+    int n = variables[p].values->size/sizeof(int *);
+    for ( int i = 0; i < n; i++ ) {
+        parts.append(QString("%1").arg(variables[p].values->u8(i),0,16));
+    }
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItems(parts);
     if (dialog->exec()) {
@@ -454,6 +484,59 @@ void AsmDataWindow::deleteVariable()
         }
     }
     rebuildTable();
+}
+
+void AsmDataWindow::setStruc()
+{
+    QAction *action = (QAction *)sender();
+    int i = action->data().toInt();
+    StrucInfo s=asmStrucs[i];
+    QVector<AsmVariable> vars(variables);
+    AsmVariable v;
+    int p = latestPlank->plankNumber;
+
+    //qDebug() << "setStruc" << i << p << s.name;
+    variables.clear();
+    for ( int j=0; j <= p; j++ ) variables.append(vars[j]);
+    variables[p].expanded = true;
+    for ( int j=0; j < s.variables.size(); j++ ) {
+        //qDebug() << s.variables[j].name;
+        v.name = s.variables[j].name;
+        v.size = s.variables[j].size;
+        v.format = s.variables[j].format;
+        v.address = variables[p].address + s.variables[j].loc;
+        v.values = new AllTypesArray(v.size);
+        variables.append(v);
+    }
+    for ( int j=p+1; j < vars.size(); j++ ) variables.append(vars[j]);
+    rebuildTable();
+}
+
+void AsmDataWindow::expandStruc()
+{
+    QAction *action = (QAction *)sender();
+    int i = action->data().toInt();
+    StrucInfo s=asmStrucs[i];
+    AsmVariable v;
+    int p = latestPlank->plankNumber;
+
+    //qDebug() << "expandStruc" << i << p << s.name;
+    variables[p].expanded = true;
+    for ( int j=0; j < s.variables.size(); j++ ) {
+        v.name = s.variables[j].name;
+        v.size = s.variables[j].size;
+        v.format = s.variables[j].format;
+        v.address = variables[p].values->u8(0) + s.variables[j].loc;
+        v.values = new AllTypesArray(v.size);
+        variables.append(v);
+        //qDebug() << "added" << v.name << v.size << v.format
+                 //<< QString("%1").arg(v.address,0,16);
+    }
+    rebuildTable();
+}
+
+void AsmDataWindow::collapseStruc()
+{
 }
 
 /*

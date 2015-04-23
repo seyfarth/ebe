@@ -51,6 +51,7 @@ class AsmVariable
 {
 public:
     AsmVariable ( QString _name="");
+    bool expanded;
     QString name;
     QString format;
     QStringList stringValues;
@@ -220,6 +221,10 @@ public slots:
      *  based on the latest register contents.
      */
     //void receiveFrame(StringHash);
+
+    void setStruc();
+    void expandStruc();
+    void collapseStruc();
 
     /**
      *  \fn setDecimal
