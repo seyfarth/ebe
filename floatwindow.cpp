@@ -3,6 +3,8 @@
 #include "types.h"
 #include <cstdio>
 
+extern bool running;
+
 IntHash floatItems;
 
 FloatWindow::FloatWindow(QWidget *parent)
@@ -97,12 +99,14 @@ void FloatWindow::receiveFpRegs(QStringList data)
 {
     QStringList parts;
     bool ok;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     unsigned long long x[4]= {0,0,0,0};
 #else
     unsigned long x[4] = { 0, 0, 0, 0 };
 #endif
     //qDebug() << "fp receive" << data;
+    if ( !running ) return;
+
     if (data.length() < count) {
         qDebug() << count << "fpreg error";
         return;
@@ -206,7 +210,7 @@ FpRegister::FpRegister()
         i8[i] = 0;
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 void FpRegister::setValue(unsigned long long *x)
 #else
 void FpRegister::setValue(unsigned long *x)

@@ -153,7 +153,7 @@ MainWindow::MainWindow(QWidget *parent)
     int sleepTime = 1;
     while ( !gdb ) {
         Sleep(sleepTime);
-        if ( sleepTime > 1 ) qDebug() << "gdb is taking too long";
+        if ( sleepTime > 10 ) qDebug() << "gdb is taking too long";
         sleepTime++;
     }
 #else

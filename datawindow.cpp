@@ -18,6 +18,7 @@ extern IntHash formatToSize;
 extern QHash<QString,FormatFunction> formatToFunction;
 
 extern EZPlank *latestPlank;
+extern bool running;
 
 QColor bgColor;
 QColor expandColor;
@@ -382,11 +383,17 @@ void DataPlank::setValues ( QStringList s)
     bool fault = false;
     int k = 0;
 
+    if ( !running ) return;
+
     if ( format == "string" || format == "std::string" ||
          format == "string array" )  {
         stringValues = s;
     } else {
         int n = (size + 7)/8;
+        if ( n > 100000 ) {
+            qDebug() << "datawindow setValues" << size << n;
+            return;
+        }
         for ( int j = 0; j < n; j++ ) values->u8(j) = 0;
         for ( int j = 0; j < s.size(); j++ ) {
             t = s[j];
@@ -898,7 +905,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         //qDebug() << "p" << p;
         v = &vars[k];
         //qDebug() << k << parent->frame << v->values;
-        //qDebug() << "receiveVars" << k << v->type << v->values;
+        //qDebug() << "receiveVars" << k << v->type << v->size << v->values;
         if ( p == 0 ) {
             p = dataTree->addDataPlank(parent,parent->treeLevel+1, group, v->name,"");
             if ( group == &globalMap ) {
@@ -906,11 +913,13 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
                 if ( v->name == "stack" ) {
                     p->address = QString("$rsp");
                     p->setName(v->name);
+                    p->size = 64;
                     p->values = new AllTypesArray(v->size);
                 } else {
                     p->address = QString("&(::%1)").arg(v->name);
                     p->setName(v->name);
                     p->values = new AllTypesArray(v->size);
+                    p->size = v->size;
                 }
             } else {
                 if ( v->type == "std::string" ) {
@@ -920,6 +929,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
                 }
                 p->setName(v->name);
                 p->values = new AllTypesArray(v->size);
+                p->size = v->size;
             }
             p->setValues(v->values);
             foreach ( Limits limits, v->dimensions ) {
@@ -1194,6 +1204,7 @@ void DataTree::receiveBackTrace(QStringList s)
     DataPlank *p;
     DataPlank *kid;
     int n = s.length();
+    if ( !running ) return;
     if ( s[n-1][0] != QChar('#') ) n--;
     for ( int i=0; i < n; i++ ) {
         if ( s[i][0] != QChar('#') ) continue;

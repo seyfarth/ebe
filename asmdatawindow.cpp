@@ -18,6 +18,8 @@ extern EZPlank *latestPlank;
 extern QMap<QString,VariableInfo> asmVariables;
 extern QVector<StrucInfo> asmStrucs;
 
+extern bool running;
+
 AsmVariable::AsmVariable(QString _name)
     : name(_name)
 {
@@ -451,6 +453,9 @@ void AsmDataWindow::defineVariableByAddress()
     int p = latestPlank->plankNumber;
     //qDebug() << "defineVariableByAddress" << p;
     QStringList parts;
+
+    if ( !running ) return;
+
     int n = variables[p].values->size/sizeof(int *);
     for ( int i = 0; i < n; i++ ) {
         parts.append(QString("%1").arg(variables[p].values->u8(i),0,16));
@@ -519,6 +524,9 @@ void AsmDataWindow::expandStruc()
     StrucInfo s=asmStrucs[i];
     AsmVariable v;
     int p = latestPlank->plankNumber;
+
+
+    if ( !running ) return;
 
     //qDebug() << "expandStruc" << i << p << s.name;
     variables[p].expanded = true;

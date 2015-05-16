@@ -23,7 +23,6 @@ class GDB: public QObject
 public:
     GDB();
     void initGdb();
-    bool running;
     QHash<FileLabel, int> bpHash;
     int numFloats;
     bool NullEOF;

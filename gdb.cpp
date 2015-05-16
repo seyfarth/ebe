@@ -24,6 +24,7 @@ ClassDefinition latestClass;
 
 extern GDB *gdb;
 QProcess *gdbProcess;
+bool running;
 
 IntHash sizeForType;
 QSet<QString> simpleTypes;
@@ -539,6 +540,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     //if ( running ) emit resetData();
     //qDebug() << "run";
     //getClasses();
+    if (!running) return;
     getBackTrace();
     //qDebug() << "Done run";
 }
@@ -846,6 +848,7 @@ void GDB::getFpRegs()
         }
     }
     send("set width 80");
+    if ( data.size() == 0 ) running = false;
     emit sendFpRegs(data);
 }
 

@@ -1,22 +1,10 @@
-        segment .data
-msg:    db      'Hello World!',0x0a ; String to print
-len:    equ     $-msg               ; String length
-x:      db      1,2,3,4,5
-
-        segment .text
-        global  main                ; Tell linker about main
-        extern  write, exit
+       segment .text
+       global  main                    ; Tell linker about main
+       extern  exit
 main:
-        push    rbp
-        mov     rbp, rsp
-                                    ; Up to 6 integer register parameters
-                                    ; in rdi, rsi, rdx, rcx, r8, r9
-                                    ; Up to 8 float register parameters
-                                    ; in xmm0-xmm7
-        mov     edx, len            ; Parameter 3 for write
-        lea     rsi, [msg]          ; Parameter 2 for write
-        mov     edi, 1              ; Parameter 1 (fd)
-        call    write
+       push    rbp
+       mov     rbp, rsp
+       sub     rsp, 32
 
-        xor     edi, edi            ; 0 return = success
-        call    exit
+       mov     rax, 5
+       call    exit

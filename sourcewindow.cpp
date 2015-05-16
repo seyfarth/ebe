@@ -28,6 +28,8 @@ extern QStringList asmExts;
 
 extern QStatusBar *statusBar;
 
+extern bool running;
+
 SourceEdit::SourceEdit(QWidget *parent)
     : QPlainTextEdit(parent)
 {
@@ -370,7 +372,7 @@ void SourceEdit::contextMenuEvent(QContextMenuEvent * /* event */)
     menu.addAction(tr("Cut"), this, SLOT(cut()));
     menu.addAction(tr("Copy"), this, SLOT(copy()));
     menu.addAction(tr("Paste"), this, SLOT(paste()));
-    if (gdb->running) {
+    if (running) {
         menu.addSeparator();
         menu.addAction(tr("Define variable"), this, SLOT(defineVariable()));
     }
