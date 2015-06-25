@@ -211,7 +211,7 @@ DataPlank::DataPlank(QWidget *p)
     values = 0;
     format = "";
     isSimple = true;
-    isFortran = false;
+    //isFortran = false;
     isFinal = false;
     indicator = 0;
     needsRequest = true;
@@ -947,7 +947,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         p->size = v->size;
         //qDebug() << v->name << v->size;
         p->values->resize(p->size);
-        p->isFortran = v->isFortran;
+        //p->isFortran = v->isFortran;
         p->dimensions.clear();
         foreach ( Limits d, v->dimensions ) {
             p->dimensions.append(d);

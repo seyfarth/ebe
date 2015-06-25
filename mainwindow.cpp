@@ -237,9 +237,9 @@ void MainWindow::checkTools()
         if (!toolExists("cc")) missingCritical += "cc";
 #else
         if (!toolExists("gcc")) missingCritical += "gcc";
-        if (!toolExists("gfortran") && !toolExists("g95") ) {
-            missing += "gfortran";
-        }
+        //if (!toolExists("gfortran") && !toolExists("g95") ) {
+            //missing += "gfortran";
+        //}
 #endif
         if (!toolExists("yasm")) missing += "yasm";
         if (!toolExists("astyle")) missing += "astyle";
@@ -516,8 +516,8 @@ void MainWindow::createMenus()
         SLOT(templateAssembly()));
     templateMenu->addAction(tr("HAL Program"), sourceFrame,
         SLOT(templateHal()));
-    templateMenu->addAction(tr("Fortran Program"), sourceFrame,
-        SLOT(templateFortran()));
+    //templateMenu->addAction(tr("Fortran Program"), sourceFrame,
+        //SLOT(templateFortran()));
     fileMenu->addAction(tr("Open"), sourceFrame, SLOT(open(bool)), QKeySequence::Open );
     fileMenu->addAction(tr("Save"), sourceFrame, SLOT(save()),
         QKeySequence::Save);

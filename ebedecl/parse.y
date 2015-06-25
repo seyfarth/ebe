@@ -15,7 +15,7 @@ char *latest_label=0;
 string format = "hex1";
 int incr = 1;
 int size;
-int count=1;
+int item_count=1;
 int data_loc=0;
 int bss_loc=0;
 int text_loc=0;
@@ -221,7 +221,7 @@ data_reservation:
     ;
 
 data_definition:
-      DB  { size=0; count=1; incr=1; } values {
+      DB  { size=0; item_count=1; incr=1; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec1";
@@ -233,7 +233,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DW  { size=0; count=1; incr=2; } values {
+    | DW  { size=0; item_count=1; incr=2; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec2";
@@ -245,7 +245,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DD  { size=0; count=1; incr=4; } values {
+    | DD  { size=0; item_count=1; incr=4; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec4";
@@ -255,7 +255,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DQ  { size=0; count=1; incr=8; } values {
+    | DQ  { size=0; item_count=1; incr=8; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec8";
@@ -267,7 +267,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DT  { size=0; count=1; incr=10; } values {
+    | DT  { size=0; item_count=1; incr=10; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec2";
@@ -279,7 +279,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DO  { size=0; count=1; incr=16; } values {
+    | DO  { size=0; item_count=1; incr=16; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec8";
@@ -291,7 +291,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DDQ { size=0; count=1; incr=16; } values {
+    | DDQ { size=0; item_count=1; incr=16; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec8";
@@ -303,7 +303,7 @@ data_definition:
         set_format(latest_label,format);
         *loc += size;
         }
-    | DY  { size=0; count=1; incr=32; } values {
+    | DY  { size=0; item_count=1; incr=32; } values {
         set_size(latest_label,size);
         if ( format == "dec" ) {
             format = "dec8";
@@ -319,17 +319,17 @@ data_definition:
 
 values:
       values ',' expr   {
-          size += count*incr*times; count=1;
+          size += item_count*incr*times; item_count=1;
       }
     | expr              {
-          size +=  count*incr*times; count=1;
+          size +=  item_count*incr*times; item_count=1;
       }
     ;
 
 expr:
       INT               { if ( format != "character" ) format="dec"; }
     | FLOAT             { if ( format != "character" ) format="float";}
-    | STRING            { format="character"; count=(strlen($1)+incr-1)/incr; }
+    | STRING            { format="character"; item_count=(strlen($1)+incr-1)/incr; }
     | ID                { $$ = get_location($1); }
     | DOLLAR            { $$ = *loc; }
     | DDOLLAR           { $$ = 0; }

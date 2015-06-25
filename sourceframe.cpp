@@ -27,7 +27,7 @@ extern bool needToKill;
 
 QString assembler;
 QStringList halExts;
-QStringList fortranExts;
+//QStringList fortranExts;
 QStringList cExts;
 QStringList cppExts;
 QStringList asmExts;
@@ -235,8 +235,8 @@ SourceFrame::SourceFrame(QWidget *parent)
     tab->setCurrentIndex(index);
 
     halExts << "hal" << "HAL";
-    fortranExts << "f" << "F" << "for" << "FOR" << "f90" << "F90" << "f95"
-        << "F95" << "ftn" << "FTN";
+    //fortranExts << "f" << "F" << "for" << "FOR" << "f90" << "F90" << "f95"
+        //<< "F95" << "ftn" << "FTN";
     cExts << "c" << "C";
     cppExts << "cpp" << "CPP" << "c++" << "C++" << "cc" << "CC";
     asmExts << "asm" << "ASM" << "s" << "S";
@@ -536,11 +536,11 @@ void SourceFrame::run()
             cmd.replace("$base", file.base);
             cmd.replace("$source", file.source);
             //qDebug() << cmd;
-        } else if (file.language == "fortran") {
-            //qDebug() << name << "fortran";
-            cmd = ebe["build/fortran"].toString();
-            cmd.replace("$base", file.base);
-            cmd.replace("$source", file.source);
+        //} else if (file.language == "fortran") {
+            ////qDebug() << name << "fortran";
+            //cmd = ebe["build/fortran"].toString();
+            //cmd.replace("$base", file.base);
+            //cmd.replace("$source", file.source);
             //qDebug() << cmd;
         }
         object = file.base + "." + ebe["build/obj"].toString();
@@ -618,8 +618,8 @@ void SourceFrame::run()
                         ldCmd = ebe["build/ccld"].toString();
                     } else if (file.language == "hal") {
                         ldCmd = ebe["build/ccld"].toString();
-                    } else if (file.language == "fortran") {
-                        ldCmd = ebe["build/fortranld"].toString();
+                    //} else if (file.language == "fortran") {
+                        //ldCmd = ebe["build/fortranld"].toString();
                     }
                 } else if (parts[1] == "T"
                     && (parts[2] == "start" || parts[2] == "_start")) {

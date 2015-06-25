@@ -79,7 +79,7 @@ struct VariableDefinition
     QStringList values;
     QList<Limits> dimensions;
     bool isSimple;
-    bool isFortran;
+    //bool isFortran;
 };
 
 typedef QHash<QString, VariableDefinition> VariableDefinitionMap;

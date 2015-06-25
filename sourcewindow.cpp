@@ -22,7 +22,7 @@ extern GDB *gdb;
 
 extern QStringList cppExts;
 extern QStringList cExts;
-extern QStringList fortranExts;
+//extern QStringList fortranExts;
 extern QStringList halExts;
 extern QStringList asmExts;
 
@@ -702,18 +702,18 @@ void SourceWindow::open()
         selected = tr("Assembly files (*.asm *.s *akefile)");
         patterns = tr("Assembly files (*.asm *.s *akefile);;")
             + tr("C/C++ files (*.c* *.h* *.t *akefile);;")
-            + tr("Fortran files (*.f* *.F* *akefile);;")
+            //+ tr("Fortran files (*.f* *.F* *akefile);;")
             + tr("HAL files (*.hal *akefile);;");
     } else if (ebe["language"].toString() == "hal") {
         //qDebug() << "asm";
         selected = tr("HAL files (*.hal *akefile)");
         patterns = tr("HAL files (*.hal *akefile);;")
             + tr("Assembly files (*.asm *.s *akefile);;")
-            + tr("C/C++ files (*.c* *.h* *.t *akefile);;")
-            + tr("Fortran files (*.f* *.F* *akefile);;");
+            + tr("C/C++ files (*.c* *.h* *.t *akefile);;");
+            //+ tr("Fortran files (*.f* *.F* *akefile);;");
     } else {
         patterns = tr("C/C++ files (*.c* *.h* *.t *akefile);;")
-            + tr("Fortran files (*.f* *.F* *akefile);;")
+          //  + tr("Fortran files (*.f* *.F* *akefile);;")
             + tr("Assembly files (*.asm *.s *akefile);;")
             + tr("HAL files (*.hal *akefile);;");
     }
@@ -981,8 +981,8 @@ void SourceWindow::comment()
     QString commentMark;
     if (cppExts.contains(ext)) {
         commentMark = "//";
-    } else if (fortranExts.contains(ext)) {
-        commentMark = "!";
+    //} else if (fortranExts.contains(ext)) {
+        //commentMark = "!";
     } else if (asmExts.contains(ext)) {
         commentMark = ";";
     } else {
@@ -1026,8 +1026,8 @@ void SourceWindow::unComment()
     QString commentMark;
     if (cppExts.contains(ext)) {
         commentMark = "//";
-    } else if (fortranExts.contains(ext)) {
-        commentMark = "!";
+    //} else if (fortranExts.contains(ext)) {
+        //commentMark = "!";
     } else if (asmExts.contains(ext)) {
         commentMark = ";";
     } else {

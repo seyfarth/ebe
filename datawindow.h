@@ -76,7 +76,7 @@ public:
     QString format;     ///< How the \c DataPlank should look
     QVector<Limits> dimensions;  ///< Array limits
     bool isSimple;      ///< Is the data simple, like char or int
-    bool isFortran;     ///< Was this a fortran variable
+    //bool isFortran;     ///< Was this a fortran variable
     bool isFinal;
     bool needsRequest;
     int size;           ///< Number of bytes of data

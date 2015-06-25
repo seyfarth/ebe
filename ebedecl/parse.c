@@ -80,7 +80,7 @@ char *latest_label=0;
 string format = "hex1";
 int incr = 1;
 int size;
-int count=1;
+int item_count=1;
 int data_loc=0;
 int bss_loc=0;
 int text_loc=0;
@@ -1632,7 +1632,7 @@ yyreduce:
 
   case 30:
 #line 224 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=1; }
+    { size=0; item_count=1; incr=1; }
 #line 1637 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1655,7 +1655,7 @@ yyreduce:
 
   case 32:
 #line 236 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=2; }
+    { size=0; item_count=1; incr=2; }
 #line 1660 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1678,7 +1678,7 @@ yyreduce:
 
   case 34:
 #line 248 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=4; }
+    { size=0; item_count=1; incr=4; }
 #line 1683 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1699,7 +1699,7 @@ yyreduce:
 
   case 36:
 #line 258 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=8; }
+    { size=0; item_count=1; incr=8; }
 #line 1704 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1722,7 +1722,7 @@ yyreduce:
 
   case 38:
 #line 270 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=10; }
+    { size=0; item_count=1; incr=10; }
 #line 1727 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1745,7 +1745,7 @@ yyreduce:
 
   case 40:
 #line 282 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=16; }
+    { size=0; item_count=1; incr=16; }
 #line 1750 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1768,7 +1768,7 @@ yyreduce:
 
   case 42:
 #line 294 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=16; }
+    { size=0; item_count=1; incr=16; }
 #line 1773 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1791,7 +1791,7 @@ yyreduce:
 
   case 44:
 #line 306 "parse.y" /* yacc.c:1646  */
-    { size=0; count=1; incr=32; }
+    { size=0; item_count=1; incr=32; }
 #line 1796 "parse.c" /* yacc.c:1646  */
     break;
 
@@ -1815,7 +1815,7 @@ yyreduce:
   case 46:
 #line 321 "parse.y" /* yacc.c:1646  */
     {
-          size += count*incr*times; count=1;
+          size += item_count*incr*times; item_count=1;
       }
 #line 1821 "parse.c" /* yacc.c:1646  */
     break;
@@ -1823,7 +1823,7 @@ yyreduce:
   case 47:
 #line 324 "parse.y" /* yacc.c:1646  */
     {
-          size +=  count*incr*times; count=1;
+          size +=  item_count*incr*times; item_count=1;
       }
 #line 1829 "parse.c" /* yacc.c:1646  */
     break;
@@ -1842,7 +1842,7 @@ yyreduce:
 
   case 50:
 #line 332 "parse.y" /* yacc.c:1646  */
-    { format="character"; count=(strlen((yyvsp[0].sval))+incr-1)/incr; }
+    { format="character"; item_count=(strlen((yyvsp[0].sval))+incr-1)/incr; }
 #line 1847 "parse.c" /* yacc.c:1646  */
     break;
 

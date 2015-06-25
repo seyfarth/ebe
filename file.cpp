@@ -3,7 +3,7 @@
 
 extern QStringList cppExts;
 extern QStringList cExts;
-extern QStringList fortranExts;
+//extern QStringList fortranExts;
 extern QStringList halExts;
 extern QStringList asmExts;
 
@@ -23,8 +23,8 @@ void File::setLanguage()
             language = "c";
         else if (asmExts.contains(ext))
             language = "asm";
-        else if (fortranExts.contains(ext))
-            language = "fortran";
+        //else if (fortranExts.contains(ext))
+            //language = "fortran";
         else if (halExts.contains(ext)) language = "hal";
         base = source.left(n);
         object = base + ".o";

@@ -5,12 +5,13 @@ message db      "Hello world!", 0x0a, 0
         global  main
         extern  printf
 main:
-        push    rfp
-        mov     rfp, rsp
-        reserve 0, 1
+        push    rbp
+        mov     rbp, rbp
+        frame   2, 0, 1
+        sub     rsp, frame_size
         lea     par1, [message]
-        xor     retd, retd          ; Linux: number of floating params
+        xor     accd, accd          ; Linux: number of floating params
         call    printf
-        xor     retd, retd
+        xor     accd, accd
         leave
         ret

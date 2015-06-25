@@ -39,7 +39,7 @@ HANDLE hThread;
 bool gdbWaiting;
 #endif
 
-bool isFortran;
+//bool isFortran;
 
 unsigned int reg_masks[] = { 1, 4, 0x10, 0x40, 0x80, 0x400, 0x800 };
 QString reg_names[] = { "CF", "PF", "AF", "ZF", "SF", "DF", "OF" };
@@ -170,11 +170,11 @@ GDB::GDB()
 void GDB::sync()
 {
     QString cmd;
-    if ( isFortran ) {
-        cmd="print \'sync\'\n";
-    } else {
+    //if ( isFortran ) {
+        //cmd="print \'sync\'\n";
+    //} else {
         cmd="print \"sync\"\n";
-    }
+    //}
     //qDebug() << cmd;
 #if QT_VERSION >= 0x050000
     gdbProcess->write(cmd.toLocal8Bit().constData());
@@ -188,7 +188,7 @@ void GDB::sync()
     //emit log(result);
     while ( result.indexOf("sync") < 0 ) {
         if ( result.indexOf("Invalid") >= 0 ) {
-            isFortran = true;
+            //isFortran = true;
             break;
         }
         result = readLine();
@@ -435,7 +435,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
 {
     int i;
     int length = files.length();
-    isFortran = false;
+    //isFortran = false;
     globals = g;
     globals.append("stack");
     //qDebug() << "length" << length;
@@ -920,7 +920,7 @@ void GDB::getVars(QStringList &names, VariableDefinitionMap &vars)
                 send ( "set language c++");
                 fortran = true;
             }
-            var.isFortran = fortran;
+            //var.isFortran = fortran;
             foreach ( QString r, results ) {
                 //qDebug() << "r" << r;
                 int i = r.indexOf("=");
@@ -1039,13 +1039,13 @@ void GDB::getVars(QStringList &names, VariableDefinitionMap &vars)
                 int n2 = var.dimensions[0].last;
                 QString t=var.type;
                 int n3;
-                if ( isFortran ) {
-                    var.size = sizeForType[baseType]*(n2-n1+1);
-                } else {
+                //if ( isFortran ) {
+                    //var.size = sizeForType[baseType]*(n2-n1+1);
+                //} else {
                     n3 = t.indexOf("[");
                     t = t.left(n3).trimmed();
                     var.size = sizeForType[t]*(n2-n1+1);
-                }
+                //}
                 QString cmd = QString("x/%1xb %2")
                     .arg(var.size).arg(name);
                 //qDebug() << cmd;
