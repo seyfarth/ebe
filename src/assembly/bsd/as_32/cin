@@ -1,0 +1,9 @@
+        .section .data
+i:      .int     1
+format: .asciz   "%d"
+        .section .text
+        push    $i          # push address of i
+                            # must have address to read
+        push    $format     # push address of format
+        call    scanf
+        add     $8, %esp    # restore stack

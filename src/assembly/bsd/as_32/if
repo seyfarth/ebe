@@ -1,0 +1,10 @@
+
+;    if ( %eax > 5 ) {
+        cmp     $5, %eax    # subtracts %eax-5 without saving
+        jng     end_if      # jump if not greater than
+
+;       do whatever
+
+;    }
+end_if:                     # name the label what you want
+

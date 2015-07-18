@@ -1,0 +1,7 @@
+top:
+        # do something which can change %eax
+        # ...
+        cmp     $0, %eax  # leave off the $ and it
+                          # tries to access address 0
+                          # segfault!
+        jge     top       # jump to top if %eax >= 0

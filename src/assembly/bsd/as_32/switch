@@ -1,0 +1,31 @@
+
+#    switch ( i ) {
+        mov     i, %eax    # prepare to test %eax several times
+
+#    case 1:
+        cmp     $1, %eax
+        jne     case_2
+
+#       Do something for i == 1
+
+#    break;
+        jmp     switch_end
+        
+#    case 2:
+case_2:
+        cmp     $2, %eax
+        jne     case_3
+
+#       Do something for i == 2
+
+#    break;
+        jmp     switch_end
+
+#    default:
+case_3:
+
+#       Do something for the default case
+
+#    }
+switch_end:
+

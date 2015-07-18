@@ -1,0 +1,11 @@
+        segment .text
+        global  main     ; Tell linker about main
+main:
+        push    rbp
+        mov     rbp, rsp ; setup stack frame
+
+; Up to 6 integer parameters in rdi, rsi, rdx, rcx, r8, r9
+; Up to 8 float parameters in xmm0-xmm7
+
+        leave
+        ret
