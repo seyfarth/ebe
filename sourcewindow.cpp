@@ -382,7 +382,9 @@ void SourceEdit::contextMenuEvent(QContextMenuEvent * /* event */)
 void SourceEdit::defineVariable()
 {
     QString text = textCursor().selectedText();
-    if (text.length() == 0) return;
+    if (text.length() == 0) {
+        text = "varName";
+    }
     DefineVariableDialog *dialog = new DefineVariableDialog;
     dialog->nameEdit->setText(text);
     dialog->addressEdit->setText("&" + text);
