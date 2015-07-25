@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QDesktopWidget>
 #include <QTimer>
 #include <QPushButton>
 #include <QtWebKit>
@@ -351,20 +352,24 @@ void MainWindow::restoreMainWindow()
     consoleDock->setFloating(ebe["console/floating"].toBool());
 
     //dDebug() << "setgeo";
-    if (!userSetGeometry && ebe.contains("ebe/geometry")) {
-        restoreGeometry(ebe["ebe/geometry"].toByteArray());
-    } else if (userSetGeometry) {
-        resize(userWidth, userHeight);
-    } else {
-        resize(1000, 750);
+    if (!userSetGeometry) {
+        if (ebe.contains("ebe/geometry") || ebe.contains("ebe/state")) {
+            if (ebe.contains("ebe/geometry")) {
+                restoreGeometry(ebe["ebe/geometry"].toByteArray());
+            }
+            if (ebe.contains("ebe/state")) {
+                restoreState(ebe["ebe/state"].toByteArray());
+            }
+        }
+        else {
+            QRect screenRect = QApplication::desktop()->availableGeometry();
+            resize(screenRect.width(), screenRect.height());
+        }
     }
-    if (!userSetGeometry && ebe.contains("ebe/state")) {
-        restoreState(ebe["ebe/state"].toByteArray());
-    } else if (userSetGeometry) {
+    else { // userSetGeometry
         resize(userWidth, userHeight);
-    } else {
-        resize(1000, 750);
     }
+
     dataDock->setStyleSheet(
         "QDockWidget::title { font-family: " + ebe["variable_font"].toString()
             + "}");
