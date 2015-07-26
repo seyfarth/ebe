@@ -63,7 +63,9 @@ private:
         const char *slot, bool checked);
     bool eventFilter(QObject *object, QEvent *event);
     void checkTools();
-
+    void initializePreferredWindowSize();
+    void setVisibleIfFits(QWidget *dockWidget, const QString &key, int *availableHeight);
+    
     bool tooltipsVisible;
 
     QDockWidget *dataDock;
@@ -101,6 +103,8 @@ private:
     QMenu *moveMenu;
     QMenu *fontMenu;
     QMenu *helpMenu;
+
+    QSize preferredWindowSize;
 };
 
 #endif

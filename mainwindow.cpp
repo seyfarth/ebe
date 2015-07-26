@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QDesktopWidget>
 #include <QTimer>
 #include <QPushButton>
 #include <QtWebKit>
@@ -136,7 +137,8 @@ void MainWindow::setWordSize()
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+    preferredWindowSize()
 {
     qRegisterMetaType < QList<StringSet> > ("QList<StringSet>");
     qRegisterMetaType < StringHash > ("StringHash");
@@ -351,20 +353,25 @@ void MainWindow::restoreMainWindow()
     consoleDock->setFloating(ebe["console/floating"].toBool());
 
     //dDebug() << "setgeo";
-    if (!userSetGeometry && ebe.contains("ebe/geometry")) {
-        restoreGeometry(ebe["ebe/geometry"].toByteArray());
-    } else if (userSetGeometry) {
-        resize(userWidth, userHeight);
-    } else {
-        resize(1000, 750);
+    if (!userSetGeometry) {
+        bool hasGeometry = ebe.contains("ebe/geometry");
+        bool hasState = ebe.contains("ebe/state");
+
+        if (hasGeometry) {
+            restoreGeometry(ebe["ebe/geometry"].toByteArray());
+        }
+        if (hasState) {
+            restoreState(ebe["ebe/state"].toByteArray());
+        }
+
+        if (!hasState && !hasGeometry) {
+            resize(preferredWindowSize.width(), preferredWindowSize.height());
+        }
     }
-    if (!userSetGeometry && ebe.contains("ebe/state")) {
-        restoreState(ebe["ebe/state"].toByteArray());
-    } else if (userSetGeometry) {
+    else { // userSetGeometry
         resize(userWidth, userHeight);
-    } else {
-        resize(1000, 750);
     }
+
     dataDock->setStyleSheet(
         "QDockWidget::title { font-family: " + ebe["variable_font"].toString()
             + "}");
@@ -840,6 +847,22 @@ void MainWindow::createStatusBar()
     statusBar()->showMessage(tr("Ready"));
 }
 
+
+void MainWindow::initializePreferredWindowSize()
+{
+    QRect rect = QApplication::desktop()->availableGeometry();
+
+    if (userSetGeometry && userHeight != 0) {
+        rect.setHeight(userHeight);
+    }
+    if (userSetGeometry && userWidth != 0) {
+        rect.setWidth(userWidth);
+    }
+
+    preferredWindowSize.setWidth(rect.width());
+    preferredWindowSize.setHeight(rect.height());
+}
+
 void MainWindow::createDockWindows()
 {
     asmDataWindow = new AsmDataWindow(this);
@@ -982,17 +1005,31 @@ void MainWindow::createDockWindows()
         halNamesDock->setVisible(ebe["halnames/visible"].toBool());
         halRegisterDock->setVisible(ebe["halregister/visible"].toBool());
     }
-    dataDock->setVisible(ebe["data/visible"].toBool());
-    registerDock->setVisible(ebe["register/visible"].toBool());
-    floatDock->setVisible(ebe["float/visible"].toBool());
-    projectDock->setVisible(ebe["project/visible"].toBool());
-    backTraceDock->setVisible(ebe["backtrace/visible"].toBool());
-    terminalDock->setVisible(ebe["terminal/visible"].toBool());
-    if (userSetGeometry && userHeight < 768) ebe["toybox/visible"] = false;
-    toyBoxDock->setVisible(ebe["toybox/visible"].toBool());
-    if (userSetGeometry && userHeight < 768) ebe["bitbucket/visible"] = false;
-    bitBucketDock->setVisible(ebe["bitbucket/visible"].toBool());
-    consoleDock->setVisible(ebe["console/visible"].toBool());
+
+    initializePreferredWindowSize();
+
+    int availableHeight = preferredWindowSize.height();
+    setVisibleIfFits(dataDock, "data/visible", &availableHeight);
+    setVisibleIfFits(registerDock, "register/visible", &availableHeight);
+    setVisibleIfFits(floatDock, "float/visible", &availableHeight);
+    setVisibleIfFits(projectDock, "project/visible", &availableHeight);
+    setVisibleIfFits(backTraceDock, "backtrace/visible", &availableHeight);
+    setVisibleIfFits(terminalDock, "terminal/visible", &availableHeight);
+    setVisibleIfFits(toyBoxDock, "toybox/visible", &availableHeight);
+    setVisibleIfFits(bitBucketDock, "bitbucket/visible", &availableHeight);
+    setVisibleIfFits(consoleDock, "console/visible", &availableHeight);
+}
+
+void MainWindow::setVisibleIfFits(QWidget *dockWidget, const QString &key, int *availableHeight)
+{
+    bool visible = ebe[key].toBool();
+    int dockHeight = dockWidget->height();
+    if (visible && dockHeight <= *availableHeight) {
+        dockWidget->setVisible(true);
+        *availableHeight -= dockHeight;
+    } else {
+        dockWidget->setVisible(false);
+    }
 }
 
 void MainWindow::editSettings()
