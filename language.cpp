@@ -68,7 +68,7 @@ void Languages::setLanguage()
     ebe["language_name"] = codeToName[languageCode];
 
     if (languageCode != "en" && languageCodes.contains(languageCode)) {
-        translator.load("ebe_" + languageCode);
+        translator.load("ebe_" + languageCode, ":translations" );
         app->installTranslator(&translator);
     } else {
         app->removeTranslator(&translator);

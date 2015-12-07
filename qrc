@@ -2,11 +2,14 @@
 
 find library src html -name '*~' -exec rm \{} \;
 
+lrelease ebe.pro
+mkdir -p translations
+cp *.qm translations
 cat > ebe.qrc << EOF
 <!DOCTYPE RCC> <RCC version="1.0">
 <qresource>
 EOF
-dirs="icons library src html"
+dirs="icons library src html translations"
 find $dirs -type f -not -name '*~' | sed -e 's/^/\<file\>/' -e 's:$:\<\/file>:' >> ebe.qrc
 
 cat >> ebe.qrc << EOF2
