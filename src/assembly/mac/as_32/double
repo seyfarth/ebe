@@ -1,0 +1,5 @@
+        .section  .data
+x:      .double   1.0  # double in .data
+        .section  .bss
+        .align    8    # may be faster
+y:      .space    8    # double in ,bss

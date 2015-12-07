@@ -36,4 +36,4 @@ cd ~/sf/ebe-web/
 vi content/changelog.rst
 make html
 
-sfpublish w
+sfpublish

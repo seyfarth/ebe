@@ -1,0 +1,16 @@
+#       Using equates to work with a customer struct
+
+c_id    .equ    0          # offset for id (4 byte int)
+c_name  .equ    c_id+4     # offset for name (16 byte array)
+c_date  .equ    c_name+16  # offset for a data (8 byte array)
+c_size  .equ    c_data+8   # size of the struct
+
+#       You need to make sure that c_size == sizeof(struct customer) in C.
+#       Also you need to make sure that all the alignments match.
+
+        push    $c_size
+        call    malloc            # returns a struct address in %eax
+        mov     id, %ecx          # assuming id is ready
+        mov     %ecx, c_id(%eax)  # place id in struct
+
+#       use memcpy for the rest

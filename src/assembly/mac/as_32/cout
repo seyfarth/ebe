@@ -1,0 +1,8 @@
+        .section .data
+i:      .int     1
+format: .asciz   "i is %d\n"
+        .section .text
+        push    i           # push value of i
+        push    $format     # push address of format
+        call    printf 
+        add     $8, %esp    # restore stack

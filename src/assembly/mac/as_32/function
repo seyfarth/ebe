@@ -1,0 +1,17 @@
+;int f ( int x )
+;{
+        segment .text
+f:
+        push    %ebp
+        mov     %ebp, %esp        # create stack frame
+        frame   1, 2              # 1 parameter to f, 2 locals
+        sub     $frame_size, %esp # subtract space for locals
+
+#       Using frame allows accessing parameters using currPar1(%ebp)
+#       and locals using local1(%ebp) and local2(%ebp)
+
+    ;return 0;
+        xor     %eax, %eax    # return value in %eax
+        leave                 # undo changes to %ebp and %esp
+        ret 
+;}
