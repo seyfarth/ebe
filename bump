@@ -29,6 +29,8 @@ git commit -a
 git branch $version
 git push origin master
 git push origin $version
+git push github master
+git push github $version
 
 cd ~/sf/ebe-web/
 vi content/changelog.rst
