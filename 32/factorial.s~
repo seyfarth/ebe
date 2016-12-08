@@ -1,0 +1,54 @@
+    ## Simple factorial example
+    .section .data
+format: .asciz  "Factorial(%d) = %d\n"
+n:  .int     5
+ 
+    .section .bss
+    .lcomm   fact, 4
+
+    .section .text
+    .globl   main
+    .extern  printf
+main:
+    pushl   %ebp
+    movl    %esp, %ebp
+    frame   2, 0, 3
+
+    movl    n, newPar1(%esp)
+    call factorial
+    movl    %eax, fact
+
+    lea     format, newPar1(%esp)
+    movl    n, newPar2(%esp)
+    movl    eax, newPar3(%esp)
+    leave
+    ret
+
+    ## Factorial function
+    ## Returns 1 if the argument is <= 0
+    #.type factorial, @function
+factorial:
+    pushl  %ebp
+    movl   %esp, %ebp
+    frame  1, 2, 2
+    subl    $16, %esp
+    movl     $23, local1(%ebp)
+    movl     $25, local2(%ebp)
+    movl     $4, currPar1(%ebp)
+    movl     $1, newPar1(%esp)
+    movl     $2, newPar2(%esp)
+    movl     currPar1(%ebp), %eax
+    cmpl $1,%eax
+    jle fac1
+    movl %eax, %ecx
+    decl %ecx
+fac_loop:   
+    imull %ecx, %eax
+    decl %ecx
+    jnz fac_loop
+    leave
+    ret
+fac1:
+    movl $1,%eax
+    leave
+    ret

@@ -1,0 +1,499 @@
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 1
+
+
+ 206              	.list
+   1              	#
+   2              	#       Program to determine if a number can be formed as 
+   3              	#       the sum of a subset of numbers.  The first number 
+   4              	#       on the command line is the target number and the
+   5              	#       rest of the numbers are candidates for forming the
+   6              	#       sum.
+   7              	
+   8              	        .section .text
+   9              	        .global  main
+  10              	main:
+  11 0000 55       	        push    %ebp
+  12 0001 89E5     	        mov     %esp, %ebp
+  13              	        frame   2, 0
+  13              	>  .equ frame_size,0*4
+  14 0003 83EC00   	        sub     $frame_size, %esp
+  15              	        
+  16 0006 8B4508   	        mov     currPar1(%ebp), %eax
+  17 0009 83E802   	        sub     $2, %eax
+  18 000c A3000000 	        mov     %eax, n  
+  18      00
+  19              	        
+  20 0011 8B550C   	        mov     currPar2(%ebp), %edx
+  21 0014 83C204   	        add     $4, %edx
+  22 0017 89150400 	        mov     %edx, argv
+  22      0000
+  23 001d FF32     	        push    (%edx)
+  24 001f 83C204   	        add     $4, %edx
+  25 0022 89150400 	        mov     %edx, argv
+  25      0000
+  26              	        
+  27 0028 E8FCFFFF 	        call    atoi
+  27      FF
+  28 002d 83C404   	        add     $4, %esp
+  29 0030 A3080000 	        mov     %eax, target
+  29      00
+  30              	        
+  31 0035 E8020100 	        call    build_arrays
+  31      00
+  32              	        
+  33 003a FF351000 	        push    used
+  33      0000
+  34 0040 FF350C00 	        push    values
+  34      0000
+  35 0046 FF350000 	        push    n 
+  35      0000
+  36 004c FF350800 	        push    target        
+  36      0000
+  37 0052 E8750000 	        call    subsetsum
+  37      00
+  38 0057 83C410   	        add     $16, %esp
+  39              	        
+  40 005a 3C01     	        cmp     $1, %al 
+  41 005c 7507     	        jne     .no_solution
+  42 005e E80E0000 	        call    print_solution
+  42      00
+  43 0063 EB0A     	        jmp     .done
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 2
+
+
+  44              	.no_solution:
+  45 0065 68200000 	        push    $fail
+  45      00
+  46 006a E8FCFFFF 	        call    printf
+  46      FF
+  47 006f C9       	.done:  leave
+  48 0070 C3       	        ret 
+  49              	
+  50              	        .section .data
+  51 0000 00000000 	n:      .int    0
+  52 0004 00000000 	argv:   .int    0
+  53 0008 00000000 	target: .int    0
+  54 000c 00000000 	values: .int    0       # pointer to int array
+  55 0010 00000000 	used:   .int    0       # pointer to int array
+  56 0014 2564203D 	fmt1:   .asciz  "%d = "
+  56      2000
+  57 001a 25642000 	fmt2:   .asciz  "%d "
+  58 001e 0A00     	fmt3:   .asciz  "\n"
+  59 0020 4E6F2073 	fail:   .asciz  "No solution\n"
+  59      6F6C7574 
+  59      696F6E0A 
+  59      00
+  60              	
+  61              	        .section .text
+  62              	print_solution:
+  63 0071 55       	        push    %ebp
+  64 0072 89E5     	        mov     %esp, %ebp
+  65              	        frame   0, 0
+  65              	>  .equ frame_size,0*4
+  66              	     
+  67 0074 53       	        push    %ebx
+  68 0075 57       	        push    %edi
+  69 0076 56       	        push    %esi
+  70              	
+  71 0077 FF350800 	        push    target 
+  71      0000
+  72 007d 68140000 	        push    $fmt1
+  72      00
+  73 0082 E8FCFFFF 	        call    printf
+  73      FF
+  74 0087 83C408   	        add     $8, %esp
+  75              	        
+  76 008a 31DB     	        xor     %ebx, %ebx
+  77 008c 8B3D1000 	        mov     used, %edi
+  77      0000
+  78 0092 8B350C00 	        mov     values, %esi
+  78      0000
+  79              	.print_top:
+  80 0098 8B049F   	        mov     (%edi,%ebx,4), %eax
+  81 009b 83F800   	        cmp     $0, %eax
+  82 009e 7411     	        jz      .skipit
+  83 00a0 8B049E   	        mov     (%esi,%ebx,4), %eax
+  84 00a3 50       	        push    %eax
+  85 00a4 681A0000 	        push    $fmt2
+  85      00
+  86 00a9 E8FCFFFF 	        call    printf
+  86      FF
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 3
+
+
+  87 00ae 83C408   	        add     $8, %esp
+  88 00b1 43       	.skipit:  inc     %ebx
+  89 00b2 3B1D0000 	        cmp     n, %ebx
+  89      0000
+  90 00b8 7CDE     	        jl      .print_top
+  91              	             
+  92 00ba 681E0000 	        push    $fmt3
+  92      00
+  93 00bf E8FCFFFF 	        call    printf
+  93      FF
+  94 00c4 83C404   	        add     $4, %esp
+  95 00c7 5E       	        pop     %esi
+  96 00c8 5F       	        pop     %edi
+  97 00c9 5B       	        pop     %ebx
+  98              	        
+  99 00ca C9       	        leave
+ 100 00cb C3       	        ret
+ 101              	        
+ 102              	subsetsum:
+ 103              	#   bool subsetsum ( int target, int n,
+ 104              	#                    int values[], int used[] )
+ 105 00cc 55       	        push    %ebp
+ 106 00cd 89E5     	        mov     %esp, %ebp
+ 107              	        frame   4, 0
+ 107              	>  .equ frame_size,0*4
+ 108 00cf 83EC00   	        sub     $frame_size, %esp
+ 109              	        
+ 110 00d2 8B450C   	        mov     currPar2(%ebp), %eax
+ 111 00d5 83F800   	        cmp     $0, %eax
+ 112 00d8 7F0F     	        jg      try_next
+ 113 00da 8B4D08   	        mov     currPar1(%ebp), %ecx
+ 114 00dd 83F900   	        cmp     $0, %ecx
+ 115 00e0 7558     	        jne     .done_sss
+ 116 00e2 B8010000 	        mov     $1, %eax
+ 116      00
+ 117 00e7 EB51     	        jmp     .done_sss
+ 118              	        
+ 119              	try_next:
+ 120 00e9 B8010000 	        mov     $1, %eax
+ 120      00
+ 121 00ee 8B5514   	        mov     currPar4(%ebp), %edx
+ 122 00f1 8902     	        mov     %eax, (%edx)
+ 123 00f3 83C204   	        add     $4, %edx
+ 124 00f6 52       	        push    %edx
+ 125 00f7 8B5510   	        mov     currPar3(%ebp), %edx
+ 126 00fa 8B0A     	        mov     (%edx), %ecx
+ 127 00fc 83C204   	        add     $4, %edx
+ 128 00ff 52       	        push    %edx
+ 129 0100 8B450C   	        mov     currPar2(%ebp), %eax
+ 130 0103 48       	        dec     %eax
+ 131 0104 50       	        push    %eax
+ 132 0105 8B4508   	        mov     currPar1(%ebp), %eax
+ 133 0108 29C8     	        sub     %ecx, %eax
+ 134 010a 50       	        push    %eax
+ 135 010b E8BCFFFF 	        call    subsetsum
+ 135      FF
+ 136 0110 83C410   	        add     $16, %esp
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 4
+
+
+ 137 0113 3C01     	        cmp     $1, %al 
+ 138 0115 7423     	        je      .done_sss
+ 139 0117 31C0     	        xor     %eax, %eax         
+ 140 0119 8B5514   	        mov     currPar4(%ebp), %edx
+ 141 011c 8902     	        mov     %eax, (%edx)
+ 142 011e 83C204   	        add     $4, %edx
+ 143 0121 52       	        push    %edx
+ 144 0122 8B5510   	        mov     currPar3(%ebp), %edx
+ 145 0125 83C204   	        add     $4, %edx
+ 146 0128 52       	        push    %edx
+ 147 0129 8B450C   	        mov     currPar2(%ebp), %eax
+ 148 012c 48       	        dec     %eax
+ 149 012d 50       	        push    %eax
+ 150 012e 8B4508   	        mov     currPar1(%ebp), %eax
+ 151 0131 50       	        push    %eax
+ 152 0132 E895FFFF 	        call    subsetsum
+ 152      FF
+ 153 0137 83C410   	        add     $16, %esp
+ 154              	                  
+ 155              	.done_sss:  
+ 156 013a C9       	        leave
+ 157 013b C3       	        ret
+ 158              	        
+ 159              	        
+ 160              	build_arrays:
+ 161 013c 55       	        push    %ebp
+ 162 013d 89E5     	        mov     %esp, %ebp
+ 163              	        frame   0, 1
+ 163              	>  .equ frame_size,1*4
+ 164 013f 83EC04   	        sub     $frame_size, %esp
+ 165              	        
+ 166 0142 A1000000 	        mov     n, %eax
+ 166      00
+ 167 0147 C1E002   	        shl     $2, %eax
+ 168 014a 50       	        push    %eax
+ 169 014b E8FCFFFF 	        call    malloc
+ 169      FF
+ 170 0150 83C404   	        add     $4, %esp
+ 171 0153 A30C0000 	        mov     %eax, values
+ 171      00
+ 172              	        
+ 173 0158 A1000000 	        mov     n, %eax
+ 173      00
+ 174 015d C1E002   	        shl     $2, %eax
+ 175 0160 50       	        push    %eax
+ 176 0161 E8FCFFFF 	        call    malloc
+ 176      FF
+ 177 0166 83C404   	        add     $4, %esp
+ 178 0169 A3100000 	        mov     %eax, used
+ 178      00
+ 179              	        
+ 180 016e 31C9     	        xor     %ecx, %ecx
+ 181 0170 894DFC   	        mov     %ecx, local1(%ebp)
+ 182              	.top:
+ 183 0173 8B150400 	        mov     argv, %edx
+ 183      0000
+ 184 0179 8B048A   	        mov     (%edx,%ecx,4), %eax
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 5
+
+
+ 185 017c 894DFC   	        mov     %ecx, local1(%ebp)
+ 186 017f 50       	        push    %eax
+ 187 0180 E8FCFFFF 	        call    atoi
+ 187      FF
+ 188 0185 83C404   	        add     $4, %esp
+ 189 0188 8B4DFC   	        mov     local1(%ebp), %ecx
+ 190 018b 8B150C00 	        mov     values, %edx
+ 190      0000
+ 191 0191 89048A   	        mov     %eax, (%edx,%ecx,4)
+ 192 0194 41       	        inc     %ecx
+ 193 0195 3B0D0000 	        cmp     n, %ecx
+ 193      0000
+ 194 019b 7CD6     	        jl      .top
+ 195              	       
+ 196 019d C9       	        leave
+ 197 019e C3       	        ret
+ 198              	
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 6
+
+
+DEFINED SYMBOLS
+/home/seyfarth/ebe/32/ebe_as_32.inc:6      *ABS*:fffffffffffffffc local1
+/home/seyfarth/ebe/32/ebe_as_32.inc:7      *ABS*:fffffffffffffff8 local2
+/home/seyfarth/ebe/32/ebe_as_32.inc:8      *ABS*:fffffffffffffff4 local3
+/home/seyfarth/ebe/32/ebe_as_32.inc:9      *ABS*:fffffffffffffff0 local4
+/home/seyfarth/ebe/32/ebe_as_32.inc:10     *ABS*:ffffffffffffffec local5
+/home/seyfarth/ebe/32/ebe_as_32.inc:11     *ABS*:ffffffffffffffe8 local6
+/home/seyfarth/ebe/32/ebe_as_32.inc:12     *ABS*:ffffffffffffffe4 local7
+/home/seyfarth/ebe/32/ebe_as_32.inc:13     *ABS*:ffffffffffffffe0 local8
+/home/seyfarth/ebe/32/ebe_as_32.inc:14     *ABS*:ffffffffffffffdc local9
+/home/seyfarth/ebe/32/ebe_as_32.inc:15     *ABS*:ffffffffffffffd8 local10
+/home/seyfarth/ebe/32/ebe_as_32.inc:16     *ABS*:ffffffffffffffd4 local11
+/home/seyfarth/ebe/32/ebe_as_32.inc:17     *ABS*:ffffffffffffffd0 local12
+/home/seyfarth/ebe/32/ebe_as_32.inc:18     *ABS*:ffffffffffffffcc local13
+/home/seyfarth/ebe/32/ebe_as_32.inc:19     *ABS*:ffffffffffffffc8 local14
+/home/seyfarth/ebe/32/ebe_as_32.inc:20     *ABS*:ffffffffffffffc4 local15
+/home/seyfarth/ebe/32/ebe_as_32.inc:21     *ABS*:ffffffffffffffc0 local16
+/home/seyfarth/ebe/32/ebe_as_32.inc:22     *ABS*:ffffffffffffffbc local17
+/home/seyfarth/ebe/32/ebe_as_32.inc:23     *ABS*:ffffffffffffffb8 local18
+/home/seyfarth/ebe/32/ebe_as_32.inc:24     *ABS*:ffffffffffffffb4 local19
+/home/seyfarth/ebe/32/ebe_as_32.inc:25     *ABS*:ffffffffffffffb0 local20
+/home/seyfarth/ebe/32/ebe_as_32.inc:26     *ABS*:ffffffffffffffac local21
+/home/seyfarth/ebe/32/ebe_as_32.inc:27     *ABS*:ffffffffffffffa8 local22
+/home/seyfarth/ebe/32/ebe_as_32.inc:28     *ABS*:ffffffffffffffa4 local23
+/home/seyfarth/ebe/32/ebe_as_32.inc:29     *ABS*:ffffffffffffffa0 local24
+/home/seyfarth/ebe/32/ebe_as_32.inc:30     *ABS*:ffffffffffffff9c local25
+/home/seyfarth/ebe/32/ebe_as_32.inc:31     *ABS*:ffffffffffffff98 local26
+/home/seyfarth/ebe/32/ebe_as_32.inc:32     *ABS*:ffffffffffffff94 local27
+/home/seyfarth/ebe/32/ebe_as_32.inc:33     *ABS*:ffffffffffffff90 local28
+/home/seyfarth/ebe/32/ebe_as_32.inc:34     *ABS*:ffffffffffffff8c local29
+/home/seyfarth/ebe/32/ebe_as_32.inc:35     *ABS*:ffffffffffffff88 local30
+/home/seyfarth/ebe/32/ebe_as_32.inc:36     *ABS*:ffffffffffffff84 local31
+/home/seyfarth/ebe/32/ebe_as_32.inc:37     *ABS*:ffffffffffffff80 local32
+/home/seyfarth/ebe/32/ebe_as_32.inc:38     *ABS*:ffffffffffffff7c local33
+/home/seyfarth/ebe/32/ebe_as_32.inc:39     *ABS*:ffffffffffffff78 local34
+/home/seyfarth/ebe/32/ebe_as_32.inc:40     *ABS*:ffffffffffffff74 local35
+/home/seyfarth/ebe/32/ebe_as_32.inc:41     *ABS*:ffffffffffffff70 local36
+/home/seyfarth/ebe/32/ebe_as_32.inc:42     *ABS*:ffffffffffffff6c local37
+/home/seyfarth/ebe/32/ebe_as_32.inc:43     *ABS*:ffffffffffffff68 local38
+/home/seyfarth/ebe/32/ebe_as_32.inc:44     *ABS*:ffffffffffffff64 local39
+/home/seyfarth/ebe/32/ebe_as_32.inc:45     *ABS*:ffffffffffffff60 local40
+/home/seyfarth/ebe/32/ebe_as_32.inc:46     *ABS*:ffffffffffffff5c local41
+/home/seyfarth/ebe/32/ebe_as_32.inc:47     *ABS*:ffffffffffffff58 local42
+/home/seyfarth/ebe/32/ebe_as_32.inc:48     *ABS*:ffffffffffffff54 local43
+/home/seyfarth/ebe/32/ebe_as_32.inc:49     *ABS*:ffffffffffffff50 local44
+/home/seyfarth/ebe/32/ebe_as_32.inc:50     *ABS*:ffffffffffffff4c local45
+/home/seyfarth/ebe/32/ebe_as_32.inc:51     *ABS*:ffffffffffffff48 local46
+/home/seyfarth/ebe/32/ebe_as_32.inc:52     *ABS*:ffffffffffffff44 local47
+/home/seyfarth/ebe/32/ebe_as_32.inc:53     *ABS*:ffffffffffffff40 local48
+/home/seyfarth/ebe/32/ebe_as_32.inc:54     *ABS*:ffffffffffffff3c local49
+/home/seyfarth/ebe/32/ebe_as_32.inc:55     *ABS*:ffffffffffffff38 local50
+/home/seyfarth/ebe/32/ebe_as_32.inc:56     *ABS*:ffffffffffffff34 local51
+/home/seyfarth/ebe/32/ebe_as_32.inc:57     *ABS*:ffffffffffffff30 local52
+/home/seyfarth/ebe/32/ebe_as_32.inc:58     *ABS*:ffffffffffffff2c local53
+/home/seyfarth/ebe/32/ebe_as_32.inc:59     *ABS*:ffffffffffffff28 local54
+/home/seyfarth/ebe/32/ebe_as_32.inc:60     *ABS*:ffffffffffffff24 local55
+/home/seyfarth/ebe/32/ebe_as_32.inc:61     *ABS*:ffffffffffffff20 local56
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 7
+
+
+/home/seyfarth/ebe/32/ebe_as_32.inc:62     *ABS*:ffffffffffffff1c local57
+/home/seyfarth/ebe/32/ebe_as_32.inc:63     *ABS*:ffffffffffffff18 local58
+/home/seyfarth/ebe/32/ebe_as_32.inc:64     *ABS*:ffffffffffffff14 local59
+/home/seyfarth/ebe/32/ebe_as_32.inc:65     *ABS*:ffffffffffffff10 local60
+/home/seyfarth/ebe/32/ebe_as_32.inc:66     *ABS*:ffffffffffffff0c local61
+/home/seyfarth/ebe/32/ebe_as_32.inc:67     *ABS*:ffffffffffffff08 local62
+/home/seyfarth/ebe/32/ebe_as_32.inc:68     *ABS*:ffffffffffffff04 local63
+/home/seyfarth/ebe/32/ebe_as_32.inc:69     *ABS*:ffffffffffffff00 local64
+/home/seyfarth/ebe/32/ebe_as_32.inc:70     *ABS*:fffffffffffffefc local65
+/home/seyfarth/ebe/32/ebe_as_32.inc:71     *ABS*:fffffffffffffef8 local66
+/home/seyfarth/ebe/32/ebe_as_32.inc:72     *ABS*:fffffffffffffef4 local67
+/home/seyfarth/ebe/32/ebe_as_32.inc:73     *ABS*:fffffffffffffef0 local68
+/home/seyfarth/ebe/32/ebe_as_32.inc:74     *ABS*:fffffffffffffeec local69
+/home/seyfarth/ebe/32/ebe_as_32.inc:75     *ABS*:fffffffffffffee8 local70
+/home/seyfarth/ebe/32/ebe_as_32.inc:76     *ABS*:fffffffffffffee4 local71
+/home/seyfarth/ebe/32/ebe_as_32.inc:77     *ABS*:fffffffffffffee0 local72
+/home/seyfarth/ebe/32/ebe_as_32.inc:78     *ABS*:fffffffffffffedc local73
+/home/seyfarth/ebe/32/ebe_as_32.inc:79     *ABS*:fffffffffffffed8 local74
+/home/seyfarth/ebe/32/ebe_as_32.inc:80     *ABS*:fffffffffffffed4 local75
+/home/seyfarth/ebe/32/ebe_as_32.inc:81     *ABS*:fffffffffffffed0 local76
+/home/seyfarth/ebe/32/ebe_as_32.inc:82     *ABS*:fffffffffffffecc local77
+/home/seyfarth/ebe/32/ebe_as_32.inc:83     *ABS*:fffffffffffffec8 local78
+/home/seyfarth/ebe/32/ebe_as_32.inc:84     *ABS*:fffffffffffffec4 local79
+/home/seyfarth/ebe/32/ebe_as_32.inc:85     *ABS*:fffffffffffffec0 local80
+/home/seyfarth/ebe/32/ebe_as_32.inc:86     *ABS*:fffffffffffffebc local81
+/home/seyfarth/ebe/32/ebe_as_32.inc:87     *ABS*:fffffffffffffeb8 local82
+/home/seyfarth/ebe/32/ebe_as_32.inc:88     *ABS*:fffffffffffffeb4 local83
+/home/seyfarth/ebe/32/ebe_as_32.inc:89     *ABS*:fffffffffffffeb0 local84
+/home/seyfarth/ebe/32/ebe_as_32.inc:90     *ABS*:fffffffffffffeac local85
+/home/seyfarth/ebe/32/ebe_as_32.inc:91     *ABS*:fffffffffffffea8 local86
+/home/seyfarth/ebe/32/ebe_as_32.inc:92     *ABS*:fffffffffffffea4 local87
+/home/seyfarth/ebe/32/ebe_as_32.inc:93     *ABS*:fffffffffffffea0 local88
+/home/seyfarth/ebe/32/ebe_as_32.inc:94     *ABS*:fffffffffffffe9c local89
+/home/seyfarth/ebe/32/ebe_as_32.inc:95     *ABS*:fffffffffffffe98 local90
+/home/seyfarth/ebe/32/ebe_as_32.inc:96     *ABS*:fffffffffffffe94 local91
+/home/seyfarth/ebe/32/ebe_as_32.inc:97     *ABS*:fffffffffffffe90 local92
+/home/seyfarth/ebe/32/ebe_as_32.inc:98     *ABS*:fffffffffffffe8c local93
+/home/seyfarth/ebe/32/ebe_as_32.inc:99     *ABS*:fffffffffffffe88 local94
+/home/seyfarth/ebe/32/ebe_as_32.inc:100    *ABS*:fffffffffffffe84 local95
+/home/seyfarth/ebe/32/ebe_as_32.inc:101    *ABS*:fffffffffffffe80 local96
+/home/seyfarth/ebe/32/ebe_as_32.inc:102    *ABS*:fffffffffffffe7c local97
+/home/seyfarth/ebe/32/ebe_as_32.inc:103    *ABS*:fffffffffffffe78 local98
+/home/seyfarth/ebe/32/ebe_as_32.inc:104    *ABS*:fffffffffffffe74 local99
+/home/seyfarth/ebe/32/ebe_as_32.inc:105    *ABS*:fffffffffffffe70 local100
+/home/seyfarth/ebe/32/ebe_as_32.inc:106    *ABS*:0000000000000008 currPar1
+/home/seyfarth/ebe/32/ebe_as_32.inc:107    *ABS*:000000000000000c currPar2
+/home/seyfarth/ebe/32/ebe_as_32.inc:108    *ABS*:0000000000000010 currPar3
+/home/seyfarth/ebe/32/ebe_as_32.inc:109    *ABS*:0000000000000014 currPar4
+/home/seyfarth/ebe/32/ebe_as_32.inc:110    *ABS*:0000000000000018 currPar5
+/home/seyfarth/ebe/32/ebe_as_32.inc:111    *ABS*:000000000000001c currPar6
+/home/seyfarth/ebe/32/ebe_as_32.inc:112    *ABS*:0000000000000020 currPar7
+/home/seyfarth/ebe/32/ebe_as_32.inc:113    *ABS*:0000000000000024 currPar8
+/home/seyfarth/ebe/32/ebe_as_32.inc:114    *ABS*:0000000000000028 currPar9
+/home/seyfarth/ebe/32/ebe_as_32.inc:115    *ABS*:000000000000002c currPar10
+/home/seyfarth/ebe/32/ebe_as_32.inc:116    *ABS*:0000000000000030 currPar11
+/home/seyfarth/ebe/32/ebe_as_32.inc:117    *ABS*:0000000000000034 currPar12
+/home/seyfarth/ebe/32/ebe_as_32.inc:118    *ABS*:0000000000000038 currPar13
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 8
+
+
+/home/seyfarth/ebe/32/ebe_as_32.inc:119    *ABS*:000000000000003c currPar14
+/home/seyfarth/ebe/32/ebe_as_32.inc:120    *ABS*:0000000000000040 currPar15
+/home/seyfarth/ebe/32/ebe_as_32.inc:121    *ABS*:0000000000000044 currPar16
+/home/seyfarth/ebe/32/ebe_as_32.inc:122    *ABS*:0000000000000048 currPar17
+/home/seyfarth/ebe/32/ebe_as_32.inc:123    *ABS*:000000000000004c currPar18
+/home/seyfarth/ebe/32/ebe_as_32.inc:124    *ABS*:0000000000000050 currPar19
+/home/seyfarth/ebe/32/ebe_as_32.inc:125    *ABS*:0000000000000054 currPar20
+/home/seyfarth/ebe/32/ebe_as_32.inc:126    *ABS*:0000000000000058 currPar21
+/home/seyfarth/ebe/32/ebe_as_32.inc:127    *ABS*:000000000000005c currPar22
+/home/seyfarth/ebe/32/ebe_as_32.inc:128    *ABS*:0000000000000060 currPar23
+/home/seyfarth/ebe/32/ebe_as_32.inc:129    *ABS*:0000000000000064 currPar24
+/home/seyfarth/ebe/32/ebe_as_32.inc:130    *ABS*:0000000000000068 currPar25
+/home/seyfarth/ebe/32/ebe_as_32.inc:131    *ABS*:000000000000006c currPar26
+/home/seyfarth/ebe/32/ebe_as_32.inc:132    *ABS*:0000000000000070 currPar27
+/home/seyfarth/ebe/32/ebe_as_32.inc:133    *ABS*:0000000000000074 currPar28
+/home/seyfarth/ebe/32/ebe_as_32.inc:134    *ABS*:0000000000000078 currPar29
+/home/seyfarth/ebe/32/ebe_as_32.inc:135    *ABS*:000000000000007c currPar30
+/home/seyfarth/ebe/32/ebe_as_32.inc:136    *ABS*:0000000000000080 currPar31
+/home/seyfarth/ebe/32/ebe_as_32.inc:137    *ABS*:0000000000000084 currPar32
+/home/seyfarth/ebe/32/ebe_as_32.inc:138    *ABS*:0000000000000088 currPar33
+/home/seyfarth/ebe/32/ebe_as_32.inc:139    *ABS*:000000000000008c currPar34
+/home/seyfarth/ebe/32/ebe_as_32.inc:140    *ABS*:0000000000000090 currPar35
+/home/seyfarth/ebe/32/ebe_as_32.inc:141    *ABS*:0000000000000094 currPar36
+/home/seyfarth/ebe/32/ebe_as_32.inc:142    *ABS*:0000000000000098 currPar37
+/home/seyfarth/ebe/32/ebe_as_32.inc:143    *ABS*:000000000000009c currPar38
+/home/seyfarth/ebe/32/ebe_as_32.inc:144    *ABS*:00000000000000a0 currPar39
+/home/seyfarth/ebe/32/ebe_as_32.inc:145    *ABS*:00000000000000a4 currPar40
+/home/seyfarth/ebe/32/ebe_as_32.inc:146    *ABS*:00000000000000a8 currPar41
+/home/seyfarth/ebe/32/ebe_as_32.inc:147    *ABS*:00000000000000ac currPar42
+/home/seyfarth/ebe/32/ebe_as_32.inc:148    *ABS*:00000000000000b0 currPar43
+/home/seyfarth/ebe/32/ebe_as_32.inc:149    *ABS*:00000000000000b4 currPar44
+/home/seyfarth/ebe/32/ebe_as_32.inc:150    *ABS*:00000000000000b8 currPar45
+/home/seyfarth/ebe/32/ebe_as_32.inc:151    *ABS*:00000000000000bc currPar46
+/home/seyfarth/ebe/32/ebe_as_32.inc:152    *ABS*:00000000000000c0 currPar47
+/home/seyfarth/ebe/32/ebe_as_32.inc:153    *ABS*:00000000000000c4 currPar48
+/home/seyfarth/ebe/32/ebe_as_32.inc:154    *ABS*:00000000000000c8 currPar49
+/home/seyfarth/ebe/32/ebe_as_32.inc:155    *ABS*:00000000000000cc currPar50
+/home/seyfarth/ebe/32/ebe_as_32.inc:156    *ABS*:00000000000000d0 currPar51
+/home/seyfarth/ebe/32/ebe_as_32.inc:157    *ABS*:00000000000000d4 currPar52
+/home/seyfarth/ebe/32/ebe_as_32.inc:158    *ABS*:00000000000000d8 currPar53
+/home/seyfarth/ebe/32/ebe_as_32.inc:159    *ABS*:00000000000000dc currPar54
+/home/seyfarth/ebe/32/ebe_as_32.inc:160    *ABS*:00000000000000e0 currPar55
+/home/seyfarth/ebe/32/ebe_as_32.inc:161    *ABS*:00000000000000e4 currPar56
+/home/seyfarth/ebe/32/ebe_as_32.inc:162    *ABS*:00000000000000e8 currPar57
+/home/seyfarth/ebe/32/ebe_as_32.inc:163    *ABS*:00000000000000ec currPar58
+/home/seyfarth/ebe/32/ebe_as_32.inc:164    *ABS*:00000000000000f0 currPar59
+/home/seyfarth/ebe/32/ebe_as_32.inc:165    *ABS*:00000000000000f4 currPar60
+/home/seyfarth/ebe/32/ebe_as_32.inc:166    *ABS*:00000000000000f8 currPar61
+/home/seyfarth/ebe/32/ebe_as_32.inc:167    *ABS*:00000000000000fc currPar62
+/home/seyfarth/ebe/32/ebe_as_32.inc:168    *ABS*:0000000000000100 currPar63
+/home/seyfarth/ebe/32/ebe_as_32.inc:169    *ABS*:0000000000000104 currPar64
+/home/seyfarth/ebe/32/ebe_as_32.inc:170    *ABS*:0000000000000108 currPar65
+/home/seyfarth/ebe/32/ebe_as_32.inc:171    *ABS*:000000000000010c currPar66
+/home/seyfarth/ebe/32/ebe_as_32.inc:172    *ABS*:0000000000000110 currPar67
+/home/seyfarth/ebe/32/ebe_as_32.inc:173    *ABS*:0000000000000114 currPar68
+/home/seyfarth/ebe/32/ebe_as_32.inc:174    *ABS*:0000000000000118 currPar69
+/home/seyfarth/ebe/32/ebe_as_32.inc:175    *ABS*:000000000000011c currPar70
+GAS LISTING /home/seyfarth/ebe/32/subsetsum.asm 			page 9
+
+
+/home/seyfarth/ebe/32/ebe_as_32.inc:176    *ABS*:0000000000000120 currPar71
+/home/seyfarth/ebe/32/ebe_as_32.inc:177    *ABS*:0000000000000124 currPar72
+/home/seyfarth/ebe/32/ebe_as_32.inc:178    *ABS*:0000000000000128 currPar73
+/home/seyfarth/ebe/32/ebe_as_32.inc:179    *ABS*:000000000000012c currPar74
+/home/seyfarth/ebe/32/ebe_as_32.inc:180    *ABS*:0000000000000130 currPar75
+/home/seyfarth/ebe/32/ebe_as_32.inc:181    *ABS*:0000000000000134 currPar76
+/home/seyfarth/ebe/32/ebe_as_32.inc:182    *ABS*:0000000000000138 currPar77
+/home/seyfarth/ebe/32/ebe_as_32.inc:183    *ABS*:000000000000013c currPar78
+/home/seyfarth/ebe/32/ebe_as_32.inc:184    *ABS*:0000000000000140 currPar79
+/home/seyfarth/ebe/32/ebe_as_32.inc:185    *ABS*:0000000000000144 currPar80
+/home/seyfarth/ebe/32/ebe_as_32.inc:186    *ABS*:0000000000000148 currPar81
+/home/seyfarth/ebe/32/ebe_as_32.inc:187    *ABS*:000000000000014c currPar82
+/home/seyfarth/ebe/32/ebe_as_32.inc:188    *ABS*:0000000000000150 currPar83
+/home/seyfarth/ebe/32/ebe_as_32.inc:189    *ABS*:0000000000000154 currPar84
+/home/seyfarth/ebe/32/ebe_as_32.inc:190    *ABS*:0000000000000158 currPar85
+/home/seyfarth/ebe/32/ebe_as_32.inc:191    *ABS*:000000000000015c currPar86
+/home/seyfarth/ebe/32/ebe_as_32.inc:192    *ABS*:0000000000000160 currPar87
+/home/seyfarth/ebe/32/ebe_as_32.inc:193    *ABS*:0000000000000164 currPar88
+/home/seyfarth/ebe/32/ebe_as_32.inc:194    *ABS*:0000000000000168 currPar89
+/home/seyfarth/ebe/32/ebe_as_32.inc:195    *ABS*:000000000000016c currPar90
+/home/seyfarth/ebe/32/ebe_as_32.inc:196    *ABS*:0000000000000170 currPar91
+/home/seyfarth/ebe/32/ebe_as_32.inc:197    *ABS*:0000000000000174 currPar92
+/home/seyfarth/ebe/32/ebe_as_32.inc:198    *ABS*:0000000000000178 currPar93
+/home/seyfarth/ebe/32/ebe_as_32.inc:199    *ABS*:000000000000017c currPar94
+/home/seyfarth/ebe/32/ebe_as_32.inc:200    *ABS*:0000000000000180 currPar95
+/home/seyfarth/ebe/32/ebe_as_32.inc:201    *ABS*:0000000000000184 currPar96
+/home/seyfarth/ebe/32/ebe_as_32.inc:202    *ABS*:0000000000000188 currPar97
+/home/seyfarth/ebe/32/ebe_as_32.inc:203    *ABS*:000000000000018c currPar98
+/home/seyfarth/ebe/32/ebe_as_32.inc:204    *ABS*:0000000000000190 currPar99
+/home/seyfarth/ebe/32/ebe_as_32.inc:205    *ABS*:0000000000000194 currPar100
+/home/seyfarth/ebe/32/subsetsum.asm:10     .text:0000000000000000 main
+/home/seyfarth/ebe/32/subsetsum.asm:13     *ABS*:0000000000000004 frame_size
+/home/seyfarth/ebe/32/subsetsum.asm:51     .data:0000000000000000 n
+/home/seyfarth/ebe/32/subsetsum.asm:52     .data:0000000000000004 argv
+/home/seyfarth/ebe/32/subsetsum.asm:53     .data:0000000000000008 target
+/home/seyfarth/ebe/32/subsetsum.asm:160    .text:000000000000013c build_arrays
+/home/seyfarth/ebe/32/subsetsum.asm:55     .data:0000000000000010 used
+/home/seyfarth/ebe/32/subsetsum.asm:54     .data:000000000000000c values
+/home/seyfarth/ebe/32/subsetsum.asm:102    .text:00000000000000cc subsetsum
+/home/seyfarth/ebe/32/subsetsum.asm:44     .text:0000000000000065 .no_solution
+/home/seyfarth/ebe/32/subsetsum.asm:62     .text:0000000000000071 print_solution
+/home/seyfarth/ebe/32/subsetsum.asm:47     .text:000000000000006f .done
+/home/seyfarth/ebe/32/subsetsum.asm:59     .data:0000000000000020 fail
+/home/seyfarth/ebe/32/subsetsum.asm:56     .data:0000000000000014 fmt1
+/home/seyfarth/ebe/32/subsetsum.asm:57     .data:000000000000001a fmt2
+/home/seyfarth/ebe/32/subsetsum.asm:58     .data:000000000000001e fmt3
+/home/seyfarth/ebe/32/subsetsum.asm:79     .text:0000000000000098 .print_top
+/home/seyfarth/ebe/32/subsetsum.asm:88     .text:00000000000000b1 .skipit
+/home/seyfarth/ebe/32/subsetsum.asm:119    .text:00000000000000e9 try_next
+/home/seyfarth/ebe/32/subsetsum.asm:155    .text:000000000000013a .done_sss
+/home/seyfarth/ebe/32/subsetsum.asm:182    .text:0000000000000173 .top
+
+UNDEFINED SYMBOLS
+atoi
+printf
+malloc

@@ -235,6 +235,18 @@ void MainWindow::checkTools()
         } else {
             missingCritical += "gdb";
         }
+#if defined(Q_OS_WIN)
+        if (!toolExists("nm")) {
+            QString message;
+
+            message = "<b>" +
+                tr("It seems that ebetools needs to be installed") +
+                "</b>";
+            int ret = QMessageBox::warning(this, tr("Ebetools"), message,
+                QMessageBox::Ok );
+            exit(1);
+        }
+#endif
 #if defined(Q_OS_BSD4)
         if (!toolExists("cc")) missingCritical += "cc";
 #else
@@ -851,6 +863,7 @@ void MainWindow::createStatusBar()
 void MainWindow::initializePreferredWindowSize()
 {
     QRect rect = QApplication::desktop()->availableGeometry();
+    qDebug() << "aval Geo" << rect;
 
     if (userSetGeometry && userHeight != 0) {
         rect.setHeight(userHeight);
@@ -859,8 +872,8 @@ void MainWindow::initializePreferredWindowSize()
         rect.setWidth(userWidth);
     }
 
-    preferredWindowSize.setWidth(rect.width());
-    preferredWindowSize.setHeight(rect.height());
+    preferredWindowSize.setWidth(rect.width()*9/10);
+    preferredWindowSize.setHeight(rect.height()*9/10);
 }
 
 void MainWindow::createDockWindows()

@@ -1,0 +1,392 @@
+     1                                 %line 14+1 /home/seyfarth/ebe/aal.inc
+     2                                 
+     3                                 
+     4                                 %line 22+1 /home/seyfarth/ebe/aal.inc
+     5                                 
+     6                                 
+     7                                 %line 29+1 /home/seyfarth/ebe/aal.inc
+     8                                 
+     9                                 
+    10                                 %line 36+1 /home/seyfarth/ebe/aal.inc
+    11                                 
+    12                                 
+    13                                 %line 43+1 /home/seyfarth/ebe/aal.inc
+    14                                 
+    15                                 
+    16                                 %line 50+1 /home/seyfarth/ebe/aal.inc
+    17                                 
+    18                                 %line 57+1 /home/seyfarth/ebe/aal.inc
+    19                                 
+    20                                 %line 63+1 /home/seyfarth/ebe/aal.inc
+    21                                 
+    22                                 %line 69+1 /home/seyfarth/ebe/aal.inc
+    23                                 
+    24                                 
+    25                                 %line 196+1 /home/seyfarth/ebe/aal.inc
+    26                                 
+    27                                 %line 202+1 /home/seyfarth/ebe/aal.inc
+    28                                 
+    29                                 %line 209+1 /home/seyfarth/ebe/aal.inc
+    30                                 
+    31                                 %line 216+1 /home/seyfarth/ebe/aal.inc
+    32                                 
+    33                                 %line 222+1 /home/seyfarth/ebe/aal.inc
+    34                                 
+    35                                 %line 228+1 /home/seyfarth/ebe/aal.inc
+    36                                 
+    37                                 
+    38                                 
+    39                                 
+    40                                 
+    41                                 %line 245+1 /home/seyfarth/ebe/aal.inc
+    42                                 
+    43                                 
+    44                                 
+    45                                 
+    46                                 
+    47                                 
+    48                                 
+    49                                 
+    50                                 
+    51                                 
+    52                                 %line 262+1 /home/seyfarth/ebe/aal.inc
+    53                                 local1 equ -8*1
+    54                                 %line 262+0 /home/seyfarth/ebe/aal.inc
+    55                                 local2 equ -8*2
+    56                                 local3 equ -8*3
+    57                                 local4 equ -8*4
+    58                                 local5 equ -8*5
+    59                                 local6 equ -8*6
+    60                                 local7 equ -8*7
+    61                                 local8 equ -8*8
+    62                                 local9 equ -8*9
+    63                                 local10 equ -8*10
+    64                                 local11 equ -8*11
+    65                                 local12 equ -8*12
+    66                                 local13 equ -8*13
+    67                                 local14 equ -8*14
+    68                                 local15 equ -8*15
+    69                                 local16 equ -8*16
+    70                                 local17 equ -8*17
+    71                                 local18 equ -8*18
+    72                                 local19 equ -8*19
+    73                                 local20 equ -8*20
+    74                                 local21 equ -8*21
+    75                                 local22 equ -8*22
+    76                                 local23 equ -8*23
+    77                                 local24 equ -8*24
+    78                                 local25 equ -8*25
+    79                                 local26 equ -8*26
+    80                                 local27 equ -8*27
+    81                                 local28 equ -8*28
+    82                                 local29 equ -8*29
+    83                                 local30 equ -8*30
+    84                                 local31 equ -8*31
+    85                                 local32 equ -8*32
+    86                                 local33 equ -8*33
+    87                                 local34 equ -8*34
+    88                                 local35 equ -8*35
+    89                                 local36 equ -8*36
+    90                                 local37 equ -8*37
+    91                                 local38 equ -8*38
+    92                                 local39 equ -8*39
+    93                                 local40 equ -8*40
+    94                                 local41 equ -8*41
+    95                                 local42 equ -8*42
+    96                                 local43 equ -8*43
+    97                                 local44 equ -8*44
+    98                                 local45 equ -8*45
+    99                                 local46 equ -8*46
+   100                                 local47 equ -8*47
+   101                                 local48 equ -8*48
+   102                                 local49 equ -8*49
+   103                                 local50 equ -8*50
+   104                                 local51 equ -8*51
+   105                                 local52 equ -8*52
+   106                                 local53 equ -8*53
+   107                                 local54 equ -8*54
+   108                                 local55 equ -8*55
+   109                                 local56 equ -8*56
+   110                                 local57 equ -8*57
+   111                                 local58 equ -8*58
+   112                                 local59 equ -8*59
+   113                                 local60 equ -8*60
+   114                                 local61 equ -8*61
+   115                                 local62 equ -8*62
+   116                                 local63 equ -8*63
+   117                                 local64 equ -8*64
+   118                                 local65 equ -8*65
+   119                                 local66 equ -8*66
+   120                                 local67 equ -8*67
+   121                                 local68 equ -8*68
+   122                                 local69 equ -8*69
+   123                                 local70 equ -8*70
+   124                                 local71 equ -8*71
+   125                                 local72 equ -8*72
+   126                                 local73 equ -8*73
+   127                                 local74 equ -8*74
+   128                                 local75 equ -8*75
+   129                                 local76 equ -8*76
+   130                                 local77 equ -8*77
+   131                                 local78 equ -8*78
+   132                                 local79 equ -8*79
+   133                                 local80 equ -8*80
+   134                                 local81 equ -8*81
+   135                                 local82 equ -8*82
+   136                                 local83 equ -8*83
+   137                                 local84 equ -8*84
+   138                                 local85 equ -8*85
+   139                                 local86 equ -8*86
+   140                                 local87 equ -8*87
+   141                                 local88 equ -8*88
+   142                                 local89 equ -8*89
+   143                                 local90 equ -8*90
+   144                                 local91 equ -8*91
+   145                                 local92 equ -8*92
+   146                                 local93 equ -8*93
+   147                                 local94 equ -8*94
+   148                                 local95 equ -8*95
+   149                                 local96 equ -8*96
+   150                                 local97 equ -8*97
+   151                                 local98 equ -8*98
+   152                                 local99 equ -8*99
+   153                                 local100 equ -8*100
+   154                                 %line 263+1 /home/seyfarth/ebe/aal.inc
+   155                                 
+   156                                 
+   157                                 
+   158                                 
+   159                                 
+   160                                 
+   161                                 
+   162                                 
+   163                                 
+   164                                 
+   165                                 
+   166                                 %line 281+1 /home/seyfarth/ebe/aal.inc
+   167                                 call7 equ 8*(7-7)
+   168                                 %line 281+0 /home/seyfarth/ebe/aal.inc
+   169                                 call8 equ 8*(8-7)
+   170                                 call9 equ 8*(9-7)
+   171                                 call10 equ 8*(10-7)
+   172                                 call11 equ 8*(11-7)
+   173                                 call12 equ 8*(12-7)
+   174                                 call13 equ 8*(13-7)
+   175                                 call14 equ 8*(14-7)
+   176                                 call15 equ 8*(15-7)
+   177                                 call16 equ 8*(16-7)
+   178                                 call17 equ 8*(17-7)
+   179                                 call18 equ 8*(18-7)
+   180                                 call19 equ 8*(19-7)
+   181                                 call20 equ 8*(20-7)
+   182                                 call21 equ 8*(21-7)
+   183                                 call22 equ 8*(22-7)
+   184                                 call23 equ 8*(23-7)
+   185                                 call24 equ 8*(24-7)
+   186                                 call25 equ 8*(25-7)
+   187                                 call26 equ 8*(26-7)
+   188                                 call27 equ 8*(27-7)
+   189                                 call28 equ 8*(28-7)
+   190                                 call29 equ 8*(29-7)
+   191                                 call30 equ 8*(30-7)
+   192                                 call31 equ 8*(31-7)
+   193                                 call32 equ 8*(32-7)
+   194                                 call33 equ 8*(33-7)
+   195                                 call34 equ 8*(34-7)
+   196                                 call35 equ 8*(35-7)
+   197                                 call36 equ 8*(36-7)
+   198                                 call37 equ 8*(37-7)
+   199                                 call38 equ 8*(38-7)
+   200                                 call39 equ 8*(39-7)
+   201                                 call40 equ 8*(40-7)
+   202                                 call41 equ 8*(41-7)
+   203                                 call42 equ 8*(42-7)
+   204                                 call43 equ 8*(43-7)
+   205                                 call44 equ 8*(44-7)
+   206                                 call45 equ 8*(45-7)
+   207                                 call46 equ 8*(46-7)
+   208                                 call47 equ 8*(47-7)
+   209                                 call48 equ 8*(48-7)
+   210                                 call49 equ 8*(49-7)
+   211                                 call50 equ 8*(50-7)
+   212                                 call51 equ 8*(51-7)
+   213                                 call52 equ 8*(52-7)
+   214                                 call53 equ 8*(53-7)
+   215                                 call54 equ 8*(54-7)
+   216                                 call55 equ 8*(55-7)
+   217                                 call56 equ 8*(56-7)
+   218                                 call57 equ 8*(57-7)
+   219                                 call58 equ 8*(58-7)
+   220                                 call59 equ 8*(59-7)
+   221                                 call60 equ 8*(60-7)
+   222                                 call61 equ 8*(61-7)
+   223                                 call62 equ 8*(62-7)
+   224                                 call63 equ 8*(63-7)
+   225                                 call64 equ 8*(64-7)
+   226                                 call65 equ 8*(65-7)
+   227                                 call66 equ 8*(66-7)
+   228                                 call67 equ 8*(67-7)
+   229                                 call68 equ 8*(68-7)
+   230                                 call69 equ 8*(69-7)
+   231                                 call70 equ 8*(70-7)
+   232                                 call71 equ 8*(71-7)
+   233                                 call72 equ 8*(72-7)
+   234                                 call73 equ 8*(73-7)
+   235                                 call74 equ 8*(74-7)
+   236                                 call75 equ 8*(75-7)
+   237                                 call76 equ 8*(76-7)
+   238                                 call77 equ 8*(77-7)
+   239                                 call78 equ 8*(78-7)
+   240                                 call79 equ 8*(79-7)
+   241                                 call80 equ 8*(80-7)
+   242                                 call81 equ 8*(81-7)
+   243                                 call82 equ 8*(82-7)
+   244                                 call83 equ 8*(83-7)
+   245                                 call84 equ 8*(84-7)
+   246                                 call85 equ 8*(85-7)
+   247                                 call86 equ 8*(86-7)
+   248                                 call87 equ 8*(87-7)
+   249                                 call88 equ 8*(88-7)
+   250                                 call89 equ 8*(89-7)
+   251                                 call90 equ 8*(90-7)
+   252                                 call91 equ 8*(91-7)
+   253                                 call92 equ 8*(92-7)
+   254                                 call93 equ 8*(93-7)
+   255                                 call94 equ 8*(94-7)
+   256                                 call95 equ 8*(95-7)
+   257                                 call96 equ 8*(96-7)
+   258                                 call97 equ 8*(97-7)
+   259                                 call98 equ 8*(98-7)
+   260                                 call99 equ 8*(99-7)
+   261                                 call100 equ 8*(100-7)
+   262                                 %line 282+1 /home/seyfarth/ebe/aal.inc
+   263                                 
+   264                                 
+   265                                 
+   266                                 
+   267                                 
+   268                                 
+   269                                 
+   270                                 
+   271                                 
+   272                                 
+   273                                 
+   274                                 %line 296+1 /home/seyfarth/ebe/aal.inc
+   275                                 
+   276                                 %line 301+1 /home/seyfarth/ebe/aal.inc
+   277                                 mypar7 equ 16+8*(7-7)
+   278                                 %line 301+0 /home/seyfarth/ebe/aal.inc
+   279                                 mypar8 equ 16+8*(8-7)
+   280                                 mypar9 equ 16+8*(9-7)
+   281                                 mypar10 equ 16+8*(10-7)
+   282                                 mypar11 equ 16+8*(11-7)
+   283                                 mypar12 equ 16+8*(12-7)
+   284                                 mypar13 equ 16+8*(13-7)
+   285                                 mypar14 equ 16+8*(14-7)
+   286                                 mypar15 equ 16+8*(15-7)
+   287                                 mypar16 equ 16+8*(16-7)
+   288                                 mypar17 equ 16+8*(17-7)
+   289                                 mypar18 equ 16+8*(18-7)
+   290                                 mypar19 equ 16+8*(19-7)
+   291                                 mypar20 equ 16+8*(20-7)
+   292                                 mypar21 equ 16+8*(21-7)
+   293                                 mypar22 equ 16+8*(22-7)
+   294                                 mypar23 equ 16+8*(23-7)
+   295                                 mypar24 equ 16+8*(24-7)
+   296                                 mypar25 equ 16+8*(25-7)
+   297                                 mypar26 equ 16+8*(26-7)
+   298                                 mypar27 equ 16+8*(27-7)
+   299                                 mypar28 equ 16+8*(28-7)
+   300                                 mypar29 equ 16+8*(29-7)
+   301                                 mypar30 equ 16+8*(30-7)
+   302                                 mypar31 equ 16+8*(31-7)
+   303                                 mypar32 equ 16+8*(32-7)
+   304                                 mypar33 equ 16+8*(33-7)
+   305                                 mypar34 equ 16+8*(34-7)
+   306                                 mypar35 equ 16+8*(35-7)
+   307                                 mypar36 equ 16+8*(36-7)
+   308                                 mypar37 equ 16+8*(37-7)
+   309                                 mypar38 equ 16+8*(38-7)
+   310                                 mypar39 equ 16+8*(39-7)
+   311                                 mypar40 equ 16+8*(40-7)
+   312                                 mypar41 equ 16+8*(41-7)
+   313                                 mypar42 equ 16+8*(42-7)
+   314                                 mypar43 equ 16+8*(43-7)
+   315                                 mypar44 equ 16+8*(44-7)
+   316                                 mypar45 equ 16+8*(45-7)
+   317                                 mypar46 equ 16+8*(46-7)
+   318                                 mypar47 equ 16+8*(47-7)
+   319                                 mypar48 equ 16+8*(48-7)
+   320                                 mypar49 equ 16+8*(49-7)
+   321                                 mypar50 equ 16+8*(50-7)
+   322                                 mypar51 equ 16+8*(51-7)
+   323                                 mypar52 equ 16+8*(52-7)
+   324                                 mypar53 equ 16+8*(53-7)
+   325                                 mypar54 equ 16+8*(54-7)
+   326                                 mypar55 equ 16+8*(55-7)
+   327                                 mypar56 equ 16+8*(56-7)
+   328                                 mypar57 equ 16+8*(57-7)
+   329                                 mypar58 equ 16+8*(58-7)
+   330                                 mypar59 equ 16+8*(59-7)
+   331                                 mypar60 equ 16+8*(60-7)
+   332                                 mypar61 equ 16+8*(61-7)
+   333                                 mypar62 equ 16+8*(62-7)
+   334                                 mypar63 equ 16+8*(63-7)
+   335                                 mypar64 equ 16+8*(64-7)
+   336                                 mypar65 equ 16+8*(65-7)
+   337                                 mypar66 equ 16+8*(66-7)
+   338                                 mypar67 equ 16+8*(67-7)
+   339                                 mypar68 equ 16+8*(68-7)
+   340                                 mypar69 equ 16+8*(69-7)
+   341                                 mypar70 equ 16+8*(70-7)
+   342                                 mypar71 equ 16+8*(71-7)
+   343                                 mypar72 equ 16+8*(72-7)
+   344                                 mypar73 equ 16+8*(73-7)
+   345                                 mypar74 equ 16+8*(74-7)
+   346                                 mypar75 equ 16+8*(75-7)
+   347                                 mypar76 equ 16+8*(76-7)
+   348                                 mypar77 equ 16+8*(77-7)
+   349                                 mypar78 equ 16+8*(78-7)
+   350                                 mypar79 equ 16+8*(79-7)
+   351                                 mypar80 equ 16+8*(80-7)
+   352                                 mypar81 equ 16+8*(81-7)
+   353                                 mypar82 equ 16+8*(82-7)
+   354                                 mypar83 equ 16+8*(83-7)
+   355                                 mypar84 equ 16+8*(84-7)
+   356                                 mypar85 equ 16+8*(85-7)
+   357                                 mypar86 equ 16+8*(86-7)
+   358                                 mypar87 equ 16+8*(87-7)
+   359                                 mypar88 equ 16+8*(88-7)
+   360                                 mypar89 equ 16+8*(89-7)
+   361                                 mypar90 equ 16+8*(90-7)
+   362                                 mypar91 equ 16+8*(91-7)
+   363                                 mypar92 equ 16+8*(92-7)
+   364                                 mypar93 equ 16+8*(93-7)
+   365                                 mypar94 equ 16+8*(94-7)
+   366                                 mypar95 equ 16+8*(95-7)
+   367                                 mypar96 equ 16+8*(96-7)
+   368                                 mypar97 equ 16+8*(97-7)
+   369                                 mypar98 equ 16+8*(98-7)
+   370                                 mypar99 equ 16+8*(99-7)
+   371                                 mypar100 equ 16+8*(100-7)
+   372                                 %line 302+1 /home/seyfarth/ebe/aal.inc
+   373                                 
+   374                                 %line 2+1 /home/seyfarth/ebe/sample.asm
+   375                                 [segment .data]
+   376 00000000 48656C6C6F20776F72-    message db "Hello world!",0x0a,0
+   377 00000000 6C64210A00         
+   378                                 [segment .text]
+   379                                 [global main]
+   380                                 [extern printf]
+   381                                 
+   382                                 main:
+   383 00000000 55                      push rbp
+   384 00000001 4889E5                  mov rbp, rsp
+   385                                 
+   386 00000004 488D3C25[00000000]      lea rdi, [message]
+   387                                 %line 14+1 /home/seyfarth/ebe/sample.asm
+   388 0000000C 31C0                    xor eax, eax
+   389                                 %line 16+1 /home/seyfarth/ebe/sample.asm
+   390 0000000E E8(F6FFFFFF)            call printf
+   391 00000013 C9                      leave
+   392 00000014 C3                      ret

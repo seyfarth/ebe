@@ -1,0 +1,148 @@
+        segment .data
+wc_print: db "lines %ld, words %ld, chars %ld",0x0a,0
+read_mode: db "r",0
+file_print: db "%s: ",0
+no_file: db "no such file",0x0a,0
+
+        segment .bss
+s       resb    1024
+
+        segment .text
+        global  main
+        global  wc_file
+        extern  fopen, fclose, printf, fgets
+
+newline: equ     0x0a
+tab:     equ     0x08
+space:   equ     ' '
+
+;
+;       wc_file will need an array of chars to use with fgets
+;       This will be a local array on the stack
+
+wc_file:
+.size:  equ     1024
+.fp     equ     local1
+.in_word equ    local2
+.sav1   equ     local3
+.sav2   equ     local4
+.sav3   equ     local5
+        push    rbp
+        mov     rbp, rsp
+        frame   1, 7, 4
+        sub     rsp, frame_size
+        mov     [rbp+.sav1], sav1
+        mov     [rbp+.sav2], sav2
+        mov     [rbp+.sav3], sav3
+        mov     [rbp+.fp], par1
+        xor     sav1d, sav1d        ; set char count to 0
+        xor     sav3d, sav3d        ; set word count to 0
+        xor     sav2d, sav2d        ; set line count to 0
+.read_line:
+        lea     par1, [s]
+        mov     par2, .size
+        mov     par3, [rbp+.fp]
+        call    fgets
+        cmp     acc, 0              ; test for end of file
+        je      .done
+        xor     scr1, scr1          ; in word
+        lea     scr2, [s]           ; pointer into s
+.get_char:
+        mov     accb, [scr2]        ; get next char of s
+        inc     scr2                ; advance to be ready for next char
+        cmp     accb, 0             ; test for end of string
+        jne     .test_tab
+        add     sav3d, scr1d        ; add in_word to word count
+        xor     scr1d, scr1d
+        jmp     .read_line
+.test_tab:
+        inc     sav1d               ; increment character count
+        cmp     accb, tab           ; compare with tab character
+        je      .tab_or_space
+        cmp     accb, space
+        je      .tab_or_space
+        cmp     accb, newline
+        je      .new_line
+        mov     scr1d, 1
+        jmp     .get_char
+.new_line:
+        inc     sav2                ; increment line count
+.tab_or_space:
+        add     sav3d, scr1d        ; add in_word to word count
+        xor     scr1d, scr1d        ; set in_word to 0
+        jmp     .get_char
+
+.done:
+        mov     par1, wc_print
+        mov     par2, sav2
+        mov     par3, sav3
+        mov     par4, sav1
+        xor     accd, accd
+        call    printf
+        mov     sav1, [rbp+.sav1]
+        mov     sav2, [rbp+.sav2]
+        mov     sav3, [rbp+.sav3]
+
+        leave
+        ret
+main:
+        ; The 2 arguments to main are argc and argv
+        ; argc, the argument count, is in par1
+        ; argv, a pointer to an array of string pointers, is in par2
+        ; It would be possible to loop based on argc, but it is also
+        ; easy to loop until a NULL pointer is reached in the argv array.
+
+.argc:   equ     local1
+.argv:   equ     local2
+.fp:     equ     local3
+.name    equ     local4
+        push    rbp
+        mov     rbp, rsp
+        frame   2, 4, 3
+        sub     rsp, frame_size
+        mov     [rbp+.argc], par1   ; save argc in a local variable
+        add     par2, 8             ; skip argv[0]
+        mov     [rbp+.argv], par2   ; save argv in a local variable
+
+        cmp     par1d, 1            ; Do we have filenames?
+        jne     .file_loop          ; If not, process list of names
+        ;mov     par1, [stdin]       ; Need to process stdin
+        ;call    wc_file
+        jmp     .end
+
+.file_loop:   
+        mov     par2, [rbp+.argv]
+        mov     par2, [par2]
+        cmp     par2, 0
+        je      .end
+        mov     par1, file_print
+        mov     [rbp+.name], par2
+        xor     accd, accd
+        call    printf
+
+        mov     par1, [rbp+.name]
+        lea     par2, [read_mode]
+        call    fopen
+        cmp     rax, 0
+        jne      .opened
+        mov     par1, no_file
+        xor     accd, accd
+        call    printf
+        jmp     .skip_close
+.opened:
+        mov     [rbp+.fp], rax
+        mov     par1, rax
+        call    wc_file
+        mov     par1, [rbp+.fp]
+        call    fclose
+
+.skip_close:
+        mov     par3, [rbp+.argv]
+        add     par3, 8
+        mov     [rbp+.argv], par3
+        jmp     .file_loop          ; try for more strings
+
+.end:
+        xor     accd, accd
+        leave                       ; Normal exit
+        ret                         

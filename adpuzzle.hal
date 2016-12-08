@@ -1,0 +1,256 @@
+        extern  printf
+
+%define SIZE 1000000
+
+
+segment .bss
+;       int dist[SIZE];
+;       int hist[SIZE];
+
+dist:   resd    SIZE
+hist:   resd    SIZE
+
+        global  dist, hist, init
+
+        segment .text
+;   void init(void)
+;   {
+;       int i;
+;   
+;       for ( i = 0; i < SIZE; i++ ) dist[i] = -1;
+;       for ( i = 0; i < SIZE; i++ ) hist[i] = 0;
+;   }
+init:
+        push    rbp
+        mov     rbp,rsp
+        frame   0, 1
+        sub     rsp, frame_size
+        mov     [rbp+local1], rdi ; prepare for using stosd
+                                  ; avoid par1 (Linux) and sav6 (Windows)
+        mov     scr1, SIZE
+        mov     accd,-1
+        cld
+        mov     rdi,dist
+init_loop:
+        stosd
+        dec     scr1
+        jg      init_loop
+        mov     scr1, SIZE
+        mov     accd,0
+        mov     rdi,hist
+init_loop2:
+        stosd
+        dec     scr1
+        jg      init_loop2
+        mov     rdi, [rbp+local1] ; restore rdi for safety
+        leave
+        ret
+;   
+;   void compute_dist ( int start, int incr, int distance )
+
+        global compute_dist
+compute_dist:
+.start   equ     local1
+.incr    equ     local2
+.distance equ    local3
+
+        push    rbp
+        mov     rbp, rsp
+        frame   3, 3
+        sub     rsp, frame_size
+    
+;   if ( start < 0 || start >= SIZE ) return;
+        cmp     par1, 0
+        jl      .end_early
+        cmp     par1, SIZE
+        jge     .end_early
+;   
+;       if ( dist[start] >= 0 && dist[start] <= d ) return;
+;   
+        mov     accd, [dist+4*par1]
+        cmp     acc, 0
+        jl      .not_explored_yet
+        cmp     acc, par3           ; dist[start] vs distance
+        jle     .end_early
+
+.not_explored_yet:
+;       dist[start] = distance;
+        mov     [dist+4*par1], par3
+;       compute_dist ( start-incr, incr, distance+1 );
+        mov     [rbp+.start], par1
+        mov     [rbp+.incr], par2
+        mov     [rbp+.distance], par3
+        inc     par3
+        sub     par1, par2
+        call    compute_dist
+        mov     par1, [rbp+.start]
+        mov     par2, [rbp+.incr]
+        mov     par3, [rbp+.distance]
+;       compute_dist ( start*2, incr, distance+1 );
+        sal     par1,1
+        inc     par3
+        call    compute_dist
+.end_early:
+        leave
+        ret
+;   
+
+;   void compute_dist_iter ( int start, int incr, int distance )
+;   {
+
+;       Synonyms for parameters and register locals
+
+        alias       Front, scr1
+        alias       Back, scr2
+        alias       Up, sav1
+        alias       Down, sav2
+        alias       Start, par1
+        alias       Incr, par2
+        alias       Distance, par3
+        alias       Negone, par4
+
+        global  compute_dist_iter
+compute_dist_iter:
+        push    rbp
+        mov     rbp,rsp
+        frame   3, 2
+
+        mov     [rbp+local1], sav1
+        mov     [rbp+local2], sav2
+
+;       int up, down;
+;       int front, back;
+;   
+;       front=0;
+;       back=0;
+        xor     Frontd, Frontd
+        xor     Backd, Backd
+
+;       hist[back] = start;
+;       dist[start] = distance;
+        mov     [hist], dStart
+        mov     [dist+4*qStart], dDistance
+        mov     dNegone,-1              ; for efficiency
+
+;       while ( back >= front ) {
+
+explore_more:
+        cmp     qBack, qFront
+        jl      explored_all
+;           start = hist[front];
+            mov     qStart, [hist+4*qFront]
+;           front++;
+            inc     qFront
+;           distance = dist[start];
+            mov     dDistance, [dist+4*qStart]
+            inc     qDistance       ; increment early
+;           up = start*2;
+            mov     qUp, qStart
+            sal     qUp, 1
+;           if ( up < SIZE && dist[up] == -1 ) {
+            cmp     qUp, SIZE
+            jge     skip_up
+            mov     acc, [dist+4*qUp]
+            cmp     acc, qNegone
+            jne     skip_up
+;               back++;
+                inc     Backq
+;               hist[back] = up;
+                mov     [hist+4*qBack], dUp
+;               dist[up] = distance+1;
+                mov     [dist+4*qUp], dDistance
+;           }
+skip_up:
+;           down = start-incr;
+            mov     qDown, qStart
+            sub     qDown, qIncr
+;           if ( down >= 0 && dist[down] == -1 ) {
+            cmp     qDown, 0
+            jl      skip_down
+            mov     acc,[dist+4*qDown]
+            cmp     acc, qNegone
+            jne     skip_down
+;               back++;
+                inc     qBack
+;               hist[back] = down;
+                mov     [hist+4*qBack], qDown
+;               dist[down] = distance+1;
+                mov     [dist+4*qDown],dDistance
+;           }
+skip_down:
+            jmp     explore_more
+;       }
+;   }
+explored_all:
+        mov     sav1, [rbp+local1]
+        mov     sav2, [rbp+local2]
+        leave
+        ret
+
+
+        segment .rodata
+hist_format:
+        db      "%4d %6d",10,0
+segment .text
+
+;   void histogram(void)
+
+        global histogram
+histogram:
+        push    rbp
+        mov     rbp,rsp
+        push    rsi
+;       for ( i = 0; i < SIZE; i++ ) {
+;           hist[i] = 0;
+;       }
+        mov     rdi,hist
+        mov     rcx,SIZE
+        xor     rax,rax
+clear_hist:
+        stosd
+        loop    clear_hist
+;       for ( i = 0; i < SIZE; i++ ) {
+;           if ( dist[i] >= 0 ) {
+;               hist[dist[i]]++;
+;           }
+;       }
+        mov     rsi,0
+        mov     rcx,SIZE
+for_hist:
+        mov     rdx,[dist+4*rsi]
+        cmp     rdx,0
+        jl      skip_inc
+        inc     qword [hist+4*rdx]
+skip_inc:
+        inc     rsi
+        cmp     rsi,rcx
+        jl      for_hist
+;   
+;       for ( i = 0; i < SIZE; i++ ) {
+;           if ( hist[i] > 0 ) printf("%4d %6d\n",i,hist[i]);
+;       }
+        mov     rsi,0
+for_print:
+        mov     rdx,[hist+4*rsi]
+        cmp     rdx,0
+        jle     skip_print
+        push    rcx
+        push    rsi
+        push    rdx         ; hist[i]
+        push    rsi         ; i
+        push    hist_format
+        xor     eax, eax
+        call    printf
+        add     rsp,12
+        pop     rsi
+        pop     rcx
+skip_print:
+        inc     rsi
+        cmp     rsi,rcx
+        jl      for_print
+
+        pop     rsi
+        mov     rsp,rbp
+        pop     rbp
+        ret
+

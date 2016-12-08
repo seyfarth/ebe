@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta property="og:title" content="ebe Tutorial Quick Introduction"/>
+    <meta property="og:url" content="/pages/ebe-tutorial-quick-introduction.html"/>
+    <meta property="og:site_name" content="Dr. Ray Teaches Assembly"/>
+    <meta property="og:type" content="website"/>
+
+    <link rel="canonical" href="/pages/ebe-tutorial-quick-introduction.html" />
+
+    <title>ebe Tutorial Quick Introduction | Dr. Ray Teaches Assembly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/theme/css/bootstrap-responsive.min.css" type="text/css" />
+
+    <link rel="stylesheet" href="/theme/css/main.css" type="text/css" />
+
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">
+        stLight.options({
+            publisher: "",
+            doNotHash: false,
+            doNotCopy: false,
+            hashAddressBar: false
+        });
+    </script>
+</head>
+
+<body id="index">
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <header id="banner" >
+                <h1>
+                    <a href="/">Dr. Ray Teaches Assembly </a>
+                </h1>
+                <nav class="navbar">
+                    <div class="navbar-inner">
+                        <ul class="nav">
+                            <li><a href="/pages/breakpoints.html">breakpoints</a></li>
+                            <li><a href="/pages/ebe-tutorial.html">ebe Tutorial</a></li>
+                            <li><a href="/pages/ebe-tutorial-quick-introduction.html">ebe Tutorial Quick Introduction</a></li>
+                            <li><a href="/pages/starting-ebe.html">Starting ebe</a></li>
+                            <li ><a href="/category/assembly.html">assembly</a></li>
+                            <li ><a href="/category/ebe.html">ebe</a></li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </header><!-- /#banner -->
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span10 offset1">
+            <div class="row-fluid">
+        
+<section  >    
+    <h1 class="entry-title">ebe Tutorial Quick Introduction</h1>
+    
+    <div class="section" id="starting-and-finishing">
+<h2>Starting and Finishing</h2>
+<p>It is generally best to start at the start. I also think it is important to be
+also finish whatever you start. Both these are generally easy but there are a
+few programs (notably vi) which can be difficult to finish.</p>
+<p>Start ebe by typing in &quot;ebe&quot; in a terminal window. Ebe will start and will
+display a collection of sub-windows and toolbars in the ebe window. The main
+sub-window is the source window which can hold several tabs with separate
+source files. There are also a collection of sub-windows which are &quot;dock&quot;
+widgets. Initially the dock widgets are shown to the left. The dock widgets
+can be moved around, stacked to make tabbed dock widgets and even moved to be
+independent windows. Likewise the toolbars can be dragged around.</p>
+<p>There is a View menu option is ebe which can be used to select/deselect dock
+widgets to customize ebe's appearance. Ebe saves its configuration is the file
+&quot;.ebe.ini&quot; in the current directory which allows you to keep your custom
+settings for a project just like you want it.</p>
+<p>When you first start ebe it should look like the picture below.</p>
+<img alt="" src="ebe_start.png" style="width: 800px;" />
+<p>This layout is not ideal and is intentionally cramped to fit smaller screens.
+Most likely you will want to make the ebe window larger and drag the &quot;channel&quot;
+between the dock widgets and the source window to make the dock widgets
+wider. There are also about 6 dock widgets which are not shown initially
+which could be valuable.</p>
+</div>
+<div class="section" id="exiting-ebe">
+<h2>Exiting ebe</h2>
+<p>You can exit ebe from the File menu exit option which also shows a shortcut
+using the keyboard (Ctrl-Q or Apple-Q). You can also use the door icon, <img alt="door" src="quit.png" />
+from the left-most toolbar to exit using the mouse.  Equally you can use the
+&quot;X&quot; or whatever your system has in the title bar for killing a program.</p>
+</div>
+<div class="section" id="ebe-subwindows">
+<h2>Ebe Subwindows</h2>
+<div class="section" id="source-window">
+<h3>Source Window</h3>
+<img alt="" class="align-right" src="start_source.png" style="width: 700px;" />
+<p>Here we have shown the ebe main window without the dock widgets. This
+shows the source window and the toolbars. The code template toolbar
+(on the right) is too big to see entirely in this picture.</p>
+<p>The source window is where you will enter your code. It along with
+the main window is also the hub of the application. It has the menu
+system where you can open files and perform a range of editing
+operations. There are several toolbars including the debug toolbar
+which has 5 buttons used in debugging:</p>
+<img alt="" class="align-left" src="ebe.png" />
+<p>The run button (green alien) builds your program and starts
+it in the debugger. It continues to run until it hits a
+breakpoint. The next line to be executed will be displayed
+with a light blue-green background.</p>
+<img alt="" class="align-left" src="next.png" />
+<p>The next button is used to execute one line of source code in
+the debugger. It shows an arrow going over some code which
+means that it does not step into called functions. The
+highlighting will switch to the new line. Next will stay in
+the same function (or subroutine for Fortran).</p>
+<img alt="" class="align-left" src="step.png" />
+<p>The step button executes one line of source code, but it will
+step into a function if the line contains a function call.
+Here the arrow shows going into some code. You probably don't
+want to step into system library functions.</p>
+<img alt="" class="align-left" src="continue.png" />
+<p>Continue will execute code until it reaches another
+breakpoint. This time the arrow indicates starting from here
+and keeping on going. This can be useful to rapidly execute a
+section of code which works properly.</p>
+<img alt="" class="align-left" src="stop.png" />
+<p>This button ends the debugging session and removes the
+highlight from the last highlighted line.</p>
+</div>
+<div class="section" id="data-window">
+<h3>Data Window</h3>
+<img alt="" class="align-right" src="start_data.png" style="width: 200px;" />
+<p>The data window is pretty boring at the start. In general it will
+display program variables in 3 categories: globals, locals and parameters.
+It displays parameters and local variables for functions when it enters them,
+so initially it has none to display.</p>
+<p>The globals, locals and parameters will be displayed for languages
+which have provided adequate debug data. Assembly functions will show
+no local variables, while C/C++ and Fortran will. There is an assembly data
+window which will show globals for assembly language and allow you to define
+data based on addresses displayed in the various windows.
+There is also a stack frame window which can be used to monitor assembly
+parameters and local variables.</p>
+<p>The red triangle is a collapse/expand button.  If it points up, it is a
+collapse button which would hide all the variables under the category.
+Likewise a downward pointing triangle would expand a category or variable.</p>
+</div>
+<div class="section" id="register-window">
+<h3>Register Window</h3>
+<img alt="" class="align-right" src="start_registers.png" style="width: 400px;" />
+<p>The register window displays the current state of the general purpose
+registers at each point where control has returned to ebe from the
+debugger. Thus when you single-step through your code with with Next
+or Step the current values will be fetched from the debugger and
+displayed.</p>
+<p>This window is probably useful only for assembly language. For higher
+level languages the data window should suffice. Many assembly
+instructions change the values of registers so seeing these registers
+live during a debug session is critical.</p>
+<p>There are 2 format choices available for the general purpose registers:
+decimal and hexadecimal. You can select a format by right clicking on
+a register name and selecting a format from the popup list.</p>
+</div>
+<div class="section" id="floating-point-register-window">
+<h3>Floating Point Register Window</h3>
+<img alt="" class="align-right" src="start_fp_registers.png" style="width: 400px;" />
+<p>The floating point register window displays the current state of the
+floating point registers at each point where control has returned to
+ebe from the debugger. Thus when you single-step through your code
+with with Next or Step the current values will be fetched from the
+debugger and displayed.</p>
+<p>This window is probably useful only for assembly language. For higher
+level languages the data window should suffice. Many assembly
+instructions change the values of registers so seeing these registers
+live during a debug session is critical.</p>
+<p>The common format choices for the floating point registers are float
+(32 bits) and double (64 bits). There are also formats matching the
+SSE and AVX instruction sets.</p>
+</div>
+<div class="section" id="terminal-window">
+<h3>Terminal Window</h3>
+<img alt="" class="align-right" src="start_terminal.png" style="width: 400px;" />
+<p>The standard input and standard output streams for programs being
+debugged are piped to the terminal window. This means that printf and
+cout results will show up in the window and the user will need to type
+in the terminal window to satisfy scanf and cin statements. Ebe will
+force all output to be immediately displayed which is not the normal
+pattern for C/C++. In C if you don't end an output line with a
+new-line character the printing is delayed until you print the
+new-line. In ebe it is immediate. Also all inputs are handled using
+the &quot;Input&quot; text input box. You can use Control-D (or C or Z) in the
+input box to send an &quot;end of file&quot; into the program being debugged.</p>
+</div>
+<div class="section" id="project-window">
+<h3>Project Window</h3>
+<img alt="" class="align-right" src="start_project.png" style="width: 400px;" />
+<p>It is possible to use ebe without a project as long as the program
+consists of one source file. If you need multiple source files you
+will need a project file. You can also include data files in a project
+if desired. A project file is a file with the extension &quot;ebe&quot; and
+consists of a series of file names - one per line. Any file with know
+extensions like &quot;.c&quot; or &quot;.asm&quot; are compiled when you click the run
+button. Files with unknown extensions are assumed to be data files and
+are ignored when rebuilding the program.</p>
+</div>
+<div class="section" id="console-window">
+<h3>Console Window</h3>
+<img alt="" class="align-right" src="start_console.png" style="width: 400px;" />
+<p>The console window gives you direct access to the gdb debugger while
+you are running a program in ebe. You can observe the interaction
+between ebe and gdb while debugging. You can also type in gdb commands
+in the text box at the bottom of the console window.</p>
+<p>Most people will have little need for the console window and it is not
+displayed until selected using the View menu.</p>
+</div>
+<div class="section" id="backtrace-window">
+<h3>Backtrace Window</h3>
+<img alt="" class="align-right" src="start_backtrace.png" style="width: 400px;" />
+<p>The bactrace window shows the results of executing the gdb backtrace
+command after each step in execution of your program. This shows
+information from the runtime stack showing all function calls and
+parameters currently active in the program.</p>
+<p>Most people will have little need for the backtrace window and it is
+not displayed until selected using the View menu.</p>
+</div>
+<div class="section" id="toybox-window">
+<h3>Toybox Window</h3>
+<img alt="" class="align-right" src="start_toybox.png" style="width: 400px;" />
+<p>The toybox window allows you to quickly evaluate expressions in either
+C/C++ or Fortran. You can define some variables in the top table by
+entering names, types and values. Then you can define expressions in
+the bottom table and click the &quot;do it&quot; button to the right of an
+expression to evaluate the expression. Ebe will build a test program,
+compile and execute it, capturing its output in the result box. Then
+you can select appropriate formats for your data.</p>
+<p>The toybox is great for experimenting in a language and is particularly
+useful in the beginning. It can be pretty slow writing programs and
+executing them to see what the compiler does with your code. The
+toybox is easy, flexible and quick. It is shown at the start to tempt
+you to try it out.</p>
+</div>
+<div class="section" id="bit-bucket-window">
+<h3>Bit Bucket Window</h3>
+<img alt="" class="align-right" src="start_bitbucket.png" style="width: 400px;" />
+<p>The bit bucket window allows you to experiment with a variety of
+low-level features. You can execute all the unary and binary operators
+available in C/C++. This means that you can select the binary bit
+operations and perform operations like left shift and exclusive or.
+There is even a rotate operator added for assembly programmers.</p>
+<p>It does integer conversions and math step by step so that you can learn
+how to do these yourself. The float conversions include conversion
+from internal format into numeric form and also from numeric form into
+the internal representation of floats. This too is done step by step
+so that you can learn the steps.</p>
+<p>Most people will have little need for the bit bucket and it is not
+displayed until selected using the View menu. It is directed more
+towards assembly programmers but it can also be useful for C/C++ and
+Fortran programmers.</p>
+</div>
+</div>
+<div class="section" id="entering-a-program">
+<h2>Entering a program</h2>
+<img alt="" src="source_namespace.png" style="width: 680px;" />
+<p>You can simply type in the text for a new program in the editor of
+the source window. Using the arrow keys, return and backspace are
+almost sufficient for getting started. Ebe has a word completion
+facility which tries to help you type by offering possible completions
+for partial words. Above you can see the source window with ebe
+offering to complete the C++ keyword namespace after entering &quot;n&quot;.
+Simply press the enter key to complete the word with the selected
+completion. The keyword using was completed after entering 2 letters,
+so it is quick to enter &quot;using namespace std;&quot; in ebe.</p>
+<div class="section" id="saving-the-source-file">
+<h3>Saving the source file</h3>
+<img alt="" src="file_menu.png" style="width: 800px;" />
+<p>It is necessary to have a name for your source file in order to run the
+program. Once ebe knows the name of your file it will automatically
+save the file each time your click on the Run button. To save your
+file file either click on the File menu option or press Alt-F (or
+Apple-F). This will bring up the File menu shown to the right.</p>
+<p>You would then select &quot;Save as&quot; to save the file and give it a new
+name. The &quot;Save&quot; option will work just as well if the name is not
+already known.</p>
+<img alt="" class="align-right" src="save_as.png" style="width: 400px;" />
+<p>To the right you can see the file save menu after typing in
+&quot;sample.cpp&quot;. Pressing the Save button will then save the source code
+in &quot;sample.cpp&quot;. Following this the Run button will automatically save
+the file and attempt to build a program named &quot;sample&quot; using the &quot;g++&quot;
+command.</p>
+</div>
+<div class="section" id="running-your-program">
+<h3>Running your program</h3>
+<p>You can compile and run your program by clicking on the Run
+button, <img alt="run_button" src="ebe.png" />.
+However you will usually want to set one of more
+breakpoints in your code before running it.</p>
+<img alt="" src="sample_source_9.png" style="width: 800px;" />
+<p>A breakpoint is a point in your program where the debugger
+will pause the execution of your program. In the program above
+you can see that the line number for line 9 has a red
+background which indicates that a breakpoint has been set on
+line 9. You can set or clear a breakpoint by clicking (right
+or left) on the line number.</p>
+<p>Also you can see that line 9 is highlighted with a
+blue-green background. This is a result of clicking the Run
+button which saved the file, ran g++, and started running the
+program in the debugger, gdb. When gdb reached the breakpoint
+it stopped and ebe highlighted line 9. At this point line 9
+has not yet been executed.</p>
+</div>
+<div class="section" id="viewing-local-variables">
+<h3>Viewing local variables</h3>
+<img alt="" class="align-right" src="sample_data_9.png" style="width: 400px;" />
+<p>When the debugger stopped execution ebe found the names and
+types of the local variables and displayed them in the data
+window. You can see that variable a has the value 32767 when
+the program paused at line 9. Recall that by default C++ local
+variables are placed on the stack and are not initialized upon
+entering a function. Thus something occurred prior to main
+being called which resulted in 32767 being placed on the stack
+at the location currently occupied by a.</p>
+<p>&lt;td&gt;&lt;img alt=&quot;source stopped at line 11&quot;
+src=&quot;sample_source_11.png&quot;&gt;</p>
+</div>
+<div class="section" id="single-stepping-though-your-program">
+<h3>Single-stepping though your program</h3>
+<img alt="" src="sample_source_11.png" style="width: 800px;" />
+<img alt="" class="align-right" src="sample_terminal_11.png" style="width: 400px;" />
+<p>Clicking on the Next button, <img alt="next_button" src="next.png" />,
+will execute one line
+of code. Executing the cout statement on line 9 may on some
+computers actually print the prompt, but under Linux it
+probably won't actually print until the cin statement on line
+10 is executed which forces the printing to occur. However in
+ebe the debugged program's output is always immediately
+displayed. Above you see the source window after clicking Next
+twice. To the right you see the terminal window with 2 numbers
+entered for a and b.</p>
+<p>Pressing return in the terminal text input box will complete
+the cin statement. At that time ebe will highlight line 11 and
+the new values for a and b will be displayed in the data
+window.</p>
+<img alt="" src="sample_source_11b.png" style="width: 800px;" />
+<img alt="" src="sample_data_11.png" style="width: 400px;" />
+<img alt="" class="align-right" src="sample_data_12.png" style="width: 400px;" />
+</div>
+<div class="section" id="setting-c">
+<h3>Setting c</h3>
+<p>To the right we see the data window after executing line 11
+(clicking Next). The value for c has been set to the sum of a
+and b.</p>
+<img alt="" class="align-right" src="sample_terminal_13.png" style="width: 400px;" />
+</div>
+<div class="section" id="printing-the-result">
+<h3>Printing the result</h3>
+<p>After executing line 12 (one more click on Next), the terminal window
+shows the result of cout.</p>
+</div>
+</div>
+
+</section>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="row-fluid">
+            <div class="span10 offset1">
+                <address>
+                    <p>
+                        This blog is proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                    </p>
+                    <p>
+                        <a href="http://github.com/jsliang/pelican-fresh/">Fresh</a> is a responsive theme designed by <a href="http://jsliang.com/">jsliang</a> and <a href="https://github.com/jsliang/pelican-fresh/graphs/contributors">contributors</a>.
+                        Special thanks to <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a> and <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a>.
+                    </p>
+                </address>
+            </div>
+        </div>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+</body>
+</html>

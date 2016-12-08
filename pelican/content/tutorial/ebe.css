@@ -1,0 +1,21 @@
+h1 {
+  color: #601000;
+}
+h2 {
+  color: #601000;
+}
+h3 {
+  color: #601000;
+}
+
+.h2 {
+  color: #601000;
+  font-weight: bold;
+  font-size: 140%
+}
+
+.h3 {
+  color: #601000;
+  font-weight: bold;
+  font-size: 120%
+}

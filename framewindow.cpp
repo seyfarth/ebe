@@ -546,6 +546,7 @@ void FrameWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void FrameWindow::defineVariableByAddress()
 {
+    if ( table->rowCount() == 0 ) return;
     QString address = table->currentItem()->text();
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItem(address);

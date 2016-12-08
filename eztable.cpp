@@ -114,6 +114,7 @@ int EZTable::rowCount()
 
 void EZTable::setText ( int r, int c, QString t, EZ::Color highlight )
 {
+    qDebug() << "setText current" << r << c;
     currentPlank->ezrows[r]->ezcells[c]->setText(t, highlight);
 }
 
@@ -124,7 +125,8 @@ QString EZTable::getText ( int r, int c )
 
 void EZTable::setText ( int p, int r, int c, QString t, EZ::Color highlight )
 {
-        table[p]->ezrows[r]->ezcells[c]->setText(t, highlight);
+    qDebug() << "setText" << p << r << c;
+    table[p]->ezrows[r]->ezcells[c]->setText(t, highlight);
 }
 
 void EZTable::addWidget ( QWidget *w, int r, int c )
@@ -238,6 +240,7 @@ void EZTable::resizeToFitContents(int f)
     int adjust;
     int allRows = 0;
 
+    qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
     //if (f) qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
 
     maxWidth.resize(columns);
@@ -353,7 +356,7 @@ void EZTable::resizeToFitContents(int f)
     foreach ( EZPlank *p, table ) {
         p->setGeometry( QRect(0,y,x,p->rows*ezrowHeight) );
         p->show();
-        //if ( !f ) qDebug() << "p" << p->geometry();
+        if ( !f ) qDebug() << "p" << p->geometry();
         y += p->rows * ezrowHeight;
         //if (f) qDebug() << p->rows << p->geometry();
         for ( int r = 0; r < p->rows; r++ ) {
@@ -476,7 +479,7 @@ void EZTable::resizeToFitContents(int f)
         //}
         //y += p->height();
     //}
-    //qDebug() << geometry();
+    qDebug() << "end rtfc" << geometry();
 }
 
 void EZTable::setCurrentPlank ( EZPlank *p )

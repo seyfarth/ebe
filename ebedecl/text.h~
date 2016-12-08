@@ -1,0 +1,18 @@
+#ifndef TEXT_H
+#define TEXT_H
+
+typedef struct TextStruct
+{
+    char *s;
+    int length;
+} Text;
+
+Text * text_create();
+int text_clear(Text *t);
+int text_copys(Text *t, char *s);
+int text_copy(Text *t, Text *v);
+int text_cats(Text *t, char *s);
+int text_cat(Text *t, Text *v);
+Text * text_dup(Text *t);
+
+#endif

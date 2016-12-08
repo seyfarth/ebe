@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dr. Ray Teaches Assembly</title><link>/</link><description></description><atom:link href="/feeds/ray-seyfarth.rss.xml" rel="self"></atom:link><lastBuildDate>Tue, 27 Jan 2015 18:22:00 -0600</lastBuildDate><item><title>Assembly Language</title><link>/assembly-language.html</link><description>&lt;div class="section" id="tutorials-on-google"&gt;
+&lt;h2&gt;Tutorials on Google+&lt;/h2&gt;
+&lt;img alt="cycles" class="align-right" src="cycles.jpg" /&gt;
+&lt;p&gt;This spring I will conduct
+Assembly Language tutorials using a Google+ Hangout.
+My plan is to have 1 hour tutorials on Mondays at 1:00 PM Central Time
+until mid May.
+If you wish to participate my Google account is &amp;quot;ray.seyfarth&amp;quot;.
+With a Google account you can start by adding me to one of your circles.
+It could be interesting and it should be useful.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="introduction-to-64-bit-assembly-programming-for-linux-and-os-x"&gt;
+&lt;h2&gt;&lt;a class="reference external" href="linux-os-x.html"&gt;Introduction to 64 Bit Assembly Programming for Linux and OS X&lt;/a&gt;&lt;/h2&gt;
+&lt;a class="reference external image-reference" href="linux-os-x.html"&gt;&lt;img alt="cycles" class="align-left" src="cover.jpg" style="width: 128px;" /&gt;&lt;/a&gt;
+&lt;p&gt;The era of 64 bit computing is now. You know your computer
+will run faster with more RAM than 4 GB and a 32 bit computer is
+limited to 4 GB. With a 64 bit CPU and a 64 bit operating
+system you can have more RAM - more RAM for programs and more RAM
+for buffer cache. Your computer will run faster.&lt;/p&gt;
+&lt;p&gt;In addition to allowing your computer to use more RAM, running
+your PC in 64 bit mode will enable the use of more
+registers. A PC running in 32 bit mode has 8 registers -
+with 2 of them tied up in the stack pointer and frame
+pointer. In 64 bit mode the CPU has 8 additional general
+purpose registers and 8 additional floating point
+registers. These additional registers allow compilers to
+perform better optimization and all function parameters to be
+placed in registers rather than being pushed on the stack.
+These new registers also help your computer run faster.&lt;/p&gt;
+&lt;p&gt;&amp;quot;Introduction to 64 Bit Assembly Language Programming for
+Linux and OS X&amp;quot; teaches only 64 bit programming.
+This simplifies the subject making it easier to learn.&lt;/p&gt;
+&lt;p&gt;This is the third edition of the assembly book. The primary
+changes to the book are the inclusion of OS X support for
+assmebly programming and the discussion of the Qt version of ebe.
+Examples in the book are frequently illustrated using windows from ebe.
+Ebe is an acronym for &amp;quot;Easy Beginner Environment&amp;quot; and targets
+teaching assembly language. It is easy to use and makes
+learning assembly language easier.&lt;/p&gt;
+&lt;p&gt;[&lt;a class="reference external" href="linux-os-x.html"&gt;more about the Linux/OS X book&lt;/a&gt;]&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="introduction-to-64-bit-windows-assembly-programming"&gt;
+&lt;h2&gt;&lt;a class="reference external" href="windows.html"&gt;Introduction to 64 Bit Windows Assembly Programming&lt;/a&gt;&lt;/h2&gt;
+&lt;a class="reference external image-reference" href="windows.html"&gt;&lt;img alt="book cover" class="align-left" src="asmwin.jpg" style="width: 128px;" /&gt;&lt;/a&gt;
+&lt;p&gt;Learn 64 bit assembly language using the Windows operating system.
+This is an adaptation of the Linux assembly book which covers the same
+basic topics.
+It is designed for people familiar with one higher level programming language.
+Ideally this language would be C or C++ since the book explains how to
+call assembly functions from C and vice versa.&lt;/p&gt;
+&lt;p&gt;The discussion is based on using the free IDE, ebe, which internally uses
+the GNU C and C++ compilers along with the yasm assembly to build programs.
+The differences between the Windows and Linux/OS X books are primarily
+the function call protocol.
+Windows uses 4 registers for parameters which Linux and OS X use more.
+The sequence of registers is different and there are a few other function
+call differences.
+In the interest of keeping the book accessible to programmers with about 1
+year of experience, the choice was made to offer a separate book.&lt;/p&gt;
+&lt;p&gt;[&lt;a class="reference external" href="windows.html"&gt;more about the Windows book&lt;/a&gt;]&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="purchase-a-printed-or-pdf-book"&gt;
+&lt;h2&gt;&lt;a class="reference external" href="purchase.html"&gt;Purchase a printed or PDF Book&lt;/a&gt;&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class="section" id="ebe-integrated-development-environment"&gt;
+&lt;h2&gt;&lt;a class="reference external" href="ebe.html"&gt;ebe - Integrated Development Environment&lt;/a&gt;&lt;/h2&gt;
+&lt;a class="reference external image-reference" href="ebe.hmtl"&gt;&lt;img alt="source code" class="align-right" src="avg_source_15.png" style="width: 640px;" /&gt;&lt;/a&gt;
+&lt;p&gt;Ebe is an integrated development environment designed to make it
+easier to write and debug assembly language programs. To the
+right is an example of the source window in ebe with a short assembly
+program. The red background on the line number for line 13
+indicates that there is a breakpoint on line 13. The light blue
+background on line 15 indicates that line 15 is the next instruction
+to execute while debugging.&lt;/p&gt;
+&lt;p&gt;Ebe supports programming in Assembly, C, C++ and Fortran. When
+you click green alien icon ebe runs the appropriate compiler or
+assembler and then starts running your program using the gdb
+debugger. You use the icons to the right of the alien to do the
+next instruction, step into a function, continue or stop
+debugging. You can view the registers in a register window and
+program variables in a data window. Ebe makes is easy for you to
+define variables based on labels in the code or addresses contained in
+registers.&lt;/p&gt;
+&lt;p&gt;The latest ebe includes growing support for different languages
+including Arabic, Chinese, French, Hindi, Portuguese, Russian, Spanish
+and Swedish. The Arabic, French, Hindi, Spanish and Swedish
+translations have been reviewed by people who speak those
+languages. The rest are from Google Translate and may be
+poor. Help is needed from around the world to improve the
+accessibility of ebe.&lt;/p&gt;
+&lt;p&gt;[&lt;a class="reference external" href="ebe.html"&gt;more about ebe&lt;/a&gt;]&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Ray Seyfarth</dc:creator><pubDate>Tue, 27 Jan 2015 18:22:00 -0600</pubDate><guid>tag:,2015-01-27:assembly-language.html</guid><category>ebe</category><category>ide</category><category>assembly</category><category>C</category><category>C++</category><category>Fortran</category><category>Windows</category><category>Linux</category><category>OS X</category></item><item><title>Buy an Assembly Book</title><link>/buy-an-assembly-book.html</link><description>&lt;!-- image: cycles.jpg
+:align: right --&gt;
+&lt;div class="section" id="introduction-to-64-bit-assembly-language-programming"&gt;
+&lt;h2&gt;Introduction to 64 Bit Assembly Language Programming&lt;/h2&gt;
+&lt;div class="section" id="ray-seyfarth"&gt;
+&lt;h3&gt;Ray Seyfarth&lt;/h3&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="pdf-books"&gt;
+&lt;h2&gt;PDF Books&lt;/h2&gt;
+&lt;script language="javascript" type="text/javascript"&gt;
+&lt;!--
+function EJEJC_lc(th) { return false; }
+// --&gt;
+&lt;/script&gt;
+&lt;script src="http://www.e-junkie.com/ecom/box.js" type="text/javascript"&gt;
+&lt;/script&gt;
+&lt;table&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; &lt;img src="cover.jpg" width="128px"&gt; &lt;/td&gt;
+&lt;td style="vertical-align: top;"&gt; &lt;big&gt; &amp;nbsp;  $4.99 (USD) &amp;nbsp;
+&lt;/big&gt;&lt;br /&gt; &amp;nbsp; The purchase is for a PDF copy of the book.&amp;nbsp;
+&lt;/td&gt;
+&lt;td style="vertical-align: top"&gt;
+&lt;a href="https://www.e-junkie.com/ecom/gb.php?c=cart&amp;i=1378390&amp;cl=281859&amp;ejc=2" target="ej_ejc" class="ec_ejc_thkbx" onClick="javascript:return EJEJC_lc(this);"&gt;&lt;img src="http://www.e-junkie.com/ej/ej_add_to_cart.gif" border="0" alt="Add to Cart"/&gt;&lt;/a&gt; &amp;nbsp;
+&lt;/td&gt;
+&lt;td style="vertical-align: top"&gt;
+&lt;a href="https://www.e-junkie.com/ecom/gb.php?c=cart&amp;cl=281859&amp;ejc=2" target="ej_ejc" class="ec_ejc_thkbx" onClick="javascript:return EJEJC_lc(this);"&gt;&lt;img src="http://www.e-junkie.com/ej/ej_view_cart.gif" border="0" alt="View Cart"/&gt;&lt;/a&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; &lt;img src="asmwin.jpg" width="128px" border="1"&gt; &lt;/td&gt;
+&lt;td style="vertical-align: top;"&gt; &lt;big&gt; &amp;nbsp;  $4.99 (USD) &amp;nbsp;
+&lt;/big&gt;&lt;br /&gt; &amp;nbsp; The purchase is for a PDF copy of the book.&amp;nbsp;
+&lt;/td&gt;
+&lt;td style="vertical-align: top"&gt;
+&lt;a href="https://www.e-junkie.com/ecom/gb.php?c=cart&amp;i=1388500&amp;cl=281859&amp;ejc=2" target="ej_ejc" class="ec_ejc_thkbx" onClick="javascript:return EJEJC_lc(this);"&gt;&lt;img src="http://www.e-junkie.com/ej/ej_add_to_cart.gif" border="0" alt="Add to Cart"/&gt;&lt;/a&gt; &amp;nbsp;
+&lt;/td&gt;
+&lt;td style="vertical-align: top"&gt;
+&lt;a href="https://www.e-junkie.com/ecom/gb.php?c=cart&amp;cl=281859&amp;ejc=2" target="ej_ejc" class="ec_ejc_thkbx" onClick="javascript:return EJEJC_lc(this);"&gt;&lt;img src="http://www.e-junkie.com/ej/ej_view_cart.gif" border="0" alt="View Cart"/&gt;&lt;/a&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;&lt;/div&gt;
+&lt;div class="section" id="printed-books-from-createspace"&gt;
+&lt;h2&gt;Printed books from CreateSpace&lt;/h2&gt;
+&lt;table&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; &lt;a href="https://www.createspace.com/4276292"&gt; &lt;img
+src="cover.jpg" width="128px"&gt;&lt;/a&gt; &lt;/td&gt;
+&lt;td&gt; &amp;nbsp;&amp;nbsp; &lt;/td&gt;
+&lt;td&gt; &lt;a href="https://www.createspace.com/4276302"&gt; &lt;img
+src="asmwin.jpg" width="128px" border="1"&gt;&lt;/a&gt; &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;&lt;/div&gt;
+&lt;div class="section" id="about-the-books"&gt;
+&lt;h2&gt;About the books&lt;/h2&gt;
+&lt;p&gt;The first book is the third edition of an assembly language programming
+textbook introducing programmers to 64 bit Intel assembly language.
+The primary addition to the third edition is the discussion of the
+new version of the free integrated development environment, ebe,
+designed by the author specifically to meet the needs of
+assembly language programmers.&lt;/p&gt;
+&lt;p&gt;The second book is a clone of the first adapted for the Windows operating
+systems.  Windows uses a different function call protocol so it makes
+sense to provide a different book for Windows.  It would be confusing to
+see 2 ways to do things in an introductory assembly class, though it would
+be fine to have one book as a reference.&lt;/p&gt;
+&lt;p&gt;The new ebe is a C++ program using the Qt library to implement a GUI
+environment consisting of a source window, a data window, a register,
+a floating point register window, a backtrace window, a console window,
+a terminal window and a project window along with 2 educational tools
+called the &amp;quot;toy box&amp;quot; and the &amp;quot;bit bucket&amp;quot;.&lt;/p&gt;
+&lt;p&gt;The source window includes a full-featured text editor with convenient
+controls for assembling,  linking and debugging a program.
+The project facility allows a program to be built from C source code files
+and assembly source files.&lt;/p&gt;
+&lt;p&gt;Assembly is performed automatically using the yasm assembler and
+linking is performed with ld or gcc.
+Debugging operates by transparently sending commands into the gdb debugger
+while automatically displaying registers and variables
+after each debugging step.&lt;/p&gt;
+&lt;p&gt;The second important addition to the Linux book is support for the
+OS X operating system.  Assembly language is similar enough between
+the two systems to cover in a single book. The book discusses the
+differences between the systems.
+The book is intended as a first assembly language book for programmers
+experienced in high level programming in a language like C or C++.
+The assembly programming is performed using the yasm assembler automatically
+from the ebe IDE under the Linux operating system.&lt;/p&gt;
+&lt;p&gt;The Linux/OS X book describes how to do similar things under Windows and
+likewise the Windows book discusses how these things are done in Linux and
+OS X.  A person would probably be satisfied with reading just the book
+for their favorite system.&lt;/p&gt;
+&lt;p&gt;The book primarily teaches how to write assembly code compatible
+with C programs.  The reader will learn to call C functions from
+assembly language and to call assembly functions from C in addition
+to writing complete programs in assembly language.&lt;/p&gt;
+&lt;p&gt;The gcc compiler is used internally to compile C programs.
+The book starts early emphasizing using ebe to debug programs,
+along with teaching equivalent commands using gdb.
+Being able to single-step assembly programs is critical in
+learning assembly programming.
+Ebe makes this far easier than using gdb directly.
+Unfortunately gdb only works well for assembly programs in Linux.
+It is unaware of line numbers in Windows and OS X, though ebe handles that
+problem by reading the listing file.&lt;/p&gt;
+&lt;p&gt;Highlights of the books include doing input/output programming using
+the Linux system calls, Windows API functions and the C library,
+implementing data structures in assembly language and high performance
+assembly language programming.  Early chapters of the book rely on using
+the debugger or ebe to observe program behavior.
+After a chapter on functions, the user is prepared to use
+printf and scanf from the C library to perform I/O.&lt;/p&gt;
+&lt;p&gt;The chapter on data structures covers singly linked lists,
+doubly linked circular lists, hash tables and binary trees.
+Test programs are presented for all these data structures.&lt;/p&gt;
+&lt;p&gt;There is a chapter on optimization techniques and 3 chapters on
+specific optimizations.
+One chapter covers how to efficiently count the 1 bits in an array
+with the most efficient version using the recently-introduced
+popcnt instruction.
+Another chapter covers using SSE instructions to create an efficient
+implementation of the Sobel filtering algorithm.
+The final high performance programming chapter discusses computing
+correlation between data in 2 arrays.  There is an AVX implementation
+which achieves 20.5 GFLOPs on a single core of a Core i7 CPU.&lt;/p&gt;
+&lt;p&gt;A companion web site, &lt;a class="reference external" href="http://www.rayseyfarth.com"&gt;http://www.rayseyfarth.com&lt;/a&gt;, has a collection
+of PDF slides which instructors can use for in-class presentations
+and source code for sample programs.&lt;/p&gt;
+&lt;p&gt;The Linux/OS X book is 270 pages, while the Windows book is 266.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Ray Seyfarth</dc:creator><pubDate>Tue, 27 Jan 2015 18:22:00 -0600</pubDate><guid>tag:,2015-01-27:buy-an-assembly-book.html</guid><category>assembly Windows</category><category>Linux</category><category>OS X</category></item><item><title>ebe - Integrated Development Environment</title><link>/ebe-integrated-development-environment.html</link><description>&lt;p&gt;Ebe is an integrated development designed to support Assembly
+Language.  After teaching assembly language one semester where the
+students and I depended on using gdb for debugging, I wanted a better
+solution.  I tried ddd and a few IDEs, but they all suffered from
+the fact that yasm doesn't provide data type information to gdb.  I
+started trying to write a debugger in python and decided dbe was a nice
+name for a debugger.  Since dbe had a source code window which
+supported nearly all that was needed in an editor, it became apparent
+that dbe was almost a development environment.  So I decided to
+expand it to be an IDE and I had to pick a name for a development
+environment.  The name ebe was too hard to resist since it already
+means extraterrestrial biological entity.  But just to satisfy my
+sense of fairness, I can claim that is stands for easy beginner
+environment.  This also explains the alien icon.  I drew the
+alien icon based on what I have read of little green men.  I
+hope I haven't made an icon too much like something someone has
+trademarked.&lt;/p&gt;
+&lt;div class="section" id="what-can-ebe-do"&gt;
+&lt;h2&gt;What can ebe do?&lt;/h2&gt;
+&lt;p&gt;In a nutshell ebe supports program development in C, C++, Fortran and
+Assembly.  It was designed to support Assembly and I needed to be
+able to build programs with C functions, so C and C++ were
+important.  Adding Fortran was easy, so why not?  The Qt
+version of ebe runs on Linux, OS X and Windows.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="how-do-you-get-ebe"&gt;
+&lt;h2&gt;How do you get ebe?&lt;/h2&gt;
+&lt;p&gt;You can get ebe from &lt;a class="reference external" href="http://qtebe.sourceforge.net"&gt;http://qtebe.sourceforge.net&lt;/a&gt;.
+There are installation packages for Ubuntu, Slackware and Windows.
+At this time support for OS X consists of instructions on how
+to download the source code and compile ebe.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="how-do-you-get-help-with-ebe"&gt;
+&lt;h2&gt;How do you get help with ebe?&lt;/h2&gt;
+&lt;p&gt;There is a &lt;a class="reference external" href="tutorial.html"&gt;tutorial&lt;/a&gt; which should be enough to get started.
+There are also tooltips and help inside the program.
+Looking through the menus will give some ideas and will show
+some keyboard shortcuts.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="how-do-you-report-problems-with-ebe"&gt;
+&lt;h2&gt;How do you report problems with ebe?&lt;/h2&gt;
+&lt;p&gt;You can use the &lt;a class="reference external" href="http://sourceforge.net/p/qtebe/tickets/"&gt;ticket system&lt;/a&gt; on the ebe sourceforge site to report
+problems with ebe.
+You can also email me as &lt;a class="reference external" href="mailto:ray.seyfarth&amp;#64;gmail.com"&gt;ray.seyfarth&amp;#64;gmail.com&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Ray Seyfarth</dc:creator><pubDate>Tue, 27 Jan 2015 18:22:00 -0600</pubDate><guid>tag:,2015-01-27:ebe-integrated-development-environment.html</guid><category>ebe</category><category>ide</category><category>assembly</category><category>C</category><category>C++</category><category>Fortran</category><category>Windows</category><category>Linux</category><category>OS X</category></item></channel></rss>

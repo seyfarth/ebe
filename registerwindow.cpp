@@ -384,9 +384,9 @@ void GenericRegisterWindow::setDecimal()
     if ( latestCell ) {
         row = latestCell->row;
         col = latestCell->column;
-        qDebug() << "setDecimal" << row << col;
-    } else {
-        qDebug() << "latestCell" << (long)latestCell;
+        //qDebug() << "setDecimal" << row << col;
+    //} else {
+        //qDebug() << "latestCell" << (long)latestCell;
     }
     col = col & ~1;                      // Make it even
     QString reg = table->text(row,col);

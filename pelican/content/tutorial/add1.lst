@@ -1,0 +1,12 @@
+     1                                 %line 1+1 /home/seyfarth/public_html/ebe/tutorial/add1.asm
+     2                                 [segment .data]
+     3 00000000 AF00000000000000       a dq 175
+     4 00000008 0110000000000000       b dq 4097
+     5                                 [segment .text]
+     6                                 [global main]
+     7                                 main:
+     8 00000000 488D0425[00000000]      lea rax, [a]
+     9 00000008 488B0425[00000000]      mov rax, [a]
+    10 00000010 48030425[00000000]      add rax, [b]
+    11 00000018 4831C0                  xor rax, rax
+    12 0000001B C3                      ret

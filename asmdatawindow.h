@@ -8,7 +8,8 @@
  */
 
 #include "types.h"
-#include "eztable.h"
+#include <QTableWidget>
+#include <QTableWidgetItem>
 #include <QFrame>
 #include <QtGui>
 #include <QDialog>
@@ -47,20 +48,22 @@ private:
     QPushButton *cancelButton;
 };
 
-class AsmVariable
+class AsmVariableTable: public QTableWidget
 {
+    Q_OBJECT
+
 public:
-    AsmVariable ( QString _name="");
+    AsmVariableTable ( QString _name="", QWidget *parent=0);
     bool expanded;
     QString name;
     QString format;
     QStringList stringValues;
     AllTypesArray *values;
     int size;
-    EZCell *item;
     int row;
     int rows;
     uLong address;
+    int columns;
 };
 
 
@@ -125,8 +128,8 @@ public:
 
     int rows;
     QVBoxLayout *layout;
-    QVector<AsmVariable> variables;
-    QVector<AsmVariable> userDefinedVariables;
+    QVector<AsmVariableTable*> variables;
+    QVector<AsmVariableTable*> userDefinedVariables;
     IntHash varNames;
     int xScroll;
     int yScroll;
@@ -135,8 +138,8 @@ public:
     void restoreScroll();
 
     void clear();
-    void buildTable();
-    void rebuildTable();
+    void buildTables();
+    void rebuildTables();
 
     /**
      *  \fn setFontHeightAndWidth
@@ -162,10 +165,6 @@ public:
      */
     ;void setValue(QString name, QString value);
 
-    /**
-     *  QTableWidget pointer to the table displayed in the RegisterWindow.
-     */
-    EZTable *table;
 
     /**
      *  \fn sizeHint
@@ -180,7 +179,6 @@ public:
 
     int fontWidth;          ///< The width of a fixed width character
     int fontHeight;         ///< The height of a fixed width character
-    int columns;
 
     /**
      *  \fn contextMenuEvent
@@ -211,38 +209,15 @@ public slots:
     void defineVariableByAddress();
     void deleteVariable();
 
-    /**
-     *  \fn receiveRegs
-     *
-     *  This slot is called when the gdb object has a new set of register
-     *  values to be displayed.  The namesList array is used to cycle
-     *  through the names of the registers to set their values.  It calls
-     *  setFontHeightAndWidth to resize the rows and columns of the table
-     *  based on the latest register contents.
-     */
-    //void receiveFrame(StringHash);
-
     void setStruc();
     void expandStruc();
     void collapseStruc();
 
-    /**
-     *  \fn setDecimal
-     *
-     *  This function is called when the popup menu action is to set the
-     *  format for a single register to "decimal".
-     */
     void setDecimal1();
     void setDecimal2();
     void setDecimal4();
     void setDecimal8();
 
-    /**
-     *  \fn setHex
-     *
-     *  This function is called when the popup menu action is to set the
-     *  format for a single register to "hexadecimal".
-     */
     void setHex1();
     void setHex2();
     void setHex4();

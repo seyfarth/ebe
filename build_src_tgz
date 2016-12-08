@@ -1,0 +1,17 @@
+#!/bin/bash
+
+version=$(grep -i 'ebe - version' html/about.html | cut -d ' ' -f 5)
+file=~/sf/qtebe/src/ebe_src_${version}.tgz
+dirs="src html library icons images"
+
+if [ -e $file ]
+then
+    echo "Version $version has already been used.  Bump it?"
+    exit 1
+fi
+
+files="qrc ebe.qrc ebe.pro Makefile *.qm *.ts "
+
+files="$files $(cat ebe.pro | egrep '(\.h)|(cpp)' | sed 's/\s/\n/g' | egrep '(\.h)|(cpp)')"
+
+tar cvzf $file $dirs $files

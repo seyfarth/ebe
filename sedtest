@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sed -n '/^PAYLOAD:/,$ {
+           /^PAYLOAD:/ n
+           p
+        } ' < $0
+exit 0
+
+PAYLOAD:
+this is fun
+and more

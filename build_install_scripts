@@ -1,0 +1,4 @@
+#!/bin/sh
+
+./build_install_script_ubuntu
+./build_install_script_fedora

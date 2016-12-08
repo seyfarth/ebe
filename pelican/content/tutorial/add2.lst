@@ -1,0 +1,13 @@
+     1                                 %line 1+1 /home/seyfarth/public_html/ebe/tutorial/add2.asm
+     2                                 [segment .data]
+     3 00000000 AF00000000000000       a dq 175
+     4 00000008 0110000000000000       b dq 4097
+     5 00000010 0000000000000000       sum dq 0
+     6                                 [segment .text]
+     7                                 [global main]
+     8                                 main:
+     9 00000000 488B0425[00000000]      mov rax, [a]
+    10 00000008 48030425[00000000]      add rax, [b]
+    11 00000010 48890425[00000000]      mov [sum], rax
+    12 00000018 4831C0                  xor rax, rax
+    13 0000001B C3                      ret

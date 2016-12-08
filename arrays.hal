@@ -1,0 +1,74 @@
+        segment .data
+x       dq     0
+y       dq     0
+sum     dq     0
+num     dq     100000
+a       db     "Hello World!",0x0a,0
+
+        segment .text
+        global  main
+        extern  malloc
+main:
+        push    rbp
+        mov     rbp, rsp
+        frame   2
+        sub     rsp, frame_size
+        
+        mov     par1, [num]
+        call    create
+        mov     [x], acc
+        mov     par1, [num]
+        call    create
+        mov     [y], acc
+        mov     par1, [num]
+        call    create
+        mov     [sum], acc
+        
+        mov     par1, [x]
+        mov     par2d, 7
+        mov     par3, [num]
+        call    fill    
+        mov     par1, [y]
+        mov     par2d, 8
+        mov     par3, [num]
+        call    fill    
+        
+        
+        leave
+        ret
+        
+create:
+        push    rbp
+        mov     rbp, rsp
+        frame   1
+        sub     rsp, frame_size
+        shl     par1, 3
+        call    malloc
+        leave
+        ret
+               
+; void fill ( long x[], int val, int num );
+fill:
+        push    rbp
+        mov     rbp, rsp
+        
+        alias   X, par1
+        alias   Val, par2 
+        alias   Num, par3
+        alias   I, scr1 
+        
+;       for ( i=0; i < num; i++ ) {
+        xor     dI, dI
+.fortop:
+        cmp     qI, qNum
+        jnl     .endfor
+;           x[i] = val;
+            mov     [qX+8*qI], qVal 
+            inc     dVal
+            inc     qI
+            jmp     .fortop
+;       }
+.endfor:
+
+        leave
+        ret

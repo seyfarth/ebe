@@ -1,0 +1,3 @@
+#define MAX hello
+
+MAX

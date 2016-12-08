@@ -1,0 +1,71 @@
+     1                                 %line 1+1 /home/seyfarth/ebe/ifs.asm
+     2                                 [segment .data]
+     3 00000000 0000000000000000       save_rcx dq 0
+     4 00000008 0000000000000000       save_rdi dq 0
+     5 00000010 0000000000000000       save_rsi dq 0
+     6                                 
+     7                                 [segment .text]
+     8                                 [global main]
+     9                                 [extern printf]
+    10                                 main:
+    11 00000000 55                      push rbp
+    12 00000001 4889E5                  mov rbp, rsp
+    13                                 
+    14                                 
+    15                                 
+    16                                 
+    17                                 
+    18                                 
+    19                                 
+    20                                 
+    21                                 end_if:
+    22                                 
+    23 00000004 31C9                    xor ecx, ecx
+    24                                 
+    25 00000006 39F9                    cmp ecx, edi
+    26 00000008 7D49                    jnl end_while
+    27                                 
+    28                                 while_top:
+    29                                 [segment .data]
+    30 00000018 617267765B25645D20-    format db 'argv[%d] = %s', 0x0a, 0
+    31 00000018 3D2025730A00       
+    32                                 [segment .text]
+    33                                 
+    34 0000000A 48890C25[00000000]      mov [save_rcx], rcx
+    35 00000012 48893C25[00000000]      mov [save_rdi], rdi
+    36 0000001A 48893425[00000000]      mov [save_rsi], rsi
+    37 00000022 488D3C25[00000000]      lea rdi, [format]
+    38 0000002A 488B14CE                mov rdx, [rsi+8*rcx]
+    39 0000002E 89CE                    mov esi, ecx
+    40 00000030 31C0                    xor eax, eax
+    41 00000032 E8(F6FFFFFF)            call printf
+    42                                 
+    43 00000037 488B0C25[00000000]      mov rcx, [save_rcx]
+    44 0000003F 488B3C25[00000000]      mov rdi, [save_rdi]
+    45 00000047 488B3425[00000000]      mov rsi, [save_rsi]
+    46 0000004F FFC1                    inc ecx
+    47                                 
+    48 00000051 39F9                    cmp ecx, edi
+    49 00000053 7CB3                    jl while_top
+    50                                 
+    51                                 end_while:
+    52                                 
+    53                                 
+    54                                 
+    55                                 top_of_do:
+    56                                 
+    57                                 
+    58                                 
+    59 00000055 48FFC8                  dec rax
+    60 00000058 75F9                    jne top_of_do
+    61                                 
+    62                                 
+    63                                 
+    64                                 
+    65                                 
+    66                                 
+    67                                 
+    68                                 
+    69 0000005A C9                      leave
+    70 0000005B C3                      ret
+    71                                 

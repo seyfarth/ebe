@@ -1,0 +1,31 @@
+     1                                 %line 1+1 /home/seyfarth/qtebe/bits2.asm
+     2                                 [segment .bss]
+     3 00000000 <gap>                  set resq 10
+     4                                 [segment .text]
+     5                                 [global main]
+     6                                 main:
+     7 00000000 55                      push rbp
+     8 00000001 4889E5                  mov rbp, rsp
+     9 00000004 480FBA2C25[00000000]-     bts qword [set], 4
+    10 00000004 04                 
+    11 0000000E 480FBA2C25[00000000]-     bts qword [set], 7
+    12 0000000E 07                 
+    13 00000018 480FBA2C25[00000000]-     bts qword [set], 8
+    14 00000018 08                 
+    15 00000022 480FBA2C25[08000000]-     bts qword [set+8], 12
+    16 00000022 0C                 
+    17 0000002C 48C7C04C000000          mov rax, 76
+    18 00000033 4889C3                  mov rbx, rax
+    19 00000036 48C1EB06                shr rbx, 6
+    20 0000003A 4889C1                  mov rcx, rax
+    21 0000003D 4883E13F                and rcx, 0x3f
+    22 00000041 31D2                    xor edx, edx
+    23 00000043 4C8D0425[00000000]      lea r8,[set]
+    24 0000004B 490FA30CD8              bt [r8+8*rbx], rcx
+    25 00000050 0F92D2                  setc dl
+    26 00000053 490FAB0CD8              bts [r8+8*rbx], rcx
+    27 00000058 490FB30CD8              btr [r8+8*rbx], rcx
+    28 0000005D 4831C0                  xor rax, rax
+    29 00000060 C9                      leave
+    30 00000061 C3                      ret
+    31                                 

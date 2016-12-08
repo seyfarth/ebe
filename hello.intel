@@ -1,0 +1,82 @@
+	.file	"hello.c"
+	.intel_syntax noprefix
+	.comm	z,4,4
+	.comm	data,80,32
+	.section	.rodata
+.LC1:
+	.string	"Hello Worl=d!"
+.LC2:
+	.string	"x = %ld, %lf\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB0:
+	.cfi_startproc
+	push	rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	mov	rbp, rsp
+	.cfi_def_cfa_register 6
+	sub	rsp, 64
+	mov	DWORD PTR [rbp-36], edi
+	mov	QWORD PTR [rbp-48], rsi
+	mov	DWORD PTR [rbp-20], 305419896
+	mov	eax, DWORD PTR [rbp-20]
+	add	eax, 12
+	pxor	xmm0, xmm0
+	cvtsi2sd	xmm0, eax
+	movsd	QWORD PTR [rbp-16], xmm0
+	movabs	rax, 1311768467294899695
+	mov	QWORD PTR [rbp-8], rax
+	movss	xmm0, DWORD PTR .LC0[rip]
+	movss	DWORD PTR z[rip], xmm0
+	movss	xmm0, DWORD PTR z[rip]
+	addss	xmm0, xmm0
+	cvttss2si	eax, xmm0
+	mov	DWORD PTR [rbp-20], eax
+	mov	eax, DWORD PTR [rbp-20]
+	mov	DWORD PTR [rbp-36], eax
+	mov	DWORD PTR [rbp-24], 0
+	jmp	.L2
+.L3:
+	mov	eax, DWORD PTR [rbp-24]
+	imul	eax, DWORD PTR [rbp-24]
+	movsx	rdx, eax
+	mov	eax, DWORD PTR [rbp-24]
+	cdqe
+	mov	QWORD PTR data[0+rax*8], rdx
+	add	DWORD PTR [rbp-24], 1
+.L2:
+	cmp	DWORD PTR [rbp-24], 9
+	jle	.L3
+	mov	edi, OFFSET FLAT:.LC1
+	call	puts
+	mov	eax, DWORD PTR [rbp-20]
+	movsx	rdx, eax
+	mov	rax, QWORD PTR [rbp-8]
+	add	rdx, rax
+	movss	xmm0, DWORD PTR z[rip]
+	cvttss2si	eax, xmm0
+	cdqe
+	add	rdx, rax
+	mov	rax, QWORD PTR [rbp-16]
+	mov	QWORD PTR [rbp-56], rax
+	movsd	xmm0, QWORD PTR [rbp-56]
+	mov	rsi, rdx
+	mov	edi, OFFSET FLAT:.LC2
+	mov	eax, 1
+	call	printf
+	mov	eax, 0
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE0:
+	.size	main, .-main
+	.section	.rodata
+	.align 4
+.LC0:
+	.long	1092616192
+	.ident	"GCC: (Ubuntu 5.2.1-22ubuntu2) 5.2.1 20151010"
+	.section	.note.GNU-stack,"",@progbits

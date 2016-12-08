@@ -1,0 +1,522 @@
+     1                                 %line 1+1 /home/seyfarth/qtebe/sudoku.asm
+     2                                 [absolute 0]
+     3                                 %line 1+0 /home/seyfarth/qtebe/sudoku.asm
+     4                                 Cell:
+     5                                 %line 2+1 /home/seyfarth/qtebe/sudoku.asm
+     6                                 c_right resq 1
+     7                                 c_down resq 1
+     8                                 c_ziggy resq 1
+     9                                 c_value resd 1
+    10                                 c_set resd 1
+    11                                 [align 8]
+    12                                 Cell_size EQU $ - Cell
+    13                                 %line 8+0 /home/seyfarth/qtebe/sudoku.asm
+    14                                 [section .text]
+    15                                 %line 9+1 /home/seyfarth/qtebe/sudoku.asm
+    16                                 
+    17                                 [segment .bss]
+    18 00000000 <gap>                  cells: resq 1
+    19 00000008 <gap>                  ifp: resq 1
+    20 00000010 <gap>                  file: resq 1
+    21 00000018 <gap>                  known: resd 1
+    22 0000001C <gap>                  value: resd 1
+    23 00000020 <gap>                  bitcount: resd 512
+    24                                 
+    25                                 
+    26                                 [segment .text]
+    27                                 
+    28                                 [global main]
+    29                                 [extern fscanf]
+    30                                 %line 22+0 /home/seyfarth/qtebe/sudoku.asm
+    31                                 [extern printf]
+    32                                 [extern malloc]
+    33                                 [extern fopen]
+    34                                 [extern fclose]
+    35                                 %line 23+1 /home/seyfarth/qtebe/sudoku.asm
+    36                                 main:
+    37 00000000 55                      push rbp
+    38 00000001 4889E5                  mov rbp, rsp
+    39                                 
+    40                                 
+    41 00000004 4883FF02                cmp rdi, 2
+    42 00000008 740F                    je have_name
+    43                                 
+    44                                 [segment .data]
+    45 00000000 55736167653A207375-    usage: db "Usage: sudoku filename", 0x0a
+    46 00000000 646F6B752066696C65-
+    47 00000000 6E616D650A         
+    48 00000017 0A                      db 0x0a
+    49 00000018 46696C6520636F6E74-     db "File contains 9 x 9 matrix with '-' for empty cells",0x0a
+    50 00000018 61696E732039207820-
+    51 00000018 39206D617472697820-
+    52 00000018 7769746820272D2720-
+    53 00000018 666F7220656D707479-
+    54 00000018 2063656C6C730A     
+    55 0000004C 616E64206469676974-     db "and digits 1-9 for known values at the start",0x0a,0
+    56 0000004C 7320312D3920666F72-
+    57 0000004C 206B6E6F776E207661-
+    58 0000004C 6C7565732061742074-
+    59 0000004C 68652073746172740A-
+    60 0000004C 00                 
+    61                                 
+    62                                 [segment .text]
+    63                                 
+    64 0000000A 488D3C25[00000000]      lea rdi, [usage]
+    65 00000012 31C0                    xor eax, eax
+    66 00000014 E8(F6FFFFFF)            call printf
+    67 00000019 C9                      leave
+    68 0000001A C3                      ret
+    69                                 
+    70                                 have_name:
+    71                                 
+    72                                 [segment .data]
+    73 0000007A 7200                   readonly: db "r",0
+    74                                 
+    75                                 [segment .text]
+    76 0000001B 488B7E08                mov rdi, [rsi+8]
+    77 0000001F 48893C25[00000000]      mov [file], rdi
+    78 00000027 48C7C6[00000000]        mov rsi, readonly
+    79 0000002E E8(F6FFFFFF)            call fopen
+    80 00000033 4883F800                cmp rax, 0
+    81 00000037 7517                    jne opened
+    82                                 
+    83                                 [segment .data]
+    84 0000007C 436F756C64206E6F74-    not_open: db "Could not open %s", 0x0a
+    85 0000007C 206F70656E2025730A 
+    86                                 
+    87                                 [segment .text]
+    88                                 
+    89 00000039 488D3C25[00000000]      lea rdi, [not_open]
+    90 00000041 488B3425[00000000]      mov rsi, [file]
+    91 00000049 31C0                    xor eax, eax
+    92 0000004B E8(F6FFFFFF)            call printf
+    93 00000050 C9                      leave
+    94 00000051 C3                      ret
+    95                                 
+    96 00000052 48890425[00000000]     opened: mov [ifp], rax
+    97                                 
+    98 0000005A E8DB020000              call count_bits
+    99                                 
+   100 0000005F E814000000              call create_cells
+   101                                 
+   102 00000064 E89D010000              call read_data
+   103                                 
+   104 00000069 488B3C25[00000000]      mov rdi, [ifp]
+   105 00000071 E8(F6FFFFFF)            call fclose
+   106                                 
+   107 00000076 E862020000              call print_sets
+   108                                 
+   109 0000007B C9                      leave
+   110 0000007C C3                      ret
+   111                                 
+   112                                 create_cells:
+   113 0000007D 55                      push rbp
+   114 0000007E 4889E5                  mov rbp, rsp
+   115                                 
+   116                                 
+   117 00000081 48C7C7200A0000          mov rdi, 81*Cell_size
+   118 00000088 E8(F6FFFFFF)            call malloc
+   119 0000008D 48890425[00000000]      mov [cells], rax
+   120                                 
+   121                                 
+   122 00000095 4831FF                  xor rdi, rdi
+   123                                 .for:
+   124 00000098 4883FF51                cmp rdi, 81
+   125 0000009C 7D1F                    jge .endfor
+   126                                 
+   127                                 
+   128 0000009E 48C7C120000000          mov rcx, Cell_size
+   129 000000A5 480FAFCF                imul rcx, rdi
+   130 000000A9 4801C1                  add rcx, rax
+   131                                 
+   132                                 
+   133 000000AC C7411800000000          mov dword [rcx+c_value],0
+   134                                 
+   135 000000B3 C7411CFF010000          mov dword [rcx+c_set], 0x1ff
+   136 000000BA 48FFC7                  inc rdi
+   137 000000BD EBD7                    jmp .for
+   138                                 
+   139                                 .endfor
+   140                                 
+   141                                 
+   142                                 
+   143                                 
+   144                                 
+   145 000000BF 31C0                    xor eax, eax
+   146                                 .for1:
+   147                                 
+   148                                 
+   149 000000C1 4889C1                  mov rcx, rax
+   150 000000C4 486BC909                imul rcx, 9
+   151 000000C8 486BC920                imul rcx, Cell_size
+   152 000000CC 48030C25[00000000]      add rcx, [cells]
+   153                                 
+   154                                 
+   155 000000D4 31DB                    xor ebx, ebx
+   156                                 .for2:
+   157                                 
+   158 000000D6 4889CA                  mov rdx, rcx
+   159 000000D9 4883C220                add rdx, Cell_size
+   160 000000DD 488911                  mov [rcx+c_right], rdx
+   161                                 
+   162                                 
+   163 000000E0 4889D1                  mov rcx, rdx
+   164                                 
+   165 000000E3 48FFC3                  inc rbx
+   166                                 
+   167 000000E6 4883FB08                cmp rbx, 8
+   168 000000EA 7CE8                    jl .for2
+   169                                 
+   170                                 
+   171 000000EC 48C7C308000000          mov rbx, 8
+   172 000000F3 486BDB20                imul rbx, Cell_size
+   173 000000F7 4889CA                  mov rdx, rcx
+   174 000000FA 4829DA                  sub rdx, rbx
+   175 000000FD 488911                  mov [rcx+c_right], rdx
+   176                                 
+   177 00000100 48FFC0                  inc rax
+   178                                 
+   179 00000103 4883F809                cmp rax, 9
+   180 00000107 7CB6                    jl .for1
+   181                                 
+   182                                 
+   183                                 
+   184                                 
+   185                                 
+   186 00000109 31DB                    xor ebx, ebx
+   187                                 .for3:
+   188                                 
+   189 0000010B 4889D9                  mov rcx, rbx
+   190 0000010E 486BC920                imul rcx, Cell_size
+   191 00000112 48030C25[00000000]      add rcx, [cells]
+   192                                 
+   193                                 
+   194 0000011A 31C0                    xor eax, eax
+   195                                 .for4:
+   196                                 
+   197 0000011C 48C7C209000000          mov rdx, 9
+   198 00000123 486BD220                imul rdx, Cell_size
+   199 00000127 4801CA                  add rdx, rcx
+   200 0000012A 48895108                mov [rcx+c_down], rdx
+   201                                 
+   202                                 
+   203 0000012E 4889D1                  mov rcx, rdx
+   204 00000131 48FFC0                  inc rax
+   205                                 
+   206 00000134 4883F808                cmp rax, 8
+   207 00000138 7CE0                    jl .for4
+   208                                 
+   209                                 
+   210 0000013A 4889DA                  mov rdx, rbx
+   211 0000013D 486BD220                imul rdx, Cell_size
+   212 00000141 48031425[00000000]      add rdx, [cells]
+   213 00000149 48895108                mov [rcx+c_down], rdx
+   214 0000014D 48FFC3                  inc rbx
+   215                                 
+   216 00000150 4883FB09                cmp rbx, 9
+   217 00000154 7CB3                    jl .for3
+   218                                 
+   219                                 
+   220                                 
+   221                                 
+   222                                 
+   223 00000156 31C0                    xor eax, eax
+   224                                 .for5
+   225                                 
+   226 00000158 31DB                    xor ebx, ebx
+   227                                 .for6
+   228                                 
+   229                                 
+   230 0000015A 4889C7                  mov rdi, rax
+   231 0000015D 486BFF09                imul rdi, 9
+   232 00000161 486BFF20                imul rdi, Cell_size
+   233 00000165 4889DA                  mov rdx, rbx
+   234 00000168 486BD220                imul rdx, Cell_size
+   235 0000016C 4801FA                  add rdx, rdi
+   236 0000016F 48031425[00000000]      add rdx, [cells]
+   237                                 
+   238                                 
+   239 00000177 4889D1                  mov rcx, rdx
+   240                                 
+   241                                 
+   242 0000017A 4889CF                  mov rdi, rcx
+   243 0000017D 4883C720                add rdi, Cell_size
+   244 00000181 48897910                mov [rcx+c_ziggy], rdi
+   245                                 
+   246                                 
+   247 00000185 4889F9                  mov rcx, rdi
+   248                                 
+   249                                 
+   250 00000188 4883C720                add rdi, Cell_size
+   251 0000018C 48897910                mov [rcx+c_ziggy], rdi
+   252                                 
+   253                                 
+   254 00000190 4889F9                  mov rcx, rdi
+   255                                 
+   256                                 
+   257 00000193 48C7C709000000          mov rdi, 9
+   258 0000019A 486BFF20                imul rdi, Cell_size
+   259 0000019E 4801CF                  add rdi, rcx
+   260 000001A1 48897910                mov [rcx+c_ziggy], rdi
+   261                                 
+   262                                 
+   263 000001A5 4889F9                  mov rcx, rdi
+   264                                 
+   265                                 
+   266 000001A8 4883EF20                sub rdi, Cell_size
+   267 000001AC 48897910                mov [rcx+c_ziggy], rdi
+   268                                 
+   269                                 
+   270 000001B0 4889F9                  mov rcx, rdi
+   271                                 
+   272                                 
+   273 000001B3 4883EF20                sub rdi, Cell_size
+   274 000001B7 48897910                mov [rcx+c_ziggy], rdi
+   275                                 
+   276                                 
+   277 000001BB 4889F9                  mov rcx, rdi
+   278                                 
+   279                                 
+   280 000001BE 48C7C709000000          mov rdi, 9
+   281 000001C5 486BFF20                imul rdi, Cell_size
+   282 000001C9 4801CF                  add rdi, rcx
+   283 000001CC 48897910                mov [rcx+c_ziggy], rdi
+   284                                 
+   285                                 
+   286 000001D0 4889F9                  mov rcx, rdi
+   287                                 
+   288                                 
+   289 000001D3 4883C720                add rdi, Cell_size
+   290 000001D7 48897910                mov [rcx+c_ziggy], rdi
+   291                                 
+   292                                 
+   293 000001DB 4889F9                  mov rcx, rdi
+   294                                 
+   295                                 
+   296 000001DE 4883C720                add rdi, Cell_size
+   297 000001E2 48897910                mov [rcx+c_ziggy], rdi
+   298                                 
+   299                                 
+   300 000001E6 4889F9                  mov rcx, rdi
+   301                                 
+   302                                 
+   303 000001E9 48895110                mov [rcx+c_ziggy], rdx
+   304 000001ED 4883C303                add rbx, 3
+   305                                 
+   306                                 
+   307 000001F1 4883FB09                cmp rbx, 9
+   308 000001F5 0F8C59FFFFFF            jl .for6
+   309                                 
+   310 000001FB 4883C003                add rax, 3
+   311                                 
+   312 000001FF 4883F809                cmp rax, 9
+   313 00000203 0F8C49FFFFFF            jl .for5
+   314                                 
+   315 00000209 C9                      leave
+   316 0000020A C3                      ret
+   317                                 
+   318                                 
+   319                                 
+   320                                 
+   321                                 read_data:
+   322 0000020B 55                      push rbp
+   323 0000020C 4889E5                  mov rbp, rsp
+   324                                 
+   325                                 
+   326 0000020F 4D31C0                  xor r8, r8
+   327                                 
+   328                                 
+   329 00000212 4D31C9                  xor r9, r9
+   330 00000215 4983F951               .for: cmp r9, 81
+   331 00000219 0F8D87000000            jge .endfor
+   332                                 
+   333                                 
+   334 0000021F 488B3C25[00000000]      mov rdi, [ifp]
+   335                                 [segment .data]
+   336 0000008E 256400                 .format: db "%d",0
+   337                                 [segment .text]
+   338 00000227 488D3425[00000000]      lea rsi, [.format]
+   339 0000022F 488D1425[00000000]      lea rdx, [value]
+   340 00000237 4831C0                  xor rax, rax
+   341 0000023A 4150                    push r8
+   342 0000023C 4151                    push r9
+   343 0000023E E8(F6FFFFFF)            call fscanf
+   344 00000243 4159                    pop r9
+   345 00000245 4158                    pop r8
+   346                                 
+   347                                 
+   348 00000247 8B1425[00000000]        mov edx, [value]
+   349 0000024E 83FA00                  cmp edx, 0
+   350 00000251 744F                    jz .value_0
+   351                                 
+   352 00000253 4C89C9                  mov rcx, r9
+   353 00000256 486BC920                imul rcx, Cell_size
+   354 0000025A 48030C25[00000000]      add rcx, [cells]
+   355                                 
+   356                                 
+   357 00000262 49FFC0                  inc r8
+   358                                 
+   359                                 
+   360 00000265 895118                  mov dword [rcx+c_value], edx
+   361                                 
+   362                                 
+   363 00000268 66C7411C0000            mov word [rcx+c_set], 0
+   364                                 
+   365 0000026E 4150                    push r8
+   366 00000270 4151                    push r9
+   367 00000272 52                      push rdx
+   368 00000273 51                      push rcx
+   369 00000274 4889CF                  mov rdi, rcx
+   370 00000277 4889D6                  mov rsi, rdx
+   371 0000027A 48C7C200000000          mov rdx, c_right
+   372 00000281 E82B000000              call clear_list
+   373                                 
+   374                                 
+   375 00000286 48C7C208000000          mov rdx, c_down
+   376 0000028D E81F000000              call clear_list
+   377                                 
+   378                                 
+   379 00000292 48C7C210000000          mov rdx, c_ziggy
+   380 00000299 E813000000              call clear_list
+   381 0000029E 59                      pop rcx
+   382 0000029F 5A                      pop rdx
+   383 000002A0 4159                    pop r9
+   384 000002A2 4158                    pop r8
+   385                                 .value_0:
+   386                                 
+   387                                 
+   388 000002A4 49FFC1                  inc r9
+   389 000002A7 E964FFFFFF              jmp .for
+   390                                 
+   391                                 .endfor
+   392                                 
+   393 000002AC 4C890425[00000000]      mov [known], r8
+   394 000002B4 C9                      leave
+   395 000002B5 C3                      ret
+   396                                 
+   397                                 clear_list:
+   398 000002B6 55                      push rbp
+   399 000002B7 4889E5                  mov rbp, rsp
+   400                                 
+   401                                 
+   402 000002BA 4889F1                  mov rcx, rsi
+   403 000002BD 48FFC9                  dec rcx
+   404 000002C0 49C7C0FFFFFFFF          mov r8, -1
+   405 000002C7 490FBBC8                btc r8, rcx
+   406                                 
+   407                                 
+   408 000002CB 4889F9                  mov rcx, rdi
+   409                                 
+   410                                 
+   411 000002CE 31C0                    xor eax, eax
+   412                                 .for:
+   413                                 
+   414                                 
+   415 000002D0 4C21411C                and [rcx+c_set], r8
+   416                                 
+   417                                 
+   418 000002D4 488B0C11                mov rcx, [rcx+rdx]
+   419                                 
+   420 000002D8 FFC0                    inc eax
+   421                                 
+   422 000002DA 4883F809                cmp rax, 9
+   423 000002DE 7CEE                    jl .for
+   424                                 
+   425 000002E0 C9                      leave
+   426 000002E1 C3                      ret
+   427                                 
+   428                                 print_sets:
+   429 000002E2 55                      push rbp
+   430 000002E3 4889E5                  mov rbp, rsp
+   431                                 
+   432                                 
+   433 000002E6 488B0C25[00000000]      mov rcx, [cells]
+   434                                 
+   435 000002EE 31DB                    xor ebx, ebx
+   436                                 .for1:
+   437                                 
+   438 000002F0 4531C0                  xor r8d, r8d
+   439                                 .for2:
+   440                                 
+   441                                 [segment .data]
+   442 00000091 256420253033782020-    .format db "%d %03x  ",0
+   443 00000091 00                 
+   444                                 [segment .text]
+   445 000002F3 488D3C25[00000000]      lea rdi, [.format]
+   446 000002FB 8B7118                  mov esi, [rcx+c_value]
+   447 000002FE 8B511C                  mov edx, [rcx+c_set]
+   448 00000301 31C0                    xor eax, eax
+   449 00000303 53                      push rbx
+   450 00000304 51                      push rcx
+   451 00000305 4150                    push r8
+   452 00000307 4150                    push r8
+   453 00000309 E8(F6FFFFFF)            call printf
+   454 0000030E 4158                    pop r8
+   455 00000310 4158                    pop r8
+   456 00000312 59                      pop rcx
+   457 00000313 5B                      pop rbx
+   458                                 
+   459                                 
+   460 00000314 4883C120                add rcx, Cell_size
+   461                                 
+   462 00000318 49FFC0                  inc r8
+   463                                 
+   464 0000031B 4983F809                cmp r8, 9
+   465 0000031F 7CD0                    jl .for2
+   466                                 
+   467                                 
+   468                                 [segment .data]
+   469 0000009B 0A00                   .newline: db 0x0a,0
+   470                                 [segment .text]
+   471 00000321 488D3C25[00000000]      lea rdi, [.newline]
+   472 00000329 31C0                    xor eax, eax
+   473 0000032B 53                      push rbx
+   474 0000032C 51                      push rcx
+   475 0000032D E8(F6FFFFFF)            call printf
+   476 00000332 59                      pop rcx
+   477 00000333 5B                      pop rbx
+   478                                 
+   479 00000334 48FFC3                  inc rbx
+   480                                 
+   481 00000337 4883FB09                cmp rbx, 9
+   482 0000033B 7CB1                    jl .for1
+   483                                 
+   484 0000033D C9                      leave
+   485 0000033E C3                      ret
+   486                                 
+   487                                 
+   488                                 
+   489                                 count_bits:
+   490 0000033F 55                      push rbp
+   491 00000340 4889E5                  mov rbp, rsp
+   492                                 
+   493 00000343 488D3C25[00000000]      lea rdi, [bitcount]
+   494 0000034B 31DB                    xor ebx, ebx
+   495                                 
+   496 0000034D 31C0                    xor eax, eax
+   497                                 .for1:
+   498                                 
+   499                                 
+   500 0000034F 31D2                    xor edx, edx
+   501                                 
+   502                                 
+   503 00000351 4831C9                  xor rcx, rcx
+   504                                 .for2:
+   505 00000354 480FA3C8                bt rax, rcx
+   506 00000358 0F92D3                  setc bl
+   507 0000035B 4801DA                  add rdx, rbx
+   508                                 
+   509 0000035E 48FFC1                  inc rcx
+   510                                 
+   511 00000361 4883F909                cmp rcx, 9
+   512 00000365 7CEB                    jl .for2
+   513                                 
+   514 00000367 891487                  mov dword [rdi+4*rax], edx
+   515 0000036A 48FFC0                  inc rax
+   516                                 
+   517 0000036D 483D00020000            cmp rax, 512
+   518 00000373 7CD8                    jl .for1
+   519                                 
+   520                                 
+   521 00000375 C9                      leave
+   522 00000376 C3                      ret

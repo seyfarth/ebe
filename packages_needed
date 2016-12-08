@@ -1,0 +1,67 @@
+libqt5webkit5:amd64: /usr/lib/x86_64-linux-gnu/libQt5WebKitWidgets.so.5
+libqt5widgets5:amd64: /usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5
+libqt5gui5:amd64: /usr/lib/x86_64-linux-gnu/libQt5Gui.so.5
+libqt5core5a:amd64: /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.3.0
+libqt5webkit5:amd64: /usr/lib/x86_64-linux-gnu/libQt5WebKit.so.5.3.0
+libqt5network5:amd64: /usr/lib/x86_64-linux-gnu/libQt5Network.so.5
+libqt5opengl5:amd64: /usr/lib/x86_64-linux-gnu/libQt5OpenGL.so.5
+libqt5printsupport5:amd64: /usr/lib/x86_64-linux-gnu/libQt5PrintSupport.so.5
+libqt5quick5:amd64: /usr/lib/x86_64-linux-gnu/libQt5Quick.so.5
+libqt5qml5:amd64: /usr/lib/x86_64-linux-gnu/libQt5Qml.so.5
+libqt5sql5:amd64: /usr/lib/x86_64-linux-gnu/libQt5Sql.so.5.3
+
+qttools5-dev
+qttools5-dev-tools
+qtbase5-dev
+qtbase5-dev-tools
+libqt5widgets5
+libqt5core5a
+libqt5network5
+libqt5opengl5-dev
+libqt5quick5
+libqt5qml5
+libqt5sql5
+libqt5webkit5-dev
+
+libc6:amd64: /lib/x86_64-linux-gnu/libpthread.so.0
+libstdc++6:amd64: /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.20
+libc6:amd64: /lib/x86_64-linux-gnu/libm.so.6
+libgcc1:amd64: /lib/x86_64-linux-gnu/libgcc_s.so.1
+libc6:amd64: /lib/x86_64-linux-gnu/libc.so.6
+libglib2.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4200.1
+libglib2.0-0:amd64: /lib/x86_64-linux-gnu/libglib-2.0.so.0
+libglib2.0-dev: /usr/share/gdb/auto-load/libglib-2.0.so.0.4200.1-gdb.py
+libx11-6:amd64: /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+libpng12-0:amd64: /lib/x86_64-linux-gnu/libpng12.so.0.51.0
+libharfbuzz0b:amd64: /usr/lib/x86_64-linux-gnu/libharfbuzz.so.0
+zlib1g:amd64: /lib/x86_64-linux-gnu/libz.so.1.2.8
+libgl1-mesa-glx:amd64: /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1
+libicu52:amd64: /usr/lib/x86_64-linux-gnu/libicui18n.so.52
+libicu52:amd64: /usr/lib/x86_64-linux-gnu/libicuuc.so.52
+libc6:amd64: /lib/x86_64-linux-gnu/libdl.so.2
+libc6:amd64: /lib/x86_64-linux-gnu/librt.so.1
+libxrender1:amd64: /usr/lib/x86_64-linux-gnu/libXrender.so.1
+libxcomposite1:amd64: /usr/lib/x86_64-linux-gnu/libXcomposite.so.1.0.0
+libjpeg-turbo8:amd64: /usr/lib/x86_64-linux-gnu/libjpeg.so.8
+libxslt1.1:amd64: /usr/lib/x86_64-linux-gnu/libxslt.so.1.1.28
+libxml2:amd64: /usr/lib/x86_64-linux-gnu/libxml2.so.2
+libgstreamer1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so.0
+libgstreamer-plugins-base1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgstapp-1.0.so.0
+libgstreamer1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgstbase-1.0.so.0.403.0
+libgstreamer-plugins-base1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgstpbutils-1.0.so.0.403.0
+libgstreamer-plugins-base1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgstvideo-1.0.so.0
+libgstreamer-plugins-base1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgstaudio-1.0.so.0.403.0
+libsqlite3-0:amd64: /usr/lib/x86_64-linux-gnu/libsqlite3.so.0
+libffi6:amd64: /usr/lib/x86_64-linux-gnu/libffi.so.6.0.2
+libpcre3:amd64: /lib/x86_64-linux-gnu/libpcre.so.3.13.1
+libxcb1:amd64: /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+libfreetype6:amd64: /usr/lib/x86_64-linux-gnu/libfreetype.so.6
+libgraphite2-3:amd64: /usr/lib/x86_64-linux-gnu/libgraphite2.so.3
+libxext6:amd64: /usr/lib/x86_64-linux-gnu/libXext.so.6
+libicu52:amd64: /usr/lib/x86_64-linux-gnu/libicudata.so.52
+liblzma5:amd64: /lib/x86_64-linux-gnu/liblzma.so.5
+libglib2.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0
+liborc-0.4-0:amd64: /usr/lib/x86_64-linux-gnu/liborc-0.4.so.0
+libgstreamer-plugins-base1.0-0:amd64: /usr/lib/x86_64-linux-gnu/libgsttag-1.0.so.0
+libxau6:amd64: /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+libxdmcp6:amd64: /usr/lib/x86_64-linux-gnu/libXdmcp.so.6

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ebe
+Comment=Easy Beginner IDE
+Exec=/home/seyfarth/ebe/ebe
+Icon=/home/seyfarth/ebe/ebe.ico
+Terminal=false
+Type=Application
+Categories=Development;
+MimeType=application/ebe

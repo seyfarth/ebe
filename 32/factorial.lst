@@ -1,0 +1,411 @@
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 1
+
+
+ 306              	.list
+   1              	    ## Simple factorial example
+   2              	    .section .data
+   3 0000 46616374 	format:      .asciz  "Factorial(%d) = %d\n"
+   3      6F726961 
+   3      6C282564 
+   3      29203D20 
+   3      25640A00 
+   4 0014 05000000 	n:  .int     5
+   5              	 
+   6              	    .section .bss
+   7              	    .lcomm   fact, 4
+   8              	
+   9              	    .section .text
+  10              	    .globl   main
+  11              	    .extern  printf
+  12              	main:
+  13 0000 55       	    pushl   %ebp
+  14 0001 89E5     	    movl    %esp, %ebp
+  15              	    frame   2, 0, 3
+  15              	>  .equ frame_size,(0+3)*4
+  16 0003 83EC0C   	    subl    $frame_size, %esp
+  17              	
+  18 0006 A1140000 	    movl    n, %eax
+  18      00
+  19 000b 890424   	    movl    %eax, newPar1(%esp)
+  20 000e E8270000 	    call    factorial
+  20      00
+  21 0013 A3000000 	    movl    %eax, fact
+  21      00
+  22              	    
+  23 0018 8D050000 	    lea     format, %eax
+  23      0000
+  24 001e 890424   	    movl    %eax, newPar1(%esp)
+  25 0021 A1140000 	    movl    n, %eax
+  25      00
+  26 0026 89442404 	    movl    %eax, newPar2(%esp)
+  27 002a A1000000 	    movl    fact, %eax
+  27      00
+  28 002f 89442408 	    movl    %eax, newPar3(%esp)
+  29 0033 E8FCFFFF 	    call    printf
+  29      FF
+  30              	
+  31 0038 C9       	    leave
+  32 0039 C3       	    ret
+  33              	
+  34              	    ## Factorial function
+  35              	    ## Returns 1 if the argument is <= 0
+  36              	    #.type factorial, @function
+  37              	factorial:
+  38 003a 55       	    pushl   %ebp
+  39 003b 89E5     	    movl    %esp, %ebp
+  40              	    frame   1, 2, 2
+  40              	>  .equ frame_size,(2+2)*4
+  41 003d 83EC10   	    subl    $frame_size, %esp
+  42              	
+  43 0040 8B4508   	    movl    currPar1(%ebp), %eax
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 2
+
+
+  44              	    .equ    num, currPar1
+  45 0043 8B4508   	    movl    num(%ebp), %eax           ## alternative after .equ
+  46 0046 83F801   	    cmpl    $1,%eax
+  47 0049 7E0B     	    jle     fac1
+  48 004b 89C1     	    movl    %eax, %ecx
+  49 004d 49       	    decl    %ecx
+  50              	fac_loop:   
+  51 004e 0FAFC1   	    imull   %ecx, %eax
+  52 0051 49       	    decl    %ecx
+  53 0052 75FA     	    jnz     fac_loop
+  54 0054 C9       	    leave
+  55 0055 C3       	    ret
+  56              	fac1:
+  57 0056 B8010000 	    movl $1,%eax
+  57      00
+  58 005b C9       	    leave
+  59 005c C3       	    ret
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 3
+
+
+DEFINED SYMBOLS
+       ebe_as_32.inc:6      *ABS*:fffffffffffffffc local1
+       ebe_as_32.inc:7      *ABS*:fffffffffffffff8 local2
+       ebe_as_32.inc:8      *ABS*:fffffffffffffff4 local3
+       ebe_as_32.inc:9      *ABS*:fffffffffffffff0 local4
+       ebe_as_32.inc:10     *ABS*:ffffffffffffffec local5
+       ebe_as_32.inc:11     *ABS*:ffffffffffffffe8 local6
+       ebe_as_32.inc:12     *ABS*:ffffffffffffffe4 local7
+       ebe_as_32.inc:13     *ABS*:ffffffffffffffe0 local8
+       ebe_as_32.inc:14     *ABS*:ffffffffffffffdc local9
+       ebe_as_32.inc:15     *ABS*:ffffffffffffffd8 local10
+       ebe_as_32.inc:16     *ABS*:ffffffffffffffd4 local11
+       ebe_as_32.inc:17     *ABS*:ffffffffffffffd0 local12
+       ebe_as_32.inc:18     *ABS*:ffffffffffffffcc local13
+       ebe_as_32.inc:19     *ABS*:ffffffffffffffc8 local14
+       ebe_as_32.inc:20     *ABS*:ffffffffffffffc4 local15
+       ebe_as_32.inc:21     *ABS*:ffffffffffffffc0 local16
+       ebe_as_32.inc:22     *ABS*:ffffffffffffffbc local17
+       ebe_as_32.inc:23     *ABS*:ffffffffffffffb8 local18
+       ebe_as_32.inc:24     *ABS*:ffffffffffffffb4 local19
+       ebe_as_32.inc:25     *ABS*:ffffffffffffffb0 local20
+       ebe_as_32.inc:26     *ABS*:ffffffffffffffac local21
+       ebe_as_32.inc:27     *ABS*:ffffffffffffffa8 local22
+       ebe_as_32.inc:28     *ABS*:ffffffffffffffa4 local23
+       ebe_as_32.inc:29     *ABS*:ffffffffffffffa0 local24
+       ebe_as_32.inc:30     *ABS*:ffffffffffffff9c local25
+       ebe_as_32.inc:31     *ABS*:ffffffffffffff98 local26
+       ebe_as_32.inc:32     *ABS*:ffffffffffffff94 local27
+       ebe_as_32.inc:33     *ABS*:ffffffffffffff90 local28
+       ebe_as_32.inc:34     *ABS*:ffffffffffffff8c local29
+       ebe_as_32.inc:35     *ABS*:ffffffffffffff88 local30
+       ebe_as_32.inc:36     *ABS*:ffffffffffffff84 local31
+       ebe_as_32.inc:37     *ABS*:ffffffffffffff80 local32
+       ebe_as_32.inc:38     *ABS*:ffffffffffffff7c local33
+       ebe_as_32.inc:39     *ABS*:ffffffffffffff78 local34
+       ebe_as_32.inc:40     *ABS*:ffffffffffffff74 local35
+       ebe_as_32.inc:41     *ABS*:ffffffffffffff70 local36
+       ebe_as_32.inc:42     *ABS*:ffffffffffffff6c local37
+       ebe_as_32.inc:43     *ABS*:ffffffffffffff68 local38
+       ebe_as_32.inc:44     *ABS*:ffffffffffffff64 local39
+       ebe_as_32.inc:45     *ABS*:ffffffffffffff60 local40
+       ebe_as_32.inc:46     *ABS*:ffffffffffffff5c local41
+       ebe_as_32.inc:47     *ABS*:ffffffffffffff58 local42
+       ebe_as_32.inc:48     *ABS*:ffffffffffffff54 local43
+       ebe_as_32.inc:49     *ABS*:ffffffffffffff50 local44
+       ebe_as_32.inc:50     *ABS*:ffffffffffffff4c local45
+       ebe_as_32.inc:51     *ABS*:ffffffffffffff48 local46
+       ebe_as_32.inc:52     *ABS*:ffffffffffffff44 local47
+       ebe_as_32.inc:53     *ABS*:ffffffffffffff40 local48
+       ebe_as_32.inc:54     *ABS*:ffffffffffffff3c local49
+       ebe_as_32.inc:55     *ABS*:ffffffffffffff38 local50
+       ebe_as_32.inc:56     *ABS*:ffffffffffffff34 local51
+       ebe_as_32.inc:57     *ABS*:ffffffffffffff30 local52
+       ebe_as_32.inc:58     *ABS*:ffffffffffffff2c local53
+       ebe_as_32.inc:59     *ABS*:ffffffffffffff28 local54
+       ebe_as_32.inc:60     *ABS*:ffffffffffffff24 local55
+       ebe_as_32.inc:61     *ABS*:ffffffffffffff20 local56
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 4
+
+
+       ebe_as_32.inc:62     *ABS*:ffffffffffffff1c local57
+       ebe_as_32.inc:63     *ABS*:ffffffffffffff18 local58
+       ebe_as_32.inc:64     *ABS*:ffffffffffffff14 local59
+       ebe_as_32.inc:65     *ABS*:ffffffffffffff10 local60
+       ebe_as_32.inc:66     *ABS*:ffffffffffffff0c local61
+       ebe_as_32.inc:67     *ABS*:ffffffffffffff08 local62
+       ebe_as_32.inc:68     *ABS*:ffffffffffffff04 local63
+       ebe_as_32.inc:69     *ABS*:ffffffffffffff00 local64
+       ebe_as_32.inc:70     *ABS*:fffffffffffffefc local65
+       ebe_as_32.inc:71     *ABS*:fffffffffffffef8 local66
+       ebe_as_32.inc:72     *ABS*:fffffffffffffef4 local67
+       ebe_as_32.inc:73     *ABS*:fffffffffffffef0 local68
+       ebe_as_32.inc:74     *ABS*:fffffffffffffeec local69
+       ebe_as_32.inc:75     *ABS*:fffffffffffffee8 local70
+       ebe_as_32.inc:76     *ABS*:fffffffffffffee4 local71
+       ebe_as_32.inc:77     *ABS*:fffffffffffffee0 local72
+       ebe_as_32.inc:78     *ABS*:fffffffffffffedc local73
+       ebe_as_32.inc:79     *ABS*:fffffffffffffed8 local74
+       ebe_as_32.inc:80     *ABS*:fffffffffffffed4 local75
+       ebe_as_32.inc:81     *ABS*:fffffffffffffed0 local76
+       ebe_as_32.inc:82     *ABS*:fffffffffffffecc local77
+       ebe_as_32.inc:83     *ABS*:fffffffffffffec8 local78
+       ebe_as_32.inc:84     *ABS*:fffffffffffffec4 local79
+       ebe_as_32.inc:85     *ABS*:fffffffffffffec0 local80
+       ebe_as_32.inc:86     *ABS*:fffffffffffffebc local81
+       ebe_as_32.inc:87     *ABS*:fffffffffffffeb8 local82
+       ebe_as_32.inc:88     *ABS*:fffffffffffffeb4 local83
+       ebe_as_32.inc:89     *ABS*:fffffffffffffeb0 local84
+       ebe_as_32.inc:90     *ABS*:fffffffffffffeac local85
+       ebe_as_32.inc:91     *ABS*:fffffffffffffea8 local86
+       ebe_as_32.inc:92     *ABS*:fffffffffffffea4 local87
+       ebe_as_32.inc:93     *ABS*:fffffffffffffea0 local88
+       ebe_as_32.inc:94     *ABS*:fffffffffffffe9c local89
+       ebe_as_32.inc:95     *ABS*:fffffffffffffe98 local90
+       ebe_as_32.inc:96     *ABS*:fffffffffffffe94 local91
+       ebe_as_32.inc:97     *ABS*:fffffffffffffe90 local92
+       ebe_as_32.inc:98     *ABS*:fffffffffffffe8c local93
+       ebe_as_32.inc:99     *ABS*:fffffffffffffe88 local94
+       ebe_as_32.inc:100    *ABS*:fffffffffffffe84 local95
+       ebe_as_32.inc:101    *ABS*:fffffffffffffe80 local96
+       ebe_as_32.inc:102    *ABS*:fffffffffffffe7c local97
+       ebe_as_32.inc:103    *ABS*:fffffffffffffe78 local98
+       ebe_as_32.inc:104    *ABS*:fffffffffffffe74 local99
+       ebe_as_32.inc:105    *ABS*:fffffffffffffe70 local100
+       ebe_as_32.inc:106    *ABS*:0000000000000008 currPar1
+       ebe_as_32.inc:107    *ABS*:000000000000000c currPar2
+       ebe_as_32.inc:108    *ABS*:0000000000000010 currPar3
+       ebe_as_32.inc:109    *ABS*:0000000000000014 currPar4
+       ebe_as_32.inc:110    *ABS*:0000000000000018 currPar5
+       ebe_as_32.inc:111    *ABS*:000000000000001c currPar6
+       ebe_as_32.inc:112    *ABS*:0000000000000020 currPar7
+       ebe_as_32.inc:113    *ABS*:0000000000000024 currPar8
+       ebe_as_32.inc:114    *ABS*:0000000000000028 currPar9
+       ebe_as_32.inc:115    *ABS*:000000000000002c currPar10
+       ebe_as_32.inc:116    *ABS*:0000000000000030 currPar11
+       ebe_as_32.inc:117    *ABS*:0000000000000034 currPar12
+       ebe_as_32.inc:118    *ABS*:0000000000000038 currPar13
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 5
+
+
+       ebe_as_32.inc:119    *ABS*:000000000000003c currPar14
+       ebe_as_32.inc:120    *ABS*:0000000000000040 currPar15
+       ebe_as_32.inc:121    *ABS*:0000000000000044 currPar16
+       ebe_as_32.inc:122    *ABS*:0000000000000048 currPar17
+       ebe_as_32.inc:123    *ABS*:000000000000004c currPar18
+       ebe_as_32.inc:124    *ABS*:0000000000000050 currPar19
+       ebe_as_32.inc:125    *ABS*:0000000000000054 currPar20
+       ebe_as_32.inc:126    *ABS*:0000000000000058 currPar21
+       ebe_as_32.inc:127    *ABS*:000000000000005c currPar22
+       ebe_as_32.inc:128    *ABS*:0000000000000060 currPar23
+       ebe_as_32.inc:129    *ABS*:0000000000000064 currPar24
+       ebe_as_32.inc:130    *ABS*:0000000000000068 currPar25
+       ebe_as_32.inc:131    *ABS*:000000000000006c currPar26
+       ebe_as_32.inc:132    *ABS*:0000000000000070 currPar27
+       ebe_as_32.inc:133    *ABS*:0000000000000074 currPar28
+       ebe_as_32.inc:134    *ABS*:0000000000000078 currPar29
+       ebe_as_32.inc:135    *ABS*:000000000000007c currPar30
+       ebe_as_32.inc:136    *ABS*:0000000000000080 currPar31
+       ebe_as_32.inc:137    *ABS*:0000000000000084 currPar32
+       ebe_as_32.inc:138    *ABS*:0000000000000088 currPar33
+       ebe_as_32.inc:139    *ABS*:000000000000008c currPar34
+       ebe_as_32.inc:140    *ABS*:0000000000000090 currPar35
+       ebe_as_32.inc:141    *ABS*:0000000000000094 currPar36
+       ebe_as_32.inc:142    *ABS*:0000000000000098 currPar37
+       ebe_as_32.inc:143    *ABS*:000000000000009c currPar38
+       ebe_as_32.inc:144    *ABS*:00000000000000a0 currPar39
+       ebe_as_32.inc:145    *ABS*:00000000000000a4 currPar40
+       ebe_as_32.inc:146    *ABS*:00000000000000a8 currPar41
+       ebe_as_32.inc:147    *ABS*:00000000000000ac currPar42
+       ebe_as_32.inc:148    *ABS*:00000000000000b0 currPar43
+       ebe_as_32.inc:149    *ABS*:00000000000000b4 currPar44
+       ebe_as_32.inc:150    *ABS*:00000000000000b8 currPar45
+       ebe_as_32.inc:151    *ABS*:00000000000000bc currPar46
+       ebe_as_32.inc:152    *ABS*:00000000000000c0 currPar47
+       ebe_as_32.inc:153    *ABS*:00000000000000c4 currPar48
+       ebe_as_32.inc:154    *ABS*:00000000000000c8 currPar49
+       ebe_as_32.inc:155    *ABS*:00000000000000cc currPar50
+       ebe_as_32.inc:156    *ABS*:00000000000000d0 currPar51
+       ebe_as_32.inc:157    *ABS*:00000000000000d4 currPar52
+       ebe_as_32.inc:158    *ABS*:00000000000000d8 currPar53
+       ebe_as_32.inc:159    *ABS*:00000000000000dc currPar54
+       ebe_as_32.inc:160    *ABS*:00000000000000e0 currPar55
+       ebe_as_32.inc:161    *ABS*:00000000000000e4 currPar56
+       ebe_as_32.inc:162    *ABS*:00000000000000e8 currPar57
+       ebe_as_32.inc:163    *ABS*:00000000000000ec currPar58
+       ebe_as_32.inc:164    *ABS*:00000000000000f0 currPar59
+       ebe_as_32.inc:165    *ABS*:00000000000000f4 currPar60
+       ebe_as_32.inc:166    *ABS*:00000000000000f8 currPar61
+       ebe_as_32.inc:167    *ABS*:00000000000000fc currPar62
+       ebe_as_32.inc:168    *ABS*:0000000000000100 currPar63
+       ebe_as_32.inc:169    *ABS*:0000000000000104 currPar64
+       ebe_as_32.inc:170    *ABS*:0000000000000108 currPar65
+       ebe_as_32.inc:171    *ABS*:000000000000010c currPar66
+       ebe_as_32.inc:172    *ABS*:0000000000000110 currPar67
+       ebe_as_32.inc:173    *ABS*:0000000000000114 currPar68
+       ebe_as_32.inc:174    *ABS*:0000000000000118 currPar69
+       ebe_as_32.inc:175    *ABS*:000000000000011c currPar70
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 6
+
+
+       ebe_as_32.inc:176    *ABS*:0000000000000120 currPar71
+       ebe_as_32.inc:177    *ABS*:0000000000000124 currPar72
+       ebe_as_32.inc:178    *ABS*:0000000000000128 currPar73
+       ebe_as_32.inc:179    *ABS*:000000000000012c currPar74
+       ebe_as_32.inc:180    *ABS*:0000000000000130 currPar75
+       ebe_as_32.inc:181    *ABS*:0000000000000134 currPar76
+       ebe_as_32.inc:182    *ABS*:0000000000000138 currPar77
+       ebe_as_32.inc:183    *ABS*:000000000000013c currPar78
+       ebe_as_32.inc:184    *ABS*:0000000000000140 currPar79
+       ebe_as_32.inc:185    *ABS*:0000000000000144 currPar80
+       ebe_as_32.inc:186    *ABS*:0000000000000148 currPar81
+       ebe_as_32.inc:187    *ABS*:000000000000014c currPar82
+       ebe_as_32.inc:188    *ABS*:0000000000000150 currPar83
+       ebe_as_32.inc:189    *ABS*:0000000000000154 currPar84
+       ebe_as_32.inc:190    *ABS*:0000000000000158 currPar85
+       ebe_as_32.inc:191    *ABS*:000000000000015c currPar86
+       ebe_as_32.inc:192    *ABS*:0000000000000160 currPar87
+       ebe_as_32.inc:193    *ABS*:0000000000000164 currPar88
+       ebe_as_32.inc:194    *ABS*:0000000000000168 currPar89
+       ebe_as_32.inc:195    *ABS*:000000000000016c currPar90
+       ebe_as_32.inc:196    *ABS*:0000000000000170 currPar91
+       ebe_as_32.inc:197    *ABS*:0000000000000174 currPar92
+       ebe_as_32.inc:198    *ABS*:0000000000000178 currPar93
+       ebe_as_32.inc:199    *ABS*:000000000000017c currPar94
+       ebe_as_32.inc:200    *ABS*:0000000000000180 currPar95
+       ebe_as_32.inc:201    *ABS*:0000000000000184 currPar96
+       ebe_as_32.inc:202    *ABS*:0000000000000188 currPar97
+       ebe_as_32.inc:203    *ABS*:000000000000018c currPar98
+       ebe_as_32.inc:204    *ABS*:0000000000000190 currPar99
+       ebe_as_32.inc:205    *ABS*:0000000000000194 currPar100
+       ebe_as_32.inc:206    *ABS*:0000000000000000 newPar1
+       ebe_as_32.inc:207    *ABS*:0000000000000004 newPar2
+       ebe_as_32.inc:208    *ABS*:0000000000000008 newPar3
+       ebe_as_32.inc:209    *ABS*:000000000000000c newPar4
+       ebe_as_32.inc:210    *ABS*:0000000000000010 newPar5
+       ebe_as_32.inc:211    *ABS*:0000000000000014 newPar6
+       ebe_as_32.inc:212    *ABS*:0000000000000018 newPar7
+       ebe_as_32.inc:213    *ABS*:000000000000001c newPar8
+       ebe_as_32.inc:214    *ABS*:0000000000000020 newPar9
+       ebe_as_32.inc:215    *ABS*:0000000000000024 newPar10
+       ebe_as_32.inc:216    *ABS*:0000000000000028 newPar11
+       ebe_as_32.inc:217    *ABS*:000000000000002c newPar12
+       ebe_as_32.inc:218    *ABS*:0000000000000030 newPar13
+       ebe_as_32.inc:219    *ABS*:0000000000000034 newPar14
+       ebe_as_32.inc:220    *ABS*:0000000000000038 newPar15
+       ebe_as_32.inc:221    *ABS*:000000000000003c newPar16
+       ebe_as_32.inc:222    *ABS*:0000000000000040 newPar17
+       ebe_as_32.inc:223    *ABS*:0000000000000044 newPar18
+       ebe_as_32.inc:224    *ABS*:0000000000000048 newPar19
+       ebe_as_32.inc:225    *ABS*:000000000000004c newPar20
+       ebe_as_32.inc:226    *ABS*:0000000000000050 newPar21
+       ebe_as_32.inc:227    *ABS*:0000000000000054 newPar22
+       ebe_as_32.inc:228    *ABS*:0000000000000058 newPar23
+       ebe_as_32.inc:229    *ABS*:000000000000005c newPar24
+       ebe_as_32.inc:230    *ABS*:0000000000000060 newPar25
+       ebe_as_32.inc:231    *ABS*:0000000000000064 newPar26
+       ebe_as_32.inc:232    *ABS*:0000000000000068 newPar27
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 7
+
+
+       ebe_as_32.inc:233    *ABS*:000000000000006c newPar28
+       ebe_as_32.inc:234    *ABS*:0000000000000070 newPar29
+       ebe_as_32.inc:235    *ABS*:0000000000000074 newPar30
+       ebe_as_32.inc:236    *ABS*:0000000000000078 newPar31
+       ebe_as_32.inc:237    *ABS*:000000000000007c newPar32
+       ebe_as_32.inc:238    *ABS*:0000000000000080 newPar33
+       ebe_as_32.inc:239    *ABS*:0000000000000084 newPar34
+       ebe_as_32.inc:240    *ABS*:0000000000000088 newPar35
+       ebe_as_32.inc:241    *ABS*:000000000000008c newPar36
+       ebe_as_32.inc:242    *ABS*:0000000000000090 newPar37
+       ebe_as_32.inc:243    *ABS*:0000000000000094 newPar38
+       ebe_as_32.inc:244    *ABS*:0000000000000098 newPar39
+       ebe_as_32.inc:245    *ABS*:000000000000009c newPar40
+       ebe_as_32.inc:246    *ABS*:00000000000000a0 newPar41
+       ebe_as_32.inc:247    *ABS*:00000000000000a4 newPar42
+       ebe_as_32.inc:248    *ABS*:00000000000000a8 newPar43
+       ebe_as_32.inc:249    *ABS*:00000000000000ac newPar44
+       ebe_as_32.inc:250    *ABS*:00000000000000b0 newPar45
+       ebe_as_32.inc:251    *ABS*:00000000000000b4 newPar46
+       ebe_as_32.inc:252    *ABS*:00000000000000b8 newPar47
+       ebe_as_32.inc:253    *ABS*:00000000000000bc newPar48
+       ebe_as_32.inc:254    *ABS*:00000000000000c0 newPar49
+       ebe_as_32.inc:255    *ABS*:00000000000000c4 newPar50
+       ebe_as_32.inc:256    *ABS*:00000000000000c8 newPar51
+       ebe_as_32.inc:257    *ABS*:00000000000000cc newPar52
+       ebe_as_32.inc:258    *ABS*:00000000000000d0 newPar53
+       ebe_as_32.inc:259    *ABS*:00000000000000d4 newPar54
+       ebe_as_32.inc:260    *ABS*:00000000000000d8 newPar55
+       ebe_as_32.inc:261    *ABS*:00000000000000dc newPar56
+       ebe_as_32.inc:262    *ABS*:00000000000000e0 newPar57
+       ebe_as_32.inc:263    *ABS*:00000000000000e4 newPar58
+       ebe_as_32.inc:264    *ABS*:00000000000000e8 newPar59
+       ebe_as_32.inc:265    *ABS*:00000000000000ec newPar60
+       ebe_as_32.inc:266    *ABS*:00000000000000f0 newPar61
+       ebe_as_32.inc:267    *ABS*:00000000000000f4 newPar62
+       ebe_as_32.inc:268    *ABS*:00000000000000f8 newPar63
+       ebe_as_32.inc:269    *ABS*:00000000000000fc newPar64
+       ebe_as_32.inc:270    *ABS*:0000000000000100 newPar65
+       ebe_as_32.inc:271    *ABS*:0000000000000104 newPar66
+       ebe_as_32.inc:272    *ABS*:0000000000000108 newPar67
+       ebe_as_32.inc:273    *ABS*:000000000000010c newPar68
+       ebe_as_32.inc:274    *ABS*:0000000000000110 newPar69
+       ebe_as_32.inc:275    *ABS*:0000000000000114 newPar70
+       ebe_as_32.inc:276    *ABS*:0000000000000118 newPar71
+       ebe_as_32.inc:277    *ABS*:000000000000011c newPar72
+       ebe_as_32.inc:278    *ABS*:0000000000000120 newPar73
+       ebe_as_32.inc:279    *ABS*:0000000000000124 newPar74
+       ebe_as_32.inc:280    *ABS*:0000000000000128 newPar75
+       ebe_as_32.inc:281    *ABS*:000000000000012c newPar76
+       ebe_as_32.inc:282    *ABS*:0000000000000130 newPar77
+       ebe_as_32.inc:283    *ABS*:0000000000000134 newPar78
+       ebe_as_32.inc:284    *ABS*:0000000000000138 newPar79
+       ebe_as_32.inc:285    *ABS*:000000000000013c newPar80
+       ebe_as_32.inc:286    *ABS*:0000000000000140 newPar81
+       ebe_as_32.inc:287    *ABS*:0000000000000144 newPar82
+       ebe_as_32.inc:288    *ABS*:0000000000000148 newPar83
+       ebe_as_32.inc:289    *ABS*:000000000000014c newPar84
+GAS LISTING /home/seyfarth/ebe/32/factorial.s 			page 8
+
+
+       ebe_as_32.inc:290    *ABS*:0000000000000150 newPar85
+       ebe_as_32.inc:291    *ABS*:0000000000000154 newPar86
+       ebe_as_32.inc:292    *ABS*:0000000000000158 newPar87
+       ebe_as_32.inc:293    *ABS*:000000000000015c newPar88
+       ebe_as_32.inc:294    *ABS*:0000000000000160 newPar89
+       ebe_as_32.inc:295    *ABS*:0000000000000164 newPar90
+       ebe_as_32.inc:296    *ABS*:0000000000000168 newPar91
+       ebe_as_32.inc:297    *ABS*:000000000000016c newPar92
+       ebe_as_32.inc:298    *ABS*:0000000000000170 newPar93
+       ebe_as_32.inc:299    *ABS*:0000000000000174 newPar94
+       ebe_as_32.inc:300    *ABS*:0000000000000178 newPar95
+       ebe_as_32.inc:301    *ABS*:000000000000017c newPar96
+       ebe_as_32.inc:302    *ABS*:0000000000000180 newPar97
+       ebe_as_32.inc:303    *ABS*:0000000000000184 newPar98
+       ebe_as_32.inc:304    *ABS*:0000000000000188 newPar99
+       ebe_as_32.inc:305    *ABS*:000000000000018c newPar100
+/home/seyfarth/ebe/32/factorial.s:3      .data:0000000000000000 format
+/home/seyfarth/ebe/32/factorial.s:4      .data:0000000000000014 n
+/home/seyfarth/ebe/32/factorial.s:7      .bss:0000000000000000 fact
+/home/seyfarth/ebe/32/factorial.s:12     .text:0000000000000000 main
+/home/seyfarth/ebe/32/factorial.s:15     *ABS*:0000000000000010 frame_size
+/home/seyfarth/ebe/32/factorial.s:37     .text:000000000000003a factorial
+/home/seyfarth/ebe/32/factorial.s:44     *ABS*:0000000000000008 num
+/home/seyfarth/ebe/32/factorial.s:56     .text:0000000000000056 fac1
+/home/seyfarth/ebe/32/factorial.s:50     .text:000000000000004e fac_loop
+
+UNDEFINED SYMBOLS
+printf

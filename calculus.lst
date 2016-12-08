@@ -1,0 +1,762 @@
+     1                                 %line 389+1 /home/seyfarth/ebe/ebe.inc
+     2                                 
+     3                                 %line 479+1 /home/seyfarth/ebe/ebe.inc
+     4                                 
+     5                                 
+     6                                 
+     7                                 
+     8                                 %line 493+1 /home/seyfarth/ebe/ebe.inc
+     9                                 
+    10                                 
+    11                                 
+    12                                 
+    13                                 
+    14                                 
+    15                                 
+    16                                 
+    17                                 
+    18                                 
+    19                                 %line 510+1 /home/seyfarth/ebe/ebe.inc
+    20                                 local1 equ -8*1
+    21                                 %line 510+0 /home/seyfarth/ebe/ebe.inc
+    22                                 local2 equ -8*2
+    23                                 local3 equ -8*3
+    24                                 local4 equ -8*4
+    25                                 local5 equ -8*5
+    26                                 local6 equ -8*6
+    27                                 local7 equ -8*7
+    28                                 local8 equ -8*8
+    29                                 local9 equ -8*9
+    30                                 local10 equ -8*10
+    31                                 local11 equ -8*11
+    32                                 local12 equ -8*12
+    33                                 local13 equ -8*13
+    34                                 local14 equ -8*14
+    35                                 local15 equ -8*15
+    36                                 local16 equ -8*16
+    37                                 local17 equ -8*17
+    38                                 local18 equ -8*18
+    39                                 local19 equ -8*19
+    40                                 local20 equ -8*20
+    41                                 local21 equ -8*21
+    42                                 local22 equ -8*22
+    43                                 local23 equ -8*23
+    44                                 local24 equ -8*24
+    45                                 local25 equ -8*25
+    46                                 local26 equ -8*26
+    47                                 local27 equ -8*27
+    48                                 local28 equ -8*28
+    49                                 local29 equ -8*29
+    50                                 local30 equ -8*30
+    51                                 local31 equ -8*31
+    52                                 local32 equ -8*32
+    53                                 local33 equ -8*33
+    54                                 local34 equ -8*34
+    55                                 local35 equ -8*35
+    56                                 local36 equ -8*36
+    57                                 local37 equ -8*37
+    58                                 local38 equ -8*38
+    59                                 local39 equ -8*39
+    60                                 local40 equ -8*40
+    61                                 local41 equ -8*41
+    62                                 local42 equ -8*42
+    63                                 local43 equ -8*43
+    64                                 local44 equ -8*44
+    65                                 local45 equ -8*45
+    66                                 local46 equ -8*46
+    67                                 local47 equ -8*47
+    68                                 local48 equ -8*48
+    69                                 local49 equ -8*49
+    70                                 local50 equ -8*50
+    71                                 local51 equ -8*51
+    72                                 local52 equ -8*52
+    73                                 local53 equ -8*53
+    74                                 local54 equ -8*54
+    75                                 local55 equ -8*55
+    76                                 local56 equ -8*56
+    77                                 local57 equ -8*57
+    78                                 local58 equ -8*58
+    79                                 local59 equ -8*59
+    80                                 local60 equ -8*60
+    81                                 local61 equ -8*61
+    82                                 local62 equ -8*62
+    83                                 local63 equ -8*63
+    84                                 local64 equ -8*64
+    85                                 local65 equ -8*65
+    86                                 local66 equ -8*66
+    87                                 local67 equ -8*67
+    88                                 local68 equ -8*68
+    89                                 local69 equ -8*69
+    90                                 local70 equ -8*70
+    91                                 local71 equ -8*71
+    92                                 local72 equ -8*72
+    93                                 local73 equ -8*73
+    94                                 local74 equ -8*74
+    95                                 local75 equ -8*75
+    96                                 local76 equ -8*76
+    97                                 local77 equ -8*77
+    98                                 local78 equ -8*78
+    99                                 local79 equ -8*79
+   100                                 local80 equ -8*80
+   101                                 local81 equ -8*81
+   102                                 local82 equ -8*82
+   103                                 local83 equ -8*83
+   104                                 local84 equ -8*84
+   105                                 local85 equ -8*85
+   106                                 local86 equ -8*86
+   107                                 local87 equ -8*87
+   108                                 local88 equ -8*88
+   109                                 local89 equ -8*89
+   110                                 local90 equ -8*90
+   111                                 local91 equ -8*91
+   112                                 local92 equ -8*92
+   113                                 local93 equ -8*93
+   114                                 local94 equ -8*94
+   115                                 local95 equ -8*95
+   116                                 local96 equ -8*96
+   117                                 local97 equ -8*97
+   118                                 local98 equ -8*98
+   119                                 local99 equ -8*99
+   120                                 local100 equ -8*100
+   121                                 %line 512+1 /home/seyfarth/ebe/ebe.inc
+   122                                 
+   123                                 
+   124                                 
+   125                                 
+   126                                 
+   127                                 
+   128                                 
+   129                                 
+   130                                 
+   131                                 
+   132                                 
+   133                                 %line 530+1 /home/seyfarth/ebe/ebe.inc
+   134                                 newPar7 equ 8*(7-7)
+   135                                 %line 530+0 /home/seyfarth/ebe/ebe.inc
+   136                                 newPar8 equ 8*(8-7)
+   137                                 newPar9 equ 8*(9-7)
+   138                                 newPar10 equ 8*(10-7)
+   139                                 newPar11 equ 8*(11-7)
+   140                                 newPar12 equ 8*(12-7)
+   141                                 newPar13 equ 8*(13-7)
+   142                                 newPar14 equ 8*(14-7)
+   143                                 newPar15 equ 8*(15-7)
+   144                                 newPar16 equ 8*(16-7)
+   145                                 newPar17 equ 8*(17-7)
+   146                                 newPar18 equ 8*(18-7)
+   147                                 newPar19 equ 8*(19-7)
+   148                                 newPar20 equ 8*(20-7)
+   149                                 newPar21 equ 8*(21-7)
+   150                                 newPar22 equ 8*(22-7)
+   151                                 newPar23 equ 8*(23-7)
+   152                                 newPar24 equ 8*(24-7)
+   153                                 newPar25 equ 8*(25-7)
+   154                                 newPar26 equ 8*(26-7)
+   155                                 newPar27 equ 8*(27-7)
+   156                                 newPar28 equ 8*(28-7)
+   157                                 newPar29 equ 8*(29-7)
+   158                                 newPar30 equ 8*(30-7)
+   159                                 newPar31 equ 8*(31-7)
+   160                                 newPar32 equ 8*(32-7)
+   161                                 newPar33 equ 8*(33-7)
+   162                                 newPar34 equ 8*(34-7)
+   163                                 newPar35 equ 8*(35-7)
+   164                                 newPar36 equ 8*(36-7)
+   165                                 newPar37 equ 8*(37-7)
+   166                                 newPar38 equ 8*(38-7)
+   167                                 newPar39 equ 8*(39-7)
+   168                                 newPar40 equ 8*(40-7)
+   169                                 newPar41 equ 8*(41-7)
+   170                                 newPar42 equ 8*(42-7)
+   171                                 newPar43 equ 8*(43-7)
+   172                                 newPar44 equ 8*(44-7)
+   173                                 newPar45 equ 8*(45-7)
+   174                                 newPar46 equ 8*(46-7)
+   175                                 newPar47 equ 8*(47-7)
+   176                                 newPar48 equ 8*(48-7)
+   177                                 newPar49 equ 8*(49-7)
+   178                                 newPar50 equ 8*(50-7)
+   179                                 newPar51 equ 8*(51-7)
+   180                                 newPar52 equ 8*(52-7)
+   181                                 newPar53 equ 8*(53-7)
+   182                                 newPar54 equ 8*(54-7)
+   183                                 newPar55 equ 8*(55-7)
+   184                                 newPar56 equ 8*(56-7)
+   185                                 newPar57 equ 8*(57-7)
+   186                                 newPar58 equ 8*(58-7)
+   187                                 newPar59 equ 8*(59-7)
+   188                                 newPar60 equ 8*(60-7)
+   189                                 newPar61 equ 8*(61-7)
+   190                                 newPar62 equ 8*(62-7)
+   191                                 newPar63 equ 8*(63-7)
+   192                                 newPar64 equ 8*(64-7)
+   193                                 newPar65 equ 8*(65-7)
+   194                                 newPar66 equ 8*(66-7)
+   195                                 newPar67 equ 8*(67-7)
+   196                                 newPar68 equ 8*(68-7)
+   197                                 newPar69 equ 8*(69-7)
+   198                                 newPar70 equ 8*(70-7)
+   199                                 newPar71 equ 8*(71-7)
+   200                                 newPar72 equ 8*(72-7)
+   201                                 newPar73 equ 8*(73-7)
+   202                                 newPar74 equ 8*(74-7)
+   203                                 newPar75 equ 8*(75-7)
+   204                                 newPar76 equ 8*(76-7)
+   205                                 newPar77 equ 8*(77-7)
+   206                                 newPar78 equ 8*(78-7)
+   207                                 newPar79 equ 8*(79-7)
+   208                                 newPar80 equ 8*(80-7)
+   209                                 newPar81 equ 8*(81-7)
+   210                                 newPar82 equ 8*(82-7)
+   211                                 newPar83 equ 8*(83-7)
+   212                                 newPar84 equ 8*(84-7)
+   213                                 newPar85 equ 8*(85-7)
+   214                                 newPar86 equ 8*(86-7)
+   215                                 newPar87 equ 8*(87-7)
+   216                                 newPar88 equ 8*(88-7)
+   217                                 newPar89 equ 8*(89-7)
+   218                                 newPar90 equ 8*(90-7)
+   219                                 newPar91 equ 8*(91-7)
+   220                                 newPar92 equ 8*(92-7)
+   221                                 newPar93 equ 8*(93-7)
+   222                                 newPar94 equ 8*(94-7)
+   223                                 newPar95 equ 8*(95-7)
+   224                                 newPar96 equ 8*(96-7)
+   225                                 newPar97 equ 8*(97-7)
+   226                                 newPar98 equ 8*(98-7)
+   227                                 newPar99 equ 8*(99-7)
+   228                                 newPar100 equ 8*(100-7)
+   229                                 %line 532+1 /home/seyfarth/ebe/ebe.inc
+   230                                 
+   231                                 
+   232                                 
+   233                                 
+   234                                 
+   235                                 
+   236                                 
+   237                                 
+   238                                 
+   239                                 
+   240                                 
+   241                                 %line 546+1 /home/seyfarth/ebe/ebe.inc
+   242                                 
+   243                                 %line 551+1 /home/seyfarth/ebe/ebe.inc
+   244                                 currPar7 equ 16+8*(7-7)
+   245                                 %line 551+0 /home/seyfarth/ebe/ebe.inc
+   246                                 currPar8 equ 16+8*(8-7)
+   247                                 currPar9 equ 16+8*(9-7)
+   248                                 currPar10 equ 16+8*(10-7)
+   249                                 currPar11 equ 16+8*(11-7)
+   250                                 currPar12 equ 16+8*(12-7)
+   251                                 currPar13 equ 16+8*(13-7)
+   252                                 currPar14 equ 16+8*(14-7)
+   253                                 currPar15 equ 16+8*(15-7)
+   254                                 currPar16 equ 16+8*(16-7)
+   255                                 currPar17 equ 16+8*(17-7)
+   256                                 currPar18 equ 16+8*(18-7)
+   257                                 currPar19 equ 16+8*(19-7)
+   258                                 currPar20 equ 16+8*(20-7)
+   259                                 currPar21 equ 16+8*(21-7)
+   260                                 currPar22 equ 16+8*(22-7)
+   261                                 currPar23 equ 16+8*(23-7)
+   262                                 currPar24 equ 16+8*(24-7)
+   263                                 currPar25 equ 16+8*(25-7)
+   264                                 currPar26 equ 16+8*(26-7)
+   265                                 currPar27 equ 16+8*(27-7)
+   266                                 currPar28 equ 16+8*(28-7)
+   267                                 currPar29 equ 16+8*(29-7)
+   268                                 currPar30 equ 16+8*(30-7)
+   269                                 currPar31 equ 16+8*(31-7)
+   270                                 currPar32 equ 16+8*(32-7)
+   271                                 currPar33 equ 16+8*(33-7)
+   272                                 currPar34 equ 16+8*(34-7)
+   273                                 currPar35 equ 16+8*(35-7)
+   274                                 currPar36 equ 16+8*(36-7)
+   275                                 currPar37 equ 16+8*(37-7)
+   276                                 currPar38 equ 16+8*(38-7)
+   277                                 currPar39 equ 16+8*(39-7)
+   278                                 currPar40 equ 16+8*(40-7)
+   279                                 currPar41 equ 16+8*(41-7)
+   280                                 currPar42 equ 16+8*(42-7)
+   281                                 currPar43 equ 16+8*(43-7)
+   282                                 currPar44 equ 16+8*(44-7)
+   283                                 currPar45 equ 16+8*(45-7)
+   284                                 currPar46 equ 16+8*(46-7)
+   285                                 currPar47 equ 16+8*(47-7)
+   286                                 currPar48 equ 16+8*(48-7)
+   287                                 currPar49 equ 16+8*(49-7)
+   288                                 currPar50 equ 16+8*(50-7)
+   289                                 currPar51 equ 16+8*(51-7)
+   290                                 currPar52 equ 16+8*(52-7)
+   291                                 currPar53 equ 16+8*(53-7)
+   292                                 currPar54 equ 16+8*(54-7)
+   293                                 currPar55 equ 16+8*(55-7)
+   294                                 currPar56 equ 16+8*(56-7)
+   295                                 currPar57 equ 16+8*(57-7)
+   296                                 currPar58 equ 16+8*(58-7)
+   297                                 currPar59 equ 16+8*(59-7)
+   298                                 currPar60 equ 16+8*(60-7)
+   299                                 currPar61 equ 16+8*(61-7)
+   300                                 currPar62 equ 16+8*(62-7)
+   301                                 currPar63 equ 16+8*(63-7)
+   302                                 currPar64 equ 16+8*(64-7)
+   303                                 currPar65 equ 16+8*(65-7)
+   304                                 currPar66 equ 16+8*(66-7)
+   305                                 currPar67 equ 16+8*(67-7)
+   306                                 currPar68 equ 16+8*(68-7)
+   307                                 currPar69 equ 16+8*(69-7)
+   308                                 currPar70 equ 16+8*(70-7)
+   309                                 currPar71 equ 16+8*(71-7)
+   310                                 currPar72 equ 16+8*(72-7)
+   311                                 currPar73 equ 16+8*(73-7)
+   312                                 currPar74 equ 16+8*(74-7)
+   313                                 currPar75 equ 16+8*(75-7)
+   314                                 currPar76 equ 16+8*(76-7)
+   315                                 currPar77 equ 16+8*(77-7)
+   316                                 currPar78 equ 16+8*(78-7)
+   317                                 currPar79 equ 16+8*(79-7)
+   318                                 currPar80 equ 16+8*(80-7)
+   319                                 currPar81 equ 16+8*(81-7)
+   320                                 currPar82 equ 16+8*(82-7)
+   321                                 currPar83 equ 16+8*(83-7)
+   322                                 currPar84 equ 16+8*(84-7)
+   323                                 currPar85 equ 16+8*(85-7)
+   324                                 currPar86 equ 16+8*(86-7)
+   325                                 currPar87 equ 16+8*(87-7)
+   326                                 currPar88 equ 16+8*(88-7)
+   327                                 currPar89 equ 16+8*(89-7)
+   328                                 currPar90 equ 16+8*(90-7)
+   329                                 currPar91 equ 16+8*(91-7)
+   330                                 currPar92 equ 16+8*(92-7)
+   331                                 currPar93 equ 16+8*(93-7)
+   332                                 currPar94 equ 16+8*(94-7)
+   333                                 currPar95 equ 16+8*(95-7)
+   334                                 currPar96 equ 16+8*(96-7)
+   335                                 currPar97 equ 16+8*(97-7)
+   336                                 currPar98 equ 16+8*(98-7)
+   337                                 currPar99 equ 16+8*(99-7)
+   338                                 currPar100 equ 16+8*(100-7)
+   339                                 %line 553+1 /home/seyfarth/ebe/ebe.inc
+   340                                 
+   341                                 %line 555+1 /home/seyfarth/ebe/ebe.inc
+   342                                 
+   343                                 %line 562+1 /home/seyfarth/ebe/ebe.inc
+   344                                 
+   345                                 %line 569+1 /home/seyfarth/ebe/ebe.inc
+   346                                 
+   347                                 %line 574+1 /home/seyfarth/ebe/ebe.inc
+   348                                 
+   349                                 %line 579+1 /home/seyfarth/ebe/ebe.inc
+   350                                 
+   351                                 %line 584+1 /home/seyfarth/ebe/ebe.inc
+   352                                 
+   353                                 %line 589+1 /home/seyfarth/ebe/ebe.inc
+   354                                 
+   355                                 %line 593+1 /home/seyfarth/ebe/ebe.inc
+   356                                 
+   357                                 %line 597+1 /home/seyfarth/ebe/ebe.inc
+   358                                 
+   359                                 %line 600+1 /home/seyfarth/ebe/ebe.inc
+   360                                 
+   361                                 %line 608+1 /home/seyfarth/ebe/ebe.inc
+   362                                 
+   363                                 %line 619+1 /home/seyfarth/ebe/ebe.inc
+   364                                 
+   365                                 %line 624+1 /home/seyfarth/ebe/ebe.inc
+   366                                 
+   367                                 %line 17+1 /home/seyfarth/ebe/hal.inc
+   368                                 
+   369                                 %line 22+1 /home/seyfarth/ebe/hal.inc
+   370                                 
+   371                                 %line 27+1 /home/seyfarth/ebe/hal.inc
+   372                                 
+   373                                 %line 32+1 /home/seyfarth/ebe/hal.inc
+   374                                 
+   375                                 %line 37+1 /home/seyfarth/ebe/hal.inc
+   376                                 
+   377                                 %line 41+1 /home/seyfarth/ebe/hal.inc
+   378                                 
+   379                                 %line 45+1 /home/seyfarth/ebe/hal.inc
+   380                                 
+   381                                 %line 49+1 /home/seyfarth/ebe/hal.inc
+   382                                 
+   383                                 
+   384                                 %line 57+1 /home/seyfarth/ebe/hal.inc
+   385                                 
+   386                                 
+   387                                 %line 64+1 /home/seyfarth/ebe/hal.inc
+   388                                 
+   389                                 
+   390                                 %line 71+1 /home/seyfarth/ebe/hal.inc
+   391                                 
+   392                                 
+   393                                 %line 78+1 /home/seyfarth/ebe/hal.inc
+   394                                 
+   395                                 
+   396                                 %line 85+1 /home/seyfarth/ebe/hal.inc
+   397                                 
+   398                                 %line 92+1 /home/seyfarth/ebe/hal.inc
+   399                                 
+   400                                 %line 98+1 /home/seyfarth/ebe/hal.inc
+   401                                 
+   402                                 %line 104+1 /home/seyfarth/ebe/hal.inc
+   403                                 
+   404                                 
+   405                                 %line 152+1 /home/seyfarth/ebe/hal.inc
+   406                                 
+   407                                 %line 158+1 /home/seyfarth/ebe/hal.inc
+   408                                 
+   409                                 %line 165+1 /home/seyfarth/ebe/hal.inc
+   410                                 
+   411                                 %line 172+1 /home/seyfarth/ebe/hal.inc
+   412                                 
+   413                                 %line 178+1 /home/seyfarth/ebe/hal.inc
+   414                                 
+   415                                 %line 184+1 /home/seyfarth/ebe/hal.inc
+   416                                 
+   417                                 %line 1+1 /home/seyfarth/ebe/calculus.hal
+   418                                 [segment .text]
+   419                                 [global main]
+   420                                 [extern malloc]
+   421                                 %line 3+0 /home/seyfarth/ebe/calculus.hal
+   422                                 [extern printf]
+   423                                 [extern scanf]
+   424                                 %line 4+1 /home/seyfarth/ebe/calculus.hal
+   425                                 
+   426                                 
+   427                                 
+   428                                 main:
+   429                                 .n equ local1
+   430                                 .a equ local2
+   431                                 .b equ local3
+   432                                 .p equ local4
+   433                                 .pp equ local5
+   434                                 .P equ local6
+   435                                 .i equ local7
+   436                                 .Pa equ local8
+   437                                 .Pb equ local9
+   438 00000000 55                      push rbp
+   439 00000001 4889E5                  mov rbp, rsp
+   440                                 
+   441 00000004 4883EC50                sub rsp, 80
+   442                                 
+   443                                 
+   444                                 [segment .data]
+   445                                 .n_prompt:
+   446 00000000 456E74657220746865-     db "Enter the degree of the polynomial: ",0
+   447 00000000 20646567726565206F-
+   448 00000000 662074686520706F6C-
+   449 00000000 796E6F6D69616C3A20-
+   450 00000000 00                 
+   451                                 
+   452                                 [segment .text]
+   453 00000008 488D3C25[00000000]      lea rdi, [.n_prompt]
+   454 00000010 31C0                    xor eax, eax
+   455 00000012 E8(F6FFFFFF)            call printf
+   456                                 
+   457                                 [segment .data]
+   458                                 .n_scanf:
+   459 00000025 256C6400                db "%ld",0
+   460                                 
+   461                                 [segment .text]
+   462 00000017 488D3C25[00000000]      lea rdi, [.n_scanf]
+   463 0000001F 488D75F8                lea rsi, [rbp+.n]
+   464 00000023 31C0                    xor eax, eax
+   465 00000025 E8(F6FFFFFF)            call scanf
+   466                                 
+   467                                 
+   468 0000002A 8B7DF8                  mov edi, [rbp+.n]
+   469 0000002D E8B4010000              call create
+   470 00000032 488945D8                mov [rbp+.pp], rax
+   471 00000036 8B7DF8                  mov edi, [rbp+.n]
+   472 00000039 48FFC7                  inc rdi
+   473 0000003C E8A5010000              call create
+   474 00000041 488945E0                mov [rbp+.p], rax
+   475 00000045 8B7DF8                  mov edi, [rbp+.n]
+   476 00000048 4883C702                add rdi, 2
+   477 0000004C E895010000              call create
+   478 00000051 488945D0                mov [rbp+.P], rax
+   479                                 
+   480                                 
+   481                                 [segment .data]
+   482                                 .p_prompt:
+   483 00000029 456E74657220256C64-     db "Enter %ld numbers for p: ",0
+   484 00000029 206E756D6265727320-
+   485 00000029 666F7220703A2000   
+   486                                 
+   487                                 [segment .text]
+   488 00000055 488D3C25[00000000]      lea rdi, [.p_prompt]
+   489 0000005D 8B75F8                  mov esi, [rbp+.n]
+   490 00000060 48FFC6                  inc rsi
+   491 00000063 31C0                    xor eax, eax
+   492 00000065 E8(F6FFFFFF)            call printf
+   493                                 
+   494 0000006A 4D31D2                  xor r10, r10
+   495 0000006D 4C8955C8                mov [rbp+.i], r10
+   496 00000071 448B5DF8               .for mov r11d, [rbp+.n]
+   497 00000075 4D39DA                  cmp r10, r11
+   498 00000078 7F22                    jg .end_for
+   499                                 
+   500                                 
+   501                                 [segment .data]
+   502 00000043 256C6600               .p_scanf: db "%lf",0
+   503                                 
+   504                                 [segment .text]
+   505 0000007A 488D3C25[00000000]      lea rdi, [.p_scanf]
+   506 00000082 488B75E0                mov rsi, [rbp+.p]
+   507 00000086 4A8D34D6                lea rsi, [rsi+8*r10]
+   508 0000008A 31C0                    xor eax, eax
+   509 0000008C E8(F6FFFFFF)            call scanf
+   510 00000091 4C8B55C8                mov r10, [rbp+.i]
+   511 00000095 49FFC2                  inc r10
+   512 00000098 4C8955C8                mov [rbp+.i], r10
+   513 0000009C EBD1                    jmp .for
+   514                                 
+   515                                 .end_for:
+   516                                 
+   517                                 
+   518                                 [segment .data]
+   519                                 .ab_prompt:
+   520 00000047 456E74657220612061-     db "Enter a and b: ",0
+   521 00000047 6E6420623A2000     
+   522                                 
+   523                                 [segment .text]
+   524 0000009E 488D3C25[00000000]      lea rdi, [.ab_prompt]
+   525 000000A6 31C0                    xor eax, eax
+   526 000000A8 E8(F6FFFFFF)            call printf
+   527                                 
+   528                                 [segment .data]
+   529                                 .ab_read:
+   530 00000057 256C6620256C6600        db "%lf %lf",0
+   531                                 
+   532                                 [segment .text]
+   533 000000AD 488D3C25[00000000]      lea rdi, [.ab_read]
+   534 000000B5 488D75F0                lea rsi, [rbp+.a]
+   535 000000B9 488D55E8                lea rdx, [rbp+.b]
+   536 000000BD 31C0                    xor eax, eax
+   537 000000BF E8(F6FFFFFF)            call scanf
+   538                                 
+   539                                 
+   540 000000C4 488B7DE0                mov rdi, [rbp+.p]
+   541 000000C8 488B75F8                mov rsi, [rbp+.n]
+   542 000000CC F20F1045F0              movsd xmm0, [rbp+.a]
+   543 000000D1 E81F010000              call horner
+   544                                 
+   545                                 [segment .data]
+   546                                 .a_print:
+   547 0000005F 70286129203D20256C-     db "p(a) = %lf",0x0a,0
+   548 0000005F 660A00             
+   549                                 
+   550                                 [segment .text]
+   551 000000D6 488D3C25[00000000]      lea rdi, [.a_print]
+   552                                 %line 127+1 /home/seyfarth/ebe/calculus.hal
+   553 000000DE B801000000              mov eax, 1
+   554                                 %line 129+1 /home/seyfarth/ebe/calculus.hal
+   555 000000E3 E8(F6FFFFFF)            call printf
+   556                                 
+   557 000000E8 488B7DE0                mov rdi, [rbp+.p]
+   558 000000EC 8B75F8                  mov esi, [rbp+.n]
+   559 000000EF F20F1045E8              movsd xmm0, [rbp+.b]
+   560 000000F4 E8FC000000              call horner
+   561                                 
+   562                                 [segment .data]
+   563                                 .b_print:
+   564 0000006B 70286229203D20256C-     db "p(b) = %lf",0x0a,0
+   565 0000006B 660A00             
+   566                                 
+   567                                 [segment .text]
+   568 000000F9 488D3C25[00000000]      lea rdi, [.b_print]
+   569                                 %line 146+1 /home/seyfarth/ebe/calculus.hal
+   570 00000101 B801000000              mov eax, 1
+   571                                 %line 148+1 /home/seyfarth/ebe/calculus.hal
+   572 00000106 E8(F6FFFFFF)            call printf
+   573                                 
+   574                                 
+   575 0000010B 488B7DE0                mov rdi, [rbp+.p]
+   576 0000010F 488B75D8                mov rsi, [rbp+.pp]
+   577 00000113 8B55F8                  mov edx, [rbp+.n]
+   578 00000116 E8FB000000              call differentiate
+   579                                 
+   580                                 
+   581 0000011B 488B7DD8                mov rdi, [rbp+.pp]
+   582 0000011F 8B75F8                  mov esi, [rbp+.n]
+   583 00000122 48FFCE                  dec rsi
+   584 00000125 F20F1045F0              movsd xmm0, [rbp+.a]
+   585 0000012A E8C6000000              call horner
+   586                                 
+   587                                 [segment .data]
+   588                                 .ppa_print:
+   589 00000077 7070286129203D2025-     db "pp(a) = %lf",0x0a,0
+   590 00000077 6C660A00           
+   591                                 
+   592                                 [segment .text]
+   593 0000012F 488D3C25[00000000]      lea rdi, [.ppa_print]
+   594                                 %line 173+1 /home/seyfarth/ebe/calculus.hal
+   595 00000137 B801000000              mov eax, 1
+   596                                 %line 175+1 /home/seyfarth/ebe/calculus.hal
+   597 0000013C E8(F6FFFFFF)            call printf
+   598                                 
+   599 00000141 488B7DD8                mov rdi, [rbp+.pp]
+   600 00000145 8B75F8                  mov esi, [rbp+.n]
+   601 00000148 48FFCE                  dec rsi
+   602 0000014B F20F1045E8              movsd xmm0, [rbp+.b]
+   603 00000150 E8A0000000              call horner
+   604                                 
+   605                                 [segment .data]
+   606                                 .ppb_print:
+   607 00000084 7070286229203D2025-     db "pp(b) = %lf",0x0a,0
+   608 00000084 6C660A00           
+   609                                 
+   610                                 [segment .text]
+   611 00000155 488D3C25[00000000]      lea rdi, [.ppb_print]
+   612                                 %line 193+1 /home/seyfarth/ebe/calculus.hal
+   613 0000015D B801000000              mov eax, 1
+   614                                 %line 195+1 /home/seyfarth/ebe/calculus.hal
+   615 00000162 E8(F6FFFFFF)            call printf
+   616                                 
+   617                                 
+   618 00000167 488B7DE0                mov rdi, [rbp+.p]
+   619 0000016B 488B75D0                mov rsi, [rbp+.P]
+   620 0000016F 8B55F8                  mov edx, [rbp+.n]
+   621 00000172 E8CF000000              call integrate
+   622                                 
+   623 00000177 488B7DD0                mov rdi, [rbp+.P]
+   624 0000017B 8B75F8                  mov esi, [rbp+.n]
+   625 0000017E 48FFC6                  inc rsi
+   626 00000181 F20F1045F0              movsd xmm0, [rbp+.a]
+   627 00000186 E86A000000              call horner
+   628 0000018B F20F1145C0              movsd [rbp+.Pa], xmm0
+   629                                 
+   630                                 [segment .data]
+   631                                 .Pa_print:
+   632 00000091 50286129203D20256C-     db "P(a) = %lf",0x0a,0
+   633 00000091 660A00             
+   634                                 
+   635                                 [segment .text]
+   636 00000190 488D3C25[00000000]      lea rdi, [.Pa_print]
+   637                                 %line 220+1 /home/seyfarth/ebe/calculus.hal
+   638 00000198 B801000000              mov eax, 1
+   639                                 %line 222+1 /home/seyfarth/ebe/calculus.hal
+   640 0000019D E8(F6FFFFFF)            call printf
+   641                                 
+   642 000001A2 488B7DD0                mov rdi, [rbp+.P]
+   643 000001A6 8B75F8                  mov esi, [rbp+.n]
+   644 000001A9 48FFC6                  inc rsi
+   645 000001AC F20F1045E8              movsd xmm0, [rbp+.b]
+   646 000001B1 E83F000000              call horner
+   647 000001B6 F20F1145B8              movsd [rbp+.Pb], xmm0
+   648                                 
+   649                                 [segment .data]
+   650                                 .Pb_print:
+   651 0000009D 50286229203D20256C-     db "P(b) = %lf",0x0a,0
+   652 0000009D 660A00             
+   653                                 
+   654                                 [segment .text]
+   655 000001BB 488D3C25[00000000]      lea rdi, [.Pb_print]
+   656                                 %line 241+1 /home/seyfarth/ebe/calculus.hal
+   657 000001C3 B801000000              mov eax, 1
+   658                                 %line 243+1 /home/seyfarth/ebe/calculus.hal
+   659 000001C8 E8(F6FFFFFF)            call printf
+   660                                 
+   661                                 
+   662                                 
+   663 000001CD F20F1045B8              movsd xmm0, [rbp+.Pb]
+   664 000001D2 F20F5C45C0              subsd xmm0, [rbp+.Pa]
+   665                                 
+   666                                 [segment .data]
+   667                                 .Pba_print:
+   668 000000A9 502862292D50286129-     db "P(b)-P(a) = %lf",0x0a,0
+   669 000000A9 203D20256C660A00   
+   670                                 
+   671                                 [segment .text]
+   672 000001D7 488D3C25[00000000]      lea rdi, [.Pba_print]
+   673                                 %line 260+1 /home/seyfarth/ebe/calculus.hal
+   674 000001DF B801000000              mov eax, 1
+   675                                 %line 262+1 /home/seyfarth/ebe/calculus.hal
+   676 000001E4 E8(F6FFFFFF)            call printf
+   677                                 
+   678 000001E9 C9                      leave
+   679 000001EA C3                      ret
+   680                                 
+   681                                 create:
+   682 000001EB 55                      push rbp
+   683 000001EC 4889E5                  mov rbp, rsp
+   684                                 
+   685 000001EF 48C1E703                shl rdi, 3
+   686 000001F3 E8(F6FFFFFF)            call malloc
+   687 000001F8 C9                      leave
+   688 000001F9 C3                      ret
+   689                                 
+   690                                 horner:
+   691                                 %line 279+1 /home/seyfarth/ebe/calculus.hal
+   692 000001FA F20F10C8                movsd xmm1, xmm0
+   693                                 
+   694                                 
+   695                                 
+   696 000001FE F20F1004F7              movsd xmm0, [rdi+rsi*8]
+   697                                 
+   698                                 
+   699 00000203 48FFCE                  dec rsi
+   700 00000206 4883FE00               .for: cmp rsi, 0
+   701 0000020A 7C0C                    jl .done
+   702                                 
+   703 0000020C F20F59C1                mulsd xmm0, xmm1
+   704 00000210 F20F5804F7              addsd xmm0, [rdi+rsi*8]
+   705 00000215 48FFCE                  dec rsi
+   706 00000218 EBEA                    jmp .for
+   707                                 
+   708                                 .done:
+   709                                 
+   710 0000021A C3                      ret
+   711                                 
+   712                                 differentiate:
+   713                                 %line 303+1 /home/seyfarth/ebe/calculus.hal
+   714                                 [segment .data]
+   715 000000BA 000000000000F03F       .one dq 1.0
+   716                                 
+   717                                 [segment .text]
+   718 0000021B F20F100C25[00000000]      movsd xmm1, [.one]
+   719 00000224 F20F10D1                movsd xmm2, xmm1
+   720                                 
+   721 00000228 4531D2                  xor r10d, r10d
+   722 0000022B 4939D2                 .for cmp r10, rdx
+   723 0000022E 7D18                    jge .done
+   724                                 
+   725 00000230 F2420F1044D708          movsd xmm0, [rdi+r10*8+8]
+   726 00000237 F20F59C1                mulsd xmm0, xmm1
+   727 0000023B F2420F1104D6            movsd [rsi+r10*8], xmm0
+   728 00000241 49FFC2                  inc r10
+   729 00000244 F20F58CA                addsd xmm1, xmm2
+   730 00000248 EBDF                    jmp .for
+   731                                 
+   732                                 
+   733                                 .done:
+   734 0000024A C3                      ret
+   735                                 
+   736                                 integrate:
+   737 0000024B F20F100C25[00000000]      movsd xmm1, [differentiate.one]
+   738 00000254 F20F10D1                movsd xmm2, xmm1
+   739                                 
+   740                                 [segment .data]
+   741 000000C2 0000000000000000       .zero dq 0.0
+   742                                 
+   743                                 [segment .text]
+   744                                 
+   745                                 
+   746 00000258 F20F100425[00000000]      movsd xmm0, [.zero]
+   747 00000261 F20F1106                movsd [rsi], xmm0
+   748                                 
+   749                                 
+   750 00000265 4531D2                  xor r10d, r10d
+   751 00000268 4939D2                 .for cmp r10, rdx
+   752 0000026B 7F18                    jg .done
+   753                                 
+   754 0000026D F2420F1004D7            movsd xmm0, [rdi+r10*8]
+   755 00000273 F20F5EC1                divsd xmm0, xmm1
+   756 00000277 F2420F1144D608          movsd [rsi+r10*8+8], xmm0
+   757 0000027E 49FFC2                  inc r10
+   758 00000281 F20F58CA                addsd xmm1, xmm2
+   759 00000285 EBDF                    jmp .for
+   760                                 
+   761                                 .done:
+   762 00000287 C3                      ret

@@ -1,0 +1,523 @@
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 1
+
+
+ 206              	.list
+   1              	#
+   2              	#       Program to test bit field extraction and insertion
+   3              	#
+   4              	        .section .text
+   5              	        .global  main
+   6              	main:
+   7 0000 55       	        push    %ebp
+   8 0001 89E5     	        mov     %esp, %ebp
+   9              	        frame   2, 2
+   9              	>  .equ frame_size,2*4
+  10 0003 83EC08   	        sub     $frame_size, %esp
+  11              	
+  12 0006 68200000 	        push    $prompt
+  12      00
+  13 000b E8FCFFFF 	        call    printf
+  13      FF
+  14 0010 83C404   	        add     $4, %esp
+  15              	
+  16 0013 68080000 	        push    $count
+  16      00
+  17 0018 68040000 	        push    $to
+  17      00
+  18 001d 68000000 	        push    $from
+  18      00
+  19 0022 683B0000 	        push    $read_fmt
+  19      00
+  20 0027 E8FCFFFF 	        call    scanf
+  20      FF
+  21 002c 83C410   	        add     $16, %esp
+  22              	
+  23 002f FF350800 	        push    count
+  23      0000
+  24 0035 FF350000 	        push    from
+  24      0000
+  25 003b 680C0000 	        push    $array
+  25      00
+  26 0040 E8240000 	        call    extract
+  26      00
+  27 0045 83C40C   	        add     $12, %esp
+  28              	        
+  29 0048 FF350800 	        push    count
+  29      0000
+  30 004e FF350400 	        push    to
+  30      0000
+  31 0054 680C0000 	        push    $array
+  31      00
+  32 0059 50       	        push    %eax
+  33 005a E86E0000 	        call    insert
+  33      00
+  34 005f 83C40C   	        add     $12, %esp
+  35              	        
+  36 0062 A31C0000 	        mov     %eax, field
+  36      00
+  37 0067 C9       	        leave
+  38 0068 C3       	        ret
+  39              	    
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 2
+
+
+  40              	extract:
+  41 0069 55       	        push    %ebp
+  42 006a 89E5     	        mov     %esp, %ebp
+  43              	        frame   3, 2
+  43              	>  .equ frame_size,2*4
+  44 006c 83EC08   	        sub     $frame_size, %esp
+  45              	        
+  46 006f 53       	        push    %ebx
+  47 0070 56       	        push    %esi
+  48 0071 57       	        push    %edi
+  49 0072 8B5508   	        mov     currPar1(%ebp), %edx
+  50 0075 8B4D0C   	        mov     currPar2(%ebp), %ecx
+  51              	        
+  52              	#       Determine first word for extraction
+  53              	#       and fetch it in eax
+  54              	
+  55 0078 89CB     	        mov     %ecx, %ebx
+  56 007a C1EB05   	        shr     $5, %ebx
+  57 007d 895DFC   	        mov     %ebx, local1(%ebp)
+  58 0080 8B049A   	        mov     (%edx,%ebx,4), %eax
+  59              	
+  60              	#       Get number of bits to extract in edi
+  61              	        
+  62 0083 8B7D10   	        mov     currPar3(%ebp), %edi      
+  63              	
+  64              	#       Determine first bit of eax to fetch
+  65              	#       and shift right to flush other bits
+  66              	
+  67 0086 83E11F   	        and     $0x1f, %ecx
+  68 0089 D3E8     	        shr     %cl, %eax
+  69              	        
+  70              	#       Determine the number of bits to use
+  71              	#       from the first word
+  72              	
+  73 008b 83E920   	        sub     $32, %ecx
+  74 008e F7D9     	        neg     %ecx
+  75 0090 894DF8   	        mov     %ecx, local2(%ebp)
+  76              	        
+  77              	#       Determine bit number of last bit to extract
+  78              	
+  79 0093 8B4D0C   	        mov     currPar2(%ebp), %ecx
+  80 0096 01CF     	        add     %ecx, %edi
+  81 0098 89FE     	        mov     %edi, %esi
+  82 009a 4E       	        dec     %esi
+  83              	        
+  84              	#       Determine dword index of last bit
+  85              	#       and complete the extraction if it
+  86              	#       the same as the first dword index
+  87              	
+  88 009b C1EE05   	        shr     $5, %esi
+  89 009e 3B75FC   	        cmp     local1(%ebp),%esi
+  90 00a1 7419     	        je      one_dword
+  91              	
+  92              	#       Determine how many bits are not needed
+  93              	#       in the second dword and flush
+  94              	        
+  95 00a3 83E71F   	        and     $0x1f, %edi
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 3
+
+
+  96 00a6 B9200000 	        mov     $32, %ecx
+  96      00
+  97 00ab 29F9     	        sub     %edi, %ecx
+  98 00ad 8B5C9A04 	        mov     4(%edx,%ebx,4), %ebx
+  99 00b1 D3E3     	        shl     %cl, %ebx
+ 100              	
+ 101              	#       Subtract the first bit number and
+ 102              	#       shift right to align for or of the parts
+ 103              	
+ 104 00b3 2B4DF8   	        sub     local2(%ebp), %ecx
+ 105 00b6 D3EB     	        shr     %cl, %ebx
+ 106 00b8 09D8     	        or      %ebx, %eax
+ 107 00ba EB0C     	        jmp     end
+ 108              	         
+ 109              	        
+ 110              	one_dword:
+ 111              	
+ 112              	#       Shift left and right to clear out 
+ 113 00bc B9200000 	        mov     $32, %ecx
+ 113      00
+ 114 00c1 2B4D10   	        sub     currPar3(%ebp), %ecx
+ 115 00c4 D3E0     	        shl     %cl, %eax
+ 116 00c6 D3E8     	        shr     %cl, %eax
+ 117              	
+ 118              	end:
+ 119 00c8 5F       	        pop     %edi
+ 120 00c9 5E       	        pop     %esi
+ 121 00ca 5B       	        pop     %ebx
+ 122 00cb C9       	        leave
+ 123 00cc C3       	        ret
+ 124              	        
+ 125              	insert:
+ 126              	        .equ    .count, currPar4
+ 127              	        .equ    .to,    currPar3
+ 128              	        .equ    .array, currPar2
+ 129              	        .equ    .field, currPar1
+ 130              	        .equ    .dword, local1
+ 131              	        .equ    .bits_dword1, local2
+ 132 00cd 55       	        push    %ebp
+ 133 00ce 89E5     	        mov     %esp, %ebp
+ 134              	        frame   4, 2
+ 134              	>  .equ frame_size,2*4
+ 135 00d0 83EC08   	        sub     $frame_size, %esp
+ 136              	
+ 137              	#       eax = field to insert
+ 138              	#       edx = array address
+ 139              	#       ebx = starting bit
+ 140              	#       edi = count
+ 141              	
+ 142 00d3 53       	        push    %ebx
+ 143 00d4 56       	        push    %esi
+ 144 00d5 57       	        push    %edi
+ 145              	        
+ 146 00d6 8B550C   	        mov     .array(%ebp), %edx
+ 147 00d9 8B5D10   	        mov     .to(%ebp), %ebx
+ 148 00dc 8B7D14   	        mov     .count(%ebp), %edi
+ 149              	        
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 4
+
+
+ 150              	#       Work on first word
+ 151              	#       
+ 152 00df 89DE     	        mov     %ebx, %esi
+ 153 00e1 C1EB05   	        shr     $5, %ebx
+ 154 00e4 895DFC   	        mov     %ebx, .dword(%ebp)
+ 155 00e7 8B1C9A   	        mov     (%edx,%ebx,4), %ebx
+ 156              	
+ 157              	#       Now ebx has the first dword
+ 158              	       
+ 159              	#       Need to determine number of high order
+ 160              	#       bits of ebx to clear out
+ 161              	
+ 162 00ea 83E61F   	        and     $0x1f, %esi     # first bit
+ 163 00ed B9200000 	        mov     $32, %ecx
+ 163      00
+ 164 00f2 29F1     	        sub     %esi, %ecx      # number of bits
+ 165 00f4 894DF8   	        mov     %ecx, .bits_dword1(%ebp)  
+ 166              	#       Zero out %ecx bits from %esi to 31
+ 167              	    
+ 168 00f7 B8FFFFFF 	        mov     $-1, %eax
+ 168      FF
+ 169 00fc D3E8     	        shr     %cl, %eax
+ 170 00fe 21C3     	        and     %eax, %ebx
+ 171              	        
+ 172              	#       Zero out upper bits of field and or with %ebx
+ 173              	        
+ 174 0100 8B7508   	        mov     .field(%ebp), %esi
+ 175 0103 B8FFFFFF 	        mov     $-1, %eax
+ 175      FF
+ 176 0108 BF200000 	        mov     $32, %edi
+ 176      00
+ 177 010d 29CF     	        sub     %ecx, %edi
+ 178 010f 89F9     	        mov     %edi, %ecx
+ 179 0111 D3E8     	        shr     %cl, %eax
+ 180 0113 21C6     	        and     %eax, %esi
+ 181 0115 D3E6     	        shl     %cl, %esi     
+ 182 0117 09F3     	        or      %esi, %ebx
+ 183              	        
+ 184              	#       Complete first word
+ 185              	
+ 186 0119 8B45FC   	        mov     .dword(%ebp), %eax
+ 187 011c 891C82   	        mov     %ebx, (%edx,%eax,4)
+ 188              	
+ 189              	#       Determine if there are more bits to insert
+ 190              	
+ 191 011f 8B5D10   	        mov     .to(%ebp), %ebx
+ 192 0122 89D9     	        mov     %ebx, %ecx
+ 193 0124 8B7D14   	        mov     .count(%ebp), %edi
+ 194 0127 01FB     	        add     %edi, %ebx
+ 195 0129 4B       	        dec     %ebx
+ 196              	        
+ 197              	#       ebx is the last bit number to store
+ 198              	
+ 199 012a C1EB05   	        shr     $5, %ebx
+ 200 012d 39C3     	        cmp     %eax, %ebx
+ 201 012f 7419     	        je      .end
+ 202              	
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 5
+
+
+ 203              	#       need to fetch next dword and 
+ 204              	#       place 0's in first ecx low order bits
+ 205              	
+ 206 0131 8B049A   	        mov     (%edx,%ebx,4), %eax    # next dword
+ 207 0134 BFFFFFFF 	        mov     $-1, %edi
+ 207      FF
+ 208 0139 D3E7     	        shl     %cl, %edi       
+ 209 013b 21F8     	        and     %edi, %eax
+ 210              	        
+ 211              	#       need to or together the highest ecx bits
+ 212              	#       of the field with %eax 
+ 213              	         
+ 214 013d 8B7508   	        mov     .field(%ebp), %esi
+ 215 0140 8B4DF8   	        mov     .bits_dword1(%ebp), %ecx
+ 216 0143 D3EE     	        shr     %cl, %esi
+ 217 0145 09F0     	        or      %esi, %eax
+ 218 0147 89049A   	        mov     %eax, (%edx,%ebx,4)
+ 219              	
+ 220              	.end:
+ 221 014a 5F       	        pop     %edi
+ 222 014b 5E       	        pop     %esi
+ 223 014c 5B       	        pop     %ebx
+ 224 014d C9       	        leave
+ 225 014e C3       	        ret
+ 226              	
+ 227              	        .section .data
+ 228 0000 00000000 	from:   .int    0
+ 229 0004 00000000 	to:     .int    0
+ 230 0008 00000000 	count:  .int    0
+ 231 000c 78563412 	array:  .int    0x12345678, 0x54321789, 0x321fedcb, 0xdeadbeef
+ 231      89173254 
+ 231      CBED1F32 
+ 231      EFBEADDE 
+ 232 001c 00000000 	field:  .int    0
+ 233 0020 456E7465 	prompt: .asciz  "Enter from, to and count: "
+ 233      72206672 
+ 233      6F6D2C20 
+ 233      746F2061 
+ 233      6E642063 
+ 234              	read_fmt:
+ 235 003b 25642025 	        .asciz  "%d %d %d"
+ 235      64202564 
+ 235      00
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 6
+
+
+DEFINED SYMBOLS
+/home/seyfarth/ebe/32/ebe_as_32.inc:6      *ABS*:fffffffffffffffc local1
+/home/seyfarth/ebe/32/ebe_as_32.inc:7      *ABS*:fffffffffffffff8 local2
+/home/seyfarth/ebe/32/ebe_as_32.inc:8      *ABS*:fffffffffffffff4 local3
+/home/seyfarth/ebe/32/ebe_as_32.inc:9      *ABS*:fffffffffffffff0 local4
+/home/seyfarth/ebe/32/ebe_as_32.inc:10     *ABS*:ffffffffffffffec local5
+/home/seyfarth/ebe/32/ebe_as_32.inc:11     *ABS*:ffffffffffffffe8 local6
+/home/seyfarth/ebe/32/ebe_as_32.inc:12     *ABS*:ffffffffffffffe4 local7
+/home/seyfarth/ebe/32/ebe_as_32.inc:13     *ABS*:ffffffffffffffe0 local8
+/home/seyfarth/ebe/32/ebe_as_32.inc:14     *ABS*:ffffffffffffffdc local9
+/home/seyfarth/ebe/32/ebe_as_32.inc:15     *ABS*:ffffffffffffffd8 local10
+/home/seyfarth/ebe/32/ebe_as_32.inc:16     *ABS*:ffffffffffffffd4 local11
+/home/seyfarth/ebe/32/ebe_as_32.inc:17     *ABS*:ffffffffffffffd0 local12
+/home/seyfarth/ebe/32/ebe_as_32.inc:18     *ABS*:ffffffffffffffcc local13
+/home/seyfarth/ebe/32/ebe_as_32.inc:19     *ABS*:ffffffffffffffc8 local14
+/home/seyfarth/ebe/32/ebe_as_32.inc:20     *ABS*:ffffffffffffffc4 local15
+/home/seyfarth/ebe/32/ebe_as_32.inc:21     *ABS*:ffffffffffffffc0 local16
+/home/seyfarth/ebe/32/ebe_as_32.inc:22     *ABS*:ffffffffffffffbc local17
+/home/seyfarth/ebe/32/ebe_as_32.inc:23     *ABS*:ffffffffffffffb8 local18
+/home/seyfarth/ebe/32/ebe_as_32.inc:24     *ABS*:ffffffffffffffb4 local19
+/home/seyfarth/ebe/32/ebe_as_32.inc:25     *ABS*:ffffffffffffffb0 local20
+/home/seyfarth/ebe/32/ebe_as_32.inc:26     *ABS*:ffffffffffffffac local21
+/home/seyfarth/ebe/32/ebe_as_32.inc:27     *ABS*:ffffffffffffffa8 local22
+/home/seyfarth/ebe/32/ebe_as_32.inc:28     *ABS*:ffffffffffffffa4 local23
+/home/seyfarth/ebe/32/ebe_as_32.inc:29     *ABS*:ffffffffffffffa0 local24
+/home/seyfarth/ebe/32/ebe_as_32.inc:30     *ABS*:ffffffffffffff9c local25
+/home/seyfarth/ebe/32/ebe_as_32.inc:31     *ABS*:ffffffffffffff98 local26
+/home/seyfarth/ebe/32/ebe_as_32.inc:32     *ABS*:ffffffffffffff94 local27
+/home/seyfarth/ebe/32/ebe_as_32.inc:33     *ABS*:ffffffffffffff90 local28
+/home/seyfarth/ebe/32/ebe_as_32.inc:34     *ABS*:ffffffffffffff8c local29
+/home/seyfarth/ebe/32/ebe_as_32.inc:35     *ABS*:ffffffffffffff88 local30
+/home/seyfarth/ebe/32/ebe_as_32.inc:36     *ABS*:ffffffffffffff84 local31
+/home/seyfarth/ebe/32/ebe_as_32.inc:37     *ABS*:ffffffffffffff80 local32
+/home/seyfarth/ebe/32/ebe_as_32.inc:38     *ABS*:ffffffffffffff7c local33
+/home/seyfarth/ebe/32/ebe_as_32.inc:39     *ABS*:ffffffffffffff78 local34
+/home/seyfarth/ebe/32/ebe_as_32.inc:40     *ABS*:ffffffffffffff74 local35
+/home/seyfarth/ebe/32/ebe_as_32.inc:41     *ABS*:ffffffffffffff70 local36
+/home/seyfarth/ebe/32/ebe_as_32.inc:42     *ABS*:ffffffffffffff6c local37
+/home/seyfarth/ebe/32/ebe_as_32.inc:43     *ABS*:ffffffffffffff68 local38
+/home/seyfarth/ebe/32/ebe_as_32.inc:44     *ABS*:ffffffffffffff64 local39
+/home/seyfarth/ebe/32/ebe_as_32.inc:45     *ABS*:ffffffffffffff60 local40
+/home/seyfarth/ebe/32/ebe_as_32.inc:46     *ABS*:ffffffffffffff5c local41
+/home/seyfarth/ebe/32/ebe_as_32.inc:47     *ABS*:ffffffffffffff58 local42
+/home/seyfarth/ebe/32/ebe_as_32.inc:48     *ABS*:ffffffffffffff54 local43
+/home/seyfarth/ebe/32/ebe_as_32.inc:49     *ABS*:ffffffffffffff50 local44
+/home/seyfarth/ebe/32/ebe_as_32.inc:50     *ABS*:ffffffffffffff4c local45
+/home/seyfarth/ebe/32/ebe_as_32.inc:51     *ABS*:ffffffffffffff48 local46
+/home/seyfarth/ebe/32/ebe_as_32.inc:52     *ABS*:ffffffffffffff44 local47
+/home/seyfarth/ebe/32/ebe_as_32.inc:53     *ABS*:ffffffffffffff40 local48
+/home/seyfarth/ebe/32/ebe_as_32.inc:54     *ABS*:ffffffffffffff3c local49
+/home/seyfarth/ebe/32/ebe_as_32.inc:55     *ABS*:ffffffffffffff38 local50
+/home/seyfarth/ebe/32/ebe_as_32.inc:56     *ABS*:ffffffffffffff34 local51
+/home/seyfarth/ebe/32/ebe_as_32.inc:57     *ABS*:ffffffffffffff30 local52
+/home/seyfarth/ebe/32/ebe_as_32.inc:58     *ABS*:ffffffffffffff2c local53
+/home/seyfarth/ebe/32/ebe_as_32.inc:59     *ABS*:ffffffffffffff28 local54
+/home/seyfarth/ebe/32/ebe_as_32.inc:60     *ABS*:ffffffffffffff24 local55
+/home/seyfarth/ebe/32/ebe_as_32.inc:61     *ABS*:ffffffffffffff20 local56
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 7
+
+
+/home/seyfarth/ebe/32/ebe_as_32.inc:62     *ABS*:ffffffffffffff1c local57
+/home/seyfarth/ebe/32/ebe_as_32.inc:63     *ABS*:ffffffffffffff18 local58
+/home/seyfarth/ebe/32/ebe_as_32.inc:64     *ABS*:ffffffffffffff14 local59
+/home/seyfarth/ebe/32/ebe_as_32.inc:65     *ABS*:ffffffffffffff10 local60
+/home/seyfarth/ebe/32/ebe_as_32.inc:66     *ABS*:ffffffffffffff0c local61
+/home/seyfarth/ebe/32/ebe_as_32.inc:67     *ABS*:ffffffffffffff08 local62
+/home/seyfarth/ebe/32/ebe_as_32.inc:68     *ABS*:ffffffffffffff04 local63
+/home/seyfarth/ebe/32/ebe_as_32.inc:69     *ABS*:ffffffffffffff00 local64
+/home/seyfarth/ebe/32/ebe_as_32.inc:70     *ABS*:fffffffffffffefc local65
+/home/seyfarth/ebe/32/ebe_as_32.inc:71     *ABS*:fffffffffffffef8 local66
+/home/seyfarth/ebe/32/ebe_as_32.inc:72     *ABS*:fffffffffffffef4 local67
+/home/seyfarth/ebe/32/ebe_as_32.inc:73     *ABS*:fffffffffffffef0 local68
+/home/seyfarth/ebe/32/ebe_as_32.inc:74     *ABS*:fffffffffffffeec local69
+/home/seyfarth/ebe/32/ebe_as_32.inc:75     *ABS*:fffffffffffffee8 local70
+/home/seyfarth/ebe/32/ebe_as_32.inc:76     *ABS*:fffffffffffffee4 local71
+/home/seyfarth/ebe/32/ebe_as_32.inc:77     *ABS*:fffffffffffffee0 local72
+/home/seyfarth/ebe/32/ebe_as_32.inc:78     *ABS*:fffffffffffffedc local73
+/home/seyfarth/ebe/32/ebe_as_32.inc:79     *ABS*:fffffffffffffed8 local74
+/home/seyfarth/ebe/32/ebe_as_32.inc:80     *ABS*:fffffffffffffed4 local75
+/home/seyfarth/ebe/32/ebe_as_32.inc:81     *ABS*:fffffffffffffed0 local76
+/home/seyfarth/ebe/32/ebe_as_32.inc:82     *ABS*:fffffffffffffecc local77
+/home/seyfarth/ebe/32/ebe_as_32.inc:83     *ABS*:fffffffffffffec8 local78
+/home/seyfarth/ebe/32/ebe_as_32.inc:84     *ABS*:fffffffffffffec4 local79
+/home/seyfarth/ebe/32/ebe_as_32.inc:85     *ABS*:fffffffffffffec0 local80
+/home/seyfarth/ebe/32/ebe_as_32.inc:86     *ABS*:fffffffffffffebc local81
+/home/seyfarth/ebe/32/ebe_as_32.inc:87     *ABS*:fffffffffffffeb8 local82
+/home/seyfarth/ebe/32/ebe_as_32.inc:88     *ABS*:fffffffffffffeb4 local83
+/home/seyfarth/ebe/32/ebe_as_32.inc:89     *ABS*:fffffffffffffeb0 local84
+/home/seyfarth/ebe/32/ebe_as_32.inc:90     *ABS*:fffffffffffffeac local85
+/home/seyfarth/ebe/32/ebe_as_32.inc:91     *ABS*:fffffffffffffea8 local86
+/home/seyfarth/ebe/32/ebe_as_32.inc:92     *ABS*:fffffffffffffea4 local87
+/home/seyfarth/ebe/32/ebe_as_32.inc:93     *ABS*:fffffffffffffea0 local88
+/home/seyfarth/ebe/32/ebe_as_32.inc:94     *ABS*:fffffffffffffe9c local89
+/home/seyfarth/ebe/32/ebe_as_32.inc:95     *ABS*:fffffffffffffe98 local90
+/home/seyfarth/ebe/32/ebe_as_32.inc:96     *ABS*:fffffffffffffe94 local91
+/home/seyfarth/ebe/32/ebe_as_32.inc:97     *ABS*:fffffffffffffe90 local92
+/home/seyfarth/ebe/32/ebe_as_32.inc:98     *ABS*:fffffffffffffe8c local93
+/home/seyfarth/ebe/32/ebe_as_32.inc:99     *ABS*:fffffffffffffe88 local94
+/home/seyfarth/ebe/32/ebe_as_32.inc:100    *ABS*:fffffffffffffe84 local95
+/home/seyfarth/ebe/32/ebe_as_32.inc:101    *ABS*:fffffffffffffe80 local96
+/home/seyfarth/ebe/32/ebe_as_32.inc:102    *ABS*:fffffffffffffe7c local97
+/home/seyfarth/ebe/32/ebe_as_32.inc:103    *ABS*:fffffffffffffe78 local98
+/home/seyfarth/ebe/32/ebe_as_32.inc:104    *ABS*:fffffffffffffe74 local99
+/home/seyfarth/ebe/32/ebe_as_32.inc:105    *ABS*:fffffffffffffe70 local100
+/home/seyfarth/ebe/32/ebe_as_32.inc:106    *ABS*:0000000000000008 currPar1
+/home/seyfarth/ebe/32/ebe_as_32.inc:107    *ABS*:000000000000000c currPar2
+/home/seyfarth/ebe/32/ebe_as_32.inc:108    *ABS*:0000000000000010 currPar3
+/home/seyfarth/ebe/32/ebe_as_32.inc:109    *ABS*:0000000000000014 currPar4
+/home/seyfarth/ebe/32/ebe_as_32.inc:110    *ABS*:0000000000000018 currPar5
+/home/seyfarth/ebe/32/ebe_as_32.inc:111    *ABS*:000000000000001c currPar6
+/home/seyfarth/ebe/32/ebe_as_32.inc:112    *ABS*:0000000000000020 currPar7
+/home/seyfarth/ebe/32/ebe_as_32.inc:113    *ABS*:0000000000000024 currPar8
+/home/seyfarth/ebe/32/ebe_as_32.inc:114    *ABS*:0000000000000028 currPar9
+/home/seyfarth/ebe/32/ebe_as_32.inc:115    *ABS*:000000000000002c currPar10
+/home/seyfarth/ebe/32/ebe_as_32.inc:116    *ABS*:0000000000000030 currPar11
+/home/seyfarth/ebe/32/ebe_as_32.inc:117    *ABS*:0000000000000034 currPar12
+/home/seyfarth/ebe/32/ebe_as_32.inc:118    *ABS*:0000000000000038 currPar13
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 8
+
+
+/home/seyfarth/ebe/32/ebe_as_32.inc:119    *ABS*:000000000000003c currPar14
+/home/seyfarth/ebe/32/ebe_as_32.inc:120    *ABS*:0000000000000040 currPar15
+/home/seyfarth/ebe/32/ebe_as_32.inc:121    *ABS*:0000000000000044 currPar16
+/home/seyfarth/ebe/32/ebe_as_32.inc:122    *ABS*:0000000000000048 currPar17
+/home/seyfarth/ebe/32/ebe_as_32.inc:123    *ABS*:000000000000004c currPar18
+/home/seyfarth/ebe/32/ebe_as_32.inc:124    *ABS*:0000000000000050 currPar19
+/home/seyfarth/ebe/32/ebe_as_32.inc:125    *ABS*:0000000000000054 currPar20
+/home/seyfarth/ebe/32/ebe_as_32.inc:126    *ABS*:0000000000000058 currPar21
+/home/seyfarth/ebe/32/ebe_as_32.inc:127    *ABS*:000000000000005c currPar22
+/home/seyfarth/ebe/32/ebe_as_32.inc:128    *ABS*:0000000000000060 currPar23
+/home/seyfarth/ebe/32/ebe_as_32.inc:129    *ABS*:0000000000000064 currPar24
+/home/seyfarth/ebe/32/ebe_as_32.inc:130    *ABS*:0000000000000068 currPar25
+/home/seyfarth/ebe/32/ebe_as_32.inc:131    *ABS*:000000000000006c currPar26
+/home/seyfarth/ebe/32/ebe_as_32.inc:132    *ABS*:0000000000000070 currPar27
+/home/seyfarth/ebe/32/ebe_as_32.inc:133    *ABS*:0000000000000074 currPar28
+/home/seyfarth/ebe/32/ebe_as_32.inc:134    *ABS*:0000000000000078 currPar29
+/home/seyfarth/ebe/32/ebe_as_32.inc:135    *ABS*:000000000000007c currPar30
+/home/seyfarth/ebe/32/ebe_as_32.inc:136    *ABS*:0000000000000080 currPar31
+/home/seyfarth/ebe/32/ebe_as_32.inc:137    *ABS*:0000000000000084 currPar32
+/home/seyfarth/ebe/32/ebe_as_32.inc:138    *ABS*:0000000000000088 currPar33
+/home/seyfarth/ebe/32/ebe_as_32.inc:139    *ABS*:000000000000008c currPar34
+/home/seyfarth/ebe/32/ebe_as_32.inc:140    *ABS*:0000000000000090 currPar35
+/home/seyfarth/ebe/32/ebe_as_32.inc:141    *ABS*:0000000000000094 currPar36
+/home/seyfarth/ebe/32/ebe_as_32.inc:142    *ABS*:0000000000000098 currPar37
+/home/seyfarth/ebe/32/ebe_as_32.inc:143    *ABS*:000000000000009c currPar38
+/home/seyfarth/ebe/32/ebe_as_32.inc:144    *ABS*:00000000000000a0 currPar39
+/home/seyfarth/ebe/32/ebe_as_32.inc:145    *ABS*:00000000000000a4 currPar40
+/home/seyfarth/ebe/32/ebe_as_32.inc:146    *ABS*:00000000000000a8 currPar41
+/home/seyfarth/ebe/32/ebe_as_32.inc:147    *ABS*:00000000000000ac currPar42
+/home/seyfarth/ebe/32/ebe_as_32.inc:148    *ABS*:00000000000000b0 currPar43
+/home/seyfarth/ebe/32/ebe_as_32.inc:149    *ABS*:00000000000000b4 currPar44
+/home/seyfarth/ebe/32/ebe_as_32.inc:150    *ABS*:00000000000000b8 currPar45
+/home/seyfarth/ebe/32/ebe_as_32.inc:151    *ABS*:00000000000000bc currPar46
+/home/seyfarth/ebe/32/ebe_as_32.inc:152    *ABS*:00000000000000c0 currPar47
+/home/seyfarth/ebe/32/ebe_as_32.inc:153    *ABS*:00000000000000c4 currPar48
+/home/seyfarth/ebe/32/ebe_as_32.inc:154    *ABS*:00000000000000c8 currPar49
+/home/seyfarth/ebe/32/ebe_as_32.inc:155    *ABS*:00000000000000cc currPar50
+/home/seyfarth/ebe/32/ebe_as_32.inc:156    *ABS*:00000000000000d0 currPar51
+/home/seyfarth/ebe/32/ebe_as_32.inc:157    *ABS*:00000000000000d4 currPar52
+/home/seyfarth/ebe/32/ebe_as_32.inc:158    *ABS*:00000000000000d8 currPar53
+/home/seyfarth/ebe/32/ebe_as_32.inc:159    *ABS*:00000000000000dc currPar54
+/home/seyfarth/ebe/32/ebe_as_32.inc:160    *ABS*:00000000000000e0 currPar55
+/home/seyfarth/ebe/32/ebe_as_32.inc:161    *ABS*:00000000000000e4 currPar56
+/home/seyfarth/ebe/32/ebe_as_32.inc:162    *ABS*:00000000000000e8 currPar57
+/home/seyfarth/ebe/32/ebe_as_32.inc:163    *ABS*:00000000000000ec currPar58
+/home/seyfarth/ebe/32/ebe_as_32.inc:164    *ABS*:00000000000000f0 currPar59
+/home/seyfarth/ebe/32/ebe_as_32.inc:165    *ABS*:00000000000000f4 currPar60
+/home/seyfarth/ebe/32/ebe_as_32.inc:166    *ABS*:00000000000000f8 currPar61
+/home/seyfarth/ebe/32/ebe_as_32.inc:167    *ABS*:00000000000000fc currPar62
+/home/seyfarth/ebe/32/ebe_as_32.inc:168    *ABS*:0000000000000100 currPar63
+/home/seyfarth/ebe/32/ebe_as_32.inc:169    *ABS*:0000000000000104 currPar64
+/home/seyfarth/ebe/32/ebe_as_32.inc:170    *ABS*:0000000000000108 currPar65
+/home/seyfarth/ebe/32/ebe_as_32.inc:171    *ABS*:000000000000010c currPar66
+/home/seyfarth/ebe/32/ebe_as_32.inc:172    *ABS*:0000000000000110 currPar67
+/home/seyfarth/ebe/32/ebe_as_32.inc:173    *ABS*:0000000000000114 currPar68
+/home/seyfarth/ebe/32/ebe_as_32.inc:174    *ABS*:0000000000000118 currPar69
+/home/seyfarth/ebe/32/ebe_as_32.inc:175    *ABS*:000000000000011c currPar70
+GAS LISTING /home/seyfarth/ebe/32/bitfields.asm 			page 9
+
+
+/home/seyfarth/ebe/32/ebe_as_32.inc:176    *ABS*:0000000000000120 currPar71
+/home/seyfarth/ebe/32/ebe_as_32.inc:177    *ABS*:0000000000000124 currPar72
+/home/seyfarth/ebe/32/ebe_as_32.inc:178    *ABS*:0000000000000128 currPar73
+/home/seyfarth/ebe/32/ebe_as_32.inc:179    *ABS*:000000000000012c currPar74
+/home/seyfarth/ebe/32/ebe_as_32.inc:180    *ABS*:0000000000000130 currPar75
+/home/seyfarth/ebe/32/ebe_as_32.inc:181    *ABS*:0000000000000134 currPar76
+/home/seyfarth/ebe/32/ebe_as_32.inc:182    *ABS*:0000000000000138 currPar77
+/home/seyfarth/ebe/32/ebe_as_32.inc:183    *ABS*:000000000000013c currPar78
+/home/seyfarth/ebe/32/ebe_as_32.inc:184    *ABS*:0000000000000140 currPar79
+/home/seyfarth/ebe/32/ebe_as_32.inc:185    *ABS*:0000000000000144 currPar80
+/home/seyfarth/ebe/32/ebe_as_32.inc:186    *ABS*:0000000000000148 currPar81
+/home/seyfarth/ebe/32/ebe_as_32.inc:187    *ABS*:000000000000014c currPar82
+/home/seyfarth/ebe/32/ebe_as_32.inc:188    *ABS*:0000000000000150 currPar83
+/home/seyfarth/ebe/32/ebe_as_32.inc:189    *ABS*:0000000000000154 currPar84
+/home/seyfarth/ebe/32/ebe_as_32.inc:190    *ABS*:0000000000000158 currPar85
+/home/seyfarth/ebe/32/ebe_as_32.inc:191    *ABS*:000000000000015c currPar86
+/home/seyfarth/ebe/32/ebe_as_32.inc:192    *ABS*:0000000000000160 currPar87
+/home/seyfarth/ebe/32/ebe_as_32.inc:193    *ABS*:0000000000000164 currPar88
+/home/seyfarth/ebe/32/ebe_as_32.inc:194    *ABS*:0000000000000168 currPar89
+/home/seyfarth/ebe/32/ebe_as_32.inc:195    *ABS*:000000000000016c currPar90
+/home/seyfarth/ebe/32/ebe_as_32.inc:196    *ABS*:0000000000000170 currPar91
+/home/seyfarth/ebe/32/ebe_as_32.inc:197    *ABS*:0000000000000174 currPar92
+/home/seyfarth/ebe/32/ebe_as_32.inc:198    *ABS*:0000000000000178 currPar93
+/home/seyfarth/ebe/32/ebe_as_32.inc:199    *ABS*:000000000000017c currPar94
+/home/seyfarth/ebe/32/ebe_as_32.inc:200    *ABS*:0000000000000180 currPar95
+/home/seyfarth/ebe/32/ebe_as_32.inc:201    *ABS*:0000000000000184 currPar96
+/home/seyfarth/ebe/32/ebe_as_32.inc:202    *ABS*:0000000000000188 currPar97
+/home/seyfarth/ebe/32/ebe_as_32.inc:203    *ABS*:000000000000018c currPar98
+/home/seyfarth/ebe/32/ebe_as_32.inc:204    *ABS*:0000000000000190 currPar99
+/home/seyfarth/ebe/32/ebe_as_32.inc:205    *ABS*:0000000000000194 currPar100
+/home/seyfarth/ebe/32/bitfields.asm:6      .text:0000000000000000 main
+/home/seyfarth/ebe/32/bitfields.asm:9      *ABS*:0000000000000008 frame_size
+/home/seyfarth/ebe/32/bitfields.asm:233    .data:0000000000000020 prompt
+/home/seyfarth/ebe/32/bitfields.asm:230    .data:0000000000000008 count
+/home/seyfarth/ebe/32/bitfields.asm:229    .data:0000000000000004 to
+/home/seyfarth/ebe/32/bitfields.asm:228    .data:0000000000000000 from
+/home/seyfarth/ebe/32/bitfields.asm:234    .data:000000000000003b read_fmt
+/home/seyfarth/ebe/32/bitfields.asm:231    .data:000000000000000c array
+/home/seyfarth/ebe/32/bitfields.asm:40     .text:0000000000000069 extract
+/home/seyfarth/ebe/32/bitfields.asm:125    .text:00000000000000cd insert
+/home/seyfarth/ebe/32/bitfields.asm:232    .data:000000000000001c field
+/home/seyfarth/ebe/32/bitfields.asm:110    .text:00000000000000bc one_dword
+/home/seyfarth/ebe/32/bitfields.asm:118    .text:00000000000000c8 end
+/home/seyfarth/ebe/32/bitfields.asm:126    *ABS*:0000000000000014 .count
+/home/seyfarth/ebe/32/bitfields.asm:127    *ABS*:0000000000000010 .to
+/home/seyfarth/ebe/32/bitfields.asm:128    *ABS*:000000000000000c .array
+/home/seyfarth/ebe/32/bitfields.asm:129    *ABS*:0000000000000008 .field
+/home/seyfarth/ebe/32/bitfields.asm:130    *ABS*:fffffffffffffffc .dword
+/home/seyfarth/ebe/32/bitfields.asm:131    *ABS*:fffffffffffffff8 .bits_dword1
+/home/seyfarth/ebe/32/bitfields.asm:220    .text:000000000000014a .end
+
+UNDEFINED SYMBOLS
+printf
+scanf

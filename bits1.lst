@@ -1,0 +1,16 @@
+   354                                 [segment .text]
+   355                                 [global main]
+   356                                 [extern rand]
+   357                                 %line 3+0 /home/seyfarth/ebe/bits1.asm
+   358                                 [extern srand]
+   359                                 %line 4+1 /home/seyfarth/ebe/bits1.asm
+   360                                 main:
+   361 00000000 55                      push rbp
+   362 00000001 4889E5                  mov rbp, rsp
+   363 00000004 BF01000000              mov edi, 1
+   364 00000009 E8(F6FFFFFF)            call srand
+   365 0000000E E8(F6FFFFFF)            call rand
+   366 00000013 4883E01F                and rax, 0x1f
+   367 00000017 C9                      leave
+   368 00000018 C3                      ret
+   369                                 

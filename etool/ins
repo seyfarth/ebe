@@ -1,0 +1,17 @@
+        segment .text
+hello:  add
+        segment .text   ; this is a comment
+hello2:
+
+stuff:  aas
+        AAD
+        AAM
+        AAS
+        ADC
+
+        segment .data   ; this is a comment
+x      dw      10*4
+        dw      $-$$
+        segment .bss    ; this is a comment
+        add
+        mul

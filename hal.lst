@@ -1,0 +1,414 @@
+     1                                 %line 17+1 /home/seyfarth/ebe/hal.asm
+     2                                 
+     3                                 %line 23+1 /home/seyfarth/ebe/hal.asm
+     4                                 
+     5                                 %line 29+1 /home/seyfarth/ebe/hal.asm
+     6                                 
+     7                                 %line 35+1 /home/seyfarth/ebe/hal.asm
+     8                                 
+     9                                 %line 41+1 /home/seyfarth/ebe/hal.asm
+    10                                 
+    11                                 %line 46+1 /home/seyfarth/ebe/hal.asm
+    12                                 
+    13                                 %line 51+1 /home/seyfarth/ebe/hal.asm
+    14                                 
+    15                                 %line 55+1 /home/seyfarth/ebe/hal.asm
+    16                                 
+    17                                 
+    18                                 %line 64+1 /home/seyfarth/ebe/hal.asm
+    19                                 
+    20                                 
+    21                                 %line 71+1 /home/seyfarth/ebe/hal.asm
+    22                                 
+    23                                 
+    24                                 %line 78+1 /home/seyfarth/ebe/hal.asm
+    25                                 
+    26                                 
+    27                                 %line 85+1 /home/seyfarth/ebe/hal.asm
+    28                                 
+    29                                 
+    30                                 %line 92+1 /home/seyfarth/ebe/hal.asm
+    31                                 
+    32                                 %line 99+1 /home/seyfarth/ebe/hal.asm
+    33                                 
+    34                                 %line 105+1 /home/seyfarth/ebe/hal.asm
+    35                                 
+    36                                 %line 111+1 /home/seyfarth/ebe/hal.asm
+    37                                 
+    38                                 
+    39                                 %line 243+1 /home/seyfarth/ebe/hal.asm
+    40                                 
+    41                                 %line 249+1 /home/seyfarth/ebe/hal.asm
+    42                                 
+    43                                 %line 256+1 /home/seyfarth/ebe/hal.asm
+    44                                 
+    45                                 %line 263+1 /home/seyfarth/ebe/hal.asm
+    46                                 
+    47                                 %line 269+1 /home/seyfarth/ebe/hal.asm
+    48                                 
+    49                                 %line 275+1 /home/seyfarth/ebe/hal.asm
+    50                                 
+    51                                 
+    52                                 
+    53                                 
+    54                                 
+    55                                 %line 292+1 /home/seyfarth/ebe/hal.asm
+    56                                 
+    57                                 
+    58                                 
+    59                                 
+    60                                 
+    61                                 
+    62                                 
+    63                                 
+    64                                 
+    65                                 
+    66                                 %line 309+1 /home/seyfarth/ebe/hal.asm
+    67                                 local1 equ -8*1
+    68                                 %line 309+0 /home/seyfarth/ebe/hal.asm
+    69                                 local2 equ -8*2
+    70                                 local3 equ -8*3
+    71                                 local4 equ -8*4
+    72                                 local5 equ -8*5
+    73                                 local6 equ -8*6
+    74                                 local7 equ -8*7
+    75                                 local8 equ -8*8
+    76                                 local9 equ -8*9
+    77                                 local10 equ -8*10
+    78                                 local11 equ -8*11
+    79                                 local12 equ -8*12
+    80                                 local13 equ -8*13
+    81                                 local14 equ -8*14
+    82                                 local15 equ -8*15
+    83                                 local16 equ -8*16
+    84                                 local17 equ -8*17
+    85                                 local18 equ -8*18
+    86                                 local19 equ -8*19
+    87                                 local20 equ -8*20
+    88                                 local21 equ -8*21
+    89                                 local22 equ -8*22
+    90                                 local23 equ -8*23
+    91                                 local24 equ -8*24
+    92                                 local25 equ -8*25
+    93                                 local26 equ -8*26
+    94                                 local27 equ -8*27
+    95                                 local28 equ -8*28
+    96                                 local29 equ -8*29
+    97                                 local30 equ -8*30
+    98                                 local31 equ -8*31
+    99                                 local32 equ -8*32
+   100                                 local33 equ -8*33
+   101                                 local34 equ -8*34
+   102                                 local35 equ -8*35
+   103                                 local36 equ -8*36
+   104                                 local37 equ -8*37
+   105                                 local38 equ -8*38
+   106                                 local39 equ -8*39
+   107                                 local40 equ -8*40
+   108                                 local41 equ -8*41
+   109                                 local42 equ -8*42
+   110                                 local43 equ -8*43
+   111                                 local44 equ -8*44
+   112                                 local45 equ -8*45
+   113                                 local46 equ -8*46
+   114                                 local47 equ -8*47
+   115                                 local48 equ -8*48
+   116                                 local49 equ -8*49
+   117                                 local50 equ -8*50
+   118                                 local51 equ -8*51
+   119                                 local52 equ -8*52
+   120                                 local53 equ -8*53
+   121                                 local54 equ -8*54
+   122                                 local55 equ -8*55
+   123                                 local56 equ -8*56
+   124                                 local57 equ -8*57
+   125                                 local58 equ -8*58
+   126                                 local59 equ -8*59
+   127                                 local60 equ -8*60
+   128                                 local61 equ -8*61
+   129                                 local62 equ -8*62
+   130                                 local63 equ -8*63
+   131                                 local64 equ -8*64
+   132                                 local65 equ -8*65
+   133                                 local66 equ -8*66
+   134                                 local67 equ -8*67
+   135                                 local68 equ -8*68
+   136                                 local69 equ -8*69
+   137                                 local70 equ -8*70
+   138                                 local71 equ -8*71
+   139                                 local72 equ -8*72
+   140                                 local73 equ -8*73
+   141                                 local74 equ -8*74
+   142                                 local75 equ -8*75
+   143                                 local76 equ -8*76
+   144                                 local77 equ -8*77
+   145                                 local78 equ -8*78
+   146                                 local79 equ -8*79
+   147                                 local80 equ -8*80
+   148                                 local81 equ -8*81
+   149                                 local82 equ -8*82
+   150                                 local83 equ -8*83
+   151                                 local84 equ -8*84
+   152                                 local85 equ -8*85
+   153                                 local86 equ -8*86
+   154                                 local87 equ -8*87
+   155                                 local88 equ -8*88
+   156                                 local89 equ -8*89
+   157                                 local90 equ -8*90
+   158                                 local91 equ -8*91
+   159                                 local92 equ -8*92
+   160                                 local93 equ -8*93
+   161                                 local94 equ -8*94
+   162                                 local95 equ -8*95
+   163                                 local96 equ -8*96
+   164                                 local97 equ -8*97
+   165                                 local98 equ -8*98
+   166                                 local99 equ -8*99
+   167                                 local100 equ -8*100
+   168                                 %line 310+1 /home/seyfarth/ebe/hal.asm
+   169                                 
+   170                                 
+   171                                 
+   172                                 
+   173                                 
+   174                                 
+   175                                 
+   176                                 
+   177                                 
+   178                                 
+   179                                 
+   180                                 %line 328+1 /home/seyfarth/ebe/hal.asm
+   181                                 newpar7 equ 8*(7-7)
+   182                                 %line 328+0 /home/seyfarth/ebe/hal.asm
+   183                                 newpar8 equ 8*(8-7)
+   184                                 newpar9 equ 8*(9-7)
+   185                                 newpar10 equ 8*(10-7)
+   186                                 newpar11 equ 8*(11-7)
+   187                                 newpar12 equ 8*(12-7)
+   188                                 newpar13 equ 8*(13-7)
+   189                                 newpar14 equ 8*(14-7)
+   190                                 newpar15 equ 8*(15-7)
+   191                                 newpar16 equ 8*(16-7)
+   192                                 newpar17 equ 8*(17-7)
+   193                                 newpar18 equ 8*(18-7)
+   194                                 newpar19 equ 8*(19-7)
+   195                                 newpar20 equ 8*(20-7)
+   196                                 newpar21 equ 8*(21-7)
+   197                                 newpar22 equ 8*(22-7)
+   198                                 newpar23 equ 8*(23-7)
+   199                                 newpar24 equ 8*(24-7)
+   200                                 newpar25 equ 8*(25-7)
+   201                                 newpar26 equ 8*(26-7)
+   202                                 newpar27 equ 8*(27-7)
+   203                                 newpar28 equ 8*(28-7)
+   204                                 newpar29 equ 8*(29-7)
+   205                                 newpar30 equ 8*(30-7)
+   206                                 newpar31 equ 8*(31-7)
+   207                                 newpar32 equ 8*(32-7)
+   208                                 newpar33 equ 8*(33-7)
+   209                                 newpar34 equ 8*(34-7)
+   210                                 newpar35 equ 8*(35-7)
+   211                                 newpar36 equ 8*(36-7)
+   212                                 newpar37 equ 8*(37-7)
+   213                                 newpar38 equ 8*(38-7)
+   214                                 newpar39 equ 8*(39-7)
+   215                                 newpar40 equ 8*(40-7)
+   216                                 newpar41 equ 8*(41-7)
+   217                                 newpar42 equ 8*(42-7)
+   218                                 newpar43 equ 8*(43-7)
+   219                                 newpar44 equ 8*(44-7)
+   220                                 newpar45 equ 8*(45-7)
+   221                                 newpar46 equ 8*(46-7)
+   222                                 newpar47 equ 8*(47-7)
+   223                                 newpar48 equ 8*(48-7)
+   224                                 newpar49 equ 8*(49-7)
+   225                                 newpar50 equ 8*(50-7)
+   226                                 newpar51 equ 8*(51-7)
+   227                                 newpar52 equ 8*(52-7)
+   228                                 newpar53 equ 8*(53-7)
+   229                                 newpar54 equ 8*(54-7)
+   230                                 newpar55 equ 8*(55-7)
+   231                                 newpar56 equ 8*(56-7)
+   232                                 newpar57 equ 8*(57-7)
+   233                                 newpar58 equ 8*(58-7)
+   234                                 newpar59 equ 8*(59-7)
+   235                                 newpar60 equ 8*(60-7)
+   236                                 newpar61 equ 8*(61-7)
+   237                                 newpar62 equ 8*(62-7)
+   238                                 newpar63 equ 8*(63-7)
+   239                                 newpar64 equ 8*(64-7)
+   240                                 newpar65 equ 8*(65-7)
+   241                                 newpar66 equ 8*(66-7)
+   242                                 newpar67 equ 8*(67-7)
+   243                                 newpar68 equ 8*(68-7)
+   244                                 newpar69 equ 8*(69-7)
+   245                                 newpar70 equ 8*(70-7)
+   246                                 newpar71 equ 8*(71-7)
+   247                                 newpar72 equ 8*(72-7)
+   248                                 newpar73 equ 8*(73-7)
+   249                                 newpar74 equ 8*(74-7)
+   250                                 newpar75 equ 8*(75-7)
+   251                                 newpar76 equ 8*(76-7)
+   252                                 newpar77 equ 8*(77-7)
+   253                                 newpar78 equ 8*(78-7)
+   254                                 newpar79 equ 8*(79-7)
+   255                                 newpar80 equ 8*(80-7)
+   256                                 newpar81 equ 8*(81-7)
+   257                                 newpar82 equ 8*(82-7)
+   258                                 newpar83 equ 8*(83-7)
+   259                                 newpar84 equ 8*(84-7)
+   260                                 newpar85 equ 8*(85-7)
+   261                                 newpar86 equ 8*(86-7)
+   262                                 newpar87 equ 8*(87-7)
+   263                                 newpar88 equ 8*(88-7)
+   264                                 newpar89 equ 8*(89-7)
+   265                                 newpar90 equ 8*(90-7)
+   266                                 newpar91 equ 8*(91-7)
+   267                                 newpar92 equ 8*(92-7)
+   268                                 newpar93 equ 8*(93-7)
+   269                                 newpar94 equ 8*(94-7)
+   270                                 newpar95 equ 8*(95-7)
+   271                                 newpar96 equ 8*(96-7)
+   272                                 newpar97 equ 8*(97-7)
+   273                                 newpar98 equ 8*(98-7)
+   274                                 newpar99 equ 8*(99-7)
+   275                                 newpar100 equ 8*(100-7)
+   276                                 %line 329+1 /home/seyfarth/ebe/hal.asm
+   277                                 
+   278                                 
+   279                                 
+   280                                 
+   281                                 
+   282                                 
+   283                                 
+   284                                 
+   285                                 
+   286                                 
+   287                                 
+   288                                 %line 343+1 /home/seyfarth/ebe/hal.asm
+   289                                 
+   290                                 %line 348+1 /home/seyfarth/ebe/hal.asm
+   291                                 currpar7 equ 16+8*(7-7)
+   292                                 %line 348+0 /home/seyfarth/ebe/hal.asm
+   293                                 currpar8 equ 16+8*(8-7)
+   294                                 currpar9 equ 16+8*(9-7)
+   295                                 currpar10 equ 16+8*(10-7)
+   296                                 currpar11 equ 16+8*(11-7)
+   297                                 currpar12 equ 16+8*(12-7)
+   298                                 currpar13 equ 16+8*(13-7)
+   299                                 currpar14 equ 16+8*(14-7)
+   300                                 currpar15 equ 16+8*(15-7)
+   301                                 currpar16 equ 16+8*(16-7)
+   302                                 currpar17 equ 16+8*(17-7)
+   303                                 currpar18 equ 16+8*(18-7)
+   304                                 currpar19 equ 16+8*(19-7)
+   305                                 currpar20 equ 16+8*(20-7)
+   306                                 currpar21 equ 16+8*(21-7)
+   307                                 currpar22 equ 16+8*(22-7)
+   308                                 currpar23 equ 16+8*(23-7)
+   309                                 currpar24 equ 16+8*(24-7)
+   310                                 currpar25 equ 16+8*(25-7)
+   311                                 currpar26 equ 16+8*(26-7)
+   312                                 currpar27 equ 16+8*(27-7)
+   313                                 currpar28 equ 16+8*(28-7)
+   314                                 currpar29 equ 16+8*(29-7)
+   315                                 currpar30 equ 16+8*(30-7)
+   316                                 currpar31 equ 16+8*(31-7)
+   317                                 currpar32 equ 16+8*(32-7)
+   318                                 currpar33 equ 16+8*(33-7)
+   319                                 currpar34 equ 16+8*(34-7)
+   320                                 currpar35 equ 16+8*(35-7)
+   321                                 currpar36 equ 16+8*(36-7)
+   322                                 currpar37 equ 16+8*(37-7)
+   323                                 currpar38 equ 16+8*(38-7)
+   324                                 currpar39 equ 16+8*(39-7)
+   325                                 currpar40 equ 16+8*(40-7)
+   326                                 currpar41 equ 16+8*(41-7)
+   327                                 currpar42 equ 16+8*(42-7)
+   328                                 currpar43 equ 16+8*(43-7)
+   329                                 currpar44 equ 16+8*(44-7)
+   330                                 currpar45 equ 16+8*(45-7)
+   331                                 currpar46 equ 16+8*(46-7)
+   332                                 currpar47 equ 16+8*(47-7)
+   333                                 currpar48 equ 16+8*(48-7)
+   334                                 currpar49 equ 16+8*(49-7)
+   335                                 currpar50 equ 16+8*(50-7)
+   336                                 currpar51 equ 16+8*(51-7)
+   337                                 currpar52 equ 16+8*(52-7)
+   338                                 currpar53 equ 16+8*(53-7)
+   339                                 currpar54 equ 16+8*(54-7)
+   340                                 currpar55 equ 16+8*(55-7)
+   341                                 currpar56 equ 16+8*(56-7)
+   342                                 currpar57 equ 16+8*(57-7)
+   343                                 currpar58 equ 16+8*(58-7)
+   344                                 currpar59 equ 16+8*(59-7)
+   345                                 currpar60 equ 16+8*(60-7)
+   346                                 currpar61 equ 16+8*(61-7)
+   347                                 currpar62 equ 16+8*(62-7)
+   348                                 currpar63 equ 16+8*(63-7)
+   349                                 currpar64 equ 16+8*(64-7)
+   350                                 currpar65 equ 16+8*(65-7)
+   351                                 currpar66 equ 16+8*(66-7)
+   352                                 currpar67 equ 16+8*(67-7)
+   353                                 currpar68 equ 16+8*(68-7)
+   354                                 currpar69 equ 16+8*(69-7)
+   355                                 currpar70 equ 16+8*(70-7)
+   356                                 currpar71 equ 16+8*(71-7)
+   357                                 currpar72 equ 16+8*(72-7)
+   358                                 currpar73 equ 16+8*(73-7)
+   359                                 currpar74 equ 16+8*(74-7)
+   360                                 currpar75 equ 16+8*(75-7)
+   361                                 currpar76 equ 16+8*(76-7)
+   362                                 currpar77 equ 16+8*(77-7)
+   363                                 currpar78 equ 16+8*(78-7)
+   364                                 currpar79 equ 16+8*(79-7)
+   365                                 currpar80 equ 16+8*(80-7)
+   366                                 currpar81 equ 16+8*(81-7)
+   367                                 currpar82 equ 16+8*(82-7)
+   368                                 currpar83 equ 16+8*(83-7)
+   369                                 currpar84 equ 16+8*(84-7)
+   370                                 currpar85 equ 16+8*(85-7)
+   371                                 currpar86 equ 16+8*(86-7)
+   372                                 currpar87 equ 16+8*(87-7)
+   373                                 currpar88 equ 16+8*(88-7)
+   374                                 currpar89 equ 16+8*(89-7)
+   375                                 currpar90 equ 16+8*(90-7)
+   376                                 currpar91 equ 16+8*(91-7)
+   377                                 currpar92 equ 16+8*(92-7)
+   378                                 currpar93 equ 16+8*(93-7)
+   379                                 currpar94 equ 16+8*(94-7)
+   380                                 currpar95 equ 16+8*(95-7)
+   381                                 currpar96 equ 16+8*(96-7)
+   382                                 currpar97 equ 16+8*(97-7)
+   383                                 currpar98 equ 16+8*(98-7)
+   384                                 currpar99 equ 16+8*(99-7)
+   385                                 currpar100 equ 16+8*(100-7)
+   386                                 %line 349+1 /home/seyfarth/ebe/hal.asm
+   387                                 
+   388                                 %line 351+1 /home/seyfarth/ebe/hal.asm
+   389                                 
+   390                                 %line 358+1 /home/seyfarth/ebe/hal.asm
+   391                                 
+   392                                 %line 367+1 /home/seyfarth/ebe/hal.asm
+   393                                 
+   394                                 %line 372+1 /home/seyfarth/ebe/hal.asm
+   395                                 
+   396                                 %line 379+1 /home/seyfarth/ebe/hal.asm
+   397                                 
+   398                                 %line 382+1 /home/seyfarth/ebe/hal.asm
+   399                                 
+   400                                 [segment .data]
+   401 00000000 000000000000F83F       a dq 1.5
+   402 00000008 3333333333332440       b dq 10.1
+   403                                 
+   404                                 [segment .text]
+   405                                 [global main]
+   406                                 main:
+   407 00000000 55                      push rbp
+   408 00000001 4889E5                  mov rbp, rsp
+   409                                 
+   410 00000004 BF01000000              mov edi, 1
+   411 00000009 F20F100425[00000000]      movsd xmm0, [a]
+   412 00000012 F20F580425[00000000]      addsd xmm0, [b]
+   413 0000001B C9                      leave
+   414 0000001C C3                      ret
