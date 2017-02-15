@@ -4,8 +4,7 @@
 #include "settings.h"
 #include <QApplication>
 #include <QListWidget>
-#include <QWebView>
-#include <QWebFrame>
+#include <QTextBrowser>
 #include <QListWidgetItem>
 #include <QClipboard>
 #include <QVBoxLayout>
@@ -31,7 +30,7 @@ LibraryWindow::LibraryWindow(QWidget *parent)
     setLayout(layout);
     setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
     show();
-    view = NULL;
+    text = NULL;
     connect ( list, SIGNAL(itemClicked(QListWidgetItem*)),
         this, SLOT(handleClick(QListWidgetItem*)) );
     cd(ebe["library/path"].toString());
@@ -119,6 +118,7 @@ void LibraryWindow::cd(QString d)
 
 void LibraryWindow::handleClick(QListWidgetItem * /* it */)
 {
+    int fontSize = ebe["font_size"].toInt();
     //qDebug() << "row" << list->currentRow();
     QString file = files[list->currentRow()];
     //qDebug() << "file" << file;
@@ -127,21 +127,25 @@ void LibraryWindow::handleClick(QListWidgetItem * /* it */)
         cd(file);
     } else if (info.isFile()) {
         QPoint p;
-        if (view.isNull()) view = new QWebView;
+        if (text.isNull()) text = new QTextBrowser;
         p = pos();
         p.setX(p.x()+420);
-        view->move(p);
-        view->resize(800,900);
-        view->load(QUrl("qrc" + file));
-        view->setZoomFactor(ebe["font_size"].toInt() / 14.0);
-        view->show();
-    connect(view,SIGNAL(loadFinished(bool)),this,SLOT(copy()));
-}
+        text->move(p);
+        text->resize(900,800);
+        text->setWindowTitle(file);
+        text->setSource(QUrl("qrc" + file));
+        text->setFontPointSize( (double)fontSize );
+        text->show();
+        //connect(text,SIGNAL(loadFinished(bool)),this,SLOT(copy()));
+        QString s = text->toPlainText();
+        s.chop(1);
+        clipboard->setText(s);
+    }
 }
 
 void LibraryWindow::copy()
 {
-    QString s = view->page()->currentFrame()->toPlainText();
+    QString s = text->toPlainText();
     s.chop(1);
     clipboard->setText(s);
 }
