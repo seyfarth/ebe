@@ -575,9 +575,9 @@ void SourceFrame::run()
     //qDebug() << asmDataWindow;
     asmDataWindow->variables.clear();
     asmDataWindow->varNames.clear();
-    qDebug() << "building globals";
+    //qDebug() << "building globals";
     foreach(file, files) {
-        qDebug() << "file" << file.source;
+        //qDebug() << "file" << file.source;
         object = file.object;
         bool findVariables = file.language == "asm" || file.language == "hal";
         if ( findVariables ) readAsmDecls(file.source);
@@ -590,17 +590,16 @@ void SourceFrame::run()
         nm.setReadChannel(QProcess::StandardOutput);
         QString data = nm.readLine();
         QStringList parts;
-        qDebug() << data;
+        //qDebug() << data;
         while (data != "") {
-            qDebug() << data;
+            //qDebug() << data;
             parts = data.split(QRegExp("\\s+"));
-            qDebug() << parts;
+            //qDebug() << parts;
             if ( findVariables ) {
                 if ( (parts[1] == "d" && parts[2] != ".data") ||
                      (parts[1] == "b" && parts[2] != ".bss") ) {
-                    qDebug() << parts[2];
-                    AsmVariableTable *var = new AsmVariableTable(parts[2],
-                                                asmDataWindow);
+                    //qDebug() << parts[2];
+                    AsmVariable var(parts[2]);
                     asmDataWindow->varNames[parts[2]] =
                                    asmDataWindow->variables.size();
                     asmDataWindow->variables.append(var);
@@ -841,16 +840,16 @@ void SourceFrame::run()
     bool definingVar = false;
     QString varName;
     QString nmp;
-    qDebug() << "running nm";
-    //QVector<AsmVariable> newVars;
+    //qDebug() << "running nm";
+    QVector<AsmVariable> newVars;
     while (nmData != "") {
-        qDebug() << nmData;
+        //qDebug() << nmData;
         nmParts = nmData.split(rx1);
         if ( definingVar ) {
-            //AsmVariable & var=asmDataWindow->variables[index];
-            //long size = nmParts[0].toULongLong(&ok,16) - var.address;
+            AsmVariable & var=asmDataWindow->variables[index];
+            long size = nmParts[0].toULongLong(&ok,16) - var.address;
             if ( size >= 1 ) {
-                if ( size > 1024 ) size = 1024;
+                if ( size > 100000 ) size = 100000;
                 if ( asmVariableDecls.contains(var.name) ) {
                     var.format = asmVariableDecls[var.name].format;
                     if ( asmVariableDecls[var.name].size > 0 ) {
@@ -871,7 +870,7 @@ void SourceFrame::run()
                 }
                 if ( asmDataWindow->varNames.count(nmParts[2]) > 0 ) {
                     index = asmDataWindow->varNames[nmParts[2]];
-                    qDebug() << "var" << nmData;
+                    //qDebug() << "var" << nmData;
                     asmDataWindow->variables[index].address =
                                   nmParts[0].toULongLong(&ok,16);
                     definingVar = true;
@@ -880,8 +879,8 @@ void SourceFrame::run()
             } else if (nmParts[1] == "T") {
                 nmParts[0] = "0x" + nmParts[0];
                 textToAddress[nmParts[2]] = nmParts[0].toULong(&ok, 16);
-                qDebug() << "text" << nmParts[2] << textToAddress[nmParts[2]]
-                << textToFile[nmParts[2]];
+                //qDebug() << "text" << nmParts[2] << textToAddress[nmParts[2]]
+                //<< textToFile[nmParts[2]];
             }
         }
         nmData = nm.readLine();
@@ -890,11 +889,11 @@ void SourceFrame::run()
     foreach ( AsmVariable v, asmDataWindow->userDefinedVariables ) {
         asmDataWindow->variables.push_back(v);
     }
-    for ( int i=0; i < asmDataWindow->variables.size(); i++ ) {
-        qDebug() << asmDataWindow->variables[i].name <<
-                    asmDataWindow->variables[i].address <<
-                    asmDataWindow->variables[i].size;
-    }
+    //for ( int i=0; i < asmDataWindow->variables.size(); i++ ) {
+        //qDebug() << asmDataWindow->variables[i].name <<
+                    //asmDataWindow->variables[i].address <<
+                    //asmDataWindow->variables[i].size;
+    //}
     //qDebug() << "globals" << varToAddress.keys();
 
 //

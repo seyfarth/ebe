@@ -20,8 +20,8 @@ extern QVector<StrucInfo> asmStrucs;
 
 extern bool running;
 
-AsmVariableTable::AsmVariableTable(QString _name, QWidget *parent)
-    : name(_name), QTableWidget(parent)
+AsmVariable::AsmVariable(QString _name)
+    : name(_name)
 {
     address = 0;
     format = "hex1";
@@ -146,21 +146,17 @@ void AsmDataWindow::clear()
     userDefinedVariables.clear();
 }
 
-void AsmDataWindow::rebuildTables()
+void AsmDataWindow::rebuildTable()
 {
-    qDebug() << variables.size() << varNames;
+    //qDebug() << variables.size() << varNames;
     columns = ebe["asmdata/columns"].toInt();
     rows = 0;
 
-    qDebug() << "rows" << rows;
-    int sz = variables.size();
-    //if ( sz > 270 ) sz = 270;
-    //table->setPlankCount(variables.size());
-    table->setPlankCount(sz);
+    //qDebug() << "rows" << rows << ";   oldrows" << oldRows;
+    table->setPlankCount(variables.size());
     table->setColumnCount(columns+2);
 
-    //for ( int i=0; i < variables.size(); i++ ) {
-    for ( int i=0; i < sz; i++ ) {
+    for ( int i=0; i < variables.size(); i++ ) {
         table->setCurrentPlank(i);
         if ( table->rowCount() < 1 ) {
             table->setRowCount(1);
@@ -173,8 +169,7 @@ void AsmDataWindow::rebuildTables()
         table->setText(0,1,variables[i].name);
     }
 
-    //for ( int i=0; i < variables.size(); i++ ) {
-    for ( int i=0; i < sz; i++ ) {
+    for ( int i=0; i < variables.size(); i++ ) {
         emit requestAsmVariable ( i, variables[i].address, variables[i].size );
     }
 }
@@ -258,15 +253,15 @@ void AsmDataWindow::redisplay ( int v, EZ::Color highlight )
         rows = (num + count - 1) / count;
     }
     if ( variables[v].expanded ) rows = 1;
-    qDebug() << "format:" << format << "  span:" << span
-             << "  num:" << num << "  size:" << size
-             << "  left:" << left << "  count;" << count;
+    //qDebug() << "format:" << format << "  span:" << span
+             //<< "  num:" << num << "  size:" << size
+             //<< "  left:" << left << "  count;" << count;
 
     table->setRowCount(rows);
 
-    qDebug() << "redisplay" << v << rows;
+    //qDebug() << "redisplay" << v << rows;
     for ( int r = 0; r < rows; r++ ) {
-        qDebug() << "working on row" << r;
+        //qDebug() << "working on row" << r;
 
         if ( r > 0 ) {
             table->setSpan(r,0,1,1);
@@ -296,7 +291,7 @@ void AsmDataWindow::redisplay ( int v, EZ::Color highlight )
     }
 }
 
-void AsmDataWindow::buildTables()
+void AsmDataWindow::buildTable()
 {
     /*
      *  Set the frame to be raised with a width 4 bevel.
@@ -305,28 +300,42 @@ void AsmDataWindow::buildTables()
     setLineWidth(4);
 
     /*
-     *  We need a layout for the variable tables
+     *  Create a table to display the registers
+     */
+    table = new EZTable(this);
+
+    /*
+     *  We need a layout for the table widget
      */
     layout = new QVBoxLayout;
     layout->setSpacing(5);
     
     /*
-     *  Leave 10 pixels all around the tables
+     *  Leave 10 pixels all around the table
      */
     layout->setContentsMargins(10, 10, 10, 10);
 
+    table->setPlankCount(0);
+    table->setColumnCount(columns+2);
     fontWidth = ebe["font_size"].toInt() * 0.8;
+    table->setColumnWidth(0,8*fontWidth);
+    table->setColumnWidth(1,15*fontWidth);
+    //for ( int c = 2; c < 34; c++ ) {
+        //table->setColumnWidth(c,5*fontWidth);
+    //}
+
 
     /*
      *  Set a tooltip to display when the cursor is over the table
      */
-    setToolTip(tr("Right click on variable names to change formats."));
+    table->setToolTip(tr("Right click on variable names to change formats."));
 
     /*
      *  Add the table to the layout and set the layout for the frame.
      */
     scrollArea = new QScrollArea;
-    scrollArea->setWidget(this);
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
     setLayout(layout);
 }
 
