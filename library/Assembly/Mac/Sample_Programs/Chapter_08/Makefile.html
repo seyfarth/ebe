@@ -1,0 +1,36 @@
+<html>
+<head>
+<title> Makefile </title>
+</head>
+<body>
+<pre>
+PROGS = switch if if2 if3 countbitsc countbits findchar add_arrays \
+	findcharright strlen memcmp
+
+all: $(PROGS) 
+
+.SUFFIXES:
+.SUFFIXES: .o .asm
+.SECONDARY:
+
+DIR = `basename $(PWD)`
+
+CCFLAGS = -g
+
+.asm.o:
+	yasm -Worphan-labels -f elf64 -g dwarf2 -l $*.lst $<
+
+.o:
+	gcc -o $@ $<
+
+countbitsc: countbits.c
+	gcc -O3 -o countbitsc countbits.c
+
+clean:
+	rm -f $(PROGS) *.o *.lst *~ .*.gdb *.s
+
+tgz: clean
+	(cd ..; tar cvzf  $(DIR).tgz $(DIR))
+</pre>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<html>
+<head>
+<title> Makefile </title>
+</head>
+<body>
+<pre>
+PROGS = testsobelc testsobelsse
+all: $(PROGS) 
+
+.SUFFIXES:
+.SUFFIXES: .o .asm .c
+.SECONDARY:
+
+DIR = `basename $(PWD)`
+
+CCFLAGS = -g
+
+.asm.o:
+	yasm -Worphan-labels -P ebe.inc -f elf64 -g dwarf2 -l $*.lst $<
+
+.o:
+	gcc -o $@ $<
+
+testsobelc: testsobel.c sobel.c
+	gcc -O3 -funroll-all-loops -o testsobelc testsobel.c sobel.c -lm
+
+testsobelsse: testsobel.c sobelsse.asm
+	yasm -Worphan-labels -P ebe.inc -f elf64 -g dwarf2 -l sobelsse.lst sobelsse.asm
+	gcc -O3 -funroll-all-loops -o testsobelsse testsobel.c sobelsse.o -lm
+
+clean:
+	rm -f $(PROGS) *.o *.lst *~ .*.gdb
+
+tgz: clean
+	(cd ..; tar cvzf  $(DIR).tgz $(DIR))
+</pre>
+</body>
+</html>
