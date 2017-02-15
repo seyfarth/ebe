@@ -636,7 +636,7 @@ void DataTree::reorder(DataPlank *p)
 void DataTree::buildTree(DataPlank *p)
 {
     qDebug() << "buildTree" << p << p->name << p->treeLevel
-             << p->format << p->state << p->kids.length();
+             << p->format << p->state << p->kids.size();
     if ( p->needsRequest ) dataWindow->request(p);
     else redisplay(p, EZ::Highlight);
     if ( p->state == EZ::Expanded ) {
