@@ -10,7 +10,7 @@
 QT_BEGIN_NAMESPACE
 class QListWidget;
 class QListWidgetItem;
-class QWebView;
+class QTextBrowser;
 class QClipboard;
 QT_END_NAMESPACE
 
@@ -26,7 +26,7 @@ public:
     QStringList components;
     QStringList files;
     QClipboard *clipboard;
-    QPointer<QWebView> view;
+    QPointer<QTextBrowser> text;
 
 private slots:
     void handleClick ( QListWidgetItem *it );

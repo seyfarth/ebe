@@ -9,16 +9,13 @@ INCLUDEPATH += .
 #INCLUDEPATH += /usr/local/include
 #LIBS += -L/usr/local/lib/qt4
 
-lessThan(QT_MAJOR_VERSION,5) {
-    QT += webkit
-}
 equals(QT_MAJOR_VERSION,5) {
-    QT += widgets webkitwidgets
+    QT += widgets
 }
 
 #CONFIG -= app_bundle
-#CONFIG += console release embed_manifest_exe
-CONFIG += console debug static
+CONFIG += console release embed_manifest_exe
+#CONFIG += console debug static
 
 TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts \
                ebe_hi.ts ebe_zh.ts ebe_ru.ts ebe_ar.ts ebe_bn.ts \

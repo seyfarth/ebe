@@ -1,9 +1,8 @@
 #include <QtGui>
 #include <QDesktopWidget>
 #include <QTimer>
+#include <QTextBrowser>
 #include <QPushButton>
-#include <QtWebKit>
-#include <QWebView>
 #include <QApplication>
 #include <QMessageBox>
 #include <QDockWidget>
@@ -801,10 +800,12 @@ void MainWindow::helpAction(QMenu *menu, QString text, QString file)
 void MainWindow::displayHelp()
 {
     QAction *action = (QAction *)sender();
-    QWebView *view = new QWebView;
-    view->load(QUrl("qrc:/html/" + action->data().toString()));
-    view->setZoomFactor((double)fontSize / 14);
-    view->show();
+    QTextBrowser *text = new QTextBrowser;
+    text->resize(900,800);
+    text->setSource(QUrl("qrc:/html/" + action->data().toString()));
+    text->setWindowTitle(action->data().toString());
+    text->setFontPointSize( (double)fontSize );
+    text->show();
 }
 
 void MainWindow::quit()
