@@ -10,7 +10,7 @@ typedef QHash<QString, int> IntHash;
 typedef QSet<QString> StringSet;
 typedef QSet<int> IntSet;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     typedef unsigned long long uLong;
     typedef long long sLong;
 #else

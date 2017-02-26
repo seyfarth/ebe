@@ -13,7 +13,6 @@ extern GDB *gdb;
 IntHash formatToSpan;
 IntHash formatToSize;
 QHash<QString,FormatFunction> formatToFunction;
-extern EZPlank *latestPlank;
 
 extern QMap<QString,VariableInfo> asmVariables;
 extern QVector<StrucInfo> asmStrucs;
@@ -423,7 +422,7 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
         sub->addAction(tr("Float fields"), this, SLOT(setFields4()));
     menu.addAction(tr("Char format"), this, SLOT(setChar()));
 
-    int p = latestPlank->plankNumber;
+    int p = table->latestPlank->plankNumber;
     //qDebug() << "selected" << p << variables[p].size;
     if ( variables[p].size >= (int)sizeof(char *) &&
          asmStrucs.size() > 0 ) {
@@ -450,7 +449,7 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void AsmDataWindow::defineVariableByAddress()
 {
-    int p = latestPlank->plankNumber;
+    int p = table->latestPlank->plankNumber;
     //qDebug() << "defineVariableByAddress" << p;
     QStringList parts;
 
@@ -498,7 +497,7 @@ void AsmDataWindow::setStruc()
     StrucInfo s=asmStrucs[i];
     QVector<AsmVariable> vars(variables);
     AsmVariable v;
-    int p = latestPlank->plankNumber;
+    int p = table->latestPlank->plankNumber;
 
     //qDebug() << "setStruc" << i << p << s.name;
     variables.clear();
@@ -523,7 +522,7 @@ void AsmDataWindow::expandStruc()
     int i = action->data().toInt();
     StrucInfo s=asmStrucs[i];
     AsmVariable v;
-    int p = latestPlank->plankNumber;
+    int p = table->latestPlank->plankNumber;
 
 
     if ( !running ) return;
@@ -635,13 +634,13 @@ void AsmDataWindow::setBinaryFP8()
 
 void AsmDataWindow::setFormat(QString format)
 {
-    //qDebug() << "setFormat" << latestPlank;
+    //qDebug() << "setFormat" << table->latestPlank;
     int v;
-    if ( latestPlank == 0 ) return;
+    if ( table->latestPlank == 0 ) return;
     saveScroll();
-    //qDebug() << "setFormat" << variables[latestPlank].name << format;
+    //qDebug() << "setFormat" << variables[table->latestPlank].name << format;
     for ( v = 0; v < table->table.size(); v++ ) {
-        if ( table->table[v] == latestPlank ) {
+        if ( table->table[v] == table->latestPlank ) {
             variables[v].format = format;
             redisplay(v);
             table->resizeToFitContents();

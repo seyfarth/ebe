@@ -1,4 +1,3 @@
-        CNAME   main
         segment .data
 a       dd      4
 b       dd      4.4
@@ -10,14 +9,14 @@ f       db      "hello world", 0
         segment .bss
 g       resd    1
 h       resd    10
-i       resb    10000000
-data    resb    10000
+i       resb    100
 
         section .text
         global  main        ; let the linker know about main
 main:
-        sub     rsp, 24     ; leave some room for local variables
-                            ; and align stack to 16 byte boundary
+        push    rbp
+        mov     rbp, rsp
+        sub     rsp, 24     ; leave room for shadow parameteres
         xor     eax, eax    ; set rax to 0 for return value
-        add     rsp, 24     ; undo the stack manipulations
+        leave               ; undo the stack manipulations
         ret

@@ -1,18 +1,19 @@
 #ifndef FLOATWINDOW_H
 #define FLOATWINDOW_H
 
-#include "ebetable.h"
+#include "eztable.h"
 #include <QtGui>
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QMenu>
+#include <QScrollArea>
 
 class FpRegister
 {
 public:
     FpRegister();
     QString value();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     void setValue(unsigned long long *x);
 #else
     void setValue(unsigned long *x);
@@ -24,12 +25,12 @@ private:
     {
         double f8[4];
         float f4[8];
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
         unsigned long long u8[4];
 #else
         unsigned long u8[4];
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
         long long i8[4];
 #else
         long i8[4];
@@ -51,11 +52,11 @@ class FloatWindow: public QFrame
 public:
     FloatWindow(QWidget *parent = 0);
     void resetNames();
-    void setFontHeightAndWidth(int height, int width);
-    void setRegister(int n, QString value,
-           EbeTable::Color h=EbeTable::Normal);
+    void setFontHeightAndWidth(int, int);
+    void setRegister(int n, QString value, EZ::Color h=EZ::Default);
     int count;
-    EbeTable *table;
+    EZTable *table;
+    QScrollArea *scrollArea;
 
 public slots:
     void receiveFpRegs(QStringList);
@@ -63,7 +64,7 @@ public slots:
     void formatAllRegisters(QAction *action);
 
 private:
-    EbeTableItem *regs[16];
+    EZCell *regs[16];
     QSize sizeHint() const;
     FpRegister regValues[16];
     int fontHeight;

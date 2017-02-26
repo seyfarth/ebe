@@ -4,7 +4,7 @@
 #include "gdb.h"
 #include "settings.h"
 #include "terminalwindow.h"
-#ifdef Q_OS_WIN
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
 #ifdef Q_OS_CYGWIN
@@ -96,7 +96,7 @@ GDB::GDB()
     gdbProcess->start(gdbName + " -nh" );
 
     wordSize = ebe["build/word_size"].toInt();
-    qDebug() << "gdb state" << gdbProcess->state() << gdbProcess->pid();
+    //qDebug() << "gdb state" << gdbProcess->state() << gdbProcess->pid();
     runCommands << "run" << "step" << "next" << "stepi" << "nexti"
         << "continue";
     simpleTypes << "char" << "signed char" << "unsigned char" << "short"
@@ -216,7 +216,7 @@ void GDB::send(QString cmd, QString /*options*/)
             return;
         }
     }
-    qDebug() << cmd;
+    //qDebug() << cmd;
 #if defined(Q_OS_WIN)
     if ( needToWake && cmd == "continue" ) {
         //qDebug() << "ResumeThread" << hThread;
@@ -236,7 +236,7 @@ void GDB::send(QString cmd, QString /*options*/)
     QString result;
     result = readLine();
     emit log(result);
-    qDebug() << "result:" << result;
+    //qDebug() << "result:" << result;
     if ( result.indexOf("Inferior") >= 0 && result.indexOf("exited") >= 0 ) {
         running = false;
     }
@@ -259,14 +259,14 @@ void GDB::send(QString cmd, QString /*options*/)
             running = false;
         }
         if (result.startsWith("Program received signal")) emit error(result);
-        qDebug() << "result:" << result;
+        //qDebug() << "result:" << result;
     }
 }
 
 QStringList GDB::sendReceive(QString cmd, QString /*options*/)
 {
     QStringList list;
-    qDebug() << cmd;
+    //qDebug() << cmd;
     if ( runningStatus != QProcess::Running ) {
         if ( gdbProcess->state() == QProcess::Running ) {
             runningStatus = QProcess::Running;
@@ -299,7 +299,7 @@ QStringList GDB::sendReceive(QString cmd, QString /*options*/)
              result.indexOf("exited") >= 0 ) {
             running = false;
         }
-        qDebug() << "result:" << result;
+        //qDebug() << "result:" << result;
     }
     if (result.length() > 5) list.append(result);
     //qDebug() << list;

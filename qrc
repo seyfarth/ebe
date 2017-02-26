@@ -5,6 +5,7 @@ find library src html -name '*~' -exec rm \{} \;
 lrelease ebe.pro
 mkdir -p translations
 cp *.qm translations
+
 cat > ebe.qrc << EOF
 <!DOCTYPE RCC> <RCC version="1.0">
 <qresource>

@@ -30,7 +30,7 @@ DefineVariableDialog::DefineVariableDialog()
     QStringList types;
     types << "char" << "unsigned char" << "signed char" << "short"
         << "unsigned short" << "int" << "unsigned int"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
         << "long long" << "unsigned long long"
 #else
         << "long" << "unsigned long"

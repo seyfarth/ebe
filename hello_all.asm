@@ -8,14 +8,14 @@ message db      "Hello world!", 0x0a, 0
 main:
         push    rbp
         mov     rbp, rsp
-        frame   3, 4, 1
+        frame   7, 6, 7
         sub     rsp, frame_size
         mov     [rbp+local1], rsp
         mov     [rbp+local2], rax
-        lea     rdi, [message]
+        lea     rcx, [message]
         xor     eax, eax          ; Linux: number of floating params
         call    printf
         xor     eax, eax
         leave
-        ret
 
+        ret

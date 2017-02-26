@@ -29,6 +29,7 @@ void EbeTable::setText ( int r, int c, QString t, Color highlight )
         }
         break;
     case Normal:
+        it->setForeground(QBrush(QColor("black")));
         break;
     }
     it->setText(t);
@@ -56,6 +57,7 @@ void EbeTableItem::updateText ( QString t, EbeTable::Color highlight )
         }
         break;
     case EbeTable::Normal:
+        setForeground(QBrush(QColor("black")));
         break;
     }
     setText(t);

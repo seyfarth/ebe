@@ -7,10 +7,11 @@
 ;   Output: only the exit status ($? in the shell)
 ;
     segment .text
-    global  start
-
-start:
-    mov  eax,60      ; 60 is the exit syscall number
-                     ; 0x2000001 for OS X
-    mov  edi,5       ; the status value to return
-    syscall          ; execute a system call
+    global  main
+    extern  exit
+main:
+    push rbp
+    mov  rbp, rsp
+    sub  rsp, 32
+    mov  ecx, 5
+    call exit

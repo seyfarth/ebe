@@ -8,7 +8,7 @@
  */
 
 #include "types.h"
-#include "ebetable.h"
+#include "eztable.h"
 #include <QFrame>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -29,68 +29,6 @@ public:
     StringHash *fpaliasNames;
     QString unalias;
     QString fpunalias;
-};
-
-/**
- *  \class FrameItem
- *
- *  \brief Class to store and format the value for an item in a stack frame
- *
- *  The Register class stores the value of a general purpose register as a
- *  QString which is a hexadecimal representation starting with "0x".
- *
- *  In addition to storing the value of a register, a Register object stores
- *  the register's name.  This is used when formatting rip and eflags which
- *  should not be converted to decimal.
- *
- *  A Register has a format which is also a QString.  Presently the format
- *  should be either "decimal" or "hexadecimal".
- *
- *  It contains functions to set the value, set the format, and retrieve the
- *  value formatted for display.
- */
-class FrameItem: public EbeTableItem
-{
-public:
-    /**
-     *  Constructor for the FrameItem class
-     *
-     *  \param name The name of the FrameItem
-     */
-    FrameItem();
-
-    /**
-     *  \fn value
-     *
-     *  Function to retrieve the value of the FrameItem formatted
-     *  according to the format value in the FrameItem
-     *
-     *  \return Formatted value as a QString
-     */
-    QString value();
-
-    AllTypes _value;
-
-    /**
-     *  \fn setValue
-     *
-     *  Function to set the value of a FrameItem
-     *
-     *  \param value A QString containing the value of the quadword.
-     */
-    void setValue(unsigned long value);
-
-
-    /**
-     *  \fn setFormat
-     *
-     *  Function to set the format for a FrameItem.
-     *
-     *  \param format A QString holding the desired quadword format
-     */
-    void setFormat(QString format);
-
-    QString format;     ///< The format for displaying the Register
 };
 
 /**
@@ -157,6 +95,7 @@ public:
     QVBoxLayout *layout;
     int returnRow;
     int local1Row;
+    QScrollArea *scrollArea;
 
     void buildTable();
     void rebuildTable();
@@ -188,7 +127,7 @@ public:
     /**
      *  QTableWidget pointer to the table displayed in the RegisterWindow.
      */
-    EbeTable *table;
+    EZTable *table;
 
     /**
      *  \fn sizeHint

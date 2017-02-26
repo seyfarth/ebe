@@ -271,7 +271,7 @@ void ToyBox::computeExpression()
         return;
     }
     QString program;
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     program = "ebe_toybox.exe";
 #else
     program = "./ebe_toybox";

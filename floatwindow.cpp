@@ -18,34 +18,25 @@ FloatWindow::FloatWindow(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(10, 10, 10, 10);
 
-    table = new EbeTable(this);
+    table = new EZTable(this);
     table->setRowCount(count / 2);
     table->setColumnCount(4);
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
     table->setToolTip(tr("Right click to change register formats."));
 
-    QTableWidgetItem *name;
-    EbeTableItem *value;
     QString regName;
     for (int r = 0; r < count / 2; r++) {
         for (int c = 0; c < 2; c++) {
             regName = QString("xmm%1 ").arg(c * (count / 2) + r);
-            name = new QTableWidgetItem(regName);
-            name->setTextAlignment(Qt::AlignRight);
-            value = new EbeTableItem("0.0");
-            regs[c * (count / 2) + r] = value;
-            table->setItem(r, c * 2, name);
-            table->setItem(r, c * 2 + 1, value);
+            table->setText(r, c * 2, " "+regName);
+            table->setText(r, c * 2 + 1, "0.0");
+            regs[c * (count / 2) + r] = table->cell(r,c*2+1);
             floatItems[QString("xmm%1").arg(c*(count/2)+r)] = r*10 + c*2;
         }
     }
-    layout->addWidget(table);
-
-    table->setShowGrid(false);
-    table->resizeRowsToContents();
-    table->resizeColumnsToContents();
-
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
+    table->resizeToFitContents();
     setLayout(layout);
 }
 
@@ -56,9 +47,8 @@ void FloatWindow::resetNames()
     table->setRowCount(count / 2);
     for (int r = 0; r < count / 2; r++) {
         for (int c = 0; c < 2; c++) {
-            if ( table->item(r,c*2) == 0 ) {
-                table->setItem(r,c*2,new EbeTableItem(""));
-                table->setItem(r,c*2+1,new EbeTableItem("0"));
+            if ( table->cell(r,c*2) == 0 ) {
+                table->setText(r,c*2+1,"0");
             }
             regName = QString("xmm%1 ").arg(c * (count / 2) + r);
             table->setText(r,c*2,regName);
@@ -71,28 +61,27 @@ QSize FloatWindow::sizeHint() const
     return QSize(200, 10);
 }
 
-void FloatWindow::setFontHeightAndWidth(int height, int width)
+void FloatWindow::setFontHeightAndWidth(int /*heighti*/, int /*width*/)
 {
-    int max, length;
-    fontHeight = height;
-    fontWidth = width;
-    for (int r = 0; r < count / 2; r++) {
-        table->setRowHeight(r, height + 3);
-    }
-    for (int c = 0; c < 4; c++) {
-        max = 1;
-        for (int r = 0; r < count / 2; r++) {
-            length = table->item(r, c)->text().length();
-            if (length > max) max = length;
-        }
-        table->setColumnWidth(c, (max + 1) * width + 3);
-    }
-
+    //int max, length;
+    //fontHeight = height;
+    //fontWidth = width;
+    //for (int r = 0; r < count / 2; r++) {
+        //table->setRowHeight(r, height + 3);
+    //}
+    //for (int c = 0; c < 4; c++) {
+        //max = 1;
+        //for (int r = 0; r < count / 2; r++) {
+            //length = table->item(r, c)->text().length();
+            //if (length > max) max = length;
+        //}
+        //table->setColumnWidth(c, (max + 1) * width + 3);
+    //}
 }
 
-void FloatWindow::setRegister(int n, QString value, EbeTable::Color highlight)
+void FloatWindow::setRegister(int n, QString value, EZ::Color highlight)
 {
-    if (n >= 0 && n < count) regs[n]->updateText(value,highlight);
+    if (n >= 0 && n < count) regs[n]->setText(value,highlight);
 }
 
 void FloatWindow::receiveFpRegs(QStringList data)
@@ -119,7 +108,7 @@ void FloatWindow::receiveFpRegs(QStringList data)
         }
         //qDebug() << "val" << i << x[0] << x[1] << x[2] << x[3];
         regValues[i].setValue(x);
-        setRegister(i, regValues[i].value(),EbeTable::Highlight);
+        setRegister(i, regValues[i].value(),EZ::Highlight);
     }
     setFontHeightAndWidth(fontHeight, fontWidth);
 }
@@ -186,7 +175,7 @@ void FloatWindow::formatRegister(QAction *action)
 {
     int n;
 
-    n = (table->currentColumn() / 2) * (count / 2) + table->currentRow();
+    n = (table->latestColumn / 2) * (count / 2) + table->latestRow;
     //qDebug() << n << action->text();
     regValues[n].setFormat(action->text());
     setRegister(n, regValues[n].value());
@@ -263,7 +252,7 @@ QString FpRegister::value()
     } else if (format == "4 ints") {
         s.sprintf("%d %d %d %d", i4[0], i4[1], i4[2], i4[3]);
     } else if (format == "2 longs") {
-        s.sprintf("%ld %ld", i8[0], i8[1]);
+        s.sprintf("%Ld %Ld", i8[0], i8[1]);
     } else if (format == "8 floats") {
         s = "";
         for (int i = 0; i < 8; i++) {
@@ -295,9 +284,9 @@ QString FpRegister::value()
             s += t;
         }
     } else if (format == "4 longs") {
-        s.sprintf("%ld %ld %ld %ld", i8[0], i8[1], i8[2], i8[3]);
+        s.sprintf("%Ld %Ld %Ld %Ld", i8[0], i8[1], i8[2], i8[3]);
     } else if (format == "2 int128s") {
-        s.sprintf("%016lx%016lx %016lx%016lx", i8[0], i8[1], i8[2], i8[3]);
+        s.sprintf("%016Lx%016Lx %016Lx%016Lx", i8[0], i8[1], i8[2], i8[3]);
     } else {
         qDebug() << "Unknown format" << format;
     }

@@ -113,94 +113,50 @@ void Settings::setDefaults()
     ebe["edit/auto_indent"] = true;
 
     ebe["language"] = "cpp";
-    ebe["build/_01"] =
-        " In order to make any changes to build rules you must set";
-    ebe["build/_02"] =
-        " build/expert to true.  Otherwise, ebe will reset all your";
-    ebe["build/_03"] =
-        " changes to the defaults when it starts.  This was done to";
-    ebe["build/_04"] =
-        " make it easier to propagate build rule changes for people.";
-    ebe["build/_05"] =
-        " It is onerous to explain to people how to edit .ebe.ini.";
-    ebe["build/_06"] =
-        " Most people can ignore its existence.";
-    ebe["build/_07"] =
-        "";
-    ebe["build/_08"] =
-        " There is a separate .ebe.ini in each directory where you";
-    ebe["build/_09"] =
-        " execute ebe.  If you have problems with expert mode, it may";
-    ebe["build/_10"] =
-        " be useful to start ebe in a new directory to generate defaults";
-    ebe["build/_11"] =
-        " and compare the build rules for the new file and the expert file.";
-    ebe["build/_12"] =
-        "";
-    ebe["build/_13"] =
-        " You can choose between a few alternative build scenarios.";
-    ebe["build/_14"] =
-        "";
-    ebe["build/_15"] =
-        " On 32 bit Linux systems you can choose to use either yasm or as.";
-    ebe["build/_16"] =
-        " To do this change the setting for build/asm to be the same";
-    ebe["build/_17"] =
-        " as build/asm_as or build/asm_yasm (the default).";
-    ebe["build/_18"] =
-        "";
-    ebe["build/_19"] =
-        " On 64 bit Linux you can choose to either use 32 or 64 bit";
-    ebe["build/_20"] =
-        " assemblers and also choose which assembler to use.";
-    ebe["build/_21"] =
-        " This requires installing g++-multilib and possibly 32 bit";
-    ebe["build/_22"] =
-        " versions of libc and libstdc++.";
-    ebe["build/_23"] =
-        "";
-    ebe["build/_24"] =
-        " If you want to use 32 bit tools you need to set build/wordSize";
-    ebe["build/_25"] =
-        " to 32.  If you want to use as instead of yasm you need to set ";
-    ebe["build/_26"] =
-        " build/assembler to as.  It would be possible to determine these";
-    ebe["build/_27"] =
-        " choices from other variables, but this was easier to implement.";
-    ebe["build/_28"] =
-        "";
-    ebe["build/_29"] =
-        " After that you need to select the proper build/asm and";
-    ebe["build/_30"] =
-        " build/asmld commands if your program starts with _start. ";
-    ebe["build/_31"] =
-        " The choices for build/asm are build/asm_yasm_64, ";
-    ebe["build/_32"] =
-        " build/asm_yasm_32, build/asm_as_64 and build/asm_as_32.";
-    ebe["build/_33"] =
-        " The choices for build/asmld are build/asmld_64 and ";
-    ebe["build/_34"] =
-        " build/asmld_32.";
-    ebe["build/_35"] =
-        "";
-    ebe["build/_36"] =
-        " If you program starts with main, it will be linked with gcc.";
-    ebe["build/_37"] =
-        " This means you must select the proper build/cc, build/asm,";
-    ebe["build/_38"] =
-        " The choices for build/cc are build/cc_64 and build/cc_32.";
-    ebe["build/_39"] =
-        " and build/ccld commands for your choice.";
-    ebe["build/_40"] =
-        " The choices for build/asm are build/asm_yasm_64, ";
-    ebe["build/_41"] =
-        " build/asm_yasm_32, build/asm_as_64 and build/asm_as_32.";
-    ebe["build/_42"] =
-        " The choices for build/asmld are build/asmld_64 and ";
-    ebe["build/_43"] =
-        " build/asmld_32.";
-    ebe["build/_44"] =
-        "";
+    ebe["build/_01"] = " In order to make any changes to build rules you must set";
+    ebe["build/_02"] = " build/expert to true.  Otherwise, ebe will reset all your";
+    ebe["build/_03"] = " changes to the defaults when it starts.  This was done to";
+    ebe["build/_04"] = " make it easier to propagate build rule changes for people.";
+    ebe["build/_05"] = " It is onerous to explain to people how to edit .ebe.ini.";
+    ebe["build/_06"] = " Most people can ignore its existence.";
+    ebe["build/_07"] = "";
+    ebe["build/_08"] = " There is a separate .ebe.ini in each directory where you";
+    ebe["build/_09"] = " execute ebe.  If you have problems with expert mode, it may";
+    ebe["build/_10"] = " be useful to start ebe in a new directory to generate defaults";
+    ebe["build/_11"] = " and compare the build rules for the new file and the expert file.";
+    ebe["build/_12"] = "";
+    ebe["build/_13"] = " You can choose between a few alternative build scenarios.";
+    ebe["build/_14"] = "";
+    ebe["build/_15"] = " On 32 bit Linux systems you can choose to use either yasm or as.";
+    ebe["build/_16"] = " To do this change the setting for build/asm to be the same";
+    ebe["build/_17"] = " as build/asm_as or build/asm_yasm (the default).";
+    ebe["build/_18"] = "";
+    ebe["build/_19"] = " On 64 bit Linux you can choose to either use 32 or 64 bit";
+    ebe["build/_20"] = " assemblers and also choose which assembler to use.";
+    ebe["build/_21"] = " This requires installing g++-multilib and possibly 32 bit";
+    ebe["build/_22"] = " versions of libc and libstdc++.";
+    ebe["build/_23"] = "";
+    ebe["build/_24"] = " If you want to use 32 bit tools you need to set build/wordSize";
+    ebe["build/_25"] = " to 32.  If you want to use as instead of yasm you need to set ";
+    ebe["build/_26"] = " build/assembler to as.  It would be possible to determine these";
+    ebe["build/_27"] = " choices from other variables, but this was easier to implement.";
+    ebe["build/_28"] = "";
+    ebe["build/_29"] = " After that you need to select the proper build/asm and";
+    ebe["build/_30"] = " build/asmld commands if your program starts with _start. ";
+    ebe["build/_31"] = " The choices for build/asm are build/asm_yasm_64, ";
+    ebe["build/_32"] = " build/asm_yasm_32, build/asm_as_64 and build/asm_as_32.";
+    ebe["build/_33"] = " The choices for build/asmld are build/asmld_64 and ";
+    ebe["build/_34"] = " build/asmld_32.";
+    ebe["build/_35"] = "";
+    ebe["build/_36"] = " If you program starts with main, it will be linked with gcc.";
+    ebe["build/_37"] = " This means you must select the proper build/cc, build/asm,";
+    ebe["build/_38"] = " The choices for build/cc are build/cc_64 and build/cc_32.";
+    ebe["build/_39"] = " and build/ccld commands for your choice.";
+    ebe["build/_40"] = " The choices for build/asm are build/asm_yasm_64, ";
+    ebe["build/_41"] = " build/asm_yasm_32, build/asm_as_64 and build/asm_as_32.";
+    ebe["build/_42"] = " The choices for build/asmld are build/asmld_64 and ";
+    ebe["build/_43"] = " build/asmld_32.";
+    ebe["build/_44"] =  "";
 
     ebe["build/word_size"] = wordSize;
     ebe["build/assembler"] = "yasm";
@@ -352,7 +308,7 @@ void Settings::setDefaults()
 
     ebe["build/expert"] = false;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     ebe["build/obj"] = "o";
 #else
     ebe["build/obj"] = "o";

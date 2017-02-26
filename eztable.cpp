@@ -1,8 +1,8 @@
 #include "eztable.h"
 
-EZPlank *latestPlank=0;
+//EZPlank *latestPlank=0;
 EZPlank *thePlank=0;
-EZCell *latestCell=0;
+//EZCell *latestCell=0;
 
 EZCell::EZCell(QWidget *parent)
     : QWidget(parent)
@@ -14,7 +14,63 @@ EZCell::EZCell(QWidget *parent)
     spanned = false;
     spannedRows = 1;
     spannedColumns = 1;
+    table = (EZTable *)this;
     text = "";
+    color = EZ::Default;
+    visible = true;
+    widget = 0;
+    plank = thePlank;
+    format = "hexadecimal";
+    _value.u8 = 0;
+    label = new QLabel(thePlank);
+    label->setText("");
+    label->show();
+}
+
+/*
+ *  Set the value of this cell
+ */
+void EZCell::setValue(uLong v)
+{
+    _value.u8 = v;
+}
+
+/*
+ *  Set the format of this cell
+ */
+void EZCell::setFormat(QString f)
+{
+    format = f;
+}
+
+/*
+ *  Get the value of this cell as it should look in the table
+ */
+QString EZCell::value()
+{
+    if (format == "decimal") {
+        return QString::number(_value.i8,10);
+    } else if (format == "double" ) {
+        return QString::number(_value.f8);
+    } else if ( format == "float" ) {
+        return QString::number(_value.f4);
+    } else {
+        return QString("0x") + QString::number(_value.u8,16);
+    }
+}
+
+EZCell::EZCell(QString s, QWidget *parent)
+    : QWidget(parent)
+{
+    row = -1;
+    column = -1;
+    cellWidth = 0;
+    spanning = false;
+    spanned = false;
+    spannedRows = 1;
+    spannedColumns = 1;
+    table = (EZTable *)this;
+    text = s;
     color = EZ::Default;
     visible = true;
     widget = 0;
@@ -27,8 +83,10 @@ EZCell::EZCell(QWidget *parent)
 void EZCell::enterEvent ( QEvent *e )
 {
     //qDebug() << "enter cell" << row << column << geometry();
-    latestCell = this;
-    latestPlank = plank;
+    table->latestRow = row;
+    table->latestColumn = column;
+    table->latestCell = this;
+    table->latestPlank = plank;
     e->accept();
     QWidget::enterEvent(e);
 }
@@ -100,6 +158,8 @@ EZTable::EZTable(QWidget *parent)
     fontWidth = ebe["font_size"].toInt() * 2 / 3;
     fontHeight = 2*fontWidth;
     ezrowHeight = 1.1 * fontHeight;
+    latestRow = 0;
+    latestColumn = 0;
     setStyleSheet( QString("font-weight:bold;"
                            "font-family: %1;"
                            " background: %2;")
@@ -114,7 +174,8 @@ int EZTable::rowCount()
 
 void EZTable::setText ( int r, int c, QString t, EZ::Color highlight )
 {
-    qDebug() << "setText current" << r << c;
+    //qDebug() << "setText current" << r << c;
+    //if ( r == 0 && c ==  0) qDebug() << "setText"  << r << c << t;
     currentPlank->ezrows[r]->ezcells[c]->setText(t, highlight);
 }
 
@@ -125,8 +186,19 @@ QString EZTable::getText ( int r, int c )
 
 void EZTable::setText ( int p, int r, int c, QString t, EZ::Color highlight )
 {
-    qDebug() << "setText" << p << r << c;
     table[p]->ezrows[r]->ezcells[c]->setText(t, highlight);
+}
+
+void EZTable::setCell ( int r, int c, EZCell *cell )
+{
+    //if ( r == 0 && c ==  0) qDebug() << "setText" << r << c << cell->text;
+    currentPlank->ezrows[r]->ezcells[c] = cell;
+}
+
+void EZTable::setCell ( int p, int r, int c, EZCell *cell )
+{
+    //qDebug() << "setText" << p << r << c;
+    table[p]->ezrows[r]->ezcells[c] = cell;
 }
 
 void EZTable::addWidget ( QWidget *w, int r, int c )
@@ -239,8 +311,11 @@ void EZTable::resizeToFitContents(int f)
     int maxLevel = -1;
     int adjust;
     int allRows = 0;
+    //int d;
 
-    qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
+    //d = columns == 3;
+
+    //if ( d ) qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
     //if (f) qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
 
     maxWidth.resize(columns);
@@ -254,7 +329,7 @@ void EZTable::resizeToFitContents(int f)
     for ( int c= f; c < columns; c++ ) {
         maxWidth[c] = 0;
     }
-    //if (f) qDebug() << "maxWidth b4" << maxWidth;
+    //if ( d ) qDebug() << "maxWidth b4" << maxWidth;
 
     foreach ( EZPlank *p, table ) {
         for ( int c = 0; c < f; c++ ) {
@@ -266,10 +341,13 @@ void EZTable::resizeToFitContents(int f)
             }
         }
     }
+    //if ( d ) qDebug() << "maxWidth mid" << maxWidth;
     foreach ( EZPlank *p, table ) {
-        //if (f) qDebug() << p->rows;
+        //if ( d ) qDebug() << "rows " << p->rows;
         for ( int r=0; r < p->rows; r++ ) {
+            //if ( d ) qDebug() << r << p->rows;
             for ( int c = 0; c < f; c++ ) {
+                //if ( d ) qDebug() << "first loop" << r << c << p->rows;
                 cell = p->ezrows[r]->ezcells[c];
                 if ( cell->spanning ) {
                     if ( c <= maxLevel ) {
@@ -291,23 +369,33 @@ void EZTable::resizeToFitContents(int f)
             int first = 0;
             if ( f > 0 ) first = f;
             for ( int c = first; c < columns; c++ ) {
+                //if ( d ) qDebug() << "second loop" << r << c << p->rows;
                 cell = p->ezrows[r]->ezcells[c];
+                //if ( d ) qDebug() << "cell" << cell;
                 n = cell->text.size()*fontWidth+fontWidth;
+                //if ( d ) qDebug() << "n" << n;
+                //if ( d ) qDebug() << "spanning" << cell->spanning;
+                //if ( d ) qDebug() << "maxWidth[c]" << maxWidth[c];
                 if ( cell->spanning ) {
                     n = (n + cell->spannedColumns - 1) / cell->spannedColumns;
+                    //if ( d ) qDebug() << "spannedcols" << cell->spannedColumns << ";   n" << n;
                     for ( int c2=c; c2 < c + cell->spannedColumns; c2++ ) {
+                        //if ( d ) qDebug() << "c2" << c2;
+                        //if ( d ) qDebug() << "maxWidth[c2]" << maxWidth[c2];
                         if ( n > maxWidth[c2] ) {
                             maxWidth[c2] = n;
                         }
+                        //if ( d ) qDebug() << "now maxWidth[c2]" << maxWidth[c2];
                     }
                 } else if ( !cell->spanned && n > maxWidth[c] ) {
                     maxWidth[c] = n;
+                    //if ( d ) qDebug() << "now maxWidth[c]" << maxWidth[c];
                 }
             }
         }
         totalRows += p->rows;
     }
-    //if (f) qDebug() << "maxWidth" << maxWidth;
+    //if ( d ) qDebug() << "maxWidth" << maxWidth;
 
     x = 0;
     for ( int c = 0; c < columns; c++ ) {
@@ -352,11 +440,12 @@ void EZTable::resizeToFitContents(int f)
     setGeometry ( QRect(0,0,x,totalRows*ezrowHeight) );
     show();
 
+    //if ( d ) qDebug() << "duh";
     int y = 0;
     foreach ( EZPlank *p, table ) {
         p->setGeometry( QRect(0,y,x,p->rows*ezrowHeight) );
         p->show();
-        if ( !f ) qDebug() << "p" << p->geometry();
+        //if ( !f ) qDebug() << "p" << p->geometry();
         y += p->rows * ezrowHeight;
         //if (f) qDebug() << p->rows << p->geometry();
         for ( int r = 0; r < p->rows; r++ ) {
@@ -479,7 +568,7 @@ void EZTable::resizeToFitContents(int f)
         //}
         //y += p->height();
     //}
-    qDebug() << "end rtfc" << geometry();
+    //if ( d ) qDebug() << "end rtfc" << geometry();
 }
 
 void EZTable::setCurrentPlank ( EZPlank *p )

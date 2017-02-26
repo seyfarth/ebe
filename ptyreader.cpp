@@ -1,5 +1,5 @@
 #include "ptyreader.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <QDebug>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 PtyReader::PtyReader(HANDLE h)
 : QThread()
 {
@@ -24,7 +24,7 @@ PtyReader::PtyReader(int fd)
 void PtyReader::run()
 {
     char data[257];
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     DWORD n;
 #else
     int n;
@@ -32,14 +32,14 @@ void PtyReader::run()
 
     //printf("ready\n");
     while (1) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
         ReadFile ( pty, data, 256, &n, NULL );
 #else
         n = read(pty, data, 256);
 #endif
 	    //qDebug() << "PtyReader n:" << n;
         if ( n < 1 ) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
             Sleep(1);
 #else
             usleep(500000);

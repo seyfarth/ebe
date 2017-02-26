@@ -13,7 +13,6 @@ extern AsmDataWindow *asmDataWindow;
 
 IntHash registerItems;
 IntHash halItems;
-extern EZCell *latestCell;
 
 /**
  * Static matrix of register names matching the pattern in the table
@@ -38,7 +37,7 @@ static QString names_2[9][2] = {
     { "rip", "eflags" }
 };
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 static QString halNames[6][4] = {
     { "acc",  "par1", "sav1",  "sav5"},
     { "scr1", "par2", "sav2",  "sav6"},
@@ -381,9 +380,9 @@ void GenericRegisterWindow::setDecimal()
 {
     int row=0;
     int col=0;
-    if ( latestCell ) {
-        row = latestCell->row;
-        col = latestCell->column;
+    if ( table->latestCell ) {
+        row = table->latestCell->row;
+        col = table->latestCell->column;
         //qDebug() << "setDecimal" << row << col;
     //} else {
         //qDebug() << "latestCell" << (long)latestCell;
@@ -513,7 +512,7 @@ void HalRegisterWindow::buildTable()
     halToIntel["sav5"] = "rbx";
     halToIntel["scr1"] = "r10";
     halToIntel["scr2"] = "r11";
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     halToIntel["par1"] = "rcx";
     halToIntel["par2"] = "rdx";
     halToIntel["par3"] = "r8";

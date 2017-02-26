@@ -25,6 +25,7 @@ class EZCell: public QWidget
 
 public:
     EZCell(QWidget *parent=0);
+    EZCell(QString s, QWidget *parent=0);
     int row;
     int column;
     int pos_x;
@@ -44,6 +45,39 @@ public:
     EZ::Color color; 
     QLabel *label;
     QWidget *widget;
+    QString format;
+
+    /**
+     *  \fn value
+     *
+     *  Function to retrieve the value of the cell formatted
+     *  according to the format value in the cell
+     *
+     *  \return Formatted value as a QString
+     */
+    QString value();
+
+    AllTypes _value;
+
+    /**
+     *  \fn setValue
+     *
+     *  Function to set the value of a cell
+     *
+     *  \param value A QString containing the value of the quadword.
+     */
+    void setValue(uLong value);
+
+
+    /**
+     *  \fn setFormat
+     *
+     *  Function to set the format for a cell.
+     *
+     *  \param format A QString holding the desired quadword format
+     */
+    void setFormat(QString format);
+
     void setText(QString t, EZ::Color highlight=EZ::Default);
     virtual void enterEvent(QEvent *e);
     virtual void leaveEvent(QEvent *e);
@@ -85,6 +119,10 @@ public:
     int planks;
     int columns;
     QVBoxLayout *layout;
+    int latestRow;
+    int latestColumn;
+    EZPlank *latestPlank;
+    EZCell *latestCell;
 
     QVector<EZPlank *> table;
     QVector<double> widthMultipliers;    // one per column
@@ -95,6 +133,8 @@ public:
         currentPlank = table[i];
     }
     QString getText ( int r, int c );
+    void setCell ( int r, int c, EZCell *cell );
+    void setCell ( int p, int r, int c, EZCell *cell );
     void setText ( int r, int c, QString t, EZ::Color highlight=EZ::Default );
     void setText ( int p, int r, int c, QString t, EZ::Color highlight=EZ::Default );
     void setPlankCount(int planks);

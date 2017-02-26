@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QtGlobal>
 #include <QDesktopWidget>
 #include <QTimer>
 #include <QTextBrowser>
@@ -9,7 +10,7 @@
 #include <QToolBar>
 #include <QMenuBar>
 #include <QFileDialog>
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -57,7 +58,7 @@ QToolBar *templateToolBar;
 
 extern QProcess *gdbProcess;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 extern HANDLE hProcess;
 extern bool needToKill;
 #else
@@ -66,7 +67,7 @@ extern int gdbWaiting;
 
 void MainWindow::setWordSize()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     QProcess where(app);
     where.start("where objdump.exe");
     where.waitForFinished();
@@ -150,7 +151,7 @@ MainWindow::MainWindow(QWidget *parent)
     gdbThread = new GDBThread();
     gdbThread->start();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     int sleepTime = 1;
     while ( !gdb ) {
         Sleep(sleepTime);
@@ -241,7 +242,7 @@ void MainWindow::checkTools()
             message = "<b>" +
                 tr("It seems that ebetools needs to be installed") +
                 "</b>";
-            int ret = QMessageBox::warning(this, tr("Ebetools"), message,
+            QMessageBox::warning(this, tr("Ebetools"), message,
                 QMessageBox::Ok );
             exit(1);
         }
@@ -300,7 +301,7 @@ void MainWindow::checkTools()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (sourceFrame->filesSaved()) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
         if ( needToKill ) TerminateProcess(hProcess,0);
 #endif
         saveSettings();
@@ -823,7 +824,7 @@ void MainWindow::displayHelp()
 void MainWindow::quit()
 {
     if (sourceFrame->filesSaved()) {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
         if ( needToKill ) TerminateProcess(hProcess,0);
 #else
         if (gdbWaiting) {
@@ -864,7 +865,7 @@ void MainWindow::createStatusBar()
 void MainWindow::initializePreferredWindowSize()
 {
     QRect rect = QApplication::desktop()->availableGeometry();
-    qDebug() << "aval Geo" << rect;
+    //qDebug() << "aval Geo" << rect;
 
     if (userSetGeometry && userHeight != 0) {
         rect.setHeight(userHeight);
@@ -954,8 +955,8 @@ void MainWindow::createDockWindows()
             | Qt::BottomDockWidgetArea);
     floatWindow = new FloatWindow(floatDock);
     floatWindow->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    addDockWidget(Qt::LeftDockWidgetArea, floatDock);
     floatDock->setWidget(floatWindow);
+    addDockWidget(Qt::LeftDockWidgetArea, floatDock);
 
     projectDock = new QDockWidget(tr("Project"));
     projectDock->setObjectName("Dock 4");
@@ -969,7 +970,7 @@ void MainWindow::createDockWindows()
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
     backTraceDock = new QDockWidget(tr("Back Trace"));
-    backTraceDock->setObjectName("Dock 6");
+    backTraceDock->setObjectName("Dock 5");
     backTraceDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
             | Qt::BottomDockWidgetArea);

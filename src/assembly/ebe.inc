@@ -412,10 +412,10 @@
 ;   Windows
 ;   First 4 local variables are in the stack frame
 
-local1 equ 16
-local2 equ 24
-local3 equ 32
-local4 equ 40
+local4 equ 16
+local3 equ 24
+local2 equ 32
+local1 equ 40
 
 ;   Local variables after 4 relative to rbp with negative offsets
 ;
@@ -465,7 +465,7 @@ newPar%1  equ   8*(i-1)
 ;   [rbp+currParX]
 
 %macro parequ 1
-currPar%1  equ 16+8*(%1+1)
+currPar%1  equ 8*(%1+1)
 %endmacro
 
 %assign i 5

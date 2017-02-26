@@ -571,7 +571,7 @@ DataTree::DataTree(QWidget *parent)
     formatForType["int"] = "dec4";
     formatForType["signed int"] = "dec4";
     formatForType["unsigned int"] = "hex4";
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     formatForType["long"] = "dec4";
     formatForType["signed long"] = "dec4";
     formatForType["unsigned long"] = "hex4";
@@ -635,8 +635,8 @@ void DataTree::reorder(DataPlank *p)
 
 void DataTree::buildTree(DataPlank *p)
 {
-    qDebug() << "buildTree" << p << p->name << p->treeLevel
-             << p->format << p->state << p->kids.size();
+    //qDebug() << "buildTree" << p << p->name << p->treeLevel
+             //<< p->format << p->state << p->kids.size();
     if ( p->needsRequest ) dataWindow->request(p);
     else redisplay(p, EZ::Highlight);
     if ( p->state == EZ::Expanded ) {
@@ -644,7 +644,7 @@ void DataTree::buildTree(DataPlank *p)
             buildTree(p->kids[j]);
         }
     }
-    qDebug() << "end BT";
+    //qDebug() << "end BT";
 }
 
 DataPlank * DataTree::finalPlank(DataPlank *p)

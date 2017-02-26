@@ -13,14 +13,14 @@
 #include "framewindow.h"
 #include "asmdatawindow.h"
 #include "registerwindow.h"
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
 
 #include <iostream>
 using namespace std;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
 extern HANDLE hProcess;
 extern bool needToKill;
 #endif
@@ -347,7 +347,7 @@ void SourceFrame::run()
     callLines.clear();
     inAssembly = false;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     if ( needToKill )
     {
         //printf("Killing handle %d\n",hProcess);
@@ -419,7 +419,7 @@ void SourceFrame::run()
         }
     }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     exeName += ".exe";
 #endif
 
@@ -451,7 +451,7 @@ void SourceFrame::run()
         } else if (file.language == "asm") {
             //qDebug() << name << "asm";
             cmd = ebe["build/asm"].toString();
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
             FileLine fl;
             fl.file = file.source;
             fl.line = 0;
@@ -507,7 +507,7 @@ void SourceFrame::run()
             //qDebug() << cmd;
         } else if (file.language == "hal") {
             cmd = ebe["build/hal"].toString();
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
             FileLine fl;
             fl.file = file.source;
             fl.line = 0;
@@ -628,7 +628,7 @@ void SourceFrame::run()
                     definesStart = true;
                 } else if (parts[1] == "B" || parts[1] == "D" || parts[1] == "G"
                     || parts[1] == "C") {
-#if defined Q_OS_MAC || defined Q_WS_WIN
+#if defined Q_OS_MAC || defined Q_OS_WIN32
                     if ( parts[2].at(0) == '_' ) {
                         globals.append(parts[2].mid(1));
                     } else {
@@ -658,7 +658,7 @@ void SourceFrame::run()
         //for ( int i=0; i < asmDataWindow->variables.size(); i++ ) {
             //qDebug() << asmDataWindow->variables[i].name;
         //}
-        //#ifndef Q_WS_WIN
+        //#ifndef Q_OS_WIN32
         //qDebug() << "language" << file.language;
         if (file.language == "asm" || file.language == "hal") {
             //qDebug() << "scanning" << file.source;
@@ -758,7 +758,7 @@ void SourceFrame::run()
 //
 //  On OS X and Windows locate symbols and line numbers from asm files
 //
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
     int line;
     QList<File>::iterator i;
     for ( i = files.begin(); i != files.end(); i++ ) {
@@ -900,7 +900,7 @@ void SourceFrame::run()
 //  Translate line numbers for asm files to actual addresses
 //  Windows and Mac
 //
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
     foreach ( file, files ) {
         //qDebug() << "nm loop" << file.source << file.language << file.object;
         if ( file.language == "asm" || file.language == "hal" ) {
@@ -1099,7 +1099,7 @@ void SourceFrame::run()
     for (index = 0; index < tab->count(); index++) {
         source = (SourceWindow *)tab->widget(index);
         sourceFiles.append(source->file.source);
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
         FileLine fl;
         long address;
         QMap<FileLine,unsigned long>::const_iterator it;
@@ -1108,7 +1108,7 @@ void SourceFrame::run()
         bps.clear();
         //qDebug() << source->file.base << source->file.language << *(source->breakpoints);
         foreach ( int bp, *(source->breakpoints) ) {
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
             if ( (source->file.language == "asm" ||
                 source->file.language == "hal") &&
                 assembler == "yasm" ) {
@@ -1245,7 +1245,7 @@ void SourceFrame::setNextLine(QString &file, int & line)
             source->setNextLine(line);
             return;
         }
-//#if defined Q_OS_MAC || defined Q_WS_WIN
+//#if defined Q_OS_MAC || defined Q_OS_WIN32
         if ( file.indexOf(".") < 0 ) {
             //FileLine fl(file,line);
             //FileLine fl2(file,line+1);

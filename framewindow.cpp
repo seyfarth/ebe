@@ -5,10 +5,6 @@
 #include "settings.h"
 #include "gdb.h"
 #include <QDebug>
-#include <QHeaderView>
-#include <QTableWidget>
-#include <QMenu>
-#include <QTableWidgetItem>
 #include <cstdio>
 
 extern FloatWindow *floatWindow;
@@ -16,7 +12,6 @@ extern RegisterWindow *registerWindow;
 extern HalRegisterWindow *halRegisterWindow;
 extern AsmDataWindow *asmDataWindow;
 extern QMap<FileLine,FrameData*> frameData;
-QMap<int,FrameItem*> frameItems;
 StringHash *itemNames=0;
 StringHash *aliasNames=0;
 StringHash *fpaliasNames=0;
@@ -49,21 +44,30 @@ FrameWindow::FrameWindow(QWidget *parent)
      *  needs a unique object name set.
      */
     setObjectName("Stack Frame");
+    setFrameStyle(QFrame::Panel | QFrame::Raised);
+    setLineWidth(4);
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(10, 10, 10, 10);
+    //layout->setSpacing(5);
     limit = 0;
-    rows = 0;
+    rows = 5;
+    table = new EZTable(this);
     buildTable();
     connect ( this, SIGNAL(requestStack(int)), gdb, SLOT(requestStack(int)) );
     connect ( gdb, SIGNAL(receiveStack(QStringList)),
               this, SLOT(receiveStack(QStringList)) );
+    table->resizeToFitContents();
+    scrollArea = new QScrollArea;
+    scrollArea->setWidget(table);
+    layout->addWidget(scrollArea);
+    setLayout(layout);
 }
 
 void FrameWindow::rebuildTable()
 {
     QString s;
-    QTableWidgetItem *name;
-    FrameItem *item;
     items.clear();
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     int local5Row;
     rows = 6;
     if ( limit->currPars > 4 ) {
@@ -71,8 +75,9 @@ void FrameWindow::rebuildTable()
         if ( rows & 1 ) rows++;
     }
     returnRow = rows - 2;
-    local1Row = rows - 3;
-    local5Row = rows+1;
+    local1Row = returnRow - 4;
+    local5Row = returnRow + 2;
+    //qDebug() << "returnRow" << returnRow << ";   local1Row" << local1Row << ";   local5Row" << local5Row;
 
     if ( limit->locals > 4 ) {
         rows += limit->locals - 4;
@@ -84,65 +89,85 @@ void FrameWindow::rebuildTable()
     }
     if ( rows & 1 ) rows++;
     
-    int oldRows = table->rowCount();
-    //for ( int r=0; r < oldRows; r++ ) {
-        //table->setText(r,0,"");
-        //table->setText(r,2,"");
-    //}
-
     table->setRowCount(rows);
-    for (int r = oldRows; r < rows; r++) {
-        frameItems[r] = new FrameItem();
-        name = new QTableWidgetItem(QString(""));
-        table->setItem(r,0,name);
-        item = new FrameItem;
-        item->setValue(0);
-        table->setItem(r,1,item);
-        name = new QTableWidgetItem(QString(""));
-        table->setItem(r,2,name);
+    for ( int r=0; r < rows; r++ ) {
+        table->setText(r,0,"");
+        table->setText(r,1,"");
+        table->setText(r,2,"");
     }
+
+    //qDebug() << "curpars";
+//
+//  Set names and addresses for stacked parameters
+//
     if ( limit->currPars > 4 ) {
-        table->setText(0,0,"");
         for ( int i=0; i < limit->currPars-4; i++ ) {
             s = QString("currPar%1").arg(i+5);
             items[s] = (returnRow-i-5)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->setText(returbRow-i-5,0,s);
-            table->setText(returbRow-i-5,2,QString("rbp+%1").arg((i+6)*8));
+            table->setText(returnRow-i-5,0," "+s);
+            table->setText(returnRow-i-5,2,QString("rbp+%1").arg((i+6)*8));
         }
     }
 
-    table->setText(returnRow+1,0,"prevRbp");
+    //qDebug() << "retaddr";
+//
+//  Set names and addresses for saved rbp and return address
+//
+    table->setText(returnRow+1,0," prevRbp");
     table->setText(returnRow+1,2,"rbp");
-    table->setText(returnRow,0,"retAddr");
+    table->setText(returnRow,0," retAddr");
     table->setText(returnRow,2,"");
 
     int num=limit->locals;
     if ( num > 4 ) num = 4;
 
+    //qDebug() << "locals 1-4";
+//
+//  Set names and addresses for locals less than 5
+//
     for ( int i = 0; i <  num; i++ ) {
         s = QString("local%1").arg(i+1);
         items[s] = (local1Row-i)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
-        table->setText(local1Row-i,0,s);
-        table->setText(local1Row-i,2,QString("rbp+%1").arg((i+2)*8));
+        table->setText(local1Row+i,0," "+s);
+        table->setText(local1Row+i,2,QString("rbp+%1").arg((3-i+2)*8));
     }
+
+//
+//  Clear name and address for possible hole
+//
+    table->setText(returnRow+2,0,"");
+    table->setText(returnRow+2,2,"");
+    //qDebug() << "locals > 4";
+//
+//  Set names and addresses for locals greater than 4
+//
     for ( int i = 4; i <  limit->locals; i++ ) {
         s = QString("local%1").arg(i+1);
         items[s] = (local5Row+i-5)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
-        table->setText(local5Row+i,0,s);
-        table->setText(local5Row+i,2,QString("rbp-%1").arg((i-3)*8));
+        table->setText(local5Row+i-4,0," "+s);
+        table->setText(local5Row+i-4,2,QString("rbp-%1").arg((i-3)*8));
     }
 
+    //qDebug() << "locals" << limit->locals << ";   rows" << rows;
     if ( limit->locals > 4 && rows > local5Row+limit->locals-4) {
+        //qDebug() << "empty row" << "locals" << limit->locals << ";   rows" << rows;
         table->setText(local5Row+limit->locals-4,0,"");
+        table->setText(local5Row+limit->locals-4,2,"");
     }
+    //qDebug() << "newpars";
     for ( int i = 5; i <= limit->newPars; i++ ) {
         s = QString("newPar%1").arg(i);
         items[s] = (rows-i)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
-        table->setText(rows-i,0,s);
+        table->setText(rows-i,0," "+s);
+        table->setText(rows-i,2,QString("rsp+%1").arg((i-1)*8));
+    }
+    for ( int i = 1; i <= 4; i++ ) {
+        s = QString("shadow%1").arg(i);
+        table->setText(rows-i,0," "+s);
         table->setText(rows-i,2,QString("rsp+%1").arg((i-1)*8));
     }
     table->setText(rows-1,2,"rsp");
@@ -167,10 +192,9 @@ void FrameWindow::rebuildTable()
         
         table->setRowCount(rows);
         for (int r = oldRows; r < rows; r++) {
-            frameItems[r] = new FrameItem();
             name = new QTableWidgetItem(QString(""));
             table->setItem(r,0,name);
-            item = new FrameItem;
+            item = new EZCell(table);
             item->setValue(0);
             table->setItem(r,1,item);
             name = new QTableWidgetItem(QString(""));
@@ -232,10 +256,9 @@ void FrameWindow::rebuildTable()
         
         table->setRowCount(rows);
         for (int r = oldRows; r < rows; r++) {
-            frameItems[r] = new FrameItem();
             name = new QTableWidgetItem(QString(""));
             table->setItem(r,0,name);
-            item = new FrameItem;
+            item = new EZCell(table);
             item->setValue(0);
             table->setItem(r,1,item);
             name = new QTableWidgetItem(QString(""));
@@ -291,17 +314,17 @@ void FrameWindow::rebuildTable()
     }
 #endif
 
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::receiveStack(QStringList results)
 {
     uLong x;
     QStringList parts;
-    FrameItem *item;
+    EZCell *item;
     bool ok;
     int row = rows-1;
+    //qDebug() << "rs";
     //qDebug() << "rs" << limit->unalias << items.keys();
     //qDebug() << "rs names" << *(limit->names);
     if ( wordSize == 64 &&
@@ -363,8 +386,8 @@ void FrameWindow::receiveStack(QStringList results)
     foreach (QString name, limit->names->keys()) {
         //qDebug() << "rs" << name;
         if ( items.contains(name) ) {
-            //qDebug() << "rs" << name;
             int irow = items[name];
+            //qDebug() << "rs" << name << irow/10 << irow%10;
             if ( irow/10 < rows ) {
                 table->setText(irow/10,irow%10,limit->names->value(name)+" ");
             }
@@ -406,64 +429,25 @@ void FrameWindow::receiveStack(QStringList results)
         //qDebug() << parts;
         for ( int j = 1; j < parts.length(); j++ ) {
             x = parts[j].toULongLong(&ok,16);
-            item = (FrameItem *)table->item(row,1);
+            item = table->cell(row,1);
             item->setValue(x);
-            item->updateText(item->value(),EbeTable::Highlight);
-            item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
+            item->setText(item->value(),EZ::Highlight);
             row--;
         }
     }
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::buildTable()
 {
-    /*
-     *  Set the frame to be raised with a width 4 bevel.
-     */
-    setFrameStyle(QFrame::Panel | QFrame::Raised);
-    setLineWidth(4);
-
-    /*
-     *  Create a table to display the registers
-     */
-    table = new EbeTable(this);
-
-    /*
-     *  We need a layout for the table widget
-     */
-    layout = new QVBoxLayout;
-    layout->setSpacing(5);
-    
-    /*
-     *  Leave 10 pixels all around the table
-     */
-    layout->setContentsMargins(10, 10, 10, 10);
-
     table->setRowCount(rows);
     table->setColumnCount(3);
 
-    QTableWidgetItem *name;
-    table->verticalHeader()->hide();
-    table->horizontalHeader()->hide();
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < 3; c++) {
-            name = new QTableWidgetItem(QString("   "));
-            table->setItem(r,c,name);
+            table->setText(r,c,"");
         }
     }
-
-    /*
-     *  Resizing based on size hints which is not too accurate
-     */
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
-
-    /*
-     *  Don't show a grid
-     */
-    //table->setShowGrid(false);
 
     /*
      *  Set a tooltip to display when the cursor is over the table
@@ -471,12 +455,6 @@ void FrameWindow::buildTable()
     table->setToolTip(tr("Right click on quad-word names to change formats.\n"
         "Right click on a quad-word's value to define a variable\n"
         "with the address contained in the quad-word."));
-
-    /*
-     *  Add the table to the layout and set the layout for the frame.
-     */
-    layout->addWidget(table);
-    setLayout(layout);
 }
 
 /*
@@ -501,8 +479,8 @@ void FrameWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    table->resizeColumnsToContents();
-    table->resizeRowsToContents();
+    //qDebug() << "setFont" << height << width;
+    table->resizeToFitContents();
 }
 
 /*
@@ -516,7 +494,7 @@ void FrameWindow::setFontHeightAndWidth(int height, int width)
  */
 void FrameWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
-    int column = table->currentColumn();
+    int column = table->latestColumn;
     QMenu menu(tr("Frame menu"));
     if (column % 2 == 0) {
         /*
@@ -547,7 +525,7 @@ void FrameWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 void FrameWindow::defineVariableByAddress()
 {
     if ( table->rowCount() == 0 ) return;
-    QString address = table->currentItem()->text();
+    QString address = table->latestCell->text;
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItem(address);
     if (dialog->exec()) {
@@ -568,11 +546,11 @@ void FrameWindow::defineVariableByAddress()
  */
 void FrameWindow::setDecimal()
 {
-    int row = table->currentRow();
-    FrameItem *item = (FrameItem *)table->item(row,1);
+    int row = table->latestRow;
+    EZCell *item = table->cell(row,1);
     item->setFormat("decimal");
     item->setText(item->value());
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 /*
@@ -580,11 +558,11 @@ void FrameWindow::setDecimal()
  */
 void FrameWindow::setHex()
 {
-    int row = table->currentRow();
-    FrameItem *item = (FrameItem *)table->item(row,1);
+    int row = table->latestRow;
+    EZCell *item = table->cell(row,1);
     item->setFormat("hexdecimal");
     item->setText(item->value());
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 /*
@@ -592,13 +570,13 @@ void FrameWindow::setHex()
  */
 void FrameWindow::setDecimalAll()
 {
-    FrameItem *item;
+    EZCell *item;
     for ( int i = 0; i < rows; i++ ) {
-        item = (FrameItem *)table->item(i,1);
+        item = table->cell(i,1);
         item->setFormat("decimal");
         item->setText(item->value());
     }
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 /*
@@ -606,53 +584,53 @@ void FrameWindow::setDecimalAll()
  */
 void FrameWindow::setHexAll()
 {
-    FrameItem *item;
+    EZCell *item;
     for ( int i = 0; i < rows; i++ ) {
-        item = (FrameItem *)table->item(i,1);
+        item = table->cell(i,1);
         item->setFormat("hexadecimal");
         item->setText(item->value());
     }
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::setDouble()
 {
-    int row = table->currentRow();
-    FrameItem *item = (FrameItem *)table->item(row,1);
+    int row = table->latestRow;
+    EZCell *item = table->cell(row,1);
     item->setFormat("double");
     item->setText(item->value());
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::setFloat()
 {
-    int row = table->currentRow();
-    FrameItem *item = (FrameItem *)table->item(row,1);
+    int row = table->latestRow;
+    EZCell *item = table->cell(row,1);
     item->setFormat("float");
     item->setText(item->value());
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::setDoubleAll()
 {
-    FrameItem *item;
+    EZCell *item;
     for ( int i = 0; i < rows; i++ ) {
-        item = (FrameItem *)table->item(i,1);
+        item = table->cell(i,1);
         item->setFormat("double");
         item->setText(item->value());
     }
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::setFloatAll()
 {
-    FrameItem *item;
+    EZCell *item;
     for ( int i = 0; i < rows; i++ ) {
-        item = (FrameItem *)table->item(i,1);
+        item = table->cell(i,1);
         item->setFormat("float");
         item->setText(item->value());
     }
-    table->resizeColumnsToContents();
+    table->resizeToFitContents();
 }
 
 void FrameWindow::nextLine ( QString file, int line )
@@ -683,49 +661,5 @@ void FrameWindow::nextLine ( QString file, int line )
             rows = 0;
             table->setRowCount(0);
         }
-    }
-}
-
-/*
- *  Constructor
- *  
- *  The parameter is the register's name.
- */
-FrameItem::FrameItem()
-    : EbeTableItem("")
-{
-    format = "hexadecimal";
-    _value.u8 = 0;
-}
-
-/*
- *  Set the value of this FrameItem
- */
-void FrameItem::setValue(uLong v)
-{
-    _value.u8 = v;
-}
-
-/*
- *  Set the format of this FrameItem
- */
-void FrameItem::setFormat(QString f)
-{
-    format = f;
-}
-
-/*
- *  Get the value of this FrameItem as it should look in the table
- */
-QString FrameItem::value()
-{
-    if (format == "decimal") {
-        return QString::number(_value.i8,10);
-    } else if (format == "double" ) {
-        return QString::number(_value.f8);
-    } else if ( format == "float" ) {
-        return QString::number(_value.f4);
-    } else {
-        return QString("0x") + QString::number(_value.u8,16);
     }
 }

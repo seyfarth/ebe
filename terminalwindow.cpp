@@ -10,7 +10,7 @@
 //#define _XOPEN_SOURCE
 #include <stdlib.h>
 #include <fcntl.h>
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN32
 #include <unistd.h>
 #endif
 
@@ -25,7 +25,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     setFrameStyle(QFrame::Panel | QFrame::Raised);
     setLineWidth(4);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     SECURITY_ATTRIBUTES attr;
     attr.nLength = sizeof(SECURITY_ATTRIBUTES);
     attr.lpSecurityDescriptor = 0;
@@ -70,7 +70,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     layout->addLayout(lineLayout);
     setLayout(layout);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     ptyReader = new PtyReader(fromChild);
 #else
     ptyName = ptsname(pty);
@@ -154,7 +154,7 @@ void TerminalWindow::lineEditReady()
     a = s.toAscii();
 #endif
     a.append('\n');
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN32
     DWORD n=a.length();
     DWORD res;
     if ( s == "EOF" )
