@@ -134,11 +134,6 @@ void FrameWindow::rebuildTable()
         table->setText(local1Row+i,2,QString("rbp+%1").arg((3-i+2)*8));
     }
 
-//
-//  Clear name and address for possible hole
-//
-    table->setText(returnRow+2,0,"");
-    table->setText(returnRow+2,2,"");
     //qDebug() << "locals > 4";
 //
 //  Set names and addresses for locals greater than 4
