@@ -59,3 +59,9 @@ xcuserdata
 *.moved-aside
 *.xcuserstate
 *.xcscmblueprint
+memory
+.ebe.ini
+.*~
+hello.s
+*.lst
+hello_all
