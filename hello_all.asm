@@ -8,7 +8,7 @@ message db      "Hello world!", 0x0a, 0
 main:
         push    rbp
         mov     rbp, rsp
-        frame   7, 6, 7
+        frame   9, 6, 9
         sub     rsp, frame_size
         mov     [rbp+local1], rsp
         mov     [rbp+local2], rax

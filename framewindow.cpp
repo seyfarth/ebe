@@ -178,37 +178,27 @@ void FrameWindow::rebuildTable()
         local1Row = returnRow+2;
         if ( limit->newPars > 6 ) rows += limit->newPars - 6;
         if ( rows & 1 ) rows++;
-        int oldRows = table->rowCount();
-        //qDebug() << "rows:" << rows << "   oldrows:" << oldRows;
-        //for ( int r=0; r < oldRows; r++ ) {
-            //table->item(r,0)->setText("");
-            //table->item(r,2)->setText("");
-        //}
         
         table->setRowCount(rows);
-        for (int r = oldRows; r < rows; r++) {
-            name = new QTableWidgetItem(QString(""));
-            table->setItem(r,0,name);
-            item = new EZCell(table);
-            item->setValue(0);
-            table->setItem(r,1,item);
-            name = new QTableWidgetItem(QString(""));
-            table->setItem(r,2,name);
+        table->setRowCount(rows);
+        for ( int r=0; r < rows; r++ ) {
+            table->setText(r,0,"");
+            table->setText(r,1,"");
+            table->setText(r,2,"");
         }
         if ( limit->currPars > 6 ) {
-            table->item(0,0)->setText("");
             for ( int i=0; i < limit->currPars-6; i++ ) {
                 s = QString("currPar%1").arg(i+7);
                 items[s] = (returnRow-i-1)*10;
                 if ( limit->names->contains(s) ) s = limit->names->value(s);
-                table->setText(returnRow-i-1,0,s);
+                table->setText(returnRow-i-1,0," "+s);
                 table->setText(returnRow-i-1,2,QString("rbp+%1").arg((i+2)*8));
             }
         }
 
-        table->setText(returnRow+1,0,"prevRbp");
+        table->setText(returnRow+1,0," prevRbp");
         table->setText(returnRow+1,2,"rbp");
-        table->setText(returnRow,0,"retAddr");
+        table->setText(returnRow,0," retAddr");
         table->setText(returnRow,2,"");
         StringHash d;
         d = *(limit->names);
@@ -217,14 +207,14 @@ void FrameWindow::rebuildTable()
             items[s] = (local1Row+i)*10;
             //qDebug() << s << d;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->setText(local1Row+i,0,s);
+            table->setText(local1Row+i,0," "+s);
             table->setText(local1Row+i,2,QString("rbp-%1").arg((i+1)*8));
         }
         for ( int i = 7; i <= limit->newPars; i++ ) {
             s = QString("newPar%1").arg(i);
             items[s] = (rows-i+6)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->setText(rows-i+6,0,s);
+            table->setText(rows-i+6,0," "+s);
             table->setText(rows-i+6,2,QString("rsp+%1").arg((i-7)*8));
         }
         if ( limit->locals == 0 && limit->newPars <= 6 ) {
@@ -242,38 +232,27 @@ void FrameWindow::rebuildTable()
         rows += limit->locals;
         local1Row = returnRow+2;
         rows += limit->newPars;
-        int oldRows = table->rowCount();
-        //qDebug() << "rows:" << rows << "   oldrows:" << oldRows;
-        //for ( int r=0; r < oldRows; r++ ) {
-            //table->setText(r,0,"");
-            //table->setText(r,2,"");
-        //}
         
         table->setRowCount(rows);
-        for (int r = oldRows; r < rows; r++) {
-            name = new QTableWidgetItem(QString(""));
-            table->setItem(r,0,name);
-            item = new EZCell(table);
-            item->setValue(0);
-            table->setItem(r,1,item);
-            name = new QTableWidgetItem(QString(""));
-            table->setItem(r,2,name);
+        for ( int r=0; r < rows; r++ ) {
+            table->setText(r,0,"");
+            table->setText(r,1,"");
+            table->setText(r,2,"");
         }
         //qDebug() << "reset names";
-        table->item(0,0)->setText("");
         for ( int i=0; i < limit->currPars; i++ ) {
             s = QString("currPar%1").arg(i+1);
             items[s] = (returnRow-i-1)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->setText(returnRow-i-1,0,s);
+            table->setText(returnRow-i-1,0," "+s);
             table->setText(returnRow-i-1,2,QString("ebp+%1").arg((i+2)*4));
         }
 
         //qDebug() << "labeled currpars";
         table->setText(returnRow+1,2,"ebp");
-        table->setText(returnRow,0,"retAddr");
+        table->setText(returnRow,0," retAddr");
         table->setText(returnRow,2,"");
-        table->setText(returnRow+1,0,"prevEbp");
+        table->setText(returnRow+1,0," prevEbp");
         StringHash d;
         d = *(limit->names);
         for ( int i = 0; i < limit->locals; i++ ) {
@@ -282,7 +261,7 @@ void FrameWindow::rebuildTable()
             //qDebug() << s << d;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
             if ( local1Row+i < rows ) {
-                table->setText(local1Row+i,0,s);
+                table->setText(local1Row+i,0," "+s);
                 table->setText(local1Row+i,2,QString("ebp-%1").arg((i+1)*4));
             }
         }
@@ -291,7 +270,7 @@ void FrameWindow::rebuildTable()
             s = QString("newPar%1").arg(i+1);
             items[s] = (rows-i-1)*10;
             if ( limit->names->contains(s) ) s = limit->names->value(s);
-            table->setText(rows-i-1,0,s);
+            table->setText(rows-i-1,0," "+s);
             if ( i > 0 ) {
                 table->setText(rows-i-1,2,QString("esp+%1").arg((i)*4));
             }

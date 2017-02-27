@@ -177,6 +177,28 @@ void Settings::setDefaults()
     ebe["windows"] = false;
     ebe["build/assembler"] = "yasm";
     if ( wordSize == 64 ) {
+        QFile::remove("hello.c");
+        QFile::copy(":/src/c/hello.c", "test_hello.c");
+        QFile::setPermissions("test_hello.c", QFile::ReadOwner | QFile::WriteOwner);
+        QProcess gcc;
+        gcc.start(QString("gcc -c test_start.c"));
+        gcc.waitForFinished();
+        gcc.close();
+        QProcess nm;
+        nm.start(QString("nm -a test_hello.o"));
+        nm.waitForFinished();
+        bool pie=false;
+        QString nmData = nm.readLine();
+        //qDebug() << "nmData: " << nmData;
+        while ( nmData != "" ) {
+            if ( nmData.contains("_GLOBAL_OFFSET_TABLE_") ) {
+                pie = true;
+                break;
+            }
+            nmData = nm.readLine();
+            //qDebug() << "nmData: " << nmData;
+        }
+        //qDebug() << "pie" << pie;
         ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
@@ -206,6 +228,20 @@ void Settings::setDefaults()
         ebe["build/cpp_64"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
             "-o \"$base.o\" \"$source\"";
         ebe["build/cppld_64"] = "g++ -g -o \"$base\"";
+        if ( pie ) {
+            ebe["build/cc"] = "gcc -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/ccld"] = "gcc -no-pie -g -o \"$base\" ";
+            ebe["build/cpp"] = "g++ -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/cppld"] = "g++ -no-pie -g -o \"$base\"";
+            ebe["build/cc_64"] = "gcc -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/ccld_64"] = "gcc -no-pie -g -o \"$base\" ";
+            ebe["build/cpp_64"] = "g++ -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/cppld_64"] = "g++ -no-pie -g -o \"$base\"";
+        }
     } else {
         ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";

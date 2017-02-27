@@ -8,10 +8,11 @@ button_green=#006000
 button_red=#800000
 comment_fg=#0000e0
 continue_color=#00a000
+cursor=0
 find_bg=#a0a0f0
 find_fg=#a00000
 fixed_font=Courier
-font_size=12
+font_size=18
 id_fg=#0000a0
 illegal_bg=#ffc0ff
 illegal_fg=#000000
@@ -19,7 +20,7 @@ instruction_fg=#007090
 language=asm
 language_code=en
 language_name=English
-linux=true
+linux=false
 list_bg=#e0f0ff
 mac=false
 macro_fg=#d00080
@@ -30,7 +31,7 @@ numbers_bg=#f8f8dc
 numbers_fg=#000078
 numeric_fg=#80o080
 operator_fg=#008860
-os=linux
+os=windows
 preprocessor_fg=#c00090
 prettify=astyle -A3 -s$tab_width -t$tab_width \"$source\"
 quit_color=#c00000
@@ -48,12 +49,12 @@ text_fg=#000060
 tooltip_bg=#ffffd0
 tree_bg=#e0fafa
 variable_font=Arial
-windows=false
+windows=true
 
 [asmdata]
 columns=16
-floating=false
-visible=true
+floating=true
+visible=false
 
 [backtrace]
 visible=false
@@ -116,18 +117,18 @@ asmld=ld -o \"$base\"
 asmld_32=ld -melf_i386 -o \"$base\"
 asmld_64=ld -o \"$base\"
 assembler=yasm
-cc=gcc -g -c -Wfatal-errors -Wall -fno-pic -O0 -o \"$base.o\" \"$source\"
+cc=gcc -g -c -fno-pie -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
 cc_32=gcc -m32 -g -c -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
-cc_64=gcc -g -c -Wfatal-errors -Wall -fno-pic -O0 -o \"$base.o\" \"$source\"
-ccld="gcc -g -fno-pic -o \"$base\" "
+cc_64=gcc -g -c -fno-pie -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
+ccld="gcc -g -fno-pie -o \"$base\" "
 ccld_32="gcc -m32 -g -o \"$base\" "
-ccld_64="gcc -g -fno-pic -o \"$base\" "
-cpp=g++ -g -c -Wfatal-errors -Wall -O0 -fno-pic -o \"$base.o\" \"$source\"
+ccld_64="gcc -g -fno-pie -o \"$base\" "
+cpp=g++ -g -c -fno-pie -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
 cpp_32=g++ -m32 -g -c -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
-cpp_64=g++ -g -c -Wfatal-errors -Wall -fno-pic -O0 -o \"$base.o\" \"$source\"
-cppld=g++ -g -fno-pic -o \"$base\"
+cpp_64=g++ -g -c -fno-pie -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
+cppld=g++ -g -fno-pie -o \"$base\"
 cppld_32=g++ -m32 -g -o \"$base\"
-cppld_64=g++ -g -fno-pic -o \"$base\"
+cppld_64=g++ -g -fno-pie -o \"$base\"
 expert=true
 fortran=gfortran -g -c -Wfatal-errors -Wall -O0 -o \"$base.o\" \"$source\"
 fortranld="gfortran -g -o \"$base\" "
@@ -156,16 +157,20 @@ floating=false
 visible=true
 
 [cursor]
-home\seyfarth\ebe\array.asm=0
+C%3A\cygwin\home\seyfarth\ebe\exit.asm=180
+C%3A\cygwin\home\seyfarth\ebe\hello.asm=191
+C%3A\cygwin\home\seyfarth\ebe\hello_all.asm=181
+C%3A\cygwin\home\seyfarth\ebe\memory.asm=158
+home\seyfarth\ebe\hello_all.asm=0
 
 [data]
 columns=16
 floating=false
-visible=true
+visible=false
 
 [ebe]
-geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x2\0\0\0\0\0P\0\0\0\0\0\0\a!\0\0\x3\xfd\0\0\0Y\0\0\0)\0\0\a\x18\0\0\x3\xf4\0\0\0\0\0\0\0\0\a\x80)
-state=@ByteArray(\0\0\0\xff\0\0\0\0\xfd\0\0\0\x1\0\0\0\0\0\0\x2\xc9\0\0\x3o\xfc\x2\0\0\0\t\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x31\x1\0\0\0J\0\0\0\xd7\0\0\0\x88\x1\0\0\x3\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x30\0\0\0\0\0\xff\xff\xff\xff\0\0\0\x88\x1\0\0\x3\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x31\0\0\0\0\0\xff\xff\xff\xff\0\0\0\x80\x1\0\0\x3\xfc\0\0\x1\"\0\0\x1!\0\0\0\xa4\x1\0\0\x1b\xfa\0\0\0\x1\x1\0\0\0\x3\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x33\x1\0\0\0\0\xff\xff\xff\xff\0\0\0j\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x32\x1\0\0\0\0\xff\xff\xff\xff\0\0\0j\x1\0\0\x3\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x32\x1\0\0\0\0\0\0\x1\x31\0\0\0j\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x33\0\0\0\0\0\xff\xff\xff\xff\0\0\0\x88\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x34\0\0\0\0\0\xff\xff\xff\xff\0\0\0\x88\x1\0\0\x3\xfc\0\0\x2\x44\0\0\x1u\0\0\0\xc8\x1\0\0\x1b\xfa\0\0\0\0\x1\0\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x39\x1\0\0\0\0\xff\xff\xff\xff\0\0\0\x88\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x36\x1\0\0\0\0\xff\xff\xff\xff\0\0\0j\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x36\x1\0\0\0\0\0\0\x2\xc9\0\0\0\xbd\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x37\0\0\0\0\0\xff\xff\xff\xff\0\0\x1\x5\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x38\0\0\0\0\0\xff\xff\xff\xff\0\0\0\xe9\x1\0\0\x3\0\0\x3\xc6\0\0\x3o\0\0\0\x4\0\0\0\x4\0\0\0\b\0\0\0\b\xfc\0\0\0\x2\0\0\0\x1\0\0\0\x1\0\0\0 \0T\0\x65\0m\0p\0l\0\x61\0t\0\x65\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x3\0\0\0\0\xff\xff\xff\xff\0\0\0\0\0\0\0\0\0\0\0\x2\0\0\0\x3\0\0\0\x18\0\x46\0i\0l\0\x65\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x1\0\0\0\0\xff\xff\xff\xff\0\0\0\0\0\0\0\0\0\0\0\x18\0\x45\0\x64\0i\0t\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x1\0\0\x1\xaa\xff\xff\xff\xff\0\0\0\0\0\0\0\0\0\0\0\x1a\0\x44\0\x65\0\x62\0u\0g\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x1\0\0\x3\xe8\xff\xff\xff\xff\0\0\0\0\0\0\0\0)
+geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x2\0\0\0\0\x2\x11\0\0\0\b\0\0\a\x7f\0\0\x4\x10\0\0\x2\x1d\0\0\0\x39\0\0\as\0\0\x4\x4\0\0\0\0\0\0\0\0\a\x80)
+state=@ByteArray(\0\0\0\xff\0\0\0\0\xfd\0\0\0\x1\0\0\0\0\0\0\x1\xdd\0\0\x3\x62\xfc\x2\0\0\0\v\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x31\0\0\0\0\x46\0\0\0\xa3\0\0\0\x92\x1\0\0\x3\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x30\0\0\0\0\x46\0\0\0\xbd\0\0\0\x92\x1\0\0\x3\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x31\0\0\0\x1[\0\0\0z\0\0\0\x8a\x1\0\0\x3\xfc\0\0\0P\0\0\0\xbd\0\0\0\xae\x1\0\0\x1b\xfa\0\0\0\0\x1\0\0\0\x2\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x32\x1\0\0\0\0\xff\xff\xff\xff\0\0\0t\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x33\x1\0\0\0\0\0\0\x1\xdd\0\0\0t\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x34\0\0\0\x1G\0\0\0\x84\0\0\0\x92\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x36\x1\0\0\x1\xe\0\0\x1\x19\0\0\0\xbd\x1\0\0\x3\xfc\0\0\x1\xf6\0\0\0\xcd\0\0\0\0\0\xff\xff\xff\xfa\0\0\0\x1\x1\0\0\0\x2\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x33\x2\0\0\0\0\0\0\x3N\0\0\0\xcc\0\0\0\xea\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x36\0\0\0\0\0\0\0\x1\x39\0\0\0\0\0\0\0\0\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x37\0\0\0\x1!\0\0\0\xf2\0\0\x1\x19\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x38\0\0\0\x1*\0\0\0\xd9\0\0\0\xf3\x1\0\0\x3\xfc\0\0\x2(\0\0\x1\x8a\0\0\0\xd7\x1\0\0\x1b\xfa\0\0\0\0\x1\0\0\0\x2\xfb\0\0\0\xe\0\x44\0o\0\x63\0k\0 \0\x31\0\x32\x1\0\0\0\0\xff\xff\xff\xff\0\0\0t\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x39\x1\0\0\0\0\0\0\x1\xdd\0\0\0\xac\x1\0\0\x3\xfb\0\0\0\f\0\x44\0o\0\x63\0k\0 \0\x35\0\0\0\x2\xb7\0\0\0\xf7\0\0\0\x92\x1\0\0\x3\0\0\x3I\0\0\x3\x62\0\0\0\x4\0\0\0\x4\0\0\0\b\0\0\0\b\xfc\0\0\0\x2\0\0\0\x1\0\0\0\x1\0\0\0 \0T\0\x65\0m\0p\0l\0\x61\0t\0\x65\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x3\0\0\0\0\xff\xff\xff\xff\0\0\0\0\0\0\0\0\0\0\0\x2\0\0\0\x3\0\0\0\x18\0\x46\0i\0l\0\x65\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x1\0\0\0\0\xff\xff\xff\xff\0\0\0\0\0\0\0\0\0\0\0\x18\0\x45\0\x64\0i\0t\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x1\0\0\x1\xaa\xff\xff\xff\xff\0\0\0\0\0\0\0\0\0\0\0\x1a\0\x44\0\x65\0\x62\0u\0g\0 \0t\0o\0o\0l\0\x62\0\x61\0r\x1\0\0\x3\xe8\xff\xff\xff\xff\0\0\0\0\0\0\0\0)
 
 [edit]
 auto_indent=true
@@ -173,7 +178,7 @@ tab_width=4
 
 [float]
 floating=false
-visible=false
+visible=true
 
 [frame]
 floating=false
