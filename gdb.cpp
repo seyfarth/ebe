@@ -613,7 +613,7 @@ void GDB::doCall()
         //qDebug() << "fl2" << i << fileLineToAddress[fl2];
     //}
     if (!running) return;
-    if ( ebe["build/assembler"].toString() == "yasm" ) {
+    if ( ebe["build/assembler"].toString() == "nasm" ) {
         //qDebug() << "tbreak *" << fileLineToAddress[fl] << "OK";
         send(QString("tbreak *%1").arg(fileLineToAddress[fl]));
 //#if defined(Q_OS_WIN) || defined(Q_OS_MAC)

@@ -384,8 +384,6 @@ void GenericRegisterWindow::setDecimal()
         row = table->latestCell->row;
         col = table->latestCell->column;
         //qDebug() << "setDecimal" << row << col;
-    //} else {
-        //qDebug() << "latestCell" << (long)latestCell;
     }
     col = col & ~1;                      // Make it even
     QString reg = table->text(row,col);
@@ -403,9 +401,14 @@ void GenericRegisterWindow::setDecimal()
  */
 void GenericRegisterWindow::setHex()
 {
-    //qDebug() << table->currentItem();
-    QString reg = table->text(0,0);
-    //qDebug() << reg;
+    int row=0;
+    int col=0;
+    if ( table->latestCell ) {
+        row = table->latestCell->row;
+        col = table->latestCell->column;
+    }
+    col = col & ~1;                      // Make it even
+    QString reg = table->text(row,col);
     reg = reg.trimmed();
     if (regs.contains(reg)) {
         regs[reg]->setFormat("hexadecimal");
@@ -444,7 +447,7 @@ Register::Register(QString n)
 {
     name = n;
     format = "hexadecimal";
-    contents = "";
+    contents.i8 = 0;
 }
 
 /*
@@ -452,13 +455,13 @@ Register::Register(QString n)
  */
 void Register::setValue(QString v)
 {
-    contents = v;
+    bool ok;
+    contents.u8 = v.toULongLong(&ok,16);
 }
 
 uLong Register::toULong()
 {
-    bool ok;
-    return contents.toULongLong(&ok, 16);
+    return contents.u8;
 }
 
 /*
@@ -474,20 +477,16 @@ void Register::setFormat(QString f)
  */
 QString Register::value()
 {
-    uLong dec;
-    bool ok;
      //qDebug() << name << format << contents;
     if (name == "rip" || name == "eflags" || name == "eip") {
 /*
  *      rip and eflags should be just like gdb prints them
  */
-        return contents;
+        return QString("0x%1").arg(contents.u8,1,16);
     } else if (format == "decimal") {
-        dec = contents.toULongLong(&ok, 16);
-        //qDebug() << "reg" << ok << contents << dec;
-        return QString("%1").arg(dec);
+        return QString("%1").arg(contents.i8);
     } else {
-        return contents;
+        return QString("0x%1").arg(contents.u8,1,16);
     }
 }
 

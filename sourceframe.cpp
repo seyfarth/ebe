@@ -459,7 +459,7 @@ void SourceFrame::run()
 //#endif
 
             ebeInc = file.source;
-            if ( assembler == "yasm" && wordSize == 64 ) {
+            if ( assembler == "nasm" && wordSize == 64 ) {
                 n = ebeInc.lastIndexOf('/');
                 if (n < 0)
                     ebeInc = "ebe.inc";
@@ -469,7 +469,7 @@ void SourceFrame::run()
                 QFile::remove(ebeInc);
                 QFile::copy(":/src/assembly/ebe.inc", ebeInc);
                 QFile::setPermissions(ebeInc, QFile::ReadOwner | QFile::WriteOwner);
-            } else if ( assembler == "yasm" && wordSize == 32 ) {
+            } else if ( assembler == "nasm" && wordSize == 32 ) {
                 n = ebeInc.lastIndexOf('/');
                 if (n < 0)
                     ebeInc = "ebe_32.inc";
@@ -779,8 +779,7 @@ void SourceFrame::run()
                     parts = text.split(QRegExp("\\s+"));
                     //qDebug() << parts;
                     if ( text[0] != QChar(' ') ) {
-                        if ( inText && parts.length() > 1 )
-                        {
+                        if ( inText && parts.length() > 1 ) {
                             fl.line = line;
                             fileLineToAddress[fl] = parts[0].toInt(&ok,16);
                             //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
@@ -793,14 +792,15 @@ void SourceFrame::run()
                             line = parts[0].toInt() - 1;
                         }
                     } else if ( parts.length() > 1 &&
-                        parts[1].startsWith("[se",Qt::CaseInsensitive) ) {
+                        parts[1].startsWith("segment",Qt::CaseInsensitive) ) {
                         if ( parts[2].startsWith(".text",Qt::CaseInsensitive) ) {
                             inText = true;
                         } else {
                             inText = false;
                         }
                     }
-                    if ( text[36] != QChar('<') || text[38] != QChar('>') ) {
+                    if ( (parts[1][0] != QChar('<') || parts[1][1] == QChar('r')) &&
+                          parts[1][18] != QChar('-') ) {
                         if ( parts.length() > 1 ) {
                             int n = parts[1].length();
                             //qDebug() << "line =" << line << ",  n =" << n;
@@ -848,6 +848,7 @@ void SourceFrame::run()
         if ( definingVar ) {
             AsmVariable & var=asmDataWindow->variables[index];
             long size = nmParts[0].toULongLong(&ok,16) - var.address;
+            //qDebug() << "size" << size;
             if ( size >= 1 ) {
                 if ( size > 100000 ) size = 100000;
                 if ( asmVariableDecls.contains(var.name) ) {
@@ -855,8 +856,11 @@ void SourceFrame::run()
                     if ( asmVariableDecls[var.name].size > 0 ) {
                         var.size = asmVariableDecls[var.name].size;
                     }
+                    size = var.size;
+                    //qDebug() << "var size" << var.size;
+                } else {
+                    var.size = size;
                 }
-                var.size = size;
                 var.values = new AllTypesArray(size);
                 definingVar = false;
                 newVars.append(asmDataWindow->variables[index]);
@@ -870,7 +874,7 @@ void SourceFrame::run()
                 }
                 if ( asmDataWindow->varNames.count(nmParts[2]) > 0 ) {
                     index = asmDataWindow->varNames[nmParts[2]];
-                    //qDebug() << "var" << nmData;
+                    //qDebug() << "var" << nmParts;
                     asmDataWindow->variables[index].address =
                                   nmParts[0].toULongLong(&ok,16);
                     definingVar = true;
@@ -1111,7 +1115,7 @@ void SourceFrame::run()
 //#if defined Q_OS_MAC || defined Q_OS_WIN32
             if ( (source->file.language == "asm" ||
                 source->file.language == "hal") &&
-                assembler == "yasm" ) {
+                assembler == "nasm" ) {
                 fl.line = bp;
                 //qDebug() << "fl2a" << fileLineToAddress[fl];
                 it = fileLineToAddress.lowerBound(fl);
@@ -1198,7 +1202,7 @@ void SourceFrame::step()
 {
     clearNextLine(breakFile, breakLine);
     //if (inAssembly && (ebe.os == "mac" || ebe.os == "windows")) {
-    if (inAssembly && assembler == "yasm" ) {
+    if (inAssembly && assembler == "nasm" ) {
         emit doStepInstruction();
     } else {
         emit doStep();

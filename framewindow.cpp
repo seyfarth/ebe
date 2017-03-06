@@ -128,7 +128,7 @@ void FrameWindow::rebuildTable()
 //
     for ( int i = 0; i <  num; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = (local1Row-i)*10;
+        items[s] = (local1Row+i)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->setText(local1Row+i,0," "+s);
         table->setText(local1Row+i,2,QString("rbp+%1").arg((3-i+2)*8));
@@ -140,7 +140,7 @@ void FrameWindow::rebuildTable()
 //
     for ( int i = 4; i <  limit->locals; i++ ) {
         s = QString("local%1").arg(i+1);
-        items[s] = (local5Row+i-5)*10;
+        items[s] = (local5Row+i-4)*10;
         if ( limit->names->contains(s) ) s = limit->names->value(s);
         table->setText(local5Row+i-4,0," "+s);
         table->setText(local5Row+i-4,2,QString("rbp-%1").arg((i-3)*8));
@@ -358,12 +358,13 @@ void FrameWindow::receiveStack(QStringList results)
     }
     //qDebug() << "rs names" << *(limit->names);
     foreach (QString name, limit->names->keys()) {
-        //qDebug() << "rs" << name;
+        //qDebug() << "rs" << name << limit->names->value(name);
         if ( items.contains(name) ) {
             int irow = items[name];
             //qDebug() << "rs" << name << irow/10 << irow%10;
             if ( irow/10 < rows ) {
-                table->setText(irow/10,irow%10,limit->names->value(name)+" ");
+                table->setText(irow/10,irow%10," "+limit->names->value(name)
+				+" ");
             }
         }
     }

@@ -127,9 +127,9 @@ void Settings::setDefaults()
     ebe["build/_12"] = "";
     ebe["build/_13"] = " You can choose between a few alternative build scenarios.";
     ebe["build/_14"] = "";
-    ebe["build/_15"] = " On 32 bit Linux systems you can choose to use either yasm or as.";
+    ebe["build/_15"] = " On 32 bit Linux systems you can choose to use either nasm or as.";
     ebe["build/_16"] = " To do this change the setting for build/asm to be the same";
-    ebe["build/_17"] = " as build/asm_as or build/asm_yasm (the default).";
+    ebe["build/_17"] = " as build/asm_as or build/asm_nasm (the default).";
     ebe["build/_18"] = "";
     ebe["build/_19"] = " On 64 bit Linux you can choose to either use 32 or 64 bit";
     ebe["build/_20"] = " assemblers and also choose which assembler to use.";
@@ -137,14 +137,14 @@ void Settings::setDefaults()
     ebe["build/_22"] = " versions of libc and libstdc++.";
     ebe["build/_23"] = "";
     ebe["build/_24"] = " If you want to use 32 bit tools you need to set build/wordSize";
-    ebe["build/_25"] = " to 32.  If you want to use as instead of yasm you need to set ";
+    ebe["build/_25"] = " to 32.  If you want to use as instead of nasm you need to set ";
     ebe["build/_26"] = " build/assembler to as.  It would be possible to determine these";
     ebe["build/_27"] = " choices from other variables, but this was easier to implement.";
     ebe["build/_28"] = "";
     ebe["build/_29"] = " After that you need to select the proper build/asm and";
     ebe["build/_30"] = " build/asmld commands if your program starts with _start. ";
-    ebe["build/_31"] = " The choices for build/asm are build/asm_yasm_64, ";
-    ebe["build/_32"] = " build/asm_yasm_32, build/asm_as_64 and build/asm_as_32.";
+    ebe["build/_31"] = " The choices for build/asm are build/asm_nasm_64, ";
+    ebe["build/_32"] = " build/asm_nasm_32, build/asm_as_64 and build/asm_as_32.";
     ebe["build/_33"] = " The choices for build/asmld are build/asmld_64 and ";
     ebe["build/_34"] = " build/asmld_32.";
     ebe["build/_35"] = "";
@@ -152,14 +152,14 @@ void Settings::setDefaults()
     ebe["build/_37"] = " This means you must select the proper build/cc, build/asm,";
     ebe["build/_38"] = " The choices for build/cc are build/cc_64 and build/cc_32.";
     ebe["build/_39"] = " and build/ccld commands for your choice.";
-    ebe["build/_40"] = " The choices for build/asm are build/asm_yasm_64, ";
-    ebe["build/_41"] = " build/asm_yasm_32, build/asm_as_64 and build/asm_as_32.";
+    ebe["build/_40"] = " The choices for build/asm are build/asm_nasm_64, ";
+    ebe["build/_41"] = " build/asm_nasm_32, build/asm_as_64 and build/asm_as_32.";
     ebe["build/_42"] = " The choices for build/asmld are build/asmld_64 and ";
     ebe["build/_43"] = " build/asmld_32.";
     ebe["build/_44"] =  "";
 
     ebe["build/word_size"] = wordSize;
-    ebe["build/assembler"] = "yasm";
+    ebe["build/assembler"] = "nasm";
 
     ebe["build/cc"] = "gcc -g -c -Wfatal-errors -Wall -O0 "
         "-o \"$base.o\" \"$source\"";
@@ -175,9 +175,8 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "linux";
     ebe["windows"] = false;
-    ebe["build/assembler"] = "yasm";
+    ebe["build/assembler"] = "nasm";
     if ( wordSize == 64 ) {
-        QFile::remove("hello.c");
         QFile::copy(":/src/c/hello.c", "test_hello.c");
         QFile::setPermissions("test_hello.c", QFile::ReadOwner | QFile::WriteOwner);
         QProcess gcc;
@@ -199,13 +198,13 @@ void Settings::setDefaults()
             //qDebug() << "nmData: " << nmData;
         }
         //qDebug() << "pie" << pie;
-        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+        ebe["build/asm_nasm_64"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_yasm_32"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+        ebe["build/asm_nasm_32"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64 "
+        ebe["build/hal"] = "nasm -g -P \"$ebe_inc\" -P hal.inc -f elf64 "
             "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/asmld_64"] = "ld -o \"$base\"";
@@ -243,11 +242,11 @@ void Settings::setDefaults()
             ebe["build/cppld_64"] = "g++ -no-pie -g -o \"$base\"";
         }
     } else {
-        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
             "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
-        ebe["build/asm_yasm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+        ebe["build/asm_nasm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/word_size"] = 32;
@@ -269,13 +268,13 @@ void Settings::setDefaults()
         "-o \"$base.o\" \"$source\"";
     ebe["build/cppld"] = "c++ -g -o \"$base\"";
     if ( wordSize == 64 ) {
-        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_yasm_64"] = "yasm -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+        ebe["build/asm_nasm_64"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_yasm_32"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+        ebe["build/asm_nasm_32"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f elf64 "
+        ebe["build/hal"] = "nasm -g -P \"$ebe_inc\" -P hal.inc -f elf64 "
             "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/asmld_64"] = "ld -o \"$base\"";
@@ -299,11 +298,11 @@ void Settings::setDefaults()
             "-o \"$base.o\" \"$source\"";
         ebe["build/cppld_64"] = "c++ -g -o \"$base\"";
     } else {
-        ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
             "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
-        ebe["build/asm_yasm"] = "yasm -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+        ebe["build/asm_nasm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
             "-g dwarf2 -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/word_size"] = 32;
@@ -316,8 +315,8 @@ void Settings::setDefaults()
     ebe["mac"] = true;
     ebe["os"] = "mac";
     ebe["windows"] = false;
-    ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
-    ebe["build/hal"] = "yasm -P \"$ebe_inc\" -P hal.inc -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/hal"] = "nasm -g -P \"$ebe_inc\" -P hal.inc -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe["build/halld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe.os = "mac";
@@ -328,9 +327,9 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "windows";
     ebe["windows"] = true;
-    ebe["build/asm"] = "yasm -P \"$ebe_inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/hal"] =
-        "yasm -P $ebe_inc -P \"hal.inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+        "nasm -g -P $ebe_inc -P \"hal.inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe["build/halld"] = "ld -o \"$base\"";
     ebe.os = "windows";
@@ -545,7 +544,7 @@ SettingsDialog::SettingsDialog()
 #if __linux__
     box = frame->addComboBox(tr("Assembler"), "build/assembler");
     strings.clear();
-    strings << "yasm" << "as";
+    strings << "nasm" << "as";
     box->setChoices(strings);
     box = frame->addComboBox(tr("Word size"), "build/word_size");
     strings.clear();
@@ -568,16 +567,16 @@ void SettingsDialog::save()
     languages.setLanguage();
 #if __linux__
     if ( ebe["build/expert"].toBool() ) {
-        if ( ebe["build/assembler"].toString() == "yasm" ) {
+        if ( ebe["build/assembler"].toString() == "nasm" ) {
             if ( ebe["build/word_size"].toInt() == 64 ) {
-                ebe["build/asm"] = ebe["build/asm_yasm_64"];
+                ebe["build/asm"] = ebe["build/asm_nasm_64"];
                 ebe["build/asmld"] = ebe["build/asmld_64"];
                 ebe["build/cpp"] = ebe["build/cpp_64"];
                 ebe["build/cppld"] = ebe["build/cppld_64"];
                 ebe["build/cc"] = ebe["build/cc_64"];
                 ebe["build/ccld"] = ebe["build/ccld_64"];
             } else {
-                ebe["build/asm"] = ebe["build/asm_yasm_32"];
+                ebe["build/asm"] = ebe["build/asm_nasm_32"];
                 ebe["build/asmld"] = ebe["build/asmld_32"];
                 ebe["build/cpp"] = ebe["build/cpp_32"];
                 ebe["build/cppld"] = ebe["build/cppld_32"];

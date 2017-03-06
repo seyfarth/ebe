@@ -7,6 +7,7 @@
  for set and get registers just yet
  */
 
+#include "types.h"
 #include "eztable.h"
 #include <QFrame>
 #include <QStringList>
@@ -70,7 +71,7 @@ public:
      */
     void setFormat(QString format);
 
-    QString contents;   ///< The current value of the Register
+    AllTypes contents;  ///< The current value of the Register
     QString format;     ///< The format for displaying the Register
     QString name;       ///< The Register's name
 };
