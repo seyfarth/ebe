@@ -255,7 +255,7 @@ void MainWindow::checkTools()
             //missing += "gfortran";
         //}
 #endif
-        if (!toolExists("yasm")) missing += "yasm";
+        if (!toolExists("nasm")) missing += "nasm";
         if (!toolExists("astyle")) missing += "astyle";
         if (missing.length() > 0 || missingCritical.length() > 0) {
             //qDebug() << "oops";

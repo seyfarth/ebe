@@ -151,7 +151,7 @@ void AsmDataWindow::rebuildTable()
     columns = ebe["asmdata/columns"].toInt();
     rows = 0;
 
-    //qDebug() << "rows" << rows << ";   oldrows" << oldRows;
+    //qDebug() << "rows" << rows;
     table->setPlankCount(variables.size());
     table->setColumnCount(columns+2);
 
@@ -169,6 +169,8 @@ void AsmDataWindow::rebuildTable()
     }
 
     for ( int i=0; i < variables.size(); i++ ) {
+    //qDebug() << "request" << variables[i].name << variables[i].address
+         //<< variables[i].size;
         emit requestAsmVariable ( i, variables[i].address, variables[i].size );
     }
 }
