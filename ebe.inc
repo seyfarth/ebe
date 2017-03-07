@@ -1,7 +1,4 @@
-%ifidni __OUTPUT_FORMAT__, win64
-%define WINDOWS
-%endif
-%ifidni __OUTPUT_FORMAT__,macho64
+%ifdef OSX
 %macro defaultrel  0.nolist
         default  rel
 %endmacro

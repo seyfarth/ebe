@@ -523,7 +523,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     //send("set prompt (gdb)\\n");
 #else
     //qDebug() << "tty " << terminalWindow->ptyName;
-    send("tty " + terminalWindow->ptyName);
+    send("set inferior-tty " + terminalWindow->ptyName);
     send("set args " + options);
     send("run");
 #endif

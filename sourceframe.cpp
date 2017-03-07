@@ -792,12 +792,14 @@ void SourceFrame::run()
                             line = parts[0].toInt() - 1;
                         }
                     } else if ( parts.length() > 1 &&
-                        parts[1].startsWith("segment",Qt::CaseInsensitive) ) {
+                        (parts[1].startsWith("segment",Qt::CaseInsensitive) ||
+                         parts[1].startsWith("section",Qt::CaseInsensitive)) ) {
                         if ( parts[2].startsWith(".text",Qt::CaseInsensitive) ) {
                             inText = true;
                         } else {
                             inText = false;
                         }
+                        //qDebug() << "inText" << inText;
                     }
                     if ( (parts[1][0] != QChar('<') || parts[1][1] == QChar('r')) &&
                           parts[1][18] != QChar('-') ) {
@@ -985,7 +987,7 @@ void SourceFrame::run()
                     if ( parts.length() > 1 ) text = parts[0];
                     text = text.trimmed();
                     text.replace("\t"," ");
-                    text.replace(",","");
+                    text.replace(","," ");
                     //qDebug() << fileLine.line << text;
 
                     parts = text.split(space);
