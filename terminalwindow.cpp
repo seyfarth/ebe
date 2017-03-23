@@ -44,6 +44,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     SetHandleInformation(fromChild,HANDLE_FLAG_INHERIT,0);
 #else
     pty = posix_openpt(O_RDWR);
+    //qDebug() << "pty" << pty;
     grantpt(pty);
     unlockpt(pty);
 #endif

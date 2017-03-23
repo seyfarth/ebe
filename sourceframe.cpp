@@ -760,6 +760,10 @@ void SourceFrame::run()
 //
 //#if defined Q_OS_MAC || defined Q_OS_WIN32
     int line;
+    bool included;
+    bool hasAddress;
+    QRegExp includeExp("<\\d+>");
+    QRegExp addressExp("[0-9a-fA-F]{8}");
     QList<File>::iterator i;
     for ( i = files.begin(); i != files.end(); i++ ) {
         file = *i;
@@ -770,48 +774,43 @@ void SourceFrame::run()
             QStringList parts;
             bool ok;
             bool inText = false;
+            int count;
             line = 1;
             if ( listing.open(QFile::ReadOnly) ) {
                 text = listing.readLine();
                 //qDebug() << text;
                 while ( text != "" ) {
-                    text = text.mid(7);
+                    text = text.trimmed();
                     parts = text.split(QRegExp("\\s+"));
+                    count = parts.length();
+                    included = count > 1 && includeExp.exactMatch(parts[1]);
+                    hasAddress = count > 1 && addressExp.exactMatch(parts[1]);
                     //qDebug() << parts;
-                    if ( text[0] != QChar(' ') ) {
-                        if ( inText && parts.length() > 1 ) {
-                            fl.line = line;
-                            fileLineToAddress[fl] = parts[0].toInt(&ok,16);
-                            //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
-                        }
-                    } else if ( parts.length() > 1 && parts[1] == "%line"
-                              && parts[3] == name) {
-                        parts = parts[2].split(QRegExp("\\+"));
-                        //qDebug() << "%line" << parts ;
-                        if ( parts.length() == 2 ) {
-                            line = parts[0].toInt() - 1;
-                        }
-                    } else if ( parts.length() > 1 &&
-                        parts[1].startsWith("segment",Qt::CaseInsensitive) ) {
+                    //qDebug() << "add" << hasAddress << ";    incl" << included;
+                    if ( inText && hasAddress && count > 3 ) {
+                        fl.line = line;
+                        fileLineToAddress[fl] = parts[1].toInt(&ok,16);
+                        //qDebug() << fl.file << fl.line << fileLineToAddress[fl];
+                        line++;
+                        //qDebug() << "line" << line;
+                    } else if ( !inText && hasAddress && !included && count > 3 ) {
+                        line++;
+                        //qDebug() << "line" << line;
+                    } else if ( !hasAddress && !included ) {
+                        line++;
+                        //qDebug() << "line" << line;
+                    }
+                    //qDebug() << "parts[1]" << parts[1];
+                    if ( count >= 3 &&
+                        (parts[1].startsWith("segment",Qt::CaseInsensitive) ||
+                         parts[1].startsWith("section",Qt::CaseInsensitive)) ) {
+                        //qDebug() << "segment";
                         if ( parts[2].startsWith(".text",Qt::CaseInsensitive) ) {
                             inText = true;
                         } else {
                             inText = false;
                         }
-                    }
-                    if ( (parts[1][0] != QChar('<') || parts[1][1] == QChar('r')) &&
-                          parts[1][18] != QChar('-') ) {
-                        if ( parts.length() > 1 ) {
-                            int n = parts[1].length();
-                            //qDebug() << "line =" << line << ",  n =" << n;
-                            if ( n == 0 ) {
-                                line++;
-                            } else {
-                                if ( parts[1][n-1] != QChar('-') ) line++;
-                            }
-                        } else {
-                                line++;
-                        }
+                        //qDebug() << "inText" << inText;
                     }
                     text = listing.readLine();
                 }
@@ -985,7 +984,7 @@ void SourceFrame::run()
                     if ( parts.length() > 1 ) text = parts[0];
                     text = text.trimmed();
                     text.replace("\t"," ");
-                    text.replace(",","");
+                    text.replace(","," ");
                     //qDebug() << fileLine.line << text;
 
                     parts = text.split(space);

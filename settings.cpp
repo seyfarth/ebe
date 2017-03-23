@@ -177,14 +177,35 @@ void Settings::setDefaults()
     ebe["windows"] = false;
     ebe["build/assembler"] = "nasm";
     if ( wordSize == 64 ) {
-        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_nasm_64"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_nasm_32"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/hal"] = "nasm -g -P \"$ebe_inc\" -P hal.inc -f elf64 "
-            "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
+        QFile::copy(":/src/c/hello.c", "test_hello.c");
+        QFile::setPermissions("test_hello.c", QFile::ReadOwner | QFile::WriteOwner);
+        QProcess gcc;
+        gcc.start(QString("gcc -c test_start.c"));
+        gcc.waitForFinished();
+        gcc.close();
+        QProcess nm;
+        nm.start(QString("nm -a test_hello.o"));
+        nm.waitForFinished();
+        bool pie=false;
+        QString nmData = nm.readLine();
+        //qDebug() << "nmData: " << nmData;
+        while ( nmData != "" ) {
+            if ( nmData.contains("_GLOBAL_OFFSET_TABLE_") ) {
+                pie = true;
+                break;
+            }
+            nmData = nm.readLine();
+            //qDebug() << "nmData: " << nmData;
+        }
+        //qDebug() << "pie" << pie;
+        ebe["build/asm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_nasm_64"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_nasm_32"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/hal"] = "nasm -DLINUX -P \"$ebe_inc\" -P hal.inc -f elf64 "
+            "-o \"$base.o\" -g -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/asmld_64"] = "ld -o \"$base\"";
         ebe["build/halld"] = "ld -o \"$base\"";
@@ -206,13 +227,27 @@ void Settings::setDefaults()
         ebe["build/cpp_64"] = "g++ -g -c -Wfatal-errors -Wall -O0 "
             "-o \"$base.o\" \"$source\"";
         ebe["build/cppld_64"] = "g++ -g -o \"$base\"";
+        if ( pie ) {
+            ebe["build/cc"] = "gcc -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/ccld"] = "gcc -no-pie -g -o \"$base\" ";
+            ebe["build/cpp"] = "g++ -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/cppld"] = "g++ -no-pie -g -o \"$base\"";
+            ebe["build/cc_64"] = "gcc -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/ccld_64"] = "gcc -no-pie -g -o \"$base\" ";
+            ebe["build/cpp_64"] = "g++ -fno-pie -g -c -Wfatal-errors -Wall -O0 "
+                "-o \"$base.o\" \"$source\"";
+            ebe["build/cppld_64"] = "g++ -no-pie -g -o \"$base\"";
+        }
     } else {
-        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
+        ebe["build/asm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_as"] = "as --32 -DLINUX -g -o \"$base.o\" "
             "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
-        ebe["build/asm_nasm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_nasm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/word_size"] = 32;
     }
@@ -233,14 +268,14 @@ void Settings::setDefaults()
         "-o \"$base.o\" \"$source\"";
     ebe["build/cppld"] = "c++ -g -o \"$base\"";
     if ( wordSize == 64 ) {
-        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_nasm_64"] = "nasm -g -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/asm_nasm_32"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
-        ebe["build/hal"] = "nasm -g -P \"$ebe_inc\" -P hal.inc -f elf64 "
-            "-o \"$base.o\" -g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_nasm_64"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_nasm_32"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
+        ebe["build/hal"] = "nasm -DLINUX -P \"$ebe_inc\" -P hal.inc -f elf64 "
+            "-o \"$base.o\" -g -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/asmld_64"] = "ld -o \"$base\"";
         ebe["build/halld"] = "ld -o \"$base\"";
@@ -251,10 +286,10 @@ void Settings::setDefaults()
         ebe["build/ccld_64"] = "cc -g -o \"$base\" ";
         ebe["build/ccld_32"] = "cc -m32 -g -o \"$base\" ";
         ebe["build/word_size"] = 64;
-        ebe["build/asm_as_32"] = "as --32 -g -o \"$base.o\" "
-            "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
-        ebe["build/asm_as_64"] = "as --64 -g -o \"$base.o\" "
-            "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
+        ebe["build/asm_as_32"] = "as --32 -DLINUX -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$source\"";
+        ebe["build/asm_as_64"] = "as --64 -DLINUX -g -o \"$base.o\" "
+            "-ahlms=\"$base.lst\" \"$source\"";
         ebe["build/asmld_32"] = "ld -melf_i386 -o \"$base\"";
         ebe["build/cpp_32"] = "c++ -m32 -g -c -Wfatal-errors -Wall -O0 "
             "-o \"$base.o\" \"$source\"";
@@ -263,12 +298,12 @@ void Settings::setDefaults()
             "-o \"$base.o\" \"$source\"";
         ebe["build/cppld_64"] = "c++ -g -o \"$base\"";
     } else {
-        ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
         ebe["build/asm_as"] = "as --32 -g -o \"$base.o\" "
             "-ahlms=\"$base.lst\" \"$ebe_inc\" \"$source\"";
-        ebe["build/asm_nasm"] = "nasm -g -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
-            "-g dwarf2 -l \"$base.lst\" \"$source\"";
+        ebe["build/asm_nasm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf32 -o \"$base.o\" "
+            "-g -l \"$base.lst\" \"$source\"";
         ebe["build/asmld"] = "ld -o \"$base\"";
         ebe["build/word_size"] = 32;
     }
@@ -280,8 +315,8 @@ void Settings::setDefaults()
     ebe["mac"] = true;
     ebe["os"] = "mac";
     ebe["windows"] = false;
-    ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
-    ebe["build/hal"] = "nasm -g -P \"$ebe_inc\" -P hal.inc -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "nasm -DOSX -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/hal"] = "nasm -DOSX -P \"$ebe_inc\" -P hal.inc -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe["build/halld"] = "ld -macosx_version_min 10.6 -o \"$base\"";
     ebe.os = "mac";
@@ -292,9 +327,9 @@ void Settings::setDefaults()
     ebe["mac"] = false;
     ebe["os"] = "windows";
     ebe["windows"] = true;
-    ebe["build/asm"] = "nasm -g -P \"$ebe_inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+    ebe["build/asm"] = "nasm -g -DWINDOWS -P \"$ebe_inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/hal"] =
-        "nasm -g -P $ebe_inc -P \"hal.inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
+        "nasm -DWINDOWS -g -P $ebe_inc -P \"hal.inc\" -f win64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
     ebe["build/asmld"] = "ld -o \"$base\"";
     ebe["build/halld"] = "ld -o \"$base\"";
     ebe.os = "windows";
