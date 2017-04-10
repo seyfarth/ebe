@@ -27,6 +27,7 @@ ui_*.h
 *-build-*
 *~
 
+ebe_src.tgz
 # QtCreator
 
 *.autosave
