@@ -396,6 +396,8 @@ void AsmDataWindow::setFontHeightAndWidth(int height, int width)
  */
 void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
+    if (!table->latestPlank) return;
+
     QMenu menu(tr("Assembly data menu"));
     QMenu *sub;
     QAction *action;

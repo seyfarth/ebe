@@ -160,6 +160,7 @@ EZTable::EZTable(QWidget *parent)
     ezrowHeight = 1.1 * fontHeight;
     latestRow = 0;
     latestColumn = 0;
+    latestPlank = NULL;
     setStyleSheet( QString("font-weight:bold;"
                            "font-family: %1;"
                            " background: %2;")
