@@ -15,11 +15,14 @@ function error()
 
 trap 'error $LINENO $0' ERR
 
-./qrc ana dsf
+./qrc
 qmake
 make clean
-lrelease ebe.pro
 make
-sudo cp ebe *.qm /usr/bin
+cd ebedecl
+make clean
+make
+cd ..
+sudo cp ebe ebedecl/ebedecl /usr/bin
 echo " "
 echo ebe is now ready.  Type in \"ebe\" to run the program.
