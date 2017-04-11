@@ -579,7 +579,8 @@ void SourceFrame::run()
     foreach(file, files) {
         //qDebug() << "file" << file.source;
         object = file.object;
-        bool findVariables = file.language == "asm" || file.language == "hal";
+        bool findVariables = (file.language == "asm" || file.language == "hal")
+                && assembler == "nasm";
         if ( findVariables ) readAsmDecls(file.source);
         if (object == defaultDir + "ebe_unbuffer.o") continue;
         //qDebug() << "object" << object << ext;
