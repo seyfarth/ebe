@@ -1,6 +1,0 @@
-typedef struct DictEntryStruct
-{
-    Vector *status;
-    Vector *entries;
-};
-
