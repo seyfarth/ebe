@@ -469,6 +469,7 @@ void FrameWindow::setFontHeightAndWidth(int height, int width)
  */
 void FrameWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
+    if ( table->rowCount() == 0 ) return;
     int column = table->latestColumn;
     QMenu menu(tr("Frame menu"));
     if (column % 2 == 0) {

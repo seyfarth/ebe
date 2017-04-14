@@ -1049,6 +1049,8 @@ void MainWindow::setVisibleIfFits(QWidget *dockWidget, const QString &key, int *
 
 void MainWindow::editSettings()
 {
+    ebe["ebe/geometry"] = saveGeometry();
+    ebe["ebe/state"] = saveState();
     SettingsDialog *dialog = new SettingsDialog();
     if (dialog->exec()) restoreMainWindow();
 }

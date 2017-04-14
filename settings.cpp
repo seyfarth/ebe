@@ -180,7 +180,7 @@ void Settings::setDefaults()
         QFile::copy(":/src/c/hello.c", "test_hello.c");
         QFile::setPermissions("test_hello.c", QFile::ReadOwner | QFile::WriteOwner);
         QProcess gcc;
-        gcc.start(QString("gcc -c test_start.c"));
+        gcc.start(QString("gcc -c test_hello.c"));
         gcc.waitForFinished();
         gcc.close();
         QProcess nm;
