@@ -372,10 +372,10 @@ void SourceEdit::contextMenuEvent(QContextMenuEvent * /* event */)
     menu.addAction(tr("Cut"), this, SLOT(cut()));
     menu.addAction(tr("Copy"), this, SLOT(copy()));
     menu.addAction(tr("Paste"), this, SLOT(paste()));
-    if (running) {
-        menu.addSeparator();
-        menu.addAction(tr("Define variable"), this, SLOT(defineVariable()));
-    }
+    //if (running) {
+        //menu.addSeparator();
+        //menu.addAction(tr("Define variable"), this, SLOT(defineVariable()));
+    //}
     menu.exec(QCursor::pos());
 }
 
@@ -396,7 +396,7 @@ void SourceEdit::defineVariable()
         block = document()->findBlock(pos);
         int line = block.blockNumber() + 1;
         dialog->result.append(QString("%1").arg(line));
-        emit sendVariableDefinition(dialog->result);
+        //emit sendVariableDefinition(dialog->result);
     }
     delete dialog;
 }
@@ -452,8 +452,8 @@ SourceWindow::SourceWindow(QWidget *parent)
     // text edit widget
     connect(textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
     connect ( textEdit, SIGNAL(newHeight(int)), this, SLOT(newHeight(int)));
-    connect(textEdit, SIGNAL(sendVariableDefinition(QStringList)), dataWindow,
-            SLOT(receiveVariableDefinition(QStringList)));
+    //connect(textEdit, SIGNAL(sendVariableDefinition(QStringList)), dataWindow,
+            //SLOT(receiveVariableDefinition(QStringList)));
     connect ( scrollBar, SIGNAL(sliderMoved(int)),
             this, SLOT(scrollBarChanged(int)));
     connect ( scrollBar, SIGNAL(valueChanged(int)),

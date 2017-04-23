@@ -33,7 +33,7 @@ QStringList cppExts;
 QStringList asmExts;
 StringSet textLabels;
 
-QHash<QString, Range> labelRange;
+//QHash<QString, Range> labelRange;
 QHash<unsigned long, FileLine> addressToFileLine;
 QMap<FileLine, unsigned long> fileLineToAddress;
 QMap<FileLine,FrameData*> frameData;
@@ -339,7 +339,7 @@ void SourceFrame::run()
     fileLineToAddress.clear();
     textToAddress.clear();
     textToFile.clear();
-    labelRange.clear();
+    //labelRange.clear();
     objectToSource.clear();
     stop();
     breakLine = 0;
@@ -579,9 +579,11 @@ void SourceFrame::run()
     foreach(file, files) {
         //qDebug() << "file" << file.source;
         object = file.object;
-        bool findVariables = (file.language == "asm" || file.language == "hal")
-                && assembler == "nasm";
-        if ( findVariables ) readAsmDecls(file.source);
+        bool findVariables = file.language == "asm" ||
+                             file.language == "hal";
+        if ( findVariables && assembler == "nasm" ) {
+            readAsmDecls(file.source);
+        }
         if (object == defaultDir + "ebe_unbuffer.o") continue;
         //qDebug() << "object" << object << ext;
         QProcess nm(this);
@@ -664,8 +666,8 @@ void SourceFrame::run()
         if (file.language == "asm" || file.language == "hal") {
             //qDebug() << "scanning" << file.source;
             FileLine fl;
-            Range range;
-            QString labelToSave;
+            //Range range;
+            //QString labelToSave;
             QFile source(file.source);
             fl.file = file.source;
             int line;
@@ -678,25 +680,25 @@ void SourceFrame::run()
                 while (text != "") {
                     parts = text.split(QRegExp("\\s+"));
                     //qDebug() << parts;
-                    if (parts.length() > 0) {
-                        label = parts[0];
-                        if (label == "" && parts.length() > 1) label = parts[1];
-                        int n = label.length();
-                        if (n > 0) {
-                            if (label[n - 1] == QChar(':')) label.chop(1);
-                            if (textLabels.contains("_" + label)) {
-                                label = "_" + label;
-                            }
-                            if (textLabels.contains(label)) {
-                                if (labelToSave != "") {
-                                    range.last = line - 1;
-                                    labelRange[labelToSave] = range;
-                                }
-                                range.first = line;
-                                labelToSave = label;
-                            }
-                        }
-                    }
+                    //if (parts.length() > 0) {
+                        //label = parts[0];
+                        //if (label == "" && parts.length() > 1) label = parts[1];
+                        //int n = label.length();
+                        //if (n > 0) {
+                            //if (label[n - 1] == QChar(':')) label.chop(1);
+                            //if (textLabels.contains("_" + label)) {
+                                //label = "_" + label;
+                            //}
+                            //if (textLabels.contains(label)) {
+                                //if (labelToSave != "") {
+                                    //range.last = line - 1;
+                                    //labelRange[labelToSave] = range;
+                                //}
+                                //range.first = line;
+                                //labelToSave = label;
+                            //}
+                        //}
+                    //}
                     if ((parts.length() >= 2 && parts[0].toUpper() == "CALL")
                         || (parts.length() >= 2 && parts[1].toUpper() == "CALL")) {
                         fl.line = line;
@@ -706,10 +708,10 @@ void SourceFrame::run()
                     text = source.readLine();
                     line++;
                 }
-                if (labelToSave != "") {
-                    range.last = line - 1;
-                    labelRange[labelToSave] = range;
-                }
+                //if (labelToSave != "") {
+                    //range.last = line - 1;
+                    //labelRange[labelToSave] = range;
+                //}
             }
             source.close();
         }

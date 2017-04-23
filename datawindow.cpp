@@ -32,7 +32,7 @@ DataMap expansionMap;
 StringHash formatForType;
 QHash<DataMap*,DataPlank*> plankForMap;
 
-extern QHash<QString, Range> labelRange;
+//extern QHash<QString, Range> labelRange;
 QStack<DataTree*> stack;
 
 extern StringHash varToAddress;
@@ -136,24 +136,24 @@ void DataWindow::setFontHeightAndWidth(int height, int width)
     dataTree->resizeToFitContents(maxLevels);
 }
 
-void DataWindow::receiveVariableDefinition(QStringList strings)
+void DataWindow::receiveVariableDefinition(QStringList /* strings */)
 {
     //DataPlank *plank;
     //qDebug() << "data rec var" << strings;
-    QString name = strings[0];
-    int line = strings[7].toInt();
-    Range range;
-    if (name[0] == QChar('.')) {
-        foreach ( QString label, labelRange.keys() ) {
-            range = labelRange[label];
+    //QString name = strings[0];
+    //int line = strings[7].toInt();
+    //Range range;
+    //if (name[0] == QChar('.')) {
+        //foreach ( QString label, labelRange.keys() ) {
+            //range = labelRange[label];
             //qDebug() << label << range.first << range.last;
-            if ( line >= range.first && line <= range.last &&
-                    varToAddress.contains(label+name) ) {
-                name = label+name;
-                break;
-            }
-        }
-    }
+            //if ( line >= range.first && line <= range.last &&
+                    //varToAddress.contains(label+name) ) {
+                //name = label+name;
+                //break;
+            //}
+        //}
+    //}
     //plank = userDefinedMap->value(name);
     //if (plank == 0) {
         //plank = dataTree->addDataPlank(userDefined,userDefinedMap, name, strings[2]);

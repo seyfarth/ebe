@@ -75,7 +75,7 @@ private slots:
 
     signals:
     void newHeight(int height);
-    void sendVariableDefinition(QStringList);
+    //void sendVariableDefinition(QStringList);
 
 private:
     void keyPressEvent(QKeyEvent *e);
