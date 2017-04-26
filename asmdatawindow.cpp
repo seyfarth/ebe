@@ -396,6 +396,7 @@ void AsmDataWindow::setFontHeightAndWidth(int height, int width)
  */
 void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
+    if ( table->planks == 0 ) return;
     if (!table->latestPlank) return;
 
     QMenu menu(tr("Assembly data menu"));
@@ -453,6 +454,7 @@ void AsmDataWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void AsmDataWindow::defineVariableByAddress()
 {
+    if ( table->planks == 0 ) return;
     int p = table->latestPlank->plankNumber;
     //qDebug() << "defineVariableByAddress" << p;
     QStringList parts;
@@ -482,20 +484,17 @@ void AsmDataWindow::defineVariableByAddress()
 
 void AsmDataWindow::deleteVariable()
 {
-    int row = 0; // table->currentRow();
-
-    for ( int i=0; i < variables.size(); i++ ) {
-        if ( variables[i].item == table->cell(row,0) ) {
-            table->setRowCount(table->rowCount()-variables[i].rows);
-            variables.remove(i);
-            break;
-        }
-    }
+    if ( table->planks == 0 ) return;
+    if (!table->latestPlank) return;
+    int p = table->latestPlank->plankNumber;
+    //qDebug() << "p" << p;
+    variables.remove(p);
     rebuildTable();
 }
 
 void AsmDataWindow::setStruc()
 {
+    if ( table->planks == 0 ) return;
     QAction *action = (QAction *)sender();
     int i = action->data().toInt();
     StrucInfo s=asmStrucs[i];
@@ -522,6 +521,7 @@ void AsmDataWindow::setStruc()
 
 void AsmDataWindow::expandStruc()
 {
+    if ( table->planks == 0 ) return;
     QAction *action = (QAction *)sender();
     int i = action->data().toInt();
     StrucInfo s=asmStrucs[i];
@@ -639,6 +639,7 @@ void AsmDataWindow::setBinaryFP8()
 void AsmDataWindow::setFormat(QString format)
 {
     //qDebug() << "setFormat" << table->latestPlank;
+    if ( table->planks == 0 ) return;
     int v;
     if ( table->latestPlank == 0 ) return;
     saveScroll();
