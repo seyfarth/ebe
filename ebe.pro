@@ -8,6 +8,7 @@ DEPENDPATH += .
 INCLUDEPATH += .
 #INCLUDEPATH += /usr/local/include
 #LIBS += -L/usr/local/lib/qt4
+#LIBS += -lsupc++
 
 equals(QT_MAJOR_VERSION,5) {
     QT += widgets

@@ -184,7 +184,7 @@ AllTypesArray::AllTypesArray(int size_)
     size = size_;
     if ( size < 8 ) size = 8;
     int n = (size+7) / 8;
-    data = new uLong[n];
+    data = new uLong [n];
     for ( int i = 0; i < n; i++ ) data[i] = 0;
 }
 

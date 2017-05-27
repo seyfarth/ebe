@@ -112,7 +112,7 @@ string name;
 %left '>' '<'
 %left '+' '-'
 %left '*' '/' '%'
-%precedence NEG
+%left NEG
 
 %%
 

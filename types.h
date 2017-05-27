@@ -10,13 +10,9 @@ typedef QHash<QString, int> IntHash;
 typedef QSet<QString> StringSet;
 typedef QSet<int> IntSet;
 
-#ifdef Q_OS_WIN32
-    typedef unsigned long long uLong;
-    typedef long long sLong;
-#else
-    typedef unsigned long uLong;
-    typedef long sLong;
-#endif
+typedef unsigned long long uLong;
+typedef long long sLong;
+
 union AllTypes
 {
     double f8;

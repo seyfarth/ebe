@@ -34,8 +34,7 @@ cd ~/sf/ebe-web/
 vi content/changelog.rst
 make html
 
-sfpublish
-
 git archive -o ebe_src.tgz master
 cp ebe_src.tgz ~/sf/qtebe/src
-rsync -e ssh ebe_src.tgz seyfarth@frs.sf.net:/home/frs/project/qtebe/src
+
+sfpublish

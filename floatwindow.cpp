@@ -88,11 +88,7 @@ void FloatWindow::receiveFpRegs(QStringList data)
 {
     QStringList parts;
     bool ok;
-#ifdef Q_OS_WIN
     unsigned long long x[4]= {0,0,0,0};
-#else
-    unsigned long x[4] = { 0, 0, 0, 0 };
-#endif
     //qDebug() << "fp receive" << data;
     if ( !running ) return;
 
@@ -199,11 +195,7 @@ FpRegister::FpRegister()
         i8[i] = 0;
 }
 
-#ifdef Q_OS_WIN
 void FpRegister::setValue(unsigned long long *x)
-#else
-void FpRegister::setValue(unsigned long *x)
-#endif
 {
     for (int i = 0; i < 4; i++)
         u8[i] = x[i];

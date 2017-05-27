@@ -13,11 +13,7 @@ class FpRegister
 public:
     FpRegister();
     QString value();
-#ifdef Q_OS_WIN32
     void setValue(unsigned long long *x);
-#else
-    void setValue(unsigned long *x);
-#endif
     void setFormat(QString f);
 
 private:
@@ -25,16 +21,8 @@ private:
     {
         double f8[4];
         float f4[8];
-#ifdef Q_OS_WIN32
         unsigned long long u8[4];
-#else
-        unsigned long u8[4];
-#endif
-#ifdef Q_OS_WIN32
         long long i8[4];
-#else
-        long i8[4];
-#endif
         unsigned int u4[8];
         int i4[8];
         unsigned short u2[16];
