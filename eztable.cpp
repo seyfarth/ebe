@@ -604,11 +604,11 @@ void EZTable::hideColumn ( int /*c*/ )
 
 void EZTable::setPlankCount ( int planks_ )
 {
-    table.resize(planks_);
     for ( int p=planks_; p < planks; p++ ) {
         table[p]->hide();
         delete table[p];
     }
+    table.resize(planks_);
     for ( int p=planks; p < planks_; p++ ) {
         table[p] = new EZPlank(this);
         table[p]->plankNumber = p;

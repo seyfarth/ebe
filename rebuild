@@ -15,6 +15,8 @@ function error()
 
 trap 'error $LINENO $0' ERR
 
+shopt -s expand_aliases
+
 ./qrc
 qmake
 make clean
