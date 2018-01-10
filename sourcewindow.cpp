@@ -927,6 +927,7 @@ void SourceWindow::setNextLine(int line)
     scrollBar->setValue(line - 1 - textHeight / 2);
     setLineNumbers(textDoc->lineCount());
     changed = saveChanged;
+    textEdit->repaint();
 }
 
 void SourceWindow::clearNextLine(int line)
@@ -935,6 +936,7 @@ void SourceWindow::clearNextLine(int line)
     QTextDocument *doc = textEdit->document();
     QTextCursor(doc->findBlockByNumber(line - 1)).setBlockFormat(normalFormat);
     changed = saveChanged;
+    textEdit->repaint();
 }
 
     LineNumberEdit::LineNumberEdit(QWidget *parent)
