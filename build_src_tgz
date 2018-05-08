@@ -1,6 +1,3 @@
 #!/bin/bash
 
-version=$(grep -i 'ebe - version' html/about.html | cut -d ' ' -f 5)
-file=~/sf/qtebe/src/ebe_src_${version}.tgz
-
-tar cvzf $file $dirs $files
+git archive -o ebe_src.tgz HEAD

@@ -161,7 +161,7 @@ void RegisterWindow::buildTable()
     if (wordSize == 64) {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                table->setText(r, c * 2 + 1, "0");
+                table->setText(r, c * 2 + 1, "");
                 if ( columns == 4 ) {
                     table->setText(r, c * 2, " " + names[r][c]);
                     registerItems[names[r][c]] = r*10+c*2;
@@ -176,7 +176,7 @@ void RegisterWindow::buildTable()
     } else {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
-                table->setText(r, c * 2 + 1, "0");
+                table->setText(r, c * 2 + 1, "");
                 if ( columns == 4 ) {
                     table->setText(r, c * 2, " " + names32[r][c]);
                     registerItems[names32[r][c]] = r*10+c*2;
@@ -328,8 +328,12 @@ void GenericRegisterWindow::setRegister(QString name, QString val,
 void GenericRegisterWindow::receiveRegs(StringHash map)
 {
     foreach ( QString key, map.keys() ) {
-        regs[key]->setValue(map[key]);
-        setRegister(key,regs[key]->value(),EZ::Highlight);
+        if ( key == "eflags" ) {
+            setRegister(key,map[key],EZ::Highlight);
+        } else {
+            regs[key]->setValue(map[key]);
+            setRegister(key,regs[key]->value(),EZ::Highlight);
+        }
     }
     table->resizeToFitContents();
 }
@@ -477,7 +481,7 @@ void Register::setFormat(QString f)
  */
 QString Register::value()
 {
-     //qDebug() << name << format << contents;
+    //qDebug() << name << format << contents.u8;
     if (name == "rip" || name == "eflags" || name == "eip") {
 /*
  *      rip and eflags should be just like gdb prints them
@@ -580,7 +584,7 @@ void HalRegisterWindow::buildTable()
  */
     for (int r = 0; r < rows; r++) {
         for (int c = 0; c < columns; c++) {
-            table->setText(r, c * 2 + 1, "0");
+            table->setText(r, c * 2 + 1, "");
             if ( columns == 4 ) {
                 if (halNames[r][c] != "") {
                     table->setText(r, c * 2, " " + halNames[r][c]);

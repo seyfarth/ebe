@@ -34,7 +34,7 @@ cd ~/sf/ebe-web/
 vi content/changelog.rst
 make html
 
-git archive -o ebe_src.tgz master
+git archive -o ebe_src.tgz HEAD
 cp ebe_src.tgz ~/sf/qtebe/src
 
 sfpublish

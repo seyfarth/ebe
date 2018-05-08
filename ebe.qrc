@@ -379,10 +379,13 @@
 <file>library/Assembly/Windows/Sample_Programs/Chapter_15/list.asm.html</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_15/hashtable.asm.html</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_15/binary_tree.asm.html</file>
+<file>library/Assembly/Windows/Sample_Programs/Chapter_12/.ebe.ini</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/sample.asm.html</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/copy.asm.html</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/hello.asm.html</file>
+<file>library/Assembly/Windows/Sample_Programs/Chapter_12/test_hello.o</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/hello_world.asm.html</file>
+<file>library/Assembly/Windows/Sample_Programs/Chapter_12/test_hello.c</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/defines.c.html</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/hello_functions.asm.html</file>
 <file>library/Assembly/Windows/Sample_Programs/Chapter_12/Makefile.html</file>
