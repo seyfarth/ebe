@@ -8,14 +8,15 @@ len:   equ     $-msg                   ; String length
 main:
        push    rbp
        mov     rbp, rsp
-                                       ; Up to 4 register parameters
-                                       ; in rcx, rdx, r8, r9
-       mov     r8, len                 ; Parameter 3 for write
-       lea     rdx, [msg]              ; Parameter 2 for write
-       mov     ecx, 1                  ; Parameter 1 (fd)
-       sub     rsp, 32                 ; Must leave room for 4 register params
+                                       ; Up to 6 integer register parameters
+                                       ; in rdi, rsi, rdx, rcx, r8, r9
+                                       ; Up to 8 float register parameters
+                                       ; in xmm0-xmm7
+       mov     edx, len                ; Parameter 3 for write
+       lea     rsi, [msg]              ; Parameter 2 for write
+       mov     edi, 1                  ; Parameter 1 (fd)
        call    write
-       add     rsp, 32                 ; Revise stack (silly in this program)
-       xor     ecx, ecx                ; 0 return = success
-       sub     rsp, 32                 ; Must leave room for 4 register params
+
+       xor     edi, edi                ; 0 return = success
        call    exit
+

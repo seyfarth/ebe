@@ -519,6 +519,8 @@ void SourceWindow::doTemplate(QAction *a)
     if (file.language == "asm") {
         QString dir;
         dir = ebe["build/assembler"].toString()+"_"+ebe["build/word_size"].toString();
+        qDebug() << "doTemplate" << dir << QString(":/src/%1/%2/%3/%4").arg("assembly").arg(ebe.os).
+                         arg(dir).arg(name);
         QFile in(QString(":/src/%1/%2/%3/%4").arg("assembly").arg(ebe.os).
                          arg(dir).arg(name));
         if (in.open(QFile::ReadOnly)) {
