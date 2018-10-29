@@ -1,0 +1,2 @@
+_       dq      1.0  ; double in .data
+_       resq    1    ; double in ,bss
