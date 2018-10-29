@@ -1,18 +1,3 @@
-
-;    while ( rax < 10 ) {
-     cmp    rax, 10     ; subtract rax-10 without saving
-     jnl    end_while   ; jump out of the while if not less than 10
-
-while_top:
-
-;       Do whatever you need to do
-;       including something which modifies rax
-
-     cmp    rax, 10     ; subtract rax-10 without saving
-     jl     while_top   ; repeat while rax < 10
-;    }
-end_while:
-
-;    It is slightly more efficient to test at the bottom.
-;    Jumping back to the original test is fine for most uses.
-
+    while ( _ ) {
+        _;
+    }

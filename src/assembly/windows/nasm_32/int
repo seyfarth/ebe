@@ -1,6 +1,0 @@
-
-        segment .data
-_       dd     0   ; 4 byte integer/float in .data
-        segment .bss
-_       resd   10  ; Array of ten 4 byte integer/float in .bss
-

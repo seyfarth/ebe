@@ -1,6 +1,0 @@
-
-        segment .data
-_       db      'Hello world',0x0a,0 ; string in .data
-        segment .bss
-_       resb    80                   ; string in .bss
-

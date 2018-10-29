@@ -1,31 +1,10 @@
-
-;    switch ( i ) {
-        mov     rax, [i]    ; prepare to test rax several times
-
-;    case 1:
-        cmp     rax, 1
-        jne     case_2
-
-;       Do something for i == 1
-
-;    break;
-        jmp     switch_end
-        
-;    case 2:
-case_2:
-        cmp     rax, 2
-        jne     case_3
-
-;       Do something for i == 2
-
-;    break;
-        jmp     switch_end
-
-;    default:
-case_3:
-
-;       Do something for the default case
-
-;    }
-switch_end:
-
+    switch ( _ ) {
+    case _:
+        _;
+        break;
+    case _:
+        _;
+        break;
+    default:
+        _;
+    }

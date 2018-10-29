@@ -1,16 +1,5 @@
-
-;    if ( rax > 5 ) {
-        cmp     rax, 5      ; subtracts rax-5 without saving
-        jng     else        ; jump if not greater than
-
-;       do whatever
-
-        jmp     end_if
-} else {
-else:                       ; name this label whatever
-
-;       or do this if rax is less than or equal to 5
-
-;    }
-end_if:
-
+    if ( _ ) {
+        _;
+    } else {
+        _;
+    }

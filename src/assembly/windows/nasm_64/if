@@ -1,10 +1,3 @@
-
-;    if ( rax > 5 ) {
-        cmp     rax, 5      ; subtracts rax-5 without saving
-        jng     end_if      ; jump if not greater than
-
-;       do whatever
-
-;    }
-end_if:                     ; name the label what you want
-
+    if ( _ ) {
+        _;
+    }
