@@ -357,11 +357,11 @@ void GenericRegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 
 void GenericRegisterWindow::defineVariableByAddress()
 {
-    //item = 0; // table->currentItem();
-    int row = 0; //item->row();
-    int col = 0; //item->column();
+    int row = table->latestRow;
+    int col = table->latestColumn;
     col = col | 1;                      // Make it odd
     QString address = table->text(row,col);
+    //qDebug() << "dVBA" << address << row << col << address;
     DefineAsmVariableDialog *dialog = new DefineAsmVariableDialog;
     dialog->addressCombo->addItem(address);
     if (dialog->exec()) {

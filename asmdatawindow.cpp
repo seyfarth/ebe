@@ -472,7 +472,9 @@ void AsmDataWindow::defineVariableByAddress()
                  //<< dialog->size << dialog->format;
         AsmVariable var(dialog->name);
         var.size = dialog->size;
-        var.address = dialog->address.toULongLong(0,0);
+        bool ok;
+        var.address = dialog->address.toULongLong(&ok,16);
+        qDebug() << ok << "address" << var.address;
         var.format = dialog->format;
         var.values = new AllTypesArray(var.size);
         userDefinedVariables.append(var);
