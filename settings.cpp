@@ -109,6 +109,7 @@ void Settings::setDefaults()
     ebe["list_bg"] = "#e0f0ff";
     ebe["tree_bg"] = "#e0fafa";
 
+    ebe["cursor_flash"] = 1000;
     ebe["edit/tab_width"] = 4;
     ebe["edit/auto_indent"] = true;
 
@@ -513,6 +514,9 @@ SettingsDialog::SettingsDialog()
     spin->setRange(2, 16);
     spin = frame->addSpinner(tr("Completion minimum"), "complete/minimum");
     spin->setRange(4, 32);
+    spin = frame->addSpinner(tr("Cursor blink in msec (0 no blink)"), "cursor_flash");
+    spin->setRange(0, 100000);
+    spin->setSingleStep(100);
     box = frame->addComboBox(tr("Toolbar icon size"), "toolbars/icon_size");
     strings << "16" << "24" << "32" << "48";
     box->setChoices(strings);
@@ -556,7 +560,6 @@ SettingsDialog::SettingsDialog()
     mainLayout->addLayout(columnLayout);
 
     setLayout(mainLayout);
-
 }
 
 void SettingsDialog::save()
@@ -682,6 +685,8 @@ Spinner::Spinner(QString v)
     : QSpinBox()
 {
     var = v;
+    //qDebug() << "AS" << var << ebe[var] << ebe[var].toInt();
+    setRange(0, ebe[var].toInt());
     setValue(ebe[var].toInt());
 }
 

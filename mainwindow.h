@@ -95,6 +95,7 @@ private:
 
     void setFontSize();
     int fontSize;
+    int cursorFlashTime;
 
     QMenu *fileMenu;
     QMenu *templateMenu;

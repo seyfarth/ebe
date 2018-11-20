@@ -545,7 +545,7 @@ void SourceFrame::run()
         }
         object = file.base + "." + ebe["build/obj"].toString();
         QFile::remove(object);
-        //qDebug() << "cmd" << cmd;
+        qDebug() << "cmd" << cmd;
         //qDebug() << "object" << object;
         QProcess compile(this);
         compile.start(cmd);
@@ -559,7 +559,7 @@ void SourceFrame::run()
             return;
         }
         foreach(extraCmd, extraCmds) {
-            //qDebug() << "extracmd" << extraCmd;
+            qDebug() << "extracmd" << extraCmd;
             compile.start(extraCmd);
             compile.waitForFinished();
         }
@@ -744,7 +744,7 @@ void SourceFrame::run()
 
     QProcess ld(this);
     ldCmd.replace("$base", exeName);
-    //qDebug() << "ld cmd" << ldCmd;
+    qDebug() << "ld cmd" << ldCmd;
     ld.start(ldCmd);
     ld.waitForFinished();
     ld.setReadChannel(QProcess::StandardError);

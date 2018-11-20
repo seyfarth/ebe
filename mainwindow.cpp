@@ -315,6 +315,10 @@ void MainWindow::restoreMainWindow()
 {
     tooltipsVisible = ebe["tooltips/visible"].toBool();
 
+    cursorFlashTime = ebe["cursor_flash"].toInt();
+    //qDebug() << "Setting flash" << cursorFlashTime;
+    app->setCursorFlashTime(cursorFlashTime);
+
     addStyleSheet("textedit-font",
         QString("QTextEdit { font-weight: bold; font-family: %1}").arg(
             ebe["fixed_font"].toString()));
@@ -452,6 +456,7 @@ void MainWindow::saveSettings()
     ebe["toybox/visible"] = toyBoxDock->isVisible();
     ebe["bitbucket/visible"] = bitBucketDock->isVisible();
     ebe["console/visible"] = consoleDock->isVisible();
+    ebe["cursor_flash"] = cursorFlashTime;
     settings->write();
 }
 
@@ -507,6 +512,8 @@ void MainWindow::createMenus()
 {
     int icon_size = ebe["toolbars/icon_size"].toInt();
 
+    app->setWindowIcon(QIcon(QString(":/icons/%1/ebe.png").arg(icon_size)));
+
     fileToolBar = new QToolBar(tr("File toolbar"), this);
     fileToolBar->setObjectName(tr("File toolbar"));
     fileToolBar->setIconSize(QSize(icon_size, icon_size));
@@ -525,46 +532,46 @@ void MainWindow::createMenus()
 
     menuBar()->setStyleSheet("font-family: " + ebe["variable_font"].toString());
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(tr("New"), sourceFrame, SLOT(newFile()),
+    fileMenu->addAction(tr("&New"), sourceFrame, SLOT(newFile()),
         QKeySequence::New);
     templateMenu = fileMenu->addMenu(tr("&Template"));
-    templateMenu->addAction(tr("C Program"), sourceFrame, SLOT(templateC()));
-    templateMenu->addAction(tr("C++ Program"), sourceFrame,
+    templateMenu->addAction(tr("&C Program"), sourceFrame, SLOT(templateC()));
+    templateMenu->addAction(tr("C&++ Program"), sourceFrame,
         SLOT(templateCpp()));
-    templateMenu->addAction(tr("Assembly Program"), sourceFrame,
+    templateMenu->addAction(tr("&Assembly Program"), sourceFrame,
         SLOT(templateAssembly()));
-    templateMenu->addAction(tr("HAL Program"), sourceFrame,
+    templateMenu->addAction(tr("&HAL Program"), sourceFrame,
         SLOT(templateHal()));
     //templateMenu->addAction(tr("Fortran Program"), sourceFrame,
         //SLOT(templateFortran()));
-    fileMenu->addAction(tr("Open"), sourceFrame, SLOT(open(bool)), QKeySequence::Open );
-    fileMenu->addAction(tr("Save"), sourceFrame, SLOT(save()),
+    fileMenu->addAction(tr("&Open"), sourceFrame, SLOT(open(bool)), QKeySequence::Open );
+    fileMenu->addAction(tr("&Save"), sourceFrame, SLOT(save()),
         QKeySequence::Save);
-    fileMenu->addAction(tr("Save as"), sourceFrame, SLOT(saveAs()));
-    fileMenu->addAction(tr("Close"), sourceFrame, SLOT(close()));
-    fileMenu->addAction(tr("Change directory"), this, SLOT(changeDirectory()));
+    fileMenu->addAction(tr("Save &as"), sourceFrame, SLOT(saveAs()));
+    fileMenu->addAction(tr("&Close"), sourceFrame, SLOT(close()));
+    fileMenu->addAction(tr("Change &directory"), this, SLOT(changeDirectory()));
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("New project"), projectWindow, SLOT(newProject()));
-    fileMenu->addAction(tr("Open project"), projectWindow, SLOT(openProject()));
-    fileMenu->addAction(tr("Close project"), projectWindow,
+    fileMenu->addAction(tr("N&ew project"), projectWindow, SLOT(newProject()));
+    fileMenu->addAction(tr("O&pen project"), projectWindow, SLOT(openProject()));
+    fileMenu->addAction(tr("C&lose project"), projectWindow,
         SLOT(closeProject()));
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("Quit"), this, SLOT(quit()), QKeySequence::Quit);
+    fileMenu->addAction(tr("&Quit"), this, SLOT(quit()), QKeySequence::Quit);
 
     fileToolBar->addAction(QIcon(QString(":/icons/%1/quit.png").arg(icon_size)),
-        tr("Quit"), this, SLOT(quit()));
+        tr("Quit (Ctrl+Q)"), this, SLOT(quit()));
     fileToolBar->addSeparator();
     fileToolBar->addAction(QIcon(QString(":/icons/%1/new.png").arg(icon_size)),
-        tr("New"), sourceFrame, SLOT(newFile()));
+        tr("New (Ctrl+N)"), sourceFrame, SLOT(newFile()));
     fileToolBar->addAction(QIcon(QString(":/icons/%1/open.png").arg(icon_size)),
-        tr("Open"), sourceFrame, SLOT(open(bool)) );
+        tr("Open (Ctrl+O)"), sourceFrame, SLOT(open(bool)) );
     fileToolBar->addAction(QIcon(QString(":/icons/%1/save.png").arg(icon_size)),
-        tr("Save"), sourceFrame, SLOT(save()));
+        tr("Save (Ctrl+S)"), sourceFrame, SLOT(save()));
     fileToolBar->addAction(
         QIcon(QString(":/icons/%1/save-as.png").arg(icon_size)), tr("Save as"),
         sourceFrame, SLOT(saveAs()));
     fileToolBar->addAction(
-        QIcon(QString(":/icons/%1/close.png").arg(icon_size)), tr("Close"),
+        QIcon(QString(":/icons/%1/close.png").arg(icon_size)), tr("Close (Ctrl+C)"),
         sourceFrame, SLOT(close()));
 
     fileToolBar->addSeparator();
@@ -581,91 +588,91 @@ void MainWindow::createMenus()
     addToolBar(Qt::TopToolBarArea, fileToolBar);
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
-    editMenu->addAction(tr("Cut"), sourceFrame, SLOT(cut()), QKeySequence::Cut);
-    editMenu->addAction(tr("Copy"), sourceFrame, SLOT(copy()),
+    editMenu->addAction(tr("Cut &X"), sourceFrame, SLOT(cut()), QKeySequence::Cut);
+    editMenu->addAction(tr("&Copy"), sourceFrame, SLOT(copy()),
         QKeySequence::Copy);
-    editMenu->addAction(tr("Paste"), sourceFrame, SLOT(paste()),
+    editMenu->addAction(tr("Paste &V"), sourceFrame, SLOT(paste()),
         QKeySequence::Paste);
     editMenu->addSeparator();
-    editMenu->addAction(tr("Undo"), sourceFrame, SLOT(undo()),
+    editMenu->addAction(tr("Undo &Z"), sourceFrame, SLOT(undo()),
         QKeySequence::Undo);
-    editMenu->addAction(tr("Redo"), sourceFrame, SLOT(redo()),
+    editMenu->addAction(tr("&Redo"), sourceFrame, SLOT(redo()),
         QKeySequence::Redo);
     editMenu->addSeparator();
-    editMenu->addAction(tr("Comment"), sourceFrame, SLOT(comment()),
+    editMenu->addAction(tr("Comment &K"), sourceFrame, SLOT(comment()),
         QKeySequence("Ctrl+K"));
-    editMenu->addAction(tr("Uncomment"), sourceFrame, SLOT(unComment()),
+    editMenu->addAction(tr("Uncomment &U"), sourceFrame, SLOT(unComment()),
         QKeySequence("Ctrl+U"));
-    editMenu->addAction(tr("Indent"), sourceFrame, SLOT(indent()),
+    editMenu->addAction(tr("Indent &>"), sourceFrame, SLOT(indent()),
         QKeySequence("Ctrl+>"));
-    editMenu->addAction(tr("Unindent"), sourceFrame, SLOT(unIndent()),
+    editMenu->addAction(tr("Unindent &<"), sourceFrame, SLOT(unIndent()),
         QKeySequence("Ctrl+<"));
     editMenu->addSeparator();
-    editMenu->addAction(tr("Find"), sourceFrame, SLOT(find()),
+    editMenu->addAction(tr("&Find"), sourceFrame, SLOT(find()),
         QKeySequence::Find);
     editMenu->addSeparator();
-    editMenu->addAction(tr("Select all"), sourceFrame, SLOT(selectAll()),
+    editMenu->addAction(tr("Select &all"), sourceFrame, SLOT(selectAll()),
         QKeySequence::SelectAll);
-    editMenu->addAction(tr("Select none"), sourceFrame, SLOT(selectNone()),
+    editMenu->addAction(tr("Select none &0"), sourceFrame, SLOT(selectNone()),
         QKeySequence("Ctrl+0"));
     editMenu->addSeparator();
-    editMenu->addAction(tr("Prettify"), sourceFrame, SLOT(prettify()));
+    editMenu->addAction(tr("&Prettify"), sourceFrame, SLOT(prettify()));
     editMenu->addSeparator();
-    editMenu->addAction(tr("Edit settings"), this, SLOT(editSettings()));
+    editMenu->addAction(tr("&Edit settings"), this, SLOT(editSettings()));
 
     moveMenu = menuBar()->addMenu(tr("&Move"));
-    moveMenu->addAction(tr("Page forward"), sourceFrame, SLOT(pageForward()),
+    moveMenu->addAction(tr("Page forward (&down)"), sourceFrame, SLOT(pageForward()),
         QKeySequence::MoveToNextPage);
-    moveMenu->addAction(tr("Page backward"), sourceFrame, SLOT(pageBackward()),
+    moveMenu->addAction(tr("Page backward (&up)"), sourceFrame, SLOT(pageBackward()),
         QKeySequence::MoveToPreviousPage);
-    moveMenu->addAction(tr("Go to line 1"), sourceFrame, SLOT(gotoFirstLine()),
+    moveMenu->addAction(tr("Go to line &1"), sourceFrame, SLOT(gotoFirstLine()),
         QKeySequence::MoveToStartOfDocument);
-    moveMenu->addAction(tr("Go to last line"), sourceFrame,
+    moveMenu->addAction(tr("Go to last lin&e"), sourceFrame,
         SLOT(gotoLastLine()), QKeySequence::MoveToEndOfDocument);
-    moveMenu->addAction(tr("Go to line n"), sourceFrame, SLOT(gotoLine()),
+    moveMenu->addAction(tr("Go to &line n"), sourceFrame, SLOT(gotoLine()),
         QKeySequence("Ctrl+L"));
-    moveMenu->addAction(tr("Go to top of screen"), sourceFrame, SLOT(gotoTop()),
+    moveMenu->addAction(tr("Go to &top of screen"), sourceFrame, SLOT(gotoTop()),
         QKeySequence("Ctrl+T"));
-    moveMenu->addAction(tr("Go to bottom"), sourceFrame, SLOT(gotoBottom()),
+    moveMenu->addAction(tr("Go to &bottom"), sourceFrame, SLOT(gotoBottom()),
         QKeySequence("Ctrl+B"));
-    moveMenu->addAction(tr("Move line to middle"), sourceFrame, SLOT(center()),
+    moveMenu->addAction(tr("Move line to &middle"), sourceFrame, SLOT(center()),
         QKeySequence("Ctrl+M"));
 
     editToolBar->addAction(QIcon(QString(":/icons/%1/cut.png").arg(icon_size)),
-        tr("Cut"), sourceFrame, SLOT(cut()));
+        tr("Cut (Ctrl+X)"), sourceFrame, SLOT(cut()));
     editToolBar->addAction(QIcon(QString(":/icons/%1/copy.png").arg(icon_size)),
-        tr("Copy"), sourceFrame, SLOT(copy()));
+        tr("&Copy (Ctrl+C)"), sourceFrame, SLOT(copy()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/paste.png").arg(icon_size)), tr("Paste"),
+        QIcon(QString(":/icons/%1/paste.png").arg(icon_size)), tr("Paste (Ctrl+V)"),
         sourceFrame, SLOT(paste()));
     editToolBar->addSeparator();
     editToolBar->addAction(QIcon(QString(":/icons/%1/undo.png").arg(icon_size)),
-        tr("Undo"), sourceFrame, SLOT(undo()));
+        tr("Undo (Ctrl+Z)"), sourceFrame, SLOT(undo()));
     editToolBar->addAction(QIcon(QString(":/icons/%1/redo.png").arg(icon_size)),
-        tr("Redo"), sourceFrame, SLOT(redo()));
+        tr("Redo (Ctrl+Shift+Z)"), sourceFrame, SLOT(redo()));
     editToolBar->addSeparator();
     editToolBar->addAction(
         QIcon(QString(":/icons/%1/indent-more.png").arg(icon_size)),
-        tr("Indent"), sourceFrame, SLOT(indent()));
+        tr("Indent (Ctrl+>)"), sourceFrame, SLOT(indent()));
     editToolBar->addAction(
         QIcon(QString(":/icons/%1/indent-less.png").arg(icon_size)),
-        tr("Unindent"), sourceFrame, SLOT(unIndent()));
+        tr("Unindent (Ctrl+<)"), sourceFrame, SLOT(unIndent()));
     editToolBar->addSeparator();
     editToolBar->addAction(QIcon(QString(":/icons/%1/find.png").arg(icon_size)),
-        tr("Find"), sourceFrame, SLOT(find()));
+        tr("Find (Ctrl+F)"), sourceFrame, SLOT(find()));
     editToolBar->addAction(
         QIcon(QString(":/icons/%1/select-all.png").arg(icon_size)),
-        tr("Select all"), sourceFrame, SLOT(selectAll()));
+        tr("Select all (Ctrl+A)"), sourceFrame, SLOT(selectAll()));
     editToolBar->addAction(
         QIcon(QString(":/icons/%1/prettify.png").arg(icon_size)),
-        tr("Prettify"), sourceFrame, SLOT(prettify()));
+        tr("Prettify (Ctrl+P)"), sourceFrame, SLOT(prettify()));
     editToolBar->addSeparator();
     editToolBar->addAction(
         QIcon(QString(":/icons/%1/font-decrease.png").arg(icon_size)),
-        tr("Decrease font"), this, SLOT(decreaseFont()));
+        tr("Decrease font (Ctrl+-)"), this, SLOT(decreaseFont()));
     editToolBar->addAction(
         QIcon(QString(":/icons/%1/font-increase.png").arg(icon_size)),
-        tr("Increase font"), this, SLOT(increaseFont()));
+        tr("Increase font (Ctrl++)"), this, SLOT(increaseFont()));
 
     addToolBar(Qt::TopToolBarArea, editToolBar);
 
@@ -707,25 +714,25 @@ void MainWindow::createMenus()
     viewMenu->addAction(projectDock->toggleViewAction());
     viewMenu->addAction(toyBoxDock->toggleViewAction());
     viewMenu->addAction(bitBucketDock->toggleViewAction());
-    addToggle ( viewMenu, tr("Tooltips"), this, SLOT(setTooltipsVisible(bool)),
+    addToggle ( viewMenu, tr("T&ooltips"), this, SLOT(setTooltipsVisible(bool)),
         ebe["tooltips/visible"].toBool() );
-    addToggle ( viewMenu, tr("Command line"), sourceFrame,
+    addToggle ( viewMenu, tr("Command &line"), sourceFrame,
         SLOT(setCommandLineVisible(bool)),
         ebe["command/visible"].toBool() );
 
     fontMenu = menuBar()->addMenu(tr("F&ont"));
-    fontMenu->addAction(tr("Increase font"), this, SLOT(increaseFont()),
+    fontMenu->addAction(tr("&Increase font"), this, SLOT(increaseFont()),
         QKeySequence::ZoomIn);
-    fontMenu->addAction(tr("Decrease font"), this, SLOT(decreaseFont()),
+    fontMenu->addAction(tr("&Decrease font"), this, SLOT(decreaseFont()),
         QKeySequence::ZoomOut);
 
     helpMenu = menuBar()->addMenu(tr("&Help "));
-    helpAction(helpMenu, tr("Getting started"), "start.html");
-    helpAction(helpMenu, tr("Projects"), "projects.html");
-    helpAction(helpMenu, tr("Editing"), "editing.html");
-    helpAction(helpMenu, tr("Breakpoints"), "breakpoints.html");
-    helpAction(helpMenu, tr("Running"), "running.html");
-    helpAction(helpMenu, tr("About"), "about.html");
+    helpAction(helpMenu, tr("&Getting started"), "start.html");
+    helpAction(helpMenu, tr("&Projects"), "projects.html");
+    helpAction(helpMenu, tr("&Editing"), "editing.html");
+    helpAction(helpMenu, tr("&Breakpoints"), "breakpoints.html");
+    helpAction(helpMenu, tr("&Running"), "running.html");
+    helpAction(helpMenu, tr("&About"), "about.html");
 
     templateToolBar->addAction(
         QIcon(QString(":/icons/%1/cin.png").arg(icon_size)), tr("cin: input"));
@@ -882,7 +889,7 @@ void MainWindow::createDockWindows()
 {
     asmDataWindow = new AsmDataWindow(this);
 
-    dataDock = new QDockWidget(tr("Data"));
+    dataDock = new QDockWidget(tr("&Data"));
     dataDock->setObjectName("Dock 1");
     dataDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -892,7 +899,7 @@ void MainWindow::createDockWindows()
     dataDock->setWidget(dataWindow);
     addDockWidget(Qt::LeftDockWidgetArea, dataDock);
 
-    registerDock = new QDockWidget(tr("Registers"));
+    registerDock = new QDockWidget(tr("&Registers"));
     registerDock->setObjectName("Dock 2");
     registerDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -904,7 +911,7 @@ void MainWindow::createDockWindows()
     addDockWidget(Qt::LeftDockWidgetArea, registerDock);
 
     if ( wordSize == 64 ) {
-        halRegisterDock = new QDockWidget(tr("HAL Registers"));
+        halRegisterDock = new QDockWidget(tr("&HAL Registers"));
         halRegisterDock->setObjectName("Dock 10");
         halRegisterDock->setAllowedAreas(
             Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -915,7 +922,7 @@ void MainWindow::createDockWindows()
         halRegisterDock->setWidget(halRegisterWindow);
         addDockWidget(Qt::LeftDockWidgetArea, halRegisterDock);
 
-        halNamesDock = new QDockWidget(tr("HAL Names"));
+        halNamesDock = new QDockWidget(tr("HAL &Names"));
         halNamesDock->setObjectName("Dock 11");
         halNamesDock->setAllowedAreas(
             Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -927,7 +934,7 @@ void MainWindow::createDockWindows()
             addDockWidget(Qt::LeftDockWidgetArea, halNamesDock);
     }
 
-    frameDock = new QDockWidget(tr("Stack Frame"));
+    frameDock = new QDockWidget(tr("&Stack Frame"));
     frameDock->setObjectName("Dock 12");
     frameDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -938,7 +945,7 @@ void MainWindow::createDockWindows()
     frameDock->setWidget(frameWindow);
     addDockWidget(Qt::LeftDockWidgetArea, frameDock);
 
-    asmDataDock = new QDockWidget(tr("Assembly Data"));
+    asmDataDock = new QDockWidget(tr("&Assembly Data"));
     asmDataDock->setObjectName("Dock 13");
     asmDataDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -948,7 +955,7 @@ void MainWindow::createDockWindows()
     asmDataDock->setWidget(asmDataWindow);
     addDockWidget(Qt::LeftDockWidgetArea, asmDataDock);
 
-    floatDock = new QDockWidget(tr("Floating Point Registers"));
+    floatDock = new QDockWidget(tr("&Floating Point Registers"));
     floatDock->setObjectName("Dock 3");
     floatDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -958,7 +965,7 @@ void MainWindow::createDockWindows()
     floatDock->setWidget(floatWindow);
     addDockWidget(Qt::LeftDockWidgetArea, floatDock);
 
-    projectDock = new QDockWidget(tr("Project"));
+    projectDock = new QDockWidget(tr("&Project"));
     projectDock->setObjectName("Dock 4");
     projectDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -969,7 +976,7 @@ void MainWindow::createDockWindows()
     projectDock->setWidget(projectWindow);
     addDockWidget(Qt::LeftDockWidgetArea, projectDock);
 
-    backTraceDock = new QDockWidget(tr("Back Trace"));
+    backTraceDock = new QDockWidget(tr("&Back Trace"));
     backTraceDock->setObjectName("Dock 5");
     backTraceDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -980,7 +987,7 @@ void MainWindow::createDockWindows()
     backTraceDock->setWidget(backTraceWindow);
     addDockWidget(Qt::LeftDockWidgetArea, backTraceDock);
 
-    terminalDock = new QDockWidget(tr("Terminal"));
+    terminalDock = new QDockWidget(tr("&Terminal"));
     terminalDock->setObjectName("Dock 6");
     terminalDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -989,7 +996,7 @@ void MainWindow::createDockWindows()
     terminalDock->setWidget(terminalWindow);
     addDockWidget(Qt::LeftDockWidgetArea, terminalDock);
 
-    toyBoxDock = new QDockWidget(tr("Toy Box"));
+    toyBoxDock = new QDockWidget(tr("Toy Bo&x"));
     toyBoxDock->setObjectName("Dock 7");
     toyBoxDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -998,7 +1005,7 @@ void MainWindow::createDockWindows()
     toyBoxDock->setWidget(toyBox);
     addDockWidget(Qt::LeftDockWidgetArea, toyBoxDock);
 
-    bitBucketDock = new QDockWidget(tr("Bit Bucket"));
+    bitBucketDock = new QDockWidget(tr("Bit B&ucket"));
     bitBucketDock->setObjectName("Dock 8");
     bitBucketDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
@@ -1007,7 +1014,7 @@ void MainWindow::createDockWindows()
     bitBucketDock->setWidget(bitBucket);
     addDockWidget(Qt::LeftDockWidgetArea, bitBucketDock);
 
-    consoleDock = new QDockWidget(tr("Console"));
+    consoleDock = new QDockWidget(tr("&Console"));
     consoleDock->setObjectName("Dock 9");
     consoleDock->setAllowedAreas(
         Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
