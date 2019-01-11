@@ -110,6 +110,7 @@ signals:
     void doStep();
     void doContinue();
     void doStop();
+    void completeStep();
 
 private:
     TabWidget *tab;

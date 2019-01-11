@@ -1,7 +1,7 @@
 #include "terminalwindow.h"
 #include "ptyreader.h"
 #include "settings.h"
-#include "gdb.h"
+#include "debugger.h"
 #include <QKeyEvent>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -15,7 +15,7 @@
 #endif
 
 
-extern GDB *gdb;
+extern Debugger *dbg;
 
 TerminalWindow::TerminalWindow(QWidget *parent)
     : QFrame(parent)
@@ -82,7 +82,7 @@ TerminalWindow::TerminalWindow(QWidget *parent)
     connect(lineEdit, SIGNAL(returnPressed()), this, SLOT(lineEditReady()));
     connect(ptyReader, SIGNAL(dataReady(QString)), this,
         SLOT(dataReady(QString)));
-    connect(lineEdit, SIGNAL(sendEOF()), gdb, SLOT(setEOF()));
+    connect(lineEdit, SIGNAL(sendEOF()), dbg, SLOT(setEOF()));
     connect(clearButton, SIGNAL(clicked()), this, SLOT(clearTerminalWindow()));
     ptyReader->start();
 }
@@ -105,7 +105,7 @@ InputEdit::InputEdit()
     timer = new QTimer(this);
     timer->stop();
     connect(timer, SIGNAL(timeout()), this, SLOT(updateFlash()));
-    connect(gdb, SIGNAL(endFlash()), this, SLOT(endFlash()));
+    connect(dbg, SIGNAL(endFlash()), this, SLOT(endFlash()));
 }
 
 void InputEdit::keyPressEvent(QKeyEvent *e)

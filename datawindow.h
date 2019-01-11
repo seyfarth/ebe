@@ -34,7 +34,7 @@ typedef QHash<QString, DataPlank*> DataMap;
  *
  *  Internally a \c DataPlank with simple data holds it in binary form
  *  in an anonymous union of size 8 bytes.  The data received from
- *  \c gdb is in hexadecimal format and is stored in an unsigned
+ *  \c debugger is in hexadecimal format and is stored in an unsigned
  *  portion of the union of the proper *  size with all the remaining
  *  bits set to 0.  The union has all the simple types in it and, 
  *  depending on the format, the proper member of the union is used
@@ -70,12 +70,13 @@ public:
     DataPlank(QWidget *parent=0);
     QString name;       ///< Full name of the \c DataPlank
     QString fullName;   ///< Full name of the \c DataPlank
-    QString type;       ///< Type as reported by \c gdb
+    QString type;       ///< Type as reported by \c debugger
     QString basicType;  ///< Type without [] or *
     QString address;    ///< For user-defined variables
     QString format;     ///< How the \c DataPlank should look
     QVector<Limits> dimensions;  ///< Array limits
     bool isSimple;      ///< Is the data simple, like char or int
+    bool isPointer;
     //bool isFortran;     ///< Was this a fortran variable
     bool isFinal;
     bool needsRequest;
@@ -94,8 +95,8 @@ public:
     void removeSubTree();
     QString valueFromGdb();
     DataMap *map;       ///< Map containing this \c DataPlank
-    QString stringValue;       ///< Value printed by \c gdb
-    QStringList stringValues;      ///< Value printed by \c gdb
+    QString stringValue;       ///< Value printed by \c debugger
+    QStringList stringValues;      ///< Value printed by \c debugger
     AllTypesArray *values;         ///< Union of all basic types
     bool hidden;
     void addChild(DataPlank *plank);
@@ -131,7 +132,7 @@ public:
  *  library functions.
  *
  *  Local data means variable defined without the keyword \c static inside
- *  a function.  These are provided by \c gdb at each point that the debugger
+ *  a function.  These are provided by \c debugger at each point that the debugger
  *  stops and reports the state of the debugged program.
  *
  *  Parameters are the data planks enclosed in parentheses 

@@ -1,6 +1,6 @@
 #include "datawindow.h"
 #include "backtracewindow.h"
-#include "gdb.h"
+#include "debugger.h"
 #include <cstdio>
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -8,17 +8,14 @@
 
 static int maxLevels = 12;
 
-extern GDB *gdb;
+extern Debugger *dbg;
 extern BackTraceWindow *backTraceWindow;
-extern IntHash sizeForType;
-extern QSet<QString> simpleTypes;
 extern DataWindow *dataWindow;
 extern IntHash formatToSpan;
 extern IntHash formatToSize;
 extern QHash<QString,FormatFunction> formatToFunction;
 
 extern EZPlank *latestPlank;
-extern bool running;
 
 QColor bgColor;
 QColor expandColor;
@@ -36,6 +33,7 @@ QHash<DataMap*,DataPlank*> plankForMap;
 QStack<DataTree*> stack;
 
 extern StringHash varToAddress;
+extern bool d;
 
 QHash<QString, ClassDefinition> classes;
 
@@ -65,35 +63,42 @@ DataWindow::DataWindow(QWidget *parent)
     qRegisterMetaType<VariableDefinitionMap> ("VariableDefinitionMap");
 
     connect(dataTree, SIGNAL(requestParameters(DataPlank*,int)),
-            gdb, SLOT(requestParameters(DataPlank*,int)));
+            dbg, SLOT(requestParameters(DataPlank*,int)),
+            Qt::BlockingQueuedConnection);
     connect(dataTree, SIGNAL(requestLocals(DataPlank*,int)),
-            gdb, SLOT(requestLocals(DataPlank*,int)));
-    connect(gdb, SIGNAL(sendBackTrace(QStringList)), dataTree,
-            SLOT(receiveBackTrace(QStringList)));
-    connect(gdb, SIGNAL(sendGlobals(VariableDefinitionMap)), this,
-            SLOT(receiveGlobals(VariableDefinitionMap)));
-    connect(gdb, SIGNAL(sendLocals(DataPlank*,VariableDefinitionMap)), this,
-            SLOT(receiveLocals(DataPlank*,VariableDefinitionMap)));
-    connect(gdb, SIGNAL(sendParameters(DataPlank*,VariableDefinitionMap)), this,
-            SLOT(receiveParameters(DataPlank*,VariableDefinitionMap)));
+            dbg, SLOT(requestLocals(DataPlank*,int)), Qt::BlockingQueuedConnection);
+    connect(dbg, SIGNAL(sendBackTrace(QStringList)), dataTree,
+            SLOT(receiveBackTrace(QStringList)), Qt::QueuedConnection);
+    connect(dbg, SIGNAL(sendGlobals(VariableDefinitionMap)), this,
+            SLOT(receiveGlobals(VariableDefinitionMap)), Qt::QueuedConnection);
+    connect(dbg, SIGNAL(sendLocals(DataPlank*,VariableDefinitionMap)), this,
+            SLOT(receiveLocals(DataPlank*,VariableDefinitionMap)),
+            Qt::QueuedConnection);
+    connect(dbg, SIGNAL(sendParameters(DataPlank*,VariableDefinitionMap)), this,
+            SLOT(receiveParameters(DataPlank*,VariableDefinitionMap)),
+            Qt::QueuedConnection);
     connect ( this, SIGNAL(requestTypedef(QString,QString&)),
-              gdb, SLOT(processTypedefRequest(QString,QString&)),
+              dbg, SLOT(processTypedefRequest(QString,QString&)),
               Qt::BlockingQueuedConnection );
     connect ( this, SIGNAL(requestClass(QString,ClassDefinition&)),
-              gdb, SLOT(processClassRequest(QString,ClassDefinition&)),
+              dbg, SLOT(processClassRequest(QString,ClassDefinition&)),
               Qt::BlockingQueuedConnection );
     connect ( this,
         SIGNAL(requestVar(DataPlank*,QString,QString,QString,QString,int,int)),
-        gdb,
-        SLOT(requestVar(DataPlank*,QString,QString,QString,QString,int,int)) );
-    connect ( gdb, SIGNAL(sendVar(DataPlank*,QString,QStringList)),
-            this, SLOT(receiveVar(DataPlank*,QString,QStringList)) );
-    //connect ( gdb, SIGNAL(dataReady(QStringList)),
+        dbg,
+        SLOT(requestVar(DataPlank*,QString,QString,QString,QString,int,int)),
+        Qt::BlockingQueuedConnection );
+    connect ( dbg, SIGNAL(sendVar(DataPlank*,QString,QStringList)),
+            this, SLOT(receiveVar(DataPlank*,QString,QStringList)),
+            Qt::QueuedConnection );
+    //connect ( dbg, SIGNAL(dataReady(QStringList)),
     //this, SLOT(setData(QStringList)) );
-    connect(dataTree, SIGNAL(requestReset()), gdb, SLOT(requestReset()));
-    connect(gdb, SIGNAL(resetData()), this, SLOT(resetData()));
-    connect(gdb, SIGNAL(sendClasses(QHash<QString, ClassDefinition>)), this,
-            SLOT(receiveClasses(QHash<QString, ClassDefinition>)));
+    connect(dataTree, SIGNAL(requestReset()), dbg, SLOT(requestReset()),
+            Qt::BlockingQueuedConnection);
+    connect(dbg, SIGNAL(resetData()), this, SLOT(resetData()), Qt::QueuedConnection);
+    connect(dbg, SIGNAL(sendClasses(QHash<QString, ClassDefinition>)), this,
+            SLOT(receiveClasses(QHash<QString, ClassDefinition>)),
+            Qt::QueuedConnection);
 }
 
 void DataWindow::saveScroll()
@@ -178,12 +183,25 @@ void DataWindow::resetData()
     QString s;
     //qDebug() << "resetData";
     saveScroll();
+    //qDebug() << "resetData 2";
+    //qDebug() << "dataTree" << dataTree;
+    //qDebug() << "dataTree->all" << dataTree->all;
+    //qDebug() << "finalPlank"  << dataTree->finalPlank(dataTree->all);
+    if ( dataTree->finalPlank(dataTree->all) == 0 ) {
+        //qDebug() << "finalPlank is NULL";
+        return;
+    }
     dataTree->finalPlank(dataTree->all)->isFinal = true;
+    //qDebug() << "resetData 3";
     dataTree->buildTree(dataTree->all);
+    //qDebug() << "resetData 4";
     dataTree->table.clear();
+    //qDebug() << "resetData 5";
     dataTree->reorder(dataTree->all);
+    //qDebug() << "resetData 6";
     //dataTree->resizeToFitContents(maxLevels);
     restoreScroll();
+    //qDebug() << "done resetData";
 }
 
 void DataWindow::rebuildData()
@@ -200,6 +218,11 @@ void DataWindow::receiveClasses(QHash<QString, ClassDefinition> c)
 {
     //qDebug() << "receive classes" << c.keys();
     classes = c;
+    //QHashIterator<QString,ClassDefinition> it(classes);
+    //while ( it.hasNext() ) {
+        //it.next();
+        //qDebug() << "class" << it.key();
+    //}
 }
 
 DataPlank::DataPlank(QWidget *p)
@@ -287,7 +310,7 @@ void DataPlank::setType(QString t)
         //qDebug() << "limits" <<  limits.first << limits.last;
     //}
 
-    if ( !classes.contains(basicType) && !simpleTypes.contains(basicType) ) {
+    if ( !classes.contains(basicType) && !Debugger::simpleTypes.contains(basicType) ) {
         //qDebug() << "typedef ?"  << basicType;
         if ( dataWindow != 0 ) dataWindow->getTypedef(basicType,newType);
         //qDebug() << "after getTypedef" << newType;
@@ -295,20 +318,21 @@ void DataPlank::setType(QString t)
             type.replace(basicType,newType);
             basicType = newType;
         }
-        if ( !classes.contains(basicType) && !simpleTypes.contains(basicType) ) {
+        if ( basicType.indexOf("*") < 0 && !classes.contains(basicType) &&
+            !Debugger::simpleTypes.contains(basicType) ) {
             if ( dataWindow != 0 ) dataWindow->getClass(basicType,c);
             classes[basicType] = c;
         }
     }
 
     //qDebug() << basicType << format;
-    if (sizeForType.contains(t)) {
-        size = sizeForType[t];
+    if (Debugger::sizeForType.contains(t)) {
+        size = Debugger::sizeForType[t];
     } else {
         size = 8;
     }
 
-    isSimple = simpleTypes.contains(t);
+    isSimple = Debugger::simpleTypes.contains(t);
     //qDebug() << basicType << format << size << isSimple;
     if (isSimple) {
         basicType = type;
@@ -330,7 +354,7 @@ void DataPlank::setType(QString t)
     } else if (name == "stack" && parent == tree->globals ) {
         format = QString("hex%1").arg(size);
         state = EZ::Expanded;
-    } else if (t.indexOf(" *") >= 0) {
+    } else if (t.indexOf(" *") >= 0 || basicType.indexOf("*") >= 0) {
         format = QString("hex%1").arg(size);
         //qDebug() << "setType" << name << t << "collapse";
         if ( state == EZ::Unknown ) state = EZ::Collapsed;
@@ -351,8 +375,8 @@ void DataPlank::setType(QString t)
         format = formatForType[basicType];
         state = EZ::Simple;
         //qDebug() << "formatForType contains basic type" << name << t << basicType;
-    } else if ( sizeForType.contains(basicType) ) {
-        size = sizeForType[basicType];
+    } else if ( Debugger::sizeForType.contains(basicType) ) {
+        size = Debugger::sizeForType[basicType];
         if ( size == 0 ) size = 8;
         format = QString("hex%1").arg(size);
         state = EZ::Simple;
@@ -364,6 +388,7 @@ void DataPlank::setType(QString t)
         //qDebug() << "else ?" << name << t << basicType;
     }
 
+    //qDebug() << "setType" << t << format;
     tree->setCurrentPlank(this);
     if ( rows < 1 ) tree->setRowCount(1);
     tree->setSpan ( 0, maxLevels+1, 1, 1 );          // 11 spans 1
@@ -383,21 +408,24 @@ void DataPlank::setValues ( QStringList s)
     bool fault = false;
     int k = 0;
 
-    if ( !running ) return;
+    if ( !Debugger::running ) return;
 
+    //qDebug() << "setValues" << name << s;
     if ( format == "string" || format == "std::string" ||
          format == "string array" )  {
         stringValues = s;
     } else {
         int n = (size + 7)/8;
+        //qDebug() << "datawindow setValues" << size << n;
         if ( n > 100000 ) {
-            qDebug() << "datawindow setValues" << size << n;
+            //qDebug() << "datawindow setValues" << size << n;
             return;
         }
         for ( int j = 0; j < n; j++ ) values->u8(j) = 0;
         for ( int j = 0; j < s.size(); j++ ) {
             t = s[j];
             parts = t.split(":");
+            //qDebug() << "setValues" << parts;
             if ( parts.size() > 1 ) {
                 t = parts[1];
             }
@@ -413,7 +441,9 @@ void DataPlank::setValues ( QStringList s)
             if ( n > size-k ) n = size-k;
             for ( int r=0; r < n; r++ ) {
                 values->u1(k) = parts[r].toInt(&ok,16);
+                //qDebug() << "r:" << r << "  k:" << k << "  n:" << n << parts[r];
                 if ( !ok || fault ) {
+                    //qDebug() << "oops";
                     fault = true;
                     values->u1(k) = 0;
                 }
@@ -427,35 +457,35 @@ void DataPlank::setValues ( QStringList s)
 void DataTree::setBinary()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("bin%1").arg(sizeForType[d->basicType]);
+    d->format = QString("bin%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
 void DataTree::setBool()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("bool%1").arg(sizeForType[d->basicType]);
+    d->format = QString("bool%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
 void DataTree::setDecimal()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("dec%1").arg(sizeForType[d->basicType]);
+    d->format = QString("dec%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
 void DataTree::setUnsignedDecimal()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("udec%1").arg(sizeForType[d->basicType]);
+    d->format = QString("udec%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
 void DataTree::setHexadecimal()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("hex%1").arg(sizeForType[d->basicType]);
+    d->format = QString("hex%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
@@ -469,21 +499,21 @@ void DataTree::setCharacter()
 void DataTree::setFloatingPoint()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = sizeForType[d->basicType] == 4 ? "float" : "double";
+    d->format = Debugger::sizeForType[d->basicType] == 4 ? "float" : "double";
     dataWindow->resetData();
 }
 
 void DataTree::setBinaryFP()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("binaryfp%1").arg(sizeForType[d->basicType]);
+    d->format = QString("binaryfp%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
 void DataTree::setFields()
 {
     DataPlank *d = (DataPlank *)latestPlank;
-    d->format = QString("fields%1").arg(sizeForType[d->basicType]);
+    d->format = QString("fields%1").arg(Debugger::sizeForType[d->basicType]);
     dataWindow->resetData();
 }
 
@@ -651,12 +681,16 @@ DataPlank * DataTree::finalPlank(DataPlank *p)
 {
     DataPlank *final = 0;
     if ( p->needsRequest ) final = p;
+    //qDebug() << "final" << final;
     DataPlank *f;
     p->isFinal = false;
     if ( p->state == EZ::Expanded ) {
+        //qDebug() << "p is not expanded";
         for ( int j=0; j < p->kids.size(); j++ ) {
+            //qDebug() << "examining kid" << j << p->kids[j];
             f = finalPlank(p->kids[j]);
             if ( f ) final = f;
+            //qDebug() << "final" << final;
         }
     }
     return final;
@@ -688,9 +722,17 @@ void DataTree::expandDataPlank(DataPlank *p)
     ClassDefinition c;
     int n;
 
-    c = classes[p->type];
+    //qDebug() << "expandDataPlank";
+    //QHashIterator<QString,ClassDefinition> it(classes);
+    //while ( it.hasNext() ) {
+        //it.next();
+        //qDebug() << "class" << it.key();
+    //}
 
-    //qDebug() << "expand" << p->name << p->type << c.name;
+    c = classes[p->type];
+    //qDebug() << "class contains type" << classes.contains(p->type);
+
+    //qDebug() << "expand" << p->fullName << p->name << p->type << c.name;
     if (c.name != "") {
         p->state = EZ::Expanded;
         n = c.members.size();
@@ -698,7 +740,11 @@ void DataTree::expandDataPlank(DataPlank *p)
         for ( int i = 0; i < n; i++ ) {
             v = c.members[i];
             d = addDataPlank(p,p->treeLevel+1,&expansionMap,v.name,v.type);
-            d->fullName = p->fullName + "." + v.name;
+            if ( p->isPointer ) {
+                d->fullName = p->fullName + "->" + v.name;
+            } else {
+                d->fullName = p->fullName + "." + v.name;
+            }
             //qDebug() << "adding class child" << d->fullName << v.type;
             d->frame = p->frame;
             d->values = new AllTypesArray(d->size);
@@ -732,14 +778,15 @@ void DataTree::expandDataPlank(DataPlank *p)
                 if (type[n - 1] == ' ') type.chop(1);
                 //qDebug() << "type now" << type;
                 d = addDataPlank(p,p->treeLevel+1,&expansionMap, "*"+p->name, type);
-                d->size = sizeForType[type] * dialog->n;
+                d->fullName = "*(" + p->fullName + ")";
+                d->size = Debugger::sizeForType[type] * dialog->n;
                 d->values = new AllTypesArray(d->size);
                 d->frame = p->frame;
                 if (p->address == "$rsp") {
                     d->address = "$rsp";
                     d->format = "hexadecimal";
                 } else {
-                    d->address = p->name;
+                    d->address = p->fullName;
                     d->format = formatForType[type];
                 }
                 //p->addChild(d);
@@ -809,8 +856,8 @@ void DataTree::expandDataPlank(DataPlank *p)
             d->format = p->format;
             if ( d->dimensions.size() == 1 ) {
                 d->size = d->dimensions[0].last - d->dimensions[0].first + 1;
-                if ( sizeForType.contains(d->basicType) ) {
-                    d->size *= sizeForType[d->basicType];
+                if ( Debugger::sizeForType.contains(d->basicType) ) {
+                    d->size *= Debugger::sizeForType[d->basicType];
                 } else {
                     d->size *= 8;
                 }
@@ -844,7 +891,7 @@ void DataWindow::request(DataPlank *d)
 {
     //qDebug() << "request" << d->name << d->address << d->format <<
         //d->size << d->frame;
-    emit requestVar(d, d->name, d->address, d->type, d->format, d->size,
+    emit requestVar(d, d->fullName, d->address, d->type, d->format, d->size,
                     d->frame);
 }
 
@@ -873,6 +920,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
     int i=1;
     QStringList keys;
 
+    d = true;
     /*
      *  Start by deactivating any planks which are no longer visible in
      *  the group.
@@ -905,17 +953,21 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
         p = group->value(k);
         //qDebug() << "p" << p;
         v = &vars[k];
+        v->isPointer = v->type.indexOf("*") >= 0;
+        //qDebug() << "v" << v;
         //qDebug() << k << parent->frame << v->values;
-        //qDebug() << "receiveVars" << k << v->type << v->size << v->values;
+        //qDebug() << "receiveVars" << "nm:" << k << "type:" << v->type << v->size << v->values;
         if ( p == 0 ) {
             p = dataTree->addDataPlank(parent,parent->treeLevel+1, group, v->name,"");
+            p->isPointer = v->isPointer;
+            //qDebug() << "now p" << p;
             if ( group == &globalMap ) {
                 p->frame = 0;
                 if ( v->name == "stack" ) {
                     p->address = QString("$rsp");
                     p->setName(v->name);
                     p->size = 64;
-                    p->values = new AllTypesArray(v->size);
+                    p->values = new AllTypesArray(p->size);
                 } else {
                     p->address = QString("&(::%1)").arg(v->name);
                     p->setName(v->name);
@@ -932,10 +984,12 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
                 p->values = new AllTypesArray(v->size);
                 p->size = v->size;
             }
+            //qDebug() << "about to set values";
             p->setValues(v->values);
             foreach ( Limits limits, v->dimensions ) {
                 p->dimensions.append(limits);
             }
+            //qDebug() << "ready to redisplay";
             dataTree->redisplay(p,EZ::NoChange);
             i++;
         }
@@ -945,9 +999,15 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
          *      Update info about the variable
          */
         p->setType(v->type);
+        v->type = p->type;
+        //if ( v->name != "stack" && v->isPointer ) {
+            //v->size = sizeof(int *);
+            //p->format = sizeof(int *) == 8 ? "hex8" : "hex4";
+        //}
         p->size = v->size;
-        //qDebug() << v->name << v->size;
-        p->values->resize(p->size);
+        //qDebug() << "resizing" << v->name << v->size;
+        if ( p->size != v->size ) p->values->resize(v->size);
+        //qDebug() << "resized";
         //p->isFortran = v->isFortran;
         p->dimensions.clear();
         foreach ( Limits d, v->dimensions ) {
@@ -975,6 +1035,7 @@ void DataWindow::receiveVars(DataMap *group, VariableDefinitionMap &vars)
          */
         p->updateFrame(parent->frame);
     }
+    d = false;
 }
 
 void DataWindow::receiveGlobals(VariableDefinitionMap vars)
@@ -985,9 +1046,11 @@ void DataWindow::receiveGlobals(VariableDefinitionMap vars)
 
 void DataWindow::receiveLocals(DataPlank *p, VariableDefinitionMap vars)
 {
+    d = true;
     //qDebug() << "receiveLocals" << p << p->isFinal;
     receiveVars ( &(p->localMap), vars );
     //if ( p->isFinal ) dataTree->resizeToFitContents(maxLevels);
+    d = false;
 }
 
 void DataWindow::receiveParameters(DataPlank *p, VariableDefinitionMap vars)
@@ -1205,18 +1268,29 @@ void DataTree::receiveBackTrace(QStringList s)
     DataPlank *p;
     DataPlank *kid;
     int n = s.length();
-    if ( !running ) return;
+    int k;
+    //qDebug() << "receiveBackTrace" << n << s;
+    if ( s.length() < 1 || s[0].indexOf(" at ") < 0 ) return;
+    if ( !Debugger::running ) return;
     if ( s[n-1][0] != QChar('#') ) n--;
     for ( int i=0; i < n; i++ ) {
         if ( s[i][0] != QChar('#') ) continue;
         //qDebug() << s[i];
-        parts = s[i].split(QRegExp("\\s+"));
-        //qDebug() << parts;
-        if ( parts.length() < 4 ) return;
-        if ( parts[2] == "in" ) {
-            name = parts[3];
-        } else {
+        k = s[i].indexOf("`");
+        if ( k >= 0 ) {
+            parts = s[i].mid(k).split(QRegExp("[`( ]"));
+            //qDebug() << parts;
+            if ( parts.length() < 3 ) return;
             name = parts[1];
+        } else {
+            parts = s[i].split(QRegExp("\\s+"));
+            //qDebug() << parts;
+            if ( parts.length() < 4 ) return;
+            if ( parts[2] == "in" ) {
+                name = parts[3];
+            } else {
+                name = parts[1];
+            }
         }
         if ( highest.contains(name) ) {
             highest[name]++;
@@ -1253,16 +1327,24 @@ void DataTree::receiveBackTrace(QStringList s)
     all->kids.clear();
     all->kids.append(globals);
     globals->reactivate();
-    int k;
     for ( int i=0; i < n; i++ ) {
         if ( s[i][0] != QChar('#') ) continue;
-        parts = s[i].split(QRegExp("\\s+"));
-        frame = parts[0].mid(1).toInt();
-        //qDebug() << parts[0].mid(1) << frame;
-        if ( parts[2] == "in" ) {
-            name = parts[3];
-        } else {
+        k = s[i].indexOf("`");
+        if ( k >= 0 ) {
+            parts = s[i].mid(k).split(QRegExp("[`( ]"));
+            //qDebug() << parts;
+            if ( parts.length() < 3 ) return;
             name = parts[1];
+            frame = s[i].mid(1).toInt();
+        } else {
+            parts = s[i].split(QRegExp("\\s+"));
+            frame = parts[0].mid(1).toInt();
+            //qDebug() << "receiveBackTrace" << parts[0].mid(1) << frame;
+            if ( parts[2] == "in" ) {
+                name = parts[3];
+            } else {
+                name = parts[1];
+            }
         }
         k = highest[name];
         if ( k != 0 ) {

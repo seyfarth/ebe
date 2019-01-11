@@ -8,7 +8,7 @@
 #include "errorwindow.h"
 #include "librarywindow.h"
 #include "instructions.h"
-#include "gdb.h"
+#include "debugger.h"
 #include "settings.h"
 #include "framewindow.h"
 #include "asmdatawindow.h"
@@ -53,7 +53,7 @@ QVector<StrucInfo> asmStrucs;
 extern RegisterWindow *registerWindow;
 extern HalRegisterWindow *halRegisterWindow;
 extern ProjectWindow *projectWindow;
-extern GDB *gdb;
+extern Debugger *dbg;
 extern QStatusBar *statusBar;
 extern SourceFrame *sourceFrame;
 extern FrameWindow *frameWindow;
@@ -190,22 +190,29 @@ SourceFrame::SourceFrame(QWidget *parent)
     }
 
     connect(this,
-        SIGNAL(
-            doRun(QString, QString, QStringList, QList<StringSet>,
-                QStringList)), gdb,
-        SLOT(
-            doRun(QString, QString, QStringList, QList<StringSet>,
-                QStringList)));
-    connect(this, SIGNAL(doNext()), gdb, SLOT(doNext()));
-    connect(this, SIGNAL(doNextInstruction()), gdb, SLOT(doNextInstruction()));
-    connect(this, SIGNAL(doStepInstruction()), gdb, SLOT(doStepInstruction()));
-    connect(this, SIGNAL(doCall()), gdb, SLOT(doCall()));
-    connect(this, SIGNAL(doStep()), gdb, SLOT(doStep()));
-    connect(this, SIGNAL(doContinue()), gdb, SLOT(doContinue()));
-    connect(this, SIGNAL(doStop()), gdb, SLOT(doStop()));
-    connect ( gdb, SIGNAL(nextInstruction(QString,int)),
-        this, SLOT(nextInstruction(QString,int)) );
-    connect(gdb, SIGNAL(error(QString)), this, SLOT(error(QString)));
+        SIGNAL(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
+        dbg, SLOT(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
+        Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doNext()), dbg, SLOT(doNext()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doNextInstruction()), dbg, SLOT(doNextInstruction()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doStepInstruction()), dbg, SLOT(doStepInstruction()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doCall()), dbg, SLOT(doCall()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doStep()), dbg, SLOT(doStep()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doContinue()), dbg, SLOT(doContinue()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doStop()), dbg, SLOT(doStop()),
+            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(completeStep()), dbg, SLOT(completeStep()),
+            Qt::BlockingQueuedConnection);
+    connect ( dbg, SIGNAL(nextInstruction(QString,int)),
+        this, SLOT(nextInstruction(QString,int)), Qt::QueuedConnection );
+    connect(dbg, SIGNAL(error(QString)), this, SLOT(error(QString)),
+            Qt::QueuedConnection);
 
     commandLine = new CommandLine();
     commandLine->setToolTip(
@@ -545,7 +552,7 @@ void SourceFrame::run()
         }
         object = file.base + "." + ebe["build/obj"].toString();
         QFile::remove(object);
-        qDebug() << "cmd" << cmd;
+        //qDebug() << "cmd" << cmd;
         //qDebug() << "object" << object;
         QProcess compile(this);
         compile.start(cmd);
@@ -559,7 +566,7 @@ void SourceFrame::run()
             return;
         }
         foreach(extraCmd, extraCmds) {
-            qDebug() << "extracmd" << extraCmd;
+            //qDebug() << "extracmd" << extraCmd;
             compile.start(extraCmd);
             compile.waitForFinished();
         }
@@ -601,11 +608,11 @@ void SourceFrame::run()
             if ( findVariables ) {
                 if ( (parts[1] == "d" && parts[2] != ".data") ||
                      (parts[1] == "b" && parts[2] != ".bss") ) {
-                    //qDebug() << parts[2];
                     AsmVariable var(parts[2]);
                     asmDataWindow->varNames[parts[2]] =
                                    asmDataWindow->variables.size();
                     asmDataWindow->variables.append(var);
+                    //qDebug() << parts[2] << asmDataWindow->variables.size();
                 }
             }
             if (parts.length() >= 3) {
@@ -744,7 +751,7 @@ void SourceFrame::run()
 
     QProcess ld(this);
     ldCmd.replace("$base", exeName);
-    qDebug() << "ld cmd" << ldCmd;
+    //qDebug() << "ld cmd" << ldCmd;
     ld.start(ldCmd);
     ld.waitForFinished();
     ld.setReadChannel(QProcess::StandardError);
@@ -865,12 +872,14 @@ void SourceFrame::run()
                 }
                 var.values = new AllTypesArray(size);
                 definingVar = false;
+                //qDebug() << "appending" << index;
                 newVars.append(asmDataWindow->variables[index]);
             }
         }
         if (nmParts.length() >= 3) {
             nmp = nmParts[1].toLower();
             if (nmp == "d" || nmp == "s" || nmp == "b" ) {
+                //qDebug() << nmp;
                 if (rx2.exactMatch(nmParts[2])) {
                     varToAddress[nmParts[2]] = "0x" + nmParts[0];
                 }
@@ -890,6 +899,19 @@ void SourceFrame::run()
             }
         }
         nmData = nm.readLine();
+    }
+    if ( definingVar ) {
+        AsmVariable & var=asmDataWindow->variables[index];
+	if ( asmVariableDecls.contains(var.name) ) {
+	    var.format = asmVariableDecls[var.name].format;
+	    if ( asmVariableDecls[var.name].size > 0 ) {
+		var.size = asmVariableDecls[var.name].size;
+	    }
+	} else {
+	    var.size = 8;
+	}
+	var.values = new AllTypesArray(var.size);
+        newVars.append(asmDataWindow->variables[index]);
     }
     asmDataWindow->variables = newVars;
     foreach ( AsmVariable v, asmDataWindow->userDefinedVariables ) {
@@ -1318,6 +1340,7 @@ void SourceFrame::nextInstruction(QString file, int line)
     setNextLine(breakFile, breakLine);
     frameWindow->nextLine(breakFile,breakLine);
     asmDataWindow->rebuildTable();
+    emit completeStep();
 }
 
 void SourceFrame::setFontHeightAndWidth(int height, int width)

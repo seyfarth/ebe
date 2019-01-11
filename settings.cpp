@@ -113,6 +113,7 @@ void Settings::setDefaults()
     ebe["edit/tab_width"] = 4;
     ebe["edit/auto_indent"] = true;
 
+    ebe["debugger"] = "gdb";
     ebe["language"] = "cpp";
     ebe["build/_01"] = " In order to make any changes to build rules you must set";
     ebe["build/_02"] = " build/expert to true.  Otherwise, ebe will reset all your";
@@ -314,6 +315,7 @@ void Settings::setDefaults()
     ebe["bsd"] = false;
     ebe["linux"] = false;
     ebe["mac"] = true;
+    ebe["debugger"] = "/Applications/Xcode.app/Contents/Developer/usr/bin/lldb-mi";
     ebe["os"] = "mac";
     ebe["windows"] = false;
     ebe["build/asm"] = "nasm -DOSX -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
@@ -348,6 +350,12 @@ void Settings::setDefaults()
     ebe["build/obj"] = "o";
 #else
     ebe["build/obj"] = "o";
+#endif
+
+
+#ifndef Q_OS_WIN32
+    ebe["terminal/use"] = false;
+    ebe["terminal/name"] = "";
 #endif
 
     ebe["check/tools"] = true;
@@ -537,6 +545,10 @@ SettingsDialog::SettingsDialog()
     frame->addCheckBox(tr("Display debug buttons"), "buttons/visible");
     frame->addCheckBox(tr("Icons on debug buttons"), "buttons/icons");
     frame->addCheckBox(tr("XMM Reverse"), "xmm/reverse");
+#ifndef Q_OS_WIN32
+    frame->addCheckBox(tr("Use external terminal"), "terminal/use");
+    frame->addLineEdit(tr("External terminal (tty command)"), "terminal/name");
+#endif
     frame->addStretch();
     columnLayout->addWidget(frame);
     //mainLayout->addLayout(columnLayout);
@@ -545,6 +557,11 @@ SettingsDialog::SettingsDialog()
     frame = new SettingsFrame(tr("External commands"));
     frame->addLineEdit(tr("Prettify"), "prettify");
     frame->addCheckBox(tr("Expert mode"), "build/expert");
+    box = frame->addComboBox(tr("Debugger"), "debugger");
+    strings.clear();
+    strings << "gdb" << "lldb";
+    box->setChoices(strings);
+    box = frame->addComboBox(tr("Word size"), "build/word_size");
 #if __linux__
     box = frame->addComboBox(tr("Assembler"), "build/assembler");
     strings.clear();

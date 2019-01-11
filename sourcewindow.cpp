@@ -3,7 +3,7 @@
 #include "datawindow.h"
 #include "asmdatawindow.h"
 #include "projectwindow.h"
-#include "gdb.h"
+#include "debugger.h"
 #include "stylesheet.h"
 #include "settings.h"
 #include <QtGui>
@@ -18,7 +18,7 @@ extern AsmDataWindow *asmDataWindow;
 extern DataWindow *dataWindow;
 extern ProjectWindow *projectWindow;
 extern SourceFrame *sourceFrame;
-extern GDB *gdb;
+extern Debugger *dbg;
 
 extern QStringList cppExts;
 extern QStringList cExts;
@@ -33,6 +33,7 @@ extern bool running;
 SourceEdit::SourceEdit(QWidget *parent)
     : QPlainTextEdit(parent)
 {
+    myParent = (SourceWindow *)parent;
     setWordWrapMode(QTextOption::NoWrap);
     //QTimer *timer = new QTimer(this);
     //connect(timer,SIGNAL(timeout()),this,SLOT(printScroll()));
@@ -852,15 +853,25 @@ void SourceWindow::save()
 
 void SourceWindow::saveCursor()
 {
-    ebe[QString("cursor/%1").arg(file.source)] = textEdit->textCursor().position();
+    QString name = QFileInfo(file.source).fileName();
+    ebe[QString("cursor/%1").arg(name)] = textEdit->textCursor().position();
+    ebe[QString("scroll/%1").arg(name)] = scrollBar->value();
+    //qDebug() << "saveCursor"  << name
+             //<< ebe[QString("cursor/%1").arg(name)].toInt()
+             //<< ebe[QString("scroll/%1").arg(name)].toInt();
 }
 
 void SourceWindow::restoreCursor()
 {
+    QString name = QFileInfo(file.source).fileName();
+    //qDebug() << "restoreCursor" << name
+             //<< ebe[QString("cursor/%1").arg(name)].toInt()
+             //<< ebe[QString("scroll/%1").arg(name)].toInt();
     QTextCursor cursor = textEdit->textCursor();
-    cursor.setPosition(ebe[QString("cursor/%1").arg(file.source)].toInt());
+    cursor.setPosition(ebe[QString("cursor/%1").arg(name)].toInt());
+    scrollBar->setValue(ebe[QString("scroll/%1").arg(name)].toInt());
     textEdit->setTextCursor(cursor);
-    center();
+    setLineNumbers(textDoc->lineCount());
 }
 
 void SourceWindow::createButtons()
@@ -953,10 +964,10 @@ void SourceWindow::clearNextLine(int line)
     breakpoints = ((SourceWindow *)parent)->breakpoints;
     breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
     breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
-    connect(this, SIGNAL(sendBreakpoint(QString, QString)), gdb,
-            SLOT(setBreakpoint(QString, QString)));
-    connect(this, SIGNAL(deleteBreakpoint(QString, QString)), gdb,
-            SLOT(deleteBreakpoint(QString, QString)));
+    connect(this, SIGNAL(sendBreakpoint(QString, QString)), dbg,
+            SLOT(setBreakpoint(QString, QString)), Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(deleteBreakpoint(QString, QString)), dbg,
+            SLOT(deleteBreakpoint(QString, QString)), Qt::BlockingQueuedConnection);
 }
 
 void SourceWindow::comment()
@@ -1540,10 +1551,13 @@ void LineNumberDialog::setMax(int max)
 
     findButton = new QPushButton("Find");
     findButton->setShortcut(QKeySequence(tr("Ctrl+F")));
+    findButton->setAutoRepeat(false);
     replaceButton = new QPushButton("Replace");
     replaceButton->setShortcut(QKeySequence(tr("Ctrl+R")));
+    replaceButton->setAutoRepeat(false);
     cancelButton = new QPushButton("Cancel");
     cancelButton->setShortcut(QKeySequence(tr("Ctrl+C")));
+    cancelButton->setAutoRepeat(false);
     connect(findButton, SIGNAL(clicked()), this, SLOT(find()));
     connect(replaceButton, SIGNAL(clicked()), this, SLOT(replace()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));

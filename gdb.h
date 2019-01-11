@@ -1,13 +1,8 @@
 #ifndef GDB_H
 #define GDB_H
 
-#include "types.h"
-#include <QThread>
-#include <QProcess>
-#include <QStringList>
-#include <QList>
-#include "variable.h"
-#include "datawindow.h"
+#include "debugger.h"
+
 
 class GDBThread: public QThread
 {
@@ -16,40 +11,43 @@ public:
     void run();
 };
 
-class GDB: public QObject
+class GDBReaderThread: public QThread
+{
+    Q_OBJECT
+
+public:
+    GDBReaderThread();
+    void run();
+public slots:
+    void handleRead();
+};
+
+class GDB: public Debugger
 {
     Q_OBJECT
 
 public:
     GDB();
-    void initGdb();
-    QHash<FileLabel, int> bpHash;
-    int numFloats;
-    bool NullEOF;
-    QString asmFile;
-    int asmLine;
 
-private:
-    void sync();
-    void send(QString cmd, QString options = "");
-    QStringList sendReceive(QString cmd, QString options = "");
-    QStringList globals;
-    QSet<QString> runCommands;
-    QSet<QString> regs;
+    volatile bool busy;
+    GDBReaderThread *reader;
+    void initDBG();
+    void send(QString cmd);
+    QStringList sendReceive(QString cmd);
+    void handleRead();
+    void handleNextInstruction(QString result);
     void getBackTrace();
     void getRegs();
     void getFpRegs();
     void getGlobals();
-    void getLocals();
     void getClasses();
     void getVars(QStringList &names, VariableDefinitionMap &vars);
     void getArgs();
     bool hasAVX;
     bool testAVX();
-    QStringList classResults;
     void setNormal();
-
-public slots:
+    void completeStep();
+    QStringList splitLines(QString s);
     void processTypedefRequest(QString,QString&);
     void processClassRequest(QString,ClassDefinition&);
     void doRun(QString exe, QString options, QStringList files,
@@ -61,11 +59,12 @@ public slots:
     void doStep();
     void doContinue();
     void doStop();
-    void doCommand(QString);
+    void doCommand(QString,QString);
     void getData(QStringList request);
     void requestVar(DataPlank *p, QString name, QString address, QString type,
         QString format, int size, int frame );
     void setBreakpoint(QString, QString);
+    void setBreakpointInternal(QString, QString);
     void deleteBreakpoint(QString, QString);
     void receiveWorkingDir(QString);
     void setEOF();

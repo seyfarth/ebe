@@ -1,9 +1,9 @@
 #include "floatwindow.h"
 #include "settings.h"
 #include "types.h"
+#include "debugger.h"
 #include <cstdio>
 
-extern bool running;
 
 IntHash floatItems;
 
@@ -77,6 +77,7 @@ void FloatWindow::setFontHeightAndWidth(int /*heighti*/, int /*width*/)
         //}
         //table->setColumnWidth(c, (max + 1) * width + 3);
     //}
+    table->resizeToFitContents();
 }
 
 void FloatWindow::setRegister(int n, QString value, EZ::Color highlight)
@@ -90,7 +91,7 @@ void FloatWindow::receiveFpRegs(QStringList data)
     bool ok;
     unsigned long long x[4]= {0,0,0,0};
     //qDebug() << "fp receive" << data;
-    if ( !running ) return;
+    if ( !Debugger::running ) return;
 
     if (data.length() < count) {
         qDebug() << count << "fpreg error";
@@ -244,7 +245,7 @@ QString FpRegister::value()
     } else if (format == "4 ints") {
         s.sprintf("%d %d %d %d", i4[0], i4[1], i4[2], i4[3]);
     } else if (format == "2 longs") {
-        s.sprintf("%Ld %Ld", i8[0], i8[1]);
+        s.sprintf("%lld %lld", i8[0], i8[1]);
     } else if (format == "8 floats") {
         s = "";
         for (int i = 0; i < 8; i++) {
@@ -276,9 +277,9 @@ QString FpRegister::value()
             s += t;
         }
     } else if (format == "4 longs") {
-        s.sprintf("%Ld %Ld %Ld %Ld", i8[0], i8[1], i8[2], i8[3]);
+        s.sprintf("%lld %lld %lld %lld", i8[0], i8[1], i8[2], i8[3]);
     } else if (format == "2 int128s") {
-        s.sprintf("%016Lx%016Lx %016Lx%016Lx", i8[0], i8[1], i8[2], i8[3]);
+        s.sprintf("%016llx%016llx %016llx%016llx", i8[0], i8[1], i8[2], i8[3]);
     } else {
         qDebug() << "Unknown format" << format;
     }

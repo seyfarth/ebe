@@ -322,12 +322,14 @@ void GenericRegisterWindow::setRegister(QString name, QString val,
 }
 
 /*
- *  Slot triggered by the gdb class sending a map of register
+ *  Slot triggered by the debugger class sending a map of register
  *  values.
  */
 void GenericRegisterWindow::receiveRegs(StringHash map)
 {
+    //qDebug() << "receiveRegs" << map.keys();
     foreach ( QString key, map.keys() ) {
+        //qDebug() << key << regs[key]->value();
         if ( key == "eflags" ) {
             setRegister(key,map[key],EZ::Highlight);
         } else {
@@ -484,7 +486,7 @@ QString Register::value()
     //qDebug() << name << format << contents.u8;
     if (name == "rip" || name == "eflags" || name == "eip") {
 /*
- *      rip and eflags should be just like gdb prints them
+ *      rip and eflags should be just like debugger prints them
  */
         return QString("0x%1").arg(contents.u8,1,16);
     } else if (format == "decimal") {

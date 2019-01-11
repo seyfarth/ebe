@@ -2,14 +2,15 @@
 #include "datawindow.h"
 #include "settings.h"
 #include "sourceframe.h"
-#include "gdb.h"
+#include "debugger.h"
 #include <QDebug>
 #include <QScrollBar>
 #include <QMenu>
 #include <cstdio>
 #include <ctype.h>
+#include <unistd.h>
 
-extern GDB *gdb;
+extern Debugger *dbg;
 IntHash formatToSpan;
 IntHash formatToSize;
 QHash<QString,FormatFunction> formatToFunction;
@@ -17,7 +18,6 @@ QHash<QString,FormatFunction> formatToFunction;
 extern QMap<QString,VariableInfo> asmVariables;
 extern QVector<StrucInfo> asmStrucs;
 
-extern bool running;
 
 AsmVariable::AsmVariable(QString _name)
     : name(_name)
@@ -134,9 +134,11 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     formatToFunction["bin8"] = toBin8;
     qRegisterMetaType<uLong>("uLong");
     connect ( this, SIGNAL(requestAsmVariable(int,uLong,int)),
-              gdb, SLOT(requestAsmVariable(int,uLong,int)) );
-    connect ( gdb, SIGNAL(sendAsmVariable(int,QStringList)),
-              this, SLOT(receiveAsmVariable(int,QStringList)) );
+              dbg, SLOT(requestAsmVariable(int,uLong,int)),
+              Qt::BlockingQueuedConnection );
+    connect ( dbg, SIGNAL(sendAsmVariable(int,QStringList)),
+              this, SLOT(receiveAsmVariable(int,QStringList)),
+              Qt::QueuedConnection );
 }
 
 void AsmDataWindow::clear()
@@ -169,8 +171,8 @@ void AsmDataWindow::rebuildTable()
     }
 
     for ( int i=0; i < variables.size(); i++ ) {
-    //qDebug() << "request" << variables[i].name << variables[i].address
-         //<< variables[i].size;
+        //qDebug() << "request" << variables[i].name << variables[i].address
+                 //<< variables[i].size;
         emit requestAsmVariable ( i, variables[i].address, variables[i].size );
     }
 }
@@ -182,6 +184,7 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
     bool ok;
     int k=0;
 
+    //qDebug() << "receiveAsmVariable" << results;
     table->setCurrentPlank(i);
     for (int j = 0; j < results.size(); j++ ) {
         t1 = results[j];
@@ -191,6 +194,7 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
             results[j] = t1;
         }
     }
+    //qDebug() << "receiveAsmVariable 2" << results;
     for (int j = 0; j < results.size(); j += 2 ) {
         t1 = results[j];
         t1.replace(",","");
@@ -205,18 +209,24 @@ void AsmDataWindow::receiveAsmVariable ( int i, QStringList results )
             t2.replace("0x","");
             t1 = t1 + t2;
         }
+    //qDebug() << "receiveAsmVariable 3" << results;
         t1.replace("\t"," ");
         t1.replace("  "," ");
         t1.remove(0,1);
+    //qDebug() << "receiveAsmVariable 4" << results;
         parts = t1.split(" ");
         int n = parts.length();
+    //qDebug() << "receiveAsmVariable 5" << parts;
         if ( n > variables[i].size ) n = variables[i].size;
         for ( int r=0; r < n; r++ ) {
+            //qDebug() << "i:" << i << "  n:" << n << "  r:" << r << "  k:" << k;
             variables[i].values->u1(k) = parts[r].toInt(&ok,16);
             k++;
         }
     }
+    //qDebug() << "about to redisplay";
     redisplay(i,EZ::Highlight);
+    table->resizeToFitContents();
 }
 
 void AsmDataWindow::redisplay ( int v, EZ::Color highlight )
@@ -386,7 +396,7 @@ void AsmDataWindow::setFontHeightAndWidth(int height, int width)
 }
 
 /*
- *  Slot triggered by the gdb class sending a map of register
+ *  Slot triggered by the debugger class sending a map of register
  *  values.
  */
 
@@ -459,7 +469,7 @@ void AsmDataWindow::defineVariableByAddress()
     //qDebug() << "defineVariableByAddress" << p;
     QStringList parts;
 
-    if ( !running ) return;
+    if ( !Debugger::running ) return;
 
     int n = variables[p].values->size/sizeof(int *);
     for ( int i = 0; i < n; i++ ) {
@@ -474,7 +484,7 @@ void AsmDataWindow::defineVariableByAddress()
         var.size = dialog->size;
         bool ok;
         var.address = dialog->address.toULongLong(&ok,16);
-        qDebug() << ok << "address" << var.address;
+        //qDebug() << ok << "address" << var.address;
         var.format = dialog->format;
         var.values = new AllTypesArray(var.size);
         userDefinedVariables.append(var);
@@ -531,7 +541,7 @@ void AsmDataWindow::expandStruc()
     int p = table->latestPlank->plankNumber;
 
 
-    if ( !running ) return;
+    if ( !Debugger::running ) return;
 
     //qDebug() << "expandStruc" << i << p << s.name;
     variables[p].expanded = true;

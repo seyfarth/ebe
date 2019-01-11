@@ -24,6 +24,9 @@
 #include "settings.h"
 #include "stylesheet.h"
 #include "instructions.h"
+#include "debugger.h"
+#include "gdb.h"
+#include "lldb.h"
 
 extern bool userSetGeometry;
 extern int userWidth;
@@ -31,7 +34,7 @@ extern int userHeight;
 extern Settings *settings;
 extern QApplication *app;
 
-QString gdbName;
+QString dbgName;
 DataWindow *dataWindow;
 SourceFrame *sourceFrame;
 RegisterWindow *registerWindow;
@@ -45,8 +48,9 @@ TerminalWindow *terminalWindow;
 ConsoleWindow *consoleWindow;
 BackTraceWindow *backTraceWindow;
 BitBucket *bitBucket;
-GDB *gdb;
-GDBThread *gdbThread;
+Debugger *dbg;
+GDBThread *dbgThread;
+LLDBThread *llbgThread;
 ToyBox *toyBox;
 
 QStatusBar *statusBar;
@@ -56,14 +60,14 @@ QToolBar *editToolBar;
 QToolBar *debugToolBar;
 QToolBar *templateToolBar;
 
-extern QProcess *gdbProcess;
+//extern QProcess *dbgProcess;
 
-#ifdef Q_OS_WIN32
-extern HANDLE hProcess;
-extern bool needToKill;
-#else
-extern int gdbWaiting;
-#endif
+//#ifdef Q_OS_WIN32
+//extern HANDLE hProcess;
+//extern bool needToKill;
+//#else
+//extern int dbgWaiting;
+//#endif
 
 void MainWindow::setWordSize()
 {
@@ -148,21 +152,26 @@ MainWindow::MainWindow(QWidget *parent)
 
     checkTools();
 
-    gdbThread = new GDBThread();
-    gdbThread->start();
+    if ( dbgName == "gdb" ) {
+        dbgThread = new GDBThread();
+        dbgThread->start();
+    } else {
+        llbgThread = new LLDBThread();
+        llbgThread->start();
+    }
 
 #ifdef Q_OS_WIN32
     int sleepTime = 1;
-    while ( !gdb ) {
+    while ( !dbg ) {
         Sleep(sleepTime);
-        if ( sleepTime > 10 ) qDebug() << "gdb is taking too long";
+        if ( sleepTime > 10 ) qDebug() << "debugger is taking too long";
         sleepTime++;
     }
 #else
-    int sleepTime = 10000;
-    while (!gdb) {
+    int sleepTime = 100000;
+    while (!dbg) {
         usleep(sleepTime);
-        if ( sleepTime > 1000000 ) qDebug() << "gdb is taking too long";
+        if ( sleepTime > 1000000 ) qDebug() << "debugger is taking too long";
         sleepTime += 1000000;
     }
 #endif
@@ -182,17 +191,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     QTimer::singleShot(0, this, SLOT(restoreMainWindow()));
 
-    connect(gdb, SIGNAL(sendRegs(StringHash)), registerWindow,
-        SLOT(receiveRegs(StringHash)));
+    connect(dbg, SIGNAL(sendRegs(StringHash)), registerWindow,
+        SLOT(receiveRegs(StringHash)), Qt::QueuedConnection);
     if ( wordSize == 64 ) {
-        connect(gdb, SIGNAL(sendRegs(StringHash)), halRegisterWindow,
-            SLOT(receiveRegs(StringHash)));
+        connect(dbg, SIGNAL(sendRegs(StringHash)), halRegisterWindow,
+            SLOT(receiveRegs(StringHash)), Qt::QueuedConnection);
     }
-    connect(gdb, SIGNAL(sendFpRegs(QStringList)), floatWindow,
-        SLOT(receiveFpRegs(QStringList)));
-    connect(this, SIGNAL(sendWorkingDir(QString)), gdb,
-        SLOT(receiveWorkingDir(QString)));
-    connect(this, SIGNAL(doStop()), gdb, SLOT(doStop()));
+    connect(dbg, SIGNAL(sendFpRegs(QStringList)), floatWindow,
+        SLOT(receiveFpRegs(QStringList)), Qt::QueuedConnection);
+    connect(this, SIGNAL(sendWorkingDir(QString)), dbg,
+        SLOT(receiveWorkingDir(QString)), Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doStop()), dbg, SLOT(doStop()), Qt::QueuedConnection);
     //dDebug() << "Connected";
     restoreMainWindow();
     //dDebug() << "Restored";
@@ -209,6 +218,7 @@ bool MainWindow::toolExists(QString tool)
     } else {
         pathList = path.split(":");
     }
+    if ( QDir::current().exists(tool) ) return true;
     foreach (QString dir, pathList )
     {
         path = dir + "/" + tool;
@@ -225,15 +235,12 @@ bool MainWindow::toolExists(QString tool)
 
 void MainWindow::checkTools()
 {
+    dbgName = ebe["debugger"].toString();
     QStringList missing;
     QStringList missingCritical;
     if (ebe["check/tools"].toBool()) {
-        if (toolExists("gdb")) {
-            gdbName = "gdb";
-        } else if ( toolExists("ggdb")) {
-            gdbName = "ggdb";
-        } else {
-            missingCritical += "gdb";
+        if (!toolExists(dbgName)) {
+            missingCritical += dbgName;
         }
 #if defined(Q_OS_WIN)
         if (!toolExists("nm")) {
@@ -291,18 +298,13 @@ void MainWindow::checkTools()
             if (ret == QMessageBox::Ignore) ebe["check/tools"] = false;
         }
     }
-    if (toolExists("gdb")) {
-        gdbName = "gdb";
-    } else {
-        gdbName = "ggdb";
-    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (sourceFrame->filesSaved()) {
 #ifdef Q_OS_WIN32
-        if ( needToKill ) TerminateProcess(hProcess,0);
+        if ( Debugger::needToKill ) TerminateProcess(Debugger::hProcess,0);
 #endif
         saveSettings();
         event->accept();
@@ -679,22 +681,27 @@ void MainWindow::createMenus()
     debugToolBar->addAction(QIcon(QString(":/icons/%1/ebe.png").arg(icon_size)),
         tr("Run (F5)"), sourceFrame, SLOT(run()));
     debugToolBar->actions()[0]->setShortcut(QKeySequence("F5"));
+    debugToolBar->actions()[0]->setAutoRepeat(false);
     debugToolBar->addAction(
         QIcon(QString(":/icons/%1/next.png").arg(icon_size)), tr("Next (F6)"),
         sourceFrame, SLOT(next()));
     debugToolBar->actions()[1]->setShortcut(QKeySequence("F6"));
+    debugToolBar->actions()[1]->setAutoRepeat(false);
     debugToolBar->addAction(
         QIcon(QString(":/icons/%1/step.png").arg(icon_size)), tr("Step (F7)"),
         sourceFrame, SLOT(step()));
     debugToolBar->actions()[2]->setShortcut(QKeySequence("F7"));
+    debugToolBar->actions()[2]->setAutoRepeat(false);
     debugToolBar->addAction(
         QIcon(QString(":/icons/%1/continue.png").arg(icon_size)),
         tr("Continue (F8)"), sourceFrame, SLOT(Continue()));
     debugToolBar->actions()[3]->setShortcut(QKeySequence("F8"));
+    debugToolBar->actions()[3]->setAutoRepeat(false);
     debugToolBar->addAction(
         QIcon(QString(":/icons/%1/process-stop.png").arg(icon_size)),
         tr("stop (F9)"), sourceFrame, SLOT(stop()));
     debugToolBar->actions()[4]->setShortcut(QKeySequence("F9"));
+    debugToolBar->actions()[4]->setAutoRepeat(false);
 
     addToolBar(Qt::TopToolBarArea, debugToolBar);
 
@@ -832,10 +839,10 @@ void MainWindow::quit()
 {
     if (sourceFrame->filesSaved()) {
 #ifdef Q_OS_WIN32
-        if ( needToKill ) TerminateProcess(hProcess,0);
+        if ( Debugger::needToKill ) TerminateProcess(Debugger::hProcess,0);
 #else
-        if (gdbWaiting) {
-            kill(gdbProcess->pid(), 2);
+        if (Debugger::dbgWaiting) {
+            kill(Debugger::dbgProcess->pid(), 2);
         }
 #endif
         emit doStop();

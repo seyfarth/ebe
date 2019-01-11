@@ -15,6 +15,7 @@
 #include "consolewindow.h"
 #include "projectwindow.h"
 #include "backtracewindow.h"
+#include "debugger.h"
 #include "gdb.h"
 #include "toybox.h"
 #include "bitbucket.h"

@@ -3,7 +3,7 @@
 #include "registerwindow.h"
 #include "floatwindow.h"
 #include "settings.h"
-#include "gdb.h"
+#include "debugger.h"
 #include <QDebug>
 #include <cstdio>
 
@@ -16,7 +16,7 @@ StringHash *itemNames=0;
 StringHash *aliasNames=0;
 StringHash *fpaliasNames=0;
 extern StringHash halToIntel;
-extern GDB *gdb;
+extern Debugger *dbg;
 IntHash items;
 extern IntHash registerItems;
 extern IntHash halItems;
@@ -53,9 +53,10 @@ FrameWindow::FrameWindow(QWidget *parent)
     rows = 5;
     table = new EZTable(this);
     buildTable();
-    connect ( this, SIGNAL(requestStack(int)), gdb, SLOT(requestStack(int)) );
-    connect ( gdb, SIGNAL(receiveStack(QStringList)),
-              this, SLOT(receiveStack(QStringList)) );
+    connect ( this, SIGNAL(requestStack(int)), dbg, SLOT(requestStack(int)),
+              Qt::BlockingQueuedConnection );
+    connect ( dbg, SIGNAL(receiveStack(QStringList)), 
+              this, SLOT(receiveStack(QStringList)));
     table->resizeToFitContents();
     scrollArea = new QScrollArea;
     scrollArea->setWidget(table);
@@ -459,7 +460,7 @@ void FrameWindow::setFontHeightAndWidth(int height, int width)
 }
 
 /*
- *  Slot triggered by the gdb class sending a map of register
+ *  Slot triggered by the debugger class sending a map of register
  *  values.
  */
 

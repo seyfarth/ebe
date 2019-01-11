@@ -29,6 +29,9 @@ public:
 private:
     QLineEdit *lineEdit;    ///< Widget allowing editing
 
+public slots:
+    void changed(const QString &text);
+
 };
 
 #endif

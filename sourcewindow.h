@@ -66,6 +66,7 @@ public:
     bool autoIndent;
     void newLine();
     void indentNewLine(int k = 0);
+    SourceWindow *myParent;
 
 private slots:
     void printScroll();

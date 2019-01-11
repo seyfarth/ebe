@@ -10,12 +10,17 @@ INCLUDEPATH += .
 #LIBS += -L/usr/local/lib/qt4
 #LIBS += -lsupc++
 
+macx {
+    #QMAKE_CC = gcc-8
+    #QMAKE_CXX = g++-8
+    QMAKE_CXXFLAGS += -std=c++11
+}
 equals(QT_MAJOR_VERSION,5) {
     QT += widgets
 }
 
 #CONFIG -= app_bundle
-CONFIG += console release embed_manifest_exe
+CONFIG += console debug embed_manifest_exe
 #CONFIG += console debug static
 
 TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts \
@@ -34,7 +39,8 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            types.h bitbucket.h unarybitpanel.h validators.h \
            binarynumber.h binarybitpanel.h integeredit.h \
            intconvert.h intmath.h floatedit.h floatconvert.h file.h \
-           language.h framewindow.h asmdatawindow.h eztable.h
+           language.h framewindow.h asmdatawindow.h eztable.h \
+           debugger.h lldb.h
 
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
@@ -45,6 +51,7 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            types.cpp bitbucket.cpp unarybitpanel.cpp validators.cpp \
            binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
            intconvert.cpp intmath.cpp floatedit.cpp floatconvert.cpp file.cpp \
-           language.cpp framewindow.cpp asmdatawindow.cpp eztable.cpp
+           language.cpp framewindow.cpp asmdatawindow.cpp eztable.cpp \
+           debugger.cpp lldb.cpp
 
 RESOURCES += ebe.qrc

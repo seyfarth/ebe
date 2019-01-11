@@ -119,6 +119,7 @@ void EZCell::setText ( QString t, EZ::Color highlight )
     case EZ::NoChange:
         break;
     }
+    //qDebug() << "setText" << old << t << label;
     label->setText(t);
 }
 

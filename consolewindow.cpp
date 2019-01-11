@@ -1,5 +1,5 @@
 #include "consolewindow.h"
-#include "gdb.h"
+#include "debugger.h"
 #include "settings.h"
 #include <QPushButton>
 #include <QPlainTextEdit>
@@ -11,8 +11,9 @@
 #include <QApplication>
 #include <QLabel>
 #include <QFile>
+#include <QDebug>
 
-extern GDB *gdb;
+extern Debugger *dbg;
 
 ConsoleWindow::ConsoleWindow(QWidget *parent)
     : QFrame(parent)
@@ -26,7 +27,7 @@ ConsoleWindow::ConsoleWindow(QWidget *parent)
     layout->setContentsMargins(10, 10, 10, 10);
 
     QHBoxLayout *commandLayout = new QHBoxLayout;
-    QLabel *label = new QLabel(tr("gdb command"));
+    QLabel *label = new QLabel(tr("debugger command"));
     label->setStyleSheet("font-family: " + ebe["variable_font"].toString());
     commandLayout->addWidget(label);
     commandLine = new QLineEdit(this);
@@ -39,13 +40,16 @@ ConsoleWindow::ConsoleWindow(QWidget *parent)
 
     scrollBar = textEdit->verticalScrollBar();
 
-    connect(gdb, SIGNAL(log(QString)), this, SLOT(log(QString)));
+    connect(dbg, SIGNAL(log(QString)), this, SLOT(log(QString)),
+            Qt::QueuedConnection);
     connect(commandLine, SIGNAL(returnPressed()), this, SLOT(sendCommand()));
-    connect(this, SIGNAL(doCommand(QString)), gdb, SLOT(doCommand(QString)));
+    connect(this, SIGNAL(doCommand(QString)), dbg, SLOT(doCommand(QString)),
+            Qt::BlockingQueuedConnection);
 }
 
 void ConsoleWindow::log(QString s)
 {
+    //qDebug() << "logging" << s;
     textEdit->textCursor().insertText(s + '\n');
     scrollBar->setValue(textEdit->document()->lineCount() - 1);
 }

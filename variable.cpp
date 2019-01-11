@@ -144,6 +144,7 @@ ArrayBoundsDialog::ArrayBoundsDialog()
     QHBoxLayout *nLayout = new QHBoxLayout;
     nLayout->addWidget(new QLabel(tr("Number of elements")));
     nSpin = new QSpinBox;
+    setMin(1);
     nLayout->addWidget(nSpin);
     layout->addLayout(nLayout);
 

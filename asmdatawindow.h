@@ -114,7 +114,7 @@ public:
      *  which is created in the constructor and initialized with "0" values
      *  for all the registers.  At this time it sets the QTableWidgetItem
      *  pointers in the registerMap for convenient access when receiving
-     *  registers from gdb.
+     *  registers from the debugger.
      *
      *  The constructor initializes the QStringList namesList with the
      *  names of all the registers for later convenience.  Then it creates
@@ -214,7 +214,7 @@ public slots:
     /**
      *  \fn receiveRegs
      *
-     *  This slot is called when the gdb object has a new set of register
+     *  This slot is called when the debugger object has a new set of register
      *  values to be displayed.  The namesList array is used to cycle
      *  through the names of the registers to set their values.  It calls
      *  setFontHeightAndWidth to resize the rows and columns of the table

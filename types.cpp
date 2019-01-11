@@ -208,7 +208,6 @@ void AllTypesArray::resize(int n)
         for ( int i=0; i < n; i++ ) newData[i] = data[i];
         delete [] data;
         data = newData;
-        newData = 0;
     }
 }
 

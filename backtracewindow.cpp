@@ -1,8 +1,8 @@
 #include "backtracewindow.h"
-#include "gdb.h"
+#include "debugger.h"
 #include <cstdio>
 
-extern GDB *gdb;
+extern Debugger *dbg;
 
 /**
  *  \brief Constructor for the \c BackTraceWindow class.
@@ -12,7 +12,7 @@ extern GDB *gdb;
  *  and then places its \c QListWidget in its layout.
  *
  *  Its final action is to connect the \c sendBackTrace signal
- *  from the \c gdb thread to its \c receiveBackTrace slot.
+ *  from the \c debugger thread to its \c receiveBackTrace slot.
  */
 BackTraceWindow::BackTraceWindow(QWidget *parent)
     : QFrame(parent)
@@ -26,8 +26,8 @@ BackTraceWindow::BackTraceWindow(QWidget *parent)
     list = new QListWidget();
     layout->addWidget(list);
     setLayout(layout);
-    connect(gdb, SIGNAL(sendBackTrace(QStringList)), this,
-        SLOT(receiveBackTrace(QStringList)));
+    connect(dbg, SIGNAL(sendBackTrace(QStringList)), this,
+        SLOT(receiveBackTrace(QStringList)), Qt::QueuedConnection );
 }
 
 /**
@@ -45,10 +45,10 @@ QSize BackTraceWindow::sizeHint() const
 /**
  *  \fn BackTraceWindow::receiveBackTrace
  *
- *  This function is called with the \c gdb thread emits a signal providing
+ *  This function is called when the \c debugger thread emits a signal providing
  *  new data to be displayed in the \c BackTraceWindow.
  *
- *  \param results The results from the \c gdb \c backtrace command.
+ *  \param results The results from the \c debugger \c backtrace command.
  */
 void BackTraceWindow::receiveBackTrace(QStringList results)
 {
