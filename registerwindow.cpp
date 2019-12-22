@@ -346,6 +346,7 @@ void GenericRegisterWindow::receiveRegs(StringHash map)
  */
 void GenericRegisterWindow::contextMenuEvent(QContextMenuEvent * /* event */)
 {
+    //qDebug() << "RW cursor" << mapFromGlobal(QCursor::pos());
     QMenu menu(tr("Register menu"));
     menu.addAction(tr("Decimal format"), this, SLOT(setDecimal()));
     menu.addAction(tr("Hexadecimal format"), this, SLOT(setHex()));

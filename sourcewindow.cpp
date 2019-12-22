@@ -965,9 +965,9 @@ void SourceWindow::clearNextLine(int line)
     breakFormat.setBackground(QBrush(QColor(ebe["break_bg"].toString())));
     breakFormat.setForeground(QBrush(QColor(ebe["break_fg"].toString())));
     connect(this, SIGNAL(sendBreakpoint(QString, QString)), dbg,
-            SLOT(setBreakpoint(QString, QString)), Qt::BlockingQueuedConnection);
+            SLOT(setBreakpoint(QString, QString)));
     connect(this, SIGNAL(deleteBreakpoint(QString, QString)), dbg,
-            SLOT(deleteBreakpoint(QString, QString)), Qt::BlockingQueuedConnection);
+            SLOT(deleteBreakpoint(QString, QString)));
 }
 
 void SourceWindow::comment()

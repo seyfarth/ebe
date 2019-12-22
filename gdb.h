@@ -29,7 +29,6 @@ class GDB: public Debugger
 public:
     GDB();
 
-    volatile bool busy;
     GDBReaderThread *reader;
     void initDBG();
     void send(QString cmd);

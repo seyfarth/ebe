@@ -317,7 +317,7 @@ void EZTable::resizeToFitContents(int f)
 
     //d = columns == 3;
 
-    //if ( d ) qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
+    //qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
     //if (f) qDebug() << "resizeToFitContents" << columns << planks << table.size() << f;
 
     maxWidth.resize(columns);

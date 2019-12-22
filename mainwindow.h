@@ -20,12 +20,12 @@
 #include "toybox.h"
 #include "bitbucket.h"
 #include "settings.h"
+#include "dockwidget.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QTextEdit;
-class QDockWidget;
 QT_END_NAMESPACE
 
 class MainWindow: public QMainWindow
@@ -69,19 +69,19 @@ private:
     
     bool tooltipsVisible;
 
-    QDockWidget *dataDock;
-    QDockWidget *registerDock;
-    QDockWidget *frameDock;
-    QDockWidget *asmDataDock;
-    QDockWidget *halRegisterDock;
-    QDockWidget *halNamesDock;
-    QDockWidget *floatDock;
-    QDockWidget *projectDock;
-    QDockWidget *terminalDock;
-    QDockWidget *consoleDock;
-    QDockWidget *backTraceDock;
-    QDockWidget *toyBoxDock;
-    QDockWidget *bitBucketDock;
+    DockWidget *dataDock;
+    DockWidget *registerDock;
+    DockWidget *frameDock;
+    DockWidget *asmDataDock;
+    DockWidget *halRegisterDock;
+    DockWidget *halNamesDock;
+    DockWidget *floatDock;
+    DockWidget *projectDock;
+    DockWidget *terminalDock;
+    DockWidget *consoleDock;
+    DockWidget *backTraceDock;
+    DockWidget *toyBoxDock;
+    DockWidget *bitBucketDock;
 
     QAction *dataVisible;
     QAction *registerVisible;

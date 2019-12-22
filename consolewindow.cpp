@@ -40,11 +40,9 @@ ConsoleWindow::ConsoleWindow(QWidget *parent)
 
     scrollBar = textEdit->verticalScrollBar();
 
-    connect(dbg, SIGNAL(log(QString)), this, SLOT(log(QString)),
-            Qt::QueuedConnection);
+    connect(dbg, SIGNAL(log(QString)), this, SLOT(log(QString)));
     connect(commandLine, SIGNAL(returnPressed()), this, SLOT(sendCommand()));
-    connect(this, SIGNAL(doCommand(QString)), dbg, SLOT(doCommand(QString)),
-            Qt::BlockingQueuedConnection);
+    connect(this, SIGNAL(doCommand(QString)), dbg, SLOT(doCommand(QString)));
 }
 
 void ConsoleWindow::log(QString s)

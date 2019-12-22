@@ -20,6 +20,7 @@ equals(QT_MAJOR_VERSION,5) {
 }
 
 #CONFIG -= app_bundle
+#CONFIG += console embed_manifest_exe
 CONFIG += console debug embed_manifest_exe
 #CONFIG += console debug static
 
@@ -40,7 +41,7 @@ HEADERS += mainwindow.h sourcewindow.h commandline.h sourceframe.h \
            binarynumber.h binarybitpanel.h integeredit.h \
            intconvert.h intmath.h floatedit.h floatconvert.h file.h \
            language.h framewindow.h asmdatawindow.h eztable.h \
-           debugger.h lldb.h
+           debugger.h lldb.h dockwidget.h
 
 SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            sourceframe.cpp terminalwindow.cpp registerwindow.cpp \
@@ -52,6 +53,6 @@ SOURCES += main.cpp sourcewindow.cpp mainwindow.cpp commandline.cpp \
            binarynumber.cpp binarybitpanel.cpp integeredit.cpp \
            intconvert.cpp intmath.cpp floatedit.cpp floatconvert.cpp file.cpp \
            language.cpp framewindow.cpp asmdatawindow.cpp eztable.cpp \
-           debugger.cpp lldb.cpp
+           debugger.cpp lldb.cpp dockwidget.cpp
 
 RESOURCES += ebe.qrc

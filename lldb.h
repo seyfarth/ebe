@@ -29,7 +29,6 @@ class LLDB: public Debugger
 public:
     LLDB();
 
-    volatile bool busy;
     QString timerResult;
     QStringList timerResults;
     LLDBReaderThread *reader;
@@ -37,6 +36,7 @@ public:
     void sync();
     void waitForResults();
     void send(QString cmd, QString tag="");
+    void sendRaw(QString cmd, QString tag="");
     QStringList sendReceive(QString cmd, QString tag="");
     void getBackTrace();
     void getRegs();

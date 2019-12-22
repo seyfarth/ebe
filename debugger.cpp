@@ -33,6 +33,7 @@ char Debugger::letterForSize[] = "bbhhwwwwg";
 unsigned int Debugger::reg_masks[] = { 1, 4, 0x10, 0x40, 0x80, 0x400, 0x800 };
 QString Debugger::reg_names[] = { "CF", "PF", "AF", "ZF", "SF", "DF", "OF" };
 
+QHash<QSemaphore *, QString> semNames;
 Debugger::Debugger()
     : QObject()
 {
@@ -51,19 +52,14 @@ void Debugger::writeLine ( QString cmd )
 
 void acquireSem ( QSemaphore &sem )
 {
-    int sleep=1;
-    while ( !sem.tryAcquire(1) ) {
-        QCoreApplication::processEvents(QEventLoop::AllEvents,sleep);
-        //qDebug() << "waiting on semaphore";
-        usleep(sleep);
-        if ( sleep < 1000 ) sleep *= 2;
-    }
+    //qDebug() << "acquireSem" << &sem << QThread::currentThread() << sem.available()
+             //<< "   loop lvl" << QThread::currentThread()->loopLevel();
+    sem.acquire(1);
 }
 
 void releaseSem ( QSemaphore &sem )
 {
-    //qDebug() << "releasing semaphore";
+    //qDebug() << "releaseSem" << &sem << QThread::currentThread() << sem.available();
     sem.release(1);
-    //QCoreApplication::processEvents(QEventLoop::AllEvents,10);
 }
 

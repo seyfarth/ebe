@@ -23,21 +23,22 @@ extern Debugger *dbg;
 
 bool d=false;
 
-static QSemaphore critSem(1);
+//static QSemaphore critSem(1);
 static QSemaphore gateSem(1);
-static QSemaphore resultSem(0);
+//static QSemaphore resultSem(0);
 //static QSemaphore launchSem(0);
 
-static volatile bool blocked;
 static volatile bool resultReady;
 
 QString currentLanguage;
 
 GDB *gdb;
+GDBThread *gdbThread;
 
 GDBThread::GDBThread()
     : QThread()
 {
+    gdbThread = this;
 }
 
 GDBReaderThread::GDBReaderThread()
@@ -50,14 +51,14 @@ void GDBReaderThread::run()
     //qDebug() << "reader thread" << currentThreadId();
     //qDebug() << "in reader" << dbg->dbgProcess->state()
              //<< dbg->dbgProcess->pid();
-    connect ( gdb->dbgProcess, SIGNAL(readyReadStandardOutput()),
-              this, SLOT(handleRead()) );
+    //connect ( gdb->dbgProcess, SIGNAL(readyReadStandardOutput()),
+              //this, SLOT(handleRead()) );
     exec();
 }
 
 void GDBReaderThread::handleRead()
 {
-    gdb->handleRead();
+    //gdb->handleRead();
 }
 
 void GDBThread::run()
@@ -72,7 +73,7 @@ void GDBThread::run()
 GDB::GDB()
     : Debugger()
 {
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN32)
     needToKill = false;
 #endif
     dbgProcess = new QProcess(this);
@@ -149,10 +150,9 @@ GDB::GDB()
             << "esp" << "eip" << "eflags";
     }
     NullEOF = false;
-    blocked = true;
-    busy = false;
-    reader = new GDBReaderThread();
-    reader->start();
+    //reader = new GDBReaderThread();
+    //reader->start();
+    this->moveToThread(gdbThread);
     //qDebug() << "reader" << reader;
 }
 
@@ -161,7 +161,6 @@ void GDB::send(QString cmd)
     sendReceive ( cmd );
 }
 
-static bool firstRead = true;
 static QStringList hrResults;
 
 QStringList GDB::sendReceive(QString cmd)
@@ -169,19 +168,19 @@ QStringList GDB::sendReceive(QString cmd)
     QString result;
     QStringList list;
 
-    if(d) qDebug() << "sendReceive start" << cmd;
-    acquireSem(critSem);
+    //qDebug() << "sendReceive start" << cmd;
+    //acquireSem(critSem);
     resultReady = false;
     writeLine ( cmd );
     emit log(cmd);
-    blocked = true;
     //qDebug() << "SR waiting";
-    acquireSem(resultSem);
-    if(d) qDebug() << "SR results" << hrResults;
+    //acquireSem(resultSem);
+    handleRead();
+    //qDebug() << "SR results" << hrResults;
     list = hrResults;
     hrResults.clear();
     foreach ( result, list ) emit log(result);
-    releaseSem(critSem);
+    //releaseSem(critSem);
     return list;
 }
 
@@ -201,13 +200,10 @@ void GDB::handleRead()
     QStringList parts;
 
     //qDebug() << "Entered handleRead";
-    if ( firstRead ) {
-        firstRead = false;
-        blocked = false;
-        return;
-    }
 
-    while ( dbgProcess->bytesAvailable() > 0 ) {
+    resultReady = false;
+    while ( !resultReady ) {
+        if ( dbgProcess->bytesAvailable() < 1 ) dbgProcess->waitForReadyRead(-1);
         result = dbgProcess->readLine();
         result.chop(1);
         emit log(result);
@@ -218,17 +214,17 @@ void GDB::handleRead()
         result = result.replace("\\n"," ");
         result = result.replace("\"","");
         result = result.replace(QRegExp(" *$"),"");
+        //qDebug() << "handleRead" << ch << result;
         if ( result.indexOf("Temporary breakpoint") >= 0 ) continue;
         if ( result.indexOf(QRegExp("^0x[0-9a-fA-f]+ in ")) == 0 ) continue;
-        //qDebug() << "handleRead" << ch << result;
         switch ( ch ) {
-        case '^':   // Result record: ^done 
-            blocked = false;
-            resultReady = true;
-            resultSem.release(1);
-            //qDebug() << "finished previous command, available"
-                     //<< resultSem.available();
-            QCoreApplication::processEvents(QEventLoop::AllEvents,0);
+        case '^':   // Result record: ^done ^error ^running
+            if ( (result.indexOf("done")) == 0 || (result.indexOf("error")) == 0 ) {
+                resultReady = true;
+                //resultSem.release(1);
+                //qDebug() << "finished previous command";
+                //QCoreApplication::processEvents(QEventLoop::AllEvents,0);
+            }
             break;  
 
         case '~':   // Console stream out - response to a CLI command
@@ -245,6 +241,7 @@ void GDB::handleRead()
                   (result.indexOf("step") >= 0)) ) {
                 //qDebug() << "stopped" << result;
                 handleNextInstruction(result);
+                resultReady = true;
             } else if ( stopped &&
                   result.indexOf("exited") >= 0 ) {
                 //qDebug() << "exited" << result;
@@ -252,6 +249,7 @@ void GDB::handleRead()
                 QStringList results;
                 results.append(tr("Program not running"));
                 emit sendBackTrace(results);
+                resultReady = true;
             }
             break;
 
@@ -588,9 +586,8 @@ void GDB::getClasses()
 void GDB::initDBG()
 {
     running = false;
-    dbgProcess->setTextModeEnabled(true);
+    //dbgProcess->setTextModeEnabled(true);
     dbgProcess->setReadChannel(QProcess::StandardOutput);
-    //send("set prompt (gdb)\\n"); 
 }
 
 //public slots:
@@ -615,6 +612,8 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     running = false;
     bpHash.clear();
     send("set print repeats 0");
+    send("set height 0"); 
+    send("set width 0"); 
     send("kill");
     if ( gdb->dbgProcess->state() != QProcess::Running ) {
         emit error("gdb is not running");
@@ -633,7 +632,7 @@ void GDB::doRun(QString exe, QString options, QStringList files,
         }
     }
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN32)
     needToWake = true;
     //char dir[1025];
     //DWORD len = 1024;
@@ -698,25 +697,36 @@ void GDB::doRun(QString exe, QString options, QStringList files,
     hasAVX = testAVX();
     send("continue");
     //send("set prompt (gdb)\\n");
-#else
+#endif
     //qDebug() << "tty " << terminalWindow->ptyName;
 #ifdef Q_OS_MAC
     send("set startup-with-shell off");
 #endif
+#if defined(Q_OS_WIN32)
+    if ( ebe["terminal/use"].toBool() ) {
+        send ( "set new-console on" );
+    } else {
+        send ( "set new-console off" );
+    }
+#else
     if ( ebe["terminal/use"].toBool() ) {
         send("set inferior-tty " + ebe["terminal/name"].toString() );
     } else {
         send("set inferior-tty " + terminalWindow->ptyName);
     }
+#endif
 #if defined(Q_OS_MAC)
     send("b start");
 #elif not defined(Q_OS_WIN32)
-    send("b _start");
+    //send("b _start");
 #endif
     send("run " + options);
     hasAVX = testAVX();
-#endif
+#if defined(Q_OS_MAC)
     send("continue");
+#elif defined(Q_OS_WIN32)
+    send("continue");
+#endif
     running = true;
     setNormal();
     //qDebug() << "run";
@@ -1538,7 +1548,7 @@ void GDB::getData(QStringList request)
 void GDB::setNormal()
 {
     if (!running) return;
-    send("set language "+currentLanguage);
+    //send("set language "+currentLanguage);
     if (NullEOF) {
         send("call __ebeSetNormal()");
         NullEOF = false;

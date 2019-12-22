@@ -191,28 +191,18 @@ SourceFrame::SourceFrame(QWidget *parent)
 
     connect(this,
         SIGNAL(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
-        dbg, SLOT(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
-        Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doNext()), dbg, SLOT(doNext()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doNextInstruction()), dbg, SLOT(doNextInstruction()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doStepInstruction()), dbg, SLOT(doStepInstruction()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doCall()), dbg, SLOT(doCall()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doStep()), dbg, SLOT(doStep()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doContinue()), dbg, SLOT(doContinue()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(doStop()), dbg, SLOT(doStop()),
-            Qt::BlockingQueuedConnection);
-    connect(this, SIGNAL(completeStep()), dbg, SLOT(completeStep()),
-            Qt::BlockingQueuedConnection);
+        dbg, SLOT(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)));
+    connect(this, SIGNAL(doNext()), dbg, SLOT(doNext()));
+    connect(this, SIGNAL(doNextInstruction()), dbg, SLOT(doNextInstruction()));
+    connect(this, SIGNAL(doStepInstruction()), dbg, SLOT(doStepInstruction()));
+    connect(this, SIGNAL(doCall()), dbg, SLOT(doCall()));
+    connect(this, SIGNAL(doStep()), dbg, SLOT(doStep()));
+    connect(this, SIGNAL(doContinue()), dbg, SLOT(doContinue()));
+    connect(this, SIGNAL(doStop()), dbg, SLOT(doStop()));
+    connect(this, SIGNAL(completeStep()), dbg, SLOT(completeStep()));
     connect ( dbg, SIGNAL(nextInstruction(QString,int)),
-        this, SLOT(nextInstruction(QString,int)), Qt::QueuedConnection );
-    connect(dbg, SIGNAL(error(QString)), this, SLOT(error(QString)),
-            Qt::QueuedConnection);
+        this, SLOT(nextInstruction(QString,int)));
+    connect(dbg, SIGNAL(error(QString)), this, SLOT(error(QString)));
 
     commandLine = new CommandLine();
     commandLine->setToolTip(
@@ -278,6 +268,7 @@ void SourceFrame::readAsmDecls(QString file)
             v.name = parts[1];
             v.format = parts[2];
             v.size = parts[4].toInt();
+            if ( v.size > 256 ) v.size = 256;
             //qDebug() << v.name << v.format << v.size;
             asmVariableDecls[v.name] = v;
         } else if ( parts[0] == "struc" ) {
@@ -291,6 +282,7 @@ void SourceFrame::readAsmDecls(QString file)
                 v.format = parts[2];
                 v.loc = parts[3].toInt();
                 v.size = parts[4].toInt();
+                if ( v.size > 16 ) v.size = 16;
                 s.variables.append(v);
                 data = decl.readLine();
                 //qDebug() << s.name << s.size << v.name << v.format << v.size;
@@ -766,7 +758,7 @@ void SourceFrame::run()
     }
 
 //
-//  On OS X and Windows locate symbols and line numbers from asm files
+//  Locate symbols and line numbers from asm files
 //
 //#if defined Q_OS_MAC || defined Q_OS_WIN32
     int line;
@@ -859,14 +851,14 @@ void SourceFrame::run()
             long size = nmParts[0].toULongLong(&ok,16) - var.address;
             //qDebug() << "size" << size;
             if ( size >= 1 ) {
-                if ( size > 100000 ) size = 100000;
+                if ( size > 256 ) size = 256;
                 if ( asmVariableDecls.contains(var.name) ) {
                     var.format = asmVariableDecls[var.name].format;
                     if ( asmVariableDecls[var.name].size > 0 ) {
                         var.size = asmVariableDecls[var.name].size;
                     }
                     size = var.size;
-                    //qDebug() << "var size" << var.size;
+                    //qDebug() << "var name & size" << var.name << var.size;
                 } else {
                     var.size = size;
                 }
@@ -910,6 +902,7 @@ void SourceFrame::run()
 	} else {
 	    var.size = 8;
 	}
+        //qDebug() << "var name & size" << var.name << var.size;
 	var.values = new AllTypesArray(var.size);
         newVars.append(asmDataWindow->variables[index]);
     }
@@ -1340,7 +1333,9 @@ void SourceFrame::nextInstruction(QString file, int line)
     setNextLine(breakFile, breakLine);
     frameWindow->nextLine(breakFile,breakLine);
     asmDataWindow->rebuildTable();
+    //qDebug() << "About to completeStep()";
     emit completeStep();
+    //qDebug() << "Done nextI";
 }
 
 void SourceFrame::setFontHeightAndWidth(int height, int width)

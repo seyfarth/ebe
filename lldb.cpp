@@ -22,14 +22,13 @@ extern ClassDefinition latestClass;
 
 extern Debugger *dbg;
 
-static QSemaphore critSem(1);
-static QSemaphore gateSem(1);
-static QSemaphore resultSem(0);
-static QSemaphore launchSem(0);
+extern LLDBThread *lldbThread;
 
 static volatile bool blocked;
 static volatile bool resultReady;
 extern bool d;
+
+static QSemaphore gateSem(1);
 
 LLDB *lldb;
 
@@ -40,7 +39,7 @@ LLDBThread::LLDBThread()
 
 void LLDBThread::run()
 {
-    //qDebug() << "thread" << currentThreadId();
+    //qDebug() << "lldb thread" << lldbThread;
     dbg = lldb = new LLDB;
     dbg->initDBG();
     Debugger::runningStatus = Debugger::dbgProcess->state();
@@ -54,15 +53,14 @@ LLDBReaderThread::LLDBReaderThread()
 
 void LLDBReaderThread::run()
 {
-    //qDebug() << "reader thread" << currentThreadId();
+    //qDebug() << "reader thread" << QThread::currentThread();
     //qDebug() << "in run reader state" << dbg->dbgProcess->state() << dbg->dbgProcess->pid();
-    connect ( lldb->dbgProcess, SIGNAL(readyReadStandardOutput()),
-              this, SLOT(handleRead()) );
     exec();
 }
 
 void LLDBReaderThread::handleRead()
 {
+    //qDebug() << "reader HR thread" << QThread::currentThreadId();
     lldb->handleRead();
 }
 
@@ -73,12 +71,10 @@ LLDB::LLDB()
 #if defined(Q_OS_WIN)
     needToKill = false;
 #endif
-    dbgProcess = new QProcess(this);
+    dbgProcess = new QProcess();
+    dbgProcess->start(dbgName,QIODevice::ReadWrite | QIODevice::Text );
     dbgProcess->setProcessChannelMode(QProcess::MergedChannels);
-    dbgProcess->start(dbgName,QIODevice::ReadWrite | QIODevice::Text |
-                              QIODevice::Unbuffered );
     //dbgProcess->start(dbgName);
-
 
     wordSize = ebe["build/word_size"].toInt();
     //qDebug() << "lldb state" << dbgProcess->state() << dbgProcess->pid();
@@ -151,10 +147,16 @@ LLDB::LLDB()
     }
     NullEOF = false;
     blocked = true;
-    busy = false;
-    reader = new LLDBReaderThread();
+    //reader = new LLDBReaderThread();
+    //reader->moveToThread(reader);
+    this->moveToThread(lldbThread);
+    //qDebug() << "lldbThread" << lldbThread;
+    //connect ( lldb->dbgProcess, SIGNAL(readyReadStandardOutput()),
+              //reader, SLOT(handleRead()) );
     reader->start();
     //qDebug() << "reader" << reader;
+    QFile::copy(":/src/wrapper.py", "wrapper.py");
+    sendRaw("command script import wrapper.py");
 }
 
 void LLDB::sync()
@@ -172,6 +174,15 @@ void LLDB::waitForResults()
     }
 }
 
+QString cmdTag;
+
+void LLDB::sendRaw(QString cmd, QString tag)
+{
+    //qDebug() << "sendRaw" << cmd;
+    cmdTag = tag;
+    writeLine(cmd);
+}
+
 void LLDB::send(QString cmd, QString tag)
 {
     sendReceive(cmd,tag);
@@ -179,35 +190,56 @@ void LLDB::send(QString cmd, QString tag)
 
 static bool firstRead = true;
 static QStringList hrResults;
-QString cmdTag;
 
 QStringList LLDB::sendReceive(QString cmd, QString tag)
 {
     QString s;
-    QStringList list;
+    QString result;
+    QStringList results;
+    bool stopped;
 
+    cmd = "wrap " + cmd;
     //qDebug() << "sendReceive start:"<< cmd << tag;
-    acquireSem(critSem);
+    //qDebug() << "sendReceive thread" << QThread::currentThread();
     cmdTag = tag;
-    resultReady = false;
     writeLine(cmd);
     emit log(cmd);
     blocked = true;
-    //if(d)qDebug() << "SR waiting";
-    acquireSem(resultSem);
-    //qDebug() << "SR results" << hrResults;
-    list = hrResults;
-    hrResults.clear();
-#if defined(Q_OS_MAC)
-    if ( cmd.left(7) == "process" ) {
-        acquireSem(launchSem);
+    stopped = false;
+    while ( 1 ) {
+        //qDebug() << "bytesAvailable" << dbgProcess->bytesAvailable();
+        if ( dbgProcess->bytesAvailable() < 1 ) dbgProcess->waitForReadyRead(-1);
+        result = dbgProcess->readLine();
+        result.chop(1);
+        //qDebug() << "sr read" << result;
+        if ( result.indexOf("stopped") >= 0 ) stopped = true;
+        //qDebug() << "stopped" << stopped  << result;
+        if ( result == "LLDB DONE" ) break;
+        if ( result.indexOf("(lldb)") < 0 ) {
+            results.append(result);
+        }            
     }
-#endif
-    
-    foreach ( s, list ) emit log(s);
-    releaseSem(critSem);
+    //qDebug() << "sr" << results;
+    if ( stopped && ((results.indexOf(QRegExp("Target.*")) >= 0)) ) {
+        int k;
+        k = results.indexOf(QRegExp(".* at [^:]+:[0-9]+:[0-9]+"));
+        //qDebug() << "look for file" << k;
+        if ( k >= 0 ) {
+            handleNextInstruction(results[k]);
+        } else {
+	    k = results.indexOf(QRegExp("->.*"));
+            if ( k >= 0 ) handleNextInstruction(results[k]);
+        }
+    } else if ( stopped && results.indexOf(QRegExp(".*exited.*")) >= 0 ) {
+        //qDebug() << "exited bt" << result;
+        results.append(tr("Program not running"));
+        running = false;
+        emit sendBackTrace(results);
+    }
+    //qDebug() << "SR results" << results;
+    foreach ( s, results ) emit log(s);
 
-    return list;
+    return results;
 }
 
 QStringList LLDB::splitLines(QString s)
@@ -221,106 +253,94 @@ void LLDB::handleRead()
 {
     QString result;
     QStringList results;
-    char ch;
     bool stopped;
     QStringList parts;
 
-    //if(d) qDebug() << "Entered handleRead";
+    //qDebug() << "Entered handleRead" << cmdTag;
+    //qDebug() << "handleRead thread" << QThread::currentThreadId();
     if ( firstRead ) {
         firstRead = false;
         blocked = false;
-        return;
+        //return;
     }
 
-    while ( dbgProcess->bytesAvailable() > 0 ) {
-        result = dbgProcess->readLine();
-        result.chop(1);
-        emit log(result);
-        ch = result[0].toLatin1();
-        result.remove(0,1);
-        //if(d) qDebug() << "handleRead" << cmdTag << ch << result;
-        switch ( ch ) {
-        case '^':   // Result record: ^done 
-            blocked = false;
-            resultReady = true;
-            resultSem.release(1);
-            //if(d) qDebug() << "finished previous command, available"
-                     //<< resultSem.available();
-            QCoreApplication::processEvents(QEventLoop::AllEvents,0);
-            break;  
-
-        case '~':   // Console stream out - response to a CLI command
-            hrResults = splitLines(result);
-            result.clear();
-            break;
-
-        case '&':   // Log stream out
-            break;
-
-        case '*':   // Asynchronous result
-            stopped = result.left(7) == "stopped";
+    stopped = false;
+    //while ( dbgProcess->bytesAvailable() > 0 ) {
+    while ( 1 ) {
+        if ( dbgProcess->bytesAvailable() > 0 ) {
+            //qDebug() << "bytesAvailable" << dbgProcess->bytesAvailable();
+            result = dbgProcess->readLine();
+            result.chop(1);
+            emit log(result);
+            //qDebug() << "hr" << result;
+            if ( result.indexOf("stopped") >= 0 ) stopped = true;
             //qDebug() << "stopped" << stopped  << result;
-            if ( cmdTag == "launch" && stopped ) launchSem.release(1);
-            if ( stopped &&
-                  ((result.indexOf("break") >= 0) ||
-                  (result.indexOf("step") >= 0)) ) {
-                //qDebug() << "stopped" << result;
-                handleNextInstruction(result);
-            } else if ( stopped &&
-                  result.indexOf("exited") >= 0 ) {
-                //if(d) qDebug() << "exited" << result;
-                QStringList results;
-                results.append(tr("Program not running"));
-                running = false;
-                emit sendBackTrace(results);
-            }
-            break;
-
-        case '+':   // Status of an ongoing, slow operation - asynchronous
-            break;
-
-        case '=':   // Notify output - asynchronous
-            break;
-
-        case '@':   // Target stream out - always redirected
-            break;
-
+            if ( result.indexOf("prompt (string)") == 0 ) break;
+            if ( result.indexOf("(lldb)") < 0 ) {
+                results.append(result);
+            }            
+        } else {
+            lldbThread->wait(100);
+            usleep(1000);
+            //QCoreApplication::processEvents(QEventLoop::AllEvents);
+            //qDebug() << "after sleep bytesAvailable" << dbgProcess->bytesAvailable();
         }
     }
-    //if(d) qDebug() << "exit handleRead";
+    hrResults = results;
+    //qDebug() << "handleRead" << results;
+    if ( stopped && ((result.indexOf("Target") >= 0) ||
+          (results.indexOf("step") >= 0)) ) {
+        int k;
+        k = results.indexOf(QRegExp("->.*"));
+        //qDebug() << "stopped" << result << k;
+        if ( k >= 0 ) handleNextInstruction(results[k]);
+    } else if ( stopped && result.indexOf("exited") >= 0 ) {
+        //qDebug() << "exited bt" << result;
+        results.append(tr("Program not running"));
+        running = false;
+        emit sendBackTrace(results);
+    } else if ( result.indexOf("(lldb) set show") ) {
+        blocked = false;
+        resultReady = true;
+    }
+    //qDebug() << "exit handleRead";
 }
 
 void LLDB::handleNextInstruction(QString result)
 {
     QStringList parts;
     QString file;
-    int line=-1;
-    int i, n;
-    unsigned long address;
+    int line;
+    int n;
+    unsigned long address=0;
 
-    parts = result.split(QRegExp("[*,\"{}\\[\\]]+"));
+    parts = result.split(QRegExp(" +"));
     //qDebug() << "stopped" << parts;
     n = parts.length();
-    for ( i = 1; i < n-1; i++ ) {
-        if ( parts[i] == "addr=" ) {
-            address = parts[i+1].toULong(0,16);
-        } else if ( parts[i] == "file=" ) {
-            file = parts[i+1];
-        } else if ( parts[i] == "line=" ) {
-            line = parts[i+1].toInt();
+    if ( n <= 2 ) return;
+    if ( parts[0] == "->" ) {
+        address = parts[1].toULong(0,16);
+    } else {
+        QStringList parts2;
+        parts2 = parts[n-1].split(':');
+        if ( parts2.length() == 3 ) {
+            file = parts2[0];
+            line = parts2[1].toInt();
+        } else {
+            return;
         }
     }
-    if ( file == "??" || line == -1 ) {
+    if ( address != 0 ) {
         FileLine fl;
         if ( addressToFileLine.contains(address) ) {
             fl = addressToFileLine[address];
             //qDebug() << address << fl.file << fl.line;
             emit nextInstruction(fl.file,fl.line);
         } else {
-            qDebug() << tr("Could not interpret address:") << address;
+            //qDebug() << tr("Could not interpret address:") << address;
         }
         //qDebug() << "stopped" << address << file << line;
-    } else if ( result.indexOf("addr=") >= 0 ) {
+    } else {
         emit nextInstruction(file,line);
         //qDebug() << "stopped" << address << file << line;
     }
@@ -329,25 +349,32 @@ void LLDB::handleNextInstruction(QString result)
 void LLDB::completeStep()
 {
     acquireSem(gateSem);
+    //qDebug() << "entered completeStep, running" << running;
     if ( running ) setNormal();
+    //qDebug() << "after setNormal";
     if ( running ) getClasses();
+    //qDebug() << "after getClasses";
     if ( running ) getRegs();
+    //qDebug() << "after getRegs";
     if ( running ) getFpRegs();
+    //qDebug() << "after getFpRegs";
     if ( running ) getBackTrace();
+    //qDebug() << "after getBackTrace";
     if ( running ) getGlobals();
-    releaseSem(gateSem);
+    //qDebug() << "after getGlobals";
     //qDebug() << "completed step";
     if ( running ) emit resetData();
+    releaseSem(gateSem);
 }
 
 void LLDB::processTypedefRequest(QString name, QString &type)
 {
-    acquireSem(gateSem);
     VariableDefinition v;
     QString result;
     QStringList results;
     QStringList parts;
     QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
+    acquireSem(gateSem);
     //qDebug() << "processTypedefRequest" << name;
     latestClass.name = name;
     latestClass.members.clear();
@@ -362,11 +389,11 @@ void LLDB::processTypedefRequest(QString name, QString &type)
 
 void LLDB::processClassRequest(QString name, ClassDefinition &c)
 {
-    acquireSem(gateSem);
     QRegExp rx("^\\s+([a-zA-Z].*)\\s+(\\**)([a-zA-Z0-9][a-zA-Z0-9_]*)(.*);$");
     QString result;
     QStringList results;
     VariableDefinition v;
+    acquireSem(gateSem);
     c.name = name;
     c.members.clear();
     //results = sendReceive("ptype " + name);
@@ -620,20 +647,20 @@ void LLDB::initDBG()
 {
     //qDebug() << "initDBG entered";
     running = false;
-    busy = false;
     dbgProcess->setTextModeEnabled(true);
     dbgProcess->setReadChannel(QProcess::StandardOutput);
+    send("set set term-width 1024");
     //qDebug() << "initDBG exiting";
 }
 
 //public slots:
 void LLDB::doCommand(QString cmd, QString tag)
 {
-    //acquireSem(gateSem);
+    acquireSem(gateSem);
     if ( tag == "" ) tag = "console";
     //qDebug() << "doCommand" << cmd << tag << p1 << p2;
     send(cmd,tag);
-    //releaseSem(gateSem); 
+    releaseSem(gateSem);
 }
 
 QString currentFile;
@@ -641,7 +668,6 @@ QString currentFile;
 void LLDB::doRun(QString exe, QString options, QStringList files,
     QList<StringSet> breakpoints, QStringList g)
 {
-    acquireSem(gateSem);
     int i;
     int length = files.length();
     QStringList parts;
@@ -660,10 +686,10 @@ void LLDB::doRun(QString exe, QString options, QStringList files,
     runningStatus = dbgProcess->state();
     if ( runningStatus != QProcess::Running ) {
         emit error("lldb is not running");
-        releaseSem(gateSem);
         return;
     }
-    //send("kill");
+    acquireSem(gateSem);
+    send("kill");
     //send("nosharedlibrary");
     send(QString("script os.chdir('") + QDir::currentPath() + QString("')"));
     //qDebug() << "file" << exe;
@@ -729,7 +755,6 @@ void LLDB::doRun(QString exe, QString options, QStringList files,
             setBreakpointInternal(files[i],bp);
         }
     }
-
 #if defined(Q_OS_WIN)
     needToWake = true;
     //char dir[1025];
@@ -800,12 +825,15 @@ void LLDB::doRun(QString exe, QString options, QStringList files,
     //send("set inferior-tty " + terminalWindow->ptyName);
     running = true;
     //sendReceive("2 register read ymm16");
+    //qDebug() << "Before sleep";
+    //usleep(1000);
+    //qDebug() << "After sleep";
     hasAVX = testAVX();
     send("continue","run");
 #endif
     //qDebug() << "running" << running;
-    releaseSem(gateSem);
     if ( running ) emit resetData();
+    releaseSem(gateSem);
     //qDebug() << "released";
     //if (!running) return;
     //getClasses();
@@ -820,8 +848,8 @@ void LLDB::doNext()
     if (!running) return;
     acquireSem(gateSem);
     send("next");
-    releaseSem(gateSem);
     //qDebug() << "end lldb next";
+    releaseSem(gateSem);
 }
 
 void LLDB::doStep()
@@ -935,15 +963,15 @@ void LLDB::requestReset()
 
 void LLDB::deleteBreakpoint(QString file, QString line)
 {
-    acquireSem(gateSem);
     FileLabel f(file, line);
     int bp = bpHash[f];
     //qDebug() << "dbp" << file << line << bp;
     if (bp > 0) {
+        acquireSem(gateSem);
         send(QString("break delete %1").arg(bp));
         bpHash.remove(f);
+        releaseSem(gateSem);
     }
-    releaseSem(gateSem);
 }
 
 void LLDB::getBackTrace()
@@ -957,7 +985,6 @@ void LLDB::getBackTrace()
         emit sendBackTrace(results);
         return;
     }
-    //gateSem.acquire(1);
 
     if ( !running ) return;
     results = sendReceive("bt");
@@ -998,7 +1025,6 @@ void LLDB::getBackTrace()
     }
     //qDebug() << "end gbt" << results;
     emit sendBackTrace(results);
-    //gateSem.release(1);
 }
 
 void LLDB::getRegs()
@@ -1009,7 +1035,6 @@ void LLDB::getRegs()
     QString s;
 
     if ( !running ) return;
-    //gateSem.acquire(1);
     //d = true;
     send("frame select 0");
     results = sendReceive("register read");
@@ -1039,7 +1064,6 @@ void LLDB::getRegs()
     //if(d) qDebug() << map;
     //d = false;
     emit sendRegs(map);
-    //gateSem.release(1);
 }
 
 void LLDB::getFpRegs()
@@ -1055,7 +1079,6 @@ void LLDB::getFpRegs()
 
     if ( !running ) return;
 
-    //gateSem.acquire(1);
     cmd = "register read";
     foreach ( fp, fpRegs ) cmd += " " + fp;
     results = sendReceive(cmd);
@@ -1090,7 +1113,6 @@ void LLDB::getFpRegs()
     //qDebug() << "hfp result" << data;
     if ( data.size() == 0 ) running = false;
     emit sendFpRegs(data);
-    //gateSem.release(1);
 }
 
 void LLDB::getGlobals()
@@ -1408,7 +1430,6 @@ void LLDB::getArgs()
     VariableDefinitionMap vars;
 
     if (!running) return;
-    acquireSem(gateSem);
     //results = sendReceive(QString("info args"));
     foreach ( QString r, results ) {
         int n = r.indexOf(" =");
@@ -1419,7 +1440,6 @@ void LLDB::getArgs()
     args.sort();
     getVars(args, vars);
     //emit sendParameters(0,vars);
-    releaseSem(gateSem);
 }
 
 bool LLDB::testAVX()
@@ -1490,8 +1510,8 @@ void LLDB::requestLocals(DataPlank *p, int frame)
     VariableDefinitionMap vars;
 
     if (!running) return;
-    acquireSem(gateSem);
 
+    acquireSem(gateSem);
     //qDebug() << "requestLocals" << p << frame;
     send(QString("frame select %1").arg(frame));
     results = sendReceive("frame variable -L -a");
@@ -1517,8 +1537,8 @@ void LLDB::requestVar(DataPlank *p, QString name, QString address,
 
     //qDebug() << "lldb requestVar" << name << address << format << size << frame << p;
     if (!running) return;
-    acquireSem(gateSem);
 
+    acquireSem(gateSem);
     send(QString("frame select %1").arg(frame));
     if (format == "string array") {
         int i = 0;
@@ -1597,6 +1617,7 @@ void LLDB::getData(QStringList request)
     if (!running) return;
     //qDebug() << "getData" << request;
     if (size < 0 || size > 8) return;
+    acquireSem(gateSem);
     char sizeLetter = letterForSize[size];
 
     char formatLetter = 'd';
@@ -1607,7 +1628,6 @@ void LLDB::getData(QStringList request)
 
     if (first < 0 || last < 0) return;
 
-    acquireSem(gateSem);
     if (format == "string array") {
         result = "";
         int i = 0;
@@ -1713,7 +1733,9 @@ void LLDB::setEOF()
 
 void LLDB::receiveWorkingDir(QString dir)
 {
+    acquireSem(gateSem);
     QDir::current().cd(dir);
+    releaseSem(gateSem);
 }
 
 void LLDB::requestStack(int n)
@@ -1736,8 +1758,8 @@ void LLDB::requestAsmVariable(int i, uLong address, int n)
 {
     QStringList results;
     if (!running) return;
-    acquireSem(gateSem);
 
+    acquireSem(gateSem);
     //qDebug() << "requestAsmVariable" << i << address << n;
 
     results = sendReceive(QString("memory read -G %1xb %2").arg(n).arg(address));

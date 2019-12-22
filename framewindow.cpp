@@ -53,8 +53,7 @@ FrameWindow::FrameWindow(QWidget *parent)
     rows = 5;
     table = new EZTable(this);
     buildTable();
-    connect ( this, SIGNAL(requestStack(int)), dbg, SLOT(requestStack(int)),
-              Qt::BlockingQueuedConnection );
+    connect ( this, SIGNAL(requestStack(int)), dbg, SLOT(requestStack(int)) );
     connect ( dbg, SIGNAL(receiveStack(QStringList)), 
               this, SLOT(receiveStack(QStringList)));
     table->resizeToFitContents();

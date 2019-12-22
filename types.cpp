@@ -182,6 +182,7 @@ QString fieldsDouble(double d)
 AllTypesArray::AllTypesArray(int size_)
 {
     size = size_;
+    //qDebug() << "ATA size" << size;
     if ( size < 8 ) size = 8;
     int n = (size+7) / 8;
     data = new uLong [n];
@@ -191,6 +192,7 @@ AllTypesArray::AllTypesArray(int size_)
 AllTypesArray::AllTypesArray(AllTypesArray &x)
 {
     size = x.size;
+    //qDebug() << "ATA size" << size;
     int n = (size+7) / 8;
     data = new uLong[n];
     for ( int i = 0; i < n; i++ ) data[i] = x.data[i];
@@ -200,6 +202,7 @@ void AllTypesArray::resize(int n)
 {
     int oldSize = size;
     size = n;
+    //qDebug() << "ATA size" << size;
     if ( size < 8 ) size = 8;
     if ( size != oldSize ) {
         int n = (size+7) / 8;

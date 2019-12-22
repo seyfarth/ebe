@@ -134,11 +134,9 @@ AsmDataWindow::AsmDataWindow(QWidget *parent)
     formatToFunction["bin8"] = toBin8;
     qRegisterMetaType<uLong>("uLong");
     connect ( this, SIGNAL(requestAsmVariable(int,uLong,int)),
-              dbg, SLOT(requestAsmVariable(int,uLong,int)),
-              Qt::BlockingQueuedConnection );
+              dbg, SLOT(requestAsmVariable(int,uLong,int)) );
     connect ( dbg, SIGNAL(sendAsmVariable(int,QStringList)),
-              this, SLOT(receiveAsmVariable(int,QStringList)),
-              Qt::QueuedConnection );
+              this, SLOT(receiveAsmVariable(int,QStringList)) );
 }
 
 void AsmDataWindow::clear()
@@ -709,7 +707,7 @@ DefineAsmVariableDialog::DefineAsmVariableDialog()
     sizeSpin = new QSpinBox;
     layout->addWidget(sizeSpin, 2, 1);
     sizeSpin->setValue(8);
-    sizeSpin->setRange(1,80000);
+    sizeSpin->setRange(1,1000);
 
     layout->addWidget(new QLabel(tr("Format")), 3, 0);
     formatCombo = new QComboBox;

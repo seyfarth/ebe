@@ -27,7 +27,7 @@ BackTraceWindow::BackTraceWindow(QWidget *parent)
     layout->addWidget(list);
     setLayout(layout);
     connect(dbg, SIGNAL(sendBackTrace(QStringList)), this,
-        SLOT(receiveBackTrace(QStringList)), Qt::QueuedConnection );
+        SLOT(receiveBackTrace(QStringList)));
 }
 
 /**

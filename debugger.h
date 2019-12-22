@@ -64,6 +64,7 @@ public:
     virtual bool testAVX()=0;
     QStringList classResults;
     virtual void setNormal()=0;
+    virtual void setBreakpointInternal(QString, QString)=0;
 
 public slots:
     virtual void processTypedefRequest(QString,QString&)=0;
@@ -82,7 +83,6 @@ public slots:
     virtual void requestVar(DataPlank *p, QString name, QString address, QString type,
         QString format, int size, int frame )=0;
     virtual void setBreakpoint(QString, QString)=0;
-    virtual void setBreakpointInternal(QString, QString)=0;
     virtual void deleteBreakpoint(QString, QString)=0;
     virtual void receiveWorkingDir(QString)=0;
     virtual void setEOF()=0;
