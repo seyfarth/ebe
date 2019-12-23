@@ -38,9 +38,11 @@ void IntegerEdit::setValue(int n, int base)
     QString number;
     unsigned int x;
     if (base == 10) {
-        number.sprintf("%d", n);
+        //number.sprintf("%d", n);
+        number = QString("%1").arg(n);
     } else if (base == 16) {
-        number.sprintf("0x%x", n);
+        //number.sprintf("0x%x", n);
+        number = QString("%1").arg(n,0,16);
     } else {
         if (number == 0) {
             number = "0xb0";

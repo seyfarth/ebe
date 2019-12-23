@@ -693,7 +693,9 @@ void ColorButton::setColor()
         QString c;
         pm->fill(color);
         setIcon(*pm);
-        c.sprintf("#%02x%02x%02x", color.red(), color.green(), color.blue());
+        //c.sprintf("#%02x%02x%02x", color.red(), color.green(), color.blue());
+        c = QString("#%1%2%3").arg(color.red(),2,16,QChar('0')).arg(color.green(),2,16,QChar('0'))
+                              .arg(color.blue(),2,16,QChar('0'));
         newSettings[var] = c;
     }
 }

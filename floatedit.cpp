@@ -35,6 +35,7 @@ int FloatEdit::value()
 void FloatEdit::setValue(int n)
 {
     QString number;
-    number.sprintf("0x%08x", n);
+    //number.sprintf("0x%08x", n);
+    number = QString("0x%1").arg(n,8,16,QChar('0'));
     setText(number);
 }

@@ -911,13 +911,15 @@ void SourceWindow::setLineNumbers(int nLines)
     QTextDocument *doc = lineNumberEdit->document();
 
     for (int i = lastLineNumber + 1; i <= nLines; i++) {
-        s.sprintf("%4d", i);
+        //s.sprintf("%4d", i);
+        s = QString("%1").arg(i,4);
         lineNumberEdit->appendPlainText(s);
         QTextCursor(doc->findBlockByNumber(i - 1)).setBlockFormat(normalFormat);
     }
     QTextCursor cursor;
     for (int i = nLines + 1; i <= lastLineNumber; i++) {
-        s.sprintf("%4d", i);
+        //s.sprintf("%4d", i);
+        s = QString("%1").arg(i,4);
         cursor = doc->find(s);
         cursor.select(QTextCursor::BlockUnderCursor);
         cursor.removeSelectedText();

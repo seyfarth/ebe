@@ -206,12 +206,14 @@ QString FpRegister::value()
 {
     QString s;
     QString t;
-    s.sprintf("%12g", f8[0]);
+    //s.sprintf("%12g", f8[0]);
+    s = QString("%1").arg(f8[0],12);
     AllTypes a;
 
     a.u8 = u8[0];
     if (format == "float") {
-        s.sprintf("%g", f4[0]);
+        //s.sprintf("%g", f4[0]);
+        s = QString("%1").arg(f4[0]);
     } else if (format == "float hex") {
         s = hexFloat(a);
     } else if (format == "float binary fp") {
@@ -219,7 +221,8 @@ QString FpRegister::value()
     } else if (format == "float fields") {
         s = fieldsFloat(a);
     } else if (format == "double") {
-        s.sprintf("%g", f8[0]);
+        //s.sprintf("%g", f8[0]);
+        s = QString("%1").arg(f8[0]);
     } else if (format == "double hex") {
         s = hexDouble(a);
     } else if (format == "double binary fp") {
@@ -227,59 +230,73 @@ QString FpRegister::value()
     } else if (format == "double fields") {
         s = fieldsDouble(a);
     } else if (format == "4 floats") {
-        s.sprintf("%g %g %g %g", f4[0], f4[1], f4[2], f4[3]);
+        //s.sprintf("%g %g %g %g", f4[0], f4[1], f4[2], f4[3]);
+        s = QString("%1 %2 %3 %4").arg(f4[0]).arg(f4[1]).arg(f4[2]).arg(f4[3]);
     } else if (format == "2 doubles") {
-        s.sprintf("%g %g", f8[0], f8[1]);
+        //s.sprintf("%g %g", f8[0], f8[1]);
+        s = QString("%1 %2").arg(f8[0]).arg(f8[1]);
     } else if (format == "16 bytes") {
         s = "";
         for (int i = 0; i < 16; i++) {
-            t.sprintf("%02x ", u1[i]);
+            //t.sprintf("%02x ", u1[i]);
+            t = QString("%1 ").arg(u1[i],2,16,QChar('0'));
             s += t;
         }
     } else if (format == "8 shorts") {
         s = "";
         for (int i = 0; i < 8; i++) {
-            t.sprintf("%d ", i2[i]);
+            //t.sprintf("%d ", i2[i]);
+            t = QString("%1 ").arg(u2[i]);
             s += t;
         }
     } else if (format == "4 ints") {
-        s.sprintf("%d %d %d %d", i4[0], i4[1], i4[2], i4[3]);
+        //s.sprintf("%d %d %d %d", i4[0], i4[1], i4[2], i4[3]);
+        s = QString("%1 %2 %3 %4").arg(i4[0]).arg(i4[1]).arg(i4[2]).arg(i4[3]);
     } else if (format == "2 longs") {
-        s.sprintf("%lld %lld", i8[0], i8[1]);
+        //s.sprintf("%lld %lld", i8[0], i8[1]);
+        s = QString("%1 %2").arg(f8[0]).arg(f8[1]);
     } else if (format == "8 floats") {
         s = "";
         for (int i = 0; i < 8; i++) {
-            t.sprintf("%g ", f4[i]);
+            //t.sprintf("%g ", f4[i]);
+            t = QString("%1 ").arg(f4[i]);
             s += t;
         }
     } else if (format == "4 doubles") {
         s = "";
         for (int i = 0; i < 4; i++) {
-            t.sprintf("%g ", f8[i]);
+            //t.sprintf("%g ", f8[i]);
+            t = QString("%1 ").arg(f8[i]);
             s += t;
         }
     } else if (format == "32 bytes") {
         s = "";
         for (int i = 0; i < 32; i++) {
-            t.sprintf("%02x ", u1[i]);
+            //t.sprintf("%02x ", u1[i]);
+            t = QString("%1 ").arg(u1[i],2,16,QChar('0'));
             s += t;
         }
     } else if (format == "16 shorts") {
         s = "";
         for (int i = 0; i < 16; i++) {
-            t.sprintf("%d ", i2[i]);
+            //t.sprintf("%d ", i2[i]);
+            t = QString("%1 ").arg(i2[i]);
             s += t;
         }
     } else if (format == "8 ints") {
         s = "";
         for (int i = 0; i < 8; i++) {
-            t.sprintf("%d ", i4[i]);
+            //t.sprintf("%d ", i4[i]);
+            t = QString("%1 ").arg(i4[i]);
             s += t;
         }
     } else if (format == "4 longs") {
-        s.sprintf("%lld %lld %lld %lld", i8[0], i8[1], i8[2], i8[3]);
+        //s.sprintf("%lld %lld %lld %lld", i8[0], i8[1], i8[2], i8[3]);
+        s = QString("%1 %2 %3 %4").arg(i8[0]).arg(i8[1]).arg(i8[2]).arg(i8[3]);
     } else if (format == "2 int128s") {
-        s.sprintf("%016llx%016llx %016llx%016llx", i8[0], i8[1], i8[2], i8[3]);
+        //s.sprintf("%016llx%016llx %016llx%016llx", i8[0], i8[1], i8[2], i8[3]);
+        s = QString("%1%2 %3%4").arg(i8[0],8,16,QChar('0')).arg(i8[1],8,16,QChar('0'))
+                                .arg(i8[2],8,16,QChar('0')).arg(i8[3],8,16,QChar('0'));
     } else {
         qDebug() << "Unknown format" << format;
     }

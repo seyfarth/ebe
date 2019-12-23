@@ -504,7 +504,8 @@ void IntConvert::binaryToHex2()
     output->setNibbles(computedValue, 4, nibble + 1);
     table->setCellWidget(row, 4, output);
     QString t;
-    t.sprintf("%d == 0x%X", n, n);
+    //t.sprintf("%d == 0x%X", n, n);
+    t = QString("%1 == 0x%2").arg(n).arg(n,0,16);
     table->setCellWidget(row, 5, new QLabel(t));
 
     value = value >> 4;
@@ -568,7 +569,8 @@ void IntConvert::hexToBinary2()
     output->setBits(computedValue, 16, (nibble + 1) * 4);
     table->setCellWidget(row, 4, output);
     QString t;
-    t.sprintf("0x%X == 0b%s", n, bits[n]);
+    //t.sprintf("0x%X == 0b%s", n, bits[n]);
+    t = QString("0x%1 == 0b%2").arg(n,0,16).arg(bits[n]);
     table->setCellWidget(row, 5, new QLabel(t));
 
     value = value >> 4;
