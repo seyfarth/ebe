@@ -315,7 +315,7 @@ void Settings::setDefaults()
     ebe["bsd"] = false;
     ebe["linux"] = false;
     ebe["mac"] = true;
-    ebe["debugger"] = "/Applications/Xcode.app/Contents/Developer/usr/bin/lldb-mi";
+    ebe["debugger"] = "lldb";
     ebe["os"] = "mac";
     ebe["windows"] = false;
     ebe["build/asm"] = "nasm -DOSX -P \"$ebe_inc\" -f macho64 -o \"$base.o\" -l \"$base.lst\" \"$source\"";
