@@ -1,14 +1,14 @@
 ebedecl: parse.o lex.o main.o tokenmap.o symbols.o
 	g++ -g -o ebedecl parse.o lex.o main.o tokenmap.o symbols.o -lfl
 
-parse.o: parse.c
-	g++ -g -c parse.c
+parse.o: parse.cpp
+	g++ -g -c parse.cpp
 
 symbols.o: symbols.cpp
 	g++ -g -c symbols.cpp
 
-lex.o: lex.c
-	g++ -g -c lex.c
+lex.o: lex.cpp
+	g++ -g -c lex.cpp
 
 main.o: main.cpp
 	g++ -g -c main.cpp
@@ -16,14 +16,14 @@ main.o: main.cpp
 tokenmap.o: tokenmap.cpp parse.h
 	g++ -g -c tokenmap.cpp
 
-lex.c: lex.l parse.h
-	flex -o lex.c lex.l
+lex.cpp: lex.l parse.h
+	flex -o lex.cpp lex.l
 
-parse.c: parse.y
-	bison --defines=parse.h -o parse.c parse.y
+parse.cpp: parse.y
+	bison --defines=parse.h -o parse.cpp parse.y
 
 parse.h: parse.y
-	bison --defines=parse.h -o parse.c parse.y
+	bison --defines=parse.h -o parse.cpp parse.y
 
 install: ebedecl
 	cp ebedecl /usr/bin

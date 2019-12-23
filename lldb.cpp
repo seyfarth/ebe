@@ -153,7 +153,7 @@ LLDB::LLDB()
     //qDebug() << "lldbThread" << lldbThread;
     //connect ( lldb->dbgProcess, SIGNAL(readyReadStandardOutput()),
               //reader, SLOT(handleRead()) );
-    reader->start();
+    //reader->start();
     //qDebug() << "reader" << reader;
     QFile::copy(":/src/wrapper.py", "wrapper.py");
     sendRaw("command script import wrapper.py");

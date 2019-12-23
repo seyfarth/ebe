@@ -311,7 +311,7 @@ void Settings::setDefaults()
     }
     ebe.os = "linux";
     ebe["xmm/reverse"] = false;
-#elif __APPLE__
+#elif defined(Q_OS_MAC)
     ebe["bsd"] = false;
     ebe["linux"] = false;
     ebe["mac"] = true;
