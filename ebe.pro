@@ -14,6 +14,11 @@ macx {
     #QMAKE_CC = gcc-8
     #QMAKE_CXX = g++-8
     QMAKE_CXXFLAGS += -std=c++11
+    exists(/usr/local/bin/brew) {
+        DESTDIR = /usr/local/bin
+    } else {
+        DESTDIR = /opt/local/bin
+    }
 }
 equals(QT_MAJOR_VERSION,5) {
     QT += widgets
