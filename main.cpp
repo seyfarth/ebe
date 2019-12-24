@@ -30,6 +30,7 @@
 #include "language.h"
 
 bool userSetGeometry = false;
+bool startedFromDesktop = false;
 int userWidth;
 int userHeight;
 
@@ -61,6 +62,13 @@ int main(int argc, char *argv[])
         }
     }
 
+    if (argc >= 2) {
+        if (strcmp(argv[1], "-d") == 0) {
+            startedFromDesktop = true;
+            argc--;
+            argv++;
+        }
+    }
     MainWindow::setWordSize();
     settings = new Settings;
     settings->read();
