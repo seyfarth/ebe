@@ -25,15 +25,11 @@ DockWidget::DockWidget(QString name)
     : QDockWidget(name)
 {
     needToDock = false;
-    setToolTip(tr("Left click on the titlebar to drag a subwindow.\n"
-                  "Click on the float icon (2 boxes) to make it visible\n"
-                  "outside the ebe window. Then move or resize as desired.\n"
-                  "Move a subwindow by dragging on the title bar.  You can.\n"
-                  "place it anywhere in the left, right, top or bottom or\n"
-                  "drop it on another one to merge into a tabbed window.\n"
-                  "If dragging is difficult, float the subwindow first.\n"
-                  "Right click to see the view options."));
-    setToolTipDuration(4000);
+    setToolTip(tr(
+       "Drag the titlebar to move a subwindow anywhere on the left, right,\n"
+       "top or bottom or drop on another one to merge into a tabbed window.\n"
+       "Right click to see the view options."));
+    //setToolTipDuration(4000);
 }
 
 #if 0

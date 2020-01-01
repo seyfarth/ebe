@@ -43,9 +43,6 @@ Settings *settings;
 
 int main(int argc, char *argv[])
 {
-#ifdef Q_OS_MAC
-    setenv("QT_USE_NATIVE_WINDOWS","1",1);
-#endif
     app = new QApplication(argc, argv);
     //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
 
