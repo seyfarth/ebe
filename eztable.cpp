@@ -156,7 +156,7 @@ EZTable::EZTable(QWidget *parent)
     planks = 0;
     setPlankCount(1);
     thePlank = currentPlank = table[0];
-    fontWidth = ebe["font_size"].toInt() * 2 / 3;
+    fontWidth = ebe["font_size"].toInt() * 0.8;
     fontHeight = 2*fontWidth;
     ezrowHeight = 1.1 * fontHeight;
     latestRow = 0;

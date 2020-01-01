@@ -298,7 +298,7 @@ void FrameWindow::receiveStack(QStringList results)
     EZCell *item;
     bool ok;
     int row = rows-1;
-    //qDebug() << "rs";
+    //qDebug() << "rs rows" << rows;;
     //qDebug() << "rs" << limit->unalias << items.keys();
     //qDebug() << "rs names" << *(limit->names);
     if ( wordSize == 64 &&
@@ -401,8 +401,10 @@ void FrameWindow::receiveStack(QStringList results)
     //qDebug() << "res" << results;
     for ( int i=0; i < results.length(); i++ ) {
         parts = results[i].split(QRegExp("\\s+"));
-        //qDebug() << parts;
+        //qDebug() << parts << row;
         for ( int j = 1; j < parts.length(); j++ ) {
+	    //qDebug() << parts[j] << row;
+            if ( row < 0 ) break;
             x = parts[j].toULongLong(&ok,16);
             item = table->cell(row,1);
             item->setValue(x);
@@ -455,6 +457,7 @@ void FrameWindow::setFontHeightAndWidth(int height, int width)
     fontHeight = height;
     fontWidth = width;
     //qDebug() << "setFont" << height << width;
+    table->setFontHeightAndWidth(height,width);
     table->resizeToFitContents();
 }
 

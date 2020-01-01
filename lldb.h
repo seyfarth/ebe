@@ -35,9 +35,9 @@ public:
     void initDBG();
     void sync();
     void waitForResults();
-    void send(QString cmd, QString tag="");
-    void sendRaw(QString cmd, QString tag="");
-    QStringList sendReceive(QString cmd, QString tag="");
+    void send(QString cmd);
+    void sendRaw(QString cmd);
+    QStringList sendReceive(QString cmd);
     void getBackTrace();
     void getRegs();
     void getFpRegs();

@@ -50,16 +50,15 @@ void Debugger::writeLine ( QString cmd )
 #endif
 }
 
-void acquireSem ( QSemaphore &sem )
+void acquireSem ( QSemaphore & /*sem*/ )
 {
     //qDebug() << "acquireSem" << &sem << QThread::currentThread() << sem.available()
              //<< "   loop lvl" << QThread::currentThread()->loopLevel();
-    sem.acquire(1);
+    //sem.acquire(1);
 }
 
-void releaseSem ( QSemaphore &sem )
+void releaseSem ( QSemaphore & /*sem*/ )
 {
     //qDebug() << "releaseSem" << &sem << QThread::currentThread() << sem.available();
-    sem.release(1);
+    //sem.release(1);
 }
-

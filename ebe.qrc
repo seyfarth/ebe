@@ -793,6 +793,7 @@
 <file>src/fortran/while</file>
 <file>src/fortran/cout</file>
 <file>src/toybox_template.cpp</file>
+<file>src/wrapper.py</file>
 <file>src/hal/double</file>
 <file>src/hal/switch</file>
 <file>src/hal/hello.hal</file>

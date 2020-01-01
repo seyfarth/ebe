@@ -17,6 +17,7 @@ extern QHash<unsigned long, FileLine> addressToFileLine;
 extern QString breakFile;
 extern int breakLine;
 extern QString dbgName;
+extern int targetPid;
 
 extern ClassDefinition latestClass;
 
@@ -174,24 +175,21 @@ void LLDB::waitForResults()
     }
 }
 
-QString cmdTag;
-
-void LLDB::sendRaw(QString cmd, QString tag)
+void LLDB::sendRaw(QString cmd)
 {
     //qDebug() << "sendRaw" << cmd;
-    cmdTag = tag;
     writeLine(cmd);
 }
 
-void LLDB::send(QString cmd, QString tag)
+void LLDB::send(QString cmd)
 {
-    sendReceive(cmd,tag);
+    sendReceive(cmd);
 }
 
 static bool firstRead = true;
 static QStringList hrResults;
 
-QStringList LLDB::sendReceive(QString cmd, QString tag)
+QStringList LLDB::sendReceive(QString cmd)
 {
     QString s;
     QString result;
@@ -201,14 +199,14 @@ QStringList LLDB::sendReceive(QString cmd, QString tag)
     cmd = "wrap " + cmd;
     //qDebug() << "sendReceive start:"<< cmd << tag;
     //qDebug() << "sendReceive thread" << QThread::currentThread();
-    cmdTag = tag;
     writeLine(cmd);
     emit log(cmd);
     blocked = true;
     stopped = false;
     while ( 1 ) {
-        //qDebug() << "bytesAvailable" << dbgProcess->bytesAvailable();
-        if ( dbgProcess->bytesAvailable() < 1 ) dbgProcess->waitForReadyRead(-1);
+        if ( dbgProcess->bytesAvailable() < 1 ) {
+            dbgProcess->waitForReadyRead(-1);
+        }
         result = dbgProcess->readLine();
         result.chop(1);
         //qDebug() << "sr read" << result;
@@ -256,7 +254,6 @@ void LLDB::handleRead()
     bool stopped;
     QStringList parts;
 
-    //qDebug() << "Entered handleRead" << cmdTag;
     //qDebug() << "handleRead thread" << QThread::currentThreadId();
     if ( firstRead ) {
         firstRead = false;
@@ -654,12 +651,11 @@ void LLDB::initDBG()
 }
 
 //public slots:
-void LLDB::doCommand(QString cmd, QString tag)
+void LLDB::doCommand(QString cmd, QString /*tag*/)
 {
     acquireSem(gateSem);
-    if ( tag == "" ) tag = "console";
     //qDebug() << "doCommand" << cmd << tag << p1 << p2;
-    send(cmd,tag);
+    send(cmd);
     releaseSem(gateSem);
 }
 
@@ -671,6 +667,8 @@ void LLDB::doRun(QString exe, QString options, QStringList files,
     int i;
     int length = files.length();
     QStringList parts;
+    QStringList results;
+    QString result;
     QString inputFile;
     QString outputFile;
     QString errorFile;
@@ -746,7 +744,24 @@ void LLDB::doRun(QString exe, QString options, QStringList files,
         send("set set target.error-path " + errorFile );
     }
     //send("process launch --no-stdio --stop-at-entry" );
-    send("process launch --stop-at-entry", "launch" );
+    send("process launch --stop-at-entry");
+    results = sendReceive("target list");
+    //qDebug() << "target info" << results;
+    foreach ( result, results ) {
+       if ( result[0] == QChar('*') ) {
+           //qDebug() << "target info" << result;
+           parts = result.split(QRegExp("[ ():,]+"));
+           //qDebug() << "parts" << parts;
+           foreach ( QString p, parts ) {
+               int i = p.indexOf("pid=");
+               if ( i == 0 ) {
+                   targetPid = p.mid(4).toInt();
+                   //qDebug() << "pid" << targetPid;
+               }
+           }
+           break;
+       }
+    }
     send("break delete -f");
     for (i = 0; i < length; i++) {
         foreach ( QString bp, breakpoints[i] ) {
@@ -829,7 +844,7 @@ void LLDB::doRun(QString exe, QString options, QStringList files,
     //usleep(1000);
     //qDebug() << "After sleep";
     hasAVX = testAVX();
-    send("continue","run");
+    send("continue");
 #endif
     //qDebug() << "running" << running;
     if ( running ) emit resetData();
@@ -898,7 +913,7 @@ void LLDB::doCall()
         send(QString("tbreak -f \"%1\" -l %2").arg(breakFile).arg(breakLine+1));
     }
 //#endif
-    send("continue","call");
+    send("continue");
     releaseSem(gateSem);
 }
 
@@ -1745,9 +1760,9 @@ void LLDB::requestStack(int n)
     if (!running) return;
     acquireSem(gateSem);
     if ( wordSize == 64 ) {
-        results = sendReceive(QString("memory read -G %1xg $rsp").arg(n),"stack");
+        results = sendReceive(QString("memory read -G %1xg $rsp").arg(n));
     } else {
-        results = sendReceive(QString("memory read -G %1xw $esp").arg(n),"stack");
+        results = sendReceive(QString("memory read -G %1xw $esp").arg(n));
     }
     //qDebug() << results;
     emit receiveStack(results);

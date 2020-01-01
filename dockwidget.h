@@ -12,7 +12,6 @@ class DockWidget: public QDockWidget
 public:
     bool needToDock;
     DockWidget(QString s);
-    bool event(QEvent *event);
 };
 
 #endif

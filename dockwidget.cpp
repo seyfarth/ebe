@@ -33,19 +33,20 @@ DockWidget::DockWidget(QString name)
                   "drop it on another one to merge into a tabbed window.\n"
                   "If dragging is difficult, float the subwindow first.\n"
                   "Right click to see the view options."));
-    //setToolTipDuration(4000);
+    setToolTipDuration(4000);
 }
 
+#if 0
 bool DockWidget::event(QEvent *event)
 {
     if ( event->type() == QEvent::ToolTip ) {
         //qDebug() << "event" << this;
         //qDebug() << "cursor" << mapFromGlobal(cursor().pos());
         if ( mapFromGlobal(cursor().pos()).y() > 20 ) {
-            event->accept();
-            return true;
+            //event->ignore();
+            //return true;
         }
     }
-    QWidget::event(event);
-    return false;
+    return QWidget::event(event);
 }
+#endif

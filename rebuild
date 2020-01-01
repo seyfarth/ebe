@@ -15,16 +15,35 @@ function error()
 
 trap 'error $LINENO $0' ERR
 
-shopt -s expand_aliases
-
 ./qrc
 qmake
 make clean
-make
+make -j 6
 cd ebedecl
 make clean
 make
 cd ..
-sudo cp ebe ebedecl/ebedecl /usr/bin
+pwd
+name=$(uname -s )
+if [ $name = Darwin ]
+then
+    if [ -x /usr/local/bin/brew ]
+    then
+        dest=/usr/local/bin
+        cp ebedecl/ebedecl $dest
+    elif [ -e /opt/local/bin ]
+    then
+        dest=/opt/local/bin
+        sudo cp ebedecl/ebedecl $dest
+    fi
+    echo " "
+    echo ebe is a script on Macs and can remain where it is.
+    echo ebedecl has been copied to $dest
+else
+    dest=/usr/bin
+    sudo cp ebe ebedecl/ebedecl $dest
+    echo " "
+    echo ebe and ebedecl have been copied to $dest
+fi
 echo " "
 echo ebe is now ready.  Type in \"ebe\" to run the program.

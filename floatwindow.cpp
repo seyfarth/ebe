@@ -61,7 +61,7 @@ QSize FloatWindow::sizeHint() const
     return QSize(200, 10);
 }
 
-void FloatWindow::setFontHeightAndWidth(int /*heighti*/, int /*width*/)
+void FloatWindow::setFontHeightAndWidth(int height, int width)
 {
     //int max, length;
     //fontHeight = height;
@@ -77,6 +77,7 @@ void FloatWindow::setFontHeightAndWidth(int /*heighti*/, int /*width*/)
         //}
         //table->setColumnWidth(c, (max + 1) * width + 3);
     //}
+    table->setFontHeightAndWidth(height,width);
     table->resizeToFitContents();
 }
 

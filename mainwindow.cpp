@@ -35,6 +35,7 @@ extern int userWidth;
 extern int userHeight;
 extern Settings *settings;
 extern QApplication *app;
+int targetPid=0;
 
 QString dbgName;
 DataWindow *dataWindow;
@@ -51,8 +52,9 @@ ConsoleWindow *consoleWindow;
 BackTraceWindow *backTraceWindow;
 BitBucket *bitBucket;
 Debugger *dbg;
-GDBThread *dbgThread;
+extern GDBThread *gdbThread;
 LLDBThread *lldbThread;
+QThread *dbgThread;
 ToyBox *toyBox;
 
 QStatusBar *statusBar;
@@ -156,10 +158,12 @@ MainWindow::MainWindow(QWidget *parent)
     checkTools();
 
     if ( dbgName == "gdb" ) {
-        dbgThread = new GDBThread();
-        dbgThread->start();
+        gdbThread = new GDBThread();
+        dbgThread = gdbThread;
+        gdbThread->start();
     } else {
         lldbThread = new LLDBThread();
+        dbgThread = lldbThread;
         lldbThread->start();
     }
 
@@ -206,6 +210,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, SIGNAL(sendWorkingDir(QString)), dbg,
         SLOT(receiveWorkingDir(QString)));
     connect(this, SIGNAL(doStop()), dbg, SLOT(doStop()));
+    connect(this, SIGNAL(doNextInstruction()), dbg, SLOT(doNextInstruction()));
     //dDebug() << "Connected";
     restoreMainWindow();
     //dDebug() << "Restored";
@@ -483,7 +488,7 @@ void MainWindow::setFontSize()
     f.setPixelSize(fontSize);
     f.setBold(true);
     QFontMetrics fm(f);
-    width = fm.maxWidth();
+    width = fm.maxWidth()+1;
     height = fm.height();
     if ( width < height/2.0 ) width++;
     //qDebug() << "fs" << fontSize << width << height;
@@ -515,6 +520,20 @@ void MainWindow::decreaseFont()
 {
     fontSize--;
     setFontSize();
+}
+
+void MainWindow::doKill()
+{
+    if ( targetPid > 0 ) {
+        kill(targetPid,SIGKILL);
+        //dbg->send("ni");
+        emit doNextInstruction();
+	app->processEvents(QEventLoop::AllEvents, 1000);
+        sourceFrame->clearNextLine();
+        emit doNextInstruction();
+	app->processEvents(QEventLoop::AllEvents, 1000);
+        sourceFrame->clearNextLine();
+    }
 }
 
 void MainWindow::createMenus()
@@ -706,7 +725,7 @@ void MainWindow::createMenus()
     debugToolBar->actions()[3]->setAutoRepeat(false);
     debugToolBar->addAction(
         QIcon(QString(":/icons/%1/process-stop.png").arg(icon_size)),
-        tr("stop (F9)"), sourceFrame, SLOT(stop()));
+        tr("stop (F9)"), this, SLOT(doKill()));
     debugToolBar->actions()[4]->setShortcut(QKeySequence("F9"));
     debugToolBar->actions()[4]->setAutoRepeat(false);
 
