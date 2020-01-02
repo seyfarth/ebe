@@ -66,3 +66,7 @@ memory
 hello.s
 *.lst
 hello_all
+bits
+bits
+bits
+ebedecl/parse.h
