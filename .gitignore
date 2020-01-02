@@ -28,6 +28,8 @@ ui_*.h
 *-build-*
 *~
 
+wrapper.py
+
 ebe_src.tgz
 # QtCreator
 
