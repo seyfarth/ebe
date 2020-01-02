@@ -43,6 +43,8 @@ ebedecl/ebedecl
 
 # Ignore xcode files
 
+ebe.app
+
 .DS_Store
 DerivedData
 build/
