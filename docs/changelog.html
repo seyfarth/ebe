@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Changelog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Ray Seyfarth">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 13pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-2 {
+        font-size: 8pt;
+      }
+      .tag-4 {
+        font-size: 6pt;
+     }
+    </style>
+    <link href="/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png">
+
+    <link href="/" type="application/atom+xml" rel="alternate" title="ebe at SourceForge ATOM Feed" />
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/index.html">ebe at SourceForge </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                          <li class="divider-vertical"></li>
+                  <li >
+                    <a href="/category/ebe.html">
+						<i class="icon-folder-open icon-large"></i>ebe
+					</a>
+                  </li>
+                  <li >
+                    <a href="/category/git.html">
+						<i class="icon-folder-open icon-large"></i>git
+					</a>
+                  </li>
+                  <li class="active">
+                    <a href="/category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+                  <li >
+                    <a href="/category/os-x.html">
+						<i class="icon-folder-open icon-large"></i>os-x
+					</a>
+                  </li>
+
+                          <ul class="nav pull-right">
+                                <li><a href="/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+
+            </ul>
+            <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="span9" id="content">
+<section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to Changelog">
+                                        Changelog
+                                </a>
+                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+<footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2015-01-27T19:00:00-06:00">
+        <i class="icon-calendar"></i>Tue 27 January 2015
+</abbr>
+<span class="label">By</span>
+<a href="/author/ray-seyfarth.html"><i class="icon-user"></i>Ray Seyfarth</a>
+<span class="label">Category</span>
+<a href="/category/misc.html"><i class="icon-folder-open"></i>misc</a>.
+
+
+<span class="label">Tags</span>
+	<a href="/tag/ebe.html"><i class="icon-tag"></i>ebe</a>
+	<a href="/tag/ide.html"><i class="icon-tag"></i>ide</a>
+	<a href="/tag/assembly.html"><i class="icon-tag"></i>assembly</a>
+	<a href="/tag/c.html"><i class="icon-tag"></i>C</a>
+	<a href="/tag/c.html"><i class="icon-tag"></i>C++</a>
+	<a href="/tag/windows.html"><i class="icon-tag"></i>Windows</a>
+	<a href="/tag/linux.html"><i class="icon-tag"></i>Linux</a>
+	<a href="/tag/os-x.html"><i class="icon-tag"></i>OS X</a>
+</footer><!-- /.post-info -->                </div>
+                <div class="section" id="version-3-3-7">
+<h2>Version 3.3.7</h2>
+<p>Fixed move problem in OS X</p>
+<ul class="simple">
+<li>Removed a setenv statement in main.cpp which told Qt to use native
+windows for OS X which a long time ago sounded like a good idea.</li>
+<li>Changed the tooltip in dockwidget.cpp to be much shorter and removed
+the duration limit for the tooltip.</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-6">
+<h2>Version 3.3.6</h2>
+<p>Changed many things, biggest change was gdb.cpp</p>
+<ul class="simple">
+<li>Commented out the QSemaphore actions in debugger.cpp
+Now ebe uses no semaphores.</li>
+<li>Created a DockWidget subclass of QDockwidget to centralize
+adding and controlling tooltips and managing moving/resizing.</li>
+<li>Added a border of light gray to the &quot;resize grip&quot;.  It seemed
+to be 1 pixel wide on OS X.  This helped with moving/resizing.</li>
+<li>Added a tooltip to DockWidgets to tell how to move and resize.</li>
+<li>The tooltip was lengthy so it is limited to 4 seconds.</li>
+<li>Added code to gdb.cpp and lldb.cpp to determine the process
+id of the program being debugged to allow the mainwindow to
+kill the process if it has the debug handler stuck.</li>
+<li>Added code to mainwindow.cpp the handle the Kill operation
+using the kill system call with SIGKILL to kill the process
+being debugged.  This is followed by signaling the debug
+handler to send a &quot;nextinstruction&quot; command.  This had to be
+done twice to make it work properly on OS X.</li>
+<li>Added code to mainwindow.cpp in the Kill operation to tell
+the sourceframe to clear the next line.</li>
+<li>Added code to floatwindow and frame window to set the font
+height and width for their tables to allow smooth font size
+changes.</li>
+<li>Made slight adjustments to eztable.cpp to calculate widths
+better when changing the font size for a table.</li>
+<li>Changed the size calculation for the width of the line
+number column in the editor so that it maintains nicely
+spaced through a wide range of font sizes.</li>
+<li>Changed gdb.cpp to quit using the machine interface and to
+read directly rather than using a reader thread.  Now it reads
+in a loop until the gdb prompt is received and the process has
+paused.  The prompt now has a new-line in it so that part of
+the prompt can be one trigger for ending the loop.  After the
+2 conditions are met, the code reads until there is no more
+data available.  There are numerous small changes related to
+the formatting differences between the interactive gdb interface
+and the machine interface.</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-5">
+<h2>Version 3.3.5</h2>
+<p>Worked on dockwidgets and changing directory</p>
+<ul class="simple">
+<li>Changed dockwidgets to allow moving to left, right, top and bottom</li>
+<li>Changed dockwidget drag tooltip to only show in the titlebar</li>
+<li>Added code to install_ebe.sh to create a Desktop ebe script on OS X
+This script has a -d option to tell ebe to retain any directory changes.</li>
+<li>Added code in mainwindow.cpp to write the new diretory to
+~/.ebe_last_directory if the -d option was given when ebe started</li>
+<li>Added code in main.cpp to process -d option if present</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-4">
+<h2>Version 3.3.4</h2>
+<p>After downloading install_ebe.sh on OS X it is pretty natural to follow
+that by executing it from there.  This ended up with ebe.app being with
+the Downloads hierarchy and caused OS X to popup confirmation messages
+which were annoying.</p>
+<ul class="simple">
+<li>In ebe.pro tested for OS X to produce ebe.app in either /usr/local/bin
+(brew) or /opt/local/bin (port)</li>
+<li>Changed install_ebe.sh to produce the ebe script for OS X with the
+proper destination directory.</li>
+<li>Changed install_ebe.sh to not use sudo on OS X when copying the ebe
+script and ebedecl to /usr/local/bin.  This matches what brew does.</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-3">
+<h2>Version 3.3.3</h2>
+<ul class="simple">
+<li>In lldb.cpp removed reader-&gt;start() since reader is not used</li>
+<li>In settings.cpp changed test in __APPLE__ to Q_OS_MAC</li>
+<li>For ebedecl changed makefiles to generate .cpp files from bison and
+flex to eliminate warnings</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-2">
+<h2>Version 3.3.2</h2>
+<ul class="simple">
+<li>Converted QString sprintf to QString arg use to avoid warnings</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-1">
+<h2>Version 3.3.1</h2>
+<ul class="simple">
+<li>Changed debugger in settings.cpp to lldb for OS X.  I apparently failed to
+copy the file from my Mac to my main computer.</li>
+</ul>
+</div>
+<div class="section" id="version-3-3-0">
+<h2>Version 3.3.0</h2>
+<p>I was forced to revert to lldb.  The primary issue was that lldb-mi was no longer
+available as part of the Xcode command line tools for OS X.</p>
+<p>I tried using gdb and there is now a function in ebe_install.sh which
+can generate a codesigning key for gdb and sign it with no use of the
+Keychain Access tool.  That's great but gdb behaved erratically when
+used in a stand-alone mode.</p>
+<p>I learned how to use Python in lldb to write a wrapper command which
+executes an lldb command and then prints a completion message from
+Python.  This made coding using lldb simpler.</p>
+<p>Dock widgets were very difficult to use in OS X.  I made the border
+width 5 to make the resizing work nicely.  Still the moving was
+hazardous, so I added a tooltip to try to help.  This is probably a QT
+issue.</p>
+<p>lldb.cpp</p>
+<ul class="simple">
+<li>Changed lldb.cpp to use lldb instead of lldb-mi.</li>
+<li>Changed LLDB object to the owned by the lldb thread.  Previously the lldb
+actions were all done in the GUI thread.</li>
+<li>Wrote wrapper.py to make a new wrap command which issues an lldb command
+and then writes &quot;LLDB DONE&quot; when the command completes.</li>
+<li>Added wrapper.py to the src directory and added code to lldb.cpp to copy
+the file from ebe's internal files prior to importing wrapper.py.</li>
+<li>Removed the use of LLDBReaderThread.  The lldb thread handles all the
+reading after it issues an lldb command.</li>
+<li>Removed the use of all but one of the semaphores.  This one may be removed
+later since the requests to the lldb thread are queued.</li>
+<li>Simplified the reading code to read until &quot;LLDB DONE&quot; is received.</li>
+</ul>
+<p>gdb.cpp</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>Changed GDB object to the owned by the gdb thread.  Previously the gdb</dt>
+<dd>actions were all done in the GUI thread.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Removed the use of GDBReaderThread.  The gdb thread handles all the</dt>
+<dd>reading after it issues an gdb command.</dd>
+</dl>
+</li>
+<li>Removed the use of all but one of the semaphores.  This one may be removed
+later since the requests to the gdb thread are queued.</li>
+<li>Simplified the reading code to read until &quot;LLDB DONE&quot; is received.</li>
+</ul>
+<p>debugger.cpp</p>
+<ul class="simple">
+<li>Changed the semaphore wrapper code to simply use acquire and release.
+Previously there was some complications probably due to misunderstanding
+how threads need to have objects moved to them.</li>
+</ul>
+<p>dockwidget.cpp and dockwidget.h</p>
+<ul class="simple">
+<li>To simplify making general changes to QDockWidget implemented a DockWidget
+class.</li>
+<li>Added a 5 pixel margin to DockWidgets to make it easier to resize them in
+OS X.  Previously it seemed that there was a 1 pixel area which needed to
+be clicked on to resize.</li>
+<li>Tried to fix a problem where DockWidgets can't be re-docked if you drag
+them out of the dock area.  This is probably a QT problem specific to OS X.</li>
+<li>Tried with no success to make it easier to move DockWidgets around within
+the dock area.  It turns out that it can be done in 2 drag operations.</li>
+<li>Added a tooltip suggesting how to move DockWidgets.</li>
+</ul>
+</div>
+<div class="section" id="version-3-2-0">
+<h2>Version 3.2.0</h2>
+<p>Version 3.2.0 is the first version to support using lldb-mi.  There have been
+many problems involved with using gdb in MacOS X.  Apple supports lldb, and
+with Xcode installed lldb-mi is installed.  lldb-mi is a machine interface for
+lldb and makes it easier to interface with.  Likewise this version switches to
+using the machine interface of gdb though this is a command line option and
+not a separate program.</p>
+<p>There are a lot of changes.  I would expect there to be some problems.  Note
+that you can specify an earlier version, like 3.1.26, by adding the version to
+the invocation of install_ebe.sh.  I can't suggest using an earlier version
+under OS X.  It would be quicker to email me or use the sourceforge bug
+tracking to contact me.  If you email me, please tell me you operating system,
+describe the problem and attach the code which exhibits the problem.  I will
+look into it and, if necessary, I will install your OS in a virtual machine to
+find the solution.</p>
+<p>BUG DISCOVERED ON SOME SYSTEMS</p>
+<p>If some things are not working properly, try using</p>
+<blockquote>
+sh install_ebe.sh 3.0.26</blockquote>
+<p>to install a working older version.</p>
+</div>
+<div class="section" id="version-3-0-0">
+<h2>Version 3.0.0</h2>
+<p>Version 3.0.0 is the first version to support the yasm struc (structure)
+definitions.  You can change the format of a variable to one of the defined
+strucs in the program or use a pointer to define a new variable of a struc
+type.  I decided to bump the version to 3.0.0 since this is a pretty
+significant change.  I think this version is basically complete for assembly
+language.  I'm sure there will be bug fixes and some minor changes, but
+nothing major is missing for assembly.  C/C++ could benefit from something
+like IntelliSense, but I have no plans in that area -- yet.</p>
+<p>There are quite a few changes.  This seems to be pretty reliable in my
+testing.  Please email me if ebe fails to operate properly.  I would
+probably require your source code to diagnose what went wrong.  I would
+like to wipe out the bugs.</p>
+</div>
+<div class="section" id="id1">
+<h2>3.2.1</h2>
+<ul class="simple">
+<li>Added lldb.cpp, lldb.h, debugger.cpp and debugger.h to git</li>
+<li>These were really needed for 3.2.0</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>3.2.0</h2>
+<ul class="simple">
+<li>Added code to use lldb-mi as a debugger (mainly for OS X)</li>
+<li>Added code to allow I/O redirection in command line text edit</li>
+<li>Added code in settings window to use a virtual terminal (/dev/ptyXX)</li>
+<li>Added code in settings window to select debugger</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>3.1.0</h2>
+<ul class="simple">
+<li>Added Alt key shortcuts for all menu choices</li>
+<li>Added code to change the cursor blink rate (0 disables)</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>3.0.26</h2>
+<ul class="simple">
+<li>Fixed register window to allow defining variable by address</li>
+<li>Fixed assembly data window to allow defining variable by address</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>3.0.22</h2>
+<ul class="simple">
+<li>Copied 32x32 icons for the template bar to serve as 64x64</li>
+<li>Copied yasm template code into nasm template directories</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2>3.0.20</h2>
+<ul class="simple">
+<li>Changed ebedecl to be statically linked, since it was built with cygwin which is not distributed.</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2>3.0.19</h2>
+<ul class="simple">
+<li>Changed maximum size of Assembly Data Window variables to 512.  With large arrays the program was too slow.</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2>3.0.18</h2>
+<ul class="simple">
+<li>Fixed problem with eflags showing as 0</li>
+<li>Removed trailing 0s from rip and eflags</li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h2>3.0.17</h2>
+<ul class="simple">
+<li>Added textEdit-&gt;repaint() to setNextLine and clearNextLine</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2>3.0.16</h2>
+<ul class="simple">
+<li>Moved table resize in eztable::setPlankCount to after the first loop</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h2>3.0.15</h2>
+<ul class="simple">
+<li>Changed uLong/sLong types to long long variants</li>
+<li>Switched %precedence to %left in ebedecl bison file</li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h2>3.0.14</h2>
+<ul class="simple">
+<li>Fixed problem with deleting variables from asm data window</li>
+<li>Fixed issue with reducing the size of the asm data table</li>
+<li>If the asm data window has no vars, there is no contest menu</li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h2>3.0.13</h2>
+<ul class="simple">
+<li>Fixed issue with showing asm variables when using as</li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h2>3.0.12</h2>
+<ul class="simple">
+<li>Fixed stack frame format crash on empty table</li>
+<li>Fixed edit settings to preserve subwindow placements</li>
+<li>Changed to not use ebedecl with as assembler</li>
+<li>Fixed asm data window crash on empty table</li>
+</ul>
+</div>
+<div class="section" id="id15">
+<h2>3.0.11</h2>
+<ul class="simple">
+<li>Skip running ebedecl when using as</li>
+<li>Fixed crash on right-clicking empty asm data window</li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h2>3.0.10</h2>
+<ul class="simple">
+<li>Fixed error in parsing nasm listing file</li>
+</ul>
+</div>
+<div class="section" id="id17">
+<h2>3.0.9</h2>
+<ul class="simple">
+<li>Changed gdb &quot;tty&quot; command to &quot;set inferior-tty&quot;</li>
+<li>Changed settings.cpp to use nasm instead of yasm</li>
+<li>Changed sourceframe.cpp to parse nasm listing file syntax</li>
+</ul>
+</div>
+<div class="section" id="id18">
+<h2>3.0.8</h2>
+<ul class="simple">
+<li>Repaired size computation for asm vars in .bss</li>
+<li>Repaired register format as decimal</li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h2>3.0.6</h2>
+<ul class="simple">
+<li>Repaired the stack frame window</li>
+<li>Ordered locals 1-4 increasing downwards</li>
+<li>Added scrollareas to stack frame window and float register window</li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h2>3.0.5</h2>
+<ul class="simple">
+<li>Changed from a QWebView to a QTextBrowser for Help and Library</li>
+<li>This should make it easier to build</li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h2>3.0.4</h2>
+<ul class="simple">
+<li>Fixed OS X menu issue, by building an app</li>
+<li>Moved .qm files to resources</li>
+<li>Modified install script to install properly</li>
+<li>Added 32/64 directories to src/assembly/mac</li>
+</ul>
+</div>
+<div class="section" id="id22">
+<h2>3.0.3</h2>
+<ul class="simple">
+<li>Removed Fortran support</li>
+<li>Fixed hello.hal (template program)</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h2>3.0.2</h2>
+<ul class="simple">
+<li>Eliminated fpreg error message when program is not running</li>
+<li>Extended time for printing gdb taking too long under Windows</li>
+<li>Eliminated infinite loop on stack in setValues</li>
+</ul>
+</div>
+<div class="section" id="id24">
+<h2>3.0.1</h2>
+<ul class="simple">
+<li>Fixed unitialized variable in registerwindow.cpp</li>
+<li>Fixed return with no value in ebedecl/symbols.cpp</li>
+<li>Repaired ebedecl/Makefile to use g++ on symbols.cpp</li>
+</ul>
+</div>
+<div class="section" id="id25">
+<h2>3.0.0</h2>
+<ul class="simple">
+<li>Support for struc expansion in assembly data window</li>
+<li>Fixed problem with data window changing size with memory errors</li>
+</ul>
+</div>
+<div class="section" id="id26">
+<h2>2.7.10</h2>
+<ul class="simple">
+<li>Changed register window to recover format changes for 1 register</li>
+<li>Fixed variable access code to use correct frame numbers</li>
+<li>Fixed problem with displaying argv strings</li>
+</ul>
+</div>
+<div class="section" id="id27">
+<h2>2.7.9</h2>
+<ul class="simple">
+<li>Added code to handle typedefs on demand</li>
+<li>Switched class/struct definitions to be on demand</li>
+<li>Fixed bugs with class/struct pointer expansion</li>
+</ul>
+</div>
+<div class="section" id="id28">
+<h2>2.7.8</h2>
+<ul class="simple">
+<li>Worked on prettify code.</li>
+<li>Added prettify function for Assembly</li>
+<li>Skip astyle use on Fortran</li>
+<li>Made prettify changes part of the undo/redo stack, so a person
+can undo an undesirable prettify operations.</li>
+</ul>
+</div>
+<div class="section" id="id29">
+<h2>2.7.7</h2>
+<ul class="simple">
+<li>Disabled use of astyle (prettify) for Fortran and Assembly</li>
+</ul>
+</div>
+<div class="section" id="id30">
+<h2>2.7.6</h2>
+<ul class="simple">
+<li>Fixed problem with 1D array of simple data types</li>
+</ul>
+</div>
+<div class="section" id="id31">
+<h2>2.7.5</h2>
+<ul class="simple">
+<li>Changed expand/collapse icons to +/-</li>
+<li>Implemented finalPlank function to find the last one requested</li>
+<li>Changed all data delivery to be by individual requests</li>
+</ul>
+</div>
+<div class="section" id="id32">
+<h2>2.7.4</h2>
+<ul class="simple">
+<li>Implemented nearly universal install script</li>
+<li>Started working on Cygwin ebe.  Discovered that Cygwin Qt uses
+X libraries and did not wish to make ebe users have to use X.</li>
+<li>Cygwin ebe hangs at irregular points.  Apparently one of the ebe
+threads dies unexpectedly.</li>
+</ul>
+</div>
+<div class="section" id="id33">
+<h2>2.7.3</h2>
+<ul class="simple">
+<li>Added support for PCBSD and hopefully a few other BSDs</li>
+<li>Fixed terminal window problem with PCBSD</li>
+</ul>
+</div>
+<div class="section" id="id34">
+<h2>2.7.2</h2>
+<ul class="simple">
+<li>Changed startup test for gdb running.  Now ebe should display its gui
+even if gdb is not running.  However clicking on the Run button should
+popup an error message if gdb is not running.</li>
+</ul>
+</div>
+<div class="section" id="id35">
+<h2>2.7.1</h2>
+<ul class="simple">
+<li>Fixed a highlight bug</li>
+<li>Data window now tracks recursive calls</li>
+<li>Fixed bug with reusing variables in the data window</li>
+</ul>
+</div>
+<div class="section" id="id36">
+<h2>2.7.0</h2>
+<ul class="simple">
+<li>Implemented a custom table widget to support the data window, the
+assembly data window and the register windows.</li>
+<li>Revised a large number of library files to be proper html in order
+to work with Qt5.</li>
+</ul>
+</div>
+<div class="section" id="id37">
+<h2>2.6.0</h2>
+<ul class="simple">
+<li>Changed the assenbly data window, the stack frame, the register
+window and the floating point window to track data changes in red.</li>
+</ul>
+</div>
+<div class="section" id="id38">
+<h2>2.5.8</h2>
+<ul class="simple">
+<li>Updated source code in library sample programs</li>
+</ul>
+</div>
+<div class="section" id="id39">
+<h2>2.5.7</h2>
+<ul class="simple">
+<li>Added instruction documentation for loop, rep and string instructions.</li>
+</ul>
+</div>
+<div class="section" id="id40">
+<h2>2.5.6</h2>
+<ul class="simple">
+<li>Added instruction documentation to the library</li>
+</ul>
+</div>
+<div class="section" id="id41">
+<h2>2.5.5</h2>
+<ul class="simple">
+<li>Fixed bug in stack frame window.  It previously could crash
+when clearing out old names.</li>
+<li>Fixed bug in settings.cpp.  It needed quotes around ebe.inc in
+yasm command.</li>
+<li>Fixed errors with console window.</li>
+</ul>
+</div>
+<div class="section" id="id42">
+<h2>2.5.4</h2>
+<ul class="simple">
+<li>Added define/delete options to asm data window</li>
+</ul>
+</div>
+<div class="section" id="id43">
+<h2>2.5.3</h2>
+<ul class="simple">
+<li>Fixed bugs in aliasing and assembly data window</li>
+</ul>
+</div>
+<div class="section" id="id44">
+<h2>2.5.2</h2>
+<ul class="simple">
+<li>Added format change menu to assembly data window</li>
+</ul>
+</div>
+<div class="section" id="id45">
+<h2>2.5.1</h2>
+<ul class="simple">
+<li>Added format change menu to stack frame window</li>
+<li>Added assembly data window</li>
+</ul>
+</div>
+<div class="section" id="id46">
+<h2>2.5.0</h2>
+<ul class="simple">
+<li>Added stack frame window</li>
+</ul>
+</div>
+<div class="section" id="id47">
+<h2>2.4.7</h2>
+<ul class="simple">
+<li>Added message for errors like divide by 0, segfault</li>
+<li>Repaired glitch in listing file parsing</li>
+</ul>
+</div>
+<div class="section" id="id48">
+<h2>2.4.5</h2>
+<ul class="simple">
+<li>Fixed problems with comment/uncomment &amp; shift left/right</li>
+</ul>
+</div>
+<div class="section" id="id49">
+<h2>2.4.4</h2>
+<ul class="simple">
+<li>Fixed problem with DLLs causing 0xc000007b error</li>
+</ul>
+</div>
+<div class="section" id="id50">
+<h2>2,4,3</h2>
+<ul class="simple">
+<li>Added popup menu for source window tabs</li>
+<li>Added msvcp110.dll to install exe</li>
+</ul>
+</div>
+<div class="section" id="id51">
+<h2>2.4.2</h2>
+<ul class="simple">
+<li>Fixed scroll problem when resizing</li>
+<li>Fixed stack display on entering a function</li>
+<li>Reordered open patterns to stick with the same language</li>
+</ul>
+</div>
+<div class="section" id="id52">
+<h2>2.4.0</h2>
+<ul class="simple">
+<li>Added stack display to the data window</li>
+<li>First version using Visual Studio Express 2012</li>
+<li>No update provided.</li>
+<li>Need to try the 64 bit version on 32 bit Windows.  The latest gcc
+seems to be versatile.  Email me with your results with C/C++ or
+fortran if you test this.  Thanks</li>
+</ul>
+</div>
+<div class="section" id="id53">
+<h2>2.3.6</h2>
+<ul class="simple">
+<li>Fixed error with stepping into asm function calls</li>
+</ul>
+</div>
+<div class="section" id="id54">
+<h2>2.3.4</h2>
+<ul class="simple">
+<li>Fixed error with negative register values</li>
+</ul>
+</div>
+<div class="section" id="id55">
+<h2>2.3.3</h2>
+<ul class="simple">
+<li>Fixed bug with expert mode</li>
+</ul>
+</div>
+<div class="section" id="id56">
+<h2>2.3.2</h2>
+<ul class="simple">
+<li>Added expert mode to protect users from changes to ebe's
+external commands.</li>
+<li>Added Indonesian</li>
+</ul>
+</div>
+<div class="section" id="id57">
+<h2>2.3.1</h2>
+<ul class="simple">
+<li>Assembly works again</li>
+<li>Added Japanese</li>
+</ul>
+</div>
+<div class="section" id="id58">
+<h2>2.3.0</h2>
+<ul class="simple">
+<li>Added language translations for Arabic, Chinese, French,
+German, Hindi, Portuguese, Russian, Spanish and Swedish
+Arabic, French, Hindi, Spanish and Swedish have been edited
+by speakers of those languages.  The others are from
+Google Translate.</li>
+<li>Fixed problem with using start-based asm files in Linux.</li>
+</ul>
+</div>
+<div class="section" id="id59">
+<h2>2.2.0</h2>
+<ul class="simple">
+<li>Implemented console window</li>
+</ul>
+</div>
+<div class="section" id="id60">
+<h2>2.1.1</h2>
+<ul class="simple">
+<li>Addded Fortran and Assembly highlighting</li>
+<li>Added version number to about.html</li>
+<li>Switched to mingw compilers which means that 64 bit executables
+are smaller than before.  There is no need to choose the 32 bit
+version of ebe.
+You need to re-install rather than update.</li>
+</ul>
+</div>
+<div class="section" id="id61">
+<h2>2.1.0</h2>
+<ul class="simple">
+<li>Added support for Windows Assembly programming</li>
+<li>Rearranged library files</li>
+<li>Prepared Fortran files to include from the code snippet toolbar</li>
+<li>Added code to save/restore cursor positions for files</li>
+</ul>
+</div>
+<div class="section" id="id62">
+<h2>2.0.25</h2>
+<ul class="simple">
+<li>Fixed problem with restoring widget sizes</li>
+</ul>
+</div>
+<div class="section" id="id63">
+<h2>2.0.24</h2>
+<ul class="simple">
+<li>Added integer add and and multiply to bit bucket</li>
+</ul>
+</div>
+<div class="section" id="id64">
+<h2>2.0.23</h2>
+<ul class="simple">
+<li>Added integer conversions to bit bucket.</li>
+</ul>
+</div>
+<div class="section" id="id65">
+<h2>2.0.22</h2>
+<ul class="simple">
+<li>First version of the bit bucket</li>
+<li>Illustrates bit operators ! - ~ | || &amp; &amp;&amp; ^ &lt;&lt; &gt;&gt; rotate left/right</li>
+</ul>
+</div>
+<div class="section" id="id66">
+<h2>2.0.21</h2>
+<ul class="simple">
+<li>Left out cmath from new C++ toybox code</li>
+</ul>
+</div>
+<div class="section" id="id67">
+<h2>2.0.20</h2>
+<ul class="simple">
+<li>Added support for Fortran to the toybox.</li>
+</ul>
+</div>
+<div class="section" id="id68">
+<h2>2.0.19</h2>
+<ul class="simple">
+<li>Changes to support assembly under OS X</li>
+<li>Changes to data window</li>
+</ul>
+</div>
+<div class="section" id="id69">
+<h2>2.0.18</h2>
+<ul class="simple">
+<li>Results now can be used to update variables in the toybox</li>
+<li>This means with variable a, a++ will update the value of a.</li>
+</ul>
+</div>
+<div class="section" id="id70">
+<h2>2.0.17</h2>
+<ul class="simple">
+<li>Added files to library</li>
+<li>Improved data support for assembly and fortran</li>
+<li>Added clear button to terminal window</li>
+<li>Revised variable definition dialog</li>
+<li>Added array checkbox to array bounds and variable definition dialogs</li>
+</ul>
+</div>
+<div class="section" id="id71">
+<h2>2.0.16</h2>
+<ul class="simple">
+<li>Added libary of code snippets; icon on template toolbar</li>
+<li>Revised program to find ebe.rcc with .exe file</li>
+</ul>
+</div>
+<div class="section" id="id72">
+<h2>2.0.15</h2>
+<ul class="simple">
+<li>Added a missing DLL: msvcr100.dll</li>
+</ul>
+</div>
+<div class="section" id="id73">
+<h2>2.0.14</h2>
+<ul class="simple">
+<li>Changed the installer to avoid needing to logout and back in</li>
+</ul>
+</div>
+<div class="section" id="id74">
+<h2>2.0.13</h2>
+<ul class="simple">
+<li>Added more options for formatting floating point data in the data window.</li>
+</ul>
+</div>
+<div class="section" id="id75">
+<h2>2.0.12</h2>
+<ul class="simple">
+<li>First version supporting Fortran debugging</li>
+<li>Handles basic types and arrays</li>
+<li>Fixed handling or char ** and char * types</li>
+<li>Fixed identification of globals under Windows</li>
+<li>Fixed output of stderr to be unbuffered</li>
+</ul>
+</div>
+<div class="section" id="id76">
+<h2>2.0.11</h2>
+<ul class="simple">
+<li>Added more floating point formats to the toybox</li>
+<li>Fixed link commands for Fortran and C</li>
+<li>Added closeEvent function to mainwindow</li>
+<li>Fortran debugging is not really useful yet</li>
+</ul>
+</div>
+<div class="section" id="id77">
+<h2>2.0.10</h2>
+<ul class="simple">
+<li>First version with toybox - spreadsheet like tool to experiment</li>
+<li>with C++ numeric expressions</li>
+</ul>
+</div>
+<div class="section" id="id78">
+<h2>2.0.09</h2>
+<ul class="simple">
+<li>Fixed problem with spaces in pathnames</li>
+<li>Implemented EOF handling using Control-D (C OR Z)</li>
+<li>Handling of data types for 32 bit programs improved</li>
+<li>Users will probably need to remove old .ebe.ini files</li>
+</ul>
+</div>
+<div class="section" id="id79">
+<h2>2.0.06</h2>
+<ul class="simple">
+<li>Solved problem with loading template main programs</li>
+<li>Repaired gdb.cpp data item types/sizes issues</li>
+<li>Fetched settings from .ebe.ini on directory change</li>
+<li>Made settings changes take effect upon save</li>
+<li>Allowed _ to start identifiers</li>
+</ul>
+</div>
+<div class="section" id="id80">
+<h2>2.0.05</h2>
+<ul class="simple">
+<li>Gave up on reading template code from resource files and used
+string constants.</li>
+<li>Removed a pointless char array from gdb.cpp.</li>
+</ul>
+</div>
+<div class="section" id="id81">
+<h2>2.0.04</h2>
+<ul class="simple">
+<li>Repaired problem with determining next line/file from gdb</li>
+<li>Fixed issue with added lines looking like breakpoints after
+setting 1 breakpoint.</li>
+<li>Bug: When lines are deleted breakpoints are not handled properly.</li>
+</ul>
+</div>
+<div class="section" id="id82">
+<h2>2.0.03</h2>
+<ul class="simple">
+<li>Added change directory to file menu</li>
+<li>Added code to implement project popup menu</li>
+<li>Non-functional version</li>
+</ul>
+</div>
+<div class="section" id="id83">
+<h2>2.0.02</h2>
+<ul class="simple">
+<li>Added edit settings menu option</li>
+<li>Added function key shortcuts for debugging</li>
+</ul>
+</div>
+
+                </div><!-- /.entry-content -->
+        </article>
+</section>
+        </div><!--/span-->
+
+                <div class="span3 well sidebar-nav" id="sidebar">
+<ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
+    <li><a href="http://rayseyfarth.blogspot.com"><i class="icon-external-link"></i>Rays Blog: ebe help</a></li>
+    <li><a href="http://rayseyfarth.com"><i class="icon-external-link"></i>Rays World</a></li>
+    <li><a href="http://rayseyfarth.com/ebe"><i class="icon-external-link"></i>ebe Documentation</a></li>
+    <li><a href="http://qtebe.sf.net/"><i class="icon-external-link"></i>ebe at SourceForge</a></li>
+    <li><a href="http://sourceforge.net/projects/qtebe/files/"><i class="icon-external-link"></i>ebe Downloads</a></li>
+    <li><a href="http://rayseyfarth.com/asm/purchase.html"><i class="icon-external-link"></i>Assembly Books</a></li>
+    <li><a href="http://getpelican.com/"><i class="icon-external-link"></i>Pelican</a></li>
+    <li><a href="http://sourceforge.org/"><i class="icon-external-link"></i>Source Forge</a></li>
+
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+<li>
+<a href="/category/ebe.html">
+    <i class="icon-folder-open icon-large"></i>ebe
+</a>
+</li>
+<li>
+<a href="/category/git.html">
+    <i class="icon-folder-open icon-large"></i>git
+</a>
+</li>
+<li>
+<a href="/category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+<li>
+<a href="/category/os-x.html">
+    <i class="icon-folder-open icon-large"></i>os-x
+</a>
+</li>
+
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+
+
+</ul>        </div><!--/.well -->
+
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <address id="about">
+                Proudly powered by <a href="http://getpelican.com/">Pelican <i class="icon-external-link"></i></a>,
+                                which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>.
+        </address><!-- /#about -->
+
+        <p>The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>,
+                   and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+
+
+    <!-- Le javascript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+  </body>
+</html>

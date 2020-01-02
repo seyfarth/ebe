@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Boot to Recovery Mode</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Ray Seyfarth">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 13pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-2 {
+        font-size: 8pt;
+      }
+      .tag-4 {
+        font-size: 6pt;
+     }
+    </style>
+    <link href="/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png">
+
+    <link href="/" type="application/atom+xml" rel="alternate" title="ebe at SourceForge ATOM Feed" />
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/index.html">ebe at SourceForge </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                          <li class="divider-vertical"></li>
+                  <li >
+                    <a href="/category/ebe.html">
+						<i class="icon-folder-open icon-large"></i>ebe
+					</a>
+                  </li>
+                  <li >
+                    <a href="/category/git.html">
+						<i class="icon-folder-open icon-large"></i>git
+					</a>
+                  </li>
+                  <li >
+                    <a href="/category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+                  <li class="active">
+                    <a href="/category/os-x.html">
+						<i class="icon-folder-open icon-large"></i>os-x
+					</a>
+                  </li>
+
+                          <ul class="nav pull-right">
+                                <li><a href="/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+
+            </ul>
+            <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="span9" id="content">
+<section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to Boot to Recovery Mode">
+                                        Boot to Recovery Mode
+                                </a>
+                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+<footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2015-01-27T19:00:00-06:00">
+        <i class="icon-calendar"></i>Tue 27 January 2015
+</abbr>
+<span class="label">By</span>
+<a href="/author/ray-seyfarth.html"><i class="icon-user"></i>Ray Seyfarth</a>
+<span class="label">Category</span>
+<a href="/category/os-x.html"><i class="icon-folder-open"></i>os-x</a>.
+
+
+<span class="label">Tags</span>
+	<a href="/tag/ebe.html"><i class="icon-tag"></i>ebe</a>
+	<a href="/tag/ide.html"><i class="icon-tag"></i>ide</a>
+	<a href="/tag/os-x.html"><i class="icon-tag"></i>OS X</a>
+</footer><!-- /.post-info -->                </div>
+                <div class="section" id="i-hope-you-never-do-this">
+<h2>I Hope You Never Do This</h2>
+<p>Now that ebe is using lldb which comes with the Xcode command line tools,
+there is no need to change SIP to use ebe.  Having typed this up, I am leaving
+it here.  I may need to read it some day.  I hope to forget about SIP.</p>
+</div>
+<div class="section" id="coping-with-system-integrity-protection">
+<h2>Coping with System Integrity Protection</h2>
+<p>The Mac OS X System Integrity Protection software is designed to protect
+your computer by preventing some things like writing to system files and
+running a debugger.
+(It doesn't interfere with lldb when installed as part of XCode, but it
+does prevent gdb from working.)
+To change the settings for SIP requires booting in Recovery Mode, using
+a terminal window there to issue a csrutil command.
+This command will not work in normal more since it would modify part of the
+operating system files.</p>
+</div>
+<div class="section" id="booting-in-recovery-mode">
+<h2>Booting in Recovery Mode</h2>
+<p>Restart your Mac and press the Command and R keys and hold them until you
+enter the recovery mode.</p>
+<p>I had troubles since I used a PC keyboard in a VirtualBox VM.
+I had to use the System Preferences window to change Keyboard preferences.
+The Keyboard settings window has a Modifier Keys button which I used to
+switch the Command and Option keys.  This allowed me to use Alt-R instead of
+Command-R.  Unfortunately this only got me to the boot menu.</p>
+<p>If Command-R gets you to the boot menu instead of the recovery mode, then
+you can get there from the boot menu.  If Command-R gets you to a different
+screen perhaps you can skip forward to <a class="reference internal" href="#recovery-mode">Recovery Mode</a>.</p>
+<div class="section" id="os-x-boot-menu">
+<h3>OS X Boot Menu</h3>
+<p>In the image below you can see the OS X boot menu after pressing the down
+arrow key 4 times.  Initially the &quot;Continue&quot; line was selected. After
+selecting the &quot;Boot Maintenance Manager&quot; press Return to go to that
+submenu.</p>
+<img alt="" src="boot_menu1.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="os-x-boot-maintenance-manager-menu">
+<h3>OS X Boot Maintenance Manager Menu</h3>
+<p>Below is shown the result of using the down arrow 3 times to select the
+&quot;Boot From File&quot; option in the &quot;Boot Maintenance Manager&quot; menu.  When the
+&quot;Boot From File&quot; option is selected press Return to go to that submenu.</p>
+<img alt="" src="boot_menu2.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="os-x-file-explorer-menu">
+<h3>OS X File Explorer Menu</h3>
+<p>Below you see the &quot;File Explorer&quot; menu after pressing the down arrow key
+twice. I found a web site which suggests the second selection here, but the
+third selection led me to success.  Press Return to do to that directory.
+Perhaps you will have to try a few choices.</p>
+<img alt="" src="boot_menu3.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="os-x-file-explorer-menu-2">
+<h3>OS X File Explorer Menu 2</h3>
+<p>Below you see the second &quot;File Explorer&quot; menu which shows a directory in
+the filesystem. Select the line with &quot;&lt;com.apple.recovery.boot&gt;&quot; and press
+Return.</p>
+<img alt="" src="boot_menu4.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="os-x-file-explorer-menu-3">
+<h3>OS X File Explorer Menu 3</h3>
+<p>Below you see the third &quot;File Explorer&quot; menu which shows a directory in
+the filesystem. Select the line with &quot;boot.efi&quot; and press Return to boot
+the system in &quot;Recovery&quot; mode.</p>
+<img alt="" src="boot_menu5.png" />
+<div class="line-block" id="recovery-mode">
+<div class="line"><br /></div>
+</div>
+<hr class="docutils" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Recovery Mode</h2>
+<p>Below you see the system after it has booted to Recovery mode. I have selected
+the &quot;Utilities&quot; option at the top.  Using the &quot;Terminal&quot; option will start
+a terminal session where you will be able to use csrutil to disable part or
+all of the SIP protections.</p>
+<img alt="" src="recovery1.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="using-csrutil">
+<h2>Using csrutil</h2>
+<p>Below is the terminal window in the Recovery mode with the csrutil command
+needed for debugging.  Unfortunately on my VirtualBox VM the keyboard gave
+strange symbols.  I eventually ran into the use of Alt-L (Command-L) to fix
+that.</p>
+<pre class="literal-block">
+csrutil enable --without debug
+</pre>
+<img alt="" src="terminal.png" />
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>When you have completed the csrutil command you can reboot the computer to
+normal mode and SIP will not interfere with gdb.</p>
+</div>
+
+                </div><!-- /.entry-content -->
+        </article>
+</section>
+        </div><!--/span-->
+
+                <div class="span3 well sidebar-nav" id="sidebar">
+<ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
+    <li><a href="http://rayseyfarth.blogspot.com"><i class="icon-external-link"></i>Rays Blog: ebe help</a></li>
+    <li><a href="http://rayseyfarth.com"><i class="icon-external-link"></i>Rays World</a></li>
+    <li><a href="http://rayseyfarth.com/ebe"><i class="icon-external-link"></i>ebe Documentation</a></li>
+    <li><a href="http://qtebe.sf.net/"><i class="icon-external-link"></i>ebe at SourceForge</a></li>
+    <li><a href="http://sourceforge.net/projects/qtebe/files/"><i class="icon-external-link"></i>ebe Downloads</a></li>
+    <li><a href="http://rayseyfarth.com/asm/purchase.html"><i class="icon-external-link"></i>Assembly Books</a></li>
+    <li><a href="http://getpelican.com/"><i class="icon-external-link"></i>Pelican</a></li>
+    <li><a href="http://sourceforge.org/"><i class="icon-external-link"></i>Source Forge</a></li>
+
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+<li>
+<a href="/category/ebe.html">
+    <i class="icon-folder-open icon-large"></i>ebe
+</a>
+</li>
+<li>
+<a href="/category/git.html">
+    <i class="icon-folder-open icon-large"></i>git
+</a>
+</li>
+<li>
+<a href="/category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+<li>
+<a href="/category/os-x.html">
+    <i class="icon-folder-open icon-large"></i>os-x
+</a>
+</li>
+
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+
+
+</ul>        </div><!--/.well -->
+
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <address id="about">
+                Proudly powered by <a href="http://getpelican.com/">Pelican <i class="icon-external-link"></i></a>,
+                                which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>.
+        </address><!-- /#about -->
+
+        <p>The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>,
+                   and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+
+
+    <!-- Le javascript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+  </body>
+</html>

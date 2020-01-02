@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How to install ebe on OS X</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Ray Seyfarth">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      .tag-1 {
+        font-size: 13pt;
+      }
+      .tag-2 {
+        font-size: 10pt;
+      }
+      .tag-2 {
+        font-size: 8pt;
+      }
+      .tag-4 {
+        font-size: 6pt;
+     }
+    </style>
+    <link href="/theme/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="/theme/css/font-awesome.css" rel="stylesheet">
+
+    <link href="/theme/css/pygments.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/theme/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png">
+
+    <link href="/" type="application/atom+xml" rel="alternate" title="ebe at SourceForge ATOM Feed" />
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/index.html">ebe at SourceForge </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+                          <li class="divider-vertical"></li>
+                  <li >
+                    <a href="/category/ebe.html">
+						<i class="icon-folder-open icon-large"></i>ebe
+					</a>
+                  </li>
+                  <li >
+                    <a href="/category/git.html">
+						<i class="icon-folder-open icon-large"></i>git
+					</a>
+                  </li>
+                  <li >
+                    <a href="/category/misc.html">
+						<i class="icon-folder-open icon-large"></i>misc
+					</a>
+                  </li>
+                  <li class="active">
+                    <a href="/category/os-x.html">
+						<i class="icon-folder-open icon-large"></i>os-x
+					</a>
+                  </li>
+
+                          <ul class="nav pull-right">
+                                <li><a href="/archives.html"><i class="icon-th-list"></i>Archives</a></li>
+                          </ul>
+
+            </ul>
+            <!--<p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>-->
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="span9" id="content">
+<section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to How to install ebe on OS X">
+                                        How to install ebe on OS X
+                                </a>
+                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+<footer class="post-info">
+<span class="label">Date</span>
+<abbr class="published" title="2015-01-27T19:00:00-06:00">
+        <i class="icon-calendar"></i>Tue 27 January 2015
+</abbr>
+<span class="label">By</span>
+<a href="/author/ray-seyfarth.html"><i class="icon-user"></i>Ray Seyfarth</a>
+<span class="label">Category</span>
+<a href="/category/os-x.html"><i class="icon-folder-open"></i>os-x</a>.
+
+
+<span class="label">Tags</span>
+	<a href="/tag/ebe.html"><i class="icon-tag"></i>ebe</a>
+	<a href="/tag/ide.html"><i class="icon-tag"></i>ide</a>
+	<a href="/tag/os-x.html"><i class="icon-tag"></i>OS X</a>
+</footer><!-- /.post-info -->                </div>
+                <div class="section" id="not-needed-as-of-ebe-version-3-2-1">
+<h2>Not Needed as of ebe Version 3.2.1</h2>
+<p>I have left this discussion here to possibly assist anyone trying to perform
+a similar task under OS X.  Hopefully no one needs this.</p>
+</div>
+<div class="section" id="coping-with-system-integrity-protection">
+<h2>Coping with System Integrity Protection</h2>
+<p>The Mac OS X System Integrity Protection software is designed to protect
+your computer by preventing some things like writing to system files and
+running a debugger.
+(It doesn't interfere with lldb when installed as part of XCode, but it
+does prevent gdb from working.)
+To change the settings for SIP requires booting in Recovery Mode, using
+a terminal window there to issue a csrutil command.
+This command will not work in normal more since it would modify part of the
+operating system files.  Use the link below to see more about booting to
+Recovery Mode and issuing the csrutil command</p>
+<blockquote>
+<a class="reference external" href="boot-to-recovery-mode.html">Using Recovery Mode to Enable Debugging</a></blockquote>
+</div>
+<div class="section" id="install-xcode-optional">
+<h2>Install Xcode (optional)</h2>
+<p>Technically you will probably only need the Xcode command line tools and
+the ebe universal install script will use the xcode-select command to
+install the command line tools.  When the script runs xcode-select it will
+exit and you will need to run it again after the xcode-select window finishes.</p>
+<p>If for some reason you need to install the command line tools outside the ebe
+install script or if you want to install the Xcode application check out:</p>
+<blockquote>
+<a class="reference external" href="https://developer.apple.com/downloads">https://developer.apple.com/downloads</a></blockquote>
+</div>
+<div class="section" id="install-homebrew-recommended">
+<h2>Install Homebrew (recommended)</h2>
+<p>Homebrew seems to be a quick way to install the programs and libraries
+needed by ebe.  The ebe install script will install it automatically
+unless you hace MacPorts already installed.
+If you prefer install it separately check out:</p>
+<blockquote>
+<a class="reference external" href="http://brew.sh">http://brew.sh</a></blockquote>
+</div>
+<div class="section" id="install-macports-optional">
+<h2>Install MacPorts (optional)</h2>
+<p>MacPorts is a set of open source software which can be installed using
+the MacPorts &quot;port&quot; command after it is installed.  From my experience
+it was a lot slower than Homebrew but worked just as well.</p>
+<p>Follow the installation instructions at <a class="reference external" href="http://www.macports.org">http://www.macports.org</a>
+It discusses Xcode and MacPorts.</p>
+<p>You will need to download the OS X macports pkg file and double click
+on it to initiate the installation.</p>
+</div>
+<div class="section" id="creating-a-keychain-certificate-for-gdb">
+<h2>Creating a Keychain Certificate for gdb</h2>
+<p>For security reasons OS X does not trust programs which control other
+programs and this is exactly what gdb needs to do.
+It is necessary to create a certificate using the Keychain Access program
+to create a certificate and use the codesign command to sign the certificate
+after gdb is installed.  The ebe install program can do the codesign
+command for you, but you will need to create the certificate first.</p>
+<blockquote>
+<a class="reference external" href="creating-a-certificate-with-keychain-access.html">Creating a Certificate with Keychain Access</a></blockquote>
+</div>
+<div class="section" id="using-the-install-script">
+<h2>Using the Install Script</h2>
+<p>There is an install script at
+<a class="reference external" href="http://sourceforge.net/projects/qtebe/files/Installer">http://sourceforge.net/projects/qtebe/files/Installer</a>
+named install_ebe.sh.
+This script will do the rest of the installation, but it would not be easy
+to install Xcode and MacPorts from a script.
+Download the script and do:</p>
+<pre class="literal-block">
+sh install_ebe.sh
+</pre>
+<p>I believe that there have been problems with qt5 and perhaps you might wish
+try qt4 if the install script fails. The relevant line number is about 245.</p>
+</div>
+<div class="section" id="install-gdb-8-0-1">
+<h2>Install gdb 8.0.1</h2>
+<p>Homebrew (at this time) installs version 8.1 of gdb which does
+not work.  After you set a break point and issue the run command
+it gets an untrapped signal which is probably the trap signal which is
+supposed to be used to return control to gdb for debugging. You can use:</p>
+<pre class="literal-block">
+gdb --version
+</pre>
+<p>to see if your version is 8.1 and perhaps this problem is solved.
+Otherwise use these 2 commands to remove version 8.1 and install 8.0.1:</p>
+<pre class="literal-block">
+brew unlink gdb
+brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/9ec9fb27a33698fc7636afce5c1c16787e9ce3f3/Formula/gdb.rb
+</pre>
+</div>
+<div class="section" id="gdb-do-not-run-sub-processes-using-bin-sh">
+<h2>gdb: do not run sub-processes using /bin/sh</h2>
+<p>By default gdb will run sub-processes using a shell (probably /bin/sh)
+which is disallowed under OS X by the System Integrity Protection
+software.  Create a file in your home directory named &quot;.gdbinit&quot; with
+the following command for gdb to execute every time it starts:</p>
+<pre class="literal-block">
+set startup-with-shell off
+</pre>
+</div>
+<div class="section" id="completing-the-installation-with-individual-commands">
+<h2>Completing the installation with individual commands</h2>
+<p>It may be useful to know the steps involved in order to cope with problems,
+but hopefully your original installation will go well.
+In the future you could skip the xcode-select, port, codesign, and killall
+commands.</p>
+<div class="section" id="install-xcode-command-line-tools">
+<h3>Install Xcode command line tools</h3>
+<pre class="literal-block">
+xcode-select --install   # probably says it doesn't exist
+</pre>
+</div>
+<div class="section" id="install-tools-used-by-ebe">
+<h3>Install tools used by ebe</h3>
+<pre class="literal-block">
+brew install git gcc astyle nomebrew/dupes/gdb nasm qt5
+brew link --overwrite gdb
+brew link --force qt5
+ln -s /usr/local/bin/gcc-4.9 /usr/local/bin/gcc
+ln -s /usr/local/bin/g++-4.9 /usr/local/bin/g++
+</pre>
+<p>or</p>
+<pre class="literal-block">
+sudo port install astyle git qt5-mac nasm gdb
+</pre>
+</div>
+<div class="section" id="use-codesign-to-tell-os-x-that-you-trust-gdb">
+<h3>Use codesign to tell OS X that you trust gdb</h3>
+<pre class="literal-block">
+sudo codesign -s gdb-cert /usr/local/bin/gdb
+</pre>
+<p>or</p>
+<pre class="literal-block">
+sudo codesign -s gdb-cert /opt/local/bin/ggdb
+</pre>
+<p>I think MacPorts places a certificate called gdb-cert on your system,
+but perhaps this was from an older installation on my Mac.</p>
+<p>If there is a problem with using the codesign command, follow the
+instructions given at <a class="reference external" href="http://ntraft.com/installing-gdb-on-os-x-mavericks">http://ntraft.com/installing-gdb-on-os-x-mavericks</a>
+or <a class="reference external" href="http://wiki.lazarus.freepascal.org/GDB_on_OS_X_Mavericks_and_Xcode_5">http://wiki.lazarus.freepascal.org/GDB_on_OS_X_Mavericks_and_Xcode_5</a></p>
+</div>
+<div class="section" id="restart-taskgated">
+<h3>Restart taskgated</h3>
+<p>You need to find the process id of taskgated using</p>
+<pre class="literal-block">
+killall -9 taskgated
+</pre>
+<p>Taskgated should restart.  It took about 1 minute on my computer, though
+it should be immediate.  Check with ps.</p>
+</div>
+<div class="section" id="test-gdb-by-itself">
+<h3>Test gdb by itself</h3>
+<p>It might be smart to compile a C program (or C++) and try running gdb
+before running ebe.</p>
+<pre class="literal-block">
+gcc -g hello.c -o hello
+gdb hello
+break main
+run
+quit
+</pre>
+<p>gdb will either complain about untrusted software or will start running
+your program and stop on the first line of the program.</p>
+</div>
+<div class="section" id="get-ebe-and-build">
+<h3>Get ebe and build</h3>
+<pre class="literal-block">
+git clone git://git.code.sf.net/p/qtebe/code ebe
+cd ebe
+bash rebuild
+sudo cp ebe *.qm /opt/local/bin
+</pre>
+<p>After the clone, it is possible to update the source using</p>
+<pre class="literal-block">
+git pull
+</pre>
+<p>Then you could rebuild ebe fairly quickly.</p>
+</div>
+</div>
+
+                </div><!-- /.entry-content -->
+        </article>
+</section>
+        </div><!--/span-->
+
+                <div class="span3 well sidebar-nav" id="sidebar">
+<ul class="nav nav-list">
+<li class="nav-header"><h4><i class="icon-external-link"></i>blogroll</h4></li>
+    <li><a href="http://rayseyfarth.blogspot.com"><i class="icon-external-link"></i>Rays Blog: ebe help</a></li>
+    <li><a href="http://rayseyfarth.com"><i class="icon-external-link"></i>Rays World</a></li>
+    <li><a href="http://rayseyfarth.com/ebe"><i class="icon-external-link"></i>ebe Documentation</a></li>
+    <li><a href="http://qtebe.sf.net/"><i class="icon-external-link"></i>ebe at SourceForge</a></li>
+    <li><a href="http://sourceforge.net/projects/qtebe/files/"><i class="icon-external-link"></i>ebe Downloads</a></li>
+    <li><a href="http://rayseyfarth.com/asm/purchase.html"><i class="icon-external-link"></i>Assembly Books</a></li>
+    <li><a href="http://getpelican.com/"><i class="icon-external-link"></i>Pelican</a></li>
+    <li><a href="http://sourceforge.org/"><i class="icon-external-link"></i>Source Forge</a></li>
+
+<li class="nav-header"><h4><i class="icon-folder-close icon-large"></i>Categories</h4></li>
+<li>
+<a href="/category/ebe.html">
+    <i class="icon-folder-open icon-large"></i>ebe
+</a>
+</li>
+<li>
+<a href="/category/git.html">
+    <i class="icon-folder-open icon-large"></i>git
+</a>
+</li>
+<li>
+<a href="/category/misc.html">
+    <i class="icon-folder-open icon-large"></i>misc
+</a>
+</li>
+<li>
+<a href="/category/os-x.html">
+    <i class="icon-folder-open icon-large"></i>os-x
+</a>
+</li>
+
+<li class="nav-header"><h4><i class="icon-tags icon-large"></i>Tags</h4></li>
+
+
+</ul>        </div><!--/.well -->
+
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <address id="about">
+                Proudly powered by <a href="http://getpelican.com/">Pelican <i class="icon-external-link"></i></a>,
+                                which takes great advantage of <a href="http://python.org">Python <i class="icon-external-link"></i></a>.
+        </address><!-- /#about -->
+
+        <p>The theme is from <a href="http://twitter.github.com/bootstrap/">Bootstrap from Twitter <i class="icon-external-link"></i></a>,
+                   and <a href="http://fortawesome.github.com/Font-Awesome/">Font-Awesome <i class="icon-external-link"></i></a>, thanks!</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+
+
+    <!-- Le javascript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/theme/js/jquery-1.7.2.min.js"></script>
+    <script src="/theme/js/bootstrap.min.js"></script>
+  </body>
+</html>
