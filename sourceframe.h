@@ -42,6 +42,7 @@ public:
     void saveIfChanged(QString file);
     void setNextLine(QString &file, int &line);
     void clearNextLine(QString file, int line);
+    void clearNextLine();
     QString buildDebugAsm(QString file);
     int fontHeight;
     int fontWidth;

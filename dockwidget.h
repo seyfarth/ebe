@@ -12,12 +12,6 @@ class DockWidget: public QDockWidget
 public:
     bool needToDock;
     DockWidget(QString s);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-
-public slots:
-    void changedTopLevel(bool floating);
-    void changedVisibility(bool visible);
 };
 
 #endif

@@ -32,6 +32,7 @@ public:
     GDBReaderThread *reader;
     void initDBG();
     void send(QString cmd);
+    void sendRaw(QString cmd);
     QStringList sendReceive(QString cmd);
     void handleRead();
     void handleNextInstruction(QString result);

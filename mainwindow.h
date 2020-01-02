@@ -48,10 +48,12 @@ public slots:
     void quit();
     void editSettings();
     void changeDirectory();
+    void doKill();
 
     signals:
     void sendWorkingDir(QString);
     void doStop();
+    void doNextInstruction();
 
 private:
     void closeEvent(QCloseEvent *e);

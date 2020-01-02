@@ -10,6 +10,7 @@
 #include <QToolBar>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QStandardPaths>
 #ifdef Q_OS_WIN32
 #include <windows.h>
 #else
@@ -34,6 +35,7 @@ extern int userWidth;
 extern int userHeight;
 extern Settings *settings;
 extern QApplication *app;
+int targetPid=0;
 
 QString dbgName;
 DataWindow *dataWindow;
@@ -50,8 +52,9 @@ ConsoleWindow *consoleWindow;
 BackTraceWindow *backTraceWindow;
 BitBucket *bitBucket;
 Debugger *dbg;
-GDBThread *dbgThread;
+extern GDBThread *gdbThread;
 LLDBThread *lldbThread;
+QThread *dbgThread;
 ToyBox *toyBox;
 
 QStatusBar *statusBar;
@@ -155,10 +158,12 @@ MainWindow::MainWindow(QWidget *parent)
     checkTools();
 
     if ( dbgName == "gdb" ) {
-        dbgThread = new GDBThread();
-        dbgThread->start();
+        gdbThread = new GDBThread();
+        dbgThread = gdbThread;
+        gdbThread->start();
     } else {
         lldbThread = new LLDBThread();
+        dbgThread = lldbThread;
         lldbThread->start();
     }
 
@@ -205,6 +210,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, SIGNAL(sendWorkingDir(QString)), dbg,
         SLOT(receiveWorkingDir(QString)));
     connect(this, SIGNAL(doStop()), dbg, SLOT(doStop()));
+    connect(this, SIGNAL(doNextInstruction()), dbg, SLOT(doNextInstruction()));
     //dDebug() << "Connected";
     restoreMainWindow();
     //dDebug() << "Restored";
@@ -482,7 +488,7 @@ void MainWindow::setFontSize()
     f.setPixelSize(fontSize);
     f.setBold(true);
     QFontMetrics fm(f);
-    width = fm.maxWidth();
+    width = fm.maxWidth()+1;
     height = fm.height();
     if ( width < height/2.0 ) width++;
     //qDebug() << "fs" << fontSize << width << height;
@@ -514,6 +520,20 @@ void MainWindow::decreaseFont()
 {
     fontSize--;
     setFontSize();
+}
+
+void MainWindow::doKill()
+{
+    if ( targetPid > 0 ) {
+        kill(targetPid,SIGKILL);
+        //dbg->send("ni");
+        emit doNextInstruction();
+	app->processEvents(QEventLoop::AllEvents, 1000);
+        sourceFrame->clearNextLine();
+        emit doNextInstruction();
+	app->processEvents(QEventLoop::AllEvents, 1000);
+        sourceFrame->clearNextLine();
+    }
 }
 
 void MainWindow::createMenus()
@@ -705,7 +725,7 @@ void MainWindow::createMenus()
     debugToolBar->actions()[3]->setAutoRepeat(false);
     debugToolBar->addAction(
         QIcon(QString(":/icons/%1/process-stop.png").arg(icon_size)),
-        tr("stop (F9)"), sourceFrame, SLOT(stop()));
+        tr("stop (F9)"), this, SLOT(doKill()));
     debugToolBar->actions()[4]->setShortcut(QKeySequence("F9"));
     debugToolBar->actions()[4]->setAutoRepeat(false);
 
@@ -857,6 +877,7 @@ void MainWindow::quit()
     }
 }
 
+extern bool startedFromDesktop;
 void MainWindow::changeDirectory()
 {
     QString dir;
@@ -867,6 +888,19 @@ void MainWindow::changeDirectory()
         QFileDialog::ShowDirsOnly);
     if (dir != "") {
         //qDebug() << "cd" << dir;
+        if ( startedFromDesktop ) {
+           QFile file;
+           QString home;
+           QString name = "";
+           home = QStandardPaths::locate(QStandardPaths::HomeLocation,name,
+					 QStandardPaths::LocateDirectory);
+           name = home + ".ebe_last_directory";
+           //qDebug() << "Home:" << home << name;
+           file.setFileName(name);
+           file.open(QIODevice::WriteOnly|QIODevice::Text);
+           QTextStream out(&file);
+           out << dir << "\n";
+        }
         QDir::setCurrent(dir);
         //qDebug() << "current" << QDir::current();
         settings->read();
@@ -904,9 +938,6 @@ void MainWindow::createDockWindows()
     asmDataDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     asmDataDock->setObjectName("Assembly Data");
-    asmDataDock->setAllowedAreas( Qt::LeftDockWidgetArea );
-        //Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea
-            //| Qt::BottomDockWidgetArea);
     asmDataWindow = new AsmDataWindow(this);
     asmDataWindow->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Preferred);
@@ -917,7 +948,6 @@ void MainWindow::createDockWindows()
     dataDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     dataDock->setObjectName("C/C++ Data");
-    dataDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     dataWindow = new DataWindow(this);
     dataWindow->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     dataDock->setWidget(dataWindow);
@@ -927,7 +957,6 @@ void MainWindow::createDockWindows()
     registerDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     registerDock->setObjectName("Registers");
-    registerDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     registerWindow = new RegisterWindow(this);
     registerWindow->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Preferred);
@@ -939,7 +968,6 @@ void MainWindow::createDockWindows()
         halRegisterDock->setFeatures( QDockWidget::DockWidgetClosable |
             QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
         halRegisterDock->setObjectName("HAL Registers");
-        halRegisterDock->setAllowedAreas( Qt::LeftDockWidgetArea );
         halRegisterWindow = new HalRegisterWindow(this);
         halRegisterWindow->setSizePolicy(QSizePolicy::Preferred,
             QSizePolicy::Preferred);
@@ -950,7 +978,6 @@ void MainWindow::createDockWindows()
         halNamesDock->setFeatures( QDockWidget::DockWidgetClosable |
             QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
         halNamesDock->setObjectName("HAL Register Names");
-        halNamesDock->setAllowedAreas( Qt::LeftDockWidgetArea );
         halNamesWindow = new HalNamesWindow(this);
         halNamesWindow->setSizePolicy(QSizePolicy::Preferred,
             QSizePolicy::Preferred);
@@ -962,7 +989,6 @@ void MainWindow::createDockWindows()
     frameDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     frameDock->setObjectName("Stack Frame");
-    frameDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     frameWindow = new FrameWindow(this);
     frameWindow->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Preferred);
@@ -973,7 +999,6 @@ void MainWindow::createDockWindows()
     floatDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     floatDock->setObjectName("Floating Point Registers");
-    floatDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     floatWindow = new FloatWindow(this);
     floatWindow->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     floatDock->setWidget(floatWindow);
@@ -983,7 +1008,6 @@ void MainWindow::createDockWindows()
     projectDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     projectDock->setObjectName("Project");
-    projectDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     projectWindow = new ProjectWindow(this);
     projectWindow->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Preferred);
@@ -994,7 +1018,6 @@ void MainWindow::createDockWindows()
     backTraceDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     backTraceDock->setObjectName("Back Trace");
-    backTraceDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     backTraceWindow = new BackTraceWindow(this);
     backTraceWindow->setSizePolicy(QSizePolicy::Preferred,
         QSizePolicy::Preferred);
@@ -1005,7 +1028,6 @@ void MainWindow::createDockWindows()
     terminalDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     terminalDock->setObjectName("Terminal");
-    terminalDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     terminalWindow = new TerminalWindow(this);
     terminalDock->setWidget(terminalWindow);
     addDockWidget(Qt::LeftDockWidgetArea, terminalDock);
@@ -1014,7 +1036,6 @@ void MainWindow::createDockWindows()
     toyBoxDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     toyBoxDock->setObjectName("Toy Box");
-    toyBoxDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     toyBox = new ToyBox(this);
     toyBoxDock->setWidget(toyBox);
     addDockWidget(Qt::LeftDockWidgetArea, toyBoxDock);
@@ -1023,7 +1044,6 @@ void MainWindow::createDockWindows()
     bitBucketDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     bitBucketDock->setObjectName("Bit Bucket");
-    bitBucketDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     bitBucket = new BitBucket(this);
     bitBucketDock->setWidget(bitBucket);
     addDockWidget(Qt::LeftDockWidgetArea, bitBucketDock);
@@ -1032,7 +1052,6 @@ void MainWindow::createDockWindows()
     consoleDock->setFeatures( QDockWidget::DockWidgetClosable |
         QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable );
     consoleDock->setObjectName("Console");
-    consoleDock->setAllowedAreas( Qt::LeftDockWidgetArea );
     consoleWindow = new ConsoleWindow(this);
     consoleDock->setWidget(consoleWindow);
     addDockWidget(Qt::LeftDockWidgetArea, consoleDock);

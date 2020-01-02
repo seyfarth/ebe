@@ -472,7 +472,7 @@ void SourceWindow::setFontHeightAndWidth(int height, int width)
 {
     fontHeight = height;
     fontWidth = width;
-    lineNumberEdit->setFixedWidth(width * 4 + 15);
+    lineNumberEdit->setFixedWidth(width * 4.20 + 15);
     if (heightInPixels > 0) {
         textHeight = heightInPixels / fontHeight;
     } else {

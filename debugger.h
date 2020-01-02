@@ -10,8 +10,8 @@
 #include "variable.h"
 #include "datawindow.h"
 
-void acquireSem(QSemaphore &sem);
-void releaseSem(QSemaphore &sem);
+void acquireSem(QSemaphore &);
+void releaseSem(QSemaphore &);
 
 class Debugger: public QObject
 {
@@ -54,6 +54,9 @@ public:
     virtual void writeLine(QString cmd);
     virtual void initDBG()=0;
     virtual void getBackTrace()=0;
+    virtual void send(QString cmd)=0;
+    virtual void sendRaw(QString cmd)=0;
+    virtual QStringList sendReceive(QString cmd)=0;
     virtual void getRegs()=0;
     virtual void getFpRegs()=0;
     virtual void getGlobals()=0;

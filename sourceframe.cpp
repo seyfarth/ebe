@@ -255,7 +255,7 @@ void SourceFrame::readAsmDecls(QString file)
 {
     QStringList parts;
     QProcess decl(this);
-    decl.start(QString("ebedecl %1").arg(file));
+    decl.start(QString("ebedecl \"%1\"").arg(file));
     decl.waitForFinished();
     QString data = decl.readLine();
     VariableInfo v;
@@ -322,6 +322,7 @@ void SourceFrame::run()
     QString ext;
     QString name;
     QString cmd;
+    QStringList sourceFiles;
 
     classes.clear();
     asmStrucs.clear();
@@ -360,7 +361,7 @@ void SourceFrame::run()
     index = tab->currentIndex();
     source = (SourceWindow *)tab->widget(index);
     name = source->file.source;
-    ;
+ 
     if (name == "") {
         int ret = QMessageBox::warning(this, tr("Warning"),
             tr("This file has not been named.\n"
@@ -399,7 +400,6 @@ void SourceFrame::run()
         exeName = name;
         exeName.truncate(index);
     } else {
-        QStringList sourceFiles;
         sourceFiles = projectWindow->fileNames;
         exeName = projectWindow->projectFileName;
         index = exeName.lastIndexOf('.');
@@ -576,7 +576,7 @@ void SourceFrame::run()
     asmDataWindow->varNames.clear();
     //qDebug() << "building globals";
     foreach(file, files) {
-        //qDebug() << "file" << file.source;
+        //qDebug() << "examine obj file" << file.source;
         object = file.object;
         bool findVariables = file.language == "asm" ||
                              file.language == "hal";
@@ -828,7 +828,7 @@ void SourceFrame::run()
 //
     textToAddress.clear();
     QProcess nm(this);
-    nm.start(QString("nm -an %1").arg(exeName));
+    nm.start(QString("nm -an \"%1\"").arg(exeName));
     nm.waitForFinished();
     QString nmData = nm.readLine();
     QStringList nmParts;
@@ -925,7 +925,7 @@ void SourceFrame::run()
     foreach ( file, files ) {
         //qDebug() << "nm loop" << file.source << file.language << file.object;
         if ( file.language == "asm" || file.language == "hal" ) {
-            nm.start(QString("nm -gn %1").arg(file.object));
+            nm.start(QString("nm -gn \"%1\"").arg(file.object));
             nm.waitForFinished();
             nmData = nm.readLine();
             //qDebug() << "nm" << file.object;
@@ -1114,40 +1114,54 @@ void SourceFrame::run()
 //
 //  Start debugging
 //
+    //foreach ( file, files ) {
+        //qDebug() << "files" << file.source;
+    //}
 
     QString s;
-    QStringList sourceFiles;
+    breakpoints.clear();
+    bool found;
     for (index = 0; index < tab->count(); index++) {
         source = (SourceWindow *)tab->widget(index);
-        sourceFiles.append(source->file.source);
+        //qDebug() << "index" << index << source->file.source;
+        found = false;
+        foreach ( file, files ) {
+            if ( file.source.indexOf("ebe_unbuffer") >= 0 ) continue;
+            if ( file.source == source->file.source ) found = true;
+            //qDebug() << file.source << found;
+        }
+        //qDebug() << "found" << found;
+        if ( found ) {
+            sourceFiles.append(source->file.source);
 //#if defined Q_OS_MAC || defined Q_OS_WIN32
-        FileLine fl;
-        long address;
-        QMap<FileLine,unsigned long>::const_iterator it;
-        fl.file = source->file.source;
+            FileLine fl;
+            long address;
+            QMap<FileLine,unsigned long>::const_iterator it;
+            fl.file = source->file.source;
 //#endif
-        bps.clear();
-        //qDebug() << source->file.base << source->file.language << *(source->breakpoints);
-        foreach ( int bp, *(source->breakpoints) ) {
+            //qDebug() << source->file.base << source->file.language << *(source->breakpoints);
+            bps.clear();
+            foreach ( int bp, *(source->breakpoints) ) {
 //#if defined Q_OS_MAC || defined Q_OS_WIN32
-            if ( (source->file.language == "asm" ||
-                source->file.language == "hal") &&
-                assembler == "nasm" ) {
-                fl.line = bp;
-                //qDebug() << "fl2a" << fileLineToAddress[fl];
-                it = fileLineToAddress.lowerBound(fl);
-                if ( it.value() == 0L ) it = fileLineToAddress.upperBound(fl);
-                address = it.value();
-                //qDebug() << "bp" << fl.file << fl.line << address;
-                bps.insert(QString("*0x%1").arg(address,1,16));
-            } else {
-                bps.insert(s.setNum(bp));
-            }
+                if ( (source->file.language == "asm" ||
+                    source->file.language == "hal") &&
+                    assembler == "nasm" ) {
+                    fl.line = bp;
+                    //qDebug() << "fl2a" << fileLineToAddress[fl];
+                    it = fileLineToAddress.lowerBound(fl);
+                    if ( it.value() == 0L ) it = fileLineToAddress.upperBound(fl);
+                    address = it.value();
+                    //qDebug() << "bp" << fl.file << fl.line << address;
+                    bps.insert(QString("*0x%1").arg(address,1,16));
+                } else {
+                    bps.insert(s.setNum(bp));
+                }
 //#else
             //bps.insert(s.setNum(bp));
+            }
 //#endif
+            breakpoints.append(bps);
         }
-        breakpoints.append(bps);
     }
     //qDebug() << "doRun" << sourceFiles << breakpoints;
     emit doRun(exeName, commandLine->text(), sourceFiles, breakpoints, globals);
@@ -1236,6 +1250,11 @@ void SourceFrame::stop()
 {
     clearNextLine(breakFile, breakLine);
     emit doStop();
+}
+
+void SourceFrame::clearNextLine()
+{
+    clearNextLine(breakFile, breakLine);
 }
 
 void SourceFrame::clearNextLine(QString file, int line)

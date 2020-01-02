@@ -25,65 +25,28 @@ DockWidget::DockWidget(QString name)
     : QDockWidget(name)
 {
     needToDock = false;
-    setToolTip(tr("Left click on the titlebar to drag this subwindow.\n"
-                  "If it stops moving then start dragging in the body\n"
-                  "of the subwindow.  You can place it anywhere in the\n"
-                  "left collection of subwindows or drop it on another\n"
-                  "subwindow to merge into a tabbed window.\n\n"
-                  "Dragging it outside the dock will make it a floating\n"
-                  "window which can be resized and moved at will.\n\n"
+    setToolTip(tr("Left click on the titlebar to drag a subwindow.\n"
+                  "Click on the float icon (2 boxes) to make it visible\n"
+                  "outside the ebe window. Then move or resize as desired.\n"
+                  "Move a subwindow by dragging on the title bar.  You can.\n"
+                  "place it anywhere in the left, right, top or bottom or\n"
+                  "drop it on another one to merge into a tabbed window.\n"
+                  "If dragging is difficult, float the subwindow first.\n"
                   "Right click to see the view options."));
-    //connect ( this, SIGNAL(visibilityChanged(bool)),
-              //this, SLOT(changedVisibility(bool)) );
-    //connect ( this, SIGNAL(topLevelChanged(bool)),
-              //this, SLOT(changedTopLevel(bool)) );
+    setToolTipDuration(4000);
 }
 
-void DockWidget::changedVisibility(bool visible)
+#if 0
+bool DockWidget::event(QEvent *event)
 {
-    QWidget *w;
-    //qDebug() << "visibilityChanged" << visible << this;
-    //qDebug() << mouseGrabber() << this;
-    if ( visible && needToDock ) {
-        needToDock = false;
-        setFloating(false);
-        w = widget();
-        //qDebug() << "widgets" << w << dataWindow;
-        //widget()->show();
-        //widget()->update();
+    if ( event->type() == QEvent::ToolTip ) {
+        //qDebug() << "event" << this;
+        //qDebug() << "cursor" << mapFromGlobal(cursor().pos());
+        if ( mapFromGlobal(cursor().pos()).y() > 20 ) {
+            //event->ignore();
+            //return true;
+        }
     }
-    if ( isFloating() && !isVisible() ) {
-       //qDebug() << "floating and not visible";
-       needToDock = true;
-       //setFloating(false);
-       //setFloating(true);
-    }
+    return QWidget::event(event);
 }
-
-void DockWidget::changedTopLevel(bool /*floating*/)
-{
-    //qDebug() << "topLevelChanged" << floating;
-    //qDebug() << mouseGrabber() << this;
-    //if ( floating && needToDock ) {
-        //needToDock = false;
-    //}
-}
-
-void DockWidget::enterEvent(QEvent * /*event*/)
-{
-    //qDebug() << "entered" << this;
-}
-
-void DockWidget::leaveEvent(QEvent * /*event*/)
-{
-    //qDebug() << "left, floating" << isFloating() << this;
-    //if ( isFloating() && !isVisible() ) {
-       //qDebug() << "floating and not visible";
-       //needToDock = true;
-       //setFloating(false);
-       //setFloating(true);
-    //} else if ( isFloating() ) {
-       //qDebug() << "floating and visible";
-       needToDock = true;
-    //}
-}
+#endif
