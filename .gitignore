@@ -39,6 +39,8 @@ ebe_src.tgz
 # Ignore ebe binary
 ebe
 
+ebedecl/ebedecl
+
 # Ignore xcode files
 
 .DS_Store
@@ -66,7 +68,6 @@ memory
 hello.s
 *.lst
 hello_all
-bits
-bits
+*.lst
 bits
 ebedecl/parse.h
