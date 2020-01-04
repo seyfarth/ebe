@@ -24,6 +24,11 @@
 #include <QSet>
 #include <stdio.h>
 #include <string.h>
+#ifdef Q_OS_MAC
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#endif
 
 #include "mainwindow.h"
 #include "settings.h"
@@ -41,8 +46,50 @@ QApplication *app;
 
 Settings *settings;
 
+#ifdef Q_OS_MAC
+void patchMacPath()
+{
+    int fd;
+    char *path;
+    char *new_path;
+
+    path = getenv("PATH");
+    new_path = (char *)calloc(strlen(path)+20,sizeof(char));
+    fd = open ( "/usr/local/bin/brew", O_RDONLY );
+    if ( fd >= 0 ) {
+        strcpy(new_path,"/usr/local/bin:");
+        close(fd);
+    } else {
+        strcpy(new_path,"/opt/local/bin:");
+    }
+    strcat(new_path, path);
+    setenv("PATH", new_path, 1);
+    //printf("%s\n",new_path);
+    free(new_path);
+}
+
+void setMacCurrentDirectory()
+{
+    char *dir;
+    
+    dir = getcwd(NULL,0);
+    if ( dir ) {
+        if ( access(dir, X_OK | W_OK | R_OK) < 0 ) {
+           char *home = getenv("HOME"); 
+           chdir(home);
+           startedFromDesktop = true;
+        }
+        free(dir);
+    }
+}
+#endif
+
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_MAC
+    patchMacPath();
+    setMacCurrentDirectory();
+#endif
     app = new QApplication(argc, argv);
     //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
 
@@ -59,13 +106,22 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (argc >= 2) {
-        if (strcmp(argv[1], "-d") == 0) {
-            startedFromDesktop = true;
-            argc--;
-            argv++;
-        }
+#ifdef Q_OS_MAC
+    if ( startedFromDesktop ) {
+       QFile file;
+       QString home = QDir::homePath();
+       QString name = home + "/.ebe_last_directory";
+       //qDebug() << "Home:" << home << name;
+       file.setFileName(name);
+       file.open(QIODevice::ReadOnly|QIODevice::Text);
+       QTextStream in(&file);
+       QString dir;
+       in >> dir;
+       //qDebug() << "dir" << dir;
+       QDir::setCurrent(dir);
     }
+#endif
+       
     MainWindow::setWordSize();
     settings = new Settings;
     settings->read();

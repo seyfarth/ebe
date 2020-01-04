@@ -540,7 +540,9 @@ void MainWindow::createMenus()
 {
     int icon_size = ebe["toolbars/icon_size"].toInt();
 
+#ifndef Q_OS_MAC
     app->setWindowIcon(QIcon(QString(":/icons/%1/ebe.png").arg(icon_size)));
+#endif
 
     fileToolBar = new QToolBar(tr("File toolbar"), this);
     fileToolBar->setObjectName(tr("File toolbar"));

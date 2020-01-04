@@ -19,14 +19,15 @@ macx {
     } else {
         DESTDIR = /opt/local/bin
     }
+    ICON = ebe.icns
 }
 equals(QT_MAJOR_VERSION,5) {
     QT += widgets
 }
 
 #CONFIG -= app_bundle
-#CONFIG += console embed_manifest_exe
-CONFIG += console debug embed_manifest_exe
+CONFIG += console embed_manifest_exe
+#CONFIG += console debug embed_manifest_exe
 #CONFIG += console debug static
 
 TRANSLATIONS = ebe_fr.ts ebe_sp.ts ebe_sv.ts ebe_de.ts ebe_pt.ts \
