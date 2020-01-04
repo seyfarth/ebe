@@ -80,3 +80,11 @@ hello_all
 *.lst
 bits
 ebedecl/parse.h
+
+t
+
+ebe_32.inc
+
+ebe.qrc
+
+args
