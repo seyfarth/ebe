@@ -88,9 +88,6 @@ SourceFrame::SourceFrame(QWidget *parent)
     breakFile = "";
     breakLine = 0;
 
-    bool icons = ebe["buttons/icons"].toBool();
-    int icon_size = ebe["buttons/icon_size"].toInt();
-
     setStyleSheet(
         "QPushButton { font-family: " + ebe["variable_font"].toString() + "}"
             + "QLabel { font-family:" + ebe["variable_font"].toString() + "}");
@@ -98,96 +95,6 @@ SourceFrame::SourceFrame(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(2);
     layout->setContentsMargins(10, 10, 10, 10);
-
-    if (ebe["buttons/visible"].toBool()) {
-        QHBoxLayout *buttonLayout = new QHBoxLayout;
-        buttonLayout->setSpacing(6);
-        buttonLayout->setContentsMargins(2, 2, 2, 2);
-
-        quitButton = new QPushButton;
-        if (icons) {
-            quitButton->setIcon(
-                QIcon(QString(":/icons/%1/quit.png").arg(icon_size)));
-            quitButton->setIconSize(QSize(icon_size, icon_size));
-        } else {
-            quitButton->setText("Quit");
-        }
-        quitButton->setStyleSheet("color: " + ebe["quit_color"].toString());
-        quitButton->setToolTip(tr("Click this button to exit from ebe"));
-        runButton = new QPushButton;
-        runButton->setToolTip(tr("Compile and run your program"));
-        runButton->setStyleSheet("color: " + ebe["run_color"].toString());
-        if (icons) {
-            runButton->setIcon(
-                QIcon(QString(":/icons/%1/run.png").arg(icon_size)));
-            runButton->setIconSize(QSize(icon_size, icon_size));
-        } else {
-            runButton->setText("Run");
-        }
-        nextButton = new QPushButton;
-        nextButton->setToolTip(
-            tr("Execute the current statement in the same function"));
-        nextButton->setStyleSheet("color: " + ebe["next_color"].toString());
-        if (icons) {
-            nextButton->setIcon(
-                QIcon(QString(":/icons/%1/next.png").arg(icon_size)));
-            nextButton->setIconSize(QSize(icon_size, icon_size));
-        } else {
-            nextButton->setText("Next");
-        }
-        stepButton = new QPushButton;
-        stepButton->setStyleSheet("color: " + ebe["step_color"].toString());
-        stepButton->setToolTip(
-            tr("Execute the current statement possibly stepping\n"
-                "into a different function"));
-        if (icons) {
-            stepButton->setIcon(
-                QIcon(QString(":/icons/%1/step.png").arg(icon_size)));
-            stepButton->setIconSize(QSize(icon_size, icon_size));
-        } else {
-            stepButton->setText("Step");
-        }
-        continueButton = new QPushButton;
-        continueButton->setStyleSheet(
-            "color: " + ebe["continue_color"].toString());
-        continueButton->setToolTip(
-            tr("Execute statements starting at the current statement\n"
-                "continuing until the program ends or a breakpoint\n"
-                "is reached."));
-        if (icons) {
-            continueButton->setIcon(
-                QIcon(QString(":/icons/%1/continue.png").arg(icon_size)));
-            continueButton->setIconSize(QSize(icon_size, icon_size));
-        } else {
-            continueButton->setText("Continue");
-        }
-        stopButton = new QPushButton;
-        stopButton->setStyleSheet("color: " + ebe["stop_color"].toString());
-        stopButton->setToolTip(
-            tr("End this debugging session and continue editing"));
-        if (icons) {
-            stopButton->setIcon(QIcon(":/icons/32/process-stop.png"));
-            stopButton->setIconSize(QSize(icon_size, icon_size));
-        } else {
-            stopButton->setText("Stop");
-        }
-        buttonLayout->addWidget(quitButton);
-        buttonLayout->addWidget(runButton);
-        buttonLayout->addWidget(nextButton);
-        buttonLayout->addWidget(stepButton);
-        buttonLayout->addWidget(continueButton);
-        buttonLayout->addWidget(stopButton);
-        buttonLayout->addStretch();
-
-        connect(quitButton, SIGNAL(clicked()), parent, SLOT(quit()));
-        connect(runButton, SIGNAL(clicked()), this, SLOT(run()));
-        connect(nextButton, SIGNAL(clicked()), this, SLOT(next()));
-        connect(stepButton, SIGNAL(clicked()), this, SLOT(step()));
-        connect(continueButton, SIGNAL(clicked()), this, SLOT(Continue()));
-        connect(stopButton, SIGNAL(clicked()), this, SLOT(stop()));
-
-        layout->addLayout(buttonLayout);
-    }
 
     connect(this,
         SIGNAL(doRun(QString,QString,QStringList,QList<StringSet>,QStringList)),
