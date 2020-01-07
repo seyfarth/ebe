@@ -1,79 +1,87 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
-"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Creator: fig2dev Version 3.2 Patchlevel 5d -->
-<!-- CreationDate: Thu Jan 17 13:58:28 2013 -->
-<!-- Magnification: 1.050 -->
-<svg	xmlns="http://www.w3.org/2000/svg"
-	xmlns:xlink="http://www.w3.org/1999/xlink"
-	width="32" height="32"
-	viewBox="1168 696 7348 8812">
-<g style="stroke-width:.025in; fill:none">
-<!-- Line: box -->
-<rect x="3779" y="2125" width="4724" height="472" rx="0" 
-style="stroke:#d10000;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#d10000;
-"/>
-<!-- Line: box -->
-<rect x="3779" y="2125" width="472" height="4724" rx="0" 
-style="stroke:#d10000;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#d10000;
-"/>
-<!-- Line: box -->
-<rect x="3779" y="6377" width="4724" height="472" rx="0" 
-style="stroke:#d10000;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#d10000;
-"/>
-<!-- Line: box -->
-<rect x="8031" y="2125" width="472" height="4724" rx="0" 
-style="stroke:#d10000;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#d10000;
-"/>
-<!-- Line: box -->
-<rect x="2598" y="1181" width="3779" height="472" rx="0" 
-style="stroke:#008f00;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#008f00;
-"/>
-<!-- Line: box -->
-<rect x="5905" y="1653" width="472" height="472" rx="0" 
-style="stroke:#008f00;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#008f00;
-"/>
-<!-- Line: box -->
-<rect x="5905" y="6850" width="472" height="944" rx="0" 
-style="stroke:#008f00;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#008f00;
-"/>
-<!-- Line: box -->
-<rect x="2598" y="7322" width="3307" height="472" rx="0" 
-style="stroke:#008f00;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#008f00;
-"/>
-<!-- Line -->
-<polygon points="1181,8267
-3307,8267
-2267,9496
-1653,8740
-1181,8267
-" style="stroke:#0000d1;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#0000d1;
-"/>
-<!-- Line: box -->
-<rect x="1889" y="708" width="708" height="7559" rx="0" 
-style="stroke:#0000d1;stroke-width:8;
-stroke-linejoin:miter; stroke-linecap:butt;
-fill:#0000d1;
-"/>
-<!-- Text -->
-<text xml:space="preserve" x="5905" y="9448" fill="#000000"  font-family="Courier" font-style="normal" font-weight="bold" font-size="1512" text-anchor="start">if</text>
-</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="1024"
+   viewBox="0 0 1024 1024"
+   width="1024"
+   version="1.1"
+   id="svg14"
+   sodipodi:docname="if.svg"
+   inkscape:version="1.0beta2 (2b71d25, 2019-12-03)">
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     inkscape:document-rotation="0"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1058"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="0.23046875"
+     inkscape:cx="-1162.8475"
+     inkscape:cy="512"
+     inkscape:window-x="11"
+     inkscape:window-y="26"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg14" />
+  <path
+     d="m226.28571 165.71429h448v128"
+     fill="none"
+     stroke="#009b00"
+     stroke-width="64"
+     id="path2" />
+  <path
+     d="m226.28571 805.71429h448v-128"
+     fill="none"
+     stroke="#009b00"
+     stroke-width="64"
+     id="path4" />
+  <path
+     d="m162.28571 69.714286v832.000004h-63.999996l95.999996 64 96-64h-64v-832.000004z"
+     fill="#0000cb"
+     stroke="#000"
+     stroke-width="2.4"
+     id="path6" />
+  <path
+     d="m488 317.14286h352v352h-352z"
+     fill="none"
+     stroke="#d50000"
+     stroke-width="64"
+     id="path8" />
+  <text
+     xml:space="preserve"
+     style="font-size:243.955px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal';stroke-width:3.81178"
+     x="780.99829"
+     y="872.59576"
+     id="text1442"
+     transform="scale(0.9310466,1.0740601)"><tspan
+       sodipodi:role="line"
+       id="tspan1440"
+       x="780.99829"
+       y="872.59576"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:243.955px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:3.81178">if</tspan></text>
 </svg>

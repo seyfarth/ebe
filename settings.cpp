@@ -526,7 +526,7 @@ SettingsDialog::SettingsDialog()
     spin->setRange(0, 100000);
     spin->setSingleStep(100);
     box = frame->addComboBox(tr("Toolbar icon size"), "toolbars/icon_size");
-    strings << "16" << "24" << "32" << "48";
+    strings << "16" << "24" << "32" << "48" << "64" << "80" << "96" << "112" << "128";
     box->setChoices(strings);
     box = frame->addComboBox(tr("Debug button icon size"), "buttons/icon_size");
     box->setChoices(strings);

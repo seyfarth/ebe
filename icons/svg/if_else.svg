@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="1024"
+   viewBox="0 0 1024 1024"
+   width="1024"
+   version="1.1"
+   id="svg867"
+   sodipodi:docname="if_else.svg"
+   inkscape:version="1.0beta2 (2b71d25, 2019-12-03)">
+  <metadata
+     id="metadata873">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs871" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     inkscape:document-rotation="0"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1236"
+     inkscape:window-height="773"
+     id="namedview869"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="637.09671"
+     inkscape:cy="454.59785"
+     inkscape:window-x="52"
+     inkscape:window-y="180"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg867" />
+  <g
+     fill="none"
+     id="g855">
+    <path
+       d="m460 704h352"
+       stroke="#009b00"
+       stroke-width="64"
+       id="path845" />
+    <path
+       d="m468.57143 157.14286v160"
+       stroke="#009b00"
+       stroke-width="64"
+       id="path847" />
+    <path
+       d="m817.71428 736v-192"
+       stroke="#009b00"
+       stroke-width="64"
+       id="path849" />
+    <path
+       d="m209.14286 154.28571h608v160"
+       stroke="#009b00"
+       stroke-width="64"
+       id="path851" />
+    <path
+       d="m209.71429 704h256v-160"
+       stroke="#009b00"
+       stroke-width="64"
+       id="path853" />
+  </g>
+  <path
+     d="m162.28571 69.714286v832.000004h-63.999996l95.999996 64 96-64h-64v-104.57143-727.428574z"
+     fill="#0000cb"
+     stroke="#000"
+     stroke-width="2.4"
+     id="path857" />
+  <text
+     font-size="201.234"
+     stroke-width="1.0481"
+     transform="scale(0.95277913,1.0495612)"
+     x="308.38477"
+     y="890.77722"
+     id="text861"><tspan
+       stroke-width="1.0481"
+       x="308.38477"
+       y="890.77722"
+       id="tspan859" /></text>
+  <path
+     d="m352 320h224v224h-224z"
+     fill="none"
+     stroke="#e10000"
+     stroke-width="64"
+     id="path863" />
+  <path
+     d="m704 320h224v224h-224z"
+     fill="none"
+     stroke="#e10000"
+     stroke-width="64.1639"
+     id="path865" />
+  <text
+     xml:space="preserve"
+     style="font-size:166.17799999999999727px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal';stroke-width:4.15441;"
+     x="378.4519"
+     y="821.34393"
+     id="text1438"
+     transform="scale(0.86618135,1.1544927)"><tspan
+       sodipodi:role="line"
+       id="tspan1436"
+       x="378.4519"
+       y="821.34393"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:166.178px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:4.15441">if-else</tspan></text>
+</svg>

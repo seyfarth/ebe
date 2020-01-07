@@ -19,4 +19,3 @@ main:
 
        xor     edi, edi                ; 0 return = success
        call    exit
-

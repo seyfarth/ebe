@@ -541,7 +541,7 @@ void MainWindow::createMenus()
     int icon_size = ebe["toolbars/icon_size"].toInt();
 
 #ifndef Q_OS_MAC
-    app->setWindowIcon(QIcon(QString(":/icons/%1/ebe.png").arg(icon_size)));
+    app->setWindowIcon(QIcon(QString(":/icons/svg/ebe.svg"))));
 #endif
 
     fileToolBar = new QToolBar(tr("File toolbar"), this);
@@ -588,31 +588,33 @@ void MainWindow::createMenus()
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Quit"), this, SLOT(quit()), QKeySequence::Quit);
 
-    fileToolBar->addAction(QIcon(QString(":/icons/%1/quit.png").arg(icon_size)),
+    fileToolBar->addAction(QIcon(QString(":/icons/svg/exit.svg")),
         tr("Quit (Ctrl+Q)"), this, SLOT(quit()));
     fileToolBar->addSeparator();
-    fileToolBar->addAction(QIcon(QString(":/icons/%1/new.png").arg(icon_size)),
+    fileToolBar->addAction(QIcon(QString(":/icons/svg/change_directory.svg")),
+        tr("Change Directory (Ctrl+D)"), this, SLOT(changeDirectory()));
+    fileToolBar->addAction(QIcon(QString(":/icons/svg/new_file.svg")),
         tr("New (Ctrl+N)"), sourceFrame, SLOT(newFile()));
-    fileToolBar->addAction(QIcon(QString(":/icons/%1/open.png").arg(icon_size)),
+    fileToolBar->addAction(QIcon(QString(":/icons/svg/open_file.svg")),
         tr("Open (Ctrl+O)"), sourceFrame, SLOT(open(bool)) );
-    fileToolBar->addAction(QIcon(QString(":/icons/%1/save.png").arg(icon_size)),
+    fileToolBar->addAction(QIcon(QString(":/icons/svg/save_file.svg")),
         tr("Save (Ctrl+S)"), sourceFrame, SLOT(save()));
     fileToolBar->addAction(
-        QIcon(QString(":/icons/%1/save-as.png").arg(icon_size)), tr("Save as"),
+        QIcon(QString(":/icons/svg/save_as.svg")), tr("Save as"),
         sourceFrame, SLOT(saveAs()));
     fileToolBar->addAction(
-        QIcon(QString(":/icons/%1/close.png").arg(icon_size)), tr("Close (Ctrl+C)"),
+        QIcon(QString(":/icons/svg/close_file.svg")), tr("Close (Ctrl+C)"),
         sourceFrame, SLOT(close()));
 
     fileToolBar->addSeparator();
     fileToolBar->addAction(
-        QIcon(QString(":/icons/%1/project-new.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/new_project.svg")),
         tr("New project"), projectWindow, SLOT(newProject()));
     fileToolBar->addAction(
-        QIcon(QString(":/icons/%1/project-open.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/open_project.svg")),
         tr("Open project"), projectWindow, SLOT(openProject()));
     fileToolBar->addAction(
-        QIcon(QString(":/icons/%1/project-close.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/close_project.svg")),
         tr("Close project"), projectWindow, SLOT(closeProject()));
 
     addToolBar(Qt::TopToolBarArea, fileToolBar);
@@ -668,65 +670,65 @@ void MainWindow::createMenus()
     moveMenu->addAction(tr("Move line to &middle"), sourceFrame, SLOT(center()),
         QKeySequence("Ctrl+M"));
 
-    editToolBar->addAction(QIcon(QString(":/icons/%1/cut.png").arg(icon_size)),
+    editToolBar->addAction(QIcon(QString(":/icons/svg/cut.svg")),
         tr("Cut (Ctrl+X)"), sourceFrame, SLOT(cut()));
-    editToolBar->addAction(QIcon(QString(":/icons/%1/copy.png").arg(icon_size)),
+    editToolBar->addAction(QIcon(QString(":/icons/svg/copy.svg")),
         tr("&Copy (Ctrl+C)"), sourceFrame, SLOT(copy()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/paste.png").arg(icon_size)), tr("Paste (Ctrl+V)"),
+        QIcon(QString(":/icons/svg/paste.svg")), tr("Paste (Ctrl+V)"),
         sourceFrame, SLOT(paste()));
     editToolBar->addSeparator();
-    editToolBar->addAction(QIcon(QString(":/icons/%1/undo.png").arg(icon_size)),
+    editToolBar->addAction(QIcon(QString(":/icons/svg/undo.svg")),
         tr("Undo (Ctrl+Z)"), sourceFrame, SLOT(undo()));
-    editToolBar->addAction(QIcon(QString(":/icons/%1/redo.png").arg(icon_size)),
+    editToolBar->addAction(QIcon(QString(":/icons/svg/redo.svg")),
         tr("Redo (Ctrl+Shift+Z)"), sourceFrame, SLOT(redo()));
     editToolBar->addSeparator();
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/indent-more.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/indent.svg")),
         tr("Indent (Ctrl+>)"), sourceFrame, SLOT(indent()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/indent-less.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/unindent.svg")),
         tr("Unindent (Ctrl+<)"), sourceFrame, SLOT(unIndent()));
     editToolBar->addSeparator();
-    editToolBar->addAction(QIcon(QString(":/icons/%1/find.png").arg(icon_size)),
+    editToolBar->addAction(QIcon(QString(":/icons/svg/find.svg")),
         tr("Find (Ctrl+F)"), sourceFrame, SLOT(find()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/select-all.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/select_all.svg")),
         tr("Select all (Ctrl+A)"), sourceFrame, SLOT(selectAll()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/prettify.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/prettify.svg")),
         tr("Prettify (Ctrl+P)"), sourceFrame, SLOT(prettify()));
     editToolBar->addSeparator();
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/font-decrease.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/font_decrease.svg")),
         tr("Decrease font (Ctrl+-)"), this, SLOT(decreaseFont()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/%1/font-increase.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/font_increase.svg")),
         tr("Increase font (Ctrl++)"), this, SLOT(increaseFont()));
 
     addToolBar(Qt::TopToolBarArea, editToolBar);
 
-    debugToolBar->addAction(QIcon(QString(":/icons/%1/ebe.png").arg(icon_size)),
+    debugToolBar->addAction(QIcon(QString(":/icons/svg/ebe.svg")),
         tr("Run (F5)"), sourceFrame, SLOT(run()));
     debugToolBar->actions()[0]->setShortcut(QKeySequence("F5"));
     debugToolBar->actions()[0]->setAutoRepeat(false);
     debugToolBar->addAction(
-        QIcon(QString(":/icons/%1/next.png").arg(icon_size)), tr("Next (F6)"),
+        QIcon(QString(":/icons/svg/next.svg")), tr("Next (F6)"),
         sourceFrame, SLOT(next()));
     debugToolBar->actions()[1]->setShortcut(QKeySequence("F6"));
     debugToolBar->actions()[1]->setAutoRepeat(false);
     debugToolBar->addAction(
-        QIcon(QString(":/icons/%1/step.png").arg(icon_size)), tr("Step (F7)"),
+        QIcon(QString(":/icons/svg/step.svg")), tr("Step (F7)"),
         sourceFrame, SLOT(step()));
     debugToolBar->actions()[2]->setShortcut(QKeySequence("F7"));
     debugToolBar->actions()[2]->setAutoRepeat(false);
     debugToolBar->addAction(
-        QIcon(QString(":/icons/%1/continue.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/continue.svg")),
         tr("Continue (F8)"), sourceFrame, SLOT(Continue()));
     debugToolBar->actions()[3]->setShortcut(QKeySequence("F8"));
     debugToolBar->actions()[3]->setAutoRepeat(false);
     debugToolBar->addAction(
-        QIcon(QString(":/icons/%1/process-stop.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/stop.svg")),
         tr("stop (F9)"), this, SLOT(doKill()));
     debugToolBar->actions()[4]->setShortcut(QKeySequence("F9"));
     debugToolBar->actions()[4]->setAutoRepeat(false);
@@ -770,48 +772,48 @@ void MainWindow::createMenus()
     helpAction(helpMenu, tr("&About"), "about.html");
 
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/cin.png").arg(icon_size)), tr("cin: input"));
+        QIcon(QString(":/icons/svg/cin.svg")), tr("cin: input"));
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/cout.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/cout.svg")),
         tr("cout: output"));
     templateToolBar->addSeparator();
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/if.png").arg(icon_size)), "if");
+        QIcon(QString(":/icons/svg/if.svg")), "if");
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/if-else.png").arg(icon_size)), "if-else");
+        QIcon(QString(":/icons/svg/if_else.svg")), "if-else");
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/switch.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/case.svg")),
         tr("switch: multi-way branch"));
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/for.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/for_loop.svg")),
         tr("for: counting loop"));
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/while.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/while.svg")),
         tr("while: general loop with test at the top"));
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/do-while.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/do_while.svg")),
         tr("do-while: general loop with test at the bottom"));
     templateToolBar->addSeparator();
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/double.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/float.svg")),
         tr("double: floating point number"));
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/int.png").arg(icon_size)),
+        QIcon(QString(":/icons/svg/int.svg")),
         tr("int: an integer"));
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/string.png").arg(icon_size)), "string");
+        QIcon(QString(":/icons/svg/string.svg")), "string");
     templateToolBar->addSeparator();
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/main.png").arg(icon_size)), "main");
+        QIcon(QString(":/icons/svg/main.svg")), "main");
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/function.png").arg(icon_size)), "function");
+        QIcon(QString(":/icons/svg/function.svg")), "function");
     templateToolBar->addSeparator();
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/class.png").arg(icon_size)), "class");
+        QIcon(QString(":/icons/svg/class.svg")), "class");
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/struct.png").arg(icon_size)), "struct");
+        QIcon(QString(":/icons/svg/struct.svg")), "struct");
     templateToolBar->addAction(
-        QIcon(QString(":/icons/%1/library.png").arg(icon_size)), tr("library"));
+        QIcon(QString(":/icons/svg/library.svg")), tr("library"));
 
     connect ( templateToolBar, SIGNAL(actionTriggered(QAction*)),
         sourceFrame, SLOT(doTemplate(QAction*)) );

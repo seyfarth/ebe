@@ -7,37 +7,40 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="exit.svg"
    inkscape:version="1.0beta2 (2b71d25, 2019-12-03)"
    id="svg16"
    version="1.1"
    viewBox="0 0 1024 1024"
    height="1024"
-   width="1024"
-   sodipodi:docname="stop.svg">
+   width="1024">
   <defs
      id="defs10" />
   <sodipodi:namedview
+     inkscape:snap-global="false"
+     inkscape:snap-bbox="true"
+     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:window-height="1054"
+     inkscape:window-width="1581"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true"
      inkscape:pagecheckerboard="true"
      units="px"
      showgrid="true"
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="px"
-     inkscape:cy="705.3791"
-     inkscape:cx="984.56681"
-     inkscape:zoom="0.49497475"
+     inkscape:cy="551.49725"
+     inkscape:cx="359.71673"
+     inkscape:zoom="0.7"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
      bordercolor="#666666"
      pagecolor="#ffffff"
-     id="base"
-     inkscape:snap-global="false"
-     inkscape:window-width="1600"
-     inkscape:window-height="915"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0">
+     id="base">
     <inkscape:grid
        empopacity="0.25098039"
        empcolor="#17138c"
@@ -63,19 +66,30 @@
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
+    <rect
+       ry="0"
+       y="32"
+       x="155.72177"
+       height="958.5639"
+       width="516.2782"
+       id="rect20"
+       style="fill:#fffdef;fill-opacity:1;stroke:#402804;stroke-width:32;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:#d20000;fill-opacity:1;stroke:#010100;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-       d="M 92.566659,678.55622 V 358.50366 l 256.354561,-256.042 h 320.44327 l 256.35458,256.042 V 678.55622 L 669.36449,934.59818 H 348.92122 Z"
-       id="path2066"
+       sodipodi:nodetypes="ccccc"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccc" />
+       id="path861"
+       d="m 174.28571,49.142857 336.78573,28.928572 -10e-6,862.500001 -337.85715,33.92859 z"
+       style="fill:#8c6700;fill-opacity:1;stroke:#000000;stroke-width:3.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.87943;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 313.16682,229.65448 214.81993,326.77177 410.1639,522.34834 213.47029,716.58293 311.14227,814.3712 507.83589,620.13663 703.17987,815.71314 801.52658,718.59588 606.1827,523.01932 802.87631,328.78473 705.20423,230.99645 508.5107,425.23104 Z"
-       id="path2070"
+       sodipodi:nodetypes="cccccccc"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccc"
-       inkscape:transform-center-x="-899.29565"
-       inkscape:transform-center-y="-45.119611" />
+       id="path865"
+       d="M 896,352 V 480 H 640 v 96 L 480,416 640,256 v 96 z"
+       style="fill:#c83700;fill-opacity:1;stroke:#000000;stroke-width:3.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
+  <inkscape:templateinfo>
+    <inkscape:name>icon</inkscape:name>
+    <inkscape:author>ray</inkscape:author>
+    <inkscape:date>2020-01-04</inkscape:date>
+  </inkscape:templateinfo>
 </svg>

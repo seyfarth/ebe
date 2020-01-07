@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
     patchMacPath();
     setMacCurrentDirectory();
 #endif
+    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     app = new QApplication(argc, argv);
     //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
 
