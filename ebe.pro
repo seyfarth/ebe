@@ -25,8 +25,6 @@ equals(QT_MAJOR_VERSION,5) {
     QT += widgets
 }
 
-QT += svg
-
 #CONFIG -= app_bundle
 CONFIG += console embed_manifest_exe
 #CONFIG += console debug embed_manifest_exe

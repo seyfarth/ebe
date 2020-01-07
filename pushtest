@@ -6,5 +6,4 @@ sed s/VERSION/test/ < about.html > html/about.html
 
 git commit -a
 git branch test
-git push origin master
 git push origin test

@@ -307,7 +307,7 @@ void LLDB::handleNextInstruction(QString result)
 {
     QStringList parts;
     QString file;
-    int line;
+    int line=0;
     int n;
     unsigned long address=0;
 
