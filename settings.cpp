@@ -362,10 +362,6 @@ void Settings::setDefaults()
 
     ebe["library/path"] = ":/library";
 
-    ebe["buttons/visible"] = false;
-    ebe["buttons/icons"] = true;
-    ebe["buttons/icon_size"] = 32;
-
     ebe["toolbars/icon_size"] = 32;
 
     ebe["console/visible"] = false;
@@ -526,9 +522,8 @@ SettingsDialog::SettingsDialog()
     spin->setRange(0, 100000);
     spin->setSingleStep(100);
     box = frame->addComboBox(tr("Toolbar icon size"), "toolbars/icon_size");
-    strings << "16" << "24" << "32" << "48" << "64" << "80" << "96" << "112" << "128";
-    box->setChoices(strings);
-    box = frame->addComboBox(tr("Debug button icon size"), "buttons/icon_size");
+    strings << "16" << "24" << "32" << "48" << "64" << "80" << "96" << "112"
+            << "128" << "160" << "192" << "224" << "256";
     box->setChoices(strings);
     box = frame->addComboBox(tr("Register window columns"), "register/columns");
     strings.clear();
@@ -542,8 +537,6 @@ SettingsDialog::SettingsDialog()
     box->setChoices(strings);
     frame->addCheckBox(tr("Auto-indent"), "edit/auto_indent");
     frame->addCheckBox(tr("Auto-open project files"), "edit/auto_indent");
-    frame->addCheckBox(tr("Display debug buttons"), "buttons/visible");
-    frame->addCheckBox(tr("Icons on debug buttons"), "buttons/icons");
     frame->addCheckBox(tr("XMM Reverse"), "xmm/reverse");
 #ifndef Q_OS_WIN32
     frame->addCheckBox(tr("Use external terminal"), "terminal/use");
