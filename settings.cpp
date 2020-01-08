@@ -622,6 +622,7 @@ void SettingsDialog::save()
                "Trying to run ebe with a changed word size is\n"
                "likely to cause ebe to crash."));
     }
+    mainWin->restoreMainWindow();
     accept();
 }
 
