@@ -8,13 +8,13 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="1024"
-   viewBox="0 0 1024 1024"
-   width="1024"
-   version="1.1"
-   id="svg31"
+   inkscape:version="1.0beta2 (2b71d25, 2019-12-03)"
    sodipodi:docname="new_project.svg"
-   inkscape:version="1.0beta2 (2b71d25, 2019-12-03)">
+   id="svg31"
+   version="1.1"
+   width="1024"
+   viewBox="0 0 1024 1024"
+   height="1024">
   <metadata
      id="metadata37">
     <rdf:RDF>
@@ -29,145 +29,143 @@
   <defs
      id="defs35">
     <linearGradient
-       id="linearGradient6283"
-       inkscape:collect="always">
+       inkscape:collect="always"
+       id="linearGradient6283">
       <stop
-         id="stop6279"
+         style="stop-color:#000050;stop-opacity:1;"
          offset="0"
-         style="stop-color:#000050;stop-opacity:1;" />
+         id="stop6279" />
       <stop
-         id="stop6281"
+         style="stop-color:#000050;stop-opacity:0;"
          offset="1"
-         style="stop-color:#000050;stop-opacity:0;" />
+         id="stop6281" />
     </linearGradient>
     <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="283.31904"
-       x2="994.03297"
-       y1="283.31904"
-       x1="43.586022"
-       id="linearGradient6285"
-       xlink:href="#linearGradient6283"
+       gradientTransform="translate(-10.847458,9.7627119)"
        inkscape:collect="always"
-       gradientTransform="translate(-10.847458,9.7627119)" />
+       xlink:href="#linearGradient6283"
+       id="linearGradient6285"
+       x1="43.586022"
+       y1="283.31904"
+       x2="994.03297"
+       y2="283.31904"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     inkscape:document-rotation="0"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1641"
-     inkscape:window-height="1028"
-     id="namedview33"
-     showgrid="false"
-     inkscape:snap-global="false"
-     inkscape:zoom="0.32593203"
-     inkscape:cx="395.09249"
-     inkscape:cy="1019.5728"
-     inkscape:window-x="0"
-     inkscape:window-y="158"
+     inkscape:current-layer="svg31"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg31" />
+     inkscape:window-y="136"
+     inkscape:window-x="0"
+     inkscape:cy="1019.5728"
+     inkscape:cx="-195.52145"
+     inkscape:zoom="0.32593203"
+     inkscape:snap-global="false"
+     showgrid="false"
+     id="namedview33"
+     inkscape:window-height="1028"
+     inkscape:window-width="1641"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     inkscape:document-rotation="0"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
   <pattern
-     id="a"
+     xlink:href="#b"
      patternTransform="matrix(0,9.1401411,-12.430688,0,1228.0846,124.34069)"
-     xlink:href="#b" />
+     id="a" />
   <pattern
-     id="b"
-     height="1"
-     patternTransform="scale(10)"
+     width="5"
      patternUnits="userSpaceOnUse"
-     width="5">
+     patternTransform="scale(10)"
+     height="1"
+     id="b">
     <path
-       d="m0-.5h1v2h-1z"
+       id="path3"
        fill="#fff"
-       id="path3" />
+       d="m0-.5h1v2h-1z" />
   </pattern>
   <linearGradient
-     id="c"
-     gradientUnits="userSpaceOnUse"
-     x1="30"
-     x2="994"
-     y1="272"
+     gradientTransform="matrix(0.98588224,0,0,0.98432287,14.03779,15.583219)"
      y2="272"
-     gradientTransform="matrix(0.98588224,0,0,0.98432287,14.03779,15.583219)">
+     y1="272"
+     x2="994"
+     x1="30"
+     gradientUnits="userSpaceOnUse"
+     id="c">
     <stop
-       offset="0"
+       id="stop6"
        stop-color="#19307b"
-       id="stop6" />
+       offset="0" />
     <stop
-       offset="1"
-       stop-color="#19307b"
+       id="stop8"
        stop-opacity="0"
-       id="stop8" />
+       stop-color="#19307b"
+       offset="1" />
   </linearGradient>
   <path
-     style="stroke:#000000;fill:#f4f4e8;fill-opacity:1"
-     inkscape:connector-curvature="0"
+     d="M 981.18551,371.82758 V 1001.7942 H 34.738564 V 371.82758 Z"
      id="path11"
-     stroke-width="4.32815"
-     d="M 981.18551,371.82758 V 1001.7942 H 34.738564 V 371.82758 Z" />
-  <path
      inkscape:connector-curvature="0"
-     style="fill:url(#linearGradient6285);fill-opacity:1;stroke:#000000"
+     style="stroke:#000000;fill:#f4f4e8;fill-opacity:1;stroke-width:14;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     d="M 34.738564,214.33592 H 981.18551 V 371.82758 H 34.738564 Z"
      id="path15"
-     stroke-width="4"
-     d="M 34.738564,214.33592 H 981.18551 V 371.82758 H 34.738564 Z" />
+     style="fill:url(#linearGradient6285);fill-opacity:1;stroke:#000000;stroke-width:14;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:connector-curvature="0" />
   <path
-     style="stroke:#000000"
-     inkscape:connector-curvature="0"
-     id="path17"
-     stroke-width="3.30042"
+     d="M 715.21669,24.262741 H 788.4437 V 152.99845 h 122.04501 v 77.24142 H 788.4437 v 128.7357 H 715.21669 V 230.23987 H 593.17168 v -77.24142 h 122.04501 z"
      fill="#e90000"
-     d="M 715.21669,24.262741 H 788.4437 V 152.99845 h 122.04501 v 77.24142 H 788.4437 v 128.7357 H 715.21669 V 230.23987 H 593.17168 v -77.24142 h 122.04501 z" />
+     stroke-width="3.30042"
+     id="path17"
+     inkscape:connector-curvature="0"
+     style="stroke:#000000" />
   <text
-     style="font-size:40px;font-family:sans-serif;"
-     font-family="sans-serif"
-     font-size="40"
-     x="184.63589"
+     id="text29"
      y="601.26691"
-     id="text29"><tspan
-       font-family="Andale Mono"
-       font-size="85.3333"
-       x="184.63589"
-       y="601.26691"
-       id="tspan21"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">add.cpp</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:40px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal'"
-     x="184.40678"
-     y="677.96606"
-     id="text864"><tspan
-       sodipodi:role="line"
-       id="tspan862"
-       x="184.40678"
-       y="677.96606" /></text>
-  <text
-     xml:space="preserve"
-     style="font-size:64px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal';"
-     x="181.86505"
-     y="683.31274"
-     id="text868"><tspan
+     x="184.63589"
+     font-size="40"
+     font-family="sans-serif"
+     style="font-size:40px;font-family:sans-serif;"><tspan
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-       sodipodi:role="line"
-       x="181.86505"
-       y="683.31274"
-       id="tspan870">add_array.asm</tspan></text>
+       id="tspan21"
+       y="601.26691"
+       x="184.63589"
+       font-size="85.3333"
+       font-family="Andale Mono">add.cpp</tspan></text>
   <text
-     xml:space="preserve"
-     style="font-size:85.33329999999999416px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal';"
-     x="181.33865"
-     y="772.85217"
-     id="text878"><tspan
+     id="text864"
+     y="677.96606"
+     x="184.40678"
+     style="font-size:40px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal'"
+     xml:space="preserve"><tspan
+       y="677.96606"
+       x="184.40678"
+       id="tspan862"
+       sodipodi:role="line" /></text>
+  <text
+     id="text868"
+     y="683.31274"
+     x="181.86505"
+     style="font-size:64px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal';"
+     xml:space="preserve"><tspan
+       id="tspan870"
+       y="683.31274"
+       x="181.86505"
        sodipodi:role="line"
-       id="tspan876"
-       x="181.33865"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">add_array.asm</tspan></text>
+  <text
+     id="text878"
+     y="772.85217"
+     x="181.33865"
+     style="font-size:85.33329999999999416px;line-height:1;font-family:'Andale Mono';-inkscape-font-specification:'Andale Mono Normal';"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
        y="772.85217"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:Courier;-inkscape-font-specification:'Courier Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">data.dat</tspan></text>
+       x="181.33865"
+       id="tspan876"
+       sodipodi:role="line">data.dat</tspan></text>
 </svg>

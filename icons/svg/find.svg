@@ -58,7 +58,6 @@
        d="M 194.02031,67.390848 V 899.39085 h 448 l 160,-160 V 67.390848 Z"
        fill="#f4f4e4"
        stroke="#000"
-       stroke-width="4"
        id="path1422"
        inkscape:connector-curvature="0" />
   </g>
@@ -84,7 +83,6 @@
        style="stroke-width:12.8;stroke-miterlimit:4;stroke-dasharray:none"
        inkscape:connector-curvature="0"
        id="path1424"
-       stroke-width="4"
        stroke="#000"
        fill="#eae9e4"
        d="m 802.02031,737.37054 h -160 v 160 z" />
