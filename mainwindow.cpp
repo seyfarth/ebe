@@ -58,6 +58,7 @@ QThread *dbgThread;
 ToyBox *toyBox;
 
 QStatusBar *statusBar;
+QList<QToolBar *> toolBars;
 
 QToolBar *fileToolBar;
 QToolBar *editToolBar;
@@ -422,6 +423,14 @@ void MainWindow::restoreMainWindow()
     fontSize = ebe["font_size"].toInt();
     setFontSize();
     //dDebug() << "set";
+    int iconSize = ebe["toolbars/icon_size"].toInt();
+    //qDebug() << "icon_size" << iconSize;
+    if ( iconSize > 0 ) {
+        foreach (QToolBar *tb, toolBars) {
+            //qDebug() << "setIconSize" << tb << iconSize;
+            tb->setIconSize(QSize(iconSize,iconSize));
+        }
+    }
 }
 
 bool MainWindow::eventFilter(QObject * /* object */, QEvent *event)
@@ -545,18 +554,22 @@ void MainWindow::createMenus()
 #endif
 
     fileToolBar = new QToolBar(tr("File toolbar"), this);
+    toolBars << fileToolBar;
     fileToolBar->setObjectName(tr("File toolbar"));
     fileToolBar->setIconSize(QSize(icon_size, icon_size));
 
     editToolBar = new QToolBar(tr("Edit toolbar"), this);
+    toolBars << editToolBar;
     editToolBar->setObjectName(tr("Edit toolbar"));
     editToolBar->setIconSize(QSize(icon_size, icon_size));
 
     debugToolBar = new QToolBar(tr("Debug toolbar"), this);
+    toolBars << debugToolBar;
     debugToolBar->setObjectName(tr("Debug toolbar"));
     debugToolBar->setIconSize(QSize(icon_size, icon_size));
 
     templateToolBar = new QToolBar(tr("Code template toolbar"), this);
+    toolBars << templateToolBar;
     templateToolBar->setObjectName(tr("Template toolbar"));
     templateToolBar->setIconSize(QSize(icon_size, icon_size));
 

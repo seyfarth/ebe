@@ -117,7 +117,8 @@ int main(int argc, char *argv[])
        file.open(QIODevice::ReadOnly|QIODevice::Text);
        QTextStream in(&file);
        QString dir;
-       in >> dir;
+       dir = QString(file.readAll());
+       dir.chop(1);
        //qDebug() << "dir" << dir;
        QDir::setCurrent(dir);
     }
