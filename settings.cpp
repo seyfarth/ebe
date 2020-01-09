@@ -180,6 +180,7 @@ void Settings::setDefaults()
     ebe["build/assembler"] = "nasm";
     if ( wordSize == 64 ) {
         QProcess gcc;
+        gcc.setProcessChannelMode(QProcess::MergedChannels);
         gcc.start(QString("gcc -v"));
         gcc.waitForFinished();
         bool pie=false;
