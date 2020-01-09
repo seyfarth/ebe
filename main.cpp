@@ -24,11 +24,9 @@
 #include <QSet>
 #include <stdio.h>
 #include <string.h>
-#ifdef Q_OS_MAC
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#endif
 
 #include "mainwindow.h"
 #include "settings.h"
@@ -67,8 +65,9 @@ void patchMacPath()
     //printf("%s\n",new_path);
     free(new_path);
 }
+#endif
 
-void setMacCurrentDirectory()
+void setCurrentDirectory()
 {
     char *dir;
     
@@ -76,20 +75,19 @@ void setMacCurrentDirectory()
     if ( dir ) {
         if ( access(dir, X_OK | W_OK | R_OK) < 0 ) {
            char *home = getenv("HOME"); 
-           chdir(home);
+           if ( chdir(home) ) qDebug() << "Could not chdir to" << home;
            startedFromDesktop = true;
         }
         free(dir);
     }
 }
-#endif
 
 int main(int argc, char *argv[])
 {
 #ifdef Q_OS_MAC
     patchMacPath();
-    setMacCurrentDirectory();
 #endif
+    setCurrentDirectory();
     //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
     app = new QApplication(argc, argv);
     //QResource::registerResource(app.applicationDirPath()+"/ebe.rcc");
@@ -107,7 +105,6 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifdef Q_OS_MAC
     if ( startedFromDesktop ) {
        QFile file;
        QString home = QDir::homePath();
@@ -122,7 +119,6 @@ int main(int argc, char *argv[])
        //qDebug() << "dir" << dir;
        QDir::setCurrent(dir);
     }
-#endif
        
     MainWindow::setWordSize();
     settings = new Settings;
