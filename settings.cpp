@@ -179,25 +179,19 @@ void Settings::setDefaults()
     ebe["windows"] = false;
     ebe["build/assembler"] = "nasm";
     if ( wordSize == 64 ) {
-        QFile::copy(":/src/c/hello.c", "test_hello.c");
-        QFile::setPermissions("test_hello.c", QFile::ReadOwner | QFile::WriteOwner);
         QProcess gcc;
-        gcc.start(QString("gcc -c test_hello.c"));
+        gcc.start(QString("gcc -v"));
         gcc.waitForFinished();
-        gcc.close();
-        QProcess nm;
-        nm.start(QString("nm -a test_hello.o"));
-        nm.waitForFinished();
         bool pie=false;
-        QString nmData = nm.readLine();
-        //qDebug() << "nmData: " << nmData;
-        while ( nmData != "" ) {
-            if ( nmData.contains("_GLOBAL_OFFSET_TABLE_") ) {
+        QString gccData = gcc.readLine();
+        //qDebug() << "gccData: " << gccData;
+        while ( gccData != "" ) {
+            if ( gccData.contains("enable-default-pie") ) {
                 pie = true;
                 break;
             }
-            nmData = nm.readLine();
-            //qDebug() << "nmData: " << nmData;
+            gccData = gcc.readLine();
+            //qDebug() << "gccData: " << gccData;
         }
         //qDebug() << "pie" << pie;
         ebe["build/asm"] = "nasm -DLINUX -P \"$ebe_inc\" -f elf64 -o \"$base.o\" "
