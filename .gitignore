@@ -29,7 +29,10 @@ ui_*.h
 *~
 
 wrapper.py
+bt
+fpadd
 
+*.tgz
 ebe_src.tgz
 # QtCreator
 
