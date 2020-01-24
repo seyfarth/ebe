@@ -21,6 +21,7 @@
 #include "bitbucket.h"
 #include "settings.h"
 #include "dockwidget.h"
+#include "ebeicon.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;

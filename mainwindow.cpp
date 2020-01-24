@@ -601,35 +601,30 @@ void MainWindow::createMenus()
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Quit"), this, SLOT(quit()), QKeySequence::Quit);
 
-    fileToolBar->addAction(QIcon(QString(":/icons/svg/exit.svg")),
+    fileToolBar->addAction(EbeIcon("exit.png"),
         tr("Quit (Ctrl+Q)"), this, SLOT(quit()));
     fileToolBar->addSeparator();
-    fileToolBar->addAction(QIcon(QString(":/icons/svg/change_directory.svg")),
+    fileToolBar->addAction(EbeIcon("change_directory.png"),
         tr("Change Directory (Ctrl+D)"), this, SLOT(changeDirectory()));
-    fileToolBar->addAction(QIcon(QString(":/icons/svg/new_file.svg")),
+    fileToolBar->addAction(EbeIcon("new_file.png"),
         tr("New (Ctrl+N)"), sourceFrame, SLOT(newFile()));
-    fileToolBar->addAction(QIcon(QString(":/icons/svg/open_file.svg")),
+    fileToolBar->addAction(EbeIcon("open_file.png"),
         tr("Open (Ctrl+O)"), sourceFrame, SLOT(open(bool)) );
-    fileToolBar->addAction(QIcon(QString(":/icons/svg/save_file.svg")),
+    fileToolBar->addAction(EbeIcon("save_file.png"),
         tr("Save (Ctrl+S)"), sourceFrame, SLOT(save()));
-    fileToolBar->addAction(
-        QIcon(QString(":/icons/svg/save_as.svg")), tr("Save as"),
+    fileToolBar->addAction( EbeIcon("save_as.png"), tr("Save as"),
         sourceFrame, SLOT(saveAs()));
     fileToolBar->addAction(
-        QIcon(QString(":/icons/svg/close_file.svg")), tr("Close (Ctrl+C)"),
+        EbeIcon("close_file.png"), tr("Close (Ctrl+C)"),
         sourceFrame, SLOT(close()));
 
     fileToolBar->addSeparator();
-    fileToolBar->addAction(
-        QIcon(QString(":/icons/svg/new_project.svg")),
+    fileToolBar->addAction( EbeIcon("new_project.png"),
         tr("New project"), projectWindow, SLOT(newProject()));
-    fileToolBar->addAction(
-        QIcon(QString(":/icons/svg/open_project.svg")),
+    fileToolBar->addAction( EbeIcon("open_project.png"),
         tr("Open project"), projectWindow, SLOT(openProject()));
-    fileToolBar->addAction(
-        QIcon(QString(":/icons/svg/close_project.svg")),
+    fileToolBar->addAction( EbeIcon("close_project.png"),
         tr("Close project"), projectWindow, SLOT(closeProject()));
-
     addToolBar(Qt::TopToolBarArea, fileToolBar);
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
@@ -683,65 +678,55 @@ void MainWindow::createMenus()
     moveMenu->addAction(tr("Move line to &middle"), sourceFrame, SLOT(center()),
         QKeySequence("Ctrl+M"));
 
-    editToolBar->addAction(QIcon(QString(":/icons/svg/cut.svg")),
+    editToolBar->addAction(EbeIcon("cut.png"),
         tr("Cut (Ctrl+X)"), sourceFrame, SLOT(cut()));
-    editToolBar->addAction(QIcon(QString(":/icons/svg/copy.svg")),
+    editToolBar->addAction(EbeIcon("copy.png"),
         tr("&Copy (Ctrl+C)"), sourceFrame, SLOT(copy()));
     editToolBar->addAction(
-        QIcon(QString(":/icons/svg/paste.svg")), tr("Paste (Ctrl+V)"),
+        EbeIcon("paste.png"), tr("Paste (Ctrl+V)"),
         sourceFrame, SLOT(paste()));
     editToolBar->addSeparator();
-    editToolBar->addAction(QIcon(QString(":/icons/svg/undo.svg")),
+    editToolBar->addAction(EbeIcon("undo.png"),
         tr("Undo (Ctrl+Z)"), sourceFrame, SLOT(undo()));
-    editToolBar->addAction(QIcon(QString(":/icons/svg/redo.svg")),
+    editToolBar->addAction(EbeIcon("redo.png"),
         tr("Redo (Ctrl+Shift+Z)"), sourceFrame, SLOT(redo()));
     editToolBar->addSeparator();
-    editToolBar->addAction(
-        QIcon(QString(":/icons/svg/indent.svg")),
+    editToolBar->addAction( EbeIcon("indent.png"),
         tr("Indent (Ctrl+>)"), sourceFrame, SLOT(indent()));
-    editToolBar->addAction(
-        QIcon(QString(":/icons/svg/unindent.svg")),
+    editToolBar->addAction( EbeIcon("unindent.png"),
         tr("Unindent (Ctrl+<)"), sourceFrame, SLOT(unIndent()));
     editToolBar->addSeparator();
-    editToolBar->addAction(QIcon(QString(":/icons/svg/find.svg")),
+    editToolBar->addAction(EbeIcon("find.png"),
         tr("Find (Ctrl+F)"), sourceFrame, SLOT(find()));
-    editToolBar->addAction(
-        QIcon(QString(":/icons/svg/select_all.svg")),
+    editToolBar->addAction( EbeIcon("select_all.png"),
         tr("Select all (Ctrl+A)"), sourceFrame, SLOT(selectAll()));
-    editToolBar->addAction(
-        QIcon(QString(":/icons/svg/prettify.svg")),
+    editToolBar->addAction( EbeIcon("prettify.png"),
         tr("Prettify (Ctrl+P)"), sourceFrame, SLOT(prettify()));
     editToolBar->addSeparator();
-    editToolBar->addAction(
-        QIcon(QString(":/icons/svg/font_decrease.svg")),
+    editToolBar->addAction( EbeIcon("font_decrease.png"),
         tr("Decrease font (Ctrl+-)"), this, SLOT(decreaseFont()));
-    editToolBar->addAction(
-        QIcon(QString(":/icons/svg/font_increase.svg")),
+    editToolBar->addAction( EbeIcon("font_increase.png"),
         tr("Increase font (Ctrl++)"), this, SLOT(increaseFont()));
 
     addToolBar(Qt::TopToolBarArea, editToolBar);
 
-    debugToolBar->addAction(QIcon(QString(":/icons/svg/ebe.svg")),
+    debugToolBar->addAction(EbeIcon("ebe.png"),
         tr("Run (F5)"), sourceFrame, SLOT(run()));
     debugToolBar->actions()[0]->setShortcut(QKeySequence("F5"));
     debugToolBar->actions()[0]->setAutoRepeat(false);
-    debugToolBar->addAction(
-        QIcon(QString(":/icons/svg/next.svg")), tr("Next (F6)"),
+    debugToolBar->addAction( EbeIcon("next.png"), tr("Next (F6)"),
         sourceFrame, SLOT(next()));
     debugToolBar->actions()[1]->setShortcut(QKeySequence("F6"));
     debugToolBar->actions()[1]->setAutoRepeat(false);
-    debugToolBar->addAction(
-        QIcon(QString(":/icons/svg/step.svg")), tr("Step (F7)"),
+    debugToolBar->addAction( EbeIcon("step.png"), tr("Step (F7)"),
         sourceFrame, SLOT(step()));
     debugToolBar->actions()[2]->setShortcut(QKeySequence("F7"));
     debugToolBar->actions()[2]->setAutoRepeat(false);
-    debugToolBar->addAction(
-        QIcon(QString(":/icons/svg/continue.svg")),
+    debugToolBar->addAction( EbeIcon("continue.png"),
         tr("Continue (F8)"), sourceFrame, SLOT(Continue()));
     debugToolBar->actions()[3]->setShortcut(QKeySequence("F8"));
     debugToolBar->actions()[3]->setAutoRepeat(false);
-    debugToolBar->addAction(
-        QIcon(QString(":/icons/svg/stop.svg")),
+    debugToolBar->addAction( EbeIcon("stop.png"),
         tr("stop (F9)"), this, SLOT(doKill()));
     debugToolBar->actions()[4]->setShortcut(QKeySequence("F9"));
     debugToolBar->actions()[4]->setAutoRepeat(false);
@@ -784,49 +769,32 @@ void MainWindow::createMenus()
     helpAction(helpMenu, tr("&Running"), "running.html");
     helpAction(helpMenu, tr("&About"), "about.html");
 
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/cin.svg")), tr("cin: input"));
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/cout.svg")),
-        tr("cout: output"));
+    templateToolBar->addAction( EbeIcon("cin.png"), tr("cin: input"));
+    templateToolBar->addAction( EbeIcon("cout.png"), tr("cout: output"));
     templateToolBar->addSeparator();
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/if.svg")), "if");
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/if_else.svg")), "if-else");
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/case.svg")),
+    templateToolBar->addAction( EbeIcon("if.png"), "if");
+    templateToolBar->addAction( EbeIcon("if_else.png"), "if-else");
+    templateToolBar->addAction( EbeIcon("case.png"),
         tr("switch: multi-way branch"));
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/for_loop.svg")),
+    templateToolBar->addAction( EbeIcon("for_loop.png"),
         tr("for: counting loop"));
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/while.svg")),
+    templateToolBar->addAction( EbeIcon("while.png"),
         tr("while: general loop with test at the top"));
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/do_while.svg")),
+    templateToolBar->addAction( EbeIcon("do_while.png"),
         tr("do-while: general loop with test at the bottom"));
     templateToolBar->addSeparator();
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/float.svg")),
+    templateToolBar->addAction( EbeIcon("float.png"),
         tr("double: floating point number"));
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/int.svg")),
+    templateToolBar->addAction( EbeIcon("int.png"),
         tr("int: an integer"));
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/string.svg")), "string");
+    templateToolBar->addAction( EbeIcon("string.png"), "string");
     templateToolBar->addSeparator();
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/main.svg")), "main");
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/function.svg")), "function");
+    templateToolBar->addAction( EbeIcon("main.png"), "main");
+    templateToolBar->addAction( EbeIcon("function.png"), "function");
     templateToolBar->addSeparator();
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/class.svg")), "class");
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/struct.svg")), "struct");
-    templateToolBar->addAction(
-        QIcon(QString(":/icons/svg/library.svg")), tr("library"));
+    templateToolBar->addAction( EbeIcon("class.png"), "class");
+    templateToolBar->addAction( EbeIcon("struct.png"), "struct");
+    templateToolBar->addAction( EbeIcon("library.png"), tr("library"));
 
     connect ( templateToolBar, SIGNAL(actionTriggered(QAction*)),
         sourceFrame, SLOT(doTemplate(QAction*)) );
