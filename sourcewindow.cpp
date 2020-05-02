@@ -933,11 +933,11 @@ void SourceWindow::setLineNumbers(int nLines)
 
 void SourceWindow::setNextLine(int line)
 {
-    //qDebug() << "sw snl" << line;
+    qDebug() << "sw snl" << line;
     QTextDocument *doc = textEdit->document();
     bool saveChanged = changed;
     QTextCursor(doc->findBlockByNumber(line - 1)).setBlockFormat(breakFormat);
-    //qDebug() << "scroll set" << line-1-textHeight/2;
+    qDebug() << "scroll set" << line-1-textHeight/2;
     scrollBar->setValue(line - 1 - textHeight / 2);
     setLineNumbers(textDoc->lineCount());
     changed = saveChanged;

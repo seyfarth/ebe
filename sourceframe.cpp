@@ -1182,11 +1182,11 @@ void SourceFrame::clearNextLine(QString file, int line)
 
 void SourceFrame::setNextLine(QString &file, int & line)
 {
-    //qDebug() << "snl" << file << line;
+    qDebug() << "snl" << file << line;
     if (file == "" || line < 1) return;
     for (int index = 0; index < tab->count(); index++) {
         source = (SourceWindow *)tab->widget(index);
-        //dDebug() << "source name" << source->file.source << file;
+        qDebug() << "source name" << source->file.source << file;
         if (source->file.source == QDir::current().absoluteFilePath(file)) {
             tab->setCurrentIndex(index);
             source->setNextLine(line);
@@ -1238,30 +1238,30 @@ void SourceFrame::nextInstruction(QString file, int line)
     int index;
     int length;
     QString ext;
-    //qDebug() << "nextI" << file << line;
+    qDebug() << "nextI" << file << line;
     if (breakFile != "") {
         clearNextLine(breakFile, breakLine);
     }
     index = file.lastIndexOf('.');
     if (index < 0) index = file.lastIndexOf('_');
     inAssembly = false;
-    //qDebug() << ebe.os << "inAssembly" << inAssembly << file << line;
+    qDebug() << ebe.os << "inAssembly" << inAssembly << file << line;
     if (index > 0) {
         length = file.length();
         ext = file.right(length - index - 1);
-        //qDebug() << ext;
+        qDebug() << ext;
         inAssembly = asmExts.contains(ext) || halExts.contains(ext);
         //file = file.left(length-4);
     }
-    //qDebug() << "inAssembly" << inAssembly;
+    qDebug() << "inAssembly" << inAssembly;
     breakFile = file;
     breakLine = line;
     setNextLine(breakFile, breakLine);
     frameWindow->nextLine(breakFile,breakLine);
     asmDataWindow->rebuildTable();
-    //qDebug() << "About to completeStep()";
+    qDebug() << "About to completeStep()";
     emit completeStep();
-    //qDebug() << "Done nextI";
+    qDebug() << "Done nextI";
 }
 
 void SourceFrame::setFontHeightAndWidth(int height, int width)

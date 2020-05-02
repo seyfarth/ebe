@@ -306,12 +306,24 @@ void GDB::handleNextInstruction(QString result)
     //if ( result.indexOf(QRegExp("func=.?start.?,")) >= 0 ) return;
     if ( result.indexOf("libc_start_main") >= 0 ) return;
     parts = result.split(", ");
-    //qDebug() << "handleNextInstruction" << parts;
+    qDebug() << "handleNextInstruction" << parts;
     n = parts.length();
     if ( n >= 2 ) {
-        parts2 = parts[1].split(" ");
-        //qDebug() << "handleNextInstruction parts2" << parts2;
-        if ( parts2.length() >= 1 ) address = parts2[0].toULong(&ok,16);
+        if ( result.indexOf(" at ") >= 0 ) {
+            parts = parts[n-1].split(" ");
+            qDebug() << "handleNextInstruction 2" << parts;
+            n = parts.length();
+            if ( n >= 2 ) parts2 = parts[n-1].split(":");
+            qDebug() << "handleNextInstruction parts2" << parts2;
+            if ( parts2.length() == 2 ) {
+                file = parts2[0];
+                line = parts2[1].toInt();
+            }
+        } else {
+            parts2 = parts[1].split(" ");
+            qDebug() << "handleNextInstruction parts2" << parts2;
+            if ( parts2.length() >= 1 ) address = parts2[0].toULong(&ok,16);
+        }
     } else if ( n == 1 ) {
         parts2 = parts[0].split(" ");
         //qDebug() << "handleNextInstruction parts2" << parts2;
@@ -338,7 +350,7 @@ void GDB::handleNextInstruction(QString result)
         //qDebug() << "stopped" << address << file << line;
     } else {
         emit nextInstruction(file,line);
-        //qDebug() << "stopped" << address << file << line << currentLanguage;
+        qDebug() << "stopped" << address << file << line << currentLanguage;
     }
 }
 
