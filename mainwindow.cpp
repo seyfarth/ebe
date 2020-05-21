@@ -10,7 +10,11 @@
 #include <QToolBar>
 #include <QMenuBar>
 #include <QFileDialog>
+#if QT_VERSION >= 0x050000
 #include <QStandardPaths>
+#else
+#include <QDir>
+#endif
 #ifdef Q_OS_WIN32
 #include <windows.h>
 #else
@@ -877,8 +881,12 @@ void MainWindow::changeDirectory()
            QFile file;
            QString home;
            QString name = "";
+#if QT_VERSION >= 0x050000
            home = QStandardPaths::locate(QStandardPaths::HomeLocation,name,
 					 QStandardPaths::LocateDirectory);
+#else
+           home = QDir::homePath();
+#endif
            name = home + ".ebe_last_directory";
            //qDebug() << "Home:" << home << name;
            file.setFileName(name);
